@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.card.PlaceableCard;
 import it.polimi.ingsw.model.enums.Resource;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,6 @@ public class PlayArea {
     }
 
     public Map<Resource, Integer> getVisibleResources() {
-        return visibleResources;
+        return Collections.unmodifiableMap(visibleResources);
     }
 }
