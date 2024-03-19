@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayArea {
-    private final DoubleMap<Integer, Integer, PlaceableCard> cardMatrix;
+    private final DoubleMap<PlaceableCard> cardMatrix;
     private final Map<Resource, Integer> visibleResources;
 
     public PlayArea(){
@@ -16,7 +16,7 @@ public class PlayArea {
         visibleResources = new HashMap<>();
     }
 
-    public DoubleMapRO<Integer, Integer, PlaceableCard> getCardMatrix(){
+    public DoubleMapRO<PlaceableCard> getCardMatrix(){
         return cardMatrix;
     }
 

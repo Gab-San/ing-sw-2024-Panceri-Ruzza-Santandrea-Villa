@@ -12,7 +12,7 @@ public enum PatternObjective {
                 "B**")
     ;
 
-    final DoubleMap<Integer, Integer, Resource> pattern;
+    final DoubleMap<Resource> pattern;
     PatternObjective(String pattern){
         this.pattern = new DoubleMap<>();
         for (int i = 0; i < pattern.length(); i++) {
@@ -22,7 +22,7 @@ public enum PatternObjective {
         }
     }
 
-    public DoubleMapRO<Integer, Integer, Resource> getPattern(){
+    public DoubleMapRO<Resource> getPattern(){
         return pattern;
     }
     private Resource charToResource(char c){

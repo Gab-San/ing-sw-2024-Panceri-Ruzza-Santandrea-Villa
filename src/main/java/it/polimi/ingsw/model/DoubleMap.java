@@ -3,20 +3,25 @@ package it.polimi.ingsw.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DoubleMap<R, C, V> implements DoubleMapRO<R,C,V> {
-    protected final Map<R, Map<C, V>> rowMap;
+public class DoubleMap<V> implements DoubleMapRO<V> {
+    protected final Map<Integer, Map<Integer, V>> rowMap;
+    private int maxRow, maxCol;
 
     public DoubleMap() {
         this.rowMap = new HashMap<>();
     }
 
-    public V get(R row, C column) {
-        Map<C, V> colMap = rowMap.get(row);
+    public V get(int row, int column) {
+        Map<Integer, V> colMap = rowMap.get(row);
         if(colMap == null) return null;
         else return colMap.get(column);
     }
-    public void put(R row, C column, V value) {
-        rowMap.computeIfAbsent(row, k -> new HashMap<C, V>())
+    public void put(int row, int column, V value) {
+        rowMap.computeIfAbsent(row, k -> new HashMap<>())
                 .put(column, value);
+        int absRow = Math.abs(row);
+        int absCol = Math.abs(column);
+        if (absRow > maxRow) maxRow = absRow;
+        if (absCol > maxCol) maxCol = absCol;
     }
 }
