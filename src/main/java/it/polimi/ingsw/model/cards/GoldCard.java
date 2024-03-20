@@ -1,4 +1,5 @@
 package it.polimi.ingsw.model.cards;
+import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.cardpatterns.GoldCardStrategy;
 import it.polimi.ingsw.model.enums.GameResource;
 
@@ -13,6 +14,7 @@ public class GoldCard extends PlayCard{
         return placementCost;
     }
 
+    @Override
     int calculatePointsOnPlace(PlayArea playArea){
         return pointsOnPlace*goldStrat.calculateSolves(playArea);
     }

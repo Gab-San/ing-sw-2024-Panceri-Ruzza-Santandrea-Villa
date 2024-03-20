@@ -12,4 +12,13 @@ public enum CornerDirection {
     public String toString() {
         return extendedName;
     }
+    public CornerDirection opposite(){
+        switch (this){
+            default: // never triggered, but necessary to compile
+            case TL: return BR;
+            case TR: return BL;
+            case BL: return TR;
+            case BR: return TL;
+        }
+    }
 }
