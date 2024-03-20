@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.card.PlaceableCard;
+import it.polimi.ingsw.model.card.placeable.PlaceableCard;
 import it.polimi.ingsw.model.enums.Resource;
 
 import java.util.Collections;

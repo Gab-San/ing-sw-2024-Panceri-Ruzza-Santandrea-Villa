@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.card;
+package it.polimi.ingsw.model.card.objective;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.enums.Resource;

@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class DoubleMap<V> implements DoubleMapRO<V> {
     protected final Map<Integer, Map<Integer, V>> rowMap;
-    private int maxRow, maxCol;
 
     public DoubleMap() {
         this.rowMap = new HashMap<>();
@@ -19,9 +18,24 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
     public void put(int row, int column, V value) {
         rowMap.computeIfAbsent(row, k -> new HashMap<>())
                 .put(column, value);
-        int absRow = Math.abs(row);
-        int absCol = Math.abs(column);
-        if (absRow > maxRow) maxRow = absRow;
-        if (absCol > maxCol) maxCol = absCol;
+    }
+
+    public int getMaxRow(){
+        return rowMap.keySet().stream()
+                .reduce(0, (max,i)-> i>max ? i : max );
+    }
+    public int getMinRow(){
+        return rowMap.keySet().stream()
+                .reduce(0, (min,i)-> i<min ? i : min );
+    }
+    public int getMaxCol(){
+        return rowMap.values().stream()
+                .flatMap(v -> v.keySet().stream())
+                .reduce(0, (max,i)-> i>max ? i : max );
+    }
+    public int getMinCol(){
+        return rowMap.values().stream()
+                .flatMap(v -> v.keySet().stream())
+                .reduce(0, (min,i)-> i<min ? i : min );
     }
 }

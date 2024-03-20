@@ -1,6 +1,7 @@
-package it.polimi.ingsw.model.card;
+package it.polimi.ingsw.model.card.objective;
 
 import it.polimi.ingsw.model.PlayArea;
+import it.polimi.ingsw.model.card.Card;
 
 public class ObjectiveCard extends Card {
     private final ObjectiveStrategy strategy;
@@ -10,6 +11,6 @@ public class ObjectiveCard extends Card {
     }
 
     public int calculatePoints(PlayArea p){
-        return strategy.calculatePoints(p);
+        return strategy.calculateSolves(p);
     }
 }
