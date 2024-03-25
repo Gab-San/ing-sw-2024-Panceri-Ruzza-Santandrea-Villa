@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+### Files to ignore ### (from Gamba di Squalo)
+Ignore/
