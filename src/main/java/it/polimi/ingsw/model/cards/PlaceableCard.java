@@ -1,0 +1,32 @@
+package it.polimi.ingsw.model.cards;
+
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.GameResource;
+
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+
+public abstract class PlaceableCard extends Card{
+    int row;
+    int col;
+    Hashtable<CornerDirection, Corner> corners;
+
+    /**
+     * @param cornDir indicates the selected corner direction;
+     * @return the corner in the selected direction;
+     * @throws NoSuchElementException if the corner in the selected direction is filled;
+     */
+    public Corner getCorner(CornerDirection cornDir) throws NoSuchElementException{
+        if(!corners.containsKey(cornDir)){
+            throw new NoSuchElementException("The search corner is filled");
+        }
+        return corners.get(cornDir);
+    }
+
+    /**
+     * TODO decide if necessary to return an array or maybe is better an hashmap
+     * @return an array of resources to add to the visible resources on the play area
+     */
+    abstract public int[] getCardResources();
+    abstract public GameResource getCardColor();
+}
