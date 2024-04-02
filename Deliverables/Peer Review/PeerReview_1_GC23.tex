@@ -1,0 +1,95 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+
+\title{Peer-Review 1: UML}
+\author{Maddalena Panceri, Alessandro Ruzza,\\ Gabriele Santandrea, Flavio Villa\\
+Gruppo 33}
+\date{Aprile 2024}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+Valutazione del diagramma UML delle classi del gruppo 23.    
+\end{center}
+
+\section{Lati positivi}
+
+\subsection{Generale}
+Ottima l'ampia visione di progettazione della \textit{View} e del \textit{Network}. Specialmente quest'ultimo è stato strutturato rispetto agli esempi presentati a esercitazione.
+
+Ottimo anche l'uso di \textit{design pattern}, quali \textit{factory pattern} per l'istanziazione dei mazzi e \textit{strategy pattern} per la valutazione degli obiettivi e delle gold card (eccetto alcuni accorgimenti).
+
+\subsection{Elementi strutturali}
+
+Corretto l'uso di \textbf{Game} come classe fulcro, che racchiude gli elementi chiave della struttura di gioco (\textit{Table, Player, ecc..}).
+
+Ingegnosa la strutturazione del \textit{Player}, principalmente per l'inclusione dell'attributo \textbf{status} che controlla la connessione o disconnessione del client.
+
+\section{Lati negativi}
+
+\subsection{Generale}
+Innanzitutto risalta all'occhio l'utilizzo delle composizioni. Queste sono utilizzate in maniera scorretta in molteplici casi: le carte, per esempio, esistono come entità a sé, in quanto compongono più classi differenti.
+
+Dopodiché si è notata l'assenza di dettagli su alcuni attributi e metodi poco comprensibili dall'UML (alcuni segnalati in seguito).
+
+Alcune frecce di aggregazione e composizione sono nella direzione errata (Token --> Scoreboard; DeckFactory --> Deck).
+
+Si è notata la presenza della classe Menu. Poiché non ne è stato spiegato l'utilizzo o la funzione, non si hanno abbastanza elementi per decidere se la sua inclusione nel \textit{Model} sia corretta o meno.
+
+\textbf{CentralCards} è una classe ritenuta superflua, in quanto i suoi componenti sono assimilabili dalla \textbf{Table}.
+
+\subsection{Board}
+
+La mappa in \textbf{Board} che implementa l'area su cui giocare le carte ha una sola coordinata. Inoltre la carta \textbf{starter} non ha coordinate. Non si comprende come sono integrate le due informazioni.
+
+\subsection{Player}
+
+\begin{itemize}
+    \item Sia player sia scoreboard hanno l'informazione riguardante il punteggio del giocatore. Non se ne comprende l'utilità;
+    \item Non è stata annotata alcuna funzione che permetta l'accesso alla mano del giocatore;
+    \item Non è stato spiegato come viene identificato il primo giocatore. Inoltre nessun token sulla scoreboard può essere nero;
+\end{itemize}
+
+\subsection{Objective}
+
+\begin{itemize}
+    \item Le due sottoclassi \textbf{SharedObjective} e \textbf{PersonalObjective} non hanno alcuna differenza rispetto alla sovraclasse, o almeno non è stata specificata, perciò tale divisione si ritiene errata;
+    
+    \item L'interfaccia \textbf{Objective} funziona anche per le \textbf{GoldCard}. In tal modo si potrebbe associare un obiettivo a una \textbf{GoldCard} (in via potenziale) e viceversa;
+    
+    \item \textbf{PlacementCard} corrisponde all'attributo \textbf{points} di \textbf{ResourceCard};
+    
+    \item \textbf{pointsGained} prende \textbf{Objective} come parametro (non se ne capisce il motivo);
+
+    \item l'attributo \textbf{points} sembra duplicato su \textbf{Objective} e  \textbf{ObjectiveCard} e \textbf{GoldCard} (ereditato da \textbf{ResourceCard}).
+\end{itemize}
+
+\subsection{Cards}
+
+\begin{itemize}
+    \item Si è notata la duplicazione di elementi tra \textbf{ResourceCard} e \textbf{StarterCard} (e.g. \textit{flip()}, \textbf{isFront}, ...)
+
+    \item Il metodo \textit{cover()} non è spiegato. Il dubbio sorto è nella gestione dei piazzamenti delle carte sui diversi corner e la relativa copertura di risorse;
+
+    \item L'ereditarietà tra \textbf{GoldCard} e \textbf{ResourceCard} permetterebbe di usare una \textbf{GoldCard} come \textbf{ResourceCard} (per esempio inserirla in \textbf{ResourceDeck});
+
+    \item Da quello che si ricava dall'UML, la classe \textbf{Deck} restituisce \textbf{ResourceCard}, quindi un metodo che vuole piazzare una \textbf{GoldCard} non ha modo di chiamare i metodi della sottoclasse (\textbf{getCost} e \textbf{getObj}). Si suppone che la funzione \textit{place()} sia ridefinita in \textbf{GoldCard} e che chiami le funzioni in questione (che dovrebbero allora essere private).
+
+    \item il costo delle \textbf{GoldCard} è un \textbf{Set<Resource>}; questo è errato in quanto il costo può avere più risorse dello stesso tipo (e.g. 5 farfalle);
+
+    \item Un'ultima nota riguarda le funzioni \textit{getFront()} e \textit{isFlipped()}: sembrano avere la stessa funzione.
+\end{itemize}
+
+\section{Confronto tra le architetture}
+
+L’uso della classe centrale \textbf{Game} è un principale punto di forza dell’UML del gruppo 23, che dimostra lungimiranza verso la funzione addizionale di partite multiple sullo stesso server. Prenderemo spunto da questo.
+
+Similmente, l’utilizzo di uno \textit{status} per indicare la disconnessione del \textbf{Player} mira all’implementazione della funzione di resilienza alla disconnessione, o comunque alla notifica di disconnessione di un giocatore. Questo elemento manca nel nostro \textit{Model} e pertanto lo includeremo.
+
+Anche il package \textit{Network} può migliorare il nostro UML, ponendo le basi per la futura definizione dei protocolli di comunicazione.
+
+\end{document}
