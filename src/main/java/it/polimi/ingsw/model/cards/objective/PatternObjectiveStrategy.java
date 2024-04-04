@@ -1,9 +1,9 @@
-package it.polimi.ingsw.model.card.objective;
+package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.DoubleMap;
 import it.polimi.ingsw.model.DoubleMapRO;
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.card.placeable.PlaceableCard;
+import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.enums.Resource;
 
 public class PatternObjectiveStrategy implements ObjectiveStrategy{

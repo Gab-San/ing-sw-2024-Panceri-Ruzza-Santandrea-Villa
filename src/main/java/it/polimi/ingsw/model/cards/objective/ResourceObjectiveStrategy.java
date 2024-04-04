@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.card.objective;
+package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.enums.Resource;

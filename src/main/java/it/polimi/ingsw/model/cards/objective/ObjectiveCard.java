@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model.card.objective;
+package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.card.Card;
+import it.polimi.ingsw.model.cards.Card;
 
 public class ObjectiveCard extends Card {
     private final ObjectiveStrategy strategy;
