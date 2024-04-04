@@ -3,14 +3,15 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.enums.Resource;
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 
 public class PlayArea {
     private final DoubleMap<PlaceableCard> cardMatrix;
-    private final Map<Resource, Integer> visibleResources;
+    private final Map<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
 
     public PlayArea(){
@@ -23,7 +24,7 @@ public class PlayArea {
         return cardMatrix;
     }
 
-    public Map<Resource, Integer> getVisibleResources() {
+    public Map<GameResource, Integer> getVisibleResources() {
         return Collections.unmodifiableMap(visibleResources);
     }
     public List<Corner> getFreeCorners() {
@@ -45,11 +46,22 @@ public class PlayArea {
         col = cardMatrix.moveCol(row, col, corner.getDirection());
         row = cardMatrix.moveRow(row, col, corner.getDirection());
 
-        // calculate point where card will be placed using corner direction
+        // update adjacent cards and subtract from visibleResources
+        for (CornerDirection dir : CornerDirection.values()){
+            int dirCol = cardMatrix.moveCol(row, col, dir);
+            int dirRow = cardMatrix.moveRow(row, col, dir);
+            PlaceableCard dirCard = cardMatrix.get(dirRow, dirCol);
+            if(dirCard != null){
+                Corner dirCorner = dirCard.getCorner(dir.opposite());
+                visibleResources.put(
+                        dirCorner.getResource(),
+                        visibleResources.get(dirCorner.getResource())-1
+                );
+                dirCorner.cover().occupy();
+            }
+        }
+        // TODO: fix representation Map<> or int[]
 
-
-        corner.occupy();
-        corner.cover();
 
     }
 }

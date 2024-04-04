@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.enums.Resource;
+import it.polimi.ingsw.model.enums.GameResource;
 
 import java.util.Map;
 
 public class ResourceObjectiveStrategy implements ObjectiveStrategy{
-    private final Map<Resource, Integer> resourceForCompletion;
+    private final Map<GameResource, Integer> resourceForCompletion;
 
-    public ResourceObjectiveStrategy(int pointsPerSolve, Map<Resource, Integer> resourceForCompletion) {
+    public ResourceObjectiveStrategy(int pointsPerSolve, Map<GameResource, Integer> resourceForCompletion) {
         this.resourceForCompletion = resourceForCompletion;
     }
 
@@ -17,7 +17,7 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
     }
 
     // returns the maximum multiplier M that satisfies b(resource)*M <= a(resource) for all resources in b
-    private int divideMap(Map<Resource, Integer> a, Map<Resource, Integer> b){
+    private int divideMap(Map<GameResource, Integer> a, Map<GameResource, Integer> b){
         return b.keySet().stream()
                 .mapToInt( resource -> a.get(resource)/b.get(resource) )
                 .min().orElse(0);

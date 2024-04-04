@@ -19,6 +19,14 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
         else return colMap.get(column);
     }
 
+    /**
+     * !! IMPORTANT !!
+     * Always call this after moveCol as row is a key factor for that movement
+     * @param row  starting row
+     * @param col  starting column
+     * @param direction  direction to move towards
+     * @return row value after movement
+     */
     @Override
     public int moveRow(int row, int col, CornerDirection direction) {
         switch (direction){

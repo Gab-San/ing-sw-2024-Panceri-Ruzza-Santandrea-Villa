@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.enums.Resource;
+import it.polimi.ingsw.model.enums.GameResource;
 
 public enum PatternObjective {
     L_RED_RED_GREEN("*R*" +
@@ -12,25 +12,25 @@ public enum PatternObjective {
                 "B**")
     ;
 
-    final DoubleMap<Resource> pattern;
+    final DoubleMap<GameResource> pattern;
     PatternObjective(String pattern){
         this.pattern = new DoubleMap<>();
         for (int i = 0; i < pattern.length(); i++) {
-            Resource r = charToResource(pattern.charAt(i));
+            GameResource r = charToResource(pattern.charAt(i));
             if(r!=null)
                 this.pattern.put(i/3, i%3, r);
         }
     }
 
-    public DoubleMapRO<Resource> getPattern(){
+    public DoubleMapRO<GameResource> getPattern(){
         return pattern;
     }
-    private Resource charToResource(char c){
+    private GameResource charToResource(char c){
         switch (c){
-            case 'R': return Resource.MUSHROOM; // red
-            case 'B': return Resource.WOLF; // blue
-            case 'G': return Resource.LEAF; // green
-            case 'P': return Resource.BUTTERFLY; // purple
+            case 'R': return GameResource.MUSHROOM; // red
+            case 'B': return GameResource.WOLF; // blue
+            case 'G': return GameResource.LEAF; // green
+            case 'P': return GameResource.BUTTERFLY; // purple
             default : return null;
         }
     }
