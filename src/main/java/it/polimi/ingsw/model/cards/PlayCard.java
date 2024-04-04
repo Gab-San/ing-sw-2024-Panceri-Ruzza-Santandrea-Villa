@@ -2,16 +2,16 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.model.PlayArea;
 
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 public abstract class PlayCard extends PlaceableCard{
-    GameResource backResource;
-    int pointsOnPlace;
+    protected GameResource backResource;
+    protected int pointsOnPlace;
 
     @Override
-    public int[] getCardResources() {
+    public Map<GameResource, Integer> getCardResources() {
         int[] resourcesCount = new int[7];
         Set<CornerDirection> cornerKeys = corners.keySet();
 
@@ -25,7 +25,13 @@ public abstract class PlayCard extends PlaceableCard{
         } else {
             resourcesCount[backResource.getResourceIndex()]++;
         }
-        return resourcesCount;
+
+        HashMap<GameResource, Integer> countedResources = new HashMap<GameResource, Integer>();
+        for (GameResource r : GameResource.values()){
+            countedResources.put(r, resourcesCount[r.getResourceIndex()]);
+        }
+
+        return countedResources;
     }
 
     @Override
@@ -36,11 +42,11 @@ public abstract class PlayCard extends PlaceableCard{
     /**
      * @return a table mapping the resources needed and the count of said resources.
      */
-    abstract Hashtable<GameResource, Integer> getPlacementCost();
+    public abstract Map<GameResource, Integer> getPlacementCost();
 
     /**
      * @param playArea associated with the player who is currently making the action
      * @return the points received from the placement
      */
-    abstract int calculatePointsOnPlace(PlayArea playArea);
+    public abstract int calculatePointsOnPlace(PlayArea playArea);
 }

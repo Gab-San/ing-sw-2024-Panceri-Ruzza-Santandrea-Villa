@@ -11,6 +11,19 @@ public abstract class Card {
     protected boolean flipped;
 
     /**
+     * Flips the card
+     */
+    public void flip(){
+        flipped = !flipped;
+        // eventual GUI code here
+    }
+    public void turnFaceUp(){
+        if(flipped) flip();
+    }
+    public void turnFaceDown(){
+        if(!flipped) flip();
+    }
+    /**
      * @return TRUE if the card is on the back side, FALSE if it's on the front side.
      */
     public boolean isFlipped(){

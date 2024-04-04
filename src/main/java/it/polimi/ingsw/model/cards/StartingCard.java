@@ -2,15 +2,15 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.*;
 
-import java.util.Hashtable;
+import java.util.*;
 import java.util.Set;
 
 public class StartingCard extends PlaceableCard {
-    GameResource[] centralFrontResources;
-    Hashtable<CornerDirection, GameResource> frontCornersResources;
+    private GameResource[] centralFrontResources;
+    private Hashtable<CornerDirection, GameResource> frontCornersResources;
 
     @Override
-    public int[] getCardResources() {
+    public Map<GameResource, Integer> getCardResources() {
         int[] resourcesCount = new int[7];
 
         if(!flipped) {
@@ -38,7 +38,12 @@ public class StartingCard extends PlaceableCard {
             }
         }
 
-        return resourcesCount;
+        Hashtable<GameResource, Integer> countedResources = new Hashtable<GameResource, Integer>();
+        for (GameResource r : GameResource.values()){
+            countedResources.put(r, resourcesCount[r.getResourceIndex()]);
+        }
+
+        return countedResources;
     }
 
     @Override

@@ -1,15 +1,14 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public abstract class PlaceableCard extends Card{
-    int row;
-    int col;
-    Hashtable<CornerDirection, Corner> corners;
+    private Point position;
+    protected Hashtable<CornerDirection, Corner> corners;
 
     /**
      * @param cornDir indicates the selected corner direction;
@@ -18,30 +17,36 @@ public abstract class PlaceableCard extends Card{
      */
     public Corner getCorner(CornerDirection cornDir) throws NoSuchElementException{
         if(!corners.containsKey(cornDir)){
-            throw new NoSuchElementException("The search corner is filled");
+            throw new NoSuchElementException("The searched corner is filled");
         }
         return corners.get(cornDir);
     }
 
     /**
-     * @return an array with the count of resources to add to the visible resources count on the play area
+     * @return a List of free corners (not occupied and not filled)
      */
-    abstract public int[] getCardResources();
+    public List<Corner> getFreeCorners(){
+        List<Corner> freeCorners = new LinkedList<>();
+        for (CornerDirection dir : CornerDirection.values()){
+            try{
+                Corner c = getCorner(dir);
+                if (!c.isOccupied()) freeCorners.add(c);
+            }catch (Exception ignored){} // filled corner isn't free
+        }
+        return freeCorners;
+    }
+
+    /**
+     * @return a map with the count of resources to add to the visible resources count on the play area
+     */
+    abstract public Map<GameResource, Integer> getCardResources();
     abstract public GameResource getCardColor();
 
-    public int getRow() {
-        return row;
+    public Point getPosition() {
+        return position;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
+    public void setPosition(Point position) {
+        this.position = position;
     }
 }

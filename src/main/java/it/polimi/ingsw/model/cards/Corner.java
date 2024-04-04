@@ -2,15 +2,16 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
+import org.jetbrains.annotations.Nullable;
 
 public class Corner {
-    GameResource resource;
-    boolean occupied;
-    boolean visible;
-    PlaceableCard cardRef;
-    CornerDirection direction;
+    private GameResource resource;
+    private boolean occupied;
+    private boolean visible;
+    private PlaceableCard cardRef;
+    private CornerDirection direction;
 
-    Corner(GameResource resource,PlaceableCard cardRef, CornerDirection dir){
+    public Corner(@Nullable GameResource resource, PlaceableCard cardRef, CornerDirection dir){
         this.resource = resource;
         this.cardRef = cardRef;
         this.occupied = false;
@@ -60,10 +61,7 @@ public class Corner {
      * @return the resource visible in the corner.
      */
     public GameResource getResource(){
-        if(visible && !occupied) {
-            return resource;
-        }
-        return null;
+        return visible ? resource : null;
     }
 
 }
