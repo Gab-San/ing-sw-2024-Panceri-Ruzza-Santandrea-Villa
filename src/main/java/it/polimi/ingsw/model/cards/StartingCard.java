@@ -2,32 +2,43 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.*;
 
+import java.util.Hashtable;
 import java.util.Set;
 
 public class StartingCard extends PlaceableCard {
-    GameResource[] centralResources;
-    //TODO: the resources on the corners when facing the front of the starting cards are not considered
+    GameResource[] centralFrontResources;
+    Hashtable<CornerDirection, GameResource> frontCornersResources;
+
     @Override
     public int[] getCardResources() {
-        int[] resources = new int[7];
-        Set<CornerDirection> cornKey = corners.keySet();
+        int[] resourcesCount = new int[7];
 
-        //In any case I can add the resources
-        for (CornerDirection cornDir : cornKey) {
-            GameResource res = corners.get(cornDir).getResource();
-            if(res != null){
-                resources[res.getResourceIndex()]++;
+        if(!flipped) {
+            Set<CornerDirection> cornerKeys = corners.keySet();
+
+            for (CornerDirection cornDir : cornerKeys) {
+                GameResource res = corners.get(cornDir).getResource();
+                if (res != null) {
+                    resourcesCount[res.getResourceIndex()]++;
+                }
+            }
+
+        } else{
+
+            Set<CornerDirection> cornerKeys = frontCornersResources.keySet();
+            for(CornerDirection cornDir: cornerKeys){
+                GameResource res = corners.get(cornDir).getResource();
+                if(res != null){
+                    resourcesCount[res.getResourceIndex()]++;
+                }
+            }
+
+            for(GameResource res: centralFrontResources){
+                resourcesCount[res.getResourceIndex()]++;
             }
         }
 
-        //If the central resources are displayed then they are considered
-        if(flipped){
-            for(GameResource res: centralResources){
-                resources[res.getResourceIndex()]++;
-            }
-        }
-
-        return resources;
+        return resourcesCount;
     }
 
     @Override

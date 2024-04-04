@@ -38,7 +38,7 @@ public class Corner {
     }
 
     /**
-     * @return if the corner is on the outer layer and it's not covered by any other corner
+     * @return  TRUE if the selected corner is not covered by any other corner, FALSE otherwise
      */
     public boolean isVisible(){
         return visible;
@@ -51,7 +51,6 @@ public class Corner {
         if(visible && !occupied) {
             return resource;
         }
-
         return null;
     }
 

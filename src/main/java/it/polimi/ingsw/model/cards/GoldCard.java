@@ -2,10 +2,18 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.cards.cardpatterns.GoldCardStrategy;
 import it.polimi.ingsw.model.enums.GameResource;
 
+import java.util.Hashtable;
+
 public class GoldCard extends PlayCard{
-    Map<GameResource, Integer> placementCost;
+    Hashtable<GameResource, Integer> placementCost;
     GoldCardStrategy goldStrat;
-    int calculatePointsOnPlace(PlayArea pA){
-        return pointsOnPlace*goldStrat.calculateSolves(pA);
+
+    @Override
+    Hashtable<GameResource, Integer> getPlacementCost() {
+        return placementCost;
+    }
+
+    int calculatePointsOnPlace(PlayArea playArea){
+        return pointsOnPlace*goldStrat.calculateSolves(playArea);
     }
 }

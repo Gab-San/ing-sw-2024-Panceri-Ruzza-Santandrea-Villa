@@ -24,8 +24,7 @@ public abstract class PlaceableCard extends Card{
     }
 
     /**
-     * TODO decide if necessary to return an array or maybe is better an hashmap
-     * @return an array of resources to add to the visible resources on the play area
+     * @return an array with the count of resources to add to the visible resources count on the play area
      */
     abstract public int[] getCardResources();
     abstract public GameResource getCardColor();
