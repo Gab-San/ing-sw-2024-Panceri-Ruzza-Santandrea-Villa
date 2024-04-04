@@ -20,15 +20,12 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
     }
 
     /**
-     * !! IMPORTANT !!
-     * Always call this after moveCol as row is a key factor for that movement
      * @param row  starting row
-     * @param col  starting column
      * @param direction  direction to move towards
-     * @return row value after movement
+     * @return row value after movement in direction
      */
     @Override
-    public int moveRow(int row, int col, CornerDirection direction) {
+    public int moveRow(int row, CornerDirection direction) {
         switch (direction){
             case TL:
             case TR:
@@ -41,20 +38,29 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
         }
         return row;
     }
-
+    /**
+     * @param col  starting column
+     * @param direction  direction to move towards
+     * @return col value after movement in direction
+     */
     @Override
-    public int moveCol(int row, int col, CornerDirection direction) {
+    public int moveCol(int col, CornerDirection direction) {
         switch (direction){
             case TL:
             case BL:
-                col += (row%2 == 0) ? 0 : -1;
+                col += -1;
                 break;
             case TR:
             case BR:
-                col += (row%2 == 0) ? 1 : 0;
+                col += 1;
                 break;
         }
         return col;
+    }
+    public V getOffset(int row, int col, CornerDirection direction){
+        int offCol = moveCol(col, direction);
+        int offRow = moveRow(row, direction);
+        return get(offRow, offCol);
     }
 
     public void put(int row, int column, V value) {

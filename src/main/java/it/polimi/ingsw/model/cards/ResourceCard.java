@@ -1,23 +1,22 @@
 package it.polimi.ingsw.model.cards;
-import it.polimi.ingsw.model.enums.GameResource;
 
-import java.util.Hashtable;
+import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.model.PlayArea;
+
+import java.util.*;
 
 public class ResourceCard extends PlayCard{
 
-    //TODO Should throw an exception or return null?
+    /**
+     * @return empty Map (Resource cards have no placement cost)
+     */
     @Override
-    Hashtable<GameResource, Integer> getPlacementCost() {
-        return null;
+    public Map<GameResource, Integer> getPlacementCost() {
+        return new Hashtable<>();
     }
 
     @Override
-    int calculatePointsOnPlace(PlayArea playArea) {
+    public int calculatePointsOnPlace(PlayArea playArea) {
         return pointsOnPlace;
-    }
-
-    @Override
-    public GameResource getCardColor() {
-        return backResource;
     }
 }
