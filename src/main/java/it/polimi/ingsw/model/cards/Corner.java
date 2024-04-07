@@ -2,14 +2,29 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * The corner class implements the functionality of a corner in the card.
+ * The action that can be made on a corner are: <br>
+ * - cover it; <br>
+ * - count its resource;
+ */
 public class Corner {
     private GameResource resource;
     private boolean occupied;
     private boolean visible;
     private PlaceableCard cardRef;
     private CornerDirection direction;
+    public Corner(@NotNull Corner otherCorner){
+        this.resource = otherCorner.resource;
+        this.occupied = otherCorner.occupied;
+        this.visible = otherCorner.visible;
+        this.cardRef = otherCorner.cardRef;
+        this.direction = otherCorner.direction;
+    }
+
 
     public Corner(@Nullable GameResource resource, PlaceableCard cardRef, CornerDirection dir){
         this.resource = resource;
@@ -18,9 +33,17 @@ public class Corner {
         this.visible = true;
         this.direction = dir;
     }
+
+    /**
+     * @return the card that contains this corner, in order to pinpoint the location of it;
+     */
     public PlaceableCard getCardRef() {
         return cardRef;
     }
+
+    /**
+     * @return the direction of the corner;
+     */
     public CornerDirection getDirection() {
         return direction;
     }

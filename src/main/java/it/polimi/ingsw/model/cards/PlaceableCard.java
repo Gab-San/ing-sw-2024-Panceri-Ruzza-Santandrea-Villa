@@ -4,11 +4,42 @@ import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 
+import javax.lang.model.type.NullType;
 import java.util.*;
 
 public abstract class PlaceableCard extends Card{
     private Point position;
     protected Hashtable<CornerDirection, Corner> corners;
+
+    protected PlaceableCard(){
+        position = null;
+        corners = null;
+    }
+
+    /**
+     * This constructor builds the card, without considering the fact that it might have a position
+     * @param corners a list of the corners that the card contains
+     */
+    protected PlaceableCard(Corner... corners){
+        this.position = null;
+        this.corners = new Hashtable<>();
+        for(Corner corn: corners){
+            Corner newCorner = new Corner(corn);
+            this.corners.put(newCorner.getDirection(), newCorner);
+        }
+    }
+
+    /**
+     * This constructor builds the card when positioned adding the information of the position.
+     * This constructor exists in order to build immutable card objects
+     * @param placement coordinates at which it is placed
+     * @param oldCard copied card
+     */
+    protected PlaceableCard(Point placement, PlaceableCard oldCard){
+        this.corners = oldCard.corners;
+        position = new Point(placement);
+    }
+
 
     /**
      * @param cornDir indicates the selected corner direction;
@@ -40,13 +71,21 @@ public abstract class PlaceableCard extends Card{
      * @return a map with the count of resources to add to the visible resources count on the play area
      */
     abstract public Map<GameResource, Integer> getCardResources();
-    abstract public GameResource getCardColor();
+    //FIXME:
+    // - should check if corner is visible?
+    // - should check if already checked?
 
-    public Point getPosition() {
+    /**
+     * @return the resource that identifies the colour of this card
+     */
+    abstract public GameResource getCardColour();
+
+    public Point getPosition() throws RuntimeException {
+        if(position == null){
+            throw new RuntimeException();
+        }
         return position;
     }
 
-    public void setPosition(Point position) {
-        this.position = position;
-    }
+    public abstract PlaceableCard setPosition(Point placement);
 }

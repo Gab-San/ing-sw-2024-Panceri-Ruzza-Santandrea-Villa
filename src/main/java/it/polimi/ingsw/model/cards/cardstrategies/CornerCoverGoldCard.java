@@ -18,7 +18,13 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
                 // corner occupied and visible == it is covering another corner
                 coversCorner = corner.isOccupied() && corner.isVisible() ;
             }catch (NoSuchElementException e){ // corner is filled
-                coversCorner = pA.getCardMatrix().get(card.getPosition().move(dir)) != null;
+                try {
+                    coversCorner = pA.getCardMatrix().get(card.getPosition().move(dir)) != null;
+                } catch(Exception nullPosition){
+                    // TODO handle exception
+                    nullPosition.printStackTrace();
+                    System.err.println("Trying to access null position");
+                }
             }
             numCorners += coversCorner ? 1 : 0;
         }

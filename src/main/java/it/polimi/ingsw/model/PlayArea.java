@@ -52,8 +52,7 @@ public class PlayArea {
         freeCorners.addAll(card.getFreeCorners());
         // place card
         Point cardPos = new Point(0,0);
-        cardMatrix.put(cardPos, card);
-        card.setPosition(cardPos);
+        cardMatrix.put(cardPos, card.setPosition(cardPos));
     }
     /**
      * Places a card in cardMatrix and occupies corners, updates visibleResources and freeCorners
@@ -70,8 +69,14 @@ public class PlayArea {
                 throw new RuntimeException("Card can't be placed as placement cost condition isn't satisfied");
             }
         }
-
-        Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
+        Point cardPos = null;
+        try {
+            cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
+        } catch(RuntimeException nullPosition){
+            // TODO handle exception
+            nullPosition.printStackTrace();
+            System.err.println("Trying to access card position");
+        }
         //checks valid placement, throw RuntimeException on failure
         if(cardMatrix.get(cardPos) != null) throw new RuntimeException("Placing on existing Card");
         for (CornerDirection dir : CornerDirection.values()){
@@ -117,7 +122,7 @@ public class PlayArea {
             );
         }
         // place card
-        cardMatrix.put(cardPos, card);
-        card.setPosition(cardPos);
+        cardMatrix.put(cardPos, card.setPosition(cardPos));
+
     }
 }

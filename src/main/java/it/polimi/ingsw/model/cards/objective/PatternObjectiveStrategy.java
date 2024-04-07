@@ -8,8 +8,6 @@ import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.enums.GameResource;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class PatternObjectiveStrategy implements ObjectiveStrategy{
     private final PatternObjective pattern;
@@ -43,7 +41,7 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
             //     - has a card of the wrong color
             for(Point patternPos : pattern.keySet()){
                 PlaceableCard card = cardMatrix.get(pos.add(patternPos));
-                if(card == null || usedPoints.contains(pos.add(patternPos)) || !card.getCardColor().equals(pattern.get(patternPos))){
+                if(card == null || usedPoints.contains(pos.add(patternPos)) || !card.getCardColour().equals(pattern.get(patternPos))){
                     patternFound =  false;
                     break;
                 }
