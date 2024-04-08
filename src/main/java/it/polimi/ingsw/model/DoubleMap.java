@@ -2,8 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DoubleMap<V> implements DoubleMapRO<V> {
     protected final Map<Integer, Map<Integer, V>> rowMap;
@@ -38,6 +37,7 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
         }
         return row;
     }
+
     /**
      * @param col  starting column
      * @param direction  direction to move towards
@@ -45,7 +45,7 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
      */
     @Override
     public int moveCol(int col, CornerDirection direction) {
-        switch (direction){
+        switch (direction) {
             case TL:
             case BL:
                 col += -1;
@@ -57,15 +57,11 @@ public class DoubleMap<V> implements DoubleMapRO<V> {
         }
         return col;
     }
+
     public V getOffset(int row, int col, CornerDirection direction){
         int offCol = moveCol(col, direction);
         int offRow = moveRow(row, direction);
         return get(offRow, offCol);
-    }
-
-    public void put(int row, int column, V value) {
-        rowMap.computeIfAbsent(row, k -> new HashMap<>())
-                .put(column, value);
     }
 
     public int getMaxRow(){

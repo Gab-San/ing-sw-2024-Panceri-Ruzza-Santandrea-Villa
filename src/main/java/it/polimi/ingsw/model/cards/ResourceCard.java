@@ -1,5 +1,4 @@
 package it.polimi.ingsw.model.cards;
-
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.PlayArea;

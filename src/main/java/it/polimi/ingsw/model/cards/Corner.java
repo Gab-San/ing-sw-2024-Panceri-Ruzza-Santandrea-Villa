@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import it.polimi.ingsw.model.enums.*;
+import org.jetbrains.annotations.*;
 
 /**
  * The corner class implements the functionality of a corner in the card.

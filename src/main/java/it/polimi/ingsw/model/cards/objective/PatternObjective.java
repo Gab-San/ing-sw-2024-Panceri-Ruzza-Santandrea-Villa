@@ -1,14 +1,9 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
-import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.*;
 import java.security.InvalidParameterException;
-import java.util.Hashtable;
-import java.util.Map;
-
 import static it.polimi.ingsw.model.enums.CornerDirection.TL;
 import static it.polimi.ingsw.model.enums.CornerDirection.TR;
 import static it.polimi.ingsw.model.enums.CornerDirection.BL;
@@ -21,6 +16,9 @@ import static it.polimi.ingsw.model.enums.CornerDirection.BR;
 // e.g. to get the top card it's Point(0,0).move(TL, TR)
 // e.g. to get the left card it's Point(0,0).move(TL, BL)
 // TODO: change PatternObjective from hard-coded enum to JSON import
+
+import java.util.*;
+
 public enum PatternObjective {
     L_RED_RED_GREEN("*R*" +
                     "*R*" +
@@ -31,6 +29,7 @@ public enum PatternObjective {
     ;
 
     final Map<Point, GameResource> pattern;
+
     PatternObjective(@NotNull String strPattern){
         pattern = new Hashtable<>();
 

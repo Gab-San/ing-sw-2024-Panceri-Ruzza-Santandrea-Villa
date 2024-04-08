@@ -6,6 +6,7 @@ public record Point(int row, int col) {
     public Point(Point other){
         this(other.row, other.col);
     }
+
     public static Point move(Point from, CornerDirection direction) {
         return switch (direction) {
             default -> new Point(from.row + 1, from.col - 1);
@@ -17,6 +18,7 @@ public record Point(int row, int col) {
     public Point move(CornerDirection direction){
         return move(this, direction);
     }
+
     public Point move(CornerDirection ...directions){
         Point p = this;
         for (CornerDirection c : directions){

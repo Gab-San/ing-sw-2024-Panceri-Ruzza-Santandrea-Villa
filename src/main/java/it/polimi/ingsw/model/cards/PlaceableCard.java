@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.cards;
-
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
-
 import java.security.InvalidParameterException;
 import java.util.*;
 
