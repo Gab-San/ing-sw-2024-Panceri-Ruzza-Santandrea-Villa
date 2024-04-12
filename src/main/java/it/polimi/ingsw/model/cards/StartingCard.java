@@ -10,11 +10,11 @@ import java.util.Set;
  * This represents the starting card: the first card placed in the setup phase.
  */
 public class StartingCard extends PlaceableCard {
-    private List<GameResource> centralFrontResources;
-    private Hashtable<CornerDirection, GameResource> frontCornersResources;
+    private final List<GameResource> centralFrontResources;
+    private final Hashtable<CornerDirection, GameResource> frontCornersResources;
 
     /**
-     * Constucts a blank card.
+     * Constructs a blank card.
      */
     public StartingCard(){
         super();
@@ -28,12 +28,13 @@ public class StartingCard extends PlaceableCard {
      * @param centralRes The resources shown in the center of the card
      * @param corners The corners of the card
      */
+    //FIXME: how to set a filled frontCorner??
     public StartingCard(Hashtable<CornerDirection, GameResource> frontCornRes,
                         GameResource[] centralRes, Corner... corners){
         super(corners);
 
         this.centralFrontResources = new ArrayList<>();
-        // Check if this copies;
+        //TODO: Check if this copies;
         centralFrontResources.addAll(Arrays.asList(centralRes));
 
         this.frontCornersResources = new Hashtable<>();
