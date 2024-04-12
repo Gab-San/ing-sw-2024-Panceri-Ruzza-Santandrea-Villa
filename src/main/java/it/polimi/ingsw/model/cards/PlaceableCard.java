@@ -4,11 +4,10 @@ import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 
-import javax.lang.model.type.NullType;
 import java.util.*;
 
 public abstract class PlaceableCard extends Card{
-    private Point position;
+    private final Point position;
     protected Hashtable<CornerDirection, Corner> corners;
 
     protected PlaceableCard(){
@@ -24,7 +23,7 @@ public abstract class PlaceableCard extends Card{
         this.position = null;
         this.corners = new Hashtable<>();
         for(Corner corn: corners){
-            Corner newCorner = new Corner(corn);
+            Corner newCorner = new Corner(corn, this);
             this.corners.put(newCorner.getDirection(), newCorner);
         }
     }

@@ -13,7 +13,7 @@ public class GoldCard extends PlayCard{
     Hashtable<GameResource, Integer> placementCost;
     GoldCardStrategy goldStrat;
 
-    public GoldCard(GameResource backResource, int pointsOnPlace,Hashtable<GameResource, Integer> plCost,
+    public GoldCard(GameResource backResource, int pointsOnPlace, Hashtable<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, Corner... corners){
         super(backResource, pointsOnPlace, corners);
         this.goldStrat = goldStrat;

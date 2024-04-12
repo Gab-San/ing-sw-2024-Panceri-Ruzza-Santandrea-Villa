@@ -13,6 +13,11 @@ public abstract class PlayCard extends PlaceableCard{
     protected PlayCard(){
         super();
     }
+    protected PlayCard(GameResource backResource, Corner... corners){
+        super(corners);
+        this.backResource = backResource;
+        this.pointsOnPlace = 0;
+    }
     protected PlayCard(GameResource backResource, int pointsOnPlace, Corner... corners){
         super(corners);
         this.backResource = backResource;

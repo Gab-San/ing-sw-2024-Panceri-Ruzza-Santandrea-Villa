@@ -42,3 +42,4 @@ build/
 ### Files to ignore ### (from Gamba di Squalo)
 Ignore/
 .idea/uiDesigner.xml
+.idea/misc.xml

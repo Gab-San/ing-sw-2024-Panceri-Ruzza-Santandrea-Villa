@@ -10,6 +10,9 @@ public class ResourceCard extends PlayCard{
     public ResourceCard(){
         super();
     }
+    public ResourceCard(GameResource backResource, Corner... corners){
+        super(backResource, corners);
+    }
     public ResourceCard(GameResource backResource, int pointsOnPlace, Corner... corners){
         super(backResource, pointsOnPlace, corners);
     }
