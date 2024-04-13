@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.PlayArea;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public abstract class PlayCard extends PlaceableCard{
@@ -18,7 +19,7 @@ public abstract class PlayCard extends PlaceableCard{
         this.backResource = backResource;
         this.pointsOnPlace = 0;
     }
-    protected PlayCard(GameResource backResource, int pointsOnPlace, Corner... corners){
+    protected PlayCard(GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
         super(corners);
         this.backResource = backResource;
         this.pointsOnPlace = pointsOnPlace;
@@ -32,26 +33,12 @@ public abstract class PlayCard extends PlaceableCard{
 
     @Override
     public Map<GameResource, Integer> getCardResources() {
-        int[] resourcesCount = new int[7];
-        Set<CornerDirection> cornerKeys = corners.keySet();
-
+        int[] resourcesCount = super.getCornerResources();
         if(!isFaceUp){
-            for(CornerDirection cornDir: cornerKeys){
-                GameResource res = corners.get(cornDir).getResource();
-                if(res != null){
-                    resourcesCount[res.getResourceIndex()]++;
-                }
-            }
-        } else {
             resourcesCount[backResource.getResourceIndex()]++;
         }
 
-        HashMap<GameResource, Integer> countedResources = new HashMap<GameResource, Integer>();
-        for (GameResource r : GameResource.values()){
-            countedResources.put(r, resourcesCount[r.getResourceIndex()]);
-        }
-
-        return countedResources;
+        return super.resourceArrayToMap(resourcesCount);
     }
 
     @Override

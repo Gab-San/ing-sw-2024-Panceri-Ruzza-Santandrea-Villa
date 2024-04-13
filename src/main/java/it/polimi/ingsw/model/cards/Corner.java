@@ -11,17 +11,16 @@ import org.jetbrains.annotations.Nullable;
  * - cover it; <br>
  * - count its resource;
  */
-// FIXME: What if we want to get a filled corner's direction?
-//  We'd have to do a check on the card.
-//  Is it necessary to check a filled corner's direction?
 public class Corner {
-    private final GameResource resource;
+    private final GameResource frontResource;
+    private final GameResource backResource;
     private boolean occupied;
     private boolean visible;
-    private final PlaceableCard cardRef;
+    private PlaceableCard cardRef;
     private final CornerDirection direction;
     public Corner(){
-        this.resource = null;
+        this.frontResource = null;
+        this.backResource = null;
         this.occupied = false;
         this.visible = true;
         this.cardRef = null;
@@ -31,20 +30,25 @@ public class Corner {
     //  - changes  made : instead of getting card-ref from corner, using this constr to get card-ref
     //  - this constructor is used only in this package to be sure to copy the information of the corners and
     //  not to have spare refs to objects
-    Corner(@NotNull Corner otherCorner, @NotNull PlaceableCard cardRef){
-        this.resource = otherCorner.resource;
+    protected Corner(@NotNull Corner otherCorner, @NotNull PlaceableCard cardRef){
+        this.frontResource = otherCorner.frontResource;
+        this.backResource = otherCorner.backResource;
         this.occupied = otherCorner.occupied;
         this.visible = otherCorner.visible;
         this.cardRef = cardRef;
         this.direction = otherCorner.direction;
     }
 
-    public Corner(@Nullable GameResource resource, CornerDirection dir){
-        this.resource = resource;
+    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, CornerDirection dir){
+        this.frontResource = frontResource;
+        this.backResource = backResource;
         this.cardRef = null;
         this.occupied = false;
         this.visible = true;
         this.direction = dir;
+    }
+    public Corner(@Nullable GameResource frontResource, CornerDirection dir){
+        this(frontResource, null, dir);
     }
 
     /**
@@ -52,6 +56,10 @@ public class Corner {
      */
     public PlaceableCard getCardRef() {
         return cardRef;
+    }
+    protected Corner setCardRef(PlaceableCard card){
+        cardRef = card;
+        return this;
     }
 
     /**
@@ -71,10 +79,10 @@ public class Corner {
     }
 
     /**
-     * @return TRUE if there is no corner covering this corner, FALSE otherwise.
+     * @return TRUE if a card can be placed on this corner, FALSE otherwise
      */
     public boolean isOccupied(){
-        return occupied;
+        return occupied || getResource() == GameResource.FILLED;
     }
 
     /**
@@ -97,7 +105,7 @@ public class Corner {
      * @return the resource visible in the corner.
      */
     public GameResource getResource(){
-        return visible ? resource : null;
+        return visible ? cardRef.isFaceUp() ? frontResource : backResource : null;
     }
 
 }

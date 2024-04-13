@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.cardstrategies.GoldCardStrategy;
 import it.polimi.ingsw.model.enums.GameResource;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
@@ -14,7 +15,7 @@ public class GoldCard extends PlayCard{
     GoldCardStrategy goldStrat;
 
     public GoldCard(GameResource backResource, int pointsOnPlace, Hashtable<GameResource, Integer> plCost,
-                    GoldCardStrategy goldStrat, Corner... corners){
+                    GoldCardStrategy goldStrat, Corner... corners) throws InvalidParameterException {
         super(backResource, pointsOnPlace, corners);
         this.goldStrat = goldStrat;
         this.placementCost = new Hashtable<>();

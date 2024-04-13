@@ -13,7 +13,7 @@ public abstract class PlaceableCard extends Card{
 
     protected PlaceableCard(){
         position = null;
-        corners = null;
+        corners = new Hashtable<>();
     }
 
     /**
@@ -39,24 +39,20 @@ public abstract class PlaceableCard extends Card{
      */
     protected PlaceableCard(Point placement, PlaceableCard oldCard){
         this.corners = oldCard.corners;
+        for (Corner c : corners.values()){
+            c.setCardRef(this);
+        }
         position = new Point(placement);
     }
-
 
     /**
      * @param cornDir indicates the selected corner direction;
      * @return the corner in the selected direction;
      * @throws NoSuchElementException if the corner in the selected direction is filled;
      */
-    public Corner getCorner(CornerDirection cornDir) throws NoSuchElementException{
-        if(!corners.containsKey(cornDir)){
-            throw new NoSuchElementException("The searched corner is filled");
-        }
+    public Corner getCorner(CornerDirection cornDir){
         return corners.get(cornDir);
     }
-    //FIXME:
-    //  - current getCorner() implementation does not check for the card being flipped
-    //  - on card flipped, all corners should exist
 
     /**
      * @return a List of free corners (not occupied and not filled)
@@ -64,10 +60,8 @@ public abstract class PlaceableCard extends Card{
     public List<Corner> getFreeCorners(){
         List<Corner> freeCorners = new LinkedList<>();
         for (CornerDirection dir : CornerDirection.values()){
-            try{
-                Corner c = getCorner(dir);
-                if (!c.isOccupied()) freeCorners.add(c);
-            }catch (Exception ignored){} // filled corner isn't free
+            Corner c = getCorner(dir);
+            if (!c.isOccupied()) freeCorners.add(c);
         }
         return freeCorners;
     }
@@ -76,9 +70,29 @@ public abstract class PlaceableCard extends Card{
      * @return a map with the count of visible resources
      */
     abstract public Map<GameResource, Integer> getCardResources();
-    //FIXME:
-    // - should check if corner is visible?
-    // - should check if already checked?
+    // used in implementations to avoid code duplication
+    protected int[] getCornerResources(){
+        int[] resourcesCount = new int[7];
+
+        Set<CornerDirection> cornerKeys = corners.keySet();
+        for(CornerDirection cornDir: cornerKeys){
+            GameResource res = corners.get(cornDir).getResource();
+            if(res != null && res != GameResource.FILLED){
+                resourcesCount[res.getResourceIndex()]++;
+            }
+        }
+        return resourcesCount;
+    }
+    // used in implementations to avoid code duplication
+    protected Map<GameResource, Integer> resourceArrayToMap(int[] resourcesCount){
+        Hashtable<GameResource, Integer> countedResources = new Hashtable<GameResource, Integer>();
+        for (GameResource r : GameResource.values()){
+            if(r != GameResource.FILLED)
+                countedResources.put(r, resourcesCount[r.getResourceIndex()]);
+        }
+
+        return countedResources;
+    }
 
     /**
      * @return the resource that identifies the colour of this card
@@ -87,7 +101,7 @@ public abstract class PlaceableCard extends Card{
 
     public Point getPosition() throws RuntimeException {
         if(position == null){
-            throw new RuntimeException();
+            throw new RuntimeException("Tried to access position on a card that wasn't placed");
         }
         return position;
     }
