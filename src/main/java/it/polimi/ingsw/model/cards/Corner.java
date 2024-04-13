@@ -24,7 +24,10 @@ public class Corner {
         this.cardRef = otherCorner.cardRef;
         this.direction = otherCorner.direction;
     }
-
+    public Corner(@NotNull Corner otherCorner, PlaceableCard cardRef){
+        this(otherCorner);
+        this.cardRef = cardRef;
+    }
 
     public Corner(@Nullable GameResource resource, PlaceableCard cardRef, CornerDirection dir){
         this.resource = resource;
@@ -32,6 +35,9 @@ public class Corner {
         this.occupied = false;
         this.visible = true;
         this.direction = dir;
+    }
+    public Corner(@Nullable GameResource resource, @NotNull CornerDirection dir){
+        this(resource, null, dir);
     }
 
     /**
