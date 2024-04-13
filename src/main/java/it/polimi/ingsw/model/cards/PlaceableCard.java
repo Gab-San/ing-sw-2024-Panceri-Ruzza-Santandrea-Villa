@@ -4,11 +4,12 @@ import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public abstract class PlaceableCard extends Card{
     private final Point position;
-    protected Hashtable<CornerDirection, Corner> corners;
+    protected final Hashtable<CornerDirection, Corner> corners;
 
     protected PlaceableCard(){
         position = null;
@@ -19,11 +20,13 @@ public abstract class PlaceableCard extends Card{
      * This constructor builds the card, without considering the fact that it might have a position
      * @param corners a list of the corners that the card contains
      */
-    protected PlaceableCard(Corner... corners){
+    protected PlaceableCard(Corner... corners) throws InvalidParameterException{
         this.position = null;
         this.corners = new Hashtable<>();
         for(Corner corn: corners){
             Corner newCorner = new Corner(corn, this);
+            if(this.corners.get(newCorner.getDirection()) != null)
+                throw new InvalidParameterException("Duplicate corner found in card instantiation");
             this.corners.put(newCorner.getDirection(), newCorner);
         }
     }
@@ -51,6 +54,9 @@ public abstract class PlaceableCard extends Card{
         }
         return corners.get(cornDir);
     }
+    //FIXME:
+    //  - current getCorner() implementation does not check for the card being flipped
+    //  - on card flipped, all corners should exist
 
     /**
      * @return a List of free corners (not occupied and not filled)
@@ -67,7 +73,7 @@ public abstract class PlaceableCard extends Card{
     }
 
     /**
-     * @return a map with the count of resources to add to the visible resources count on the play area
+     * @return a map with the count of visible resources
      */
     abstract public Map<GameResource, Integer> getCardResources();
     //FIXME:
