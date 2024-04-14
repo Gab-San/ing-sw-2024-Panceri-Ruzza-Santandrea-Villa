@@ -110,7 +110,7 @@ class PlaceableCardTest extends CardTest {
     @Test
     void getSetPosition() {
         // at instantiation position == null
-        assertNull(card.getPosition());
+        assertThrows(RuntimeException.class, ()->card.getPosition());
 
         Point pos = new Point(5, 5);
         PlaceableCard placedCard = card.setPosition(pos);

@@ -9,7 +9,8 @@ import org.jetbrains.annotations.Nullable;
  * The corner class implements the functionality of a corner in the card.
  * The action that can be made on a corner are: <br>
  * - cover it; <br>
- * - count its resource;
+ * - count its resource; <br>
+ * - access the related card.
  */
 public class Corner {
     private final GameResource frontResource;
@@ -18,19 +19,14 @@ public class Corner {
     private boolean visible;
     private PlaceableCard cardRef;
     private final CornerDirection direction;
-    public Corner(){
-        this.frontResource = null;
-        this.backResource = null;
-        this.occupied = false;
-        this.visible = true;
-        this.cardRef = null;
-        this.direction = null;
-    }
-    // FIXME:
-    //  - changes  made : instead of getting card-ref from corner, using this constr to get card-ref
-    //  - this constructor is used only in this package to be sure to copy the information of the corners and
-    //  not to have spare refs to objects
-    protected Corner(@NotNull Corner otherCorner, @NotNull PlaceableCard cardRef){
+
+    /**
+     * This constructor is used during instantiation of cards to make sure of not compromising
+     * the information contained into the corner.
+     * @param otherCorner the corner from which to copy information
+     * @param cardRef the card with which the corner is associated
+     */
+    Corner(@NotNull Corner otherCorner, @NotNull PlaceableCard cardRef){
         this.frontResource = otherCorner.frontResource;
         this.backResource = otherCorner.backResource;
         this.occupied = otherCorner.occupied;
@@ -38,17 +34,37 @@ public class Corner {
         this.cardRef = cardRef;
         this.direction = otherCorner.direction;
     }
+    /**
+     * This constructor builds a corner given all the information about it.
+     * @param frontResource the resource displayed on the front face of the card
+     * @param backResource the resource displayed on the back face of the card
+     * @param cardRef the card with which the corner is associated
+     * @param dir the direction of the corner
+     */
     public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, PlaceableCard cardRef, CornerDirection dir){
         this.frontResource = frontResource;
         this.backResource = backResource;
-        this.cardRef = cardRef;
         this.occupied = false;
         this.visible = true;
+        this.cardRef = cardRef;
         this.direction = dir;
     }
+
+    /**
+     * This constructor builds a corner with a null cardRef
+     * @param frontResource the resource displayed on the front face of the card
+     * @param backResource the resource displayed on the back face of the card
+     * @param dir the direction of the corner
+     */
     public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, CornerDirection dir){
         this(frontResource, backResource, null, dir);
     }
+
+    /**
+     * This constructor defaults the back resource to an empty resource.
+     * @param frontResource the resource displayed on the front face of the card
+     * @param dir the direction of the corner
+     */
     public Corner(@Nullable GameResource frontResource, CornerDirection dir){
         this(frontResource, null, dir);
     }
@@ -69,17 +85,27 @@ public class Corner {
             return false;
     }
     /**
-     * @return the card that contains this corner, in order to pinpoint the location of it;
+     * Getter for the reference of the card related to this corner.
+     * This method is used to access the information of the card given the corner.
+     * @return the card that contains this corner
      */
     public PlaceableCard getCardRef() {
         return cardRef;
     }
-    protected Corner setCardRef(PlaceableCard card){
+
+    /**
+     * This method is used to change the card reference when the card is placed.
+     * Placing a card will result in making a copy of the original into the matrix so a change
+     * in the reference is needed in order to correctly access information from the corners
+     * @param card the new card to which the corner must be associated with
+     */
+    Corner setCardRef(PlaceableCard card){
         cardRef = card;
         return this;
     }
 
     /**
+     * Getter for the direction of the corner.
      * @return the direction of the corner;
      */
     public CornerDirection getDirection() {
@@ -96,6 +122,8 @@ public class Corner {
     }
 
     /**
+     * Getter for the boolean value of occupation of the corner.
+     * It gives information about the availability of the corner on which to place a card.
      * @return TRUE if a card can be placed on this corner, FALSE otherwise
      */
     public boolean isOccupied(){
@@ -112,6 +140,8 @@ public class Corner {
     }
 
     /**
+     * Getter for the boolean value of visibility of the corner.
+     * It returns whether the corner is covered by another card's corner or not.
      * @return  TRUE if the selected corner is not covered by any other corner, FALSE otherwise
      */
     public boolean isVisible(){
@@ -119,10 +149,16 @@ public class Corner {
     }
 
     /**
-     * @return the resource visible in the corner.
+     * Getter for the corner resource.
+     * An empty corner will return an empty resource, a covered corner will not return a resource.
+     * @return the resource visible in the corner, depending on the orientation of the card.
      */
     public GameResource getResource(){
-        return visible ? cardRef.isFaceUp() ? frontResource : backResource : null;
+        if(!visible){
+            return null;
+        }
+
+        return cardRef.isFaceUp ? frontResource : backResource;
     }
 
 }

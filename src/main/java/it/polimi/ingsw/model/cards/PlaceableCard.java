@@ -11,7 +11,9 @@ public abstract class PlaceableCard extends Card{
     private final Point position;
     protected final Hashtable<CornerDirection, Corner> corners;
 
-    // init "blank" card as having all empty corners
+    /**
+     * This constructor builds a "blank" card with all corners empty on both sides
+    */
     protected PlaceableCard(){
         this(
                 new Corner(null, null, CornerDirection.TL),
@@ -111,16 +113,6 @@ public abstract class PlaceableCard extends Card{
             }
         }
         return resourcesCount;
-    }
-    // used in implementations to avoid code duplication
-    protected Map<GameResource, Integer> resourceArrayToMap(int[] resourcesCount){
-        Hashtable<GameResource, Integer> countedResources = new Hashtable<GameResource, Integer>();
-        for (GameResource r : GameResource.values()){
-            if(r != GameResource.FILLED)
-                countedResources.put(r, resourcesCount[r.getResourceIndex()]);
-        }
-
-        return countedResources;
     }
 
     /**
