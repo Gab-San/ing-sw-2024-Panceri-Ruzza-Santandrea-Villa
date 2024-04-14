@@ -71,8 +71,7 @@ public class PlayArea {
                 throw new RuntimeException("Card can't be placed as placement cost condition isn't satisfied");
             }
         }
-        Point cardPos = null;
-        cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
+        Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
 
         //checks valid placement, throw RuntimeException on failure
         if(cardMatrix.get(cardPos) != null) throw new RuntimeException("Placing on existing Card");

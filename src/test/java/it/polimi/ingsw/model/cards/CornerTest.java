@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -14,25 +15,22 @@ class CornerTest {
     Corner cornerTR = new Corner(GameResource.BUTTERFLY, CornerDirection.TR);
     Corner cornerBL = new Corner(null, CornerDirection.BL);
 
-    PlaceableCard cardRef = new ResourceCard(GameResource.BUTTERFLY, cornerTL, cornerBL, cornerTR);
+    PlaceableCard cardRef;
 
     @BeforeEach
     void printNewLine(){
         System.out.println();
     }
+    CornerTest(){
+        cardRef = new ResourceCard(GameResource.BUTTERFLY, cornerTL, cornerBL, cornerTR);
+        cardRef.turnFaceUp();
+        cornerTL = cardRef.getCorner(CornerDirection.TL);
+        cornerTR = cardRef.getCorner(CornerDirection.TR);
+        cornerBL = cardRef.getCorner(CornerDirection.BL);
+    }
     @Test
     void getCardRef() {
-        // assertEquals(cardRef, cornerTL.getCardRef()) is FALSE because the card constructor
-        // copies the corner
-
-        for(CornerDirection cornerDirection: CornerDirection.values()){
-            System.out.println("Testing "+ cornerDirection + " ...");
-            try {
-                assertEquals(cornerDirection, cardRef.getCorner(cornerDirection).getDirection());
-            } catch (NoSuchElementException filledCorner){
-                System.err.println("This corner is filled");
-            }
-        }
+        assertEquals(cardRef, cornerTL.getCardRef());
     }
 
     @Test
@@ -61,20 +59,15 @@ class CornerTest {
         assertFalse(cornerTL.isVisible());
     }
 
-
     @Test
     void getResource() {
         for(CornerDirection cornerDirection : CornerDirection.values()){
             System.out.println("Testing "+ cornerDirection + " ...");
-            try {
-                GameResource cornRes = cardRef.getCorner(cornerDirection).getResource();
-                if(cornRes != null) {
-                    System.out.println(cornerDirection + " " + cornRes);
-                } else {
-                    System.out.println("This corner is empty");
-                }
-            } catch (NoSuchElementException filledCorner){
-                System.err.println("This corner is filled");
+            GameResource cornRes = cardRef.getCorner(cornerDirection).getResource();
+            if(cornRes != null) {
+                System.out.println(cornerDirection + " " + cornRes);
+            } else {
+                System.out.println("This corner is empty");
             }
         }
     }

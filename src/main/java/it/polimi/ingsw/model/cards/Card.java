@@ -13,6 +13,22 @@ public abstract class Card {
      */
     protected boolean isFaceUp;
 
+    protected Card(){
+        isFaceUp = false;
+    }
+    protected Card(Card other){
+        isFaceUp = other.isFaceUp;
+    }
+    public boolean equals(Card other){
+        return isFaceUp == other.isFaceUp;
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof Card)) return false;
+        else return equals((Card) other);
+    }
+
     /**
      * Flips the card.
      */

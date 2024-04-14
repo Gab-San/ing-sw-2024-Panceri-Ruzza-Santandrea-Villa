@@ -11,9 +11,14 @@ public abstract class PlaceableCard extends Card{
     private final Point position;
     protected final Hashtable<CornerDirection, Corner> corners;
 
+    // init "blank" card as having all empty corners
     protected PlaceableCard(){
-        position = null;
-        corners = new Hashtable<>();
+        this(
+                new Corner(null, null, CornerDirection.TL),
+                new Corner(null, null, CornerDirection.TR),
+                new Corner(null, null, CornerDirection.BL),
+                new Corner(null, null, CornerDirection.BR)
+        );
     }
 
     /**
@@ -29,6 +34,10 @@ public abstract class PlaceableCard extends Card{
                 throw new InvalidParameterException("Duplicate corner found in card instantiation");
             this.corners.put(newCorner.getDirection(), newCorner);
         }
+        // set any missing corner to FILLED on front side
+        for(CornerDirection dir : CornerDirection.values()){
+            this.corners.putIfAbsent(dir, new Corner(GameResource.FILLED, null, this, dir));
+        }
     }
 
     /**
@@ -38,11 +47,31 @@ public abstract class PlaceableCard extends Card{
      * @param oldCard copied card
      */
     protected PlaceableCard(Point placement, PlaceableCard oldCard){
+        super(oldCard);
         this.corners = oldCard.corners;
         for (Corner c : corners.values()){
             c.setCardRef(this);
         }
         position = new Point(placement);
+    }
+
+    /**
+     * @param other card to compare to this
+     * @return TRUE if cards have the same content (ignoring position), FALSE otherwise
+     */
+    public boolean equals(PlaceableCard other){
+        if(other == this) return true;
+        return super.equals(other) &&
+                corners.equals(other.corners);
+        // corners.equals delegates comparison to Corner.equals for each corner
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(other instanceof PlaceableCard)
+            return equals((PlaceableCard) other);
+        else
+            return false;
     }
 
     /**
