@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.PlayArea;
+import it.polimi.ingsw.model.functions.UsefulFunc;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -11,9 +11,6 @@ import java.util.*;
 public abstract class PlayCard extends PlaceableCard{
     private GameResource backResource;
     protected int pointsOnPlace;
-    protected PlayCard(){
-        super();
-    }
     protected PlayCard(GameResource backResource, Corner... corners){
         super(corners);
         this.backResource = backResource;
@@ -38,7 +35,7 @@ public abstract class PlayCard extends PlaceableCard{
             resourcesCount[backResource.getResourceIndex()]++;
         }
 
-        return super.resourceArrayToMap(resourcesCount);
+        return UsefulFunc.resourceArrayToMap(resourcesCount);
     }
 
     @Override
