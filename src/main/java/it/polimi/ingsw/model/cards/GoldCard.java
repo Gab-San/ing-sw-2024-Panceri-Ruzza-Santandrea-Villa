@@ -30,6 +30,18 @@ public class GoldCard extends PlayCard{
         this.placementCost = oldCard.placementCost;
         this.goldStrat = oldCard.goldStrat;
     }
+    public boolean equals(GoldCard other){
+        return super.equals(other) &&
+                goldStrat.equals(other.goldStrat);
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(other instanceof GoldCard)
+            return equals((GoldCard) other);
+        else
+            return false;
+    }
 
     @Override
     public Map<GameResource, Integer> getPlacementCost() {

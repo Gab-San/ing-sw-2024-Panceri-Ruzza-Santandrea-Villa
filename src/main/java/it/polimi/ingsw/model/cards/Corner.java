@@ -38,19 +38,36 @@ public class Corner {
         this.cardRef = cardRef;
         this.direction = otherCorner.direction;
     }
-
-    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, CornerDirection dir){
+    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, PlaceableCard cardRef, CornerDirection dir){
         this.frontResource = frontResource;
         this.backResource = backResource;
-        this.cardRef = null;
+        this.cardRef = cardRef;
         this.occupied = false;
         this.visible = true;
         this.direction = dir;
+    }
+    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, CornerDirection dir){
+        this(frontResource, backResource, null, dir);
     }
     public Corner(@Nullable GameResource frontResource, CornerDirection dir){
         this(frontResource, null, dir);
     }
 
+    // TODO: Improve Corner.equals(), currently ignores cardRef
+    public boolean equals(Corner other){
+        return frontResource == other.frontResource &&
+                backResource == other.backResource &&
+                direction == other.direction;
+                //cardRef.equals(other.cardRef); ?? would be endless recursive loop
+    }
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(other instanceof Corner)
+            return equals((Corner)other);
+        else
+            return false;
+    }
     /**
      * @return the card that contains this corner, in order to pinpoint the location of it;
      */

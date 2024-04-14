@@ -42,6 +42,18 @@ public class StartingCard extends PlaceableCard {
         super(placement, oldCard);
         this.centralFrontResources = oldCard.centralFrontResources;
     }
+    public boolean equals(StartingCard other){
+         return super.equals(other) &&
+                 centralFrontResources.equals(other.centralFrontResources);
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(other instanceof StartingCard)
+            return equals((StartingCard) other);
+        else
+            return false;
+    }
 
     @Override
     public Map<GameResource, Integer> getCardResources() {

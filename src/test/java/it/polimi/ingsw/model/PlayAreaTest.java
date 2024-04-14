@@ -24,20 +24,19 @@ class PlayAreaTest {
 
     void setUp(boolean placeStartingCardOnFront) {
         playArea = new PlayArea();
-        Hashtable<CornerDirection, GameResource> frontRes = new Hashtable<>();
-        frontRes.put(TL, LEAF);
-        frontRes.put(BL, MUSHROOM);
+        // TODO: fix corners with front and back resources
         startingCard = new StartingCard(
-                frontRes,
                 new GameResource[]{LEAF, WOLF, MUSHROOM},
-                new Corner(LEAF, TL),
-                new Corner(WOLF, TR),
-                new Corner(MUSHROOM, BL),
-                new Corner(BUTTERFLY, BR)
+                new Corner(null, LEAF, TL),
+                new Corner(null, WOLF, TR),
+                new Corner(FILLED, MUSHROOM, BL),
+                new Corner(FILLED, BUTTERFLY, BR)
         );
 
-        if (!placeStartingCardOnFront)
-            startingCard.flip();
+        if (placeStartingCardOnFront)
+            startingCard.turnFaceUp();
+        else
+            startingCard.turnFaceDown();
 
         playArea.placeStartingCard(startingCard);
 
@@ -54,13 +53,13 @@ class PlayAreaTest {
         setUp(true);
         //assert correct visibleResources added
         Map<GameResource, Integer> visibleRes = playArea.getVisibleResources();
-        assertEquals(2, visibleRes.get(LEAF));
+        assertEquals(1, visibleRes.get(LEAF));
         assertEquals(1, visibleRes.get(WOLF));
-        assertEquals(2, visibleRes.get(MUSHROOM));
+        assertEquals(1, visibleRes.get(MUSHROOM));
         assertEquals(0, visibleRes.get(BUTTERFLY));
         for(GameResource res : GameResource.values()){
             if(res.getResourceIndex() > 4)
-                assertNull(visibleRes.get(res));
+                assertEquals(0, visibleRes.get(res));
         }
 
         //assert correct freeCorners added
@@ -83,7 +82,7 @@ class PlayAreaTest {
         assertEquals(1, visibleRes.get(BUTTERFLY));
         for(GameResource res : GameResource.values()){
             if(res.getResourceIndex() > 4)
-                assertNull(visibleRes.get(res));
+                assertEquals(0, visibleRes.get(res));
         }
 
         //assert correct freeCorners added
@@ -107,6 +106,10 @@ class PlayAreaTest {
                 // BR is filled
         );
         Corner coveredCorner = playArea.getFreeCorners().get(0);
+        // remove that corner's resource from oldVisibleResources before it is covered
+        if(coveredCorner.getResource() != null)
+            oldVisibleRes.replace(coveredCorner.getResource(), oldVisibleRes.get(coveredCorner.getResource())-1);
+        // place card
         playArea.placeCard(cardToPlace, coveredCorner);
 
         Point placePosition = coveredCorner.getCardRef().getPosition().move(coveredCorner.getDirection());
@@ -114,8 +117,7 @@ class PlayAreaTest {
 
         // assert correct placement
         assertEquals(cardPlaced.getPosition(), placePosition);
-        assertEquals(cardPlaced.getCardResources(), cardToPlace.getCardResources());
-        assertEquals(cardPlaced.getCardColour(), cardToPlace.getCardColour());
+        assertEquals(cardPlaced, cardToPlace);
 
         // assert coveredCorner actually occupied and covered
         assertTrue(coveredCorner.isOccupied());
@@ -127,10 +129,6 @@ class PlayAreaTest {
         assertTrue(placedCard_corner.isVisible());
 
         // assert visibleResources update
-        oldVisibleRes.replace(
-                coveredCorner.getResource(),
-                oldVisibleRes.get(coveredCorner.getResource())-1
-        );
         Map<GameResource, Integer> placedCardRes = cardPlaced.getCardResources();
         for(GameResource res : placedCardRes.keySet()){
             oldVisibleRes.replace(
@@ -143,8 +141,8 @@ class PlayAreaTest {
         // assert freeCorners update
         assertFalse(playArea.getFreeCorners().contains(coveredCorner));
         oldFreeCorners.remove(coveredCorner);
-        assertTrue(playArea.getFreeCorners().containsAll(oldFreeCorners));
-        assertTrue(playArea.getFreeCorners().containsAll(cardPlaced.getFreeCorners()));
+        oldFreeCorners.addAll(cardPlaced.getFreeCorners());
+        assertEquals(playArea.getFreeCorners(), oldFreeCorners);
         assertFalse(playArea.getFreeCorners().contains(placedCard_corner));
         // TODO: review placeCard test
     }
