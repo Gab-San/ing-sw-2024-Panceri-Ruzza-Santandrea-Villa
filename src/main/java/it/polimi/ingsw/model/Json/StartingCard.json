@@ -1,0 +1,88 @@
+{
+  "name": "json",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa.git"
+  },
+  "private": true,
+  "startingCards": [
+    {
+      "cardId": "S0",
+      "centralFrontResources": ["BUTTERFLY"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "NULL","backResource": "MUSHROOM"},
+        {"direction": "TR", "frontResource": "LEAF","backResource": "LEAF"},
+        {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "BUTTERFLY"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "WOLF"}
+      ],
+      "frontImageFileName": "img_S0_front.jpg",
+      "backImageFileName": "img_S0_back.jpg"
+    },
+    {
+      "cardId": "S1",
+      "centralFrontResources": ["MUSHROOM"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "WOLF", "backResource": "LEAF"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "BUTTERFLY"}
+      ],
+      "frontImageFileName": "img_S1_front.jpg",
+      "backImageFileName": "img_S1_back.jpg"
+    },
+    {
+      "cardId": "S2",
+      "centralFrontResources": ["LEAF", "MUSHROOM"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "LEAF"}
+      ],
+      "frontImageFileName": "img_S2_front.jpg",
+      "backImageFileName": "img_S2_back.jpg"
+    },
+    {
+      "cardId": "S3",
+      "centralFrontResources": ["WOLF", "BUTTERFLY"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "LEAF"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "MUSHROOM"}
+      ],
+      "frontImageFileName": "img_S3_front.jpg",
+      "backImageFileName": "img_S3_back.jpg"
+    },
+    {
+      "cardId": "S4",
+      "centralFrontResources": ["WOLF", "BUTTERFLY", "LEAF"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
+        {"direction": "BR", "frontResource": "FILLED", "backResource": "WOLF"}
+      ],
+      "frontImageFileName": "img_S4_front.jpg",
+      "backImageFileName": "img_S4_back.jpg"
+    },
+    {
+      "cardId": "S5",
+      "centralFrontResources": ["LEAF", "WOLF", "MUSHROOM"],
+      "cornerJ": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
+        {"direction": "BR", "frontResource": "FILLED", "backResource": "BUTTERFLY"}
+      ],
+      "frontImageFileName": "img_S5_front.jpg",
+      "backImageFileName": "img_S5_back.jpg"
+    }
+  ]
+}

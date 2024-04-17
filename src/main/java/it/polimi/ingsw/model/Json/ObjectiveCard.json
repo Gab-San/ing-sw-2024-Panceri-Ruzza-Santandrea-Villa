@@ -1,0 +1,87 @@
+{
+  "name": "json",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa.git"
+  },
+  "private": true,
+  "objectiveCard" : [
+    {
+      "cardId": "B0",
+      "front": {
+        "points": 2,
+        "patter": "**R *R* R**",
+        "imageFileName": "img_B0_front.jpg"
+      },
+      "back": {
+        "imageFileName": "img_B0_back.jpg"
+      }
+    },
+    {
+      "cardId": "B0",
+      "front": {
+        "points": 2,
+        "patter": "G** *G* **G",
+        "imageFileName": "img_B0_front.jpg"
+      },
+      "back": {
+        "imageFileName": "img_B0_back.jpg"
+      }
+    },
+    {
+      "cardId": "B2",
+      "patter": "**B *B* B**",
+      "points": 2,
+      "frontImageFileName": "img_B2_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B3",
+      "points": 2,
+      "patter": "P** *P* **P",
+      "frontImageFileName": "img_B3_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B4",
+      "points": 3,
+      "patter": "*R* *R* **G",
+      "frontImageFileName": "img_B4_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B5",
+      "points": 3,
+      "patter": "*G* *G* P**",
+      "frontImageFileName": "img_B5_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B6",
+      "points": 3,
+      "patter": "**R *B*",
+      "frontImageFileName": "img_B6_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B7",
+      "points": 3,
+      "patter": "B** *P* *P*",
+      "frontImageFileName": "img_B3_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    },
+    {
+      "cardId": "B3",
+      "points": 2,
+      "patter": "P** *P* **P",
+      "frontImageFileName": "img_B3_front.jpg",
+      "backImageFileName": "img_B0_back.jpg"
+    }
+  ]
+}

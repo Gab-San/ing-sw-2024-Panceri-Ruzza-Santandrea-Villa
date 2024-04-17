@@ -8,6 +8,19 @@ public enum GameResource {
     private GameResource(int resourceIndex){
         this.resourceIndex = resourceIndex;
     }
+    public static GameResource getResourceFromName(String resName){
+        switch (resName){
+            case "MUSHROOM": return GameResource.MUSHROOM;
+            case "BUTTERFLY": return GameResource.BUTTERFLY;
+            case "LEAF" : return GameResource.LEAF;
+            case "WOLF": return GameResource.WOLF;
+            case "SCROLL": return GameResource.SCROLL;
+            case "POTION" : return GameResource.POTION;
+            case "QUILL": return GameResource.QUILL;
+            case "FILLED": return GameResource.FILLED;
+            default: return null;
+        }
+    }
     public int getResourceIndex(){
         return resourceIndex - 1;
     }
