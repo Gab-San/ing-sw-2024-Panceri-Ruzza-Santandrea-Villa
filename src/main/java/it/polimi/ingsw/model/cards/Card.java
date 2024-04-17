@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.cards;
 
 /**
  * This represents a generic card.
- *
+ * <p>
  * This is the higher level abstraction of a card, representing the most simple form of it being a blank
  * rectangular that can be flipped.
  */
@@ -19,15 +19,7 @@ public abstract class Card {
     protected Card(Card other){
         isFaceUp = other.isFaceUp;
     }
-    public boolean equals(Card other){
-        return isFaceUp == other.isFaceUp;
-    }
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(!(other instanceof Card)) return false;
-        else return equals((Card) other);
-    }
+
 
     /**
      * Flips the card.
@@ -56,5 +48,17 @@ public abstract class Card {
      */
     public synchronized boolean isFaceUp(){
         return isFaceUp;
+    }
+
+    // OBJECT METHODS
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof Card)) return false;
+
+        return equals((Card) other);
+    }
+    public boolean equals(Card other){
+        return isFaceUp == other.isFaceUp;
     }
 }

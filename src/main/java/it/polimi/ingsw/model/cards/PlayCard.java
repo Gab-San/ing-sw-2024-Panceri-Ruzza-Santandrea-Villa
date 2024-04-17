@@ -27,20 +27,6 @@ public abstract class PlayCard extends PlaceableCard{
         this.backResource = oldCard.backResource;
         this.pointsOnPlace = oldCard.pointsOnPlace;
     }
-    public boolean equals(PlayCard other){
-        return super.equals(other) &&
-                getCardColour() == other.getCardColour() &&
-                pointsOnPlace == other.pointsOnPlace &&
-                getPlacementCost().equals(other.getPlacementCost());
-    }
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(other instanceof PlayCard)
-            return equals((PlayCard) other);
-        else
-            return false;
-    }
 
     @Override
     public Map<GameResource, Integer> getCardResources() {
@@ -67,5 +53,21 @@ public abstract class PlayCard extends PlaceableCard{
      * @return the points received from the placement
      */
     public abstract int calculatePointsOnPlace(PlayArea playArea);
+
+    // OBJECT METHODS
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof PlayCard)) return false;
+
+        return equals((PlayCard) other);
+    }
+
+    public boolean equals(PlayCard other){
+        return super.equals(other) &&
+                getCardColour() == other.getCardColour() &&
+                pointsOnPlace == other.pointsOnPlace &&
+                getPlacementCost().equals(other.getPlacementCost());
+    }
 
 }

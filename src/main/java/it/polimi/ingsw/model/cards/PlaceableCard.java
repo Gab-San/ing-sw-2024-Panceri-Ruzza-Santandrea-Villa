@@ -55,24 +55,6 @@ public abstract class PlaceableCard extends Card{
         position = new Point(placement);
     }
 
-    /**
-     * @param other card to compare to this
-     * @return TRUE if cards have the same content (ignoring position), FALSE otherwise
-     */
-    public boolean equals(PlaceableCard other){
-        if(other == this) return true;
-        return super.equals(other) &&
-                corners.equals(other.corners);
-        // corners.equals delegates comparison to Corner.equals for each corner
-    }
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(other instanceof PlaceableCard)
-            return equals((PlaceableCard) other);
-        else
-            return false;
-    }
 
     /**
      * @param cornDir indicates the selected corner direction;
@@ -136,4 +118,24 @@ public abstract class PlaceableCard extends Card{
     }
 
     public abstract PlaceableCard setPosition(Point placement);
+
+
+    // OBJECT METHODS
+
+    /**
+     * @param other card to compare to this
+     * @return TRUE if cards have the same content (ignoring position), FALSE otherwise
+     */
+    public boolean equals(PlaceableCard other){
+        return super.equals(other) &&
+                corners.equals(other.corners);
+        // corners.equals delegates comparison to Corner.equals for each corner
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof PlaceableCard)) return false;
+
+        return equals((PlaceableCard) other);
+    }
 }

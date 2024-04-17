@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
@@ -51,7 +50,7 @@ class PlaceableCardTest extends CardTest {
                 assertEquals(corner, card_corners.get(dir));
             else
                 assertEquals(corner, new Corner(FILLED, null, dir)); // manually check that the FILLED corner was created
-            //FIXME: the following may be redundant as they are testing Corner not card
+            // These assert better test the corner
             assertTrue(corner.isVisible());
             assertFalse(corner.isOccupied());
         }
@@ -73,8 +72,10 @@ class PlaceableCardTest extends CardTest {
         assertEquals(1, resourceMap.get(LEAF));
         assertEquals(1, resourceMap.get(BUTTERFLY));
         for (GameResource res : GameResource.values()) {
-            if (!res.equals(LEAF) && !res.equals(BUTTERFLY) && !res.equals(FILLED))
+            if (!res.equals(LEAF) && !res.equals(BUTTERFLY) && !res.equals(FILLED)) {
                 assertEquals(0, resourceMap.get(res));
+            }
+            if(res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
 
         card.turnFaceDown();
@@ -84,6 +85,8 @@ class PlaceableCardTest extends CardTest {
         for (GameResource res : GameResource.values()) {
             if (!res.equals(LEAF) && !res.equals(FILLED))
                 assertEquals(0, resourceMap.get(res));
+
+            if(res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
     }
 
@@ -115,7 +118,7 @@ class PlaceableCardTest extends CardTest {
         Point pos = new Point(5, 5);
         PlaceableCard placedCard = card.setPosition(pos);
         // after placement, new card will have updated position with no other changes
-        assertEquals(placedCard.getPosition(), pos);
+        assertEquals(pos, placedCard.getPosition());
         assertEquals(card, placedCard); // equals ignores position
     }
 }
