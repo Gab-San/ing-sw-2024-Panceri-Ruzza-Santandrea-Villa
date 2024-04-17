@@ -69,21 +69,7 @@ public class Corner {
         this(frontResource, null, dir);
     }
 
-    // TODO: Improve Corner.equals(), currently ignores cardRef
-    public boolean equals(Corner other){
-        return frontResource == other.frontResource &&
-                backResource == other.backResource &&
-                direction == other.direction;
-                //cardRef.equals(other.cardRef); ?? would be endless recursive loop
-    }
-    @Override
-    public boolean equals(Object other){
-        if(other == this) return true;
-        if(other instanceof Corner)
-            return equals((Corner)other);
-        else
-            return false;
-    }
+
     /**
      * Getter for the reference of the card related to this corner.
      * This method is used to access the information of the card given the corner.
@@ -159,6 +145,23 @@ public class Corner {
         }
 
         return cardRef.isFaceUp ? frontResource : backResource;
+    }
+
+    // OBJECT METHODS
+    public boolean equals(Corner other){
+        // No need to check for card ref. The placed card can be equal to the same card that isn't placed
+        return frontResource == other.frontResource &&
+                backResource == other.backResource &&
+                direction == other.direction &&
+                occupied == other.occupied &&
+                visible == other. visible;
+    }
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(!(other instanceof Corner)) return false;
+
+        return equals((Corner)other);
     }
 
 }

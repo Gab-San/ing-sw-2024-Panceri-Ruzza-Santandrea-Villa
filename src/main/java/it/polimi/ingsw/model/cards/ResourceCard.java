@@ -8,6 +8,9 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 public class ResourceCard extends PlayCard{
+    public ResourceCard() {
+        super();
+    }
     public ResourceCard(GameResource backResource, Corner... corners) throws InvalidParameterException {
         super(backResource, corners);
     }
@@ -17,10 +20,6 @@ public class ResourceCard extends PlayCard{
 
     private ResourceCard(Point placement, ResourceCard oldCard){
         super(placement, oldCard);
-    }
-
-    public ResourceCard() {
-        super();
     }
 
     /**

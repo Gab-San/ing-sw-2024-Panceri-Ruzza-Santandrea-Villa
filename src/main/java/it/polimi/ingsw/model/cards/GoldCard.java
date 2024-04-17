@@ -30,18 +30,6 @@ public class GoldCard extends PlayCard{
         this.placementCost = oldCard.placementCost;
         this.goldStrat = oldCard.goldStrat;
     }
-    public boolean equals(GoldCard other){
-        return super.equals(other) &&
-                goldStrat.equals(other.goldStrat);
-    }
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(other instanceof GoldCard)
-            return equals((GoldCard) other);
-        else
-            return false;
-    }
 
     @Override
     public Map<GameResource, Integer> getPlacementCost() {
@@ -52,9 +40,22 @@ public class GoldCard extends PlayCard{
     public int calculatePointsOnPlace(PlayArea playArea){
         return pointsOnPlace * goldStrat.calculateSolves(playArea, this);
     }
-
     @Override
     public PlaceableCard setPosition(Point placement) {
         return new GoldCard(placement, this);
+    }
+
+    // OBJECT METHOD
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof GoldCard)) return false;
+
+        return equals((GoldCard) other);
+    }
+    public boolean equals(GoldCard other){
+        return super.equals(other) &&
+                // Isn't it enough if we compare the classes?
+                goldStrat.equals(other.goldStrat);
     }
 }

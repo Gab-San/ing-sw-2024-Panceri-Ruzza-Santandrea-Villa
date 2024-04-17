@@ -12,7 +12,9 @@ public class App
     // test classes
     // - define exceptions and runtime exceptions
     // - check if map access to its resources is correct (no need for map.contains??)
-    // - define default constructors for each class
+
+    //FIXME:
+    // - rewrite all equals methods
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
