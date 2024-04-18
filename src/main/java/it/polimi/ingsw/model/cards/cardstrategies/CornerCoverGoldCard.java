@@ -6,8 +6,6 @@ import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 
-import java.util.NoSuchElementException;
-
 public class CornerCoverGoldCard implements GoldCardStrategy{
     @Override
     public int calculateSolves(PlayArea pA, GoldCard card) {
@@ -30,5 +28,12 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
         }
 
         return numCorners;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) return true;
+        // This strat is identified only by its class
+        return other instanceof CornerCoverGoldCard;
     }
 }
