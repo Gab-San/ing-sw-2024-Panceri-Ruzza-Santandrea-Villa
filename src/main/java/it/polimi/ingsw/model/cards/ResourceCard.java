@@ -78,7 +78,10 @@ public class ResourceCard extends PlayCard{
      */
     @Override
     public int calculatePointsOnPlace(@Nullable PlayArea playArea) {
-        return pointsOnPlace;
+        if(isFaceUp) {
+            return pointsOnPlace;
+        }
+        return 0;
     }
 
     /**

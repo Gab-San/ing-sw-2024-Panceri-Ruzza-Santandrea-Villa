@@ -71,7 +71,7 @@ public class GoldCard extends PlayCard{
      */
     @Override
     public Map<GameResource, Integer> getPlacementCost() {
-        return placementCost;
+        return isFaceUp ? placementCost : new Hashtable<>();
     }
     /**
      * Returns the points scored when placing this card.
@@ -80,7 +80,11 @@ public class GoldCard extends PlayCard{
      */
     @Override
     public int calculatePointsOnPlace(@NotNull PlayArea playArea){
-        return pointsOnPlace * goldStrat.calculateSolves(playArea, this);
+        if(isFaceUp) {
+            return pointsOnPlace * goldStrat.calculateSolves(playArea, this);
+        }
+
+        return 0;
     }
     
     /**
