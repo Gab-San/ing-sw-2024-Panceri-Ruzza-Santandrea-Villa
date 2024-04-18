@@ -13,6 +13,9 @@ import java.util.*;
  *     Starting card can store multiple resources in the center of the card.
  *     They can also display a resource on both sides of a corner.
  * </p>
+ * <p>
+ *     By default when instantiated a card is facing downwards (displaying back)
+ * </p>
  */
 public class StartingCard extends PlaceableCard {
     private final List<GameResource> centralFrontResources;

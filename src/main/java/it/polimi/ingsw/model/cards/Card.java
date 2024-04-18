@@ -5,6 +5,10 @@ package it.polimi.ingsw.model.cards;
  * <p>
  * This is the highest level abstraction of a card, representing the most simple form of it being a blank
  * rectangular that can be flipped.
+ * </p>
+ * <p>
+ * By default when instantiated a card is facing downwards (displaying back)
+ * </p>
  */
 public abstract class Card {
     /**

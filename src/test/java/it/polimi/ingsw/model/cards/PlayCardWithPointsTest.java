@@ -14,26 +14,29 @@ import java.util.Map;
 import static it.polimi.ingsw.model.enums.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.CornerDirection.BR;
 import static it.polimi.ingsw.model.enums.GameResource.*;
+import static it.polimi.ingsw.model.enums.GameResource.WOLF;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
-class PlayCardNoPointsTest {
+public class PlayCardWithPointsTest {
     private PlayCard testCard;
     private static final Map<CornerDirection, Corner> card_corners = new Hashtable<>();
-    private final GameResource backResource = BUTTERFLY;
+    private final GameResource backResource = WOLF;
     @BeforeAll
     public static void initializeCorners() {
-        card_corners.put(TL, new Corner(QUILL, TL));
-        card_corners.put(TR, new Corner(MUSHROOM, TR));
-        card_corners.put(BL, new Corner(BUTTERFLY, BL));
-        card_corners.put(BR, new Corner(BUTTERFLY, BR));
+        card_corners.put(TL, new Corner(WOLF, TL));
+        card_corners.put(TR, new Corner(WOLF, TR));
+        card_corners.put(BL, new Corner(SCROLL, BL));
+        card_corners.put(BR, new Corner(WOLF, BR));
     }
 
     @BeforeEach
     void setup(){
         try {
             testCard = new ResourceCard(backResource,
+                    3,
                     card_corners.get(TL),
-                    // TR is filled
+                    card_corners.get(TR),
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -51,10 +54,10 @@ class PlayCardNoPointsTest {
         // FRONT
         testCard.turnFaceUp();
         resourceMap = testCard.getCardResources();
-        assertEquals(1, resourceMap.get(QUILL));
-        assertEquals(2, resourceMap.get(BUTTERFLY));
+        assertEquals(1, resourceMap.get(SCROLL));
+        assertEquals(3, resourceMap.get(WOLF));
         for (GameResource res : GameResource.values()) {
-            if (!res.equals(QUILL) && !res.equals(BUTTERFLY) && !res.equals(FILLED)) {
+            if (!res.equals(SCROLL) && !res.equals(WOLF) && !res.equals(FILLED)) {
                 assertEquals(0, resourceMap.get(res));
             }
             if(res.equals(FILLED)) assertNull(resourceMap.get(res));
@@ -63,9 +66,9 @@ class PlayCardNoPointsTest {
         // BACK
         testCard.turnFaceDown();
         resourceMap = testCard.getCardResources();
-        assertEquals(1, resourceMap.get(BUTTERFLY));
+        assertEquals(1, resourceMap.get(WOLF));
         for (GameResource res : GameResource.values()) {
-            if (!res.equals(BUTTERFLY) && !res.equals(FILLED)) assertEquals(0, resourceMap.get(res));
+            if (!res.equals(WOLF) && !res.equals(FILLED)) assertEquals(0, resourceMap.get(res));
 
             if(res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
@@ -81,7 +84,6 @@ class PlayCardNoPointsTest {
     void equalSelf(){
         //Property: Reflexive;
         assertEquals(testCard, testCard);
-
         PlayCard testCardCopy = testCard;
         assertEquals(testCard, testCardCopy);
     }
@@ -99,9 +101,10 @@ class PlayCardNoPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(
-                    WOLF,
+                    LEAF,
+                    3,
                     card_corners.get(TL),
-                    // TR is filled
+                    card_corners.get(TR),
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -110,7 +113,29 @@ class PlayCardNoPointsTest {
             fail("Resource card instantiation failed with error message: \n" + invalidParameterException.getMessage());
         }
 
-        assertNotEquals(differentCard, testCard);
+        assertNotEquals(differentCard, testCard, "Doesn't catch difference on res");
+        assertNotEquals(testCard, differentCard);
+    }
+
+    @Test
+    @DisplayName("Equals: differ by points on placement")
+    void equalDifferent1(){
+        PlayCard differentCard = null;
+        try {
+            differentCard = new ResourceCard(
+                    backResource,
+                    21,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    card_corners.get(BL),
+                    card_corners.get(BR)
+            );
+
+        } catch(InvalidParameterException invalidParameterException){
+            fail("Resource card instantiation failed with error message: \n" + invalidParameterException.getMessage());
+        }
+
+        assertNotEquals(differentCard, testCard, "Doesn't catch difference on point on placement");
         assertNotEquals(testCard, differentCard);
     }
 
@@ -120,8 +145,9 @@ class PlayCardNoPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(backResource,
+                    3,
                     card_corners.get(TL),
-                    // TR is filled
+                    card_corners.get(TR),
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -129,7 +155,7 @@ class PlayCardNoPointsTest {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
 
-        assertEquals(differentCard,testCard);
+        assertEquals(differentCard,testCard, "Doesn't recognise equal cards");
         assertEquals(testCard,differentCard);
     }
 
@@ -139,8 +165,9 @@ class PlayCardNoPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(backResource,
+                    3,
                     card_corners.get(TL),
-                    // TR is filled
+                    card_corners.get(TR),
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -151,8 +178,9 @@ class PlayCardNoPointsTest {
         PlayCard anotherCard = null;
         try {
             anotherCard = new ResourceCard(backResource,
+                    3,
                     card_corners.get(TL),
-                    // TR is filled
+                    card_corners.get(TR),
                     card_corners.get(BL),
                     card_corners.get(BR)
             );

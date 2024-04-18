@@ -18,6 +18,9 @@ import java.util.*;
  *     In order to place a gold card, enough resources as listed at the bottom of it must be visible in the
  *     play area
  * </p>
+ * <p>
+ *     By default when instantiated a card is facing downwards (displaying back)
+ * </p>
  */
 public class GoldCard extends PlayCard{
     private final Hashtable<GameResource, Integer> placementCost;

@@ -14,6 +14,9 @@ import java.util.*;
  *     It is still a primitive representation of the whole card object, but it already is enough
  *     to define placement rules.
  * </p>
+ * <p>
+ *     By default when instantiated a card is facing downwards (displaying back)
+ * </p>
  */
 public abstract class PlaceableCard extends Card{
     private final Point position;
@@ -23,7 +26,7 @@ public abstract class PlaceableCard extends Card{
     protected final Hashtable<CornerDirection, Corner> corners;
 
     /**
-     * Default constructor: builds a "blank" card with all corners empty on both sides
+     * Default constructor: builds a "blank" card with all corners empty on both sides.
     */
     protected PlaceableCard(){
         this(

@@ -14,6 +14,9 @@ import java.util.*;
  *     It is a card composed of the corners and a back resource. <br>
  *     It has no placement cost but it may have placement points.
  * </p>
+ * <p>
+ *      By default when instantiated a card is facing downwards (displaying back)
+ * </p>
  */
 public class ResourceCard extends PlayCard{
     /**

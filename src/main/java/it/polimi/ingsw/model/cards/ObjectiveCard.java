@@ -3,6 +3,17 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.objective.ObjectiveStrategy;
 
+//TODO add class description
+/**
+ * This represents a generic card.
+ * <p>
+ * This is the highest level abstraction of a card, representing the most simple form of it being a blank
+ * rectangular that can be flipped.
+ * </p>
+ * <p>
+ * By default when instantiated a card is facing downwards (displaying back)
+ * </p>
+ */
 public class ObjectiveCard extends Card {
     private final ObjectiveStrategy strategy;
     private final int pointsPerSolve;
