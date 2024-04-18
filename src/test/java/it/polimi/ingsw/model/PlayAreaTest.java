@@ -22,6 +22,7 @@ class PlayAreaTest {
     Map<GameResource, Integer> oldVisibleRes;
     List<Corner> oldFreeCorners;
 
+    // TODO: duplicate tests placing card on front and back
     void setUp(boolean placeStartingCardOnFront) {
         playArea = new PlayArea();
         // TODO: fix corners with front and back resources
@@ -151,7 +152,6 @@ class PlayAreaTest {
         oldFreeCorners.addAll(cardPlaced.getFreeCorners());
         assertEquals(playArea.getFreeCorners(), oldFreeCorners);
         assertFalse(playArea.getFreeCorners().contains(placedCard_corner));
-        // TODO: review placeCard test
     }
 
     private Map<Point, PlaceableCard> duplicateCardMatrix(){
@@ -175,23 +175,21 @@ class PlayAreaTest {
 
         Corner corner = playArea.getFreeCorners().get(2);
         playArea.placeCard(blockedCard, corner);
+        assertEquals(startingCard.getFreeCorners(), playArea.getFreeCorners());
+        assertEquals(3, playArea.getFreeCorners().size());
 
         //duplicate playArea to check for invariance after failed placeCard attempts
-        Map<Point, PlaceableCard> oldCardMatrix = new Hashtable<>();
-        Map<Point, PlaceableCard> cardMatrix = playArea.getCardMatrix();
-        for(Point p : cardMatrix.keySet()){
-            oldCardMatrix.put(p, cardMatrix.get(p));
-        }
+        Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard cardToPlace = new ResourceCard();
         assertThrows(RuntimeException.class,
                 ()->playArea.placeCard(cardToPlace, blockedCard.getCorner(BL))
         );
-        assertEquals(oldCardMatrix, cardMatrix);
+        assertEquals(oldCardMatrix, playArea.getCardMatrix());
         assertThrows(RuntimeException.class,
                 ()->playArea.placeCard(cardToPlace, blockedCard.getCorner(TR))
         );
-        assertEquals(oldCardMatrix, cardMatrix);
+        assertEquals(oldCardMatrix, playArea.getCardMatrix());
     }
     @Test
     @DisplayName("Test invalid placement of a PlayCard (on occupied corner)")
@@ -260,10 +258,10 @@ class PlayAreaTest {
                 new Corner(MUSHROOM, TR),
                 new Corner(LEAF, BL)
         );
+        goldCard.turnFaceUp();
         // place card, assert no exception raised as placementCost is satisfied
         assertDoesNotThrow(()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));
     }
-
     @Test
     @DisplayName("Test placement of a GoldCard (placementCost not satisfied)")
     void testPlaceGoldCard_notOK() {
@@ -278,6 +276,7 @@ class PlayAreaTest {
                 new Corner(MUSHROOM, TR),
                 new Corner(LEAF, BL)
         );
+        goldCard.turnFaceUp();
 
         //duplicate playArea to check for invariance after failed placeCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
