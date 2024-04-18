@@ -41,7 +41,9 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
             //     - has a card of the wrong color
             for(Point patternPos : pattern.keySet()){
                 PlaceableCard card = cardMatrix.get(pos.add(patternPos));
-                if(card == null || usedPoints.contains(pos.add(patternPos)) || !card.getCardColour().equals(pattern.get(patternPos))){
+                boolean invalidCard = card == null || card.getCardColour()==null || !card.getCardColour().equals(pattern.get(patternPos));
+                boolean cardAlreadyUsed = usedPoints.contains(pos.add(patternPos));
+                if(invalidCard || cardAlreadyUsed){
                     patternFound =  false;
                     break;
                 }
