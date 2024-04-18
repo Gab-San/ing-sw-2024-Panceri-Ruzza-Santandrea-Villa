@@ -10,7 +10,6 @@ public class ItemCountGoldCard implements GoldCardStrategy{
     }
     @Override
     public int calculateSolves(PlayArea playArea, GoldCard card) {
-
         return playArea.getVisibleResources().get(item);
     }
 }

@@ -148,20 +148,38 @@ public class Corner {
     }
 
     // OBJECT METHODS
-    public boolean equals(Corner other){
+    /**
+     * Indicates whether some object has the same properties as this one
+     * @param other the reference object which to compare
+     * @return true if the object is the same as the argument; false otherwise
+     */
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(!(other instanceof Corner)) return false;
+
+        return compare((Corner)other);
+    }
+
+    /**
+     * This method compare two corners and defines whether they are equal.
+     * <p>
+     *     The parameters checked are:
+     *     - Front resource;
+     *     - Back resource;
+     *     - Direction;
+     *     - Occupation and visibility;
+     * </p>
+     * @param other the corner with which to compare
+     * @return true if the two corners are equal; false otherwise
+     */
+    public boolean compare(Corner other){
         // No need to check for card ref. The placed card can be equal to the same card that isn't placed
         return frontResource == other.frontResource &&
                 backResource == other.backResource &&
                 direction == other.direction &&
                 occupied == other.occupied &&
                 visible == other. visible;
-    }
-    @Override
-    public boolean equals(Object other){
-        if(other == this) return true;
-        if(!(other instanceof Corner)) return false;
-
-        return equals((Corner)other);
     }
 
 }

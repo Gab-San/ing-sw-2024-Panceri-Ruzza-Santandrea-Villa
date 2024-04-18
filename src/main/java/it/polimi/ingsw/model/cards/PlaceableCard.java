@@ -7,12 +7,23 @@ import it.polimi.ingsw.model.enums.GameResource;
 import java.security.InvalidParameterException;
 import java.util.*;
 
+/**
+ * This class represents a placeable card.
+ * <p>
+ *     In the context of this game a placeable card is a card that can be placed on the map.
+ *     It is still a primitive representation of the whole card object, but it already is enough
+ *     to define placement rules.
+ * </p>
+ */
 public abstract class PlaceableCard extends Card{
     private final Point position;
+    /**
+     * The corners the card is composed of.
+     */
     protected final Hashtable<CornerDirection, Corner> corners;
 
     /**
-     * This constructor builds a "blank" card with all corners empty on both sides
+     * Default constructor: builds a "blank" card with all corners empty on both sides
     */
     protected PlaceableCard(){
         this(
@@ -24,11 +35,19 @@ public abstract class PlaceableCard extends Card{
     }
 
     /**
-     * This constructor builds the card, without considering the fact that it might have a position
+     * This constructor builds a card given its corners.
+     * <p>
+     *     The card position is set to null.
+     * </p>
      * @param corners a list of the corners that the card contains
+     * @throws InvalidParameterException when a duplicate corner is found
      */
     protected PlaceableCard(Corner... corners) throws InvalidParameterException{
+        super();
         this.position = null;
+
+        // For each defined corner a copy is made into the card so that no outside reference can
+        // modify the corner once the card is instantiated. To access a corner one must access the card.
         this.corners = new Hashtable<>();
         for(Corner corn: corners){
             Corner newCorner = new Corner(corn, this);
@@ -36,15 +55,19 @@ public abstract class PlaceableCard extends Card{
                 throw new InvalidParameterException("Duplicate corner found in card instantiation");
             this.corners.put(newCorner.getDirection(), newCorner);
         }
-        // set any missing corner to FILLED on front side
+
+        // Set any missing corner to FILLED on front side
         for(CornerDirection dir : CornerDirection.values()){
             this.corners.putIfAbsent(dir, new Corner(GameResource.FILLED, null, this, dir));
         }
     }
 
     /**
-     * This constructor builds the card when positioned adding the information of the position.
-     * This constructor exists in order to build immutable card objects
+     * This constructor builds the card when positioned.
+     * <p>
+     *      It adds the information of the position. <br>
+     *      This constructor exists in order to build immutable card objects.
+     * </p>
      * @param placement coordinates at which it is placed
      * @param oldCard copied card
      */
@@ -57,18 +80,25 @@ public abstract class PlaceableCard extends Card{
         position = new Point(placement);
     }
 
-
+// ---- Corner related methods: they are already implemented because this information is visible and needs
+//  to be visible at this depth in the inheritance tree. ----
     /**
+     * Returns the corner in the selected direction.
      * @param cornDir indicates the selected corner direction;
      * @return the corner in the selected direction;
-     * @throws NoSuchElementException if the corner in the selected direction is filled;
      */
     public Corner getCorner(CornerDirection cornDir){
         return corners.get(cornDir);
     }
 
     /**
-     * @return a List of free corners (not occupied and not filled)
+     * Returns a list of the card's free corners.
+     * <p>
+     *     A corner is considered free when it is not covered or it doesn't
+     *     cover another corner. <br>
+     *     A filled corner is not free.
+     * </p>
+     * @return a list of free corners.
      */
     public List<Corner> getFreeCorners(){
         List<Corner> freeCorners = new LinkedList<>();
@@ -79,16 +109,19 @@ public abstract class PlaceableCard extends Card{
         return freeCorners;
     }
 
+
     /**
-     * @return a map with the count of visible resources
+     * Returns a counting array of the resources in the visible corners of the card.
+     * @return an array with the count of the card's visible resources
      */
-    abstract public Map<GameResource, Integer> getCardResources();
-    // used in implementations to avoid code duplication
+    // Used in implementations to avoid code duplication
+
     protected int[] getCornerResources(){
         int[] resourcesCount = new int[7];
 
         Set<CornerDirection> cornerKeys = corners.keySet();
         for(CornerDirection cornDir: cornerKeys){
+            // TODO shouldn't be considered only visible corners?
             GameResource res = corners.get(cornDir).getResource();
             if(res != null && res != GameResource.FILLED){
                 resourcesCount[res.getResourceIndex()]++;
@@ -97,11 +130,28 @@ public abstract class PlaceableCard extends Card{
         return resourcesCount;
     }
 
+
     /**
+     * Returns a map containing the number of visible resources in the card.
+     * @return a map with the count of visible resources
+     */
+    abstract public Map<GameResource, Integer> getCardResources();
+
+    /**
+     * Returns the resource associated with the card colour.
+     * <p>
+     *     Each resource in the game has a colour. Therefore a resource
+     *     can be used to identify the colour of the card.
+     * </p>
      * @return the resource that identifies the colour of this card
      */
     abstract public GameResource getCardColour();
 
+    /**
+     * Getter for the position of the card.
+     * @return the position of the card
+     * @throws RuntimeException when trying to access the position of a not positioned card.
+     */
     public Point getPosition() throws RuntimeException {
         if(position == null){
             throw new RuntimeException("Tried to access position on a card that wasn't placed");
@@ -109,25 +159,47 @@ public abstract class PlaceableCard extends Card{
         return position;
     }
 
+    /**
+     * Sets the position of the card.
+     * <p>
+     *     In order to make a card an immutable object, this method build a new identical
+     *     card with the only new information of position.
+     * </p>
+     * @param placement the position in which the card has to be placed
+     * @return an equal positioned card
+     */
     public abstract PlaceableCard setPosition(Point placement);
 
 
     // OBJECT METHODS
 
     /**
-     * @param other card to compare to this
-     * @return TRUE if cards have the same content (ignoring position), FALSE otherwise
+     * Indicates whether some object has the same properties as this one
+     * @param other the reference object which to compare
+     * @return true if the object is the same as the argument; false otherwise
      */
-    public boolean equals(PlaceableCard other){
-        return super.equals(other) &&
-                corners.equals(other.corners);
-        // corners.equals delegates comparison to Corner.equals for each corner
-    }
     @Override
     public boolean equals(Object other){
         if (other == this) return true;
         if(!(other instanceof PlaceableCard)) return false;
 
-        return equals((PlaceableCard) other);
+        return compare((PlaceableCard) other);
+    }
+
+    /**
+     * This method compares two placeable card objects.
+     * <p>
+     *     Returns true if the two cards have the same properties:
+     *     - Orientation;
+     *     - Corners.
+     *     Returns false otherwise.
+     * </p>
+     * @param other the card with which to compare
+     * @return true if the card is the same as the argument; false otherwise
+     */
+    protected boolean compare(PlaceableCard other){
+        return super.compare(other) &&
+                corners.equals(other.corners);
+        // corners.equals delegates comparison to Corner.equals for each corner
     }
 }
