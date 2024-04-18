@@ -57,9 +57,12 @@ public class PointsResourceCardTest {
 
     @Test
     @DisplayName("Calculation on card with no points")
-    void calculatePointsNoPoints() {
+    void calculatePoints() {
+        testCard.turnFaceUp();
         assertEquals(419, testCard.calculatePointsOnPlace(null) );
         assertNotEquals(418, testCard.calculatePointsOnPlace(null));
+        testCard.turnFaceDown();
+        assertEquals(0, testCard.calculatePointsOnPlace(null));
     }
 
     @Test
