@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidParameterException;
@@ -15,19 +15,21 @@ import static it.polimi.ingsw.model.enums.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlaceableCardTest extends CardTest {
-    PlaceableCard card = null;
-    Map<CornerDirection, Corner> card_corners = new Hashtable<>();
+class PlaceableCardTest extends BaseCardTest {
+    private PlaceableCard card;
+    private static final Map<CornerDirection, Corner> card_corners = new Hashtable<>();
 
-    PlaceableCardTest() {
+    @BeforeAll
+    public static void initializeCorners() {
         card_corners.put(TL, new Corner(null, TL));
         card_corners.put(TR, new Corner(LEAF, TR));
         card_corners.put(BR, new Corner(BUTTERFLY, BR));
         // BL is filled
     }
 
-    @BeforeEach
-    public void placeableCard_instantiate() {
+
+    @Override
+    void setupCard(Card card){
         try {
             card = new ResourceCard(LEAF, 0,
                     card_corners.get(TL),
@@ -38,6 +40,7 @@ class PlaceableCardTest extends CardTest {
         } catch (InvalidParameterException ex) {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
+        super.setupCard(card);
     }
 
     @Test
@@ -113,7 +116,7 @@ class PlaceableCardTest extends CardTest {
     @Test
     void getSetPosition() {
         // at instantiation position == null
-        assertNull(card.getPosition());
+        assertThrows(RuntimeException.class, ()-> card.getPosition());
 
         Point pos = new Point(5, 5);
         PlaceableCard placedCard = card.setPosition(pos);

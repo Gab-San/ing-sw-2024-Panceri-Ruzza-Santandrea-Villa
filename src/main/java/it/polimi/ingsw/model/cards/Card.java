@@ -78,8 +78,8 @@ public abstract class Card {
     /**
      * This method compares two placeable card objects.
      * <p>
-     *     Returns true if the two cards have the same properties:
-     *     - Orientation;
+     *     Returns true if the two cards have the same properties:<br>
+     *     - Orientation;<br>
      *     Returns false otherwise.
      * </p>
      * @param other the card with which to compare

@@ -9,6 +9,10 @@ import java.util.*;
 
 /**
  * This represents the starting card: the first card placed in the setup phase.
+ * <p>
+ *     Starting card can store multiple resources in the center of the card.
+ *     They can also display a resource on both sides of a corner.
+ * </p>
  */
 public class StartingCard extends PlaceableCard {
     private final List<GameResource> centralFrontResources;
@@ -35,6 +39,11 @@ public class StartingCard extends PlaceableCard {
         this.centralFrontResources = oldCard.centralFrontResources;
     }
 
+    /**
+     * Returns a map containing the number of visible resources on the card.<br>
+     * These are either front corner resources with the card central resources or back corner resources.
+     * @return a map with the count of the card's visible resources
+     */
     @Override
     public Map<GameResource, Integer> getCardResources() {
         int[] resourcesCount = super.getCornerResources();
@@ -47,11 +56,24 @@ public class StartingCard extends PlaceableCard {
         return UsefulFunc.resourceArrayToMap(resourcesCount);
     }
 
+    /**
+     * Starting cards are white cards. Since no objective has a use for white cards
+     * their colour is set to null.
+     * @return null (associated with white colour)
+     */
     @Override
     public GameResource getCardColour() {
         return null;
     }
-
+    /**
+     * Sets the position of the card.
+     * <p>
+     *     In order to make a card an immutable object, this method build a new identical
+     *     card with the only new information of position.
+     * </p>
+     * @param placement the position in which the card has to be placed
+     * @return an equal positioned card
+     */
     @Override
     public PlaceableCard setPosition(Point placement) {
         return new StartingCard(placement, this);
@@ -61,13 +83,11 @@ public class StartingCard extends PlaceableCard {
     @Override
     public boolean equals(Object other){
         if (other == this) return true;
-        if(other instanceof StartingCard)
-            return equals((StartingCard) other);
-        else
-            return false;
+        if(!(other instanceof StartingCard)) return false;
+        return compare((StartingCard) other);
     }
-    public boolean equals(StartingCard other){
-        return super.equals(other) &&
+    public boolean compare(StartingCard other){
+        return super.compare(other) &&
                 centralFrontResources.equals(other.centralFrontResources);
     }
 }
