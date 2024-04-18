@@ -121,7 +121,7 @@ public abstract class PlaceableCard extends Card{
 
         Set<CornerDirection> cornerKeys = corners.keySet();
         for(CornerDirection cornDir: cornerKeys){
-            // TODO shouldn't be considered only visible corners?
+            // Get resource if visible
             GameResource res = corners.get(cornDir).getResource();
             if(res != null && res != GameResource.FILLED){
                 resourcesCount[res.getResourceIndex()]++;
@@ -189,9 +189,9 @@ public abstract class PlaceableCard extends Card{
     /**
      * This method compares two placeable card objects.
      * <p>
-     *     Returns true if the two cards have the same properties:
-     *     - Orientation;
-     *     - Corners.
+     *     Returns true if the two cards have the same properties:<br>
+     *     - Orientation;<br>
+     *     - Corners.<br>
      *     Returns false otherwise.
      * </p>
      * @param other the card with which to compare

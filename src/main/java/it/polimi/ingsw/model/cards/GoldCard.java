@@ -23,7 +23,20 @@ public class GoldCard extends PlayCard{
     private final Hashtable<GameResource, Integer> placementCost;
     private final GoldCardStrategy goldStrat;
 
-    public GoldCard(GameResource backResource, int pointsOnPlace, Hashtable<GameResource, Integer> plCost,
+    /**
+     * Constructor for gold card.
+     * <p>
+     *     In addition to corners and the back resource, must specify points on place,
+     *     gold scoring method and placement cost.
+     * </p>
+     * @param backResource the resource displayed on the back
+     * @param pointsOnPlace points multiplier scored on placement
+     * @param plCost a map defining the placement cost of the card
+     * @param goldStrat method of points scoring
+     * @param corners the corners attached to the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
+    public GoldCard(GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, Corner... corners) throws InvalidParameterException {
         super(backResource, pointsOnPlace, corners);
         this.goldStrat = goldStrat;
@@ -98,12 +111,12 @@ public class GoldCard extends PlayCard{
      * This method compares two gold card objects.
      * <p>
      *     Returns true if the two cards have the same properties:
-     *     - Orientation;
-     *     - Corners;
-     *     - Back resource and colour;
-     *     - Placement points;
-     *     - Placement cost;
-     *     - Gold strategy.
+     *     - Orientation;<br>
+     *     - Corners;<br>
+     *     - Back resource and colour;<br>
+     *     - Placement points;<br>
+     *     - Placement cost;<br>
+     *     - Gold strategy.<br>
      *     Returns false otherwise.
      * </p>
      * @param other the card with which to compare

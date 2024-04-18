@@ -71,16 +71,19 @@ public abstract class PlayCard extends PlaceableCard{
     }
 
     /**
-     * Returns a map containing the number of visible resources on the card.
+     * Returns a map containing the number of visible resources on the card.<br>
+     * These are either visible corner resources or  card's back resource.
      * @return a map with the count of the card's visible resources
      */
     @Override
     public Map<GameResource, Integer> getCardResources() {
-        int[] resourcesCount = super.getCornerResources();
         if(!isFaceUp){
+            int[] resourcesCount = new int[7];
             resourcesCount[backResource.getResourceIndex()]++;
+            return UsefulFunc.resourceArrayToMap(resourcesCount);
         }
 
+        int[] resourcesCount = super.getCornerResources();
         return UsefulFunc.resourceArrayToMap(resourcesCount);
     }
 
@@ -123,12 +126,12 @@ public abstract class PlayCard extends PlaceableCard{
     /**
      * This method compares two playable card objects.
      * <p>
-     *     Returns true if the two cards have the same properties:
-     *     - Orientation;
-     *     - Corners;
-     *     - Back resource and colour;
-     *     - Placement points;
-     *     - Placement cost.
+     *     Returns true if the two cards have the same properties:<br>
+     *     - Orientation;<br>
+     *     - Corners;<br>
+     *     - Back resource and colour;<br>
+     *     - Placement points;<br>
+     *     - Placement cost.<br>
      *     Returns false otherwise.
      * </p>
      * @param other the card with which to compare

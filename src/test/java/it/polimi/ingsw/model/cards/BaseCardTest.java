@@ -1,22 +1,24 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class CardTest {
-    Card testCard;
+public class BaseCardTest {
+    private Card testCard;
     @BeforeEach
     void setup(){
-        testCard = new ResourceCard();
-        System.out.println("\nStarting test...\n");
+        System.out.println("\nStarting Test...\n");
+        setupCard(new ResourceCard());
     }
+
+    void setupCard(Card card){
+        testCard = card;
+    }
+
     @Test
-    void flip() {
+    void flip(){
         assertFalse(testCard.isFaceUp());
         System.out.println(testCard.isFaceUp ? "Face Up" : "Face Down");
 
@@ -39,6 +41,7 @@ class CardTest {
 
         testCard.turnFaceUp();
         assertTrue(testCard.isFaceUp());
+
         testCard.turnFaceUp();
         assertTrue(testCard.isFaceUp());
         System.out.println(testCard.isFaceUp ? "Face Up" : "Face Down");
@@ -55,7 +58,6 @@ class CardTest {
         testCard.turnFaceDown();
         assertFalse(testCard.isFaceUp());
         System.out.println(testCard.isFaceUp ? "Face Up" : "Face Down");
-
     }
 
     @Test
@@ -65,24 +67,45 @@ class CardTest {
 
     @Test
     void equalsTest(){
-        // Reflexive
-        assertTrue(testCard.equals(testCard));
-        Card newCard = testCard;
+        // Property: Reflexive;
+        assertEquals(testCard, testCard);
+
+        Card testCardCopy = testCard;
+        assertEquals(testCard, testCardCopy);
+
         // Symmetrical
-        assertTrue(testCard.equals((Card) newCard));
-        assertTrue(newCard.equals( (Card) testCard));
-        Corner notCard = new Corner(GameResource.BUTTERFLY, CornerDirection.TL);
-        assertFalse(testCard.equals(notCard));
-        newCard = new ResourceCard();
-        newCard.turnFaceUp();
+        final Card differentCard = new ResourceCard();
+
+        differentCard.turnFaceUp();
         testCard.turnFaceUp();
-        assertTrue(testCard.equals(newCard));
-        assertTrue(newCard.equals(testCard));
+
+        assertAll(
+                () -> assertEquals(testCard, differentCard),
+                () -> assertEquals(differentCard, testCard)
+        );
+
         testCard.turnFaceDown();
-        assertFalse(testCard.equals(newCard));
-        assertFalse(newCard.equals(testCard));
-        newCard.turnFaceDown();
-        assertTrue(testCard.equals(newCard));
-        assertTrue(newCard.equals(testCard));
+        assertAll(
+                () -> assertEquals(testCard, testCardCopy),
+                () -> assertNotEquals(testCard, differentCard),
+                () -> assertNotEquals(differentCard, testCard)
+        );
+
+        differentCard.turnFaceDown();
+
+        assertAll(
+                () -> assertEquals(testCard, differentCard),
+                () -> assertEquals(differentCard, testCard)
+        );
+
+        // Transitive
+        final Card anotherCard = new ResourceCard();
+        anotherCard.turnFaceDown();
+
+        if( testCard.equals(differentCard) && differentCard.equals(anotherCard) ){
+            assertEquals(testCard, anotherCard);
+        } else {
+            fail("Transitive property not met");
+        }
     }
 }

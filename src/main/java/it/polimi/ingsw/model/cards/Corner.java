@@ -164,11 +164,11 @@ public class Corner {
     /**
      * This method compare two corners and defines whether they are equal.
      * <p>
-     *     The parameters checked are:
-     *     - Front resource;
-     *     - Back resource;
-     *     - Direction;
-     *     - Occupation and visibility;
+     *     The parameters checked are:<br>
+     *     - Front resource;<br>
+     *     - Back resource;<br>
+     *     - Direction;<br>
+     *     - Occupation and visibility;<br>
      * </p>
      * @param other the corner with which to compare
      * @return true if the two corners are equal; false otherwise
