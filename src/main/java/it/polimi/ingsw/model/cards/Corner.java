@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,6 @@ public class Corner {
         this.cardRef = cardRef;
         this.direction = otherCorner.direction;
     }
-
     /**
      * This constructor builds a corner given all the information about it.
      * @param frontResource the resource displayed on the front face of the card
@@ -43,16 +41,17 @@ public class Corner {
      * @param cardRef the card with which the corner is associated
      * @param dir the direction of the corner
      */
-    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, @Nullable PlaceableCard cardRef, CornerDirection dir){
+    public Corner(@Nullable GameResource frontResource, @Nullable GameResource backResource, PlaceableCard cardRef, CornerDirection dir){
         this.frontResource = frontResource;
         this.backResource = backResource;
-        this.cardRef = cardRef;
         this.occupied = false;
         this.visible = true;
+        this.cardRef = cardRef;
         this.direction = dir;
     }
+
     /**
-     * This constructor defaults the card reference to null.
+     * This constructor builds a corner with a null cardRef
      * @param frontResource the resource displayed on the front face of the card
      * @param backResource the resource displayed on the back face of the card
      * @param dir the direction of the corner
@@ -69,6 +68,7 @@ public class Corner {
     public Corner(@Nullable GameResource frontResource, CornerDirection dir){
         this(frontResource, null, dir);
     }
+
 
     /**
      * Getter for the reference of the card related to this corner.
@@ -145,6 +145,41 @@ public class Corner {
         }
 
         return cardRef.isFaceUp ? frontResource : backResource;
+    }
+
+    // OBJECT METHODS
+    /**
+     * Indicates whether some object has the same properties as this one
+     * @param other the reference object which to compare
+     * @return true if the object is the same as the argument; false otherwise
+     */
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(!(other instanceof Corner)) return false;
+
+        return compare((Corner)other);
+    }
+
+    /**
+     * This method compare two corners and defines whether they are equal.
+     * <p>
+     *     The parameters checked are:
+     *     - Front resource;
+     *     - Back resource;
+     *     - Direction;
+     *     - Occupation and visibility;
+     * </p>
+     * @param other the corner with which to compare
+     * @return true if the two corners are equal; false otherwise
+     */
+    public boolean compare(Corner other){
+        // No need to check for card ref. The placed card can be equal to the same card that isn't placed
+        return frontResource == other.frontResource &&
+                backResource == other.backResource &&
+                direction == other.direction &&
+                occupied == other.occupied &&
+                visible == other. visible;
     }
 
 }
