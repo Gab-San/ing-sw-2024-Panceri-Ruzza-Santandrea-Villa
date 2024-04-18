@@ -184,6 +184,26 @@ class BasePlaceableCardTest {
     }
 
     @Test
+    @DisplayName("Equals: differ by one corner resource")
+    void equalDifferent2(){
+        PlaceableCard differentCard = null;
+        try {
+            differentCard = new ResourceCard(LEAF, 0,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    new Corner(BUTTERFLY, MUSHROOM, BR)
+                    // BL corner is filled
+            );
+        } catch (InvalidParameterException ex) {
+            fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
+        }
+        assertNotEquals(differentCard, testCard);
+        assertNotEquals(testCard, differentCard);
+    }
+
+
+
+    @Test
     @DisplayName("Equals: equal cards")
     void equalEqual(){
         PlayCard differentCard = null;

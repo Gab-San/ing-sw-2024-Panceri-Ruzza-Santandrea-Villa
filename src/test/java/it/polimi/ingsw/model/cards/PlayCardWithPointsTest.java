@@ -48,24 +48,24 @@ public class PlayCardWithPointsTest {
     }
 
     @Test
-    public void getCardResources() {
-        Map<GameResource, Integer> resourceMap;
-
-        // FRONT
+    @DisplayName("GetResources: facing up")
+    void getCardResourcesUp() {
         testCard.turnFaceUp();
-        resourceMap = testCard.getCardResources();
+        Map<GameResource, Integer> resourceMap = testCard.getCardResources();
         assertEquals(1, resourceMap.get(SCROLL));
         assertEquals(3, resourceMap.get(WOLF));
         for (GameResource res : GameResource.values()) {
             if (!res.equals(SCROLL) && !res.equals(WOLF) && !res.equals(FILLED)) {
                 assertEquals(0, resourceMap.get(res));
             }
-            if(res.equals(FILLED)) assertNull(resourceMap.get(res));
+            if (res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
-
-        // BACK
+    }
+    @Test
+    @DisplayName("GetResources: facing down")
+    void getCardResourcesDown(){
         testCard.turnFaceDown();
-        resourceMap = testCard.getCardResources();
+        Map <GameResource, Integer> resourceMap = testCard.getCardResources();
         assertEquals(1, resourceMap.get(WOLF));
         for (GameResource res : GameResource.values()) {
             if (!res.equals(WOLF) && !res.equals(FILLED)) assertEquals(0, resourceMap.get(res));
