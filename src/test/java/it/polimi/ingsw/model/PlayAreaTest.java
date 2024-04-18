@@ -66,9 +66,7 @@ class PlayAreaTest {
         StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new Point(0,0));
         assertEquals(startingCard, this.startingCard);
         assertEquals(playArea.getFreeCorners(), startingCard.getFreeCorners());
-
-        //assert exception on placement of another starting card
-        assertThrows(RuntimeException.class, ()->playArea.placeStartingCard(startingCard));
+        assertEquals(2, playArea.getFreeCorners().size());
     }
     @Test
     @DisplayName("Test placement of starting card on back (central resources not visible)")
@@ -89,11 +87,16 @@ class PlayAreaTest {
         StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new Point(0,0));
         assertEquals(startingCard, this.startingCard);
         assertEquals(playArea.getFreeCorners(), startingCard.getFreeCorners());
-
-        //assert exception on placement of another starting card
+        assertEquals(4, playArea.getFreeCorners().size());
+    }
+    @Test
+    @DisplayName("Test failure on placement of a second starting card (first placement on both sides)")
+    void testPlaceStartingCard_fail() {
+        setUp(false);
+        assertThrows(RuntimeException.class, ()->playArea.placeStartingCard(startingCard));
+        setUp(true);
         assertThrows(RuntimeException.class, ()->playArea.placeStartingCard(startingCard));
     }
-
     @Test
     @DisplayName("Test placement of a PlayCard")
     void testPlaceCard() {
@@ -127,6 +130,10 @@ class PlayAreaTest {
         Corner placedCard_corner = cardPlaced.getCorner(coveredCorner.getDirection().opposite());
         assertTrue(placedCard_corner.isOccupied());
         assertTrue(placedCard_corner.isVisible());
+
+        //assert other placed card's corners are not occupied and visible
+        assertEquals(3, cardPlaced.getFreeCorners().size());
+        assertFalse(cardPlaced.getFreeCorners().contains(placedCard_corner));
 
         // assert visibleResources update
         Map<GameResource, Integer> placedCardRes = cardPlaced.getCardResources();
@@ -277,5 +284,81 @@ class PlayAreaTest {
 
         assertThrows(RuntimeException.class, ()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
+    }
+
+    @Test
+    @DisplayName("Test covering of multiple corners (left side)")
+    void testPlaceCard_multipleCoveredCorners_left() {
+        setUp(false);
+        ResourceCard cardTL = new ResourceCard();
+        ResourceCard cardBL = new ResourceCard();
+        playArea.placeCard(cardTL, startingCard.getCorner(TL));
+        playArea.placeCard(cardBL, startingCard.getCorner(BL));
+        ResourceCard card = new ResourceCard();
+        playArea.placeCard(card, cardBL.getCorner(TL));
+
+        assertTrue(cardBL.getCorner(TL).isOccupied());
+        assertFalse(cardBL.getCorner(TL).isVisible());
+        assertTrue(cardTL.getCorner(BL).isOccupied());
+        assertFalse(cardTL.getCorner(BL).isVisible());
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(TR)));
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(BR)));
+    }
+    @Test
+    @DisplayName("Test covering of multiple corners (right side)")
+    void testPlaceCard_multipleCoveredCorners_right() {
+        setUp(false);
+        ResourceCard cardTR = new ResourceCard();
+        ResourceCard cardBR = new ResourceCard();
+        playArea.placeCard(cardTR, startingCard.getCorner(TR));
+        playArea.placeCard(cardBR, startingCard.getCorner(BR));
+        ResourceCard card = new ResourceCard();
+        playArea.placeCard(card, cardBR.getCorner(TR));
+
+        assertTrue(cardBR.getCorner(TR).isOccupied());
+        assertFalse(cardBR.getCorner(TR).isVisible());
+        assertTrue(cardTR.getCorner(BR).isOccupied());
+        assertFalse(cardTR.getCorner(BR).isVisible());
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(TL)));
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(BL)));
+    }
+    @Test
+    @DisplayName("Test covering of multiple corners (top side)")
+    void testPlaceCard_multipleCoveredCorners_top() {
+        setUp(false);
+        ResourceCard cardTR = new ResourceCard();
+        ResourceCard cardTL = new ResourceCard();
+        playArea.placeCard(cardTR, startingCard.getCorner(TR));
+        playArea.placeCard(cardTL, startingCard.getCorner(TL));
+        ResourceCard card = new ResourceCard();
+        playArea.placeCard(card, cardTL.getCorner(TR));
+
+        assertTrue(cardTL.getCorner(TR).isOccupied());
+        assertFalse(cardTL.getCorner(TR).isVisible());
+        assertTrue(cardTR.getCorner(TL).isOccupied());
+        assertFalse(cardTR.getCorner(TL).isVisible());
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(BR)));
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(BL)));
+    }
+    @Test
+    @DisplayName("Test covering of multiple corners (bottom side)")
+    void testPlaceCard_multipleCoveredCorners_bottom() {
+        setUp(false);
+        PlayCard cardBL = new ResourceCard();
+        PlayCard cardBR = new ResourceCard();
+        playArea.placeCard(cardBL, startingCard.getCorner(BL));
+        cardBL = (PlayCard) cardBL.getCorner(TL).getCardRef();
+        playArea.placeCard(cardBR, startingCard.getCorner(BR));
+        cardBR = (PlayCard) cardBR.getCorner(TL).getCardRef();
+        PlayCard  card = new ResourceCard();
+        playArea.placeCard(card, cardBR.getCorner(BL));
+        card = (PlayCard) card.getCorner(TL).getCardRef();
+
+        assertTrue(cardBR.getCorner(BL).isOccupied());
+        assertFalse(cardBR.getCorner(BL).isVisible());
+        assertTrue(cardBL.getCorner(BR).isOccupied());
+        assertFalse(cardBL.getCorner(BR).isVisible());
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(TL)));
+        assertFalse(playArea.getFreeCorners().contains(card.getCorner(TR)));
     }
 }

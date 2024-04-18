@@ -77,13 +77,11 @@ public abstract class PlayCard extends PlaceableCard{
      */
     @Override
     public Map<GameResource, Integer> getCardResources() {
-        if(!isFaceUp){
-            int[] resourcesCount = new int[7];
+        int[] resourcesCount = super.getCornerResources();
+        if(!isFaceUp && backResource != null && backResource != GameResource.FILLED){
             resourcesCount[backResource.getResourceIndex()]++;
-            return UsefulFunc.resourceArrayToMap(resourcesCount);
         }
 
-        int[] resourcesCount = super.getCornerResources();
         return UsefulFunc.resourceArrayToMap(resourcesCount);
     }
 
