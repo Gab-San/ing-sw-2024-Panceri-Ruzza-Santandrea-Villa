@@ -41,7 +41,7 @@ public enum PatternObjective {
                         charToResource(strPattern.charAt(i))
                 );
             }
-            catch(Exception ignored){}
+            catch(InvalidParameterException ignored){}
             // '*' characters are ignored as whatever is in those points is irrelevant
             // strings longer than 9 (3x3) are also ignored (might want to allow for custom patterns, e.g. 5x5)
         }

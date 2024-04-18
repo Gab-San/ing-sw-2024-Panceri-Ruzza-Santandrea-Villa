@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.PlayArea;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -13,6 +14,9 @@ import java.util.*;
  *     The resource card is one of the two playable card types.
  *     It is a card composed of the corners and a back resource. <br>
  *     It has no placement cost but it may have placement points.
+ * </p>
+ * <p>
+ *      By default when instantiated a card is facing downwards (displaying back)
  * </p>
  */
 public class ResourceCard extends PlayCard{
@@ -73,7 +77,7 @@ public class ResourceCard extends PlayCard{
      * @return the points received from the placement
      */
     @Override
-    public int calculatePointsOnPlace(PlayArea playArea) {
+    public int calculatePointsOnPlace(@Nullable PlayArea playArea) {
         return pointsOnPlace;
     }
 

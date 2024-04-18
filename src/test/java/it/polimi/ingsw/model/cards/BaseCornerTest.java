@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO redo corner test of resource
 class BaseCornerTest {
     Corner cornerTL = new Corner(GameResource.BUTTERFLY, CornerDirection.TL);
     Corner cornerTR = new Corner(GameResource.BUTTERFLY, CornerDirection.TR);
@@ -62,6 +63,7 @@ class BaseCornerTest {
 
     @Test
     void getResource() {
+
         for(CornerDirection cornerDirection : CornerDirection.values()){
             System.out.println("Testing "+ cornerDirection + " ...");
             GameResource cornRes = cardRef.getCorner(cornerDirection).getResource();
@@ -72,4 +74,6 @@ class BaseCornerTest {
             }
         }
     }
+
+     //TODO test equals
 }

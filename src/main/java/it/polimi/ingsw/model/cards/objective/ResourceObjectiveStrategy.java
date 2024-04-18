@@ -16,7 +16,11 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
         return divideMap(p.getVisibleResources(), resourceForCompletion);
     }
 
-    // returns the maximum multiplier M that satisfies b(resource)*M <= a(resource) for all resources in b
+    /**
+     * @param a dividend map
+     * @param b divisor map
+     * @return the maximum multiplier M that satisfies b.get(resource)*M <= a.get(resource) for all resources in b
+      */
     private int divideMap(Map<GameResource, Integer> a, Map<GameResource, Integer> b){
         return b.keySet().stream()
                 .mapToInt( resource -> a.get(resource)/b.get(resource) )

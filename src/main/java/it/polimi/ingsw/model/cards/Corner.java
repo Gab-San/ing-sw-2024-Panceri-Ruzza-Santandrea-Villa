@@ -99,8 +99,8 @@ public class Corner {
     }
 
     /**
-     * This functions sets the occupation of the corner as TRUE.
-     * After its invocation the function isOccupied will return TRUE.
+     * This functions sets the occupation of the corner as true.
+     * After its invocation the function isOccupied will return true.
      */
     public Corner occupy(){
         occupied = true;
@@ -110,7 +110,7 @@ public class Corner {
     /**
      * Getter for the boolean value of occupation of the corner.
      * It gives information about the availability of the corner on which to place a card.
-     * @return TRUE if a card can be placed on this corner, FALSE otherwise
+     * @return true if a card can be placed on this corner, false otherwise
      */
     public boolean isOccupied(){
         return occupied || getResource() == GameResource.FILLED;

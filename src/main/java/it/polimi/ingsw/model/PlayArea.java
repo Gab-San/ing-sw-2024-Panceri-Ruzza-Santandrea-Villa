@@ -95,7 +95,7 @@ public class PlayArea {
             PlaceableCard dirCard = cardMatrix.get(cardPos.move(dir));
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite()); // corner isn't filled as checks passed
-                if (dirCorner.getResource() != null){
+                if (dirCorner.getResource() != null && dirCorner.getResource() != GameResource.FILLED){
                     visibleResources.put(
                             dirCorner.getResource(),
                             visibleResources.get(dirCorner.getResource()) - 1
@@ -106,9 +106,8 @@ public class PlayArea {
                 freeCorners.remove(dirCorner);
             }
             else{
-                try {
+                if(!card.getCorner(dir).isOccupied()) // true if that corner is FILLED
                     freeCorners.add(card.getCorner(dir));
-                }catch (Exception ignored){} // filled corners aren't free
             }
         }
         // add placed card resources to visibleResources

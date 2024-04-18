@@ -15,6 +15,9 @@ import java.util.*;
  *     of the game. All of the cards that can be held in the hand and then played during a player's turn
  *     must be play cards.
  * </p>
+ *  <p>
+ *       By default when instantiated a card is facing downwards (displaying back)
+ *  </p>
  */
 public abstract class PlayCard extends PlaceableCard{
     private GameResource backResource;
@@ -77,6 +80,7 @@ public abstract class PlayCard extends PlaceableCard{
      */
     @Override
     public Map<GameResource, Integer> getCardResources() {
+
         if(!isFaceUp){
             int[] resourcesCount = new int[7];
             resourcesCount[backResource.getResourceIndex()]++;

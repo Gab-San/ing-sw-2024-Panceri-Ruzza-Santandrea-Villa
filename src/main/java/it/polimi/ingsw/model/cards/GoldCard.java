@@ -3,6 +3,7 @@ import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.cardstrategies.GoldCardStrategy;
 import it.polimi.ingsw.model.enums.GameResource;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -17,6 +18,9 @@ import java.util.*;
  *     What differentiates them mostly from resource cards is the placement cost.
  *     In order to place a gold card, enough resources as listed at the bottom of it must be visible in the
  *     play area
+ * </p>
+ * <p>
+ *     By default when instantiated a card is facing downwards (displaying back)
  * </p>
  */
 public class GoldCard extends PlayCard{
@@ -75,7 +79,7 @@ public class GoldCard extends PlayCard{
      * @return the points received from the placement
      */
     @Override
-    public int calculatePointsOnPlace(PlayArea playArea){
+    public int calculatePointsOnPlace(@NotNull PlayArea playArea){
         return pointsOnPlace * goldStrat.calculateSolves(playArea, this);
     }
     
