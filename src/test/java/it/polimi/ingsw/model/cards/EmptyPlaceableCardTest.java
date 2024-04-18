@@ -15,22 +15,32 @@ import java.util.Map;
 
 import static it.polimi.ingsw.model.enums.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.GameResource.*;
+import static it.polimi.ingsw.model.enums.GameResource.MUSHROOM;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class FilledCardTest {
+@SuppressWarnings("ReassignedVariable")
+public class EmptyPlaceableCardTest {
     private PlaceableCard testCard;
     private static final Map<CornerDirection, Corner> card_corners = new Hashtable<>();
     @BeforeAll
     public static void initializeCorners() {
         card_corners.put(TL, new Corner(null, TL));
-        card_corners.put(TR, new Corner(LEAF, TR));
-        card_corners.put(BR, new Corner(BUTTERFLY, BR));
+        card_corners.put(TR, new Corner(null, TR));
+        card_corners.put(BR, new Corner(null, BR));
         card_corners.put(BL, new Corner(null, BL));
     }
+
     @BeforeEach
     void setup(){
         try {
-            testCard = new ResourceCard(MUSHROOM);
+            testCard = new ResourceCard(
+                    MUSHROOM,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    card_corners.get(BR),
+                    card_corners.get(BL)
+            );
         } catch (InvalidParameterException ex) {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
@@ -42,7 +52,7 @@ public class FilledCardTest {
             // Only need to check if the corners have been copied correctly
             Corner corner = testCard.getCorner(dir);
             // manually check that the FILLED corner was created
-            assertEquals(corner, new Corner(FILLED, null, dir));
+            assertEquals(corner, new Corner(null, null, dir));
 
             // These assert better test the corner
             assertTrue(corner.isVisible());
@@ -53,17 +63,17 @@ public class FilledCardTest {
     @Test
     @DisplayName("Free Corners: face up card")
     void getFreeCornersUP() {
-        // Test that all corners are occupied
+        // Test that all corners are free
         testCard.turnFaceUp();
         List<Corner> freeCorners = testCard.getFreeCorners();
         for (CornerDirection dir : CornerDirection.values()) {
             boolean contained = freeCorners.contains(testCard.getCorner(dir));
-            assertFalse(contained);
+            assertTrue(contained);
         }
-        // Test that an occupied corner is removed from freeCorners
+
         Corner cornerTR = testCard.getCorner(TR);
-        assertTrue(cornerTR.isOccupied());
-        assertFalse(freeCorners.contains(cornerTR), "Occupied corner in freeCorners");
+        assertFalse(cornerTR.isOccupied());
+        assertTrue(freeCorners.contains(cornerTR), "Occupied corner in freeCorners");
         cornerTR.occupy();
         assertTrue(cornerTR.isOccupied());
         assertFalse(testCard.getFreeCorners().contains(cornerTR), "Occupied corner IN freeCorners");
@@ -80,12 +90,12 @@ public class FilledCardTest {
             assertTrue(contained);
         }
         // Test that an occupied corner is removed from freeCorners
-        Corner cornerTR = testCard.getCorner(TR);
-        assertFalse(cornerTR.isOccupied());
-        assertTrue(freeCorners.contains(cornerTR), "Not occupied corner NOT in freeCorners");
-        cornerTR.occupy();
-        assertTrue(cornerTR.isOccupied());
-        assertFalse(testCard.getFreeCorners().contains(cornerTR), "Occupied corner IN freeCorners");
+        Corner cornerBL = testCard.getCorner(BL);
+        assertFalse(cornerBL.isOccupied());
+        assertTrue(freeCorners.contains(cornerBL), "Not occupied corner NOT in freeCorners");
+        cornerBL.occupy();
+        assertTrue(cornerBL.isOccupied());
+        assertFalse(testCard.getFreeCorners().contains(cornerBL), "Occupied corner IN freeCorners");
     }
 
     @Test
@@ -168,7 +178,13 @@ public class FilledCardTest {
     void equalEqual(){
         PlaceableCard differentCard = null;
         try {
-            differentCard = new ResourceCard(MUSHROOM);
+            differentCard = new ResourceCard(
+                    MUSHROOM,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    card_corners.get(BR),
+                    card_corners.get(BL)
+            );
         } catch (InvalidParameterException ex) {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
@@ -182,14 +198,26 @@ public class FilledCardTest {
     void equalTransitive(){
         PlaceableCard differentCard = null;
         try {
-            differentCard = new ResourceCard(MUSHROOM);
+            differentCard = new ResourceCard(
+                    MUSHROOM,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    card_corners.get(BR),
+                    card_corners.get(BL)
+            );
         } catch (InvalidParameterException ex) {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
 
         PlaceableCard anotherCard = null;
         try {
-            anotherCard = new ResourceCard(MUSHROOM);
+            anotherCard = new ResourceCard(
+                    MUSHROOM,
+                    card_corners.get(TL),
+                    card_corners.get(TR),
+                    card_corners.get(BR),
+                    card_corners.get(BL)
+            );
         } catch (InvalidParameterException ex) {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }

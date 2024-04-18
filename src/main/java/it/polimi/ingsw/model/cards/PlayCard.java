@@ -84,6 +84,7 @@ public abstract class PlayCard extends PlaceableCard{
         if(!isFaceUp){
             int[] resourcesCount = new int[7];
             resourcesCount[backResource.getResourceIndex()]++;
+            return UsefulFunc.resourceArrayToMap(resourcesCount);
         }
 
         int[] resourcesCount = super.getCornerResources();

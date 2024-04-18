@@ -3,6 +3,7 @@ import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.cardstrategies.GoldCardStrategy;
 import it.polimi.ingsw.model.enums.GameResource;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -78,7 +79,7 @@ public class GoldCard extends PlayCard{
      * @return the points received from the placement
      */
     @Override
-    public int calculatePointsOnPlace(PlayArea playArea){
+    public int calculatePointsOnPlace(@NotNull PlayArea playArea){
         return pointsOnPlace * goldStrat.calculateSolves(playArea, this);
     }
     

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeAll;
@@ -86,6 +87,19 @@ class BaseStartingCardTest {
     @Test
     void getCardColour() {
         assertNull(testCard.getCardColour());
+    }
+
+    @Test
+    void getSetPosition() {
+        // At instantiation position == null
+        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+
+        Point pos = new Point(5, 5);
+        StartingCard placedCard = (StartingCard) testCard.setPosition(pos);
+        // After placement, new card will have updated position with no other changes
+        assertEquals(pos, placedCard.getPosition());
+        // Check that equals ignores position
+        assertEquals(testCard, placedCard);
     }
 
     @Test

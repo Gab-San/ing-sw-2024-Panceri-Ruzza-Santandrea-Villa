@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,29 +15,26 @@ import java.util.Map;
 import static it.polimi.ingsw.model.enums.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.CornerDirection.BR;
 import static it.polimi.ingsw.model.enums.GameResource.*;
-import static it.polimi.ingsw.model.enums.GameResource.WOLF;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.fail;
 
-public class PlayCardWithPointsTest {
+class NoPointsPlayCardTest {
     private PlayCard testCard;
     private static final Map<CornerDirection, Corner> card_corners = new Hashtable<>();
-    private final GameResource backResource = WOLF;
+    private final GameResource backResource = BUTTERFLY;
     @BeforeAll
     public static void initializeCorners() {
-        card_corners.put(TL, new Corner(WOLF, TL));
-        card_corners.put(TR, new Corner(WOLF, TR));
-        card_corners.put(BL, new Corner(SCROLL, BL));
-        card_corners.put(BR, new Corner(WOLF, BR));
+        card_corners.put(TL, new Corner(QUILL, TL));
+        card_corners.put(TR, new Corner(MUSHROOM, TR));
+        card_corners.put(BL, new Corner(BUTTERFLY, BL));
+        card_corners.put(BR, new Corner(BUTTERFLY, BR));
     }
 
     @BeforeEach
     void setup(){
         try {
             testCard = new ResourceCard(backResource,
-                    3,
                     card_corners.get(TL),
-                    card_corners.get(TR),
+                    // TR is filled
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -48,27 +46,27 @@ public class PlayCardWithPointsTest {
     }
 
     @Test
-    @DisplayName("GetResources: facing up")
-    void getCardResourcesUp() {
+    public void getCardResources() {
+        Map<GameResource, Integer> resourceMap;
+
+        // FRONT
         testCard.turnFaceUp();
-        Map<GameResource, Integer> resourceMap = testCard.getCardResources();
-        assertEquals(1, resourceMap.get(SCROLL));
-        assertEquals(3, resourceMap.get(WOLF));
+        resourceMap = testCard.getCardResources();
+        assertEquals(1, resourceMap.get(QUILL));
+        assertEquals(2, resourceMap.get(BUTTERFLY));
         for (GameResource res : GameResource.values()) {
-            if (!res.equals(SCROLL) && !res.equals(WOLF) && !res.equals(FILLED)) {
+            if (!res.equals(QUILL) && !res.equals(BUTTERFLY) && !res.equals(FILLED)) {
                 assertEquals(0, resourceMap.get(res));
             }
-            if (res.equals(FILLED)) assertNull(resourceMap.get(res));
+            if(res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
-    }
-    @Test
-    @DisplayName("GetResources: facing down")
-    void getCardResourcesDown(){
+
+        // BACK
         testCard.turnFaceDown();
-        Map <GameResource, Integer> resourceMap = testCard.getCardResources();
-        assertEquals(1, resourceMap.get(WOLF));
+        resourceMap = testCard.getCardResources();
+        assertEquals(1, resourceMap.get(BUTTERFLY));
         for (GameResource res : GameResource.values()) {
-            if (!res.equals(WOLF) && !res.equals(FILLED)) assertEquals(0, resourceMap.get(res));
+            if (!res.equals(BUTTERFLY) && !res.equals(FILLED)) assertEquals(0, resourceMap.get(res));
 
             if(res.equals(FILLED)) assertNull(resourceMap.get(res));
         }
@@ -80,10 +78,23 @@ public class PlayCardWithPointsTest {
     }
 
     @Test
+    void getSetPosition() {
+        // At instantiation position == null
+        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+
+        Point pos = new Point(5, 5);
+        PlayCard placedCard = (PlayCard) testCard.setPosition(pos);
+        // After placement, new card will have updated position with no other changes
+        assertEquals(pos, placedCard.getPosition());
+        // Check that equals ignores position
+        assertEquals(testCard, placedCard);
+    }
+    @Test
     @DisplayName("Equals: self")
     void equalSelf(){
         //Property: Reflexive;
         assertEquals(testCard, testCard);
+
         PlayCard testCardCopy = testCard;
         assertEquals(testCard, testCardCopy);
     }
@@ -101,10 +112,9 @@ public class PlayCardWithPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(
-                    LEAF,
-                    3,
+                    WOLF,
                     card_corners.get(TL),
-                    card_corners.get(TR),
+                    // TR is filled
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -113,29 +123,7 @@ public class PlayCardWithPointsTest {
             fail("Resource card instantiation failed with error message: \n" + invalidParameterException.getMessage());
         }
 
-        assertNotEquals(differentCard, testCard, "Doesn't catch difference on res");
-        assertNotEquals(testCard, differentCard);
-    }
-
-    @Test
-    @DisplayName("Equals: differ by points on placement")
-    void equalDifferent1(){
-        PlayCard differentCard = null;
-        try {
-            differentCard = new ResourceCard(
-                    backResource,
-                    21,
-                    card_corners.get(TL),
-                    card_corners.get(TR),
-                    card_corners.get(BL),
-                    card_corners.get(BR)
-            );
-
-        } catch(InvalidParameterException invalidParameterException){
-            fail("Resource card instantiation failed with error message: \n" + invalidParameterException.getMessage());
-        }
-
-        assertNotEquals(differentCard, testCard, "Doesn't catch difference on point on placement");
+        assertNotEquals(differentCard, testCard);
         assertNotEquals(testCard, differentCard);
     }
 
@@ -145,9 +133,8 @@ public class PlayCardWithPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(backResource,
-                    3,
                     card_corners.get(TL),
-                    card_corners.get(TR),
+                    // TR is filled
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -155,7 +142,7 @@ public class PlayCardWithPointsTest {
             fail("Resource card instantiation failed with error message: \n" + ex.getMessage());
         }
 
-        assertEquals(differentCard,testCard, "Doesn't recognise equal cards");
+        assertEquals(differentCard,testCard);
         assertEquals(testCard,differentCard);
     }
 
@@ -165,9 +152,8 @@ public class PlayCardWithPointsTest {
         PlayCard differentCard = null;
         try {
             differentCard = new ResourceCard(backResource,
-                    3,
                     card_corners.get(TL),
-                    card_corners.get(TR),
+                    // TR is filled
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
@@ -178,9 +164,8 @@ public class PlayCardWithPointsTest {
         PlayCard anotherCard = null;
         try {
             anotherCard = new ResourceCard(backResource,
-                    3,
                     card_corners.get(TL),
-                    card_corners.get(TR),
+                    // TR is filled
                     card_corners.get(BL),
                     card_corners.get(BR)
             );
