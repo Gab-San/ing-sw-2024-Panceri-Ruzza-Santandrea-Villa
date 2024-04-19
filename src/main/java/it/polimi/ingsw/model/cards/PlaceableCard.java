@@ -201,8 +201,13 @@ public abstract class PlaceableCard extends Card{
      * @return true if the card is the same as the argument; false otherwise
      */
     protected boolean compare(PlaceableCard other){
-        return super.compare(other) &&
-                corners.equals(other.corners);
+        return compareCard(other) &&
+                corners.equals(((PlaceableCard) other).corners);
         // corners.equals delegates comparison to Corner.equals for each corner
+    }
+
+    protected boolean compareCard(PlaceableCard other){
+        return super.compareCard(other) &&
+                (position == null || other.position == null || position.equals(other.position));
     }
 }

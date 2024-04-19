@@ -20,11 +20,11 @@ import java.util.*;
  *  </p>
  */
 public abstract class PlayCard extends PlaceableCard{
-    private GameResource backResource;
+    private final GameResource backResource;
     /**
      * Points scored on card's placement
      */
-    protected int pointsOnPlace;
+    protected final int pointsOnPlace;
 
     /**
      * Default constructor: builds a "blank" card with all corners empty on both sides.
@@ -32,6 +32,8 @@ public abstract class PlayCard extends PlaceableCard{
      */
     protected PlayCard() {
         super();
+        backResource = null;
+        pointsOnPlace = 0;
     }
 
     /**
@@ -83,7 +85,8 @@ public abstract class PlayCard extends PlaceableCard{
 
         if(!isFaceUp){
             int[] resourcesCount = new int[7];
-            resourcesCount[backResource.getResourceIndex()]++;
+            if(backResource != null && backResource != GameResource.FILLED)
+                resourcesCount[backResource.getResourceIndex()]++;
             return UsefulFunc.resourceArrayToMap(resourcesCount);
         }
 
@@ -141,11 +144,14 @@ public abstract class PlayCard extends PlaceableCard{
      * @param other the card with which to compare
      * @return true if the card is the same as the argument; false otherwise
      */
-    protected boolean compare(PlayCard other){
-        return super.compare(other) &&
-                getCardColour() == other.getCardColour() &&
-                pointsOnPlace == other.pointsOnPlace &&
-                getPlacementCost().equals(other.getPlacementCost());
+    @Override
+    protected boolean compareCard(PlaceableCard other){
+        if(!(other instanceof PlayCard)) return false;
+        PlayCard cardToComp = (PlayCard) other;
+        return super.compareCard(other) &&
+                getCardColour() == cardToComp.getCardColour() &&
+                pointsOnPlace == cardToComp.pointsOnPlace &&
+                getPlacementCost().equals(cardToComp.getPlacementCost());
     }
 
 }

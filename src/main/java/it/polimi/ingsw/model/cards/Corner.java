@@ -174,9 +174,9 @@ public class Corner {
      * @return true if the two corners are equal; false otherwise
      */
     public boolean compare(Corner other){
-        // No need to check for card ref. The placed card can be equal to the same card that isn't placed
         return frontResource == other.frontResource &&
                 backResource == other.backResource &&
+                (cardRef == null || other.cardRef == null || cardRef.compareCard(other.cardRef))&&
                 direction == other.direction &&
                 occupied == other.occupied &&
                 visible == other. visible;

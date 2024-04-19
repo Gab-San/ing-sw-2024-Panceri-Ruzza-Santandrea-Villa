@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
+import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.enums.GameResource;
 
 import java.util.Map;
@@ -27,4 +28,11 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
                 .min().orElse(0);
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof ResourceObjectiveStrategy resObj)) return false;
+
+        return resourceForCompletion.equals(resObj.resourceForCompletion);
+    }
 }

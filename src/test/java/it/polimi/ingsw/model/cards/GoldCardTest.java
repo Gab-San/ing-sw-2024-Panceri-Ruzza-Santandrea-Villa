@@ -1,13 +1,11 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayArea;
+import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.ItemCountGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.SimpleGoldCard;
 import it.polimi.ingsw.model.enums.GameResource;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -21,6 +19,7 @@ class GoldCardTest {
     private static final PlayArea playArea = new PlayArea();
     private static int potionCardCornerPlaceIdx;
     private static int scrollCardCornerPlaceIdx;
+    private static int cornerCardIdx;
 
     @BeforeAll
     public static void initializePlayArea(){
@@ -35,6 +34,8 @@ class GoldCardTest {
         startingCard.turnFaceUp();
 
         playArea.placeStartingCard(startingCard);
+
+        System.out.println(startingCard.getCorner(TL).getCardRef().getPosition());
 
         ResourceCard leafOne = new ResourceCard(
                 LEAF,
@@ -53,7 +54,10 @@ class GoldCardTest {
             }
         }
 
+
         playArea.placeCard(leafOne, playArea.getFreeCorners().get(freeCornerIndex));
+
+        System.out.println(leafOne.getCorner(TL).getCardRef().getPosition());
 
         ResourceCard leafTwo = new ResourceCard(
                 LEAF,
@@ -73,6 +77,7 @@ class GoldCardTest {
 
         playArea.placeCard(leafTwo, playArea.getFreeCorners().get(freeCornerIndex));
 
+        System.out.println(leafTwo.getCorner(TL).getCardRef().getPosition());
         ResourceCard leafThree = new ResourceCard(
                 LEAF,
                 1,
@@ -92,6 +97,7 @@ class GoldCardTest {
 
         playArea.placeCard(leafThree, playArea.getFreeCorners().get(freeCornerIndex));
 
+        System.out.println(leafThree.getCorner(TL).getCardRef().getPosition());
         ResourceCard leafFour = new ResourceCard(
                 LEAF,
                 new Corner(BUTTERFLY, TR),
@@ -109,7 +115,7 @@ class GoldCardTest {
         }
 
         playArea.placeCard(leafFour, playArea.getFreeCorners().get(freeCornerIndex));
-
+        System.out.println(leafFour.getCorner(TL).getCardRef().getPosition());
         ResourceCard mushroomOne = new ResourceCard(
                 MUSHROOM,
                 new Corner(QUILL, TR),
@@ -127,7 +133,7 @@ class GoldCardTest {
         }
 
         playArea.placeCard(mushroomOne, playArea.getFreeCorners().get(freeCornerIndex));
-
+        System.out.println(mushroomOne.getCorner(TL).getCardRef().getPosition());
         ResourceCard butterflyOne = new ResourceCard(
                 BUTTERFLY,
                 new Corner(SCROLL, TL),
@@ -145,6 +151,7 @@ class GoldCardTest {
         }
 
         playArea.placeCard(butterflyOne, playArea.getFreeCorners().get(freeCornerIndex));
+        System.out.println(butterflyOne.getCorner(TL).getCardRef().getPosition());
 
         ResourceCard butterflyTwo = new ResourceCard(
                 BUTTERFLY,
@@ -163,6 +170,7 @@ class GoldCardTest {
         }
 
         playArea.placeCard(butterflyTwo, playArea.getFreeCorners().get(freeCornerIndex));
+        System.out.println(butterflyTwo.getCorner(TL).getCardRef().getPosition());
 
         for(Corner corn : playArea.getFreeCorners()){
             if(corn.equals(leafOne.getCorner(TR)) ){
@@ -177,6 +185,14 @@ class GoldCardTest {
                 break;
             }
         }
+
+        for(Corner corn:playArea.getFreeCorners()){
+            if(corn.equals(leafFour.getCorner(BR))){
+                cornerCardIdx = playArea.getFreeCorners().indexOf(corn);
+            }
+        }
+
+        System.out.println(playArea.getVisibleResources());
     }
 
     @Nested
@@ -198,8 +214,6 @@ class GoldCardTest {
             );
             // TURNING UP CARD
             testCard.turnFaceUp();
-
-            playArea.placeCard(testCard, playArea.getFreeCorners().get(scrollCardCornerPlaceIdx));
         }
 
         @Test
@@ -211,6 +225,8 @@ class GoldCardTest {
 
         @Test
         void calculatePointsOnPlace() {
+            playArea.placeCard(testCard, playArea.getFreeCorners().get(scrollCardCornerPlaceIdx));
+
             int placementPoints = testCard.calculatePointsOnPlace(playArea);
             assertEquals(2, placementPoints);
         }
@@ -236,8 +252,6 @@ class GoldCardTest {
             );
             // TURNING UP CARD
             testCard.turnFaceUp();
-
-            playArea.placeCard(testCard, playArea.getFreeCorners().get(potionCardCornerPlaceIdx));
         }
 
         @Test
@@ -249,6 +263,8 @@ class GoldCardTest {
 
         @Test
         void calculatePointsOnPlace() {
+            playArea.placeCard(testCard, playArea.getFreeCorners().get(potionCardCornerPlaceIdx));
+
             int placementPoints = testCard.calculatePointsOnPlace(playArea);
             assertEquals(1, placementPoints);
         }
@@ -340,21 +356,42 @@ class GoldCardTest {
 
     }
 
-    //TODO implement Corner Cover Test
-//    @Nested
-//    class CornerGoldCardTest{
-//
-//        @Test
-//        void getPlacementCost() {
-//            Map<GameResource, Integer> placementCostMap = testCard.getPlacementCost();
-//            assertEquals(3, placementCostMap.get(LEAF));
-//            assertEquals(1, placementCostMap.get(MUSHROOM));
-//        }
-//
-//        @Test
-//        void calculatePointsOnPlace() {
-//            // TODO create play area first
-//        }
-//
-//    }
+
+    @Nested
+    class CornerGoldCardTest{
+        private GoldCard testCard;
+        @BeforeEach
+        void setup(){
+            Map<GameResource, Integer> plCost = new Hashtable<>();
+            plCost.put(LEAF, 3);
+            plCost.put(MUSHROOM, 1);
+
+            testCard = new GoldCard(
+                    LEAF,
+                    2,
+                    plCost,
+                    new CornerCoverGoldCard(),
+                    new Corner(null, TL),
+                    new Corner(null, BR),
+                    new Corner(null, TR)
+            );
+            testCard.turnFaceUp();
+        }
+        @Test
+        void getPlacementCost() {
+            Map<GameResource, Integer> placementCostMap = testCard.getPlacementCost();
+            assertEquals(3, placementCostMap.get(LEAF));
+            assertEquals(1, placementCostMap.get(MUSHROOM));
+        }
+
+        @Test
+        void calculatePointsOnPlace() {
+            playArea.placeCard(testCard, playArea.getFreeCorners().get(cornerCardIdx));
+            System.out.println(testCard.getCorner(TL).getCardRef().getPosition());
+
+            int placementPoints = testCard.calculatePointsOnPlace(playArea);
+            assertEquals(6, placementPoints);
+        }
+
+    }
 }

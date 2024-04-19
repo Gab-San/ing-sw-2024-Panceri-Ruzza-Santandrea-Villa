@@ -130,9 +130,11 @@ public class GoldCard extends PlayCard{
      * @param other the card with which to compare
      * @return true if the card is the same as the argument; false otherwise
      */
-    public boolean compare(GoldCard other){
-        return super.equals(other) &&
-                // Isn't it enough if we compare the classes?
-                goldStrat.equals(other.goldStrat);
+    @Override
+    public boolean compareCard(PlaceableCard other){
+        if(!(other instanceof GoldCard)) return false;
+        GoldCard cardToComp = (GoldCard) other;
+        return super.compareCard(other) &&
+                goldStrat.equals(cardToComp.goldStrat);
     }
 }
