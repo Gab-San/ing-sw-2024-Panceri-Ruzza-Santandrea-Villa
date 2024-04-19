@@ -25,7 +25,6 @@ class PlayAreaTest {
     // TODO: duplicate tests placing card on front and back
     void setUp(boolean placeStartingCardOnFront) {
         playArea = new PlayArea();
-        // TODO: fix corners with front and back resources
         startingCard = new StartingCard(
                 new GameResource[]{LEAF, WOLF, MUSHROOM},
                 new Corner(null, LEAF, TL),

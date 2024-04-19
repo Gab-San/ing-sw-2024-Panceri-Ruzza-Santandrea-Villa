@@ -8,7 +8,7 @@ import java.util.Map;
 public class ResourceObjectiveStrategy implements ObjectiveStrategy{
     private final Map<GameResource, Integer> resourceForCompletion;
 
-    public ResourceObjectiveStrategy(int pointsPerSolve, Map<GameResource, Integer> resourceForCompletion) {
+    public ResourceObjectiveStrategy(Map<GameResource, Integer> resourceForCompletion) {
         this.resourceForCompletion = resourceForCompletion;
     }
 
