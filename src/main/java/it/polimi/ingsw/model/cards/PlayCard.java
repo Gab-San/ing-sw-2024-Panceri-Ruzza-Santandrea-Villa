@@ -141,11 +141,13 @@ public abstract class PlayCard extends PlaceableCard{
      * @param other the card with which to compare
      * @return true if the card is the same as the argument; false otherwise
      */
-    protected boolean compare(PlayCard other){
-        return super.compare(other) &&
-                getCardColour() == other.getCardColour() &&
-                pointsOnPlace == other.pointsOnPlace &&
-                getPlacementCost().equals(other.getPlacementCost());
+    @Override
+    protected boolean compareCard(PlaceableCard other){
+        PlayCard cardToComp = (PlayCard) other;
+        return super.compareCard(other) &&
+                getCardColour() == cardToComp.getCardColour() &&
+                pointsOnPlace == cardToComp.pointsOnPlace &&
+                getPlacementCost().equals(cardToComp.getPlacementCost());
     }
 
 }

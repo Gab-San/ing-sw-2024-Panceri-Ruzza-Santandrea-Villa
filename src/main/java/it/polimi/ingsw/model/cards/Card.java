@@ -76,7 +76,7 @@ public abstract class Card {
         if (other == this) return true;
         if(!(other instanceof Card)) return false;
 
-        return compare((Card) other);
+        return compareCard((Card) other);
     }
 
     /**
@@ -89,7 +89,7 @@ public abstract class Card {
      * @param other the card with which to compare
      * @return true if the card is the same as the argument; false otherwise
      */
-    protected boolean compare(Card other){
+    protected boolean compareCard(Card other){
         return isFaceUp == other.isFaceUp;
     }
 }

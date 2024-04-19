@@ -44,4 +44,5 @@ public class ObjectiveCard extends Card {
     public int calculatePoints(PlayArea p){
         return pointsPerSolve * strategy.calculateSolves(p);
     }
+    //TODO implement equals
 }

@@ -15,7 +15,7 @@ class BaseCornerTest {
     Corner cornerTR = new Corner(GameResource.BUTTERFLY, CornerDirection.TR);
     Corner cornerBL = new Corner(null, CornerDirection.BL);
 
-    PlaceableCard cardRef;
+    PlaceableCard testCard;
 
     @BeforeEach
     void printNewLine(){
@@ -23,15 +23,15 @@ class BaseCornerTest {
     }
     @BeforeEach
     void setup(){
-        cardRef = new ResourceCard(GameResource.BUTTERFLY, cornerTL, cornerBL, cornerTR);
-        cardRef.turnFaceUp();
-        cornerTL = cardRef.getCorner(CornerDirection.TL);
-        cornerTR = cardRef.getCorner(CornerDirection.TR);
-        cornerBL = cardRef.getCorner(CornerDirection.BL);
+        testCard = new ResourceCard(GameResource.BUTTERFLY, cornerTL, cornerBL, cornerTR);
+        testCard.turnFaceUp();
+        cornerTL = testCard.getCorner(CornerDirection.TL);
+        cornerTR = testCard.getCorner(CornerDirection.TR);
+        cornerBL = testCard.getCorner(CornerDirection.BL);
     }
     @Test
     void getCardRef() {
-        assertEquals(cardRef, cornerTL.getCardRef());
+        assertEquals(testCard, cornerTL.getCardRef());
     }
 
     @Test
@@ -39,7 +39,7 @@ class BaseCornerTest {
         for(CornerDirection cornerDirection: CornerDirection.values()) {
             System.out.println("Testing " + cornerDirection + " ...");
             try{
-                assertEquals(cornerDirection, cardRef.getCorner(cornerDirection).getDirection());
+                assertEquals(cornerDirection, testCard.getCorner(cornerDirection).getDirection());
             } catch (NoSuchElementException filledCorner){
                 System.err.println("This corner is filled");
             }
@@ -65,7 +65,7 @@ class BaseCornerTest {
 
         for(CornerDirection cornerDirection : CornerDirection.values()){
             System.out.println("Testing "+ cornerDirection + " ...");
-            GameResource cornRes = cardRef.getCorner(cornerDirection).getResource();
+            GameResource cornRes = testCard.getCorner(cornerDirection).getResource();
             if(cornRes != null) {
                 System.out.println(cornerDirection + " " + cornRes);
             } else {
