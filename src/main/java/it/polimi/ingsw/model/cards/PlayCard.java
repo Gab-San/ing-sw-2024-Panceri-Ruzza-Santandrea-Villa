@@ -143,6 +143,7 @@ public abstract class PlayCard extends PlaceableCard{
      */
     @Override
     protected boolean compareCard(PlaceableCard other){
+        if(!(other instanceof PlayCard)) return false;
         PlayCard cardToComp = (PlayCard) other;
         return super.compareCard(other) &&
                 getCardColour() == cardToComp.getCardColour() &&

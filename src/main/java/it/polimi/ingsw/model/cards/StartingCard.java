@@ -91,6 +91,7 @@ public class StartingCard extends PlaceableCard {
     }
     @Override
     public boolean compareCard(PlaceableCard other){
+        if(!(other instanceof StartingCard)) return false;
         StartingCard cardToComp = (StartingCard) other;
         return super.compareCard(other) &&
                 centralFrontResources.equals(cardToComp.centralFrontResources);

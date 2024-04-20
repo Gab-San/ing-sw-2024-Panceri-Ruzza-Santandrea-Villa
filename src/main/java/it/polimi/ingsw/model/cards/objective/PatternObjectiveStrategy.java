@@ -18,6 +18,13 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
         this.pattern = pattern;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof PatternObjectiveStrategy resObj)) return false;
+
+        return pattern.equals(resObj.pattern);
+    }
     // TODO: test algorithm to check for the Objective pattern
     /**
      * @author Ruzza

@@ -208,6 +208,6 @@ public abstract class PlaceableCard extends Card{
 
     protected boolean compareCard(PlaceableCard other){
         return super.compareCard(other) &&
-                ((position != null && other.position != null) ? position.equals(other.position) : true);
+                (position == null || other.position == null || position.equals(other.position));
     }
 }

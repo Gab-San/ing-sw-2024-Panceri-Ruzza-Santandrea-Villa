@@ -132,6 +132,7 @@ public class GoldCard extends PlayCard{
      */
     @Override
     public boolean compareCard(PlaceableCard other){
+        if(!(other instanceof GoldCard)) return false;
         GoldCard cardToComp = (GoldCard) other;
         return super.compareCard(other) &&
                 goldStrat.equals(cardToComp.goldStrat);

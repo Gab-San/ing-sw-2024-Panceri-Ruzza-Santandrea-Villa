@@ -45,4 +45,13 @@ public class ObjectiveCard extends Card {
         return pointsPerSolve * strategy.calculateSolves(p);
     }
     //TODO implement equals
+    @Override
+    public boolean equals(Object other){
+        if (other == this) return true;
+        if(!(other instanceof ObjectiveCard otherObj)) return false;
+
+        return super.compareCard(otherObj) &&
+                strategy.equals((otherObj).strategy) &&
+                pointsPerSolve == otherObj.pointsPerSolve;
+    }
 }
