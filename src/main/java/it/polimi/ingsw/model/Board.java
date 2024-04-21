@@ -66,17 +66,12 @@ public class Board {
     public Map<Player, Integer> getScoreboard(){
         return Collections.unmodifiableMap(scoreboard);
     }
-    public void addScore(Player p, int amount){
-        scoreboard.replace(
-            p,
-            scoreboard.get(p) + amount
-        );
+    public void addScore(Player player, int amount){
+        int newScore = scoreboard.get(player) + amount;
+        setScore(player, newScore);
     }
-    public void setScore(Player p, int score){
-        scoreboard.put(
-                p,
-                score
-        );
+    public void setScore(Player player, int score){
+        scoreboard.put(player, score);
     }
     public boolean checkEndgame(){
         return scoreboard.values().stream()
