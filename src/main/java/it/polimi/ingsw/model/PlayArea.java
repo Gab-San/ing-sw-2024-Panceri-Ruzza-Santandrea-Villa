@@ -63,7 +63,7 @@ public class PlayArea {
      * @param corner which corner (in FreeCorner) to place it on
      * @throws RuntimeException if the placement is invalid
      */
-    public void placeCard(@NotNull PlayCard playCard, @NotNull Corner corner) throws RuntimeException{
+    public PlayCard placeCard(@NotNull PlayCard playCard, @NotNull Corner corner) throws RuntimeException{
         // checks valid cost before placing
         Map<GameResource, Integer> placeCost = playCard.getPlacementCost();
         for (GameResource r : placeCost.keySet()){
@@ -120,6 +120,6 @@ public class PlayArea {
             );
 
         }
-
+        return (PlayCard) card;
     }
 }
