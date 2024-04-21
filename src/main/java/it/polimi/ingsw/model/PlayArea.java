@@ -71,6 +71,7 @@ public class PlayArea {
                 throw new RuntimeException("Card can't be placed as placement cost condition isn't satisfied");
             }
         }
+        if(corner.getCardRef() == null) throw new RuntimeException("Can't place on a detached corner");
         Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
 
         //checks valid placement, throw RuntimeException on failure

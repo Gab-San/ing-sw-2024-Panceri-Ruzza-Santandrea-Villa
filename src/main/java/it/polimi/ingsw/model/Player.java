@@ -6,6 +6,10 @@ import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import org.jetbrains.annotations.Range;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Player {
     private final String nickname;
     @Range(from=1,to=4)
@@ -15,14 +19,26 @@ public class Player {
     private final PlayerColor color;
 
     public static class PlayerHand{
-        final PlayCard[] cards;
+        static final int MAX_CARDS = 3;
+        final List<PlayCard> cards;
         ObjectiveCard secretObjective;
         StartingCard startingCard;
 
         PlayerHand(){
-            cards = new PlayCard[3];
+            cards = new LinkedList<>();
             secretObjective = null;
             startingCard = null;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if(other == this) return true;
+            if(other instanceof PlayerHand hand){
+                return cards.equals(hand.cards) &&
+                        secretObjective.equals(hand.secretObjective) &&
+                        startingCard.equals(hand.startingCard);
+            }
+            else return false;
         }
 
         public boolean containsCard(PlayCard card) {
@@ -32,8 +48,16 @@ public class Player {
             return false;
         }
         public PlayCard getCard(int pos){
-            if (pos < 0 || pos >= cards.length) return null;
-            else return cards[pos];
+            if (pos < 0 || pos >= cards.size()) return null;
+            else return cards.get(pos);
+        }
+        public void addCard(PlayCard card) throws RuntimeException{
+            if(cards.size() > MAX_CARDS) throw new RuntimeException("Too many cards in hand!");
+            cards.add(card);
+        }
+        public void removeCard(PlayCard card) throws RuntimeException{
+            if(!cards.contains(card)) throw new RuntimeException("Card wasn't in hand!");
+            cards.remove(card);
         }
 
         public ObjectiveCard getSecretObjective() {
@@ -57,6 +81,20 @@ public class Player {
         isConnected = true;
         hand = new PlayerHand();
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) return true;
+        if(other instanceof Player player){
+            return nickname.equals(player.nickname) &&
+                    isConnected == player.isConnected &&
+                    //turn == player.turn &&
+                    //FIXME: compare turn?? Or maybe only compare nickname as they would be unique
+                    hand.equals(player.hand) &&
+                    color.equals(player.color);
+        }
+        else return false;
     }
 
     public String getNickname(){
