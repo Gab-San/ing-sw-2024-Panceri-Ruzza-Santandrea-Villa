@@ -92,4 +92,9 @@ public abstract class Card {
     protected boolean compareCard(Card other){
         return isFaceUp == other.isFaceUp;
     }
+
+    @Override
+    public String toString() {
+        return (isFaceUp ? "Is Facing Up\n" : "Is Facing Down\n");
+    }
 }

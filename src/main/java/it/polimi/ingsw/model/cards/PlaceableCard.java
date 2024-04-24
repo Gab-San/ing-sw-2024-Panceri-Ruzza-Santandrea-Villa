@@ -63,6 +63,26 @@ public abstract class PlaceableCard extends Card{
         }
     }
 
+    protected PlaceableCard(List<Corner> corners) throws InvalidParameterException{
+        super();
+        this.position = null;
+
+        // For each defined corner a copy is made into the card so that no outside reference can
+        // modify the corner once the card is instantiated. To access a corner one must access the card.
+        this.corners = new Hashtable<>();
+        for(Corner corn: corners){
+            Corner newCorner = new Corner(corn, this);
+            if(this.corners.get(newCorner.getDirection()) != null)
+                throw new InvalidParameterException("Duplicate corner found in card instantiation");
+            this.corners.put(newCorner.getDirection(), newCorner);
+        }
+
+        // Set any missing corner to FILLED on front side
+        for(CornerDirection dir : CornerDirection.values()){
+            this.corners.putIfAbsent(dir, new Corner(GameResource.FILLED, null, this, dir));
+        }
+    }
+
     /**
      * This constructor builds the card when positioned.
      * <p>
@@ -207,5 +227,12 @@ public abstract class PlaceableCard extends Card{
     protected boolean compareCard(PlaceableCard other){
         return super.compareCard(other) &&
                 (position == null || other.position == null || position.equals(other.position));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ((position != null) ? position.toString() + "\n" : "This card still isn't placed\n") +
+                corners.toString() + "\n";
     }
 }

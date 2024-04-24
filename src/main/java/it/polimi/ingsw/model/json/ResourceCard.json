@@ -1,21 +1,8 @@
-{
-  "name": "json",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa.git"
-  },
-  "private": true,
-  "frontResourceCard" : [
+[
     {
       "cardId": "R0",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
           {"direction": "TL", "frontResource": "MUSHROOM", "backResource": "NULL"},
           {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
           {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
@@ -28,7 +15,7 @@
     {
       "cardId": "R1",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -41,7 +28,7 @@
     {
       "cardId": "R2",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
@@ -54,7 +41,7 @@
     {
       "cardId": "R3",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "MUSHROOM","backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -67,7 +54,7 @@
     {
       "cardId": "R4",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
@@ -80,7 +67,7 @@
     {
       "cardId": "R5",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -93,7 +80,7 @@
     {
       "cardId": "R6",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "SCROLL", "backResource": "NULL"},
@@ -106,7 +93,7 @@
     {
       "cardId": "R7",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -119,7 +106,7 @@
     {
       "cardId": "R8",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -132,7 +119,7 @@
     {
       "cardId": "R9",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
@@ -145,7 +132,7 @@
     {
       "cardId": "R10",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
@@ -158,7 +145,7 @@
     {
       "cardId": "R11",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -171,7 +158,7 @@
     {
       "cardId": "R12",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
@@ -184,7 +171,7 @@
     {
       "cardId": "R13",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -197,7 +184,7 @@
     {
       "cardId": "R14",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "QUILL", "backResource": "NULL"},
@@ -210,7 +197,7 @@
     {
       "cardId": "R15",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
           {"direction": "TL", "frontResource": "MUSHROOM", "backResource": "NULL"},
           {"direction": "TR", "frontResource": "LEAF", "backResource": "NULL"},
           {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -223,7 +210,7 @@
     {
       "cardId": "R16",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "SCROLL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
@@ -236,7 +223,7 @@
     {
       "cardId": "R17",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
@@ -249,7 +236,7 @@
     {
       "cardId": "R18",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -262,7 +249,7 @@
     {
       "cardId": "R19",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -275,7 +262,7 @@
     {
       "cardId": "R20",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -288,7 +275,7 @@
     {
       "cardId": "R21",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
@@ -301,7 +288,7 @@
     {
       "cardId": "R22",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -314,7 +301,7 @@
     {
       "cardId": "R23",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -327,7 +314,7 @@
     {
       "cardId": "R24",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
@@ -340,7 +327,7 @@
     {
       "cardId": "R25",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -353,7 +340,7 @@
     {
       "cardId": "R26",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
@@ -366,7 +353,7 @@
     {
       "cardId": "R27",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
@@ -379,7 +366,7 @@
     {
       "cardId": "R28",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -392,7 +379,7 @@
     {
       "cardId": "R29",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -405,7 +392,7 @@
     {
       "cardId": "R30",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
           {"direction": "TL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
           {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
           {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -418,7 +405,7 @@
     {
       "cardId": "R31",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
           {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
           {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
           {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
@@ -431,7 +418,7 @@
     {
       "cardId": "R32",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "NULL"}, 
@@ -444,7 +431,7 @@
     {
       "cardId": "R33",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -457,7 +444,7 @@
     {
       "cardId": "R34",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
@@ -470,7 +457,7 @@
     {
       "cardId": "R35",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "SCROLL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -483,7 +470,7 @@
     {
       "cardId": "R36",
       "pointsOnPlace": 0,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
@@ -496,7 +483,7 @@
     {
       "cardId": "R37",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -509,7 +496,7 @@
     {
       "cardId": "R38",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
@@ -522,7 +509,7 @@
     {
       "cardId": "R39",
       "pointsOnPlace": 1,
-      "cornersJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
@@ -532,5 +519,4 @@
       "frontImageFileName": "img_R39_front.jpg",
       "backImageFileName": "img_R20_back.jpg"
     }
-  ]
-}
+]

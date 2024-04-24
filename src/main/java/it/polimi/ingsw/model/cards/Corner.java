@@ -181,4 +181,12 @@ public class Corner {
                 visible == other. visible;
     }
 
+
+    @Override
+    public String toString() {
+        return  "[occupied]" + occupied +
+                "[visible]" + visible +
+                "[frontRes]" + frontResource +
+                "[backRes]" + backResource + "\n";
+    }
 }

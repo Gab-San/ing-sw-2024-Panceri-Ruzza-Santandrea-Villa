@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model.deck.cardfactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.cards.ResourceCard;
+import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class GoldCardFactory extends CardFactory {
 
-    public GoldCardFactory(Path idFile, Path importFile) {
-        super(idFile, importFile);
+    public GoldCardFactory(String idFile) {
+        super(idFile);
     }
 
     @Override

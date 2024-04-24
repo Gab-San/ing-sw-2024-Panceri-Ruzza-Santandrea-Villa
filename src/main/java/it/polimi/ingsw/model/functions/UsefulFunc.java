@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.enums.GameResource;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class UsefulFunc {
+public interface UsefulFunc {
     /**
      * This function converts a counting array of resources into a map.
      * All the information is preserved.

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.deck.cardfactory;
+package it.polimi.ingsw.model.json.deserializers;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class ResourceCardJSON {
         return cardId;
     }
 
-    public void setCardId(String cardId) {
+    void setCardId(String cardId) {
         this.cardId = cardId;
     }
 
@@ -22,7 +22,7 @@ public class ResourceCardJSON {
         return pointsOnPlace;
     }
 
-    public void setPointsOnPlace(int pointsOnPlace) {
+    void setPointsOnPlace(int pointsOnPlace) {
         this.pointsOnPlace = pointsOnPlace;
     }
 
@@ -30,7 +30,7 @@ public class ResourceCardJSON {
         return cornerJS;
     }
 
-    public void setCornerJS(List<CornerJ> cornerJS) {
+    void setCornerJS(List<CornerJ> cornerJS) {
         this.cornerJS = cornerJS;
     }
 
@@ -38,7 +38,7 @@ public class ResourceCardJSON {
         return backResource;
     }
 
-    public void setBackResource(String backResource) {
+    void setBackResource(String backResource) {
         this.backResource = backResource;
     }
 
@@ -46,7 +46,7 @@ public class ResourceCardJSON {
         return frontImageFileName;
     }
 
-    public void setFrontImageFileName(String frontImageFileName) {
+    void setFrontImageFileName(String frontImageFileName) {
         this.frontImageFileName = frontImageFileName;
     }
 
@@ -54,7 +54,7 @@ public class ResourceCardJSON {
         return backImageFileName;
     }
 
-    public void setBackImageFileName(String backImageFileName) {
+    void setBackImageFileName(String backImageFileName) {
         this.backImageFileName = backImageFileName;
     }
 }

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.deck.cardfactory;
+package it.polimi.ingsw.model.json.deserializers;
 
 import java.util.List;
 
-class GoldCardJSON {
+public class GoldCardJSON {
     private String cardId;
     private List<PlacementCost> placementCost;
     private List<PointOnPlace> pointsOnPlace;

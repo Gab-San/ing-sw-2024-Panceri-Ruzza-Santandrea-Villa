@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.deck.cardfactory;
+package it.polimi.ingsw.model.json.deserializers;
 
-class PointOnPlace {
+public class PlacementCost {
     private String type;
     private int amount;
 

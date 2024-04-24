@@ -1,21 +1,8 @@
-{
-  "name": "json",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa.git"
-  },
-  "private": true,
-  "startingCards": [
+[
     {
       "cardId": "S0",
       "centralFrontResources": ["BUTTERFLY"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL","backResource": "MUSHROOM"},
         {"direction": "TR", "frontResource": "LEAF","backResource": "LEAF"},
         {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "BUTTERFLY"},
@@ -27,7 +14,7 @@
     {
       "cardId": "S1",
       "centralFrontResources": ["MUSHROOM"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "WOLF", "backResource": "LEAF"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
@@ -39,7 +26,7 @@
     {
       "cardId": "S2",
       "centralFrontResources": ["LEAF", "MUSHROOM"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
@@ -51,7 +38,7 @@
     {
       "cardId": "S3",
       "centralFrontResources": ["WOLF", "BUTTERFLY"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "LEAF"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "BUTTERFLY"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "WOLF"},
@@ -63,7 +50,7 @@
     {
       "cardId": "S4",
       "centralFrontResources": ["WOLF", "BUTTERFLY", "LEAF"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "MUSHROOM"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
@@ -75,7 +62,7 @@
     {
       "cardId": "S5",
       "centralFrontResources": ["LEAF", "WOLF", "MUSHROOM"],
-      "cornerJ": [
+      "corners": [
         {"direction": "TL", "frontResource": "NULL", "backResource": "MUSHROOM"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
@@ -84,5 +71,4 @@
       "frontImageFileName": "img_S5_front.jpg",
       "backImageFileName": "img_S5_back.jpg"
     }
-  ]
-}
+]

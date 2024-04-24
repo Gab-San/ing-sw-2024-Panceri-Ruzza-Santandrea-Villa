@@ -1,12 +1,12 @@
-package it.polimi.ingsw.model.deck.cardfactory;
+package it.polimi.ingsw.model.json.deserializers;
 
 
-class CornerJ {
+public class CornerJ {
     private String direction;
     private String frontResource;
     private String backResource;
 
-    String getDirection() {
+    public String getDirection() {
         return direction;
     }
 
@@ -18,7 +18,7 @@ class CornerJ {
         return backResource;
     }
 
-    public void setBackResource(String backResource) {
+    void setBackResource(String backResource) {
         this.backResource = backResource;
     }
 
@@ -26,7 +26,7 @@ class CornerJ {
         return frontResource;
     }
 
-    public void setFrontResource(String frontResource) {
+    void setFrontResource(String frontResource) {
         this.frontResource = frontResource;
     }
 }

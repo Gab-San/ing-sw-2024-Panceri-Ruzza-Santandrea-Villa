@@ -1,15 +1,19 @@
-package it.polimi.ingsw.model.deck.cardfactory;
+package it.polimi.ingsw.model.json.deserializers;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@JsonDeserialize(using= StartingCardDeserializer.class)
 public class StartingCardJSON {
     private String cardId;
     private List<String> centralFrontResources;
-    private List<CornerJ> cornerJS;
+    private List<CornerJ> corners;
     private String frontImageFileName;
     private String backImageFileName;
 
-    String getCardId() {
+    public String getCardId() {
         return cardId;
     }
 
@@ -17,15 +21,15 @@ public class StartingCardJSON {
         this.cardId = cardId;
     }
 
-    List<CornerJ> getCorners() {
-        return cornerJS;
+    public List<CornerJ> getCorners() {
+        return corners;
     }
 
-    void setCorners(List<CornerJ> cornerJS) {
-        this.cornerJS = cornerJS;
+    void setCorners(List<CornerJ> corners) {
+        this.corners = corners;
     }
 
-    String getFrontImageFileName() {
+    public String getFrontImageFileName() {
         return frontImageFileName;
     }
 
@@ -33,7 +37,7 @@ public class StartingCardJSON {
         this.frontImageFileName = frontImageFileName;
     }
 
-    String getBackImageFileName() {
+    public String getBackImageFileName() {
         return backImageFileName;
     }
 
@@ -46,7 +50,7 @@ public class StartingCardJSON {
         return centralFrontResources;
     }
 
-    public void setCentralFrontResources(List<String> centralFrontResources) {
+    void setCentralFrontResources(List<String> centralFrontResources) {
         this.centralFrontResources = centralFrontResources;
     }
 }
