@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.enums.GamePhase;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -15,35 +16,70 @@ public class Board {
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
 
-    //TODO: move currentTurn to Game class?
     private int currentTurn;
+    private GamePhase gamePhase;
 
-    protected Board(){
+    private final Game gameInfo;
+
+    protected Board(String gameID){
         currentTurn = 0;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
+        gameInfo = new Game(gameID);
     }
 
     /**
      * Constructs the Board (as in initializing the game)
-     * @param players all (2-4) players that are joining this game
-     * @throws InvalidParameterException if the parameter players has an illegal player count
+     * @param players 1-4 players that are joining this game
+     * @throws InvalidParameterException if the parameter players has an illegal player count (0 or >4)
      * @throws RuntimeException if players contains duplicates
      */
-    public Board(Player ...players) throws InvalidParameterException, RuntimeException {
-        this();
-        if(players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
+    public Board(String gameID, Player ...players) throws InvalidParameterException, RuntimeException {
+        this(gameID);
+        if(players.length < 1 || players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
         for(Player p : players) {
             addPlayer(p);
         }
     }
 
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+    /**
+     * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1.
+     */
+    public void nextTurn(){
+        if(currentTurn >= playerAreas.size())
+            currentTurn = 1;
+        else
+            currentTurn++;
+    }
+    public GamePhase getGamePhase() {
+        return gamePhase;
+    }
+    public void setGamePhase(GamePhase gamePhase) {
+        this.gamePhase = gamePhase;
+    }
+    public Game getGameInfo(){
+        return gameInfo;
+    }
     /**
      * @return list of players ordered by their turn
      */
-    public List<Player> getPlayers(){
+    public List<Player> getPlayersByTurn(){
         return playerAreas.keySet().stream()
                 .sorted(Comparator.comparingInt(Player::getTurn))
+                .toList();
+    }
+    /**
+     * @return list of players ordered by their score
+     */
+    public List<Player> getPlayersByScore(){
+        return playerAreas.keySet().stream()
+                .sorted(Comparator.comparingInt(scoreboard::get))
                 .toList();
     }
     //FIXME: is this useful??
@@ -57,6 +93,7 @@ public class Board {
      * @throws RuntimeException if the player had already joined or if the current game is full (4 players)
      */
     public void addPlayer(Player player) throws RuntimeException{
+        if(player == null) throw new NullPointerException("Null player reference.");
         if(playerAreas.containsKey(player)) throw new RuntimeException("Cannot add a player already in game.");
         if(playerAreas.size() >= MAX_PLAYERS) throw new RuntimeException("Max number of players already in game.");
         setScore(player, 0);
