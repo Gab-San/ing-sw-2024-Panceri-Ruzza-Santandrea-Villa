@@ -22,7 +22,7 @@ public class Board {
     private final Game gameInfo;
 
     protected Board(String gameID){
-        currentTurn = 0;
+        currentTurn = 1;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);

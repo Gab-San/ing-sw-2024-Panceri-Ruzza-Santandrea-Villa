@@ -5,15 +5,19 @@ import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
 public class PlayState extends GameState {
-    private boolean hasPlacedCard;
-    private  boolean lastTurn;
+    private Set<String> playersWhoPlacedCard;
+    private boolean lastTurn;
 
     public PlayState(Board board) {
         super(board);
-        hasPlacedCard = false;
+        playersWhoPlacedCard = new HashSet<>();
         lastTurn=false;
     }
 
@@ -35,23 +39,27 @@ public class PlayState extends GameState {
 
     @Override
     public void placeStartingCard(String nickname, StartingCard card, Boolean placeOnFront) throws Exception {
+        if(playersWhoPlacedCard.contains(nickname)) throw new Exception("Players had already placed!");
 
+        // TODO: place the starting card
+
+        playersWhoPlacedCard.add(nickname);
     }
 
     @Override
-    public void chooseSecreteObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
+    public void chooseSecretObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
 
     }
 
     @Override
     public GameState draw(String nickname, int deck, int card) throws Exception {
         //TODO: this.board.draw(nickname, deck, card);
-        if(lastTurn && board.getCurrentTurn()==board.getPlayersByTurn().size()-1)
-            return this.nextState();
-        if(board.checkEndgame() && board.getCurrentTurn()==board.getPlayerAreas().keySet().size()-1)
+        if(lastTurn && board.getCurrentTurn()==board.getPlayerAreas().size()-1)
+            return nextState();
+        if(board.checkEndgame() && board.getCurrentTurn()==board.getPlayerAreas().size()-1)
             lastTurn = true;
-        if(board.getCurrentTurn()!=board.getPlayerAreas().keySet().size()-1)
-            this.board.setCurrentTurn(this.board.getCurrentTurn()+1);
+        if(board.getCurrentTurn() != board.getPlayerAreas().keySet().size()-1)
+            this.board.setCurrentTurn(board.getCurrentTurn()+1);
         else this.board.setCurrentTurn(0);
         return this;
     }
@@ -61,8 +69,7 @@ public class PlayState extends GameState {
 
     }
 
-    @Override
-    public GameState nextState() throws Exception {
-        return new EndgameState(this.board);
+    private GameState nextState() throws Exception {
+        return new EndgameState(board);
     }
 }

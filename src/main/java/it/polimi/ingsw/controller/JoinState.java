@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.server.VirtualClient;
 
 public class JoinState extends GameState {
 
@@ -45,7 +46,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public void chooseSecreteObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
+    public void chooseSecretObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
         throw new Exception("IMPOSSIBLE TO CHOOSE SECRETE OBJECTIVE DURING JOIN STATE");
     }
 
@@ -59,8 +60,7 @@ public class JoinState extends GameState {
         throw new Exception("IMPOSSIBLE TO PLACE CARDS DURING JOIN STATE");
     }
 
-    @Override
-    public GameState nextState() throws Exception {
+    private GameState nextState() throws Exception {
         return new SetupState(board);
     }
 }

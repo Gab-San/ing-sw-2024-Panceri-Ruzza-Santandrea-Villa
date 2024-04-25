@@ -10,11 +10,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 // TODO: implement command pattern
 //Commands should have a reference to CentralServer in order to get games or handle the disconnection (or connection loss)
-abstract class ClientUpdateCommand {
-    abstract void execute();
+abstract class ClientUpdateCommand implements Runnable {
+    @Override
+    public abstract void run();
 }
-abstract class GameActionCommand {
-    abstract void execute();
+abstract class GameActionCommand implements Runnable{
+    @Override
+    public abstract void run();
 }
 
 public class CentralServer {
@@ -26,9 +28,16 @@ public class CentralServer {
     private BlockingQueue<ClientUpdateCommand> gameUpdatesQueue;
     private BlockingQueue<GameActionCommand> actionQueue;
 
-    private Runnable getQueueExtractor(BlockingQueue queue){
+    private Runnable getQueueExtractor(BlockingQueue<? extends Runnable> queue){
         return () -> {
-            Ni
+            try {
+                while(true) {
+                    Runnable command = queue.take();
+                    command.run();
+                }
+            }catch (InterruptedException ex){
+                //TODO: handle exception?
+            }
         };
     }
     CentralServer(){
@@ -41,6 +50,9 @@ public class CentralServer {
         gameUpdatesQueue = new LinkedBlockingDeque<>();
         actionQueue = new LinkedBlockingDeque<>();
 
+        new Thread(getQueueExtractor(lobbyUpdatesQueue)).start();
+        new Thread(getQueueExtractor(gameUpdatesQueue)).start();
+        new Thread(getQueueExtractor(actionQueue)).start();
     }
 
     private synchronized BoardController getGame(String gameID){

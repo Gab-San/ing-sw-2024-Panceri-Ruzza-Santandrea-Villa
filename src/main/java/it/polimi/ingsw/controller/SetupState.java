@@ -6,10 +6,10 @@ import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.server.VirtualClient;
+
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class SetupState extends GameState{
     public boolean areStartingCardsPlaced;
@@ -20,9 +20,11 @@ public class SetupState extends GameState{
 
     @Override
     public void join(String nickname, String gameID) throws Exception {
+        // FIXME: why this check??
         if(gameID.equals(board.getGameInfo().getGameID()))
             throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
-        else throw new Exception("IMPOSSIBLE TO PLACE  CARDS DURING SETUP STATE");
+        else
+            throw new Exception("IMPOSSIBLE TO PLACE  CARDS DURING SETUP STATE");
     }
 
     @Override
@@ -32,7 +34,7 @@ public class SetupState extends GameState{
 
     @Override
     public GameState startGame() throws Exception {
-        throw new Exception("IMPOSSIBLE TO PLACE  CARDS DURING SETUP STATE");
+        throw new Exception("IMPOSSIBLE TO START GAME DURING SETUP STATE");
     }
 
     @Override
@@ -47,24 +49,22 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public void chooseSecreteObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
+    public void chooseSecretObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
 
     }
 
     @Override
     public GameState draw(String nickname, int deck, int card) throws Exception {
-
-        return null;
+        throw new Exception("IMPOSSIBLE TO DRAW DURING SETUP STATE");
     }
 
     @Override
     public void placeCard(String nickname, PlayCard card, Corner corner) throws Exception {
-
+        throw new Exception("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
     }
 
-    @Override
-    public GameState nextState() throws Exception {
-        board.setCurrentTurn(0);
+    private GameState nextState() throws Exception {
+        board.setCurrentTurn(1);
         return new PlayState(this.board);
     }
 
