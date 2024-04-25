@@ -3,54 +3,57 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.server.VirtualClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SetupState extends GameState{
-    public boolean areStartingCardsPlaced;
+    public Set<String> playersWhoPlacedStartingCard;
+    public Set<String> playersWhoChoseSecretObjective;
     public SetupState(Board board) {
         super(board);
-        areStartingCardsPlaced=false;
+        playersWhoPlacedStartingCard = new HashSet<>();
     }
 
     @Override
-    public void join(String nickname, String gameID) throws Exception {
-        // FIXME: why this check??
-        if(gameID.equals(board.getGameInfo().getGameID()))
-            throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
-        else
-            throw new Exception("IMPOSSIBLE TO PLACE  CARDS DURING SETUP STATE");
+    public void join(String nickname, VirtualClient client) throws Exception {
+        throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws Exception {
-
-    }
-
-    @Override
-    public GameState startGame() throws Exception {
+    public GameState startGame(String nickname) throws Exception {
         throw new Exception("IMPOSSIBLE TO START GAME DURING SETUP STATE");
     }
 
     @Override
-    public void placeStartingCard(String nickname, StartingCard card, Boolean placeOnFront) throws Exception {
-        List<Player> players = new ArrayList<>(this.board.getPlayersByTurn());
-        for(var player : players){
-            if(player.getNickname().equals(nickname)) {
-                //TODO: player.addInHand(card); or some other way to place the starting card
-                this.board.placeStartingCard(player, placeOnFront);
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws Exception {
+        synchronized (board){
+            if(playersWhoPlacedStartingCard.contains(nickname))
+                throw new Exception(nickname + " already placed their starting card.");
+            Player player = board.getPlayerByNickname(nickname);
+            this.board.placeStartingCard(player, placeOnFront);
+
+            playersWhoPlacedStartingCard.add(nickname);
+            if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
+                //TODO: implement players choosing their color
+                //TODO: deal secret objectives to the players
             }
         }
     }
 
     @Override
-    public void chooseSecretObjective(String nickname, ObjectiveCard card, Boolean placeOnFront) throws Exception {
-
+    public GameState chooseSecretObjective(String nickname, int choice) throws Exception {
+        synchronized (board){
+            Player player = board.getPlayerByNickname(nickname);
+            player.getHand().chooseObjective(choice);
+            playersWhoChoseSecretObjective.add(nickname);
+            if(playersWhoChoseSecretObjective.size() == board.getPlayerAreas().size())
+                return nextState();
+            else
+                return this;
+        }
     }
 
     @Override

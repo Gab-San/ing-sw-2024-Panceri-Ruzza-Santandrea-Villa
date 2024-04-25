@@ -77,7 +77,7 @@ public class PlayerHand{
         if(objectiveChoices[0] == null || objectiveChoices[1] == null) throw new RuntimeException("Objective choices not initialized.");
         if(secretObjective != null) throw new RuntimeException("Secret objective was already chosen.");
 
-        setSecretObjective(objectiveChoices[choice-1]);
+        setSecretObjective(objectiveChoices[choice-1]); // throws IndexOutOfBoundsException here if necessary
         objectiveChoices = null;
     }
 

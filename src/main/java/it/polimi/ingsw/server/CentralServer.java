@@ -4,29 +4,29 @@ import it.polimi.ingsw.controller.BoardController;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-
-// TODO: implement command pattern
-//Commands should have a reference to CentralServer in order to get games or handle the disconnection (or connection loss)
-abstract class ClientUpdateCommand implements Runnable {
-    @Override
-    public abstract void run();
-}
-abstract class GameActionCommand implements Runnable{
-    @Override
-    public abstract void run();
-}
 
 public class CentralServer {
-    private Map<String, VirtualClient> playerClients;   // key == player nickname
-    private Set<String> playersInLobby;                 // list of player nicknames
-    private Map<String, BoardController> playerGames;   // key == player nickname
-    private Map<String, BoardController> gamesByID;     // key == game ID
-    private BlockingQueue<ClientUpdateCommand> lobbyUpdatesQueue;
-    private BlockingQueue<ClientUpdateCommand> gameUpdatesQueue;
-    private BlockingQueue<GameActionCommand> actionQueue;
+    private final Map<String, VirtualClient> playerClients;   // key == player nickname
+    private final Set<String> playersInLobby;                 // list of player nicknames
+    private final Map<String, BoardController> playerGames;   // key == player nickname
+    private final Map<String, BoardController> gamesByID;     // key == game ID
+    private final BlockingQueue<ClientUpdateCommand> lobbyUpdatesQueue;
+    private final BlockingQueue<ClientUpdateCommand> gameUpdatesQueue;
+    private final BlockingQueue<GameActionCommand> actionQueue;
+
+    public Map<String, VirtualClient> getPlayerClients() {
+        return playerClients;
+    }
+    public Set<String> getPlayersInLobby() {
+        return playersInLobby;
+    }
+    public Map<String, BoardController> getPlayerGames() {
+        return playerGames;
+    }
+    public Map<String, BoardController> getGamesByID() {
+        return gamesByID;
+    }
 
     private Runnable getQueueExtractor(BlockingQueue<? extends Runnable> queue){
         return () -> {
@@ -50,6 +50,7 @@ public class CentralServer {
         gameUpdatesQueue = new LinkedBlockingDeque<>();
         actionQueue = new LinkedBlockingDeque<>();
 
+        //TODO: review the update/command queue executors
         new Thread(getQueueExtractor(lobbyUpdatesQueue)).start();
         new Thread(getQueueExtractor(gameUpdatesQueue)).start();
         new Thread(getQueueExtractor(actionQueue)).start();
@@ -72,20 +73,20 @@ public class CentralServer {
         }
     }
 
-    // TODO: add exception for invalid connection (duplicate nickname)
+    // TODO: add custom exception for invalid connection (duplicate nickname)
     public synchronized void connect(String nickname, VirtualClient client) throws RuntimeException{
         //check unique nickname
         if(playerClients.containsKey(nickname)){
             throw new RuntimeException("Nickname already taken!");
         }
         // else
-        playerClients.put(nickname, client);
+        VirtualClient oldClient = playerClients.put(nickname, client);
 
         BoardController game = playerGames.get(nickname);
         if(game != null){
-            //TODO: handle reconnection
+            game.replaceClient(nickname, oldClient, client);
         } else {
-            playersInLobby.add(nickname);
+            playersInLobby.add(nickname); //leaves playersInLobby unchanged if reconnecting
         }
     }
 

@@ -18,6 +18,9 @@ public class Player {
     private final PlayerHand hand;
     private final PlayerColor color;
 
+    public Player(String nickname){
+        this(nickname, null, 0);
+    }
     public Player(String nickname, PlayerColor color, int turn){
         this.nickname = nickname;
         this.turn = turn;
@@ -30,12 +33,12 @@ public class Player {
     public boolean equals(Object other) {
         if(other == this) return true;
         if(other instanceof Player player){
-            return nickname.equals(player.nickname) &&
-                    isConnected == player.isConnected &&
-                    //turn == player.turn &&
-                    //FIXME: compare turn?? Or maybe only compare nickname as they would be unique
+            return nickname.equals(player.nickname); // &&
+                    //FIXME: compare other attributes?? Nickname is unique so it should be enough
+            /*        isConnected == player.isConnected &&
+                    turn == player.turn &&
                     hand.equals(player.hand) &&
-                    color.equals(player.color);
+                    color.equals(player.color);       */
         }
         else return false;
     }

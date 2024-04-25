@@ -154,6 +154,37 @@ public class Board {
         playerAreas.get(player).placeStartingCard(startingCard); // throws RuntimeException if the startingCard was already placed
         player.getHand().setStartingCard(null); //FIXME: should we do this??
     }
-    // TODO: methods to give a startingCard and a secretObjective to the player (through the decks)
+
+    public boolean containsPlayer(String nickname) {
+        return playerAreas.keySet().stream()
+                .anyMatch(p -> p.getNickname().equals(nickname));
+    }
+
+    /**
+     * @param nickname player's nickname
+     * @return the Player instance of the player with given nickname
+     * @throws RuntimeException if there is no player in this game with the given nickname
+     */
+    public Player getPlayerByNickname(String nickname) throws RuntimeException{
+        return playerAreas.keySet().stream()
+                .filter(p -> p.getNickname().equals(nickname))
+                .findFirst().orElseThrow(()-> new RuntimeException("Cannot find a player with given nickname") );
+    }
+
+    public void removePlayer(String nickname) throws RuntimeException {
+        Player player = getPlayerByNickname(nickname);
+
+        // remove playArea and scoreboard
+        playerAreas.remove(player);
+        scoreboard.remove(player);
+        //decrement turn of each player that followed the removed player in turn order
+        playerAreas.keySet().stream()
+                .filter(p -> p.getTurn() > player.getTurn())
+                .forEach(p -> p.setTurn(p.getTurn()-1));
+        // fix current turn if it was another player's turn
+        if(currentTurn >= player.getTurn())
+            currentTurn--;
+    }
+    // TODO: methods to give a startingCard and secretObjectives to the player (through the decks)
     // TODO: methods to draw cards (through the decks)
 }
