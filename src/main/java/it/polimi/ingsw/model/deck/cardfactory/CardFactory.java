@@ -20,8 +20,8 @@ public abstract class CardFactory extends Thread{
      * @return a random card in the deck
      * @throws Exception if the deck is empty
      */
-    abstract public PlayCard addCardToDeck() throws Exception;
-    abstract protected PlayCard instantiateCard();
+    abstract public PlayCard addCardToDeck() throws RuntimeException;
+    abstract protected PlayCard instantiateCard(String cardId);
     abstract protected void importFromJSON();
 
     protected int getRandomCardID(){

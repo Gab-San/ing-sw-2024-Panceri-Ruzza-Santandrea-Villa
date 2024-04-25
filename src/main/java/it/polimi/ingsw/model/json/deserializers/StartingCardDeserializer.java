@@ -5,12 +5,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import it.polimi.ingsw.model.cards.Corner;
+import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.enums.GameResource;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartingCardDeserializer extends StdDeserializer<StartingCardJSON> {
+public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
     public StartingCardDeserializer(){
         this(null);
     }
@@ -19,21 +22,24 @@ public class StartingCardDeserializer extends StdDeserializer<StartingCardJSON> 
     }
 
     @Override
-    public StartingCardJSON deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public StartingCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        StartingCardJSON startJS = new StartingCardJSON();
-        // Setting ID
-        startJS.setCardId(node.get("cardId").asText());
-        // Setting Images
-        startJS.setFrontImageFileName(node.get("frontImageFileName").asText());
-        startJS.setBackImageFileName(node.get("backImageFileName").asText());
-        // Setting Central Front Resources
-        List<String> centralFrontResources = new ArrayList<>();
-        node.get("centralFrontResources").forEach((e) -> centralFrontResources.add(e.asText()));
-        startJS.setCentralFrontResources(centralFrontResources);
+        // ID can be ignored since it's creating already starting cards.
+        // We can just use it as a ref but has no concrete attribute.
 
-        startJS.setCorners(JsonFunctions.parseJsonCorners(node));
-        return startJS;
+        // TODO: Setting Images
+//        startJS.setFrontImageFileName(node.get("frontImageFileName").asText());
+//        startJS.setBackImageFileName(node.get("backImageFileName").asText());
+
+        // Getting Central Front Resources
+        List<GameResource> centralFrontResources = new ArrayList<>();
+        node.get("centralFrontResources")
+                .forEach((e) -> centralFrontResources.add(GameResource.getResourceFromName(e.asText())) );
+
+        // Instantiating Corners
+        List<Corner> cornerList = JsonFunctions.parseCorners(node);
+
+        return new StartingCard(centralFrontResources, cornerList);
     }
 }

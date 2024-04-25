@@ -220,7 +220,7 @@ public abstract class PlaceableCard extends Card{
      */
     protected boolean compare(PlaceableCard other){
         return compareCard(other) &&
-                corners.equals(((PlaceableCard) other).corners);
+                corners.equals(other.corners);
         // corners.equals delegates comparison to Corner.equals for each corner
     }
 
@@ -232,7 +232,7 @@ public abstract class PlaceableCard extends Card{
     @Override
     public String toString() {
         return super.toString() +
-                ((position != null) ? position.toString() + "\n" : "This card still isn't placed\n") +
+                ((position != null) ? position + "\n" : "This card still isn't placed\n") +
                 corners.toString() + "\n";
     }
 }

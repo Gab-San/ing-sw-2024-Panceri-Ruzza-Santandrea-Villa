@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model.json.deserializers;
 
+import it.polimi.ingsw.model.enums.GameResource;
+
 import java.util.List;
 
 public class ResourceCardJSON {
     private String cardId;
     private int pointsOnPlace;
     private List<CornerJ> cornerJS;
-    private String backResource;
+    private GameResource backResource;
     private String frontImageFileName;
     private String backImageFileName;
 
@@ -34,11 +36,11 @@ public class ResourceCardJSON {
         this.cornerJS = cornerJS;
     }
 
-    public String getBackResource() {
+    public GameResource getBackResource() {
         return backResource;
     }
 
-    void setBackResource(String backResource) {
+    void setBackResource(GameResource backResource) {
         this.backResource = backResource;
     }
 

@@ -16,14 +16,14 @@ public class GoldCardFactory extends CardFactory {
     }
 
     @Override
-    public PlayCard addCardToDeck() throws Exception {
+    public PlayCard addCardToDeck() throws RuntimeException {
         String cardId = remainingCards.remove(getRandomCardID());
         // TODO to implement when JSON is functional
-        return instantiateCard();
+        return instantiateCard(cardId);
     }
 
     @Override
-    protected PlayCard instantiateCard() {
+    protected PlayCard instantiateCard(String cardId) {
         return null;
     }
 

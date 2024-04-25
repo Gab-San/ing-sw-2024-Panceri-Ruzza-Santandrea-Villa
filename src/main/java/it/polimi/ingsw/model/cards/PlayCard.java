@@ -60,6 +60,12 @@ public abstract class PlayCard extends PlaceableCard{
         this.pointsOnPlace = pointsOnPlace;
     }
 
+    protected PlayCard(GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
+        super(corners);
+        this.backResource = backResource;
+        this.pointsOnPlace = pointsOnPlace;
+    }
+
     /**
      * This constructor builds the card when positioned.
      * <p>

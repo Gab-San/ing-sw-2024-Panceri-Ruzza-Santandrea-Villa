@@ -47,6 +47,11 @@ public class ResourceCard extends PlayCard{
     public ResourceCard(GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
         super(backResource, pointsOnPlace, corners);
     }
+
+    public ResourceCard(GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
+        super(backResource, pointsOnPlace, corners);
+    }
+
     /**
      * This constructor builds the card when positioned.
      * <p>

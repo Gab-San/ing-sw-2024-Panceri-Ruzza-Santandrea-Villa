@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.json.deserializers;
 
+import it.polimi.ingsw.model.enums.GameResource;
+
 import java.util.List;
 
 public class GoldCardJSON {
@@ -7,7 +9,7 @@ public class GoldCardJSON {
     private List<PlacementCost> placementCost;
     private List<PointOnPlace> pointsOnPlace;
     private List<CornerJ> cornersJS;
-    private String backResource;
+    private GameResource backResource;
     private String frontImageFileName;
     private String backImageFileName;
 
@@ -43,11 +45,11 @@ public class GoldCardJSON {
         this.cornersJS = cornersJS;
     }
 
-    public String getBackResource() {
+    public GameResource getBackResource() {
         return backResource;
     }
 
-    public void setBackResource(String backResource) {
+    public void setBackResource(GameResource backResource) {
         this.backResource = backResource;
     }
 
