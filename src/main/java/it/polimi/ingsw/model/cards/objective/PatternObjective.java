@@ -19,19 +19,13 @@ import static it.polimi.ingsw.model.enums.CornerDirection.BR;
 
 import java.util.*;
 
-public enum PatternObjective {
-    L_RED_RED_GREEN("*R*" +
-                    "*R*" +
-                    "**G"),
-    DIAG_BLUE(  "**B" +
-                "*B*" +
-                "B**")
-    ;
-
+public class PatternObjective {
     final Map<Point, GameResource> pattern;
 
-    PatternObjective(@NotNull String strPattern){
+    public PatternObjective(@NotNull String strPattern){
         pattern = new Hashtable<>();
+        //format:  "G** *G* **G"
+        strPattern = strPattern.replace(" ", "");
 
         for (int i = 0; i < strPattern.length(); i++) {
             try {
@@ -73,5 +67,10 @@ public enum PatternObjective {
             case 8 -> center.move(BR);
             default -> throw new InvalidParameterException();
         };
+    }
+
+    @Override
+    public String toString() {
+        return pattern.toString();
     }
 }

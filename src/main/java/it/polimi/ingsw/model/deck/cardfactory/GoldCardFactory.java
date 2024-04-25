@@ -1,43 +1,87 @@
 package it.polimi.ingsw.model.deck.cardfactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.exceptions.DeckException;
+import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.json.deserializers.GoldCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
+import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class GoldCardFactory extends CardFactory {
+    List<GoldCardJSON> jsonCards;
 
-    public GoldCardFactory(String idFile) {
-        super(idFile);
-    }
-
-    @Override
-    public PlayCard addCardToDeck() throws RuntimeException {
-        String cardId = remainingCards.remove(getRandomCardID());
-        // TODO to implement when JSON is functional
-        return instantiateCard(cardId);
-    }
-
-    @Override
-    protected PlayCard instantiateCard(String cardId) {
-        return null;
-    }
-
-    @Override
-    protected void importFromJSON() {
-        String path = "src/main/java/it/polimi/ingsw/model/Json/GoldCard.json"; // Path file JSON
+    public GoldCardFactory() throws DeckInstantiationException{
+        super("src/main/java/it/polimi/ingsw/model/resources/GoldCard_Id");
 
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
+            jsonCards = importFromJson();
+        } catch (DeckException deckException){
+            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
+                    deckException.getDeck());
+        }
+    }
 
-            List<GoldCardJSON> jsonList = objectMapper.readValue(new File(path), objectMapper.getTypeFactory().constructCollectionType(List.class, GoldCardJSON.class));
-            //jsonCards = jsonList;
+    public GoldCardFactory(String idFile) throws DeckInstantiationException {
+        super(idFile);
+        try {
+            jsonCards = importFromJson();
+        } catch (DeckException deckException){
+            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
+                    deckException.getDeck());
+        }
+    }
+
+    @Override
+    public PlayCard addCardToDeck() throws DeckException {
+        if(remainingCards.isEmpty()){
+            throw new DeckException("Deck is Empty", GoldCardFactory.class);
+        }
+        String cardId = remainingCards.remove(getRandomCard());
+        PlayCard goldCard;
+        try{
+            goldCard = instantiateCard(cardId);
+        } catch (NoSuchElementException exception){
+            throw new DeckException("Requested card was not found", exception, ResourceCardFactory.class);
+        }
+        return goldCard;
+    }
+
+    @Override
+    protected PlayCard instantiateCard(String cardId) throws NoSuchElementException {
+        for(GoldCardJSON goldCard : jsonCards){
+            if(goldCard.getCardId().equals(cardId)){
+                jsonCards.remove(goldCard);
+                return new GoldCard(
+                        goldCard.getBackResource(),
+                        goldCard.getPointsOnPlace().getAmount(),
+                        JsonFunctions.parsePlacementCost(goldCard.getPlacementCost()),
+                        JsonFunctions.parseGoldCardStrategy(goldCard.getPointsOnPlace()),
+                        JsonFunctions.parseCorners(goldCard.getCornersJS())
+                );
+            }
+        }
+        throw new NoSuchElementException("Error in instantiating card");
+    }
+
+    private List<GoldCardJSON> importFromJson() throws DeckException {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            SimpleModule simpleModule = new SimpleModule();
+            simpleModule.addDeserializer(GoldCardJSON.class, new GoldCardDeserializer());
+            objectMapper.registerModule(simpleModule);
+
+            File json = new File("src/main/java/it/polimi/ingsw/model/Json/GoldCard.json"); // Path file JSON
+            return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, GoldCardJSON.class));
         } catch (IOException e) {
-            System.err.println("Error reading file JSON: " + e.getMessage());
+            throw new DeckException("Error reading file JSON", e, GoldCardFactory.class);
         }
     }
 }

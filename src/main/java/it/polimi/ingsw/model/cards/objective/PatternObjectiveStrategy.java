@@ -59,4 +59,10 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
         }
         return numOfSolves;
     }
+
+
+    @Override
+    public String toString() {
+        return "PatternType: " +  pattern.toString();
+    }
 }

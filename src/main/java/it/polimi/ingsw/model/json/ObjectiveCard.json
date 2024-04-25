@@ -1,87 +1,130 @@
-{
-  "name": "json",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+[
+  {
+    "cardId": "O0",
+    "type" : "PATTERNTYPE",
+    "points": 2,
+    "pattern": ["**R *R* R**"],
+    "frontImageFileName": "img_B0_front.png",
+    "backImageFileName": "img_B0_back.png"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa.git"
+  {
+    "cardId": "O1",
+    "type" : "PATTERNTYPE",
+    "points": 2,
+    "pattern": ["G** *G* **G"],
+    "frontImageFileName": "img_B0_front.png",
+    "backImageFileName": "img_B0_back.png"
   },
-  "private": true,
-  "objectiveCard" : [
-    {
-      "cardId": "B0",
-      "front": {
-        "points": 2,
-        "patter": "**R *R* R**",
-        "imageFileName": "img_B0_front.jpg"
-      },
-      "back": {
-        "imageFileName": "img_B0_back.jpg"
-      }
-    },
-    {
-      "cardId": "B0",
-      "front": {
-        "points": 2,
-        "patter": "G** *G* **G",
-        "imageFileName": "img_B0_front.jpg"
-      },
-      "back": {
-        "imageFileName": "img_B0_back.jpg"
-      }
-    },
-    {
-      "cardId": "B2",
-      "patter": "**B *B* B**",
-      "points": 2,
-      "frontImageFileName": "img_B2_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B3",
-      "points": 2,
-      "patter": "P** *P* **P",
-      "frontImageFileName": "img_B3_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B4",
-      "points": 3,
-      "patter": "*R* *R* **G",
-      "frontImageFileName": "img_B4_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B5",
-      "points": 3,
-      "patter": "*G* *G* P**",
-      "frontImageFileName": "img_B5_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B6",
-      "points": 3,
-      "patter": "**R *B*",
-      "frontImageFileName": "img_B6_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B7",
-      "points": 3,
-      "patter": "B** *P* *P*",
-      "frontImageFileName": "img_B3_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    },
-    {
-      "cardId": "B3",
-      "points": 2,
-      "patter": "P** *P* **P",
-      "frontImageFileName": "img_B3_front.jpg",
-      "backImageFileName": "img_B0_back.jpg"
-    }
-  ]
-}
+  {
+    "cardId": "O2",
+    "type" : "PATTERNTYPE",
+    "pattern": ["**B *B* B**"],
+    "points": 2,
+    "frontImageFileName": "img_B2_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O3",
+    "type" : "PATTERNTYPE",
+    "points": 2,
+    "pattern": ["P** *P* **P"],
+    "frontImageFileName": "img_B3_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O4",
+    "type" : "PATTERNTYPE",
+    "points": 3,
+    "pattern": ["*R* *R* **G"],
+    "frontImageFileName": "img_B4_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O5",
+    "type" : "PATTERNTYPE",
+    "points": 3,
+    "pattern": ["*G* *G* P**"],
+    "frontImageFileName": "img_B5_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O6",
+    "type" : "PATTERNTYPE",
+    "points": 3,
+    "pattern": ["*R* B** B**"],
+    "frontImageFileName": "img_B6_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O7",
+    "type" : "PATTERNTYPE",
+    "points": 3,
+    "pattern": ["B** *P* *P*"],
+    "frontImageFileName": "img_B7_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "O8",
+    "type" : "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["WOLF", "WOLF", "WOLF"],
+    "frontImageFileName": "img_B10_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "09",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["LEAF", "LEAF", "LEAF"],
+    "frontImageFileName": "img_B9_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "10",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"],
+    "frontImageFileName": "img_B8_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "11",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["BUTTERFLY", "BUTTERFLY", "BUTTERFLY"],
+    "frontImageFileName": "img_B11_front.png",
+    "backImageFileName": "img_B0_back.png"
+  },
+  {
+    "cardId": "12",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["QUILL", "QUILL"],
+    "frontImageFileName": "img_B15_front.png",
+    "backImageFileName": "img_B12_back.png"
+  },
+  {
+    "cardId": "13",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["POTION", "POTION"],
+    "frontImageFileName": "img_B14_front.png",
+    "backImageFileName": "img_B12_back.png"
+  },
+  {
+    "cardId": "14",
+    "type": "RESOURCETYPE",
+    "points": 2,
+    "pattern": ["SCROLL", "SCROLL"],
+    "frontImageFileName": "img_B13_front.png",
+    "backImageFileName": "img_B12_back.png"
+  },
+  {
+    "cardId": "15",
+    "type": "RESOURCETYPE",
+    "points": 3,
+    "pattern": ["QUILL", "SCROLL", "POTION"],
+    "frontImageFileName": "img_B12_front.png",
+    "backImageFileName": "img_B12_back.png"
+  }
+]

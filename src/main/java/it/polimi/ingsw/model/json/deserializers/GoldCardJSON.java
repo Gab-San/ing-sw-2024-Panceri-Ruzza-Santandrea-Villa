@@ -3,11 +3,12 @@ package it.polimi.ingsw.model.json.deserializers;
 import it.polimi.ingsw.model.enums.GameResource;
 
 import java.util.List;
+import java.util.Map;
 
 public class GoldCardJSON {
     private String cardId;
-    private List<PlacementCost> placementCost;
-    private List<PointOnPlace> pointsOnPlace;
+    private Map<String, Integer> placementCost;
+    private PointOnPlace pointsOnPlace;
     private List<CornerJ> cornersJS;
     private GameResource backResource;
     private String frontImageFileName;
@@ -21,19 +22,19 @@ public class GoldCardJSON {
         this.cardId = cardId;
     }
 
-    public List<PlacementCost> getPlacementCost() {
+    public Map<String, Integer> getPlacementCost() {
         return placementCost;
     }
 
-    public void setPlacementCost(List<PlacementCost> placementCost) {
+    public void setPlacementCost(Map<String, Integer> placementCost) {
         this.placementCost = placementCost;
     }
 
-    public List<PointOnPlace> getPointsOnPlace() {
+    public PointOnPlace getPointsOnPlace() {
         return pointsOnPlace;
     }
 
-    public void setPointsOnPlace(List<PointOnPlace> pointsOnPlace) {
+    public void setPointsOnPlace(PointOnPlace pointsOnPlace) {
         this.pointsOnPlace = pointsOnPlace;
     }
 

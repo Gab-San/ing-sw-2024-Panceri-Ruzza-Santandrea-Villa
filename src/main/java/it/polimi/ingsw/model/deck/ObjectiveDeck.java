@@ -1,6 +1,15 @@
 package it.polimi.ingsw.model.deck;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
+import it.polimi.ingsw.model.exceptions.DeckException;
+import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.json.deserializers.ObjectiveCardDeserializer;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * The objective deck is composed of 16 objective cards at the start of the game
@@ -9,46 +18,51 @@ import it.polimi.ingsw.model.cards.ObjectiveCard;
  * - 1 card is drawn from the deck by each player. <br>
  */
 public class ObjectiveDeck {
-    private final ObjectiveCard[] remainingCards;
-    private int lastCard;
+    public final List<ObjectiveCard> cardDeck;
     private ObjectiveCard firstRevealed;
     private ObjectiveCard secondRevealed;
 
-    // It's impossible to empty this deck
-    // TODO decide if to throw an exception
+    public ObjectiveDeck() throws DeckInstantiationException {
+        // Populating the array
+        try {
+            cardDeck = importFromJson();
+        } catch (DeckException deckException){
+            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
+                    deckException.getDeck());
+        }
 
-    public ObjectiveDeck(){
-        remainingCards = new ObjectiveCard[16];
-        lastCard = remainingCards.length - 1;
         reveal();
     }
+
 
     /**
      * This method should be called once at the start of the match by each player
      * @return the first card of the deck
-     * @throws Exception if deck is empty
+     * @throws DeckException if deck is empty
      */
-    public ObjectiveCard getCard() throws Exception{
-        synchronized (remainingCards) {
-            if (lastCard < 0) {
-                throw new Exception("The deck is empty");
+    public ObjectiveCard getCard() throws DeckException {
+        synchronized (cardDeck) {
+            if (cardDeck.isEmpty()) {
+                throw new DeckException("The deck is empty", ObjectiveDeck.class);
             }
-            ObjectiveCard toReturn = remainingCards[lastCard];
-            lastCard--;
-            return toReturn;
+            return cardDeck.remove(getRandomCard());
         }
+    }
+
+    private int getRandomCard() {
+        return new Random().nextInt(cardDeck.size());
     }
 
     /**
      * This method should be called once in the setup
      */
     private void reveal() {
-        synchronized (remainingCards) {
+        synchronized (cardDeck) {
             try {
                 firstRevealed = getCard();
                 secondRevealed = getCard();
-            } catch (Exception emptyDeck) {
-                emptyDeck.printStackTrace();
+            } catch (DeckException emptyDeck) {
+                emptyDeck.printStackTrace(System.err);
             }
         }
     }
@@ -68,5 +82,22 @@ public class ObjectiveDeck {
      */
     public ObjectiveCard getSecondRevealed(){
         return secondRevealed;
+    }
+
+
+
+    private List<ObjectiveCard> importFromJson() throws DeckException {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addDeserializer(ObjectiveCard.class, new ObjectiveCardDeserializer());
+            mapper.registerModule(module);
+
+            File json = new File("src/main/java/it/polimi/ingsw/model/json/ObjectiveCard.json");
+            return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(ArrayList.class, ObjectiveCard.class));
+        } catch (IOException exc){
+            throw new DeckException("Error reading file JSON", exc, ObjectiveDeck.class);
+        }
+
     }
 }

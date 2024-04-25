@@ -50,6 +50,18 @@ public class GoldCard extends PlayCard{
             this.placementCost.put(res, plCost.get(res));
         }
     }
+
+    public GoldCard(GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
+                    GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
+        super(backResource, pointsOnPlace, corners);
+        this.goldStrat = goldStrat;
+        this.placementCost = new Hashtable<>();
+        // Copying information from the constructed object to the card
+        for(GameResource res: plCost.keySet()){
+            this.placementCost.put(res, plCost.get(res));
+        }
+    }
+
     /**
      * This constructor builds the card when positioned.
      * <p>

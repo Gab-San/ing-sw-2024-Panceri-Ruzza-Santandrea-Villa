@@ -28,7 +28,7 @@ public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
         // ID can be ignored since it's creating already starting cards.
         // We can just use it as a ref but has no concrete attribute.
 
-        // TODO: Setting Images
+        // TODO: [GAMBA] {After View} Set Images
 //        startJS.setFrontImageFileName(node.get("frontImageFileName").asText());
 //        startJS.setBackImageFileName(node.get("backImageFileName").asText());
 
