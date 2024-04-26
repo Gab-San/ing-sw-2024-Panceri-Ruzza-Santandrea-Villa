@@ -1,19 +1,18 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
+import static it.polimi.ingsw.model.enums.GameResource.BUTTERFLY;
+import static it.polimi.ingsw.model.enums.GameResource.FILLED;
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO redo corner test of resource
 class BaseCornerTest {
-    Corner cornerTL = new Corner(GameResource.BUTTERFLY, CornerDirection.TL);
-    Corner cornerTR = new Corner(GameResource.BUTTERFLY, CornerDirection.TR);
+    Corner cornerTL = new Corner(BUTTERFLY, CornerDirection.TL);
+    Corner cornerTR = new Corner(BUTTERFLY, CornerDirection.TR);
     Corner cornerBL = new Corner(null, CornerDirection.BL);
 
     PlaceableCard testCard;
@@ -24,7 +23,7 @@ class BaseCornerTest {
     }
     @BeforeEach
     void setup(){
-        testCard = new ResourceCard(GameResource.BUTTERFLY, cornerTL, cornerBL, cornerTR);
+        testCard = new ResourceCard(BUTTERFLY, cornerTL, cornerBL, cornerTR);
         testCard.turnFaceUp();
         cornerTL = testCard.getCorner(CornerDirection.TL);
         cornerTR = testCard.getCorner(CornerDirection.TR);
@@ -62,18 +61,22 @@ class BaseCornerTest {
     }
 
     @Test
-    void getResource() {
-
-        for(CornerDirection cornerDirection : CornerDirection.values()){
-            System.out.println("Testing "+ cornerDirection + " ...");
-            GameResource cornRes = testCard.getCorner(cornerDirection).getResource();
-            if(cornRes != null) {
-                System.out.println(cornerDirection + " " + cornRes);
-            } else {
-                System.out.println("This corner is empty");
-            }
-        }
+    void getResourceFront() {
+        testCard.turnFaceUp();
+        assertAll(
+                () -> assertEquals(BUTTERFLY, testCard.getCorner(CornerDirection.TL).getResource()),
+                () -> assertEquals(BUTTERFLY, testCard.getCorner(CornerDirection.TR).getResource()),
+                () -> assertNull(testCard.getCorner(CornerDirection.BL).getResource()),
+                () -> assertEquals(FILLED, testCard.getCorner(CornerDirection.BR).getResource() )
+        );
     }
 
-     //TODO test equals
+    @Test
+    void getResourceBack(){
+        testCard.turnFaceDown();
+        for(CornerDirection cornerDirection : CornerDirection.values()){
+            System.out.println("Testing "+ cornerDirection + " ...");
+            assertNull(testCard.getCorner(cornerDirection).getResource());
+        }
+    }
 }
