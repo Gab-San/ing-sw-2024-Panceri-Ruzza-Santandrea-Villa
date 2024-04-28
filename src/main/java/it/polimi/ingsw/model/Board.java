@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-//TODO: Create custom Exceptions (like InvalidAction??)
+//TODO: Create custom Exceptions (like InvalidPlacement / InvalidAction??)
 public class Board {
     //TODO: add decks
     public static final int ENDGAME_SCORE = 20;
@@ -34,13 +34,13 @@ public class Board {
      * Constructs the Board (as in initializing the game)
      * @param players 1-4 players that are joining this game
      * @throws InvalidParameterException if the parameter players has an illegal player count (0 or >4)
-     * @throws RuntimeException if players contains duplicates
+     * @throws IllegalStateException if players contains duplicates
      */
-    public Board(String gameID, Player ...players) throws InvalidParameterException, RuntimeException {
+    public Board(String gameID, Player ...players) throws InvalidParameterException, IllegalStateException {
         this(gameID);
         if(players.length < 1 || players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
         for(Player p : players) {
-            addPlayer(p);
+            addPlayer(p); // never throws NullPointerException as p != null
         }
     }
 
@@ -112,12 +112,12 @@ public class Board {
     /**
      * Adds a player to the game
      * @param player player that is joining the game
-     * @throws RuntimeException if the player had already joined or if the current game is full (4 players)
+     * @throws IllegalStateException if the player had already joined or if the current game is full (4 players)
      */
-    public void addPlayer(Player player) throws RuntimeException{
+    public void addPlayer(Player player) throws NullPointerException, IllegalStateException{
         if(player == null) throw new NullPointerException("Null player reference.");
-        if(playerAreas.containsKey(player)) throw new RuntimeException("Cannot add a player already in game.");
-        if(playerAreas.size() >= MAX_PLAYERS) throw new RuntimeException("Max number of players already in game.");
+        if(playerAreas.containsKey(player)) throw new IllegalStateException("Cannot add a player already in game.");
+        if(playerAreas.size() >= MAX_PLAYERS) throw new IllegalStateException("Max number of players already in game.");
         setScore(player, 0);
         playerAreas.put(player, new PlayArea());
         player.setTurn(playerAreas.size());
@@ -126,7 +126,8 @@ public class Board {
     public Map<Player, Integer> getScoreboard(){
         return Collections.unmodifiableMap(scoreboard);
     }
-    public void addScore(Player player, int amount){
+    public void addScore(Player player, int amount) throws IllegalArgumentException{
+        if(!scoreboard.containsKey(player)) throw new IllegalArgumentException("Player not in game!");
         int newScore = scoreboard.get(player) + amount;
         setScore(player, newScore);
     }
@@ -164,11 +165,11 @@ public class Board {
      * Places the player's starting card on their playArea
      * @param player the player doing the placement action
      * @param placeOnFront the facing on which to place the player's starting card
-     * @throws RuntimeException if the action is invalid (e.g. if the player hasn't received a startingCard yet or has already placed it)
+     * @throws IllegalStateException if the action is invalid (e.g. if the player hasn't received a startingCard yet or has already placed it)
      */
-    public void placeStartingCard(Player player, boolean placeOnFront) throws RuntimeException{
+    public void placeStartingCard(Player player, boolean placeOnFront) throws IllegalStateException{
         StartingCard startingCard = player.getHand().getStartingCard();
-        if(startingCard == null) throw new RuntimeException("Player doesn't have a starting card yet!");
+        if(startingCard == null) throw new IllegalStateException("Player doesn't have a starting card yet!");
         if(placeOnFront)
             startingCard.turnFaceUp();
         else
@@ -186,15 +187,15 @@ public class Board {
     /**
      * @param nickname player's nickname
      * @return the Player instance of the player with given nickname
-     * @throws RuntimeException if there is no player in this game with the given nickname
+     * @throws IllegalStateException if there is no player in this game with the given nickname
      */
-    public Player getPlayerByNickname(String nickname) throws RuntimeException{
+    public Player getPlayerByNickname(String nickname) throws IllegalStateException{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getNickname().equals(nickname))
-                .findFirst().orElseThrow(()-> new RuntimeException("Cannot find a player with given nickname") );
+                .findFirst().orElseThrow(()-> new IllegalStateException("Cannot find a player with given nickname in this game") );
     }
 
-    public void removePlayer(String nickname) throws RuntimeException {
+    public void removePlayer(String nickname) throws IllegalStateException {
         Player player = getPlayerByNickname(nickname);
 
         // remove playArea and scoreboard

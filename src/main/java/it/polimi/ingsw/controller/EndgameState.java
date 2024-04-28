@@ -11,37 +11,37 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws Exception {
-        throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING ENDGAME STATE");
+    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING ENDGAME STATE");
     }
 
     @Override
-    public GameState startGame(String nickname) throws Exception {
+    public GameState startGame(String nickname) throws IllegalStateException {
         // TODO: restart game after the end on player request?
         return null;
     }
 
     @Override
-    public void placeStartingCard(String nickname, boolean placeOnFront) throws Exception {
-        throw new Exception("IMPOSSIBLE TO PLACE STARTING CARD DURING ENDGAME STATE");
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING ENDGAME STATE");
     }
 
     @Override
-    public GameState chooseSecretObjective(String nickname, int choice) throws Exception {
-        throw new Exception("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING ENDGAME STATE");
+    public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING ENDGAME STATE");
     }
 
     @Override
-    public GameState draw(String nickname, int deck, int card) throws Exception {
-        throw new Exception("IMPOSSIBLE TO DRAW DURING ENDGAME STATE");
+    public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING ENDGAME STATE");
     }
 
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws Exception {
-        throw new Exception("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
+    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
-    private GameState nextState() throws Exception {
+    private GameState nextState() throws IllegalStateException {
         //TODO: implement, network is needed
         //to send a message to the players to see if they want to connect to a new game or not
         return null;

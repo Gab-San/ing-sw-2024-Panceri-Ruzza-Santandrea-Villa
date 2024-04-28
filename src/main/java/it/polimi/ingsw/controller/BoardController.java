@@ -16,32 +16,32 @@ public class BoardController {
         this.gameState = new JoinState(new Board(gameID, players));
     }
 
-    public void join(String nickname, VirtualClient client) throws Exception{
+    public void join(String nickname, VirtualClient client) throws IllegalStateException{
         gameState.join(nickname, client);
     }
-    public void disconnect(String nickname, VirtualClient client) throws Exception{
+    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
         gameState.disconnect(nickname, client);
     }
-    void startGame(String nickname) throws Exception{
+    void startGame(String nickname) throws IllegalStateException{
         gameState = gameState.startGame(nickname);
     }
-    public void placeStartingCard(String nickname, boolean placeOnFront) throws Exception{
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException{
         gameState.placeStartingCard(nickname, placeOnFront);
     }
-    public void chooseSecretObjective(String nickname, int choice) throws Exception{
+    public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException{
         gameState.chooseSecretObjective(nickname, choice);
     }
-    public void draw(String nickname, int deck, int card) throws Exception{
+    public void draw(String nickname, int deck, int card) throws IllegalStateException{
         gameState = gameState.draw(nickname, deck, card);
     }
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws Exception{
+    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException{
         gameState.placeCard(nickname, card, corner);
     }
 
-    public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient) throws RuntimeException {
+    public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient) throws IllegalStateException {
         synchronized (gameState.board){
             if(gameState.board.containsPlayer(nickname))
-                throw new RuntimeException(nickname + " isn't connected to this game.");
+                throw new IllegalStateException(nickname + " isn't connected to this game.");
             gameState.board.getGameInfo().removeClient(oldClient);
             gameState.board.getGameInfo().addClient(newClient);
             //TODO: push game update to the client that just reconnected

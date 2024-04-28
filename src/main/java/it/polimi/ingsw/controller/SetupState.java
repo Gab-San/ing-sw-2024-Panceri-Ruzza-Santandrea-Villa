@@ -18,20 +18,20 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws Exception {
-        throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
+    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
     }
 
     @Override
-    public GameState startGame(String nickname) throws Exception {
-        throw new Exception("IMPOSSIBLE TO START GAME DURING SETUP STATE");
+    public GameState startGame(String nickname) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING SETUP STATE");
     }
 
     @Override
-    public void placeStartingCard(String nickname, boolean placeOnFront) throws Exception {
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         synchronized (board){
             if(playersWhoPlacedStartingCard.contains(nickname))
-                throw new Exception(nickname + " already placed their starting card.");
+                throw new IllegalStateException(nickname + " already placed their starting card.");
             Player player = board.getPlayerByNickname(nickname);
             this.board.placeStartingCard(player, placeOnFront);
 
@@ -44,7 +44,7 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public GameState chooseSecretObjective(String nickname, int choice) throws Exception {
+    public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
         synchronized (board){
             Player player = board.getPlayerByNickname(nickname);
             player.getHand().chooseObjective(choice);
@@ -57,16 +57,16 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public GameState draw(String nickname, int deck, int card) throws Exception {
-        throw new Exception("IMPOSSIBLE TO DRAW DURING SETUP STATE");
+    public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING SETUP STATE");
     }
 
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws Exception {
-        throw new Exception("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
+    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
     }
 
-    private GameState nextState() throws Exception {
+    private GameState nextState() throws IllegalStateException {
         board.setCurrentTurn(1);
         return new PlayState(this.board);
     }

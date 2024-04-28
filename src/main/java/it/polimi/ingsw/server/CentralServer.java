@@ -53,12 +53,12 @@ public class CentralServer {
             }
         };
     }
-    public static CentralServer getSingleton() throws RuntimeException{
-        if(singleton == null) throw new RuntimeException("CentralServer hasn't been initialized yet.");
+    public static CentralServer getSingleton() throws IllegalStateException{
+        if(singleton == null) throw new IllegalStateException("CentralServer hasn't been initialized yet.");
         return singleton;
     }
-    CentralServer() throws RuntimeException{
-        if(singleton != null) throw new RuntimeException("Central Server can only have one instance!");
+    CentralServer() throws IllegalStateException{
+        if(singleton != null) throw new IllegalStateException("Central Server can only have one instance!");
         else singleton = this;
 
         playerClients = new Hashtable<>();
@@ -118,10 +118,10 @@ public class CentralServer {
     }
 
     // TODO: add custom exception for invalid connection (duplicate nickname)
-    public synchronized void connect(String nickname, VirtualClient client) throws RuntimeException{
+    public synchronized void connect(String nickname, VirtualClient client) throws IllegalStateException{
         //check unique nickname
         if(playerClients.containsKey(nickname)){
-            throw new RuntimeException("Nickname already taken!");
+            throw new IllegalStateException("Nickname already taken!");
         }
         // else
         VirtualClient oldClient = playerClients.put(nickname, client);
@@ -134,10 +134,10 @@ public class CentralServer {
         }
     }
 
-    public synchronized void join(String nickname, String gameID) throws RuntimeException{
+    public synchronized void join(String nickname, String gameID) throws IllegalStateException{
         // check nickname connection
-        if(!playerClients.containsKey(nickname)) throw new RuntimeException("Player not connected!");
-        if(playerGames.containsKey(nickname)) throw new RuntimeException("Player already in game!");
+        if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
+        if(playerGames.containsKey(nickname)) throw new IllegalStateException("Player already in game!");
 
         // creates game if it doesn't exist
         BoardController game = getGame(gameID);
@@ -146,7 +146,7 @@ public class CentralServer {
             playersInLobby.remove(nickname);
             playerGames.put(nickname, game);
         }catch (Exception e){
-            throw new RuntimeException("Player can't connect to game " + gameID + "\n" +
+            throw new IllegalStateException("Player can't connect to game " + gameID + "\n" +
                     "Error message: " + e.getMessage());
         }
     }

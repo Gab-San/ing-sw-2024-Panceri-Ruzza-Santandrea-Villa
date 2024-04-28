@@ -17,27 +17,27 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws Exception {
-        throw new Exception("IMPOSSIBLE TO JOIN A GAME DURING PLAY STATE");
+    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING PLAY STATE");
     }
 
     @Override
-    public GameState startGame(String nickname) throws Exception {
-        throw new Exception("IMPOSSIBLE TO START GAME DURING PLAY STATE");
+    public GameState startGame(String nickname) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
     }
 
     @Override
-    public void placeStartingCard(String nickname, boolean placeOnFront) throws Exception {
-        throw new Exception("IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE");
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE");
     }
 
     @Override
-    public GameState chooseSecretObjective(String nickname, int choice) throws Exception {
-        throw new Exception("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE");
+    public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE");
     }
 
     @Override
-    public GameState draw(String nickname, int deck, int card) throws Exception {
+    public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
         synchronized (board){
             //TODO: this.board.draw(nickname, deck, card);
             boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
@@ -55,10 +55,10 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws Exception {
+    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
         synchronized (board) {
             if (currentPlayerHasPlacedCard)
-                throw new Exception("Player had already placed a card!");
+                throw new IllegalStateException("Player had already placed a card!");
 
             Player player = board.getPlayerByNickname(nickname);
             board.placeCard(player, card, corner);
@@ -67,7 +67,7 @@ public class PlayState extends GameState {
         }
     }
 
-    private GameState nextState() throws Exception {
+    private GameState nextState() throws IllegalStateException {
         return new EndgameState(board);
     }
 }
