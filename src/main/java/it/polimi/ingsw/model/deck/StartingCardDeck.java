@@ -26,9 +26,9 @@ public class StartingCardDeck {
         }
     }
 
-    public StartingCard getCard() throws Exception {
+    public StartingCard getCard() throws DeckException {
         if(cardDeck.isEmpty()){
-            throw new Exception("Deck is Empty");
+            throw new DeckException("Deck is Empty");
         }
         int cardIdx = getRandomCard();
         return cardDeck.remove(cardIdx);

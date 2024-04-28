@@ -1,14 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.cards.ObjectiveCard;
-import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import org.jetbrains.annotations.Range;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Player {
     private final String nickname;
@@ -22,7 +15,7 @@ public class Player {
         this.nickname = nickname;
         this.turn = turn;
         isConnected = true;
-        hand = new PlayerHand();
+        hand = new PlayerHand(this);
         this.color = color;
     }
 

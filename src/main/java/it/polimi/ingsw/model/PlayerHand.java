@@ -3,8 +3,10 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,16 +14,17 @@ import java.util.List;
 public class PlayerHand{
     static final int MAX_CARDS = 3;
     private final List<PlayCard> cards;
-    private ObjectiveCard secretObjective;
-    private ObjectiveCard[] objectiveChoices;
-    //TODO: change objective to a list to allow for the selection during game setup??
+    private final List<ObjectiveCard> secretObjective;
     private StartingCard startingCard;
+    private static int MAX_OBJECTIVES = 2;
+    private final Player playerRef;
 
-    PlayerHand(){
+
+    PlayerHand(Player playerRef){
         cards = new LinkedList<>();
-        secretObjective = null;
-        objectiveChoices = new ObjectiveCard[2];
+        secretObjective = new ArrayList<>(2);
         startingCard = null;
+        this.playerRef = playerRef;
     }
 
     @Override
@@ -30,8 +33,7 @@ public class PlayerHand{
         if(other instanceof PlayerHand otherHand){
             return cards.equals(otherHand.cards) &&
                     secretObjective.equals(otherHand.secretObjective) &&
-                    startingCard.equals(otherHand.startingCard) &&
-                    Arrays.equals(objectiveChoices, otherHand.objectiveChoices);
+                    startingCard.equals(otherHand.startingCard);
         }
         else return false;
     }
@@ -42,6 +44,8 @@ public class PlayerHand{
         }
         return false;
     }
+
+    //TODO [GAMBA] Make a popCard that removes the card (method remove(idx) returns the card at index)
     public PlayCard getCard(int pos){
         if (pos < 0 || pos >= cards.size()) return null;
         else return cards.get(pos);
@@ -56,17 +60,17 @@ public class PlayerHand{
     }
 
     public ObjectiveCard getSecretObjective() {
+        return secretObjective.getFirst();
+    }
+
+    public void setCard(ObjectiveCard secretObjective) throws PlayerHandException {
+        if(this.secretObjective.size() >= MAX_OBJECTIVES){
+            throw new PlayerHandException(playerRef, ObjectiveCard.class);
+        }
+        this.secretObjective.add(secretObjective);
+    }
+    public List<ObjectiveCard> getObjectiveChoices() {
         return secretObjective;
-    }
-    public void setSecretObjective(ObjectiveCard secretObjective) {
-        this.secretObjective = secretObjective;
-    }
-    public ObjectiveCard[] getObjectiveChoices() {
-        return objectiveChoices;
-    }
-    public void setObjectiveChoices(@NotNull ObjectiveCard firstObjectiveChoice, @NotNull ObjectiveCard secondObjectiveChoice) {
-        objectiveChoices[0] = firstObjectiveChoice;
-        objectiveChoices[1] = secondObjectiveChoice;
     }
 
     /**
@@ -74,18 +78,22 @@ public class PlayerHand{
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
      */
     public void chooseObjective(int choice) throws IndexOutOfBoundsException{
-        if(objectiveChoices[0] == null || objectiveChoices[1] == null) throw new RuntimeException("Objective choices not initialized.");
-        if(secretObjective != null) throw new RuntimeException("Secret objective was already chosen.");
+        if(secretObjective.isEmpty()) throw new RuntimeException("Objective choices not initialized.");
+        if(MAX_OBJECTIVES == 1) throw new RuntimeException("Secret objective was already chosen.");
 
-        setSecretObjective(objectiveChoices[choice-1]);
-        objectiveChoices = null;
+        secretObjective.remove(choice-1);
+        MAX_OBJECTIVES--;
     }
 
     public StartingCard getStartingCard() {
         return startingCard;
     }
-    public void setStartingCard(StartingCard startingCard) {
+    public void setCard(StartingCard startingCard) throws PlayerHandException {
+        if(startingCard != null){
+            throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
+        }
         this.startingCard = startingCard;
     }
+
 }
 

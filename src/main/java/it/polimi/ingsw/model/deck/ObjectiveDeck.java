@@ -30,7 +30,6 @@ public class ObjectiveDeck {
             throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
                     deckException.getDeck());
         }
-
         reveal();
     }
 
@@ -41,6 +40,8 @@ public class ObjectiveDeck {
      * @throws DeckException if deck is empty
      */
     public ObjectiveCard getCard() throws DeckException {
+        //FIXME [GAMBA] Understand if it's thread safe
+        // - There's no need to synchronize since the construction is not threaded
         synchronized (cardDeck) {
             if (cardDeck.isEmpty()) {
                 throw new DeckException("The deck is empty", ObjectiveDeck.class);
