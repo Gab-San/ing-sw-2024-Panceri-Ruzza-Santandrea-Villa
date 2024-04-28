@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,15 +15,15 @@ public class PlayerHand{
     private final List<PlayCard> cards;
     private final List<ObjectiveCard> secretObjective;
     private StartingCard startingCard;
-    private static int MAX_OBJECTIVES = 2;
+    private int MAX_OBJECTIVES;
     private final Player playerRef;
-
 
     PlayerHand(Player playerRef){
         cards = new LinkedList<>();
         secretObjective = new ArrayList<>(2);
         startingCard = null;
         this.playerRef = playerRef;
+        MAX_OBJECTIVES = 2;
     }
 
     @Override
@@ -46,16 +45,17 @@ public class PlayerHand{
     }
 
     //TODO [GAMBA] Make a popCard that removes the card (method remove(idx) returns the card at index)
-    public PlayCard getCard(int pos){
-        if (pos < 0 || pos >= cards.size()) return null;
+    //[Ale] that can be done with a sequence of card = hand.getCard(idx) ; hand.removeCard(card)
+    public PlayCard getCard(int pos) throws IndexOutOfBoundsException{
+        if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
         else return cards.get(pos);
     }
-    public void addCard(@NotNull PlayCard card) throws RuntimeException{
-        if(cards.size() > MAX_CARDS) throw new RuntimeException("Too many cards in hand!");
+    public void addCard(@NotNull PlayCard card) throws PlayerHandException{
+        if(cards.size() > MAX_CARDS) throw new PlayerHandException("Too many cards in hand!", playerRef, card.getClass());
         cards.add(card);
     }
-    public void removeCard(@NotNull PlayCard card) throws RuntimeException{
-        if(!cards.contains(card)) throw new RuntimeException("Card wasn't in hand!");
+    public void removeCard(@NotNull PlayCard card) throws PlayerHandException{
+        if(!cards.contains(card)) throw new PlayerHandException("Card wasn't in hand!", playerRef, card.getClass());
         cards.remove(card);
     }
 
@@ -76,20 +76,22 @@ public class PlayerHand{
     /**
      * @param choice index of the chosen secret objective (1 or 2)
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
+     * @throws PlayerHandException if secret objective was already chosen
      */
-    public void chooseObjective(int choice) throws IndexOutOfBoundsException{
-        if(secretObjective.isEmpty()) throw new RuntimeException("Objective choices not initialized.");
-        if(MAX_OBJECTIVES == 1) throw new RuntimeException("Secret objective was already chosen.");
+    public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
+        if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
+        if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
 
         secretObjective.remove(choice-1);
-        MAX_OBJECTIVES--;
+        MAX_OBJECTIVES = 1;
     }
 
     public StartingCard getStartingCard() {
+        if(startingCard == null) throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }
     public void setCard(StartingCard startingCard) throws PlayerHandException {
-        if(startingCard != null){
+        if(this.startingCard != null){
             throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
         }
         this.startingCard = startingCard;

@@ -185,10 +185,10 @@ public class Board {
     public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         //TODO [Gamba] choose whether to handle the deck exception
         switch (deck){
-            case 's':
+            case STARTING_DECK:
                 playerHand.setCard(startingDeck.getCard());
                 break;
-            case 'o':
+            case OBJECTIVE_DECK:
                 playerHand.setCard(objectiveDeck.getCard());
                 playerHand.setCard(objectiveDeck.getCard());
                 break;
@@ -206,10 +206,10 @@ public class Board {
 
     public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         switch (deck){
-            case 'r':
+            case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getTopCard());
                 break;
-            case 'g':
+            case GOLD_DECK:
                 playerHand.addCard(goldDeck.getTopCard());
                 break;
             default:
