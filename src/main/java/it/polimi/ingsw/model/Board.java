@@ -144,14 +144,14 @@ public class Board {
      * @param player the player doing the placement action
      * @param card the card to be placed
      * @param corner the corner on which to place card
-     * @throws InvalidParameterException if player isn't in game, card isn't in player's hand or corner is
-     * @throws RuntimeException if the placement is invalid (as per PlayArea.placeCard())
+     * @throws IllegalArgumentException if player isn't in game, card isn't in player's hand or corner is
+     * @throws IllegalStateException if the placement is invalid (as per PlayArea.placeCard())
      */
     //TODO: review Board.placeCard() args after making client/view
-    public void placeCard(Player player, PlayCard card, Corner corner) throws InvalidParameterException, RuntimeException{
+    public void placeCard(Player player, PlayCard card, Corner corner) throws IllegalArgumentException, IllegalStateException{
         //checks
-        if(!playerAreas.containsKey(player)) throw new InvalidParameterException("Player not in this game!");
-        if(!player.getHand().containsCard(card)) throw new InvalidParameterException("Card not in player's hand!");
+        if(!playerAreas.containsKey(player)) throw new IllegalArgumentException("Player not in this game!");
+        if(!player.getHand().containsCard(card)) throw new IllegalArgumentException("Card not in player's hand!");
 
         //placement
         PlayArea playArea = playerAreas.get(player);

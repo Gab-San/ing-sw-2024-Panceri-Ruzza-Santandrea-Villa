@@ -93,9 +93,9 @@ class PlayAreaTest {
     @DisplayName("Test failure on placement of a second starting card (first placement on both sides)")
     void testPlaceStartingCard_fail() {
         setUp(false);
-        assertThrows(RuntimeException.class, ()->playArea.placeStartingCard(startingCard));
+        assertThrows(IllegalStateException.class, ()->playArea.placeStartingCard(startingCard));
         setUp(true);
-        assertThrows(RuntimeException.class, ()->playArea.placeStartingCard(startingCard));
+        assertThrows(IllegalStateException.class, ()->playArea.placeStartingCard(startingCard));
     }
     @Test
     @DisplayName("Test placement of a PlayCard")
@@ -181,11 +181,11 @@ class PlayAreaTest {
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard cardToPlace = new ResourceCard();
-        assertThrows(RuntimeException.class,
+        assertThrows(IllegalStateException.class,
                 ()->playArea.placeCard(cardToPlace, blockedCard.getCorner(BL))
         );
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
-        assertThrows(RuntimeException.class,
+        assertThrows(IllegalStateException.class,
                 ()->playArea.placeCard(cardToPlace, blockedCard.getCorner(TR))
         );
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
@@ -210,12 +210,12 @@ class PlayAreaTest {
 
         PlayCard otherCard = new ResourceCard();
         // test of failure on occupied non-visible corner
-        assertThrows(RuntimeException.class,
+        assertThrows(IllegalStateException.class,
                 ()->playArea.placeCard(otherCard, startCardCorner));
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
 
         // test of failure on occupied visible corner
-        assertThrows(RuntimeException.class,
+        assertThrows(IllegalStateException.class,
                 ()->playArea.placeCard(otherCard, card.getCorner(startCardCorner.getDirection().opposite())));
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
     }
@@ -280,7 +280,7 @@ class PlayAreaTest {
         //duplicate playArea to check for invariance after failed placeCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
-        assertThrows(RuntimeException.class, ()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));
+        assertThrows(IllegalStateException.class, ()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));
         assertEquals(oldCardMatrix, playArea.getCardMatrix());
     }
 
