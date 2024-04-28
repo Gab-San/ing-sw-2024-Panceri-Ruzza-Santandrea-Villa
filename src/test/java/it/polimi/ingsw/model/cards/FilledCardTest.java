@@ -119,7 +119,7 @@ public class FilledCardTest {
     @Test
     void getSetPosition() {
         // At instantiation position == null
-        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+        assertThrows(IllegalStateException.class, ()-> testCard.getPosition());
 
         Point pos = new Point(150, 200);
         PlaceableCard placedCard = testCard.setPosition(pos);

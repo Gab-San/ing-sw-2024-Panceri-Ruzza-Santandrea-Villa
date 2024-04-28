@@ -92,7 +92,7 @@ class BaseStartingCardTest {
     @Test
     void getSetPosition() {
         // At instantiation position == null
-        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+        assertThrows(IllegalStateException.class, ()-> testCard.getPosition());
 
         Point pos = new Point(5, 5);
         StartingCard placedCard = (StartingCard) testCard.setPosition(pos);

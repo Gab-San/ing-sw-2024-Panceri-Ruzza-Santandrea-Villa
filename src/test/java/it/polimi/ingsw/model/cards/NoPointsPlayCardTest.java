@@ -80,7 +80,7 @@ class NoPointsPlayCardTest {
     @Test
     void getSetPosition() {
         // At instantiation position == null
-        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+        assertThrows(IllegalStateException.class, ()-> testCard.getPosition());
 
         Point pos = new Point(5, 5);
         PlayCard placedCard = (PlayCard) testCard.setPosition(pos);
