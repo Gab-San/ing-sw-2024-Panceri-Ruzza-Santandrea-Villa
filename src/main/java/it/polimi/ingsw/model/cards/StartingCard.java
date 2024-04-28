@@ -20,11 +20,11 @@ public class StartingCard extends PlaceableCard {
     private final List<GameResource> centralFrontResources;
 
     /**
-     * Constucts a blank card.
+     * Constructs a blank card.
      */
     public StartingCard(){
         super();
-        this.centralFrontResources = null;
+        this.centralFrontResources = new ArrayList<>();
     }
 
     /**
@@ -34,7 +34,6 @@ public class StartingCard extends PlaceableCard {
      */
     public StartingCard(GameResource[] centralRes, Corner... corners) throws InvalidParameterException {
         super(corners);
-
         this.centralFrontResources = new ArrayList<>();
         centralFrontResources.addAll(Arrays.asList(centralRes));
     }
