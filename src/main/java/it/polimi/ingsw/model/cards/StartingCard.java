@@ -1,5 +1,4 @@
 package it.polimi.ingsw.model.cards;
-
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.*;
 import it.polimi.ingsw.model.functions.UsefulFunc;
@@ -21,6 +20,14 @@ public class StartingCard extends PlaceableCard {
     private final List<GameResource> centralFrontResources;
 
     /**
+     * Constucts a blank card.
+     */
+    public StartingCard(){
+        super();
+        this.centralFrontResources = null;
+    }
+
+    /**
      * Constructs a starting card filled with the required information.
      * @param centralRes The resources shown in the center of the card
      * @param corners The corners of the card
@@ -32,6 +39,11 @@ public class StartingCard extends PlaceableCard {
         centralFrontResources.addAll(Arrays.asList(centralRes));
     }
 
+    public StartingCard(List<GameResource> centralRes, List<Corner> corners) throws InvalidParameterException{
+        super(corners);
+
+        this.centralFrontResources = new ArrayList<>(centralRes);
+    }
     /**
      * Constructs a starting card from another one, adding the placement information.
      * @param placement The placement point of the card (starting cards are always placed at (0,0))
@@ -95,5 +107,11 @@ public class StartingCard extends PlaceableCard {
         StartingCard cardToComp = (StartingCard) other;
         return super.compareCard(other) &&
                 centralFrontResources.equals(cardToComp.centralFrontResources);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                centralFrontResources.toString() + "\n";
     }
 }

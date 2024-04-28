@@ -137,10 +137,16 @@ public class ObjectiveCardTest {
         assertEquals(4, playArea.getVisibleResources().get(WOLF));
         assertEquals(12, objectiveCardMIXED.calculatePoints(playArea));
     }
+    private PatternObjective createPatternDIAG_BLUE(){
+        return new PatternObjective("**B *B* B**");
+    }
+    private PatternObjective createPattern_L_RED_GREEN(){
+        return new PatternObjective("*R* *R* **G");
+    }
 
     @Test
     void patternTest_DIAG_allFront(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 1);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TR));
@@ -150,7 +156,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void patternTest_DIAG_allBack(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 2);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 2);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR), true);
         card = placePlayCard(WOLF, card.getCorner(TR), true);
@@ -160,7 +166,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void patternTest_DIAG_mixedSides(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 3);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 3);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TR), true);
@@ -170,7 +176,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void patternTest_DIAG_reverseDiagonal(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 1);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TL), true);
@@ -181,7 +187,7 @@ public class ObjectiveCardTest {
 
     @Test
     void patternTest_L_mixedSides(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.L_RED_RED_GREEN), 4);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPattern_L_RED_GREEN()), 4);
         PlaceableCard card;
         card = placePlayCard(MUSHROOM, startingCard.getCorner(TR));
         card = placePlayCard(MUSHROOM, startingCard.getCorner(BR), true);
@@ -191,7 +197,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void pattern_DIAG_singleCardUseTest(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 1);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TR), true);
@@ -204,7 +210,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void pattern_interruptedDIAGTest(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 1);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TR), true);
@@ -216,7 +222,7 @@ public class ObjectiveCardTest {
     }
     @Test
     void pattern_multipleSolvesTest(){
-        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(PatternObjective.DIAG_BLUE), 1);
+        ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;
         card = placePlayCard(WOLF, startingCard.getCorner(TR));
         card = placePlayCard(WOLF, card.getCorner(TR), true);

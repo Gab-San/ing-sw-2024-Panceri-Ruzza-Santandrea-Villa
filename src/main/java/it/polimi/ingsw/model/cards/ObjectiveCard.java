@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.objective.ObjectiveStrategy;
 
-//TODO add class description
 /**
  * This represents a generic card.
  * <p>
@@ -44,7 +43,6 @@ public class ObjectiveCard extends Card {
     public int calculatePoints(PlayArea p){
         return pointsPerSolve * strategy.calculateSolves(p);
     }
-    //TODO implement equals
     @Override
     public boolean equals(Object other){
         if (other == this) return true;
@@ -53,5 +51,10 @@ public class ObjectiveCard extends Card {
         return super.compareCard(otherObj) &&
                 strategy.equals((otherObj).strategy) &&
                 pointsPerSolve == otherObj.pointsPerSolve;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + strategy + "\n" + "Points Per Solve: " + pointsPerSolve + "\n";
     }
 }

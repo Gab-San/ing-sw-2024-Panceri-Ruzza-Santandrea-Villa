@@ -21,4 +21,14 @@ public enum CornerDirection {
             case BR: return TL;
         }
     }
+
+    public static CornerDirection getDirectionFromString(String dirName){
+        return switch (dirName) {
+            case "TL" -> TL;
+            case "TR" -> TR;
+            case "BR" -> BR;
+            case "BL" -> BL;
+            default -> null;
+        };
+    }
 }

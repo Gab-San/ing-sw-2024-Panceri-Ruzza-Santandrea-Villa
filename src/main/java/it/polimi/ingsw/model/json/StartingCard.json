@@ -1,0 +1,74 @@
+[
+    {
+      "cardId": "S0",
+      "centralFrontResources": ["BUTTERFLY"],
+      "corners": [
+        {"direction": "TL", "frontResource": "NULL","backResource": "MUSHROOM"},
+        {"direction": "TR", "frontResource": "LEAF","backResource": "LEAF"},
+        {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "BUTTERFLY"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "WOLF"}
+      ],
+      "frontImageFileName": "img_S0_front.png",
+      "backImageFileName": "img_S0_back.png"
+    },
+    {
+      "cardId": "S1",
+      "centralFrontResources": ["MUSHROOM"],
+      "corners": [
+        {"direction": "TL", "frontResource": "WOLF", "backResource": "LEAF"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "BUTTERFLY"}
+      ],
+      "frontImageFileName": "img_S1_front.png",
+      "backImageFileName": "img_S1_back.png"
+    },
+    {
+      "cardId": "S2",
+      "centralFrontResources": ["LEAF", "MUSHROOM"],
+      "corners": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "LEAF"}
+      ],
+      "frontImageFileName": "img_S2_front.png",
+      "backImageFileName": "img_S2_back.png"
+    },
+    {
+      "cardId": "S3",
+      "centralFrontResources": ["WOLF", "BUTTERFLY"],
+      "corners": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "LEAF"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "BL", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BR", "frontResource": "NULL", "backResource": "MUSHROOM"}
+      ],
+      "frontImageFileName": "img_S3_front.png",
+      "backImageFileName": "img_S3_back.png"
+    },
+    {
+      "cardId": "S4",
+      "centralFrontResources": ["WOLF", "BUTTERFLY", "LEAF"],
+      "corners": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "BUTTERFLY"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
+        {"direction": "BR", "frontResource": "FILLED", "backResource": "WOLF"}
+      ],
+      "frontImageFileName": "img_S4_front.png",
+      "backImageFileName": "img_S4_back.png"
+    },
+    {
+      "cardId": "S5",
+      "centralFrontResources": ["LEAF", "WOLF", "MUSHROOM"],
+      "corners": [
+        {"direction": "TL", "frontResource": "NULL", "backResource": "MUSHROOM"},
+        {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
+        {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
+        {"direction": "BR", "frontResource": "FILLED", "backResource": "BUTTERFLY"}
+      ],
+      "frontImageFileName": "img_S5_front.png",
+      "backImageFileName": "img_S5_back.png"
+    }
+]
