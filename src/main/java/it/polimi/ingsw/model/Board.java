@@ -15,6 +15,7 @@ public class Board {
     public static final int MAX_PLAYERS = 4;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
+    private final Map<Player, Boolean> isPlayerDeadlocked;
 
     private int currentTurn;
     private GamePhase gamePhase;
@@ -26,6 +27,7 @@ public class Board {
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
+        isPlayerDeadlocked = new Hashtable<>();
     }
 
     /**
@@ -42,6 +44,8 @@ public class Board {
         }
     }
 
+    //TODO: timer to check for players who lose connection during their turn
+    //  we could also periodically ping the clients saved in gameInfo
     public int getCurrentTurn() {
         return currentTurn;
     }
@@ -49,13 +53,29 @@ public class Board {
         this.currentTurn = currentTurn;
     }
     /**
-     * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1.
+     * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1. <br>
+     * If a player can't place any cards for lack of free corners, skips that player's turn.
+     * @return - true if the game can continue in the next turn
+     *          <br>- false if the game can't continue because all players are deadlocked
      */
-    public void nextTurn(){
+    public boolean nextTurn(){
         if(currentTurn >= playerAreas.size())
             currentTurn = 1;
         else
             currentTurn++;
+
+        Player nextPlayer = getPlayersByTurn().get(currentTurn);
+        if(playerAreas.get(nextPlayer).getFreeCorners().isEmpty()){
+            //TODO: notify player of deadlock (? may not be necessary as the map 'isPlayerDeadlocked' already displays it)
+            isPlayerDeadlocked.put(nextPlayer, true);
+            if(isPlayerDeadlocked.containsValue(false)){ // at least one player is not deadlocked
+                return nextTurn(); // skip deadlocked player's turn
+            }
+            else{
+                return false;
+            }
+        }
+        else return true;
     }
     public GamePhase getGamePhase() {
         return gamePhase;
@@ -82,9 +102,11 @@ public class Board {
                 .sorted(Comparator.comparingInt(scoreboard::get))
                 .toList();
     }
-    //FIXME: is this useful??
     public Map<Player, PlayArea> getPlayerAreas(){
         return Collections.unmodifiableMap(playerAreas);
+    }
+    public Map<Player, Boolean> getPlayerDeadlocks(){
+        return Collections.unmodifiableMap(isPlayerDeadlocked);
     }
 
     /**
@@ -99,6 +121,7 @@ public class Board {
         setScore(player, 0);
         playerAreas.put(player, new PlayArea());
         player.setTurn(playerAreas.size());
+        isPlayerDeadlocked.put(player, false);
     }
     public Map<Player, Integer> getScoreboard(){
         return Collections.unmodifiableMap(scoreboard);

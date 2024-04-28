@@ -46,9 +46,11 @@ public class PlayState extends GameState {
             if(board.checkEndgame() && isLastPlayerTurn)
                 lastRound = true;
 
-            board.nextTurn();
-            currentPlayerHasPlacedCard = false;
-            return this;
+            if(board.nextTurn()) {
+                currentPlayerHasPlacedCard = false;
+                return this;
+            }
+            else return nextState(); // if game can't continue (nextTurn returns false), go to endgame
         }
     }
 
