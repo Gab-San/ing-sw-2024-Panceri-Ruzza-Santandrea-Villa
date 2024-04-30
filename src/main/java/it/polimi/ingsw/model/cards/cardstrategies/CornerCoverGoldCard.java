@@ -31,7 +31,7 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
                 try {
                     //TODO This try branch can be reached only if getting the reference to the placed card
                     coversCorner = pA.getCardMatrix().get(card.getPosition().move(dir)) != null;
-                }catch (RuntimeException e){
+                }catch (IllegalStateException e){
                     coversCorner = pA.getCardMatrix().get(card.getCorner(dir).getCardRef().getPosition().move(dir)) != null;
                 }
             }
@@ -44,7 +44,7 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
     @Override
     public boolean equals(Object other) {
         if(other == this) return true;
-        // This strat is identified only by its class
+        // This strategy is identified only by its class
         return other instanceof CornerCoverGoldCard;
     }
 }

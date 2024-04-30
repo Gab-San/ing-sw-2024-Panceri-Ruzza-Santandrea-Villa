@@ -68,7 +68,7 @@ public class PointsResourceCardTest {
     @Test
     void getSetPosition() {
         // At instantiation position == null
-        assertThrows(RuntimeException.class, ()-> testCard.getPosition());
+        assertThrows(IllegalStateException.class, ()-> testCard.getPosition());
 
         Point pos = new Point(5, 5);
         ResourceCard placedCard = (ResourceCard) testCard.setPosition(pos);

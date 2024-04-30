@@ -171,11 +171,11 @@ public abstract class PlaceableCard extends Card{
     /**
      * Getter for the position of the card.
      * @return the position of the card
-     * @throws RuntimeException when trying to access the position of a not positioned card.
+     * @throws IllegalStateException when trying to access the position of a not positioned card.
      */
-    public Point getPosition() throws RuntimeException {
+    public Point getPosition() throws IllegalStateException {
         if(position == null){
-            throw new RuntimeException("Tried to access position on a card that wasn't placed");
+            throw new IllegalStateException("Tried to access position on a card that wasn't placed");
         }
         return position;
     }

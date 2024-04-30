@@ -36,12 +36,12 @@ public class PlayArea {
      * Places the startingCard in cardMatrix, updates visibleResources and freeCorners
      * @author Ruzza
      * @param startCard StartingCard to be placed
-     * @throws RuntimeException if the cardMatrix isn't empty
+     * @throws IllegalStateException if the cardMatrix isn't empty
      */
-    public void placeStartingCard(@NotNull StartingCard startCard) throws RuntimeException{
+    public void placeStartingCard(@NotNull StartingCard startCard) throws IllegalStateException{
         // check cardMatrix is empty
         if(!cardMatrix.keySet().isEmpty())
-            throw new RuntimeException("Attempting to place starting card on non-empty cardMatrix");
+            throw new IllegalStateException("Attempting to place starting card on non-empty cardMatrix");
 
         // place card
         Point cardPos = new Point(0,0);
@@ -61,27 +61,26 @@ public class PlayArea {
      * @author Ruzza
      * @param playCard ResourceCard or GoldCard to be placed
      * @param corner which corner (in FreeCorner) to place it on
-     * @throws RuntimeException if the placement is invalid
+     * @throws IllegalStateException if the placement is invalid
      */
-    public PlayCard placeCard(@NotNull PlayCard playCard, @NotNull Corner corner) throws RuntimeException{
+    public PlayCard placeCard(@NotNull PlayCard playCard, @NotNull Corner corner) throws IllegalStateException{
         // checks valid cost before placing
         Map<GameResource, Integer> placeCost = playCard.getPlacementCost();
         for (GameResource r : placeCost.keySet()){
             if (visibleResources.get(r) == null || visibleResources.get(r) < placeCost.get(r)){
-                throw new RuntimeException("Card can't be placed as placement cost condition isn't satisfied");
+                throw new IllegalStateException("Card can't be placed as placement cost condition isn't satisfied");
             }
         }
-        if(corner.getCardRef() == null) throw new RuntimeException("Can't place on a detached corner");
         Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
 
-        //checks valid placement, throw RuntimeException on failure
-        if(cardMatrix.get(cardPos) != null) throw new RuntimeException("Placing on existing Card");
+        //checks valid placement, throw IllegalStateException on failure
+        if(cardMatrix.get(cardPos) != null) throw new IllegalStateException("Placing on existing Card");
         for (CornerDirection dir : CornerDirection.values()){
             PlaceableCard dirCard = cardMatrix.get(cardPos.move(dir));
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite());
                 if (dirCorner.isOccupied())
-                    throw new RuntimeException("Should not place here, corner " + dir + " is occupied");
+                    throw new IllegalStateException("Should not place here, corner " + dir + " is occupied");
             }
         }
 

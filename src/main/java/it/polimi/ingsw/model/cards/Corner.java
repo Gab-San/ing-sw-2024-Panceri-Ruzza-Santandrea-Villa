@@ -72,9 +72,10 @@ public class Corner {
      * Getter for the reference of the card related to this corner.
      * This method is used to access the information of the card given the corner.
      * @return the card that contains this corner
+     * @throws RuntimeException if it is a "detached" corner, as in not connected to a card
      */
-    //TODO: maybe throw exception if cardRef == null? (Like in card getPosition)
-    public PlaceableCard getCardRef() {
+    public PlaceableCard getCardRef() throws IllegalStateException {
+        if(cardRef == null) throw new IllegalStateException("Error trying to access card of a 'detached' Corner.");
         return cardRef;
     }
 

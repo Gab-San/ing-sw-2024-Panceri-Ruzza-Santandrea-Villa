@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.server.VirtualClient;
+
 import java.util.HashSet;
 import java.util.Set;
-
-//TODO: delete this after creating the actual VirtualClient
-class VirtualClient{}
 
 public class Game {
     private final String gameID;
