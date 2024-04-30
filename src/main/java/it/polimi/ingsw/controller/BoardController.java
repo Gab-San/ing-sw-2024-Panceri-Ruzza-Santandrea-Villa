@@ -5,14 +5,15 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class BoardController {
     private GameState gameState;
-    public BoardController (String gameID){
+    public BoardController (String gameID) throws DeckInstantiationException {
         this.gameState = new JoinState(new Board(gameID));
     }
-    public BoardController (String gameID, Player... players){
+    public BoardController (String gameID, Player... players) throws DeckInstantiationException {
         this.gameState = new JoinState(new Board(gameID, players));
     }
 

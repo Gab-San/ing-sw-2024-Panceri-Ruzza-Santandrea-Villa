@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.BoardController;
+import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -88,6 +89,7 @@ public class CentralServer {
 
         // else create the game
         BoardController game = new BoardController(gameID);
+        //TODO: handle failure in creating game? (DeckInstantiationException can be raised)
         gamesByID.put(gameID, game);
 
         // create new game's actionQueue and updateQueue and associated threads

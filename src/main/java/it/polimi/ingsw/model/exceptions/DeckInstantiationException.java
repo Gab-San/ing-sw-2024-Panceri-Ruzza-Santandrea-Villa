@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.exceptions;
 
-public class DeckInstantiationException extends ReflectiveOperationException {
+public class DeckInstantiationException extends RuntimeException {
 
     private Class<?> factoryType;
 
