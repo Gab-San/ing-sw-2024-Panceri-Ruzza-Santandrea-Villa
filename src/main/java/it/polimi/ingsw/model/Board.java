@@ -1,9 +1,17 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.Corner;
+import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.deck.ObjectiveDeck;
+import it.polimi.ingsw.model.deck.PlayableDeck;
+import it.polimi.ingsw.model.deck.StartingCardDeck;
+import it.polimi.ingsw.model.deck.cardfactory.GoldCardFactory;
+import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
 import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.model.exceptions.DeckException;
+import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -15,17 +23,27 @@ public class Board {
     public static final int MAX_PLAYERS = 4;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
-
+    private final PlayableDeck resourceDeck, goldDeck;
+    private final ObjectiveDeck objectiveDeck;
+    private final StartingCardDeck startingDeck;
+    public static final char STARTING_DECK = 's';
+    public static final char OBJECTIVE_DECK = 'o';
+    public static final char RESOURCE_DECK = 'r';
+    public static final char GOLD_DECK = 'g';
     private int currentTurn;
     private GamePhase gamePhase;
 
     private final Game gameInfo;
 
-    protected Board(String gameID){
+    protected Board(String gameID) throws DeckInstantiationException {
         currentTurn = 0;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
+        resourceDeck = new PlayableDeck(new ResourceCardFactory());
+        goldDeck = new PlayableDeck(new GoldCardFactory());
+        objectiveDeck = new ObjectiveDeck();
+        startingDeck = new StartingCardDeck();
     }
 
     /**
@@ -34,10 +52,18 @@ public class Board {
      * @throws InvalidParameterException if the parameter players has an illegal player count (0 or >4)
      * @throws RuntimeException if players contains duplicates
      */
-    public Board(String gameID, Player ...players) throws InvalidParameterException, RuntimeException {
+    public Board(String gameID, Player ...players) throws InvalidParameterException, DeckInstantiationException {
         this(gameID);
         if(players.length < 1 || players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
         for(Player p : players) {
+            addPlayer(p);
+        }
+    }
+
+    public Board(String gameID, List<Player> players) throws InvalidParameterException, DeckInstantiationException {
+        this(gameID);
+        if(players.isEmpty() || players.size() > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players!");
+        for(Player p: players){
             addPlayer(p);
         }
     }
@@ -146,14 +172,74 @@ public class Board {
     public void placeStartingCard(Player player, boolean placeOnFront) throws RuntimeException{
         StartingCard startingCard = player.getHand().getStartingCard();
         if(startingCard == null) throw new RuntimeException("Player doesn't have a starting card yet!");
+        //TODO card face should be controller by the card not by the method
         if(placeOnFront)
             startingCard.turnFaceUp();
         else
             startingCard.turnFaceDown();
 
         playerAreas.get(player).placeStartingCard(startingCard); // throws RuntimeException if the startingCard was already placed
-        player.getHand().setStartingCard(null); //FIXME: should we do this??
     }
-    // TODO: methods to give a startingCard and a secretObjective to the player (through the decks)
-    // TODO: methods to draw cards (through the decks)
+
+
+    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+        //TODO [Gamba] choose whether to handle the deck exception
+        switch (deck){
+            case STARTING_DECK:
+                playerHand.setCard(startingDeck.getCard());
+                break;
+            case OBJECTIVE_DECK:
+                playerHand.setCard(objectiveDeck.getCard());
+                playerHand.setCard(objectiveDeck.getCard());
+                break;
+            default:
+                throw new IllegalStateException("Choosing a non-dealable deck");
+        }
+    }
+
+    public List<ObjectiveCard> getRevealedObjectives(){
+        List<ObjectiveCard> revealedObj = new ArrayList<>();
+        revealedObj.add(objectiveDeck.getFirstRevealed());
+        revealedObj.add(objectiveDeck.getSecondRevealed());
+        return revealedObj;
+    }
+
+    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+        switch (deck){
+            case RESOURCE_DECK:
+                playerHand.addCard(resourceDeck.getTopCard());
+                break;
+            case GOLD_DECK:
+                playerHand.addCard(goldDeck.getTopCard());
+                break;
+            default:
+                throw new IllegalStateException("Choosing a non-drawable deck");
+        }
+    }
+
+    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+        switch (deck){
+            case 'r':
+                playerHand.addCard(resourceDeck.getFirstRevealedCard());
+                break;
+            case 'g':
+                playerHand.addCard(goldDeck.getFirstRevealedCard());
+                break;
+            default:
+                throw new IllegalStateException("Choosing a non-drawable deck");
+        }
+    }
+
+    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+        switch (deck){
+            case 'r':
+                playerHand.addCard(resourceDeck.getSecondRevealedCard());
+                break;
+            case 'g':
+                playerHand.addCard(goldDeck.getSecondRevealedCard());
+                break;
+            default:
+                throw new IllegalStateException("Choosing a non-drawable deck");
+        }
+    }
 }

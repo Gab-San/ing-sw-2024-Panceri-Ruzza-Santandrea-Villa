@@ -3,25 +3,27 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class PlayerHand{
     static final int MAX_CARDS = 3;
     private final List<PlayCard> cards;
-    private ObjectiveCard secretObjective;
-    private ObjectiveCard[] objectiveChoices;
-    //TODO: change objective to a list to allow for the selection during game setup??
+    private final List<ObjectiveCard> secretObjective;
     private StartingCard startingCard;
+    private int MAX_OBJECTIVES;
+    private final Player playerRef;
 
-    PlayerHand(){
+    PlayerHand(Player playerRef){
         cards = new LinkedList<>();
-        secretObjective = null;
-        objectiveChoices = new ObjectiveCard[2];
+        secretObjective = new ArrayList<>(2);
         startingCard = null;
+        this.playerRef = playerRef;
+        MAX_OBJECTIVES = 2;
     }
 
     @Override
@@ -30,8 +32,7 @@ public class PlayerHand{
         if(other instanceof PlayerHand otherHand){
             return cards.equals(otherHand.cards) &&
                     secretObjective.equals(otherHand.secretObjective) &&
-                    startingCard.equals(otherHand.startingCard) &&
-                    Arrays.equals(objectiveChoices, otherHand.objectiveChoices);
+                    startingCard.equals(otherHand.startingCard);
         }
         else return false;
     }
@@ -42,50 +43,71 @@ public class PlayerHand{
         }
         return false;
     }
-    public PlayCard getCard(int pos){
-        if (pos < 0 || pos >= cards.size()) return null;
+
+    public PlayCard getCard(int pos) throws IndexOutOfBoundsException{
+        if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
         else return cards.get(pos);
     }
-    public void addCard(@NotNull PlayCard card) throws RuntimeException{
-        if(cards.size() > MAX_CARDS) throw new RuntimeException("Too many cards in hand!");
+    public PlayCard popCard(int pos) throws IndexOutOfBoundsException{
+        if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
+        else return cards.remove(pos);
+    }
+    public void addCard(@NotNull PlayCard card) throws PlayerHandException{
+        if(cards.size() >= MAX_CARDS) throw new PlayerHandException("Too many cards in hand!", playerRef, card.getClass());
+        if(this.containsCard(card)) throw new PlayerHandException("Card is already in hand!", playerRef, card.getClass());
         cards.add(card);
     }
-    public void removeCard(@NotNull PlayCard card) throws RuntimeException{
-        if(!cards.contains(card)) throw new RuntimeException("Card wasn't in hand!");
-        cards.remove(card);
+    public void removeCard(@NotNull PlayCard card) throws PlayerHandException{
+        if(!containsCard(card)) throw new PlayerHandException("Card wasn't in hand!", playerRef, card.getClass());
+        for (int i = 0; i < cards.size(); i++) {
+            if(cards.get(i) == card) {
+                cards.remove(i); // need this loop as cards.remove(card) would use the .equals method
+                return;
+            }
+        }
     }
 
-    public ObjectiveCard getSecretObjective() {
+    public ObjectiveCard getSecretObjective() throws PlayerHandException {
+        if(MAX_OBJECTIVES == 2) throw new PlayerHandException("Secret objective was not chosen yet.", playerRef, ObjectiveCard.class);
+        return secretObjective.get(0); //.getFirst(); doesn't compile
+    }
+    //FIXME: rename this method to dealObjective or something?
+    public void setCard(ObjectiveCard secretObjective) throws PlayerHandException {
+        if(this.secretObjective.size() >= MAX_OBJECTIVES)
+            throw new PlayerHandException(playerRef, ObjectiveCard.class);
+
+        if(this.secretObjective.contains(secretObjective))
+            throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
+
+        this.secretObjective.add(secretObjective);
+    }
+    public List<ObjectiveCard> getObjectiveChoices() {
         return secretObjective;
     }
-    public void setSecretObjective(ObjectiveCard secretObjective) {
-        this.secretObjective = secretObjective;
-    }
-    public ObjectiveCard[] getObjectiveChoices() {
-        return objectiveChoices;
-    }
-    public void setObjectiveChoices(@NotNull ObjectiveCard firstObjectiveChoice, @NotNull ObjectiveCard secondObjectiveChoice) {
-        objectiveChoices[0] = firstObjectiveChoice;
-        objectiveChoices[1] = secondObjectiveChoice;
-    }
-
     /**
      * @param choice index of the chosen secret objective (1 or 2)
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
+     * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
      */
-    public void chooseObjective(int choice) throws IndexOutOfBoundsException{
-        if(objectiveChoices[0] == null || objectiveChoices[1] == null) throw new RuntimeException("Objective choices not initialized.");
-        if(secretObjective != null) throw new RuntimeException("Secret objective was already chosen.");
+    public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
+        if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
+        if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
 
-        setSecretObjective(objectiveChoices[choice-1]);
-        objectiveChoices = null;
+        secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
+        MAX_OBJECTIVES = 1;
     }
 
     public StartingCard getStartingCard() {
+        if(startingCard == null) throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }
-    public void setStartingCard(StartingCard startingCard) {
+    //FIXME: rename this method to setStartingCard?
+    public void setCard(StartingCard startingCard) throws PlayerHandException {
+        if(this.startingCard != null){
+            throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
+        }
         this.startingCard = startingCard;
     }
+
 }
 
