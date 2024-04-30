@@ -33,7 +33,8 @@ public class BoardController {
             gameState = gameState.setNumOfPlayers(nickname, num);
         }
     }
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
+
+    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         synchronized (this) {
             gameState.disconnect(nickname, client);
         }
@@ -80,5 +81,9 @@ public class BoardController {
             gameState.board.getGameInfo().addClient(newClient);
             //TODO: push game update to the client that just reconnected
         }
+    }
+    public String getGameID(){
+        // don't need to synchronize on board as all fields accessed are final
+        return gameState.board.getGameInfo().getGameID();
     }
 }

@@ -1,0 +1,33 @@
+- DRAW COMMAND
+
+Ipotesi di comando:
+
+Draw from R1
+
+Dopo lo splice della stringa è possibile vedere che è un Draw command perchè c'è la parola DRAW
+
+Dopodichè si procede valutando il deck:
+
+R0
+R1
+R2
+
+G0
+G1
+G2
+
+Altrimenti non è possibile pescare
+(Qui si potrebbe aggiungere in realtà un layer in più che permetta un ulteriore separazione per non avere uno switch case a 6 casistiche).
+
+In particolare tale valutazione è più utile nel caso di RMI poichè in realtà TCP potrebbe mandare il messaggio serializzato e poi se ne dovrebbe occupare il server di creare il comando giusto.
+
+Il server costruisce il comando Draw(nick, 'r'/'g' (altri non dovrebbero arrivare ma in caso è già controllato nella board), 0);
+
+Il DrawCommand definirà in base agli elementi ricevuti se eseguire il drawTop drawFirst oppure drawSecond dalla parte del controller che si occuperà di delegare. Oppure il controller leggerà allo stesso modo il comando e deciderà quale pescare.
+
+- PLACE CARD
+
+Ipotesi di comando:
+
+Place G2 on G3 TL
+
