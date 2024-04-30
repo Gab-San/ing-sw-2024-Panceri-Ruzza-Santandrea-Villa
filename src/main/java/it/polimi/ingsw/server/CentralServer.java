@@ -2,13 +2,14 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.BoardController;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 // FIXME: add VirtualClient to all function calls (to check that a client doesn't send commands for other players)?
 public class CentralServer {
-    private static CentralServer singleton;
+    private static CentralServer singleton=null;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final Set<String> playersInLobby;                 // list of player nicknames
     private final Map<String, BoardController> playerGames;   // key == player nickname
@@ -117,20 +118,29 @@ public class CentralServer {
         }
     }
 
-    // TODO: add custom exception for invalid connection (duplicate nickname)
+    // TODO: add custom exception for invalid connection? (duplicate nickname)
     public synchronized void connect(String nickname, VirtualClient client) throws IllegalStateException{
         //check unique nickname
-        if(playerClients.containsKey(nickname)){
-            throw new IllegalStateException("Nickname already taken!");
-        }
-        // else
-        VirtualClient oldClient = playerClients.put(nickname, client);
+        if(playerClients.containsValue(client))
+            throw new IllegalStateException("Already connected!");
 
-        BoardController game = playerGames.get(nickname);
-        if(game != null){
-            game.replaceClient(nickname, oldClient, client);
-        } else {
-            playersInLobby.add(nickname); //leaves playersInLobby unchanged if reconnecting
+        VirtualClient oldClient = null;
+        if(playerClients.containsKey(nickname)){
+            try{
+                playerClients.get(nickname).ping();
+                throw new IllegalStateException("Player with nickname "+nickname+" already connected!");
+            }catch (RemoteException | NullPointerException clientToBeReplaced){
+                oldClient = playerClients.put(nickname, client);
+            }
+
+            BoardController game = playerGames.get(nickname);
+            if(game != null){ // if player is in game
+                game.replaceClient(nickname, oldClient, client);
+            }
+        }
+        else{
+            playerClients.put(nickname, client);
+            playersInLobby.add(nickname);
         }
     }
 
@@ -145,9 +155,19 @@ public class CentralServer {
             game.join(nickname, playerClients.get(nickname));
             playersInLobby.remove(nickname);
             playerGames.put(nickname, game);
-        }catch (Exception e){
+        }catch (IllegalStateException e){
             throw new IllegalStateException("Player can't connect to game " + gameID + "\n" +
                     "Error message: " + e.getMessage());
+        }
+    }
+
+    public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
+        if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
+        if(!playerClients.get(nickname).equals(client)) throw new IllegalStateException("Client instance does not match.");
+
+        playersInLobby.remove(nickname); // unchanged if not in lobby
+        if(playerGames.containsKey(nickname)){
+            
         }
     }
 }
