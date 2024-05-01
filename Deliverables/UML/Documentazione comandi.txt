@@ -40,4 +40,3 @@ Il controller:
 	- ottiene il corner su cui piazzare con cardMatrix.get(pos).getCorner(TL)
 Se la posizione è invalida si possono fare dei null-check e se il corner non è corretto sarà il model a segnalarlo.
 
-

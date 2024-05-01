@@ -2,6 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
+<<<<<<< HEAD
+=======
+import it.polimi.ingsw.model.Player;
+>>>>>>> 5825146 (Developing TCP connection)
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
@@ -12,7 +16,15 @@ import java.util.ArrayList;
 public class BoardController {
     private GameState gameState;
     public BoardController (String gameID) throws DeckInstantiationException {
+<<<<<<< HEAD
         this.gameState = new CreationState(new Board(gameID), this, new ArrayList<>());
+=======
+            this.gameState = new CreationState(new Board(gameID), this);
+    }
+
+    public BoardController (String gameID, Player... players) throws DeckInstantiationException {
+            this.gameState = new JoinState(new Board(gameID, players), this, players.length);
+>>>>>>> 5825146 (Developing TCP connection)
     }
 
     public synchronized void join(String nickname, VirtualClient client)

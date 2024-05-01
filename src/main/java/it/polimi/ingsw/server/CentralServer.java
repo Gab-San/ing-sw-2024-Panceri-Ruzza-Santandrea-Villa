@@ -3,7 +3,6 @@ package it.polimi.ingsw.server;
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-
 import static com.diogonunes.jcolor.Ansi.colorize;
 
 // FIXME: add VirtualClient to all function calls (to check that a client doesn't send commands for other players)?
@@ -33,6 +31,7 @@ public class CentralServer {
         if(singleton == null) singleton = new CentralServer();
         return singleton;
     }
+
     public void issueGameCommand(GameCommand action) throws InterruptedException {
         commandQueue.put(action);
     }
