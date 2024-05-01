@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
 
-abstract public class GameCommand implements ServerCommand{
+abstract public class GameCommand{
     public final BoardController gameController;
     protected final String nickname;
     protected GameCommand(BoardController gameController, String nickname){

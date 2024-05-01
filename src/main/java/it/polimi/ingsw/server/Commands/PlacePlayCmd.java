@@ -1,22 +1,24 @@
 package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
 
 public class PlacePlayCmd extends GameCommand{
 
-    private final PlayCard card;
-    private final Corner corner;
+    private final String cardID;
+    private final Point placePos;
+    private final CornerDirection cornerDir;
 
-    public PlacePlayCmd(BoardController gameController, String nickname, PlayCard card, Corner corner){
+    public PlacePlayCmd(BoardController gameController, String nickname, String cardID, Point placePos, CornerDirection cornerDir){
         super(gameController, nickname);
-        this.card = card;
-        this.corner = corner;
+        this.cardID = cardID;
+        this.placePos = placePos;
+        this.cornerDir = cornerDir;
     }
 
     @Override
     public void execute() {
-        this.gameController.placeCard(nickname,card,corner);
+//        this.gameController.placeCard(nickname,cardID,placePos,cornerDir);
     }
 }
