@@ -5,50 +5,46 @@ import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.server.VirtualClient;
 
-public class EndgameState extends GameState{
-    public EndgameState(Board board) {
+public class CreationState extends GameState{
+    boolean gameCreated;
+    public CreationState(Board board) {
         super(board);
+        gameCreated=false;
     }
 
     @Override
     public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING ENDGAME STATE");
+        throw new IllegalStateException("IMPOSSIBLE TO JOIN THE GAME DURING CREATION STATE");
     }
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+
         return null;
     }
 
     @Override
     public GameState startGame(String nickname) throws IllegalStateException {
-        // TODO: restart game after the end on player request?
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
 
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING ENDGAME STATE");
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD DURING CREATION STATE");
     }
 
     @Override
     public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING ENDGAME STATE");
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE DURING CREATION STATE");
     }
 
     @Override
     public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING ENDGAME STATE");
+        throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING CREATION STATE");
     }
 
     @Override
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
-    }
-
-    private GameState nextState() throws IllegalStateException {
-        //TODO: implement, network is needed
-        //to send a message to the players to see if they want to connect to a new game or not
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
 }

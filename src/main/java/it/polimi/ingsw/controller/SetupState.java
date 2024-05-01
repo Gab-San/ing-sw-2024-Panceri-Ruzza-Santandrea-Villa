@@ -18,8 +18,13 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+    public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE");
+    }
+
+    @Override
+    public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+        return null;
     }
 
     @Override

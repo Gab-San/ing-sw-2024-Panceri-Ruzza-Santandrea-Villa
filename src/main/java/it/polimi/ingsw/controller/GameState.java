@@ -12,7 +12,8 @@ public abstract class GameState {
         this.board = board;
     }
 
-    abstract public void join (String nickname, VirtualClient client) throws IllegalStateException;
+    abstract public GameState join (String nickname, VirtualClient client) throws IllegalStateException;
+    abstract public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException;
     public void disconnect (String nickname, VirtualClient client) throws IllegalStateException{
         synchronized (board){
             board.removePlayer(nickname); // throws exception if player isn't in game
