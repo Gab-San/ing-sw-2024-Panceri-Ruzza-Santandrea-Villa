@@ -86,4 +86,9 @@ public class BoardController {
         // don't need to synchronize on board as all fields accessed are final
         return gameState.board.getGameInfo().getGameID();
     }
+
+    //TODO: delete this test method when we're done
+    public void testPrint(String text){
+        System.out.println("Function call received "+text);
+    }
 }

@@ -31,3 +31,13 @@ Ipotesi di comando:
 
 Place G2 on G3 TL
 
+L'input è dato col nominativo della carta, ma il client ha già la corrispondenza con la sua posizione.
+??? cambia G2 con index in mano ???
+Il client quindi invia il messaggio "Place G2 on [pos di G3] TL"
+Il comando viene costruito come PlaceCard(nick, "G2", pos, CornerDirection.TL) (enum dovrebbe essere serializzabile)
+Il controller:
+	- Ottiene l'istanza di G2 dalla PlayerHand corrispondente a nick
+	- ottiene il corner su cui piazzare con cardMatrix.get(pos).getCorner(TL)
+Se la posizione è invalida si possono fare dei null-check e se il corner non è corretto sarà il model a segnalarlo.
+
+
