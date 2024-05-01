@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.enums.CornerDirection;
 
 import java.rmi.Remote;
 
-public interface VirtualServer extends Remote {
+public interface VirtualServer {
     void connect(String nickname, VirtualClient client) throws IllegalStateException;
     void setNumOfPlayers(String nickname, VirtualClient client, int num) throws IllegalStateException;
     void disconnect(String nickname, VirtualClient client) throws IllegalStateException;

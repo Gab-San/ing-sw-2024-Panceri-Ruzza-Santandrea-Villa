@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -61,7 +62,7 @@ public class CentralServer {
             try{
                 playerClients.get(nickname).ping();
                 throw new IllegalStateException("Player with nickname "+nickname+" already connected!");
-            }catch (ConnectionLostException clientLostConnection){
+            }catch (RemoteException | ConnectionLostException clientLostConnection){
                 oldClient = playerClients.put(nickname, client);
             }
             if(gameRef != null){ // if player is in game

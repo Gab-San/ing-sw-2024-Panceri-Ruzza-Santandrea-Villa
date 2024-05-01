@@ -7,12 +7,13 @@ import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RMIServer implements VirtualServer {
+public class RMIServer implements VirtualServer, Remote {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
     public static final int REGISTRY_PORT = 1234;
     CentralServer serverRef;
@@ -24,7 +25,7 @@ public class RMIServer implements VirtualServer {
     public RMIServer() throws RemoteException {
         serverRef = CentralServer.getSingleton();
 
-        VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
+        RMIServer stub = (RMIServer) UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
     }
@@ -42,7 +43,7 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void connect(String nickname, VirtualClient client) {
+    public void connect(String nickname, VirtualClient client) throws IllegalStateException {
         serverRef.connect(nickname, client);
     }
 
