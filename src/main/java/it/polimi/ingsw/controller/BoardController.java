@@ -11,32 +11,50 @@ import it.polimi.ingsw.server.VirtualClient;
 public class BoardController {
     private GameState gameState;
     public BoardController (String gameID) throws DeckInstantiationException {
-        this.gameState = new JoinState(new Board(gameID));
+        synchronized (this) {
+            this.gameState = new CreationState(new Board(gameID));
+        }
     }
     public BoardController (String gameID, Player... players) throws DeckInstantiationException {
-        this.gameState = new JoinState(new Board(gameID, players));
+        synchronized (this) {
+            this.gameState = new JoinState(new Board(gameID, players));
+        }
     }
 
     public void join(String nickname, VirtualClient client) throws IllegalStateException{
-        gameState.join(nickname, client);
+        synchronized (this) {
+            gameState.join(nickname, client);
+        }
     }
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
-        gameState.disconnect(nickname, client);
+        synchronized (this) {
+            gameState.disconnect(nickname, client);
+        }
     }
     void startGame(String nickname) throws IllegalStateException{
-        gameState = gameState.startGame(nickname);
+        synchronized (this) {
+            gameState = gameState.startGame(nickname);
+        }
     }
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException{
-        gameState.placeStartingCard(nickname, placeOnFront);
+        synchronized (this) {
+            gameState.placeStartingCard(nickname, placeOnFront);
+        }
     }
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException{
-        gameState.chooseSecretObjective(nickname, choice);
+        synchronized (this) {
+            gameState.chooseSecretObjective(nickname, choice);
+        }
     }
     public void draw(String nickname, int deck, int card) throws IllegalStateException{
-        gameState = gameState.draw(nickname, deck, card);
+        synchronized (this) {
+            gameState = gameState.draw(nickname, deck, card);
+        }
     }
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException{
-        gameState.placeCard(nickname, card, corner);
+        synchronized (this) {
+            gameState.placeCard(nickname, card, corner);
+        }
     }
 
     public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient) throws IllegalStateException {

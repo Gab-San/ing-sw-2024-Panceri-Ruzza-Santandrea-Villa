@@ -17,11 +17,17 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+    public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
         synchronized (board){
             board.addPlayer(new Player(nickname)); // throws exception if player can't be added
             board.getGameInfo().addClient(client);
         }
+        return null;
+    }
+
+    @Override
+    public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+        return null;
     }
 
     @Override
