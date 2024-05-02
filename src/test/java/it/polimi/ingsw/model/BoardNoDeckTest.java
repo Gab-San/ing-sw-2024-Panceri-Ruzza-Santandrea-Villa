@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,13 +44,10 @@ public class BoardNoDeckTest {
     @Test
     public void joinFailureDuplicateNicknameTest(){
         joinPlayers(3);
-        board.getPlayersByTurn().forEach(p->System.out.println(p.getNickname()));
-        try{
-            board.addPlayer(new Player("player2"));
-            fail("Shouldn't be able to add duplicate nickname");
-        }catch (IllegalStateException e){
-            System.err.println(e.getMessage());
-        }
+        assertThrows(IllegalStateException.class,
+                ()->board.addPlayer(new Player("player2")),
+                "Shouldn't be able to add duplicate nickname"
+        );
         players[3] = new Player("player4");
         assertDoesNotThrow(()->board.addPlayer(players[3]));
     }
