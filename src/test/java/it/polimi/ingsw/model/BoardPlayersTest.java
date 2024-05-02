@@ -10,6 +10,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardPlayersTest extends BaseBoardTest {
+    @ParameterizedTest
+    @ValueSource( ints = {1,2,3,4} )
+    public void joinNumsTest(int num){
+        joinPlayers(num);
+    }
     @Test
     public void joinFailureTooManyPlayersTest(){
         joinPlayers(4);
@@ -22,8 +27,7 @@ public class BoardPlayersTest extends BaseBoardTest {
                 ()->board.addPlayer(new Player("player2")),
                 "Shouldn't be able to add duplicate nickname"
         );
-        players[3] = new Player("player4");
-        assertDoesNotThrow(()->board.addPlayer(players[3]));
+        assertDoesNotThrow(()->board.addPlayer(new Player("player4")));
     }
     @Test
     public void getPlayersOrderingTest(){
