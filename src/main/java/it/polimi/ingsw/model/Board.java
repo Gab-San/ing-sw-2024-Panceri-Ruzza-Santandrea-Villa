@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.exceptions.PlayerHandException;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -37,7 +38,7 @@ public class Board {
 
     private final Game gameInfo;
 
-    protected Board(String gameID) throws DeckInstantiationException {
+    public Board(String gameID) throws DeckInstantiationException {
         currentTurn = 1;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
@@ -212,6 +213,7 @@ public class Board {
 
     public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         //TODO [Gamba] choose whether to handle the deck exception
+        //FIXME [Ale] we may not want the deck to consume the card when an exception will be thrown by playerHand.setCard()
         switch (deck){
             case STARTING_DECK:
                 playerHand.setCard(startingDeck.getCard());
@@ -232,7 +234,7 @@ public class Board {
         return revealedObj;
     }
 
-    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         switch (deck){
             case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getTopCard());
@@ -245,7 +247,7 @@ public class Board {
         }
     }
 
-    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         switch (deck){
             case 'r':
                 playerHand.addCard(resourceDeck.getFirstRevealedCard());
@@ -258,7 +260,7 @@ public class Board {
         }
     }
 
-    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         switch (deck){
             case 'r':
                 playerHand.addCard(resourceDeck.getSecondRevealedCard());

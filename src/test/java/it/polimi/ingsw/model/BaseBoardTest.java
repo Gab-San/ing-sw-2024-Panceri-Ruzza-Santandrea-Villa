@@ -11,16 +11,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BaseBoardTest {
-    static Board board;
+    Board board;
     Player[] players;
 
-    @BeforeAll
-    public static void createBoard(){
-        board = new Board("testGame");
-    }
     @BeforeEach
     public void setUp(){
-        players = new Player[4];
+        board = new Board("testGame");
+        players = null;
         board.setCurrentTurn(1);
         board.getPlayerAreas().clear();
         board.getScoreboard().clear();
@@ -29,6 +26,7 @@ public class BaseBoardTest {
     @ParameterizedTest
     @ValueSource( ints = {1,2,3,4} )
     public void joinPlayers(int num) throws IllegalStateException{
+        players = new Player[num];
         for (int i = 0; i < num; i++) {
             players[i] = new Player("player"+(i+1), null, i+1);
             Player p = players[i];
