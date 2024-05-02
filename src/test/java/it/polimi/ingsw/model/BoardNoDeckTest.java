@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,13 +11,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardNoDeckTest {
-    Board board;
+    static Board board;
     Player[] players;
 
+    @BeforeAll
+    public static void createBoard(){
+        board = new Board("testGame");
+    }
     @BeforeEach
     public void setUp(){
-        board = new Board("testGame");
         players = new Player[4];
+        board.setCurrentTurn(1);
+        board.getPlayerAreas().clear();
+        board.getScoreboard().clear();
+        board.getPlayerDeadlocks().clear();
     }
     @ParameterizedTest
     @ValueSource( ints = {1,2,3,4} )
@@ -28,11 +36,22 @@ public class BoardNoDeckTest {
         }
     }
     @Test
-    public void joinFailureTest(){
+    public void joinFailureTooManyPlayersTest(){
         joinPlayers(4);
         assertThrows(IllegalStateException.class, ()->board.addPlayer(new Player("player5")));
-        assertThrows(IllegalStateException.class, ()->board.addPlayer(new Player("player3")));
-        assertThrows(IllegalStateException.class, ()->board.addPlayer(players[2]));
+    }
+    @Test
+    public void joinFailureDuplicateNicknameTest(){
+        joinPlayers(3);
+        board.getPlayersByTurn().forEach(p->System.out.println(p.getNickname()));
+        try{
+            board.addPlayer(new Player("player2"));
+            fail("Shouldn't be able to add duplicate nickname");
+        }catch (IllegalStateException e){
+            System.err.println(e.getMessage());
+        }
+        players[3] = new Player("player4");
+        assertDoesNotThrow(()->board.addPlayer(players[3]));
     }
 
     @Test

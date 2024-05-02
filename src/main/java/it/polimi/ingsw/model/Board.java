@@ -130,10 +130,10 @@ public class Board {
                 .toList();
     }
     public Map<Player, PlayArea> getPlayerAreas(){
-        return Collections.unmodifiableMap(playerAreas);
+        return playerAreas;
     }
     public Map<Player, Boolean> getPlayerDeadlocks(){
-        return Collections.unmodifiableMap(isPlayerDeadlocked);
+        return isPlayerDeadlocked;
     }
 
     /**
@@ -151,7 +151,7 @@ public class Board {
         isPlayerDeadlocked.put(player, false);
     }
     public Map<Player, Integer> getScoreboard(){
-        return Collections.unmodifiableMap(scoreboard);
+        return scoreboard;
     }
     public void addScore(Player player, int amount) throws IllegalArgumentException{
         if(!scoreboard.containsKey(player)) throw new IllegalArgumentException("Player not in game!");
