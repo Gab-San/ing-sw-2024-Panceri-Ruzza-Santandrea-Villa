@@ -91,7 +91,7 @@ public class Board {
         else
             currentTurn++;
 
-        Player nextPlayer = getPlayersByTurn().get(currentTurn);
+        Player nextPlayer = getPlayersByTurn().get(currentTurn-1);
         if(playerAreas.get(nextPlayer).getFreeCorners().isEmpty()){
             //TODO: notify player of deadlock (? may not be necessary as the map 'isPlayerDeadlocked' already displays it)
             isPlayerDeadlocked.put(nextPlayer, true);
