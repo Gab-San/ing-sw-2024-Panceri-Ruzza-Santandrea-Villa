@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.HashSet;
@@ -11,10 +12,14 @@ import java.util.Set;
 
 public class SetupState extends GameState{
     public Set<String> playersWhoPlacedStartingCard;
+    public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
     public SetupState(Board board) {
         super(board);
         playersWhoPlacedStartingCard = new HashSet<>();
+        playersWhoChoseColor=new HashSet<>();
+        playersWhoChoseSecretObjective=new HashSet<>();
+
     }
 
     @Override
@@ -41,20 +46,43 @@ public class SetupState extends GameState{
 
             playersWhoPlacedStartingCard.add(nickname);
             if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
-                //TODO: implement players choosing their color
-                //TODO: deal secret objectives to the players
+                //TODO: ask players to choose their color
+
             }
+    }
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
+        //it's needed to control whether all starting cards have been placed
+        if(playersWhoPlacedStartingCard.size()!= board.getPlayerAreas().size())
+            throw new IllegalStateException("It's needed to wait for everybody to place their starting card.");
+
+        if(playersWhoChoseColor.contains(nickname))
+            throw new IllegalStateException(nickname + " already chose his color.");
+        Player player = this.board.getPlayerByNickname(nickname);
+        player.setColor(color);
+
+        playersWhoChoseColor.add(nickname);
+        if(playersWhoChoseColor.size()==board.getPlayerAreas().size()) {
+            //TODO: ask players to choose their secret objective
+
+        }
     }
 
     @Override
     public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
-            Player player = board.getPlayerByNickname(nickname);
-            player.getHand().chooseObjective(choice);
-            playersWhoChoseSecretObjective.add(nickname);
-            if(playersWhoChoseSecretObjective.size() == board.getPlayerAreas().size())
-                return nextState();
-            else
-                return this;
+        //it's needed to control whether all starting cards have been placed and color chosen
+        if(playersWhoPlacedStartingCard.size()!= board.getPlayerAreas().size())
+            throw new IllegalStateException("It's needed to wait for everybody to place their starting card.");
+        if(playersWhoChoseColor.size()!= board.getPlayerAreas().size())
+            throw new IllegalStateException("It's needed to wait for everybody to choose their color.");
+
+        Player player = board.getPlayerByNickname(nickname);
+        player.getHand().chooseObjective(choice);
+        playersWhoChoseSecretObjective.add(nickname);
+
+        if(playersWhoChoseSecretObjective.size() == board.getPlayerAreas().size())
+            return nextState();
+        else
+            return this;
     }
 
     @Override

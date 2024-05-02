@@ -9,7 +9,7 @@ public class Player {
     private int turn;
     private boolean isConnected;
     private final PlayerHand hand;
-    private final PlayerColor color;
+    private PlayerColor color;
 
     public Player(String nickname){
         this(nickname, null, 0);
@@ -61,5 +61,6 @@ public class Player {
     public PlayerColor getColor() {
         return color;
     }
+    public void setColor(PlayerColor newColor){ this.color=newColor;}
 
 }

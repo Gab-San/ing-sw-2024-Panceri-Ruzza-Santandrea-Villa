@@ -23,7 +23,7 @@ public class BoardController {
 
     public void join(String nickname, VirtualClient client) throws IllegalStateException{
         synchronized (this) {
-            gameState.join(nickname, client);
+            gameState=gameState.join(nickname, client);
         }
     }
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
@@ -43,7 +43,7 @@ public class BoardController {
     }
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException{
         synchronized (this) {
-            gameState.chooseSecretObjective(nickname, choice);
+            gameState=gameState.chooseSecretObjective(nickname, choice);
         }
     }
     public void draw(String nickname, int deck, int card) throws IllegalStateException{

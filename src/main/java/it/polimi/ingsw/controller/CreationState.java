@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class CreationState extends GameState{
@@ -18,9 +19,10 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-
-        return null;
+    public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
+        if(num<2)
+            throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE AT LEAST 2, YOU INSERTED " + num + "PLAYERS");
+        return this.nextState(num);
     }
 
     @Override
@@ -31,6 +33,11 @@ public class CreationState extends GameState{
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD DURING CREATION STATE");
+    }
+
+    @Override
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE YOUR COLOR DURING CREATION STATE");
     }
 
     @Override
@@ -47,4 +54,7 @@ public class CreationState extends GameState{
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
-}
+    private GameState nextState(int num) throws IllegalStateException {
+            return new JoinState(board, num);
+        }
+    }
