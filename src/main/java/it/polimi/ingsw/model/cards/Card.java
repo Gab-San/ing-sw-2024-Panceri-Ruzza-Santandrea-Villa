@@ -95,6 +95,6 @@ public abstract class Card {
 
     @Override
     public String toString() {
-        return (isFaceUp ? "Is Facing Up\n" : "Is Facing Down\n");
+        return cardID + "\n" + (isFaceUp ? "Is Facing Up\n" : "Is Facing Down\n");
     }
 }
