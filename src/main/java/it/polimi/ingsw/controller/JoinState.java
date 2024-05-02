@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.HashSet;
@@ -11,16 +12,25 @@ import java.util.Set;
 
 public class JoinState extends GameState {
     private final Set<String> readyPlayers;
+    int numOfPlayersToStart;
     public JoinState(Board board){
         super(board);
         readyPlayers = new HashSet<>();
     }
 
+    public JoinState(Board board, int num){
+        super(board);
+        readyPlayers = new HashSet<>();
+        numOfPlayersToStart=num;
+    }
     @Override
     public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
-            board.addPlayer(new Player(nickname)); // throws exception if player can't be added
-            board.getGameInfo().addClient(client);
-        return null;
+        board.addPlayer(new Player(nickname)); // throws exception if player can't be added
+        board.getGameInfo().addClient(client);
+        if(this.board.getPlayerAreas().size()>numOfPlayersToStart) {
+            JoinState joinState = this;
+            return joinState;
+        } else return nextState();
     }
 
     @Override
@@ -30,24 +40,15 @@ public class JoinState extends GameState {
 
     @Override
     public GameState startGame(String nickname) throws IllegalStateException {
-            if(!board.containsPlayer(nickname)) throw new IllegalStateException("Player isn't in this game!");
-            // we may want to allow players to remove the "ready" with a second call of this method?
-            if (readyPlayers.contains(nickname)){
-                return this;
-            }
-
-            //TODO: send a message to all players in game that this player said they're ready
-
-            readyPlayers.add(nickname);
-            if (readyPlayers.size() == board.getPlayerAreas().size())
-                return nextState();
-            else
-                return this;
+        throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME DURING JOIN STATE");
     }
 
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARDS DURING JOIN STATE");
+    }
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE YOUR COLOR DURING CREATION STATE");
     }
 
     @Override

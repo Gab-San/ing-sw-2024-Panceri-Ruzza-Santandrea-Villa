@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class EndgameState extends GameState{
@@ -29,6 +30,9 @@ public class EndgameState extends GameState{
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING ENDGAME STATE");
+    }
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO CHOOSE YOUR COLOR DURING ENDGAME STATE");
     }
 
     @Override
