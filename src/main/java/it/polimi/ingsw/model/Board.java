@@ -295,6 +295,7 @@ public class Board {
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
+
     public boolean containsPlayer(String nickname) {
         return playerAreas.keySet().stream()
                 .anyMatch(p -> p.getNickname().equals(nickname));
