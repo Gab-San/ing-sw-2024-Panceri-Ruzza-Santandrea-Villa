@@ -18,21 +18,18 @@ public class JoinState extends GameState {
 
     @Override
     public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
-        synchronized (board){
             board.addPlayer(new Player(nickname)); // throws exception if player can't be added
             board.getGameInfo().addClient(client);
-        }
         return null;
     }
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING JOIN STATE");
     }
 
     @Override
     public GameState startGame(String nickname) throws IllegalStateException {
-        synchronized (board) {
             if(!board.containsPlayer(nickname)) throw new IllegalStateException("Player isn't in this game!");
             // we may want to allow players to remove the "ready" with a second call of this method?
             if (readyPlayers.contains(nickname)){
@@ -46,7 +43,6 @@ public class JoinState extends GameState {
                 return nextState();
             else
                 return this;
-        }
     }
 
     @Override

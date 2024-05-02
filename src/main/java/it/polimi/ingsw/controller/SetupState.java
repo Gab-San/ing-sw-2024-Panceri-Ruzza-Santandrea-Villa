@@ -24,7 +24,7 @@ public class SetupState extends GameState{
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE");
     }
 
     @Override
@@ -34,7 +34,6 @@ public class SetupState extends GameState{
 
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
-        synchronized (board){
             if(playersWhoPlacedStartingCard.contains(nickname))
                 throw new IllegalStateException(nickname + " already placed their starting card.");
             Player player = board.getPlayerByNickname(nickname);
@@ -45,12 +44,10 @@ public class SetupState extends GameState{
                 //TODO: implement players choosing their color
                 //TODO: deal secret objectives to the players
             }
-        }
     }
 
     @Override
     public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
-        synchronized (board){
             Player player = board.getPlayerByNickname(nickname);
             player.getHand().chooseObjective(choice);
             playersWhoChoseSecretObjective.add(nickname);
@@ -58,7 +55,6 @@ public class SetupState extends GameState{
                 return nextState();
             else
                 return this;
-        }
     }
 
     @Override

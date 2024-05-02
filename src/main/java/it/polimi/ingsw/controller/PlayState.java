@@ -23,7 +23,8 @@ public class PlayState extends GameState {
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE");
+
     }
 
     @Override
@@ -43,7 +44,6 @@ public class PlayState extends GameState {
 
     @Override
     public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
-        synchronized (board){
             //TODO: this.board.draw(nickname, deck, card);
             boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
             if(lastRound && isLastPlayerTurn)
@@ -56,12 +56,10 @@ public class PlayState extends GameState {
                 return this;
             }
             else return nextState(); // if game can't continue (nextTurn returns false), go to endgame
-        }
     }
 
     @Override
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
-        synchronized (board) {
             if (currentPlayerHasPlacedCard)
                 throw new IllegalStateException("Player had already placed a card!");
 
@@ -69,7 +67,6 @@ public class PlayState extends GameState {
             board.placeCard(player, card, corner);
 
             currentPlayerHasPlacedCard = true;
-        }
     }
 
     private GameState nextState() throws IllegalStateException {
