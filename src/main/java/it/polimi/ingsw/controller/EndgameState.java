@@ -17,7 +17,7 @@ public class EndgameState extends GameState{
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-        return null;
+        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING ENDGAME STATE");
     }
 
     @Override
