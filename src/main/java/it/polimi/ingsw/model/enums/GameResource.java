@@ -24,6 +24,10 @@ public enum GameResource {
             default: return null;
         }
     }
+
+    /*public static String getColour(String colour) {
+    }*/
+
     public int getResourceIndex(){
         return resourceIndex - 1;
     }
