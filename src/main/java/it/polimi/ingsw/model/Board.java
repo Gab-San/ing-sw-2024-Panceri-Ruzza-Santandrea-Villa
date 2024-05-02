@@ -81,28 +81,32 @@ public class Board {
     }
     /**
      * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1. <br>
+     * If a player is disconnected, skips that player's turn. <br>
      * If a player can't place any cards for lack of free corners, skips that player's turn.
-     * @return - true if the game can continue in the next turn
-     *          <br>- false if the game can't continue because all players are deadlocked
+     * @return - true if the game can continue in the next turn <br>
+     *         - false if the game can't continue because all players are deadlocked or disconnected
      */
     public boolean nextTurn(){
-        if(currentTurn >= playerAreas.size())
-            currentTurn = 1;
-        else
-            currentTurn++;
-
-        Player nextPlayer = getPlayersByTurn().get(currentTurn-1);
-        if(playerAreas.get(nextPlayer).getFreeCorners().isEmpty()){
-            //TODO: notify player of deadlock (? may not be necessary as the map 'isPlayerDeadlocked' already displays it)
-            isPlayerDeadlocked.put(nextPlayer, true);
-            if(isPlayerDeadlocked.containsValue(false)){ // at least one player is not deadlocked
-                return nextTurn(); // skip deadlocked player's turn
-            }
-            else{
-                return false;
-            }
+        int playersWhoCanPlay = playerAreas.size();
+        for(Player p : playerAreas.keySet()){
+            if(playerAreas.get(p).getFreeCorners().isEmpty())
+                isPlayerDeadlocked.put(p, true);
+            if(!p.isConnected() || isPlayerDeadlocked.get(p))
+                playersWhoCanPlay--;
         }
-        else return true;
+        if(playersWhoCanPlay == 0) return false;
+
+        Player nextPlayer;
+        List<Player> playersByTurn = getPlayersByTurn();
+        do {
+            if(currentTurn >= playerAreas.size())
+                currentTurn = 1;
+            else
+                currentTurn++;
+            nextPlayer = playersByTurn.get(currentTurn-1);
+        }while(!nextPlayer.isConnected() || isPlayerDeadlocked.get(nextPlayer));
+
+        return true;
     }
     public GamePhase getGamePhase() {
         return gamePhase;
