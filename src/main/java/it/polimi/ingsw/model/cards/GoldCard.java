@@ -42,7 +42,12 @@ public class GoldCard extends PlayCard{
      */
     public GoldCard(GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, Corner... corners) throws InvalidParameterException {
-        super(backResource, pointsOnPlace, corners);
+        this(null, backResource, pointsOnPlace, plCost, goldStrat, corners);
+    }
+
+    public GoldCard(String cardID, GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
+                    GoldCardStrategy goldStrat, Corner... corners) throws InvalidParameterException {
+        super(cardID, backResource, pointsOnPlace, corners);
         this.goldStrat = goldStrat;
         this.placementCost = new Hashtable<>();
         // Copying information from the constructed object to the card
@@ -53,7 +58,12 @@ public class GoldCard extends PlayCard{
 
     public GoldCard(GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
-        super(backResource, pointsOnPlace, corners);
+        this(null, backResource, pointsOnPlace, plCost, goldStrat, corners);
+    }
+
+    public GoldCard(String cardID, GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
+                    GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
+        super(cardID, backResource, pointsOnPlace, corners);
         this.goldStrat = goldStrat;
         this.placementCost = new Hashtable<>();
         // Copying information from the constructed object to the card

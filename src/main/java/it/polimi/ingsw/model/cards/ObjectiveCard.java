@@ -27,6 +27,10 @@ public class ObjectiveCard extends Card {
      * @param pointsPerSolve value of one solve
      */
     public ObjectiveCard(ObjectiveStrategy strategy, int pointsPerSolve){
+        this(null, strategy, pointsPerSolve);
+    }
+
+    public ObjectiveCard(String cardID, ObjectiveStrategy strategy, int pointsPerSolve){
         this.strategy = strategy;
         this.pointsPerSolve = pointsPerSolve;
     }

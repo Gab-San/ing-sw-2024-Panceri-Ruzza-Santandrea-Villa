@@ -11,6 +11,7 @@ package it.polimi.ingsw.model.cards;
  * </p>
  */
 public abstract class Card {
+    private String cardID;
     /**
      * Describes the orientation of the card. If FALSE it is on the back side;
      * if TRUE is on the front side.
@@ -23,15 +24,25 @@ public abstract class Card {
      */
     protected Card(){
         isFaceUp = false;
+        cardID = null;
+    }
+
+    /**
+     * Constructor of card class that sets the card identifier
+     * @param cardID the card identifier
+     */
+    protected Card(String cardID){
+        this();
+        this.cardID = cardID;
     }
 
     /**
      * Constructor of card class that copies the information from another card
      * @param other the card whose info will be copied
      */
-
     protected Card(Card other){
         isFaceUp = other.isFaceUp;
+        cardID = other.cardID;
     }
 
 
@@ -64,21 +75,10 @@ public abstract class Card {
         return isFaceUp;
     }
 
+    //TODO decide if to return null or an empty string
+    public String getCardID() {return cardID != null ? cardID : "";}
+
     // OBJECT METHODS
-
-    /**
-     * Indicates whether some object has the same properties as this one
-     * @param other the reference object which to compare
-     * @return true if the object is the same as the argument; false otherwise
-     */
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(!(other instanceof Card)) return false;
-
-        return compareCard((Card) other);
-    }
-
     /**
      * This method compares two placeable card objects.
      * <p>

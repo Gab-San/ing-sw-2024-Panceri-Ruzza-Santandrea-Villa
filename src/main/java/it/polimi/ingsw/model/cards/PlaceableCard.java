@@ -43,8 +43,8 @@ public abstract class PlaceableCard extends Card{
      * @param corners a list of the corners that the card contains
      * @throws InvalidParameterException when a duplicate corner is found
      */
-    protected PlaceableCard(Corner... corners) throws InvalidParameterException{
-        super();
+    protected PlaceableCard(String cardID, Corner... corners) throws InvalidParameterException{
+        super(cardID);
         this.position = null;
 
         // For each defined corner a copy is made into the card so that no outside reference can
@@ -63,8 +63,12 @@ public abstract class PlaceableCard extends Card{
         }
     }
 
-    protected PlaceableCard(List<Corner> corners) throws InvalidParameterException{
-        super();
+    protected PlaceableCard(Corner... corners) throws InvalidParameterException{
+        this(null, corners);
+    }
+
+    protected PlaceableCard(String cardID, List<Corner> corners) throws InvalidParameterException{
+        super(cardID);
         this.position = null;
 
         // For each defined corner a copy is made into the card so that no outside reference can
@@ -81,6 +85,10 @@ public abstract class PlaceableCard extends Card{
         for(CornerDirection dir : CornerDirection.values()){
             this.corners.putIfAbsent(dir, new Corner(GameResource.FILLED, null, this, dir));
         }
+    }
+
+    protected PlaceableCard(List<Corner> corners) throws InvalidParameterException {
+        this(null,corners);
     }
 
     /**
