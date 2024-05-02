@@ -618,7 +618,7 @@
       "backImageFileName": "img_G30_back.png"
     },
     {
-      "cardId": "G36",
+      "cardId": "G37",
       "pointsOnPlace": {"type":  "SIMPLEPOINT", "amount":  3},
       "placementCost": [
         {"type": "BUTTERFLY", "amount": 3}
