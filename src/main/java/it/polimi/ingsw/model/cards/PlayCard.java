@@ -156,8 +156,7 @@ public abstract class PlayCard extends PlaceableCard{
         PlayCard cardToComp = (PlayCard) other;
         return super.compareCard(other) &&
                 getCardColour() == cardToComp.getCardColour() &&
-                pointsOnPlace == cardToComp.pointsOnPlace &&
-                getPlacementCost().equals(cardToComp.getPlacementCost());
+                pointsOnPlace == cardToComp.pointsOnPlace;
     }
 
 }

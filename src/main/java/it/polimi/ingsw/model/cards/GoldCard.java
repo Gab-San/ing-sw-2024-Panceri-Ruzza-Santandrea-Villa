@@ -147,6 +147,7 @@ public class GoldCard extends PlayCard{
         if(!(other instanceof GoldCard)) return false;
         GoldCard cardToComp = (GoldCard) other;
         return super.compareCard(other) &&
-                goldStrat.equals(cardToComp.goldStrat);
+                goldStrat.equals(cardToComp.goldStrat) &&
+                placementCost.equals(cardToComp.placementCost);
     }
 }

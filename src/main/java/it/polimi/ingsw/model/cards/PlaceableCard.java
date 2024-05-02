@@ -195,19 +195,6 @@ public abstract class PlaceableCard extends Card{
     // OBJECT METHODS
 
     /**
-     * Indicates whether some object has the same properties as this one
-     * @param other the reference object which to compare
-     * @return true if the object is the same as the argument; false otherwise
-     */
-    @Override
-    public boolean equals(Object other){
-        if (other == this) return true;
-        if(!(other instanceof PlaceableCard)) return false;
-
-        return compare((PlaceableCard) other);
-    }
-
-    /**
      * This method compares two placeable card objects.
      * <p>
      *     Returns true if the two cards have the same properties:<br>

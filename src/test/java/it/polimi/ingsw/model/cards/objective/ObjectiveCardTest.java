@@ -84,6 +84,13 @@ public class ObjectiveCardTest {
         assertEquals(4, playArea.getVisibleResources().get(WOLF));
         assertEquals(2, objectiveCardLEAF.calculatePoints(playArea));
         assertEquals(1, objectiveCardWOLF.calculatePoints(playArea));
+
+
+        map = new Hashtable<>();
+        map.put(LEAF, 3);
+        ObjectiveCard objectiveCardLEAF2 = new ObjectiveCard(new ResourceObjectiveStrategy(map),1);
+        assertNotEquals(objectiveCardLEAF, objectiveCardWOLF);
+        assertEquals(objectiveCardLEAF, objectiveCardLEAF2);
     }
     @Test
     void resourceObjectiveTest_mixedResource() {

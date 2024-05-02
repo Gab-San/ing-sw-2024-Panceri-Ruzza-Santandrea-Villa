@@ -180,6 +180,19 @@ class BaseStartingCardTest {
     }
 
     @Test
+    @DisplayName("Equals: differ by subtype")
+    void equalDifferent3(){
+        ResourceCard resCard = new ResourceCard(
+                LEAF,
+                2,
+                card_corners.get(TR),
+                card_corners.get(BR)
+        );
+
+        assertNotEquals(testCard,resCard);
+    }
+
+    @Test
     @DisplayName("Equals: equal cards")
     void equalEqual(){
         StartingCard differentCard = null;
