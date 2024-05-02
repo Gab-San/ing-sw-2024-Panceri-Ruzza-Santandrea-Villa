@@ -60,6 +60,7 @@ public class GoldCardFactory extends CardFactory {
             if(goldCard.getCardId().equals(cardId)){
                 jsonCards.remove(goldCard);
                 return new GoldCard(
+                        goldCard.getCardId(),
                         goldCard.getBackResource(),
                         goldCard.getPointsOnPlace().getAmount(),
                         JsonFunctions.parsePlacementCost(goldCard.getPlacementCost()),

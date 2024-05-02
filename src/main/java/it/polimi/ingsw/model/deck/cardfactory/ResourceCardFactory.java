@@ -60,6 +60,7 @@ public class ResourceCardFactory extends CardFactory {
             if(resCard.getCardId().equals(cardId)){
                 jsonCards.remove(resCard);
                 return new ResourceCard(
+                        resCard.getCardId(),
                         resCard.getBackResource(),
                         resCard.getPointsOnPlace(),
                         JsonFunctions.parseCorners(resCard.getCornerJS())

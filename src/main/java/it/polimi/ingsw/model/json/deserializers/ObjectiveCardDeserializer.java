@@ -25,23 +25,20 @@ public class ObjectiveCardDeserializer extends StdDeserializer<ObjectiveCard> {
 
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
+        String id = node.get("cardId").asText();
         String patternType = node.get("type").asText();
 
 
         int pointsPerSolve = node.get("points").asInt();
 
-        // Setting Card Images
-        //TODO [GAMBA] {After View} Set Images
-//        String frontImageFile = node.get("frontImageFileName").asText();
-//        String backImageFile = node.get("backImageFileName").asText();
 
         switch (patternType){
             case "PATTERNTYPE":
                 PatternObjectiveStrategy patternStr = JsonFunctions.parsePatternObjectiveStrategy(node);
-                return new ObjectiveCard( patternStr, pointsPerSolve);
+                return new ObjectiveCard(id, patternStr, pointsPerSolve);
             case "RESOURCETYPE":
                 ResourceObjectiveStrategy resStr = JsonFunctions.parseResourcesObjective(node);
-                return new ObjectiveCard( resStr, pointsPerSolve);
+                return new ObjectiveCard(id, resStr, pointsPerSolve);
             default:
                 throw new IOException();
         }

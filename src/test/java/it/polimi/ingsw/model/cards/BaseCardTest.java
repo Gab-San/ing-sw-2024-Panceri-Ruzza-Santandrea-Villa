@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,11 @@ public class BaseCardTest {
     @BeforeEach
     void setup(){
         System.out.println("\nStarting Test...\n");
-        setupCard(new ResourceCard());
+        setupCard(new ResourceCard(
+                "C0",
+                GameResource.LEAF,
+                new Corner(null, CornerDirection.TL)
+        ));
     }
 
     void setupCard(Card card){
@@ -33,6 +39,11 @@ public class BaseCardTest {
 
         assertFalse(testCard.isFaceUp());
         System.out.println(testCard.isFaceUp ? "Face Up" : "Face Down");
+    }
+
+    @Test
+    void getCardID(){
+        assertEquals("C0", testCard.getCardID());
     }
 
     @Test
@@ -74,7 +85,11 @@ public class BaseCardTest {
         assertEquals(testCard, testCardCopy);
 
         // Symmetrical
-        final Card differentCard = new ResourceCard();
+        final Card differentCard = new ResourceCard(
+                "C0",
+                GameResource.LEAF,
+                new Corner(null, CornerDirection.TL)
+        );
 
         differentCard.turnFaceUp();
         testCard.turnFaceUp();
@@ -99,7 +114,11 @@ public class BaseCardTest {
         );
 
         // Transitive
-        final Card anotherCard = new ResourceCard();
+        final Card anotherCard = new ResourceCard(
+                "C0",
+                GameResource.LEAF,
+                new Corner(null, CornerDirection.TL)
+        );
         anotherCard.turnFaceDown();
 
         if( testCard.equals(differentCard) && differentCard.equals(anotherCard) ){
