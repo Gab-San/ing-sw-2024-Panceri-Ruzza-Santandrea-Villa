@@ -39,6 +39,12 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         return;
     }
 
+    //TODO In case remove this
+    @Override
+    public void sendCmd(String cmd) {
+        System.out.println("Sending Command: " + cmd);
+    }
+
     public void connect(String nickname) throws IllegalStateException, RemoteException {
         server.connect(nickname, this);
         this.nickname = nickname;
