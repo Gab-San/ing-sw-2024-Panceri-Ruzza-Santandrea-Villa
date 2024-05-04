@@ -90,8 +90,8 @@ public class Board {
     public boolean nextTurn(){
         int playersWhoCanPlay = playerAreas.size();
         for(Player p : playerAreas.keySet()){
-            if(playerAreas.get(p).getFreeCorners().isEmpty())
-                isPlayerDeadlocked.put(p, true);
+            if(playerAreas.get(p).getFreeCorners().isEmpty() && !playerAreas.get(p).getCardMatrix().isEmpty())
+                isPlayerDeadlocked.put(p, true); //deadlocked == no free corners but at least one card placed (starting)
             if(!p.isConnected() || isPlayerDeadlocked.get(p))
                 playersWhoCanPlay--;
         }

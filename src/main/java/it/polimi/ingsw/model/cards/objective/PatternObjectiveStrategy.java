@@ -33,8 +33,9 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
         Set<Point> usedPoints = new HashSet<>();
         int numOfSolves = 0;
 
-        // order is irrelevant, all points with cards will be checked eventually
-        for (Point pos : cardMatrix.keySet()){
+        List<Point> cardPositions = cardMatrix.keySet().stream()
+                .sorted(Point::compare).toList();
+        for (Point pos : cardPositions){
             boolean patternFound = true;
             // only look at cards in points necessary for the pattern (relative to center of this check)
             // terminate early with failure if that point:
