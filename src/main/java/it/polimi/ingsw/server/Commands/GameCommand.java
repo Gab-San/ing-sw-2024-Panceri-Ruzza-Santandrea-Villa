@@ -11,4 +11,7 @@ abstract public class GameCommand{
     }
 
     abstract public void execute();
+    public String getNickname(){
+        return nickname;
+    }
 }

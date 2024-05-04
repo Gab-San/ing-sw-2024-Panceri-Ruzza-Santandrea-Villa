@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
+import it.polimi.ingsw.server.rmi.RMIServer;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -87,7 +88,27 @@ public class CentralServer {
         if(!client.equals(playerClients.get(nickname))) throw new IllegalStateException("Illegal request, Client instance does not match!");
 
         gameRef.disconnect(nickname, client);
+        playerClients.remove(nickname);
+        commandQueue.removeAll(
+            commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
+        );
         //TODO: unsubscribe client from all observers
     }
 
+    public static void main(String[] args) throws RemoteException {
+        RMIServer rmiServer = new RMIServer();
+        System.out.println("RMI Server started and bound successfully");
+        System.out.println("Waiting for messages...");
+    }
+
+    public synchronized void updateMsg(String fullMessage) {
+        for(String nickname : playerClients.keySet()){
+            try{
+                playerClients.get(nickname).update(fullMessage);
+            }catch (RemoteException | ConnectionLostException e){
+                disconnect(nickname, playerClients.get(nickname));
+                System.out.println("Disconnected " + nickname + " for connection loss.");
+            }
+        }
+    }
 }

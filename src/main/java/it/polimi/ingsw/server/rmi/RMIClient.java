@@ -2,19 +2,21 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.ConnectionLostException;
+import it.polimi.ingsw.server.Parser;
 import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.VirtualServer;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 public class RMIClient extends UnicastRemoteObject implements VirtualClient {
-    private String nickname;
-    private final RMIServer server;
+    private String nickname = null;
+    private final RMI_VirtualServer server;
 
     public RMIClient() throws RemoteException, NotBoundException{
         this("localhost");
@@ -22,12 +24,12 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     public RMIClient(String registryIP) throws RemoteException, NotBoundException {
         super();
         Registry registry = LocateRegistry.getRegistry(registryIP, RMIServer.REGISTRY_PORT);
-        server = (RMIServer) registry.lookup(RMIServer.CANONICAL_NAME);
+        server = (RMI_VirtualServer) registry.lookup(RMIServer.CANONICAL_NAME);
     }
 
     @Override
-    public void update() throws RemoteException {
-        System.out.println("Update Received"); // temp function
+    public void update(String msg) throws RemoteException {
+        System.out.println(msg); // temp function
     }
 
     /**
@@ -41,20 +43,96 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     //TODO In case remove this
     @Override
-    public void sendCmd(String cmd) {
-        System.out.println("Sending Command: " + cmd);
+    public void sendMsg(String msg) throws RemoteException {
+        //System.out.println("Sending Message: " + msg);
+        validateConnection();
+        server.sendMsg(nickname, this, msg);
     }
 
+    private void validateConnection() throws IllegalStateException, RemoteException{
+        if(nickname == null){
+            throw new IllegalStateException("Please connect to server before sending commands other than 'connect'.");
+        }
+        else server.ping(); // throws RemoteException on connection lost.
+    }
+
+    @Override
     public void connect(String nickname) throws IllegalStateException, RemoteException {
         server.connect(nickname, this);
         this.nickname = nickname;
     }
-
-    void setNumOfPlayers(int num) throws IllegalStateException{
-        server.setNumOfPlayers(nickname, this, num);
+    @Override
+    public void disconnect() throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.disconnect(nickname, this);
+        this.nickname = null;
     }
 
-    public void disconnect() throws IllegalStateException, RemoteException {
-        server.disconnect(nickname, this);
+    @Override
+    public void setNumOfPlayers(int num) throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.setNumOfPlayers(nickname, this, num);
+    }
+    @Override
+    public void placeStartCard(boolean placeOnFront) throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.placeStartCard(nickname, this, placeOnFront);
+    }
+    @Override
+    public void chooseColor(PlayerColor color) throws IllegalStateException, RemoteException{
+        validateConnection();
+        server.chooseColor(nickname, this, color);
+    }
+    @Override
+    public void chooseObjective(int choice) throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.chooseObjective(nickname, this, choice);
+    }
+
+    @Override
+    public void placeCard(String cardID, Point placePos, CornerDirection cornerDir) throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.placeCard(nickname, this, cardID, placePos, cornerDir);
+    }
+    @Override
+    public void draw(char deck, int card) throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.draw(nickname, this, deck, card);
+    }
+
+    @Override
+    public void startGame() throws IllegalStateException, RemoteException {
+        validateConnection();
+        server.startGame(nickname, this);
+    }
+
+    public static void main(String[] args) throws RemoteException, NotBoundException {
+        System.err.println("CLIENT TO BE RUN ONLY FOR TEST PURPOSES");
+        if(args.length < 1) {
+            args = new String[1];
+            args[0] = "localhost";
+        }
+
+        RMIClient client = new RMIClient(args[0]);
+        Parser parser = new Parser(client);
+
+        String input = "";
+        Scanner scanner = new Scanner(System.in);
+        while (!input.split(" ")[0].equalsIgnoreCase("quit")){
+            try{
+                System.out.println("Enter command: ");
+                input = scanner.nextLine();
+                parser.parseCommand(input);
+            }catch (RemoteException | ConnectionLostException e){
+                System.err.println("Connection lost. Message: " + e.getMessage());
+            }catch (IndexOutOfBoundsException e){
+                System.err.println("Too few arguments.");
+            }catch (IllegalStateException e){
+                System.err.println("Cannot execute command. Message: " + e.getMessage());
+            }catch (IllegalArgumentException e){
+                System.err.println("Command invalid. Message: " + e.getMessage());
+            }
+        }
+        System.exit(0);
     }
 }

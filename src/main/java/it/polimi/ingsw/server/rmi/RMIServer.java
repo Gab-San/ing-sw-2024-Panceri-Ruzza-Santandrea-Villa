@@ -2,18 +2,18 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
+import it.polimi.ingsw.server.ConnectionLostException;
 import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.VirtualServer;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RMIServer implements VirtualServer, Remote {
+public class RMIServer implements RMI_VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
     public static final int REGISTRY_PORT = 1234;
     CentralServer serverRef;
@@ -25,7 +25,7 @@ public class RMIServer implements VirtualServer, Remote {
     public RMIServer() throws RemoteException {
         serverRef = CentralServer.getSingleton();
 
-        RMIServer stub = (RMIServer) UnicastRemoteObject.exportObject(this, 0);
+        RMI_VirtualServer stub = (RMI_VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
     }
@@ -45,6 +45,7 @@ public class RMIServer implements VirtualServer, Remote {
     @Override
     public void connect(String nickname, VirtualClient client) throws IllegalStateException {
         serverRef.connect(nickname, client);
+        serverRef.updateMsg(nickname + " has connected");
     }
 
     @Override
@@ -57,6 +58,7 @@ public class RMIServer implements VirtualServer, Remote {
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException {
         serverRef.disconnect(nickname, client);
+        serverRef.updateMsg(nickname + " has disconnected");
     }
 
     @Override
@@ -65,7 +67,12 @@ public class RMIServer implements VirtualServer, Remote {
         PlaceStartingCmd command = new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront);
         issueCommand(command);
     }
-
+    @Override
+    public void chooseColor(String nickname, VirtualClient client, PlayerColor color) throws IllegalStateException{
+        validateClient(nickname, client);
+        ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, color);
+        issueCommand(command);
+    }
     @Override
     public void chooseObjective(String nickname, VirtualClient client, int choice) throws IllegalStateException {
         validateClient(nickname, client);
@@ -92,5 +99,17 @@ public class RMIServer implements VirtualServer, Remote {
         validateClient(nickname, client);
         StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname);
         issueCommand(command);
+    }
+
+    @Override
+    public void sendMsg(String nickname, VirtualClient client, String message) {
+        validateClient(nickname, client);
+        String fullMessage = nickname + "> " + message;
+        System.out.println(fullMessage);
+        serverRef.updateMsg(fullMessage);
+    }
+    @Override
+    public void ping(){
+        return;
     }
 }
