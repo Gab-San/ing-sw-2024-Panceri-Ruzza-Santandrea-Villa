@@ -51,8 +51,7 @@ public class SetupState extends GameState{
 
             playersWhoPlacedStartingCard.add(nickname);
             if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
-                board.setGamePhase(GamePhase.CPCP;
-
+                board.setGamePhase(GamePhase.CPCP);
             }
     }
     public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException,DeckException {
@@ -93,7 +92,7 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
+    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING SETUP STATE");
     }
 

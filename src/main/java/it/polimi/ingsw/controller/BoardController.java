@@ -46,9 +46,9 @@ public class BoardController {
             gameState=gameState.chooseSecretObjective(nickname, choice);
         }
     }
-    public void draw(String nickname, int deck, int card) throws IllegalStateException{
+    public void draw(String nickname, String cardToDraw) throws IllegalStateException{
         synchronized (this) {
-            gameState = gameState.draw(nickname, deck, card);
+            gameState = gameState.draw(nickname, cardToDraw);
         }
     }
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException{
