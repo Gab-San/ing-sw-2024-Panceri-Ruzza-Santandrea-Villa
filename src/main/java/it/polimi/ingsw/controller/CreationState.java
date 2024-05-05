@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -11,6 +12,7 @@ public class CreationState extends GameState{
     public CreationState(Board board) {
         super(board);
         gameCreated=false;
+        board.setGamePhase(GamePhase.SNOFP);
     }
 
     @Override

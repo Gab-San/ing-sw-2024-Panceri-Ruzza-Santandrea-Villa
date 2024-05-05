@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -16,6 +17,7 @@ public class JoinState extends GameState {
     public JoinState(Board board){
         super(board);
         readyPlayers = new HashSet<>();
+        board.setGamePhase(GamePhase.JP);
     }
 
     public JoinState(Board board, int num){

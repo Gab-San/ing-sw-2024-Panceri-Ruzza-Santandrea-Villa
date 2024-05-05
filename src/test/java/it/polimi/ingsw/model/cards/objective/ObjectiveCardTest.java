@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Hashtable;
@@ -220,7 +221,7 @@ public class ObjectiveCardTest {
 
         assertEquals(0, objectiveCard.calculatePoints(playArea));
     }
-    @Test
+    @RepeatedTest(500)
     void pattern_multipleSolvesTest(){
         ObjectiveCard objectiveCard = new ObjectiveCard(new PatternObjectiveStrategy(createPatternDIAG_BLUE()), 1);
         PlaceableCard card;

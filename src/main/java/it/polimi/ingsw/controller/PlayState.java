@@ -2,8 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.PlayerHand;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -48,32 +50,73 @@ public class PlayState extends GameState {
 
     @Override
     public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
-            //TODO: this.board.draw(nickname, deck, card);
-            boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
-            if(lastRound && isLastPlayerTurn)
-                return nextState();
-            if(board.checkEndgame() && isLastPlayerTurn)
-                lastRound = true;
+        //TODO: this.board.draw(nickname, deck, card);
+        boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
+        if(lastRound && isLastPlayerTurn)
+            return nextState();
+        if(board.checkEndgame() && isLastPlayerTurn)
+            lastRound = true;
 
-            if(board.nextTurn()) {
-                currentPlayerHasPlacedCard = false;
-                return this;
-            }
-            else return nextState(); // if game can't continue (nextTurn returns false), go to endgame
+        if(board.nextTurn()) {
+            currentPlayerHasPlacedCard = false;
+            return this;
+        }
+        else return nextState(); // if game can't continue (nextTurn returns false), go to endgame
     }
 
     @Override
     public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
-            if (currentPlayerHasPlacedCard)
-                throw new IllegalStateException("Player had already placed a card!");
+        //FIXME: controlled: if it's player turn, if player has already placed
+        if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
+            throw new IllegalStateException("It's not your turn to place the card yet");
+        if (currentPlayerHasPlacedCard)
+            throw new IllegalStateException("Player had already placed a card!");
 
-            Player player = board.getPlayerByNickname(nickname);
-            board.placeCard(player, card, corner);
+        Player player=board.getPlayerByNickname(nickname);
+        board.placeCard(player, card, corner);
 
-            currentPlayerHasPlacedCard = true;
+        currentPlayerHasPlacedCard = true;
     }
 
     private GameState nextState() throws IllegalStateException {
         return new EndgameState(board);
     }
+    public GameState draw2(String nickname, String cardToDraw) throws Exception {
+        //FIXME: controlled: if it's player turn, if player has already placed
+        if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
+            throw new IllegalStateException("It's not your turn to draw yet");
+        if (!currentPlayerHasPlacedCard)
+            throw new IllegalStateException("Player had to place a card yet!");
+        Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
+        //if()
+
+        if(cardToDraw.length()!=2)
+            throw new IllegalArgumentException();
+
+        switch(cardToDraw.charAt(1)) {
+            case ('0'):
+                board.drawTop(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                break;
+            case '1':
+                board.drawFirst(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                break;
+            case ('2'):
+                board.drawSecond(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+
+        boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
+        if(lastRound && board.getCurrentTurn()==board.getPlayerAreas().size())
+            return nextState();
+        if(isLastPlayerTurn && board.checkEndgame())
+            lastRound=true;
+        if(board.nextTurn()) {
+            currentPlayerHasPlacedCard = false;
+            return this;
+        }
+        return nextState();
+    }
+
 }
