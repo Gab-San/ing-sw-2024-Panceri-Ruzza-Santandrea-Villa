@@ -324,5 +324,9 @@ public class Board {
         // fix current turn if it was another player's turn
         if(currentTurn >= player.getTurn())
             currentTurn--;
+
     }
+    public PlayableDeck getResourceDeck(){return this.resourceDeck;}
+    public PlayableDeck getGoldDeck(){return this.goldDeck;}
+
 }

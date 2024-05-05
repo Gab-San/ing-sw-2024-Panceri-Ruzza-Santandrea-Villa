@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.HashSet;
@@ -19,6 +21,9 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
+        board.setGamePhase(GamePhase.CBP);
+        board.setGamePhase(GamePhase.GSCP);
+
 
     }
 
@@ -46,11 +51,11 @@ public class SetupState extends GameState{
 
             playersWhoPlacedStartingCard.add(nickname);
             if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
-                //TODO: ask players to choose their color
+                board.setGamePhase(GamePhase.CPCP;
 
             }
     }
-    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException,DeckException {
         //it's needed to control whether all starting cards have been placed
         if(playersWhoPlacedStartingCard.size()!= board.getPlayerAreas().size())
             throw new IllegalStateException("It's needed to wait for everybody to place their starting card.");
@@ -62,6 +67,8 @@ public class SetupState extends GameState{
 
         playersWhoChoseColor.add(nickname);
         if(playersWhoChoseColor.size()==board.getPlayerAreas().size()) {
+            drawFirstHand();
+            giveToChooseObjectives();
             //TODO: ask players to choose their secret objective
 
         }
@@ -99,5 +106,19 @@ public class SetupState extends GameState{
         board.setCurrentTurn(1);
         return new PlayState(this.board);
     }
+    private void setupDecks(){
 
+    }
+    private void drawFirstHand() throws IllegalStateException, DeckException {
+        for(Player player : board.getPlayerAreas().keySet()) {
+            board.drawTop(Board.RESOURCE_DECK, player.getHand());
+            board.drawTop(Board.RESOURCE_DECK, player.getHand());
+            board.drawTop(Board.GOLD_DECK, player.getHand());
+        }
+    }
+    private void giveToChooseObjectives(){
+        for(Player player : board.getPlayerAreas().keySet()) {
+            //TODO: give player the 2 secrete objectives
+        }
+    }
 }
