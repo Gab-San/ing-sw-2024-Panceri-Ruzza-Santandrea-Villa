@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
-import it.polimi.ingsw.server.ConnectionLostException;
+import it.polimi.ingsw.server.VirtualServer;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -13,7 +13,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RMIServer implements RMI_VirtualServer {
+public class RMIServer implements VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
     public static final int REGISTRY_PORT = 1234;
     CentralServer serverRef;
@@ -25,7 +25,7 @@ public class RMIServer implements RMI_VirtualServer {
     public RMIServer() throws RemoteException {
         serverRef = CentralServer.getSingleton();
 
-        RMI_VirtualServer stub = (RMI_VirtualServer) UnicastRemoteObject.exportObject(this, 0);
+        VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
     }

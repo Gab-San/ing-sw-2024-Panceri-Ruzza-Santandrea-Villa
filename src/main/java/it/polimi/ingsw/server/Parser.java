@@ -11,7 +11,7 @@ import java.util.List;
 // Decide if clients will act as VirtualServer then parser can directly call functions
 public class Parser {
 
-    private final VirtualClient virtualClient;
+    private final CommandPassthrough virtualClient;
     public Parser(){
         //TODO Decide whether to handle exception or remove constructor
         try {
@@ -21,7 +21,7 @@ public class Parser {
         }
     }
 
-    public Parser(VirtualClient virtualClient){
+    public Parser(CommandPassthrough virtualClient){
         this.virtualClient = virtualClient;
     }
 
@@ -31,20 +31,7 @@ public class Parser {
         String keyCommand = "";
         if(commandComponents.length > 0)
             keyCommand = commandComponents[0].toLowerCase();
-
-        //FIXME: [Ale] I don't quite like that this would recognize "G3 TL on G9 place" as a valid command
-//        String keyCommand = Arrays.stream(commandComponents).distinct().filter(
-//                e -> e.equalsIgnoreCase("place") ||
-//                        e.equalsIgnoreCase("draw") ||
-//                        e.equalsIgnoreCase("disconnect") ||
-//                        e.equalsIgnoreCase("choose") ||
-//                        e.equalsIgnoreCase("play") ||
-//                        e.equalsIgnoreCase("restart") ||
-//                        e.equalsIgnoreCase("join") ||
-//                        e.equalsIgnoreCase("connect")
-//                        // TODO eliminate this part
-//                        || e.equalsIgnoreCase("send")
-//        ).findAny().orElse("").toLowerCase();
+        
 
         switch (keyCommand){
             case "place":
