@@ -23,7 +23,7 @@ public abstract class GameState {
     abstract public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException;
     abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, DeckException;
     abstract public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException;
-    abstract public GameState draw (String nickname, int deck, int card) throws IllegalStateException;
+    abstract public GameState draw (String nickname, String cardToDraw) throws IllegalStateException;
     abstract public void placeCard (String nickname, PlayCard card, Corner corner) throws IllegalStateException;
     abstract public GameState startGame (String nickname) throws IllegalStateException;
 }

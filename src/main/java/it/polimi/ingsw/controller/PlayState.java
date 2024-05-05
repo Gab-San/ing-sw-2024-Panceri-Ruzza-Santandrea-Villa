@@ -48,7 +48,7 @@ public class PlayState extends GameState {
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE");
     }
 
-    @Override
+
     public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
         //TODO: this.board.draw(nickname, deck, card);
         boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
@@ -81,7 +81,8 @@ public class PlayState extends GameState {
     private GameState nextState() throws IllegalStateException {
         return new EndgameState(board);
     }
-    public GameState draw2(String nickname, String cardToDraw) throws Exception {
+    @Override
+    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
         //FIXME: controlled: if it's player turn, if player has already placed
         if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
             throw new IllegalStateException("It's not your turn to draw yet");
