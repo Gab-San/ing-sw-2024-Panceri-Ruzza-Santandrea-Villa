@@ -11,7 +11,7 @@ public class DrawCmd extends GameCommand {
         this.card = card;
     }
     @Override
-    public void execute() {
+    public void execute() throws IllegalStateException {
         this.gameController.draw(nickname,deck,card);
     }
 //

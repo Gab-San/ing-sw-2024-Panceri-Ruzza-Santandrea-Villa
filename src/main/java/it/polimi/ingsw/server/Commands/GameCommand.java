@@ -10,7 +10,7 @@ abstract public class GameCommand{
         this.nickname = nickname;
     }
 
-    abstract public void execute();
+    abstract public void execute() throws IllegalStateException;
     public String getNickname(){
         return nickname;
     }

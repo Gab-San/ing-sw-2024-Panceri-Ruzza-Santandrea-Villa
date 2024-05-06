@@ -1,17 +1,21 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.server.rmi.RMIClient;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-//FIXME parser will call a sendCmd function onto the virtual client, passing a string
-// Decide if clients will act as VirtualServer then parser can directly call functions
 public class Parser {
 
     private final CommandPassthrough virtualClient;
+    // TODO: DELETE MODEL VIEW
+    private final ModelView view;
     public Parser(){
         //TODO Decide whether to handle exception or remove constructor
         try {
@@ -19,19 +23,21 @@ public class Parser {
         } catch (NotBoundException | RemoteException e) {
             throw new RuntimeException(e);
         }
+        this.view = new ModelView();
     }
 
-    public Parser(CommandPassthrough virtualClient){
+    public Parser(CommandPassthrough virtualClient, ModelView view){
         this.virtualClient = virtualClient;
+        this.view = view;
     }
 
 
-    public void parseCommand(String command) throws ConnectionLostException, RemoteException, IllegalArgumentException {
+    public void parseCommand(String command) throws RemoteException, IllegalArgumentException {
+
         String[] commandComponents = command.trim().split("\\s+");
         String keyCommand = "";
         if(commandComponents.length > 0)
             keyCommand = commandComponents[0].toLowerCase();
-        
 
         switch (keyCommand){
             case "place":
@@ -49,21 +55,61 @@ public class Parser {
                 parseConnectCmd(commandComponents);
                 break;
             case "disconnect":
-                parseDisconnectCmd(commandComponents);
+                parseDisconnectCmd();
                 break;
             case "restart":
-                parseRestartCmd(commandComponents);
+                parseRestartCmd();
                 break;
             case "send":
                 parseSendCmd(commandComponents);
                 break;
+            case "set":
+            case "players":
+            case "start":
+                parseSetNumPlayers(commandComponents);
+                break;
+            case "test":
+                parseTestCmd(commandComponents);
+                break;
             default:
-                throw new IllegalArgumentException("Message not recognised");
+                throw new IllegalArgumentException("Command not recognised");
         }
 
     }
 
-    private void parseSendCmd(String[] commandComponents) throws ConnectionLostException, RemoteException {
+    private void parseSetNumPlayers(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+        List<String> noCmd = Arrays.stream(commandComponents).skip(1).toList();
+        int numOfPlayers;
+        try {
+            numOfPlayers = searchForNumber(noCmd);
+        } catch (IndexOutOfBoundsException exception){
+            throw new IllegalArgumentException("Command wrongly formatted", exception);
+        }
+
+        virtualClient.setNumOfPlayers(numOfPlayers);
+    }
+
+    private int searchForNumber(List<String> numCmdComp) throws IndexOutOfBoundsException{
+        for(String cmp : numCmdComp){
+            if(Pattern.compile("[2-4]").matcher(cmp).matches()){
+                return Integer.parseInt(cmp);
+            }
+        }
+        throw new IndexOutOfBoundsException("The number of players selected must be between 2 and 4");
+    }
+
+    private void parseTestCmd(String[] commandComponents) throws RemoteException {
+        List<String> textNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
+
+        StringBuilder text = new StringBuilder();
+        for(String cmp : textNoCmd){
+            text.append(cmp).append(" ");
+        }
+
+        virtualClient.testCmd(text.toString().trim());
+    }
+
+    private void parseSendCmd(String[] commandComponents) throws RemoteException {
         List<String> msgNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
 
         StringBuilder msg = new StringBuilder();
@@ -74,11 +120,11 @@ public class Parser {
         virtualClient.sendMsg(msg.toString().trim());
     }
 
-    private void parseRestartCmd(String[] commandComponents) throws RemoteException {
+    private void parseRestartCmd() throws RemoteException {
         virtualClient.startGame();
     }
 
-    private void parseDisconnectCmd(String[] commandComponents) throws RemoteException {
+    private void parseDisconnectCmd() throws RemoteException {
         virtualClient.disconnect();
     }
 
@@ -90,12 +136,33 @@ public class Parser {
         for(String cmp : nickNoCmd){
             nickname.append(cmp).append(" ");
         }
-
+        //TODO: Save nickname in TCP
         virtualClient.connect(nickname.toString().trim());
     }
 
-    private void parseChooseCmd(String[] commandComponents) throws RemoteException {
+    private void parseChooseCmd(String[] commandComponents) throws RemoteException,IllegalArgumentException {
+        List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
+
+        // Parsing and recognising ChooseColor command
+        for(String arg : cmdArgs){
+            if(Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()){
+                virtualClient.chooseColor(arg.toUpperCase().charAt(0));
+                return;
+            }
+        }
+
+        // Parsing and recognising ChooseObjective command
+        try {
+            parseChooseObjCmd(commandComponents);
+        } catch (IllegalArgumentException exc){
+            throw new IllegalArgumentException("Command was wrongly formatted", exc);
+        }
+    }
+
+
+    private void parseChooseObjCmd(String[] commandComponents) throws RemoteException, IllegalArgumentException {
         try{
+            //TODO fix the index out of bound exception
             int choice = Integer.parseInt(commandComponents[1]);
             virtualClient.chooseObjective(choice);
         }catch (IndexOutOfBoundsException e){
@@ -105,13 +172,81 @@ public class Parser {
         }
     }
 
-    private void parseDrawCmd(String[] commandComponents) throws RemoteException {
+    private void parseDrawCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+        List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
+        boolean deckFound = false;
+        char deck = '\0';
+        int position = 0;
+        for(int i = 0; i < cmdArgs.size() && !deckFound; i++){
+            if(Pattern.compile("[RGrg][0-2]").matcher(cmdArgs.get(i)).matches()){
+                String arg = cmdArgs.get(i).trim();
+                deck = arg.charAt(0);
+                position = Integer.parseInt(String.valueOf(arg.charAt(1)));
+                deckFound = true;
+            }
+        }
 
+        if(!deckFound) throw new IllegalArgumentException("Command wrongly formatted");
+
+        virtualClient.draw(deck, position);
     }
 
-    private void parsePlayCmd(String[] commandComponents) throws RemoteException {
+    private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+        List<String> cmdArg = Arrays.stream(commandComponents).skip(1).toList();
 
+        for(String arg : cmdArg){
+            if(Pattern.compile("[Ss]tarting|[Ss][0-5]").matcher(arg).matches()){
+                parsePlaceStartingCard();
+                return;
+            }
+        }
+
+        try {
+            parsePlaceCard(cmdArg);
+        } catch (IllegalArgumentException exception){
+            throw new IllegalArgumentException("Command wrongly formatted", exception);
+        }
     }
 
+    private void parsePlaceCard(List<String> cmdArg) throws IllegalArgumentException, RemoteException{
+        StringBuilder argsStr = new StringBuilder();
+        for(String arg : cmdArg){
+            argsStr.append(arg).append(" ");
+        }
+
+        String cardToPlace;
+        Point placementPos;
+        CornerDirection cornDir;
+
+        String argsString =  argsStr.toString().trim();
+        Matcher cardMatcher = Pattern.compile("[RGrg][0-39]").matcher(argsString);
+        if(cardMatcher.find()){
+            cardToPlace = cardMatcher.group();
+        } else {
+            throw new IllegalArgumentException("Command wrongly formatted: missing placing card");
+        }
+
+        if(cardMatcher.find()){
+            String cardID = cardMatcher.group();
+            placementPos = view.getPosition(cardID);
+        } else{
+            throw new IllegalArgumentException("Command wrongly formatted: missing card on which to place");
+        }
+
+        Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);
+        if(dirMatcher.find()){
+            cornDir = CornerDirection.getDirectionFromString(dirMatcher.group());
+        } else {
+            throw new IllegalArgumentException("Command wrongly formatted: missing direction");
+        }
+
+        virtualClient.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
+    }
+
+    private void parsePlaceStartingCard() throws RemoteException {
+        virtualClient.placeStartCard(view.getPlayerStartingCard().isFaceUp());
+    }
 
 }
+
+

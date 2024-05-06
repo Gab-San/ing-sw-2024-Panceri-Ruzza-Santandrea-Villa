@@ -10,7 +10,7 @@ public class ChooseColorCmd extends GameCommand{
         this.color = color;
     }
     @Override
-    public void execute() {
+    public void execute() throws IllegalStateException {
         //this.gameController.chooseColor(nickname, color);
     }
 }

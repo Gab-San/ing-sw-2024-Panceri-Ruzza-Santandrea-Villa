@@ -88,7 +88,12 @@ public class BoardController {
     }
 
     //TODO: delete this test method when we're done
-    public void testPrint(String text){
+    public synchronized void testPrint(String text) throws IllegalStateException{
         System.out.println("Function call received "+text);
+        if(text.toLowerCase().contains("throw")){
+            System.out.println("THROWING ILLEGAL STATE TEST");
+            System.out.flush();
+            throw new IllegalStateException("Testing IllegalStateException thrown in queue thread.");
+        }
     }
 }

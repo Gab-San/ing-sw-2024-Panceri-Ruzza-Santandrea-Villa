@@ -44,10 +44,16 @@ public class CentralServer {
             try {
                 while(true) {
                     GameCommand command = queue.take();
-                    command.execute();
+                    try {
+                        command.execute();
+                    }catch (IllegalStateException e){
+                        System.err.println("IllegalStateException raised while executing a command.");
+                        System.err.println(e.getMessage());
+                    }
                 }
-            }catch (InterruptedException ex){
+            }catch (InterruptedException e){
                 //TODO: handle exception?
+                System.err.println("Queue thread was interrupted. Closing now.");
             }
         };
     }
@@ -63,7 +69,7 @@ public class CentralServer {
             try{
                 playerClients.get(nickname).ping();
                 throw new IllegalStateException("Player with nickname "+nickname+" already connected!");
-            }catch (RemoteException | ConnectionLostException clientLostConnection){
+            }catch (RemoteException clientLostConnection){
                 oldClient = playerClients.put(nickname, client);
             }
             if(gameRef != null){ // if player is in game
@@ -105,7 +111,7 @@ public class CentralServer {
         for(String nickname : playerClients.keySet()){
             try{
                 playerClients.get(nickname).update(fullMessage);
-            }catch (RemoteException | ConnectionLostException e){
+            }catch (RemoteException e){
                 disconnect(nickname, playerClients.get(nickname));
                 System.out.println("Disconnected " + nickname + " for connection loss.");
             }

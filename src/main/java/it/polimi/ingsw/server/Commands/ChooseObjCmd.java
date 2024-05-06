@@ -10,7 +10,7 @@ public class ChooseObjCmd extends GameCommand{
     }
 
     @Override
-    public void execute() {
+    public void execute() throws IllegalStateException {
         this.gameController.chooseSecretObjective(nickname, choice);
     }
 }

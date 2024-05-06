@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.enums.CornerDirection;
 
+//TODO When merging delete other point classes
 public record Point(int row, int col) {
     /**
      * Constructs a Point as a copy of another point

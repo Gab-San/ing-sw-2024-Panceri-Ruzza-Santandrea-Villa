@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.rmi;
 
-import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.CentralServer;
@@ -68,9 +68,9 @@ public class RMIServer implements VirtualServer {
         issueCommand(command);
     }
     @Override
-    public void chooseColor(String nickname, VirtualClient client, PlayerColor color) throws IllegalStateException{
+    public void chooseColor(String nickname, VirtualClient client, char colour) throws IllegalStateException{
         validateClient(nickname, client);
-        ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, color);
+        ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour) );
         issueCommand(command);
     }
     @Override
@@ -81,9 +81,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void placeCard(String nickname, VirtualClient client, String cardID, Point placePos, CornerDirection cornerDir) throws IllegalStateException {
+    public void placeCard(String nickname, VirtualClient client, String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         validateClient(nickname, client);
-        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID, placePos, cornerDir);
+        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID, placePos, cornerDir, placeOnFront);
         issueCommand(command);
     }
 
@@ -107,6 +107,12 @@ public class RMIServer implements VirtualServer {
         String fullMessage = nickname + "> " + message;
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
+    }
+    @Override
+    public void testCmd(String nickname, VirtualClient client, String text){
+        validateClient(nickname, client);
+        TestCmd command = new TestCmd(serverRef.getGameRef(), nickname, text);
+        issueCommand(command);
     }
     @Override
     public void ping(){

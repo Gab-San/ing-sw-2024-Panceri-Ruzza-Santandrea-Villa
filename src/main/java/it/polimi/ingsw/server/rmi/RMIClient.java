@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.rmi;
 
-import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.*;
 
 import java.rmi.NotBoundException;
@@ -27,7 +26,8 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
 
     @Override
     public void update(String msg) throws RemoteException {
-        System.out.println(msg); // temp function
+        System.out.println("\n"+msg); // temp function
+        System.out.print("> "); // temp function
     }
 
     /**
@@ -45,6 +45,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
         //System.out.println("Sending Message: " + msg);
         validateConnection();
         server.sendMsg(nickname, this, msg);
+    }
+    @Override
+    public void testCmd(String text) throws RemoteException{
+        validateConnection();
+        server.testCmd(nickname, this, text);
     }
 
     private void validateConnection() throws IllegalStateException, RemoteException{
@@ -77,7 +82,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
         server.placeStartCard(nickname, this, placeOnFront);
     }
     @Override
-    public void chooseColor(PlayerColor color) throws IllegalStateException, RemoteException{
+    public void chooseColor(char color) throws IllegalStateException, RemoteException{
         validateConnection();
         server.chooseColor(nickname, this, color);
     }
@@ -88,9 +93,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
     }
 
     @Override
-    public void placeCard(String cardID, Point placePos, CornerDirection cornerDir) throws IllegalStateException, RemoteException {
+    public void placeCard(String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.placeCard(nickname, this, cardID, placePos, cornerDir);
+        server.placeCard(nickname, this, cardID, placePos, cornerDir, placeOnFront);
     }
     @Override
     public void draw(char deck, int card) throws IllegalStateException, RemoteException {
@@ -112,16 +117,17 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
         }
 
         RMIClient client = new RMIClient(args[0]);
-        Parser parser = new Parser(client);
+        // TODO correct
+        Parser parser = new Parser(client, new ModelView());
 
         String input = "";
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter command\n> ");
         while (!input.split(" ")[0].equalsIgnoreCase("quit")){
             try{
-                System.out.println("Enter command: ");
                 input = scanner.nextLine();
                 parser.parseCommand(input);
-            }catch (RemoteException | ConnectionLostException e){
+            }catch (RemoteException e){
                 System.err.println("Connection lost. Message: " + e.getMessage());
             }catch (IndexOutOfBoundsException e){
                 System.err.println("Too few arguments.");

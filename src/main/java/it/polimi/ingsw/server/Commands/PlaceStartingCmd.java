@@ -11,7 +11,7 @@ public class PlaceStartingCmd extends GameCommand{
         this.faceUp = faceUp;
     }
     @Override
-    public void execute() {
+    public void execute() throws IllegalStateException {
         this.gameController.placeStartingCard(nickname, faceUp);
     }
 }

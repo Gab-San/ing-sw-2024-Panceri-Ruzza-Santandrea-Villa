@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.model.cards.StartingCard;
 
 public class StartGameCmd extends GameCommand{
 
@@ -10,7 +9,7 @@ public class StartGameCmd extends GameCommand{
     }
 
     @Override
-    public void execute() {
+    public void execute() throws IllegalStateException {
         this.gameController.startGame(nickname);
     }
 }
