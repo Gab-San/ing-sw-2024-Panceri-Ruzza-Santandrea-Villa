@@ -2,9 +2,8 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -26,16 +25,18 @@ public class BoardController {
             gameState=gameState.join(nickname, client);
         }
     }
+
+    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+        synchronized (this){
+            gameState.setNumOfPlayers(nickname, num);
+        }
+    }
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
         synchronized (this) {
             gameState.disconnect(nickname, client);
         }
     }
-    void startGame(String nickname) throws IllegalStateException{
-        synchronized (this) {
-            gameState = gameState.startGame(nickname);
-        }
-    }
+
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException{
         synchronized (this) {
             gameState.placeStartingCard(nickname, placeOnFront);
@@ -51,9 +52,15 @@ public class BoardController {
             gameState = gameState.draw(nickname, cardToDraw);
         }
     }
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException{
+    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException{
         synchronized (this) {
-            gameState.placeCard(nickname, card, corner);
+            gameState.placeCard(nickname, cardPos, cornerDir);
+        }
+    }
+
+    void startGame(String nickname, int numOfPlayers) throws IllegalStateException{
+        synchronized (this) {
+            gameState = gameState.startGame(nickname, numOfPlayers);
         }
     }
 

@@ -1,14 +1,20 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.model.cards.ObjectiveCard;
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class EndgameState extends GameState{
     public EndgameState(Board board) {
         super(board);
+        board.setGamePhase(GamePhase.ESOCP);
+        evaluateSecreteObjectives();
+        board.setGamePhase(GamePhase.STWP);
     }
 
     @Override
@@ -19,12 +25,6 @@ public class EndgameState extends GameState{
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING ENDGAME STATE");
-    }
-
-    @Override
-    public GameState startGame(String nickname) throws IllegalStateException {
-        // TODO: restart game after the end on player request?
-        return null;
     }
 
     @Override
@@ -46,13 +46,31 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
+    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
-    private GameState nextState() throws IllegalStateException {
-        //TODO: implement, network is needed
-        //to send a message to the players to see if they want to connect to a new game or not
-        return null;
+    private void evaluateSecreteObjectives(){
+        for(Player player : board.getPlayerAreas().keySet()){
+            ObjectiveCard objCard = player.getHand().getSecretObjective();
+            objCard.flip();
+            int points = objCard.calculatePoints(board.getPlayerAreas().get(player));
+            board.addScore(player, points);
+        }
+    }
+    @Override
+    public GameState startGame(String gameID, int numOfPlayers) throws IllegalStateException {
+        // TODO: restart game after the end on player request?
+        Board newBoard = new Board(gameID, this.board.getPlayerAreas().keySet().stream().toList());
+
+        if(numOfPlayers>board.getPlayerAreas().size()) {
+            // the setPhase is done in the constructor
+            return new JoinState(newBoard, numOfPlayers);
+        }
+        if(numOfPlayers==board.getPlayerAreas().size()) {
+            // the setPhase is done in the constructor
+            return new SetupState(newBoard);
+        }
+        throw new IllegalArgumentException();
     }
 }

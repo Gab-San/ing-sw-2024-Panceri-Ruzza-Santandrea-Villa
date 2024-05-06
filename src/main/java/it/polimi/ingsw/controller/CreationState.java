@@ -1,8 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
@@ -22,14 +22,12 @@ public class CreationState extends GameState{
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
+        boolean b = board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname));
+        if(b)
+            throw new IllegalArgumentException();
         if(num<2)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE AT LEAST 2, YOU INSERTED " + num + "PLAYERS");
         return this.nextState(num);
-    }
-
-    @Override
-    public GameState startGame(String nickname) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
 
     @Override
@@ -53,10 +51,15 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
+    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
     private GameState nextState(int num) throws IllegalStateException {
             return new JoinState(board, num);
         }
+
+    @Override
+    public GameState startGame (String gameID, int numOfPlayers) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
+    }
     }
