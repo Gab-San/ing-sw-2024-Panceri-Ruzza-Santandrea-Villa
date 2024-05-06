@@ -60,6 +60,7 @@ public class EndgameState extends GameState{
     }
     @Override
     public GameState startGame(String gameID, int numOfPlayers) throws IllegalStateException {
+        //FIXME: it's maybe needed to add a control if the player who calls startGame is in the game
         // TODO: restart game after the end on player request?
         Board newBoard = new Board(gameID, this.board.getPlayerAreas().keySet().stream().toList());
 
