@@ -2,11 +2,13 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerHand;
+import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.deck.PlayableDeck;
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class PlayState extends GameState {
@@ -17,6 +19,7 @@ public class PlayState extends GameState {
         super(board);
         currentPlayerHasPlacedCard = false;
         lastRound = false;
+        board.setGamePhase(GamePhase.PCP);
     }
 
     @Override
@@ -28,11 +31,6 @@ public class PlayState extends GameState {
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE");
 
-    }
-
-    @Override
-    public GameState startGame(String nickname) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
     }
 
     @Override
@@ -48,76 +46,77 @@ public class PlayState extends GameState {
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE");
     }
 
-
-    public GameState draw(String nickname, int deck, int card) throws IllegalStateException {
-        //TODO: this.board.draw(nickname, deck, card);
-        boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
-        if(lastRound && isLastPlayerTurn)
-            return nextState();
-        if(board.checkEndgame() && isLastPlayerTurn)
-            lastRound = true;
-
-        if(board.nextTurn()) {
-            currentPlayerHasPlacedCard = false;
-            return this;
-        }
-        else return nextState(); // if game can't continue (nextTurn returns false), go to endgame
-    }
-
     @Override
-    public void placeCard(String nickname, PlayCard card, Corner corner) throws IllegalStateException {
+    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+        if(!board.getGamePhase().equals("PLACE CARD PHASE"))
+            throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
         if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
             throw new IllegalStateException("It's not your turn to place the card yet");
         if (currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had already placed a card!");
 
+
         Player player=board.getPlayerByNickname(nickname);
+        PlayCard card = (PlayCard) board.getPlayerAreas().get(player).getCardMatrix().get(cardPos);
+        Corner corner = card.getCorner(cornerDir);
         board.placeCard(player, card, corner);
 
         currentPlayerHasPlacedCard = true;
+        board.setGamePhase(GamePhase.DCP);
     }
 
-    private GameState nextState() throws IllegalStateException {
-        return new EndgameState(board);
-    }
     @Override
     public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
+        if(!board.getGamePhase().equals("DRAW CARD PHASE"))
+            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
         if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
             throw new IllegalStateException("It's not your turn to draw yet");
         if (!currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had to place a card yet!");
         Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
-        //if()
+        //FIXME: if(player.getHand().size()==3)?
 
         if(cardToDraw.length()!=2)
             throw new IllegalArgumentException();
 
         switch(cardToDraw.charAt(1)) {
             case ('0'):
-                board.drawTop(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                try {board.drawTop(cardToDraw.charAt(0), player.getHand());}
+                catch (DeckException e) {/*TODO: handling exception */}
                 break;
             case '1':
-                board.drawFirst(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                try {board.drawFirst(cardToDraw.charAt(0), player.getHand());}
+                catch (DeckException e) {/*TODO: handling exception */}
                 break;
             case ('2'):
-                board.drawSecond(cardToDraw.charAt(0), board.getPlayersByTurn().get(board.getCurrentTurn()).getHand());
+                try {board.drawSecond(cardToDraw.charAt(0), player.getHand());}
+                catch (DeckException e) {/*TODO: handling exception */}
                 break;
             default:
                 throw new IllegalArgumentException();
         }
 
         boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
-        if(lastRound && board.getCurrentTurn()==board.getPlayerAreas().size())
+        if(lastRound && isLastPlayerTurn)
             return nextState();
         if(isLastPlayerTurn && board.checkEndgame())
             lastRound=true;
         if(board.nextTurn()) {
             currentPlayerHasPlacedCard = false;
+            board.setGamePhase(GamePhase.PCP);
             return this;
         }
         return nextState();
     }
 
+    private GameState nextState() throws IllegalStateException {
+        return new EndgameState(board);
+    }
+
+    @Override
+    public GameState startGame (String gameID, int numOfPlayers) throws IllegalStateException {
+        throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
+    }
 }
