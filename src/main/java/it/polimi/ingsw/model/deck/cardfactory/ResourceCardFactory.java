@@ -40,7 +40,7 @@ public class ResourceCardFactory extends CardFactory {
     }
 
     @Override
-    public PlayCard addCardToDeck() throws DeckException {
+    public synchronized PlayCard addCardToDeck() throws DeckException {
         if(remainingCards.isEmpty()){
             throw new DeckException("Deck is Empty", ResourceCardFactory.class);
         }
@@ -55,11 +55,11 @@ public class ResourceCardFactory extends CardFactory {
     }
 
     @Override
-    protected PlayCard instantiateCard(String cardId) throws NoSuchElementException {
+    protected synchronized PlayCard instantiateCard(String cardId) throws NoSuchElementException {
         for(ResourceCardJSON resCard : jsonCards){
             if(resCard.getCardId().equals(cardId)){
-                jsonCards.remove(resCard);
                 return new ResourceCard(
+                        resCard.getCardId(),
                         resCard.getBackResource(),
                         resCard.getPointsOnPlace(),
                         JsonFunctions.parseCorners(resCard.getCornerJS())
@@ -83,9 +83,8 @@ public class ResourceCardFactory extends CardFactory {
         }
     }
 
-
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return remainingCards.toString();
     }
 }

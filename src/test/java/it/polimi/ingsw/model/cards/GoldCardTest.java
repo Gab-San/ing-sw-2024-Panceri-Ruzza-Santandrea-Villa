@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayArea;
+import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.ItemCountGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.SimpleGoldCard;
@@ -12,8 +13,7 @@ import java.util.Map;
 
 import static it.polimi.ingsw.model.enums.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.GameResource.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GoldCardTest {
     private static final PlayArea playArea = new PlayArea();
@@ -392,6 +392,266 @@ class GoldCardTest {
             int placementPoints = testCard.calculatePointsOnPlace(playArea);
             assertEquals(6, placementPoints);
         }
-
     }
+
+    @Test
+    @DisplayName("Equals: card with different strat")
+    void equalsTest1(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+
+        GoldCard testCard2 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new SimpleGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        assertNotEquals(testCard1,testCard2);
+    }
+
+    @Test
+    @DisplayName("Equals: card with diff placement cost")
+    void equalsTest2(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+
+        plCost = new Hashtable<>();
+        plCost.put(LEAF, 5);
+        GoldCard testCard2 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        assertNotEquals(testCard1,testCard2);
+    }
+
+    @Test
+    @DisplayName("Equals: card with diff corners")
+    void equalsTest3(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+
+        plCost = new Hashtable<>();
+        plCost.put(LEAF, 5);
+        GoldCard testCard2 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, TR)
+        );
+
+        assertNotEquals(testCard1,testCard2);
+    }
+
+    @Test
+    @DisplayName("Equals: different subtype cards")
+    void equalsTest(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+
+        GoldCard testCard2 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new SimpleGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        ResourceCard resCard = new ResourceCard();
+
+        assertNotEquals(resCard,testCard1);
+        assertNotEquals(resCard,testCard2);
+    }
+
+    @Test
+    @DisplayName("Equals: equal corner cover cards ")
+    void equalsTest4(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard testCardCopy = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new CornerCoverGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new Point(2,2));
+
+        assertEquals(testCard1,testCardCopy);
+        assertEquals(placedCard, testCard1);
+        assertEquals(placedCard,testCardCopy);
+    }
+
+    @Test
+    @DisplayName("Equals: equal simple gold cards ")
+    void equalsTest5(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new SimpleGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard testCardCopy = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new SimpleGoldCard(),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        assertEquals(testCard1,testCardCopy);
+    }
+
+    @Test
+    @DisplayName("Equals: equal item count cards ")
+    void equalsTest6(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new ItemCountGoldCard(SCROLL),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard testCardCopy = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new ItemCountGoldCard(SCROLL),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new Point(2,2));
+
+        assertEquals(testCard1,testCardCopy);
+        assertEquals(placedCard, testCard1);
+        assertEquals(placedCard,testCardCopy);
+    }
+
+
+    @Test
+    @DisplayName("Equals: diff item in item count cards ")
+    void equalsTest7(){
+        Map<GameResource, Integer> plCost = new Hashtable<>();
+        plCost.put(LEAF, 3);
+        plCost.put(MUSHROOM, 1);
+
+        GoldCard testCard1 = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new ItemCountGoldCard(SCROLL),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        GoldCard testCardCopy = new GoldCard(
+                LEAF,
+                2,
+                plCost,
+                new ItemCountGoldCard(LEAF),
+                new Corner(null, TL),
+                new Corner(null, BR),
+                new Corner(null, TR)
+        );
+
+        assertNotEquals(testCard1,testCardCopy);
+    }
+
+
 }

@@ -106,10 +106,23 @@ public class PlayArea {
                 freeCorners.remove(dirCorner);
             }
             else{
-                if(!card.getCorner(dir).isOccupied()) // true if that corner is FILLED
+                if(!card.getCorner(dir).isOccupied()) { // if that corner isn't FILLED
                     freeCorners.add(card.getCorner(dir));
+                }
+                else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
+                    Point pointLocked = cardPos.move(dir);
+                    for(CornerDirection dir2 : CornerDirection.values()){
+                        PlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
+                        if(cardDir != null) {
+                            Corner possibleLockedCorner = cardDir.getCorner(dir2.opposite());
+                            if (!possibleLockedCorner.isOccupied()) // if it's not FILLED
+                                freeCorners.remove(possibleLockedCorner);
+                        }
+                    }
+                }
             }
         }
+
         // add placed card resources to visibleResources
         Map<GameResource, Integer> cardResources = card.getCardResources();
         for (GameResource res : cardResources.keySet()){

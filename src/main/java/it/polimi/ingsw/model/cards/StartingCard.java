@@ -33,16 +33,26 @@ public class StartingCard extends PlaceableCard {
      * @param corners The corners of the card
      */
     public StartingCard(GameResource[] centralRes, Corner... corners) throws InvalidParameterException {
-        super(corners);
+        this(null, centralRes, corners);
+    }
+
+    public StartingCard(String cardID, GameResource[] centralRes, Corner... corners) throws InvalidParameterException {
+        super(cardID, corners);
         this.centralFrontResources = new ArrayList<>();
         centralFrontResources.addAll(Arrays.asList(centralRes));
     }
 
     public StartingCard(List<GameResource> centralRes, List<Corner> corners) throws InvalidParameterException{
-        super(corners);
+        this(null,centralRes,corners);
+    }
+
+    public StartingCard(String cardID, List<GameResource> centralRes, List<Corner> corners) throws InvalidParameterException{
+        super(cardID, corners);
 
         this.centralFrontResources = new ArrayList<>(centralRes);
     }
+
+
     /**
      * Constructs a starting card from another one, adding the placement information.
      * @param placement The placement point of the card (starting cards are always placed at (0,0))

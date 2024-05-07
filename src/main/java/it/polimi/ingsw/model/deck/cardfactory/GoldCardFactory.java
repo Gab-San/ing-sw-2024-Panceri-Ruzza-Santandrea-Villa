@@ -40,7 +40,7 @@ public class GoldCardFactory extends CardFactory {
     }
 
     @Override
-    public PlayCard addCardToDeck() throws DeckException {
+    public synchronized PlayCard addCardToDeck() throws DeckException {
         if(remainingCards.isEmpty()){
             throw new DeckException("Deck is Empty", GoldCardFactory.class);
         }
@@ -55,11 +55,11 @@ public class GoldCardFactory extends CardFactory {
     }
 
     @Override
-    protected PlayCard instantiateCard(String cardId) throws NoSuchElementException {
+    protected synchronized PlayCard instantiateCard(String cardId) throws NoSuchElementException {
         for(GoldCardJSON goldCard : jsonCards){
             if(goldCard.getCardId().equals(cardId)){
-                jsonCards.remove(goldCard);
                 return new GoldCard(
+                        goldCard.getCardId(),
                         goldCard.getBackResource(),
                         goldCard.getPointsOnPlace().getAmount(),
                         JsonFunctions.parsePlacementCost(goldCard.getPlacementCost()),
@@ -84,4 +84,5 @@ public class GoldCardFactory extends CardFactory {
             throw new DeckException("Error reading file JSON", e, GoldCardFactory.class);
         }
     }
+
 }

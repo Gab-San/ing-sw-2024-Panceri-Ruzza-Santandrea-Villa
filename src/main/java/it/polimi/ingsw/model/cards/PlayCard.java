@@ -36,15 +36,20 @@ public abstract class PlayCard extends PlaceableCard{
         pointsOnPlace = 0;
     }
 
+
+    protected PlayCard(String cardID, GameResource backResource, Corner... corners) throws InvalidParameterException{
+        super(cardID, corners);
+        this.backResource = backResource;
+        this.pointsOnPlace = 0;
+    }
+
     /**
      * This constructor creates a card with no points on placement.
      * @param backResource the resource displayed on the back of the card
      * @param corners the corners associated with the card
      */
-    protected PlayCard(GameResource backResource, Corner... corners){
-        super(corners);
-        this.backResource = backResource;
-        this.pointsOnPlace = 0;
+    protected PlayCard(GameResource backResource, Corner... corners) throws InvalidParameterException{
+        this(null, backResource, corners);
     }
 
     /**
@@ -54,14 +59,14 @@ public abstract class PlayCard extends PlaceableCard{
      * @param corners the corners associated with the card
      * @throws InvalidParameterException when a duplicate corner is found
      */
-    protected PlayCard(GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
-        super(corners);
+    protected PlayCard(String cardID, GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
+        super(cardID, corners);
         this.backResource = backResource;
         this.pointsOnPlace = pointsOnPlace;
     }
 
-    protected PlayCard(GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
-        super(corners);
+    protected PlayCard(String cardID, GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
+        super(cardID, corners);
         this.backResource = backResource;
         this.pointsOnPlace = pointsOnPlace;
     }
@@ -156,8 +161,7 @@ public abstract class PlayCard extends PlaceableCard{
         PlayCard cardToComp = (PlayCard) other;
         return super.compareCard(other) &&
                 getCardColour() == cardToComp.getCardColour() &&
-                pointsOnPlace == cardToComp.pointsOnPlace &&
-                getPlacementCost().equals(cardToComp.getPlacementCost());
+                pointsOnPlace == cardToComp.pointsOnPlace;
     }
 
 }

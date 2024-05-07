@@ -29,4 +29,12 @@ public record Point(int row, int col) {
     public Point add(Point p){
         return new Point(row + p.row, col + p.col);
     }
+
+    public int compare(Point other) {
+        if(row > other.row) return 1;
+        if(row == other.row){
+            return Integer.compare(col, other.col);
+        }
+        else return -1;
+    }
 }

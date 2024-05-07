@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.exceptions.PlayerHandException;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -37,7 +38,7 @@ public class Board {
 
     private final Game gameInfo;
 
-    protected Board(String gameID) throws DeckInstantiationException {
+    public Board(String gameID) throws DeckInstantiationException {
         currentTurn = 1;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
@@ -81,28 +82,32 @@ public class Board {
     }
     /**
      * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1. <br>
+     * If a player is disconnected, skips that player's turn. <br>
      * If a player can't place any cards for lack of free corners, skips that player's turn.
-     * @return - true if the game can continue in the next turn
-     *          <br>- false if the game can't continue because all players are deadlocked
+     * @return - true if the game can continue in the next turn <br>
+     *         - false if the game can't continue because all players are deadlocked or disconnected
      */
     public boolean nextTurn(){
-        if(currentTurn >= playerAreas.size())
-            currentTurn = 1;
-        else
-            currentTurn++;
-
-        Player nextPlayer = getPlayersByTurn().get(currentTurn);
-        if(playerAreas.get(nextPlayer).getFreeCorners().isEmpty()){
-            //TODO: notify player of deadlock (? may not be necessary as the map 'isPlayerDeadlocked' already displays it)
-            isPlayerDeadlocked.put(nextPlayer, true);
-            if(isPlayerDeadlocked.containsValue(false)){ // at least one player is not deadlocked
-                return nextTurn(); // skip deadlocked player's turn
-            }
-            else{
-                return false;
-            }
+        int playersWhoCanPlay = playerAreas.size();
+        for(Player p : playerAreas.keySet()){
+            if(playerAreas.get(p).getFreeCorners().isEmpty() && !playerAreas.get(p).getCardMatrix().isEmpty())
+                isPlayerDeadlocked.put(p, true); //deadlocked == no free corners but at least one card placed (starting)
+            if(!p.isConnected() || isPlayerDeadlocked.get(p))
+                playersWhoCanPlay--;
         }
-        else return true;
+        if(playersWhoCanPlay == 0) return false;
+
+        Player nextPlayer;
+        List<Player> playersByTurn = getPlayersByTurn();
+        do {
+            if(currentTurn >= playerAreas.size())
+                currentTurn = 1;
+            else
+                currentTurn++;
+            nextPlayer = playersByTurn.get(currentTurn-1);
+        }while(!nextPlayer.isConnected() || isPlayerDeadlocked.get(nextPlayer));
+
+        return true;
     }
     public GamePhase getGamePhase() {
         return gamePhase;
@@ -130,10 +135,10 @@ public class Board {
                 .toList();
     }
     public Map<Player, PlayArea> getPlayerAreas(){
-        return Collections.unmodifiableMap(playerAreas);
+        return playerAreas;
     }
     public Map<Player, Boolean> getPlayerDeadlocks(){
-        return Collections.unmodifiableMap(isPlayerDeadlocked);
+        return isPlayerDeadlocked;
     }
 
     /**
@@ -151,7 +156,7 @@ public class Board {
         isPlayerDeadlocked.put(player, false);
     }
     public Map<Player, Integer> getScoreboard(){
-        return Collections.unmodifiableMap(scoreboard);
+        return scoreboard;
     }
     public void addScore(Player player, int amount) throws IllegalArgumentException{
         if(!scoreboard.containsKey(player)) throw new IllegalArgumentException("Player not in game!");
@@ -208,13 +213,28 @@ public class Board {
 
     public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         //TODO [Gamba] choose whether to handle the deck exception
+        //FIXME [Ale] we may not want the deck to consume the card when an exception will be thrown by playerHand.setCard()
         switch (deck){
             case STARTING_DECK:
-                playerHand.setCard(startingDeck.getCard());
+                StartingCard startingCard = startingDeck.getCard();
+                try {
+                    playerHand.setCard(startingCard);
+                }catch (PlayerHandException e){
+                    startingDeck.putCard(startingCard);
+                    throw e;
+                }
                 break;
             case OBJECTIVE_DECK:
-                playerHand.setCard(objectiveDeck.getCard());
-                playerHand.setCard(objectiveDeck.getCard());
+                ObjectiveCard objCard1 = objectiveDeck.getCard();
+                ObjectiveCard objCard2 = objectiveDeck.getCard();
+                try {
+                    playerHand.setCard(objCard1);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
+                    playerHand.setCard(objCard2);   // so separating this is not necessary. The second can't throw if the first doesn't throw
+                }catch (PlayerHandException e){
+                    objectiveDeck.putCard(objCard1);
+                    objectiveDeck.putCard(objCard2);
+                    throw e;
+                }
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-dealable deck");
@@ -228,7 +248,10 @@ public class Board {
         return revealedObj;
     }
 
-    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
             case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getTopCard());
@@ -241,12 +264,15 @@ public class Board {
         }
     }
 
-    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
-            case 'r':
+            case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getFirstRevealedCard());
                 break;
-            case 'g':
+            case GOLD_DECK:
                 playerHand.addCard(goldDeck.getFirstRevealedCard());
                 break;
             default:
@@ -254,12 +280,15 @@ public class Board {
         }
     }
 
-    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
-            case 'r':
+            case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getSecondRevealedCard());
                 break;
-            case 'g':
+            case GOLD_DECK:
                 playerHand.addCard(goldDeck.getSecondRevealedCard());
                 break;
             default:

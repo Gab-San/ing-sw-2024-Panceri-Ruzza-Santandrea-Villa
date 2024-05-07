@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import org.junit.jupiter.api.BeforeEach;
+import it.polimi.ingsw.model.cards.StartingCard;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,32 +9,26 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BoardNoDeckTest {
-    Board board;
-    Player[] players;
-
-    @BeforeEach
-    public void setUp(){
-        board = new Board("testGame");
-        players = new Player[4];
-    }
+public class BoardPlayersTest extends BaseBoardTest {
     @ParameterizedTest
     @ValueSource( ints = {1,2,3,4} )
-    public void joinPlayers(int num) throws IllegalStateException{
-        for (int i = 0; i < num; i++) {
-            players[i] = new Player("player"+(i+1), null, i+1);
-            Player p = players[i];
-            assertDoesNotThrow(()->board.addPlayer(p));
-        }
+    public void joinNumsTest(int num){
+        joinPlayers(num);
     }
     @Test
-    public void joinFailureTest(){
+    public void joinFailureTooManyPlayersTest(){
         joinPlayers(4);
         assertThrows(IllegalStateException.class, ()->board.addPlayer(new Player("player5")));
-        assertThrows(IllegalStateException.class, ()->board.addPlayer(new Player("player3")));
-        assertThrows(IllegalStateException.class, ()->board.addPlayer(players[2]));
     }
-
+    @Test
+    public void joinFailureDuplicateNicknameTest(){
+        joinPlayers(3);
+        assertThrows(IllegalStateException.class,
+                ()->board.addPlayer(new Player("player2")),
+                "Shouldn't be able to add duplicate nickname"
+        );
+        assertDoesNotThrow(()->board.addPlayer(new Player("player4")));
+    }
     @Test
     public void getPlayersOrderingTest(){
         joinPlayers(4);
@@ -49,13 +43,5 @@ public class BoardNoDeckTest {
             assertTrue(board.getScoreboard().get(playersByScore.get(i)) < board.getScoreboard().get(playersByScore.get(i+1)));
             assertSame(players[i], playersByTurn.get(i));
         }
-    }
-
-    @Test
-    public void playerDeadlockTest(){
-        //TODO: assert correct identification of deadlocks
-        // assert correct skipping of deadlocked player's turn
-        // assert correct return value for the game continuing and the game ending due to deadlocks
-        //maybe do this on a 2-player game for simplicity
     }
 }

@@ -35,6 +35,10 @@ public class Player {
         }
         else return false;
     }
+    @Override
+    public int hashCode(){
+        return nickname.hashCode();
+    }
 
     public String getNickname(){
         return nickname;

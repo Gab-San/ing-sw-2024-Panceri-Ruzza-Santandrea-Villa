@@ -34,7 +34,11 @@ public class ResourceCard extends PlayCard{
      * @throws InvalidParameterException when duplicate of corner fount
      */
     public ResourceCard(GameResource backResource, Corner... corners) throws InvalidParameterException {
-        super(backResource, corners);
+        this(null, backResource, corners);
+    }
+
+    public ResourceCard(String cardID, GameResource backResource, Corner... corners) throws InvalidParameterException {
+        super(cardID, backResource, corners);
     }
 
     /**
@@ -45,11 +49,19 @@ public class ResourceCard extends PlayCard{
      * @throws InvalidParameterException when duplicate of corner found
      */
     public ResourceCard(GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
-        super(backResource, pointsOnPlace, corners);
+        this( null, backResource, pointsOnPlace, corners);
+    }
+
+    public ResourceCard(String cardID, GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
+        super(cardID, backResource, pointsOnPlace, corners);
     }
 
     public ResourceCard(GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
-        super(backResource, pointsOnPlace, corners);
+        this(null, backResource, pointsOnPlace, corners);
+    }
+
+    public ResourceCard(String cardID, GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
+        super(cardID,backResource, pointsOnPlace, corners);
     }
 
     /**

@@ -25,8 +25,8 @@ public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
     public StartingCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        // ID can be ignored since it's creating already starting cards.
-        // We can just use it as a ref but has no concrete attribute.
+
+        String id = node.get("cardId").asText();
 
         // TODO: [GAMBA] {After View} Set Images
 //        startJS.setFrontImageFileName(node.get("frontImageFileName").asText());
@@ -40,6 +40,6 @@ public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
         // Instantiating Corners
         List<Corner> cornerList = JsonFunctions.parseCorners(node);
 
-        return new StartingCard(centralFrontResources, cornerList);
+        return new StartingCard(id, centralFrontResources, cornerList);
     }
 }
