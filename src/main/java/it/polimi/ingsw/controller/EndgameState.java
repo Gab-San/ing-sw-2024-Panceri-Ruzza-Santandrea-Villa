@@ -46,7 +46,7 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
