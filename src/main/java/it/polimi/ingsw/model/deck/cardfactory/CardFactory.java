@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class CardFactory{
-    protected List<String> remainingCards;
+    protected final List<String> remainingCards;
 
     CardFactory(String idFile){
         Charset chrset = Charset.forName(System.getProperty("file.encoding"));
@@ -41,5 +41,9 @@ public abstract class CardFactory{
             ioException.printStackTrace(System.err);
         }
         return idList;
+    }
+
+    public synchronized void undoDraw(String cardId){
+        remainingCards.add(cardId);
     }
 }
