@@ -1,13 +1,24 @@
 package it.polimi.ingsw.model.enums;
 
 public enum GamePhase {
-    CP("CREATION PHASE"), SNOFP("SET NUMBER OF PLAYERS PHASE"),
+    CP("CREATION PHASE"),
+    SNOFP("SET NUMBER OF PLAYERS PHASE"),
+    CBP("CREATE BOARD PHASE"),
     JP("JOIN PHASE"),
-    SP("SETUP PHASE"), CBP("CREATE BOARD PHASE"), GSCP("GIVE STARTING CARD PHASE"), PSCP("PLACE STARTING CARD PHASE"),
-        CPCP("CHOOSE PLAYER COLOR PHASE"), DFHP("DEAL FIST HAND PHASE"), DSOCP("DEAL SECRET OBJECTIVE CARDS PHASE"),
-        CSOCP("CHOOSE SECRET OBJECTIVE CARD PHASE"), CFPP("CHOOSE THE FIRST PLAYER PHASE"),
-    PP("PLAY PHASE"), PCP("PLACE CARD PHASE"), DCP("DRAW CARD PHASE"),
-    EP("ENDGAME PHASE"), ESOCP("EVALUATE SECRETE OBJECTIVE CARD PHASE"), STWP("SHOW THE WINNER PHASE");
+    SP("SETUP PHASE"),
+    GSCP("GIVE STARTING CARD PHASE"),
+    PSCP("PLACE STARTING CARD PHASE"),
+    CPCP("CHOOSE PLAYER COLOR PHASE"),
+    DFHP("DEAL FIRST HAND PHASE"),
+    DSOCP("DEAL SECRET OBJECTIVE CARDS PHASE"),
+    CSOCP("CHOOSE SECRET OBJECTIVE CARD PHASE"),
+    CFPP("CHOOSE THE FIRST PLAYER PHASE"),
+    PP("PLAY PHASE"),
+    PCP("PLACE CARD PHASE"),
+    DCP("DRAW CARD PHASE"),
+    EP("ENDGAME PHASE"),
+    ESOCP("EVALUATE SECRET OBJECTIVE CARD PHASE"),
+    STWP("SHOW THE WINNER PHASE");
 
     private final String gamePhaseExtended;
 
@@ -23,9 +34,6 @@ public enum GamePhase {
         return (this.gamePhaseExtended.equals(phase));
     }
     public boolean equals(GamePhase phase){
-        return this.gamePhaseExtended.equals(phase.getGamePhaseExtended());
-    }
-    public String getGamePhaseExtended(){
-        return (this.gamePhaseExtended);
+        return this == phase;
     }
 }
