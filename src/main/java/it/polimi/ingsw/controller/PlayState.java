@@ -2,15 +2,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerHand;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.json.deserializers.ResourceCardJSON;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class PlayState extends GameState {
@@ -49,11 +46,11 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         if(board.getGamePhase() != GamePhase.PCP)
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
-        if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
+        if(!board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
             throw new IllegalStateException("It's not your turn to place the card yet");
         if (currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had already placed a card!");
@@ -68,9 +65,14 @@ public class PlayState extends GameState {
         PlayCard cardToPlace = player.getHand().getCardByID(cardID);
         board.placeCard(player, cardToPlace, corner);
 
-
-        currentPlayerHasPlacedCard = true;
-        board.setGamePhase(GamePhase.DCP);
+        if(board.canDraw()){
+            currentPlayerHasPlacedCard = true;
+            board.setGamePhase(GamePhase.DCP);
+            return this;
+        }
+        else{
+            return postDrawChecks();
+        }
     }
 
     @Override
@@ -80,7 +82,7 @@ public class PlayState extends GameState {
         if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
             throw new IllegalStateException("It's not your turn to draw yet");
         if (!currentPlayerHasPlacedCard)
-            throw new IllegalStateException("Player had to place a card yet!");
+            throw new IllegalStateException("Player has not placed a card yet!");
         Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
 
         switch(cardPos) {
@@ -97,9 +99,13 @@ public class PlayState extends GameState {
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Invalid card position for this draw command.");
         }
 
+        return postDrawChecks();
+    }
+
+    private GameState postDrawChecks(){
         boolean isLastPlayerTurn = board.getCurrentTurn()==board.getPlayerAreas().size();
         if(lastRound && isLastPlayerTurn)
             return nextState();

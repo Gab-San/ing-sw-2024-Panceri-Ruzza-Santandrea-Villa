@@ -54,7 +54,7 @@ public class BoardController {
     }
     public void placeCard(String nickname, String cardID,Point cardPos, CornerDirection cornerDir) throws IllegalStateException{
         synchronized (this) {
-            gameState.placeCard(nickname, cardID, cardPos, cornerDir);
+            gameState = gameState.placeCard(nickname, cardID, cardPos, cornerDir);
         }
     }
 
@@ -66,7 +66,7 @@ public class BoardController {
 
     public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient) throws IllegalStateException {
         synchronized (gameState.board){
-            if(gameState.board.containsPlayer(nickname))
+            if(!gameState.board.containsPlayer(nickname))
                 throw new IllegalStateException(nickname + " isn't connected to this game.");
             gameState.board.getGameInfo().removeClient(oldClient);
             gameState.board.getGameInfo().addClient(newClient);

@@ -17,8 +17,6 @@ public class PlayableDeck {
     private static final int FIRST_POSITION = 1;
     private static final int SECOND_POSITION = 2;
 
-//    private boolean emptied;
-
     public PlayableDeck(CardFactory cardFactory) throws DeckInstantiationException {
         cardDeck = new ArrayBlockingQueue<>(6,true);
         this.cardFactory = cardFactory;
@@ -103,6 +101,13 @@ public class PlayableDeck {
             default:
                 throw new IllegalStateException("Trying to position in non-position");
         }
+    }
+
+    public synchronized boolean isTopEmpty(){
+        return cardFactory.isEmpty() && cardDeck.isEmpty();
+    }
+    public synchronized boolean isCompletelyEmpty(){
+        return isTopEmpty() && firstRevealedCard == null && secondRevealedCard == null;
     }
 
 }

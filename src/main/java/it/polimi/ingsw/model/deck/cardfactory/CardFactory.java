@@ -46,4 +46,7 @@ public abstract class CardFactory{
     public synchronized void undoDraw(String cardId){
         remainingCards.add(cardId);
     }
+    public synchronized boolean isEmpty(){
+        return remainingCards.isEmpty();
+    }
 }

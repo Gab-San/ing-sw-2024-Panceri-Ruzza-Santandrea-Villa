@@ -17,9 +17,7 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-//TODO: Create custom Exceptions (like InvalidPlacement / InvalidAction??)
 public class Board {
-    //TODO: add decks
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAYERS = 4;
     private final Map<Player, Integer> scoreboard;
@@ -168,8 +166,15 @@ public class Board {
     }
     public boolean checkEndgame(){
         return scoreboard.values().stream()
-                .anyMatch(score -> score >= ENDGAME_SCORE);
+                .anyMatch(score -> score >= ENDGAME_SCORE)
+                ||
+                (resourceDeck.isTopEmpty() && goldDeck.isTopEmpty())
+                ;
     }
+    public boolean canDraw(){
+        return !(resourceDeck.isCompletelyEmpty() && goldDeck.isCompletelyEmpty());
+    }
+
 
     /**
      * Places the given card on the given corner on player's playArea
@@ -213,7 +218,6 @@ public class Board {
 
     public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         //TODO [Gamba] choose whether to handle the deck exception
-        //FIXME [Ale] we may not want the deck to consume the card when an exception will be thrown by playerHand.setCard()
         switch (deck){
             case STARTING_DECK:
                 StartingCard startingCard = startingDeck.getCard();
