@@ -59,10 +59,12 @@ public class EndgameState extends GameState{
         }
     }
     @Override
-    public GameState startGame(String gameID, int numOfPlayers) throws IllegalStateException {
+    public GameState startGame(String nickname, int numOfPlayers) throws IllegalStateException {
         //FIXME: it's maybe needed to add a control if the player who calls startGame is in the game
-        // TODO: restart game after the end on player request?
-        Board newBoard = new Board(gameID, this.board.getPlayerAreas().keySet().stream().toList());
+        if(board.getPlayerByNickname(nickname)==null)
+            throw new IllegalArgumentException("Player " + nickname + " is not part of the game");
+        //TODO: restart game after the end on player request?
+        Board newBoard = new Board(this.board.getGameInfo().getGameID() , this.board.getPlayerAreas().keySet().stream().toList());
 
         if(numOfPlayers>board.getPlayerAreas().size()) {
             // the setPhase is done in the constructor

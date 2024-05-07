@@ -61,7 +61,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public GameState startGame (String gameID, int numOfPlayers) throws IllegalStateException {
+    public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME DURING JOIN STATE");
     }
 }
