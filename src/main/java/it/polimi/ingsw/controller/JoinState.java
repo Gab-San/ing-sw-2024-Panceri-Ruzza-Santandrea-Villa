@@ -47,7 +47,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
+    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO DRAW STARTING CARDS DURING JOIN STATE");
     }
 

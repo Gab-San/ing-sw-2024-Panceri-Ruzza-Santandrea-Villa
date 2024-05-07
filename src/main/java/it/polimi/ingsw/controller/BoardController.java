@@ -47,14 +47,14 @@ public class BoardController {
             gameState=gameState.chooseSecretObjective(nickname, choice);
         }
     }
-    public void draw(String nickname, String cardToDraw) throws IllegalStateException{
+    public void draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException{
         synchronized (this) {
-            gameState = gameState.draw(nickname, cardToDraw);
+            gameState = gameState.draw(nickname, deckFrom, cardPos);
         }
     }
-    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException{
+    public void placeCard(String nickname, String cardID,Point cardPos, CornerDirection cornerDir) throws IllegalStateException{
         synchronized (this) {
-            gameState.placeCard(nickname, cardPos, cornerDir);
+            gameState.placeCard(nickname, cardID, cardPos, cornerDir);
         }
     }
 

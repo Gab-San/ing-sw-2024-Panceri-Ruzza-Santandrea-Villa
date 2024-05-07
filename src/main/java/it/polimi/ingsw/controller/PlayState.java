@@ -79,7 +79,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
+    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         if(!board.getGamePhase().equals("DRAW CARD PHASE"))
             throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
@@ -90,20 +90,18 @@ public class PlayState extends GameState {
         Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
         //FIXME: if(player.getHand().size()==3)?
 
-        if(cardToDraw.length()!=2)
-            throw new IllegalArgumentException();
 
-        switch(cardToDraw.charAt(1)) {
-            case ('0'):
-                try {board.drawTop(cardToDraw.charAt(0), player.getHand());}
+        switch(cardPos) {
+            case (0):
+                try {board.drawTop(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
-            case '1':
-                try {board.drawFirst(cardToDraw.charAt(0), player.getHand());}
+            case 1:
+                try {board.drawFirst(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
-            case ('2'):
-                try {board.drawSecond(cardToDraw.charAt(0), player.getHand());}
+            case (2):
+                try {board.drawSecond(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
             default:

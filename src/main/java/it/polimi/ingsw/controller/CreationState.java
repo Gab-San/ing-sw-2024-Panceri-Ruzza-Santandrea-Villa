@@ -46,7 +46,7 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
+    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING CREATION STATE");
     }
 

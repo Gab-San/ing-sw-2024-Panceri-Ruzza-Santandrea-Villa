@@ -13,7 +13,7 @@ public class EndgameState extends GameState{
     public EndgameState(Board board) {
         super(board);
         board.setGamePhase(GamePhase.ESOCP);
-        evaluateSecreteObjectives();
+        evaluateSecretObjectives();
         board.setGamePhase(GamePhase.STWP);
     }
 
@@ -41,7 +41,7 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public GameState draw(String nickname, String cardToDraw) throws IllegalStateException {
+    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING ENDGAME STATE");
     }
 
@@ -50,7 +50,7 @@ public class EndgameState extends GameState{
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
-    private void evaluateSecreteObjectives(){
+    private void evaluateSecretObjectives(){
         for(Player player : board.getPlayerAreas().keySet()){
             ObjectiveCard objCard = player.getHand().getSecretObjective();
             objCard.flip();
