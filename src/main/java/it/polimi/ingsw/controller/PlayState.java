@@ -3,12 +3,13 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Point;
-import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlayCard;
+import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
+import it.polimi.ingsw.model.json.deserializers.ResourceCardJSON;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class PlayState extends GameState {
@@ -47,7 +48,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         if(!board.getGamePhase().equals("PLACE CARD PHASE"))
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
@@ -60,7 +61,18 @@ public class PlayState extends GameState {
         Player player=board.getPlayerByNickname(nickname);
         PlayCard card = (PlayCard) board.getPlayerAreas().get(player).getCardMatrix().get(cardPos);
         Corner corner = card.getCorner(cornerDir);
+        /*PlayCard cardToPlace=new ;
+        for(int i=0; i<3; i++){
+            PlaceableCard tmp=player.getHand().getCard(i);
+            if(tmp.getCardID().equals(cardID)){
+                cardToPlace=tmp;
+                break;
+            }
+        }
+        if(cardToPlace==null)
+            throw new IllegalArgumentException();*/
         board.placeCard(player, card, corner);
+
 
         currentPlayerHasPlacedCard = true;
         board.setGamePhase(GamePhase.DCP);

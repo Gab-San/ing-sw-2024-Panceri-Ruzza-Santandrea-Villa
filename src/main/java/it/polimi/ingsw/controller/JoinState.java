@@ -52,7 +52,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public void placeCard(String nickname, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS DURING JOIN STATE");
     }
 
