@@ -61,7 +61,7 @@ public class PlayState extends GameState {
         Player player=board.getPlayerByNickname(nickname);
         PlayCard card = (PlayCard) board.getPlayerAreas().get(player).getCardMatrix().get(cardPos);
         Corner corner = card.getCorner(cornerDir);
-        /*PlayCard cardToPlace=new ;
+        /* PlayCard cardToPlace=null ;
         for(int i=0; i<3; i++){
             PlaceableCard tmp=player.getHand().getCard(i);
             if(tmp.getCardID().equals(cardID)){
@@ -70,8 +70,8 @@ public class PlayState extends GameState {
             }
         }
         if(cardToPlace==null)
-            throw new IllegalArgumentException();*/
-        board.placeCard(player, card, corner);
+            throw new IllegalArgumentException();
+        board.placeCard(player, cardToPlace, corner);*/
 
 
         currentPlayerHasPlacedCard = true;
@@ -92,7 +92,7 @@ public class PlayState extends GameState {
 
 
         switch(cardPos) {
-            case (0):
+            case 0:
                 try {board.drawTop(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
@@ -100,7 +100,7 @@ public class PlayState extends GameState {
                 try {board.drawFirst(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;
-            case (2):
+            case 2:
                 try {board.drawSecond(deckFrom, player.getHand());}
                 catch (DeckException e) {/*TODO: handling exception */}
                 break;

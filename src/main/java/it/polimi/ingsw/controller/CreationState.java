@@ -62,4 +62,4 @@ public class CreationState extends GameState{
     public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
-    }
+}
