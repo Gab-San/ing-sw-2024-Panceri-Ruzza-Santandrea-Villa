@@ -58,10 +58,13 @@ public class PlayState extends GameState {
             throw new IllegalStateException("Player had already placed a card!");
 
 
+
         Player player=board.getPlayerByNickname(nickname);
         PlayCard card = (PlayCard) board.getPlayerAreas().get(player).getCardMatrix().get(cardPos);
         Corner corner = card.getCorner(cornerDir);
-        /* PlayCard cardToPlace=null ;
+        /* if(player.getHand.isHandFull)
+            throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
+        PlayCard cardToPlace=null ;
         for(int i=0; i<3; i++){
             PlaceableCard tmp=player.getHand().getCard(i);
             if(tmp.getCardID().equals(cardID)){
