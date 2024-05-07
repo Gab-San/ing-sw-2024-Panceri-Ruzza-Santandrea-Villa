@@ -77,7 +77,7 @@ public class PlayerHand{
     //FIXME: rename this method to dealObjective or something?
     public void setCard(ObjectiveCard secretObjective) throws PlayerHandException {
         if(this.secretObjective.size() >= MAX_OBJECTIVES)
-            throw new PlayerHandException(playerRef, ObjectiveCard.class);
+            throw new PlayerHandException("Two objective cards were already dealt.", playerRef, ObjectiveCard.class);
 
         if(this.secretObjective.contains(secretObjective))
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
@@ -100,7 +100,7 @@ public class PlayerHand{
         MAX_OBJECTIVES = 1;
     }
 
-    public StartingCard getStartingCard() {
+    public StartingCard getStartingCard() throws PlayerHandException {
         if(startingCard == null) throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.deck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
@@ -32,6 +33,12 @@ public class StartingCardDeck {
         }
         int cardIdx = getRandomCard();
         return cardDeck.remove(cardIdx);
+    }
+    public void putCard(StartingCard card){
+        synchronized (cardDeck){
+            if(!cardDeck.contains(card))
+                cardDeck.add(card);
+        }
     }
 
     private List<StartingCard> importFromJson() throws DeckException {

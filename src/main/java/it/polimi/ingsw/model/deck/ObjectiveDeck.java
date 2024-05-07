@@ -68,6 +68,13 @@ public class ObjectiveDeck {
         }
     }
 
+    public void putCard(ObjectiveCard card){
+        synchronized (cardDeck){
+            if(!cardDeck.contains(card))
+                cardDeck.add(card);
+        }
+    }
+
     /**
      * Getter for the first revealed card. This card must be referred to in order to calculate the objective
      * points.

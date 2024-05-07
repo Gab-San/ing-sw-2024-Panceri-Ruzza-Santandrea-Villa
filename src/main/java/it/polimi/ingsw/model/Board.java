@@ -216,11 +216,25 @@ public class Board {
         //FIXME [Ale] we may not want the deck to consume the card when an exception will be thrown by playerHand.setCard()
         switch (deck){
             case STARTING_DECK:
-                playerHand.setCard(startingDeck.getCard());
+                StartingCard startingCard = startingDeck.getCard();
+                try {
+                    playerHand.setCard(startingCard);
+                }catch (PlayerHandException e){
+                    startingDeck.putCard(startingCard);
+                    throw e;
+                }
                 break;
             case OBJECTIVE_DECK:
-                playerHand.setCard(objectiveDeck.getCard());
-                playerHand.setCard(objectiveDeck.getCard());
+                ObjectiveCard objCard1 = objectiveDeck.getCard();
+                ObjectiveCard objCard2 = objectiveDeck.getCard();
+                try {
+                    playerHand.setCard(objCard1);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
+                    playerHand.setCard(objCard2);   // so separating this is not necessary. The second can't throw if the first doesn't throw
+                }catch (PlayerHandException e){
+                    objectiveDeck.putCard(objCard1);
+                    objectiveDeck.putCard(objCard2);
+                    throw e;
+                }
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-dealable deck");
