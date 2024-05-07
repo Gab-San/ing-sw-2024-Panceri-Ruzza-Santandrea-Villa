@@ -53,9 +53,12 @@ public class PlayerHand{
         else return cards.remove(pos);
     }
     public void addCard(@NotNull PlayCard card) throws PlayerHandException{
-        if(cards.size() >= MAX_CARDS) throw new PlayerHandException("Too many cards in hand!", playerRef, card.getClass());
+        if(isHandFull()) throw new PlayerHandException("Too many cards in hand!", playerRef, card.getClass());
         if(this.containsCard(card)) throw new PlayerHandException("Card is already in hand!", playerRef, card.getClass());
         cards.add(card);
+    }
+    public boolean isHandFull() {
+        return cards.size() >= MAX_CARDS;
     }
     public void removeCard(@NotNull PlayCard card) throws PlayerHandException{
         if(!containsCard(card)) throw new PlayerHandException("Card wasn't in hand!", playerRef, card.getClass());

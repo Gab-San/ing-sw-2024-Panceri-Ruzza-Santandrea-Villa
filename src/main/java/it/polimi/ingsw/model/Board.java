@@ -235,6 +235,9 @@ public class Board {
     }
 
     public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
             case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getTopCard());
@@ -248,11 +251,14 @@ public class Board {
     }
 
     public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
-            case 'r':
+            case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getFirstRevealedCard());
                 break;
-            case 'g':
+            case GOLD_DECK:
                 playerHand.addCard(goldDeck.getFirstRevealedCard());
                 break;
             default:
@@ -261,11 +267,14 @@ public class Board {
     }
 
     public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        if(playerHand.isHandFull())
+            throw new IllegalStateException("Player hand is full. Can't draw");
+
         switch (deck){
-            case 'r':
+            case RESOURCE_DECK:
                 playerHand.addCard(resourceDeck.getSecondRevealedCard());
                 break;
-            case 'g':
+            case GOLD_DECK:
                 playerHand.addCard(goldDeck.getSecondRevealedCard());
                 break;
             default:
