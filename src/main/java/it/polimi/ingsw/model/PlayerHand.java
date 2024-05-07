@@ -48,6 +48,11 @@ public class PlayerHand{
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
         else return cards.get(pos);
     }
+    public PlayCard getCardByID(String cardID) throws IllegalArgumentException{
+        return cards.stream()
+                .filter(card -> cardID.equals(card.getCardID()))
+                .findFirst().orElseThrow(()->new IllegalArgumentException("Player hand does not contain a card with ID " + cardID));
+    }
     public PlayCard popCard(int pos) throws IndexOutOfBoundsException{
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
         else return cards.remove(pos);
