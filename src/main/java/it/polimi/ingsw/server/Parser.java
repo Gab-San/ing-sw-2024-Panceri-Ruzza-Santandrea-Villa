@@ -32,8 +32,7 @@ public class Parser {
     }
 
 
-    public void parseCommand(String command) throws RemoteException, IllegalArgumentException {
-
+    public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
         String[] commandComponents = (String[]) Arrays.stream(command.trim().split("\\s+")).distinct().toArray();
         String keyCommand = "";
         if(commandComponents.length > 0)
@@ -77,7 +76,7 @@ public class Parser {
 
     }
 
-    private void parseSetNumPlayers(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+    private void parseSetNumPlayers(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
         List<String> noCmd = Arrays.stream(commandComponents).skip(1).toList();
         int numOfPlayers;
         try {
@@ -120,15 +119,15 @@ public class Parser {
         virtualClient.sendMsg(msg.toString().trim());
     }
 
-    private void parseRestartCmd() throws RemoteException {
+    private void parseRestartCmd() throws RemoteException, IllegalStateException {
         virtualClient.startGame();
     }
 
-    private void parseDisconnectCmd() throws RemoteException {
+    private void parseDisconnectCmd() throws RemoteException, IllegalStateException {
         virtualClient.disconnect();
     }
 
-    private void parseConnectCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+    private void parseConnectCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
         if(commandComponents.length < 2) throw new IllegalArgumentException("Connect command must provide a nickname.");
         List<String> nickNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
 
@@ -140,7 +139,7 @@ public class Parser {
         virtualClient.connect(nickname.toString().trim());
     }
 
-    private void parseChooseCmd(String[] commandComponents) throws RemoteException,IllegalArgumentException {
+    private void parseChooseCmd(String[] commandComponents) throws RemoteException,IllegalArgumentException, IllegalStateException {
         List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
 
         if(cmdArgs.stream().anyMatch(e -> e.equalsIgnoreCase("color"))) {
@@ -156,7 +155,7 @@ public class Parser {
         }
     }
 
-    private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException {
+    private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         for (String arg : cmdArgs) {
             if (Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()) {
                 virtualClient.chooseColor(arg.toUpperCase().charAt(0));
@@ -167,7 +166,7 @@ public class Parser {
     }
 
 
-    private void parseChooseObjCmd(String[] commandComponents) throws RemoteException, IllegalArgumentException {
+    private void parseChooseObjCmd(String[] commandComponents) throws RemoteException, IllegalArgumentException, IllegalStateException {
         try{
             int choice = Integer.parseInt(commandComponents[1]);
             virtualClient.chooseObjective(choice);
@@ -178,7 +177,7 @@ public class Parser {
         }
     }
 
-    private void parseDrawCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+    private void parseDrawCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
         List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
         boolean deckFound = false;
         char deck = '\0';
@@ -197,7 +196,7 @@ public class Parser {
         virtualClient.draw(deck, position);
     }
 
-    private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
+    private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
         List<String> cmdArg = Arrays.stream(commandComponents).skip(1).toList();
         //FIXME: fix this command
         // It can recognise something like place starting G0 on G3
@@ -214,12 +213,12 @@ public class Parser {
         } catch (IllegalArgumentException exception){
             throw new IllegalArgumentException("Command wrongly formatted: ", exception);
         } catch (NoSuchMethodException methodException){
-            throw new IllegalArgumentException("Command wrongly formatted: missing \"starting\" keyword or cardId");
+            throw new IllegalArgumentException("Command wrongly formatted: missing \"starting\" keyword or cardId", methodException);
         }
     }
 
-    private void parsePlaceCard(List<String> cmdArg) throws NoSuchMethodException, IllegalArgumentException, RemoteException{
-        if( cmdArg.size() < 3 ) throw new NoSuchMethodException();
+    private void parsePlaceCard(List<String> cmdArg) throws NoSuchMethodException, IllegalArgumentException, RemoteException, IllegalStateException{
+        if( cmdArg.size() < 3 ) throw new NoSuchMethodException("Too few command arguments");
         StringBuilder argsStr = new StringBuilder();
         for(String arg : cmdArg){
             argsStr.append(arg).append(" ");
@@ -234,7 +233,7 @@ public class Parser {
         if(cardMatcher.find()){
             cardToPlace = cardMatcher.group();
         } else {
-            throw new IllegalArgumentException("missing placing card");
+            throw new IllegalArgumentException("missing card to place");
         }
 
         if(cardMatcher.find()){
@@ -254,7 +253,7 @@ public class Parser {
         virtualClient.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
     }
 
-    private void parsePlaceStartingCard() throws RemoteException {
+    private void parsePlaceStartingCard() throws RemoteException, IllegalStateException {
         virtualClient.placeStartCard(view.getPlayerStartingCard().isFaceUp());
     }
 

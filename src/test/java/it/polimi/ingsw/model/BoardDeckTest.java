@@ -20,10 +20,12 @@ public class BoardDeckTest extends BaseBoardTest{
             for(Player player  : players){
                 board.deal(Board.STARTING_DECK, player.getHand());
                 board.deal(Board.OBJECTIVE_DECK, player.getHand());
+                assertThrows(PlayerHandException.class, ()->board.deal(Board.OBJECTIVE_DECK, player.getHand()));
+                assertThrows(PlayerHandException.class, ()->board.deal(Board.STARTING_DECK, player.getHand()));
+
+                assertThrows(IllegalStateException.class, ()->board.deal(Board.RESOURCE_DECK, player.getHand()));
+                assertThrows(IllegalStateException.class, ()->board.deal(Board.GOLD_DECK, player.getHand()));
             }
-            // not repeated for all players because board.deal() consumes the card even on Exception thrown
-            assertThrows(PlayerHandException.class, ()->board.deal(Board.OBJECTIVE_DECK, players[0].getHand()));
-            assertThrows(PlayerHandException.class, ()->board.deal(Board.STARTING_DECK, players[0].getHand()));
         }catch (DeckException e){
             fail("DeckException was raised: " + e.getMessage());
         }
@@ -36,7 +38,6 @@ public class BoardDeckTest extends BaseBoardTest{
     @ParameterizedTest
     @ValueSource(chars={Board.RESOURCE_DECK, Board.GOLD_DECK, Board.OBJECTIVE_DECK, Board.STARTING_DECK})
     public void drawTest(char deck) throws InterruptedException{
-        // void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         joinPlayers(4);
         try{
             for(Player player : players){
