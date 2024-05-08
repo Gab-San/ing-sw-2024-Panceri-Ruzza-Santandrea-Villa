@@ -5,12 +5,12 @@ import it.polimi.ingsw.model.cards.GoldCard;
 public class SimpleGoldCard implements GoldCardStrategy {
     /**
      * Returns the score multiplier for this gold card (= 1).
-     * @param pA current player's play area
+     * @param playArea current player's play area
      * @param card the card that is being played
      * @return the score multiplier of this gold card
      */
     @Override
-    public int calculateSolves(PlayArea pA, GoldCard card) {
+    public int calculateSolves(PlayArea playArea, GoldCard card) {
         return 1;
     }
 

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.enums;
 
+/**
+ * Enumeration of all phases of the game (as in particular states the game can be in at a given time)
+ */
 public enum GamePhase {
     CP("CREATION PHASE"),
     SNOFP("SET NUMBER OF PLAYERS PHASE"),

@@ -8,23 +8,44 @@ import static it.polimi.ingsw.model.enums.CornerDirection.TL;
 import static it.polimi.ingsw.model.enums.CornerDirection.TR;
 import static it.polimi.ingsw.model.enums.CornerDirection.BL;
 import static it.polimi.ingsw.model.enums.CornerDirection.BR;
-
-// String pattern convention:
-// * = any card   ;  R,G,B,P = Red, Green, Blue, Purple card
-// corner positions are TL, TR, BR, BL to the center card
-// the positions between corners are the top, bottom, left, right cards
-// e.g. to get the top card it's Point(0,0).move(TL, TR)
-// e.g. to get the left card it's Point(0,0).move(TL, BL)
-// TODO: change PatternObjective from hard-coded enum to JSON import
-
 import java.util.*;
+
+/**
+ * Pattern for objective cards that require it
+ * <br> <br>
+ * String pattern convention:
+ * <ul>
+ *     <li>
+ *          * = any card <br>
+ *          R,G,B,P = Red, Green, Blue, Purple card
+ *     </li>
+ *     <li>
+ *          corner positions are TL, TR, BR, BL to the center card
+ *     </li>
+ *     <li>
+ *          the positions between corners are the top, bottom, left, right cards
+ *     </li>
+ *          e.g. to get the top card it's Point(0,0).move(TL, TR)
+ *     <li>
+ *          e.g. to get the left card it's Point(0,0).move(TL, BL)
+ *     </li>
+ * </ul>
+ */
 
 public class PatternObjective {
     final Map<Point, GameResource> pattern;
+    final String initialString;
 
+    /**
+     * Constructs pattern from string
+     * @param strPattern example format: "G** *G* **G" <br> where the first 3 chars are the top row,
+     *                  <br> the middle 3 chars are the middle row
+     *                  <br> the last 3 chars are the bottom row
+     */
     public PatternObjective(@NotNull String strPattern){
         pattern = new Hashtable<>();
-        //format:  "G** *G* **G"
+        initialString = strPattern;
+        //removes the spaces (they were needed in the string for readability, but translation to map is easier without them
         strPattern = strPattern.replace(" ", "");
 
         for (int i = 0; i < strPattern.length(); i++) {
@@ -40,6 +61,9 @@ public class PatternObjective {
         }
     }
 
+    /**
+     * @return pattern as a Map similar to PlayArea.cardMatrix (points are centered in (0,0))
+     */
     public Map<Point, GameResource> getPattern(){
         return pattern;
     }
@@ -52,7 +76,7 @@ public class PatternObjective {
             default ->  throw new InvalidParameterException();
         };
     }
-    //TODO: Improve translation from pattern string position to Point
+
     private Point patternPosToPoint(int pos) throws InvalidParameterException{
         Point center = new Point(0,0);
         return switch (pos){
@@ -71,6 +95,6 @@ public class PatternObjective {
 
     @Override
     public String toString() {
-        return pattern.toString();
+        return initialString;
     }
 }

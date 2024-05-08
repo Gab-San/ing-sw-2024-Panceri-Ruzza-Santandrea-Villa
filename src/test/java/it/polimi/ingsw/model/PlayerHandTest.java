@@ -80,20 +80,20 @@ public class PlayerHandTest {
         ObjectiveCard obj3 = new ObjectiveCard(new PatternObjectiveStrategy(new PatternObjective("**G *P* G**")), 1);
         assertThrows(PlayerHandException.class, ()->hand.getSecretObjective());
 
-        hand.setCard(obj1);
-        assertThrows(PlayerHandException.class, ()->hand.setCard(obj1));
+        hand.setObjectiveCard(obj1);
+        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj1));
         assertEquals(obj1, obj1bis);
-        assertThrows(PlayerHandException.class, ()->hand.setCard(obj1bis));
+        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj1bis));
 
-        hand.setCard(obj2);
-        assertThrows(PlayerHandException.class, ()->hand.setCard(obj3));
+        hand.setObjectiveCard(obj2);
+        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj3));
         assertEquals(2, hand.getObjectiveChoices().size());
 
         hand.chooseObjective(1);
         assertSame(hand.getSecretObjective(), obj1);
         assertEquals(1, hand.getObjectiveChoices().size());
 
-        assertThrows(PlayerHandException.class, ()->hand.setCard(obj3));
+        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj3));
     }
 
     @Test
@@ -101,10 +101,10 @@ public class PlayerHandTest {
         assertThrows(PlayerHandException.class, ()->hand.getStartingCard());
 
         StartingCard card = new StartingCard();
-        assertDoesNotThrow(()->hand.setCard(card));
+        assertDoesNotThrow(()->hand.setStartingCard(card));
         assertSame(card, hand.getStartingCard());
 
         StartingCard card2 = new StartingCard(new GameResource[]{LEAF, WOLF});
-        assertThrows(PlayerHandException.class, ()->hand.setCard(card2));
+        assertThrows(PlayerHandException.class, ()->hand.setStartingCard(card2));
     }
 }
