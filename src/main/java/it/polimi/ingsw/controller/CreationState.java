@@ -8,10 +8,9 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
 public class CreationState extends GameState{
-    boolean gameCreated;
+
     public CreationState(Board board) {
         super(board);
-        gameCreated=false;
         board.setGamePhase(GamePhase.SNOFP);
     }
 
@@ -25,8 +24,8 @@ public class CreationState extends GameState{
         boolean b = board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname));
         if(b)
             throw new IllegalArgumentException();
-        if(num<2)
-            throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE AT LEAST 2, YOU INSERTED " + num + "PLAYERS");
+        if(num<2 || num>4)
+            throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
         return this.nextState(num);
     }
 
