@@ -51,7 +51,7 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
     private GameState nextState(int num) throws IllegalStateException {

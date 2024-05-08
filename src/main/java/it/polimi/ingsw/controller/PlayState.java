@@ -46,7 +46,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir) throws IllegalStateException {
+    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         if(board.getGamePhase() != GamePhase.PCP)
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         //FIXME: controlled: if it's player turn, if player has already placed
@@ -63,6 +63,8 @@ public class PlayState extends GameState {
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
 
         PlayCard cardToPlace = player.getHand().getCardByID(cardID);
+        if(placeOnFront) cardToPlace.turnFaceUp();
+        else cardToPlace.turnFaceDown();
         board.placeCard(player, cardToPlace, corner);
 
         if(board.canDraw()){

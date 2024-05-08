@@ -52,9 +52,9 @@ public class BoardController {
             gameState = gameState.draw(nickname, deckFrom, cardPos);
         }
     }
-    public void placeCard(String nickname, String cardID,Point cardPos, CornerDirection cornerDir) throws IllegalStateException{
+    public void placeCard(String nickname, String cardID,Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException{
         synchronized (this) {
-            gameState = gameState.placeCard(nickname, cardID, cardPos, cornerDir);
+            gameState = gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
         }
     }
 
