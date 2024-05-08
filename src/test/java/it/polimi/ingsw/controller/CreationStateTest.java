@@ -2,7 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,29 +21,55 @@ public class CreationStateTest {
         firstPlayer=new Player("Creator");
         board=new Board("TestCreationState", firstPlayer);
         creationState=new CreationState(board);
-        nextGS=new SetupState(new Board("ignore"));
+        nextGS=new JoinState(new Board("ignore"));
     }
 
     @Test
-    public void SetNumOfPlayersTest(){
+    public void SetNumOfPlayersTest() {
         assert (board.getGamePhase().equals(GamePhase.SNOFP));
-        String nextClass=nextGS.getClass().toString();
-        GameState nextGameState=null;
-        for(int i=0; i<6;i++) {
-            if(i>4 || i<2) {
+        String nextClass = nextGS.getClass().toString();
+        GameState nextGameState = null;
+        for (int i = 0; i < 6; i++) {
+            if (i > 4 || i < 2) {
                 int finalI = i;
-                assertThrows(IllegalArgumentException.class, ()->creationState.setNumOfPlayers(firstPlayer.getNickname(), finalI));
+                assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers(firstPlayer.getNickname(), finalI));
+            } else {
+                try {
+                    System.out.println(board.getPlayerAreas().containsKey(board.getPlayerByNickname(firstPlayer.getNickname())));
+                    System.err.println("ciclo i=" + i);
+                    nextGameState = creationState.setNumOfPlayers(firstPlayer.getNickname(), i);
+                    assertEquals(nextGameState.getClass().toString(), nextClass, "Test with i=" + i + " wrong next state: " +
+                            "it is expected" + nextClass + ", but it is " + nextGameState.getClass().toString());
+                    assertSame(nextGameState.board, this.board, "Test with i=" + i + " wrong board in nextGameState: " +
+                            "it is expected" + board + ", but it is " + nextGameState.board);
+                } catch (Exception e) {
+                    fail("Some exception was raised: " + e.getMessage());
+                }
             }
-            else {
-                nextGameState=creationState.setNumOfPlayers(firstPlayer.getNickname(), i);
-                assertEquals(nextGameState.getClass().toString(), nextClass, "Test with i=" + i + " wrong next state: " +
-                        "it is expected" + nextClass + ", but it is " + nextGameState.getClass().toString());
-                assertSame(nextGameState.board, this.board, "Test with i=" + i + " wrong board in nextGameState: " +
-                        "it is expected" + board + ", but it is " + nextGameState.board);
-            }
-
         }
-
-
+            assertThrows(IllegalStateException.class, () -> creationState.placeStartingCard(firstPlayer.getNickname(), true));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.BLUE));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.RED));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.GREEN));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.YELLOW));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseSecretObjective(firstPlayer.getNickname(), 0));
+            assertThrows(IllegalStateException.class, () -> creationState.chooseSecretObjective(firstPlayer.getNickname(), 1));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'r', 0));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'r', 1));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'r', 2));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'g', 0));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'g', 1));
+            assertThrows(IllegalStateException.class, () -> creationState.draw(firstPlayer.getNickname(), 'g', 2));
+            //TODO: FIXME: virtual client is null, must be added assertion with VirtualClient != null
+            assertThrows(IllegalStateException.class, () -> creationState.join(firstPlayer.getNickname(), null));
+            assertThrows(IllegalStateException.class, () -> creationState.startGame(firstPlayer.getNickname(), 2));
+            assertThrows(IllegalStateException.class, () -> creationState.startGame(firstPlayer.getNickname(), 3));
+            assertThrows(IllegalStateException.class, () -> creationState.startGame(firstPlayer.getNickname(), 4));
+            assertThrows(IllegalStateException.class, () -> creationState.placeCard(firstPlayer.getNickname(), "r0", new Point(0, 0), CornerDirection.TR, true));
+            assertThrows(IllegalStateException.class, () -> creationState.placeCard(firstPlayer.getNickname(), "r2", new Point(1, 0), CornerDirection.TL, false));
+            assertThrows(IllegalStateException.class, () -> creationState.placeCard(firstPlayer.getNickname(), "g22", new Point(0, 1), CornerDirection.BL, true));
+            assertThrows(IllegalStateException.class, () -> creationState.placeCard(firstPlayer.getNickname(), "g8", new Point(1, 1), CornerDirection.BL, false));
     }
 }
+
+

@@ -51,6 +51,8 @@ public class EndgameState extends GameState{
     }
 
     private void evaluateSecretObjectives(){
+        if(board.getGamePhase()!=GamePhase.ESOCP)
+            throw new IllegalStateException("IMPOSSIBLE EVALUATE SECRET OBJECTIVES IN THIS PHASE");
         for(Player player : board.getPlayerAreas().keySet()){
             ObjectiveCard objCard = player.getHand().getSecretObjective();
             objCard.flip();
@@ -60,6 +62,8 @@ public class EndgameState extends GameState{
     }
     @Override
     public GameState startGame(String nickname, int numOfPlayers) throws IllegalStateException {
+        if(board.getGamePhase()!=GamePhase.STWP)
+            throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         board.getPlayerByNickname(nickname); // throws IllegalStateException if player isn't in game
 
         if(numOfPlayers < board.getPlayerAreas().size()){

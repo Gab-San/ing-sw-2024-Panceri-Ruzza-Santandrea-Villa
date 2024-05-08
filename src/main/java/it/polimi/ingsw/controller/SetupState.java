@@ -44,7 +44,7 @@ public class SetupState extends GameState{
 
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
-        if(!board.getGamePhase().equals("GIVE STARTING CARD PHASE"))
+        if(!(board.getGamePhase()==GamePhase.PSCP))
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD IN THIS PHASE");
         if(playersWhoPlacedStartingCard.contains(nickname))
             throw new IllegalStateException(nickname + " has already placed their starting card.");
@@ -57,7 +57,7 @@ public class SetupState extends GameState{
         }
     }
     public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException,DeckException {
-        if(!board.getGamePhase().equals("CHOOSE YOUR COLOR PHASE"))
+        if(!(board.getGamePhase()==GamePhase.CPCP))
             throw new IllegalStateException("IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE");
         //it's needed to control whether all starting cards have been placed
         if(playersWhoPlacedStartingCard.size()< board.getPlayerAreas().size())
@@ -80,7 +80,7 @@ public class SetupState extends GameState{
 
     @Override
     public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
-        if(!board.getGamePhase().equals("SELECT SECRETE OBJECTIVE CARD PHASE"))
+        if(!(board.getGamePhase()==GamePhase.CSOCP))
             throw new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRETE OBJECTIVE CARD IN THIS PHASE");
         //it's needed to control whether all starting cards have been placed and color chosen
         if(playersWhoPlacedStartingCard.size()!= board.getPlayerAreas().size())

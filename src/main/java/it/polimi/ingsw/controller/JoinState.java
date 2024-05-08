@@ -21,6 +21,9 @@ public class JoinState extends GameState {
     }
     @Override
     public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
+        //should be impossible to be triggered, but in case of future of the addition of other phases, it may be necessary
+        if(board.getGamePhase()!=GamePhase.JP)
+            throw new IllegalStateException("IMPOSSIBLE TO JOIN IN THIS PHASE");
         board.addPlayer(new Player(nickname)); // throws exception if player can't be added
         board.getGameInfo().addClient(client);
         if(this.board.getPlayerAreas().size()>numOfPlayersToStart) {
