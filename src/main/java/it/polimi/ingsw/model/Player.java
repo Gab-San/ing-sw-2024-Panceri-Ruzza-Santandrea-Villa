@@ -46,7 +46,7 @@ public class Player {
     public int getTurn(){
         return turn;
     }
-    void setTurn(int turn) {
+    public void setTurn(int turn) {
         this.turn = turn;
     }
     public boolean isConnected() {

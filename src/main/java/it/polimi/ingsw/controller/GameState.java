@@ -21,7 +21,7 @@ public abstract class GameState {
             board.getGameInfo().removeClient(client);
     }
     abstract public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException;
-    abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, IllegalArgumentException, DeckException;
+    abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, IllegalArgumentException, InterruptedException, DeckException;
     abstract public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException;
     abstract public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException;
     abstract public GameState draw (String nickname, char deckFrom, int cardPos) throws IllegalStateException, IllegalArgumentException;

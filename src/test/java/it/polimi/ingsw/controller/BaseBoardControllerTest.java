@@ -16,6 +16,6 @@ public abstract class BaseBoardControllerTest {
     }
 
     public void disconnectTest(){
-        //TODO: disconnect test for controller (use a mock virtualClient, it's currently not used anyway)
+        //TODO: [Ale] wait for network, implementation may change
     }
 }

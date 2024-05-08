@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -20,28 +22,34 @@ public class BoardController {
         }
     }
 
-    public void join(String nickname, VirtualClient client) throws IllegalStateException{
+    public void join(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
         synchronized (this) {
             gameState=gameState.join(nickname, client);
         }
     }
 
-    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException{
         synchronized (this){
             gameState = gameState.setNumOfPlayers(nickname, num);
         }
     }
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
+    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
         synchronized (this) {
             gameState.disconnect(nickname, client);
         }
     }
 
-    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException{
+    public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException{
         synchronized (this) {
             gameState.placeStartingCard(nickname, placeOnFront);
         }
     }
+    public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, IllegalArgumentException, DeckException, InterruptedException{
+        synchronized (this){
+            gameState.chooseYourColor(nickname, color);
+        }
+    }
+
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException{
         synchronized (this) {
             gameState=gameState.chooseSecretObjective(nickname, choice);

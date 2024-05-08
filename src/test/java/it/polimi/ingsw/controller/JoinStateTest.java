@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -11,20 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JoinStateTest extends BaseBoardControllerTest {
     GameState joinState;
-    private Class<? extends GameState> nextStateClass;
 
     private void setUp(int numOfPlayers){
-        nextStateClass = SetupState.class;
         joinState = new CreationState(board).setNumOfPlayers(firstPlayer.getNickname(), numOfPlayers);
     }
 
     @ParameterizedTest
     @ValueSource(ints={2,3,4})
     public void joinUntilNextStateTest(int numOfPlayers){
-        joinUntilNextState(numOfPlayers);
+        joinUntilSetupState(numOfPlayers);
     }
 
-    protected GameState joinUntilNextState(int numOfPlayers){
+    protected GameState joinUntilSetupState(int numOfPlayers){
         setUp(numOfPlayers);
         assertEquals(JoinState.class, joinState.getClass());
         GameState nextGS=null;
@@ -32,7 +29,7 @@ public class JoinStateTest extends BaseBoardControllerTest {
             nextGS = joinState.join("Player"+j, null);
         }
         assertNotNull(nextGS);
-        assertEquals(nextStateClass, nextGS.getClass());
+        assertEquals(SetupState.class, nextGS.getClass());
         return nextGS;
     }
 

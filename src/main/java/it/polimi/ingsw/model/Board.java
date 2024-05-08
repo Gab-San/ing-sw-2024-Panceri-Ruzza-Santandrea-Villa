@@ -10,12 +10,14 @@ import it.polimi.ingsw.model.deck.StartingCardDeck;
 import it.polimi.ingsw.model.deck.cardfactory.GoldCardFactory;
 import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
 import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 
 import java.security.InvalidParameterException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Board {
     public static final int ENDGAME_SCORE = 20;
@@ -403,6 +405,18 @@ public class Board {
         // fix current turn if it was another player's turn
         if(currentTurn >= player.getTurn())
             currentTurn--;
+    }
 
+    public Set<PlayerColor> getAvailableColors(){
+        Set<PlayerColor> colors = Arrays.stream(PlayerColor.values()).collect(Collectors.toSet());
+        for(Player p : playerAreas.keySet()){
+            if(p.getColor() != null)
+                colors.remove(p.getColor());
+        }
+        return colors;
+    }
+    public PlayerColor getRandomAvailableColor() throws IllegalStateException{
+        Set<PlayerColor> colors = getAvailableColors();
+        return colors.stream().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
     }
 }
