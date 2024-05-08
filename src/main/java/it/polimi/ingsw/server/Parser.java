@@ -19,10 +19,10 @@ public class Parser {
     }
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
-        String[] commandComponents = (String[]) Arrays.stream(command.trim().split("\\s+")).distinct().toArray();
+        List<String> commandComponents = Arrays.stream(command.trim().split("\\s+")).distinct().toList();
         String keyCommand = "";
-        if(commandComponents.length > 0)
-            keyCommand = commandComponents[0].toLowerCase();
+        if(!commandComponents.isEmpty())
+            keyCommand = commandComponents.get(0).toLowerCase();
 
         switch (keyCommand){
             case "place":
@@ -62,8 +62,8 @@ public class Parser {
 
     }
 
-    private void parseSetNumPlayers(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
-        List<String> noCmd = Arrays.stream(commandComponents).skip(1).toList();
+    private void parseSetNumPlayers(List<String> commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
+        List<String> noCmd = commandComponents.stream().skip(1).toList();
         int numOfPlayers;
         try {
             numOfPlayers = searchForNumber(noCmd);
@@ -83,24 +83,22 @@ public class Parser {
         throw new IndexOutOfBoundsException("The number of players selected must be between 2 and 4");
     }
 
-    private void parseTestCmd(String[] commandComponents) throws RemoteException {
-        List<String> textNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
-
+    private void parseTestCmd(List<String> commandComponents) throws RemoteException {
         StringBuilder text = new StringBuilder();
-        for(String cmp : textNoCmd){
-            text.append(cmp).append(" ");
-        }
+
+        commandComponents.stream().skip(1).forEachOrdered(
+                (cmp) -> text.append(cmp).append(" ")
+        );
 
         virtualClient.testCmd(text.toString().trim());
     }
 
-    private void parseSendCmd(String[] commandComponents) throws RemoteException {
-        List<String> msgNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
+    private void parseSendCmd(List<String> commandComponents) throws RemoteException {
 
         StringBuilder msg = new StringBuilder();
-        for(String cmp : msgNoCmd){
-            msg.append(cmp).append(" ");
-        }
+        commandComponents.stream().skip(1).forEachOrdered(
+                (cmp) -> msg.append(cmp).append(" ")
+        );
 
         virtualClient.sendMsg(msg.toString().trim());
     }
@@ -113,9 +111,9 @@ public class Parser {
         virtualClient.disconnect();
     }
 
-    private void parseConnectCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
-        if(commandComponents.length < 2) throw new IllegalArgumentException("Connect command must provide a nickname.");
-        List<String> nickNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
+    private void parseConnectCmd(List<String> commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
+        if(commandComponents.size() < 2) throw new IllegalArgumentException("Connect command must provide a nickname.");
+        List<String> nickNoCmd =  commandComponents.stream().skip(1).toList();
 
         StringBuilder nickname = new StringBuilder();
         for(String cmp : nickNoCmd){
@@ -125,9 +123,8 @@ public class Parser {
         virtualClient.connect(nickname.toString().trim());
     }
 
-
-    private void parseChooseCmd(String[] commandComponents) throws RemoteException,IllegalArgumentException, IllegalStateException {
-        List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
+    private void parseChooseCmd(List<String> commandComponents) throws RemoteException,IllegalArgumentException, IllegalStateException {
+        List<String> cmdArgs = commandComponents.stream().skip(1).toList();
 
         if(cmdArgs.stream().anyMatch(e -> e.equalsIgnoreCase("color"))) {
             parseChooseColorCommand(cmdArgs);
@@ -153,10 +150,10 @@ public class Parser {
     }
 
 
-    private void parseChooseObjCmd(String[] commandComponents) throws RemoteException, IllegalArgumentException, IllegalStateException {
+    private void parseChooseObjCmd(List<String> commandComponents) throws RemoteException, IllegalArgumentException, IllegalStateException {
         try{
             //TODO fix the index out of bound exception
-            int choice = Integer.parseInt(commandComponents[1]);
+            int choice = Integer.parseInt(commandComponents.get(1));
             virtualClient.chooseObjective(choice);
         }catch (IndexOutOfBoundsException e){
             throw new IllegalArgumentException("Choose command must provide a choice number (1 or 2).");
@@ -166,8 +163,8 @@ public class Parser {
     }
 
 
-    private void parseDrawCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
-        List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
+    private void parseDrawCmd(List<String> commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
+        List<String> cmdArgs = commandComponents.stream().skip(1).toList();
         boolean deckFound = false;
         char deck = '\0';
         int position = 0;
@@ -185,8 +182,8 @@ public class Parser {
         virtualClient.draw(deck, position);
     }
 
-    private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
-        List<String> cmdArg = Arrays.stream(commandComponents).skip(1).toList();
+    private void parsePlayCmd(List<String> commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
+        List<String> cmdArg = commandComponents.stream().skip(1).toList();
         //FIXME: fix this command
         // It can recognise something like place starting G0 on G3
         // as a valid command
