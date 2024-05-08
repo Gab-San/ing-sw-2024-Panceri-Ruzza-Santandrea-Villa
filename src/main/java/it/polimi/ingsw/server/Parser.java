@@ -34,7 +34,7 @@ public class Parser {
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException {
 
-        String[] commandComponents = command.trim().split("\\s+");
+        String[] commandComponents = (String[]) Arrays.stream(command.trim().split("\\s+")).distinct().toArray();
         String keyCommand = "";
         if(commandComponents.length > 0)
             keyCommand = commandComponents[0].toLowerCase();
@@ -143,26 +143,32 @@ public class Parser {
     private void parseChooseCmd(String[] commandComponents) throws RemoteException,IllegalArgumentException {
         List<String> cmdArgs = Arrays.stream(commandComponents).skip(1).toList();
 
-        // Parsing and recognising ChooseColor command
-        for(String arg : cmdArgs){
-            if(Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()){
-                virtualClient.chooseColor(arg.toUpperCase().charAt(0));
-                return;
-            }
+        if(cmdArgs.stream().anyMatch(e -> e.equalsIgnoreCase("color"))) {
+            parseChooseColorCommand(cmdArgs);
+            return;
         }
 
         // Parsing and recognising ChooseObjective command
         try {
             parseChooseObjCmd(commandComponents);
         } catch (IllegalArgumentException exc){
-            throw new IllegalArgumentException("Command was wrongly formatted", exc);
+            throw new IllegalArgumentException("Command was wrongly formatted:\n" + exc.getMessage());
         }
+    }
+
+    private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException {
+        for (String arg : cmdArgs) {
+            if (Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()) {
+                virtualClient.chooseColor(arg.toUpperCase().charAt(0));
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Command was wrongly formatted: no color found");
     }
 
 
     private void parseChooseObjCmd(String[] commandComponents) throws RemoteException, IllegalArgumentException {
         try{
-            //TODO fix the index out of bound exception
             int choice = Integer.parseInt(commandComponents[1]);
             virtualClient.chooseObjective(choice);
         }catch (IndexOutOfBoundsException e){
@@ -193,7 +199,9 @@ public class Parser {
 
     private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException {
         List<String> cmdArg = Arrays.stream(commandComponents).skip(1).toList();
-
+        //FIXME: fix this command
+        // It can recognise something like place starting G0 on G3
+        // as a valid command
         for(String arg : cmdArg){
             if(Pattern.compile("[Ss]tarting|[Ss][0-5]").matcher(arg).matches()){
                 parsePlaceStartingCard();
@@ -204,11 +212,14 @@ public class Parser {
         try {
             parsePlaceCard(cmdArg);
         } catch (IllegalArgumentException exception){
-            throw new IllegalArgumentException("Command wrongly formatted", exception);
+            throw new IllegalArgumentException("Command wrongly formatted: ", exception);
+        } catch (NoSuchMethodException methodException){
+            throw new IllegalArgumentException("Command wrongly formatted: missing \"starting\" keyword or cardId");
         }
     }
 
-    private void parsePlaceCard(List<String> cmdArg) throws IllegalArgumentException, RemoteException{
+    private void parsePlaceCard(List<String> cmdArg) throws NoSuchMethodException, IllegalArgumentException, RemoteException{
+        if( cmdArg.size() < 3 ) throw new NoSuchMethodException();
         StringBuilder argsStr = new StringBuilder();
         for(String arg : cmdArg){
             argsStr.append(arg).append(" ");
@@ -223,21 +234,21 @@ public class Parser {
         if(cardMatcher.find()){
             cardToPlace = cardMatcher.group();
         } else {
-            throw new IllegalArgumentException("Command wrongly formatted: missing placing card");
+            throw new IllegalArgumentException("missing placing card");
         }
 
         if(cardMatcher.find()){
             String cardID = cardMatcher.group();
             placementPos = view.getPosition(cardID);
         } else{
-            throw new IllegalArgumentException("Command wrongly formatted: missing card on which to place");
+            throw new IllegalArgumentException("missing card on which to place");
         }
 
         Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);
         if(dirMatcher.find()){
             cornDir = CornerDirection.getDirectionFromString(dirMatcher.group());
         } else {
-            throw new IllegalArgumentException("Command wrongly formatted: missing direction");
+            throw new IllegalArgumentException("missing direction");
         }
 
         virtualClient.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
