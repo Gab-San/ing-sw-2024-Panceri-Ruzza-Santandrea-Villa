@@ -407,6 +407,9 @@ public class Board {
             currentTurn--;
     }
 
+    /**
+     * @return Set of all colors that have not yet been chosen by a player
+     */
     public Set<PlayerColor> getAvailableColors(){
         Set<PlayerColor> colors = Arrays.stream(PlayerColor.values()).collect(Collectors.toSet());
         for(Player p : playerAreas.keySet()){
@@ -415,8 +418,11 @@ public class Board {
         }
         return colors;
     }
+    /**
+     * @return a random color among colors that have not yet been chosen by a player
+     */
     public PlayerColor getRandomAvailableColor() throws IllegalStateException{
         Set<PlayerColor> colors = getAvailableColors();
-        return colors.stream().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
+        return colors.stream().unordered().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
     }
 }
