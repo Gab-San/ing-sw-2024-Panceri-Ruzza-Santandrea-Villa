@@ -181,7 +181,7 @@ public class Board {
         int newScore = scoreboard.get(player) + amount;
         setScore(player, newScore);
     }
-    private void setScore(Player player, int score){
+    protected void setScore(Player player, int score){
         scoreboard.put(player, score);
     }
 

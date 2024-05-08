@@ -21,9 +21,8 @@ public class CreationState extends GameState{
 
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
-        boolean b = board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname));
-        if(b)
-            throw new IllegalArgumentException();
+        if(!board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname)))
+            throw new IllegalArgumentException("PLAYER ISN'T IN GAME");
         if(num<2 || num>4)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
         return this.nextState(num);
