@@ -1,7 +1,5 @@
 package it.polimi.ingsw.tcp;
 
-import it.polimi.ingsw.server.tcp.TCPServer;
-
 import java.io.IOException;
 
 class TCPServerTest {
