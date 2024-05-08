@@ -379,10 +379,10 @@ public class Board {
      * @return the Player instance of the player with given nickname
      * @throws IllegalStateException if there is no player in this game with the given nickname
      */
-    public Player getPlayerByNickname(String nickname) throws IllegalStateException{
+    public Player getPlayerByNickname(String nickname) throws IllegalArgumentException{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getNickname().equals(nickname))
-                .findFirst().orElseThrow(()-> new IllegalStateException("Cannot find a player with given nickname in this game") );
+                .findFirst().orElseThrow(()-> new IllegalArgumentException("Cannot find a player with given nickname in this game") );
     }
 
     /**
