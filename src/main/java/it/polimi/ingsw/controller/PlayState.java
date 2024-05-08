@@ -29,7 +29,6 @@ public class PlayState extends GameState {
     @Override
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE");
-
     }
 
     @Override
@@ -46,17 +45,17 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.PCP)
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
-        //FIXME: controlled: if it's player turn, if player has already placed
-        if(!board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
-            throw new IllegalStateException("It's not your turn to place the card yet");
         if (currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had already placed a card!");
 
+        Player player = board.getPlayerByNickname(nickname); // throws if player isn't in game
 
-        Player player = board.getPlayerByNickname(nickname);
+        if(!board.getPlayersByTurn().get(board.getCurrentTurn()).equals(player))
+            throw new IllegalStateException("It's not your turn to place the card yet");
+
         Corner corner = board.getPlayerAreas().get(player).getCardMatrix().get(cardPos).getCorner(cornerDir);
 
          if(!player.getHand().isHandFull())
@@ -78,14 +77,17 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
+    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.DCP)
             throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE");
-        if(board.getPlayersByTurn().get(board.getCurrentTurn()).getNickname().equals(nickname))
-            throw new IllegalStateException("It's not your turn to draw yet");
+        if(!board.canDraw()) // should never happen as placeCard already checks for this
+            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD: THERE IS NO CARD TO DRAW");
         if (!currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player has not placed a card yet!");
-        Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
+
+        Player player = board.getPlayerByNickname(nickname);
+        if(!board.getPlayersByTurn().get(board.getCurrentTurn()).equals(player))
+            throw new IllegalStateException("It's not your turn to draw yet");
 
         switch(cardPos) {
             case 0:
@@ -118,7 +120,7 @@ public class PlayState extends GameState {
             board.setGamePhase(GamePhase.PCP);
             return this;
         }
-        return nextState();
+        else return nextState();
     }
 
     private GameState nextState() throws IllegalStateException {

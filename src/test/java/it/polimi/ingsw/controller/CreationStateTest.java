@@ -30,6 +30,7 @@ public class CreationStateTest {
     @ValueSource(ints={0,1,2,3,4,5,6})
     public void SetNumOfPlayersTest(int i) {
         assert (board.getGamePhase().equals(GamePhase.SNOFP));
+        Class<? extends GameState> nextClass=nextGS.getClass();
         GameState nextGameState;
         assertEquals(creationState.board, this.board, "the board is changed");
         assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers("definitelyNotRight", i),"Does not throw IllegalArgumentException with nickname not inside the game");

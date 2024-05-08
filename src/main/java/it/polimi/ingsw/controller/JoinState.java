@@ -26,7 +26,7 @@ public class JoinState extends GameState {
             throw new IllegalStateException("IMPOSSIBLE TO JOIN IN THIS PHASE");
         board.addPlayer(new Player(nickname)); // throws exception if player can't be added
         board.getGameInfo().addClient(client);
-        if(this.board.getPlayerAreas().size()>numOfPlayersToStart) {
+        if(this.board.getPlayerAreas().size() < numOfPlayersToStart) {
             return this;
         } else return nextState();
     }
@@ -59,7 +59,7 @@ public class JoinState extends GameState {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS DURING JOIN STATE");
     }
 
-    private GameState nextState() throws IllegalStateException {
+    private GameState nextState() {
         return new SetupState(board);
     }
 

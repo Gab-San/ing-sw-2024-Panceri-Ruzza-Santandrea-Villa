@@ -377,7 +377,7 @@ public class Board {
     /**
      * @param nickname player's nickname
      * @return the Player instance of the player with given nickname
-     * @throws IllegalStateException if there is no player in this game with the given nickname
+     * @throws IllegalArgumentException if there is no player in this game with the given nickname
      */
     public Player getPlayerByNickname(String nickname) throws IllegalArgumentException{
         return playerAreas.keySet().stream()

@@ -15,15 +15,15 @@ public abstract class GameState {
     }
 
     abstract public GameState join (String nickname, VirtualClient client) throws IllegalStateException;
-    abstract public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException;
-    public void disconnect (String nickname, VirtualClient client) throws IllegalStateException{
+    abstract public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException;
+    public void disconnect (String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
             board.removePlayer(nickname); // throws exception if player isn't in game
             board.getGameInfo().removeClient(client);
     }
-    abstract public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException;
-    abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, DeckException;
-    abstract public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException;
-    public abstract GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException;
-    abstract public GameState draw (String nickname, char deckFrom, int cardPos) throws IllegalStateException;
-    abstract public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException;
+    abstract public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException;
+    abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, IllegalArgumentException, DeckException;
+    abstract public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException;
+    abstract public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException;
+    abstract public GameState draw (String nickname, char deckFrom, int cardPos) throws IllegalStateException, IllegalArgumentException;
+    abstract public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException;
 }

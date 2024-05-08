@@ -50,34 +50,33 @@ public class EndgameState extends GameState{
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
-    private void evaluateSecretObjectives(){
+    private void evaluateSecretObjectives() throws IllegalStateException{
         if(board.getGamePhase()!=GamePhase.ESOCP)
             throw new IllegalStateException("IMPOSSIBLE EVALUATE SECRET OBJECTIVES IN THIS PHASE");
         for(Player player : board.getPlayerAreas().keySet()){
             ObjectiveCard objCard = player.getHand().getSecretObjective();
-            objCard.flip();
+            objCard.turnFaceUp(); // reveal secret objective
             int points = objCard.calculatePoints(board.getPlayerAreas().get(player));
             board.addScore(player, points);
         }
     }
     @Override
-    public GameState startGame(String nickname, int numOfPlayers) throws IllegalStateException {
+    public GameState startGame(String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase()!=GamePhase.STWP)
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
-        board.getPlayerByNickname(nickname); // throws IllegalStateException if player isn't in game
-
+        board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
         if(numOfPlayers < board.getPlayerAreas().size()){
             throw new IllegalArgumentException("Can't reduce number of players on game restart.");
         }
 
-        //TODO: restart game after the end on player request?
         Board newBoard = new Board(this.board.getGameInfo().getGameID() , this.board.getPlayerAreas().keySet().stream().toList());
 
-        if(numOfPlayers > board.getPlayerAreas().size()) {
+        if(board.getPlayerAreas().size() < numOfPlayers) {
+            // if not enough players are connected for the new game, go to Join State
             // the setPhase is done in the constructor
             return new JoinState(newBoard, numOfPlayers);
         }
-        else{ // numOfPlayers == board.getPlayerAreas().size()
+        else{ // numOfPlayers == board.getPlayerAreas().size() , skip join state
             // the setPhase is done in the constructor
             return new SetupState(newBoard);
         }

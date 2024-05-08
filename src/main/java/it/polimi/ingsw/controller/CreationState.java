@@ -23,11 +23,10 @@ public class CreationState extends GameState{
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase()!=GamePhase.SNOFP)
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
-        if(!board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname)))
-            throw new IllegalArgumentException("PLAYER ISN'T IN GAME");
+        board.getPlayerByNickname(nickname); // throws on player not in game
         if(num<2 || num>4)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
-        return this.nextState(num);
+        return nextState(num);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class CreationState extends GameState{
     public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
-    private GameState nextState(int num) throws IllegalStateException {
+    private GameState nextState(int num) {
             return new JoinState(board, num);
         }
 
