@@ -2,12 +2,15 @@ package it.polimi.ingsw.model.cards.objective;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.enums.GameResource;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
+/**
+ * Objective strategy for objectives that use a 3x3 pattern of cards (identified by color)
+ */
 public class PatternObjectiveStrategy implements ObjectiveStrategy{
     private final PatternObjective pattern;
-    // implement Pattern as an Enum PatternObjective.PatternName(...)
-    // then .getPattern() to use in calculatePoints (this way all patterns are hard coded)
 
     public PatternObjectiveStrategy(PatternObjective pattern){
         this.pattern = pattern;
@@ -20,14 +23,9 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
 
         return pattern.equals(resObj.pattern);
     }
-    // TODO: test algorithm to check for the Objective pattern
-    /**
-     * @author Ruzza
-     * @param playArea the playArea on which to calculate #occurrences of this pattern
-     * @return num of times this pattern occurs in playArea
-     */
+
     @Override
-    public int calculateSolves(PlayArea playArea) {
+    public int calculateSolves(@NotNull PlayArea playArea) {
         Map<Point, PlaceableCard> cardMatrix = playArea.getCardMatrix();
         Map<Point, GameResource> pattern = this.pattern.getPattern();
         Set<Point> usedPoints = new HashSet<>();

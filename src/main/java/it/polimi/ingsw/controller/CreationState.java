@@ -23,9 +23,8 @@ public class CreationState extends GameState{
     public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase()!=GamePhase.SNOFP)
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
-        boolean b = board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname));
-        if(!b)
-            throw new IllegalArgumentException();
+        if(!board.getPlayerAreas().containsKey(board.getPlayerByNickname(nickname)))
+            throw new IllegalArgumentException("PLAYER ISN'T IN GAME");
         if(num<2 || num>4)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
         return this.nextState(num);

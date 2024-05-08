@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.enums;
 
+/**
+ * Enumeration of game's resources. Valid resources have an associated integer value for array indexing.
+ */
 public enum GameResource {
     MUSHROOM(1), BUTTERFLY(2),LEAF(3),
     WOLF(4), SCROLL(5),POTION(6),QUILL(7),

@@ -13,12 +13,12 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
      *     This number multiplied by the points on placement will result
      *     in the score for placing this gold card.
      * </p>
-     * @param pA current player's play area
+     * @param playArea current player's play area
      * @param card the card that is being placed
      * @return the score multiplier of this gold card
      */
     @Override
-    public int calculateSolves(PlayArea pA, GoldCard card) {
+    public int calculateSolves(PlayArea playArea, GoldCard card) {
         int numCorners = 0;
 
         for (CornerDirection dir : CornerDirection.values()){
@@ -30,9 +30,9 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
             else {
                 try {
                     //TODO This try branch can be reached only if getting the reference to the placed card
-                    coversCorner = pA.getCardMatrix().get(card.getPosition().move(dir)) != null;
+                    coversCorner = playArea.getCardMatrix().get(card.getPosition().move(dir)) != null;
                 }catch (IllegalStateException e){
-                    coversCorner = pA.getCardMatrix().get(card.getCorner(dir).getCardRef().getPosition().move(dir)) != null;
+                    coversCorner = playArea.getCardMatrix().get(card.getCorner(dir).getCardRef().getPosition().move(dir)) != null;
                 }
             }
             numCorners += coversCorner ? 1 : 0;

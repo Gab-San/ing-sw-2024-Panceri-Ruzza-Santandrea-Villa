@@ -7,7 +7,8 @@ import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,30 +24,26 @@ public class CreationStateTest {
         creationState=new CreationState(board);
         nextGS=new JoinState(new Board("ignore"));
     }
-
-    @Test
-    public void SetNumOfPlayersTest() {
+    
+    @ParameterizedTest
+    @ValueSource(ints={0,1,2,3,4,5,6})
+    public void SetNumOfPlayersTest(int i) {
         assert (board.getGamePhase().equals(GamePhase.SNOFP));
-        String nextClass = nextGS.getClass().toString();
-        GameState nextGameState = null;
-        for (int i = 0; i < 6; i++) {
+        Class<? extends GameState> nextClass=nextGS.getClass();
+        GameState nextGameState;
             if (i > 4 || i < 2) {
-                int finalI = i;
-                assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers(firstPlayer.getNickname(), finalI));
+                assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers(firstPlayer.getNickname(), i));
             } else {
                 try {
-                    System.out.println(board.getPlayerAreas().containsKey(board.getPlayerByNickname(firstPlayer.getNickname())));
-                    System.err.println("ciclo i=" + i);
                     nextGameState = creationState.setNumOfPlayers(firstPlayer.getNickname(), i);
-                    assertEquals(nextGameState.getClass().toString(), nextClass, "Test with i=" + i + " wrong next state: " +
-                            "it is expected" + nextClass + ", but it is " + nextGameState.getClass().toString());
+                    assertEquals(nextGameState.getClass(), nextClass, "Test with i=" + i + " wrong next state: " +
+                            "it is expected" + nextClass + ", but it is " + nextGameState.getClass());
                     assertSame(nextGameState.board, this.board, "Test with i=" + i + " wrong board in nextGameState: " +
                             "it is expected" + board + ", but it is " + nextGameState.board);
                 } catch (Exception e) {
                     fail("Some exception was raised: " + e.getMessage());
                 }
             }
-        }
             assertThrows(IllegalStateException.class, () -> creationState.placeStartingCard(firstPlayer.getNickname(), true));
             assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.BLUE));
             assertThrows(IllegalStateException.class, () -> creationState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.RED));

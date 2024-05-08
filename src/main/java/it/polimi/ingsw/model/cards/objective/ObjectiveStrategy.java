@@ -3,7 +3,13 @@ package it.polimi.ingsw.model.cards.objective;
 import it.polimi.ingsw.model.PlayArea;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Common interface for all objectives. Uses strategy pattern.
+ */
 public interface ObjectiveStrategy {
-    //TODO write documentation for the objective strategies
-    public int calculateSolves(@NotNull PlayArea p);
+    /**
+     * @param playArea the playArea on which to calculate #solves of this objective
+     * @return number of times this objective is satisfied on the given playArea
+     */
+    int calculateSolves(@NotNull PlayArea playArea);
 }

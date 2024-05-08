@@ -15,19 +15,29 @@ public class PlayArea {
     private final Hashtable<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
 
+    /**
+     * Constructs PlayArea with empty cardMatrix, no visible resources and no freeCorners
+     */
     public PlayArea(){
         cardMatrix = new Hashtable<>();
         visibleResources = new Hashtable<>();
-        freeCorners = new ArrayList<>(10);
+        freeCorners = new LinkedList<>();
     }
 
     public Map<Point, PlaceableCard> getCardMatrix(){
         return Collections.unmodifiableMap(cardMatrix);
     }
 
+    /**
+     * @return map containing information of the amount of resources that are visible
+     */
     public Map<GameResource, Integer> getVisibleResources() {
         return Collections.unmodifiableMap(visibleResources);
     }
+
+    /**
+     * @return list of corners where a card can be placed
+     */
     public List<Corner> getFreeCorners() {
         return Collections.unmodifiableList(freeCorners);
     }
