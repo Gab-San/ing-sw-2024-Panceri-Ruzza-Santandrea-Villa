@@ -39,11 +39,6 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
         return;
     }
 
-    @Override
-    public void close() {
-        return;
-    }
-
     //TODO In case remove this
     @Override
     public void sendMsg(String msg) throws RemoteException {

@@ -109,13 +109,14 @@ public class RMIServer implements VirtualServer {
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
     }
+
     @Override
-    public void ping(){
+    public void ping() throws RemoteException{
         return;
     }
 
     @Override
-    public void testCmd(String nickname, RMIClient rmiClient, String text) throws RemoteException {
+    public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
 
     }
 }
