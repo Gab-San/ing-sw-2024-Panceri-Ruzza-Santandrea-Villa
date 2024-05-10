@@ -23,4 +23,14 @@ public class TestCmdMessage implements TCPClientMessage{
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.testCmd(nickname, virtualClient,testMsg);
     }
+
+    @Override
+    public String toString() {
+        return "TEST";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

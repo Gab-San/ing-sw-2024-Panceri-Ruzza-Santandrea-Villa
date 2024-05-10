@@ -5,4 +5,13 @@ import it.polimi.ingsw.server.VirtualClient;
 import java.rmi.RemoteException;
 
 public class PuppetClient implements VirtualClient {
+    @Override
+    public void update(String msg) throws RemoteException {
+
+    }
+
+    @Override
+    public void ping() throws RemoteException {
+
+    }
 }

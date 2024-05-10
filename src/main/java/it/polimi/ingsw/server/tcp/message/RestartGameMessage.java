@@ -19,4 +19,14 @@ public class RestartGameMessage implements TCPClientMessage {
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.startGame(nickname, virtualClient);
     }
+
+    @Override
+    public String toString() {
+        return "RESTART GAME";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

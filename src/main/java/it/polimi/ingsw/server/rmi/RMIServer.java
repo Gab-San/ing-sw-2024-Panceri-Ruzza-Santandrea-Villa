@@ -105,7 +105,7 @@ public class RMIServer implements VirtualServer {
     @Override
     public void sendMsg(String nickname, VirtualClient client, String message) {
         validateClient(nickname, client);
-        String fullMessage = nickname + "> " + message;
+        String fullMessage = nickname + ": " + message;
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
     }

@@ -1,8 +1,14 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;;
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.server.rmi.RMIClient;
+import it.polimi.ingsw.server.tcp.TCPClient;
+
+import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    private final CommandPassthrough virtualClient;
+    private CommandPassthrough virtualClient;
     // TODO: DELETE MODEL VIEW
     private final ModelView view;
     public Parser(CommandPassthrough virtualClient, ModelView view){
@@ -56,8 +62,50 @@ public class Parser {
             case "test":
                 parseTestCmd(commandComponents);
                 break;
+            case "reconnect":
+                parseReconnectCmd(commandComponents);
+                break;
             default:
                 throw new IllegalArgumentException("Command not recognised");
+        }
+
+    }
+
+    private void parseReconnectCmd(List<String> commandComponents) throws IllegalArgumentException{
+        List<String> cmdArgs = commandComponents.stream().skip(1).toList();
+
+
+        if(cmdArgs.get(0).equalsIgnoreCase("TCP") || cmdArgs.get(0).equalsIgnoreCase("SOCKET")){
+            if(cmdArgs.size() < 3){
+                throw new IllegalArgumentException("Too few arguments.\n" +
+                        "Format as such: reconnect TCP/RMI hostname port");
+            }
+            String hostAddr = cmdArgs.get(1);
+            int port;
+            try {
+                port = Integer.parseInt(cmdArgs.get(2));
+            } catch (NumberFormatException formatException){
+                throw new IllegalArgumentException(formatException.getMessage());
+            }
+
+            try {
+                virtualClient = new TCPClient(hostAddr, port);
+                return;
+            } catch (UnknownHostException exc){
+                throw new IllegalArgumentException("Wrong host: " + exc.getMessage());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
+        }
+        if(cmdArgs.size() < 2){
+            throw new IllegalArgumentException("Too few arguments.\n" +
+                    "Format as such: reconnect RMI hostname");
+        }
+
+        try {
+            virtualClient = new RMIClient(cmdArgs.get(1));
+        } catch (RemoteException | NotBoundException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
 
     }

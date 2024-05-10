@@ -21,4 +21,14 @@ public class SetNumofPlayerMessage implements TCPClientMessage{
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.setNumOfPlayers(nickname,virtualClient,numOfPlayers);
     }
+
+    @Override
+    public String toString() {
+        return "SET NUM OF PLAYER";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

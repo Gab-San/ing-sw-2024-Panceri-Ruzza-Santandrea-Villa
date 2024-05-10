@@ -10,8 +10,7 @@ public class ConnectMessage implements TCPClientMessage{
     @Serial
     private static final long serialVersionUID = 1L;
     private final String nickname;
-
-    public ConnectMessage(String nickname) {
+    public ConnectMessage(String nickname){
         this.nickname = nickname;
     }
 
@@ -23,5 +22,10 @@ public class ConnectMessage implements TCPClientMessage{
     @Override
     public String toString() {
         return "CONNECT";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
     }
 }

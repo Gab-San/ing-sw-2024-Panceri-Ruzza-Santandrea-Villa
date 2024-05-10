@@ -28,7 +28,7 @@ public class CentralServer {
     }
 
     public synchronized static CentralServer getSingleton() throws IllegalStateException{
-        if(singleton == null) singleton = new CentralServer();
+        if (singleton == null) singleton = new CentralServer();
         return singleton;
     }
 

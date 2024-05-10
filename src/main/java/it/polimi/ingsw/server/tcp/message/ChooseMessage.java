@@ -39,4 +39,14 @@ public class ChooseMessage implements TCPClientMessage{
 
         virtualServer.chooseObjective(nickname, virtualClient, choice);
     }
+
+    @Override
+    public String toString() {
+        return isColor ? "CHOOSE COLOR" : "CHOOSE OBJECTIVE";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

@@ -42,4 +42,8 @@ public class PingMessage implements TCPClientMessage, TCPServerMessage {
         return "PING";
     }
 
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

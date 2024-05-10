@@ -7,10 +7,7 @@ import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
-import it.polimi.ingsw.server.rmi.RMIClient;
-import it.polimi.ingsw.server.tcp.message.PingMessage;
-import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
-
+import it.polimi.ingsw.server.tcp.message.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,7 +23,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     private ObjectOutputStream outputStream;
     private final Queue<TCPClientMessage> commandQueue;
     private final CentralServer serverRef;
-    private final ClientProxy virtualClient;
+    private final ClientProxy proxy;
     public ClientHandler(Socket connectionSocket){
         this.connectionSocket = connectionSocket;
         try {
@@ -37,7 +34,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         }
         commandQueue = new LinkedBlockingQueue<>();
         serverRef = CentralServer.getSingleton();
-        virtualClient = new ClientProxy();
+        proxy = new ClientProxy(this, outputStream);
         initializeCommandExecutor();
     }
 
@@ -59,7 +56,7 @@ public class ClientHandler implements Runnable, VirtualServer {
                         }
                         try {
                             System.out.println("Executing " + command + "...");
-                            command.execute(this, virtualClient);
+                            command.execute(this, proxy);
                         } catch (RemoteException e) {
                             System.err.println(e.getMessage() + "\n" + e.getCause().getMessage());
                             closeSocket();
@@ -105,9 +102,15 @@ public class ClientHandler implements Runnable, VirtualServer {
     }
 
     @Override
-    public void connect(String nickname, VirtualClient client) throws IllegalStateException {
-        serverRef.connect(nickname, client);
-        serverRef.updateMsg(nickname + " has connected");
+    public void connect(String nickname, VirtualClient client){
+        try {
+            serverRef.connect(nickname, client);
+            proxy.setUsername(nickname);
+            serverRef.updateMsg(nickname + " has connected");
+            proxy.updateError(new CheckConnectMessage(nickname, false));
+        } catch (IllegalStateException stateException){
+            proxy.updateError(new CheckConnectMessage(nickname, true, stateException.getMessage()));
+        }
     }
 
 
@@ -118,10 +121,15 @@ public class ClientHandler implements Runnable, VirtualServer {
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException {
+    public void disconnect(String nickname, VirtualClient client) {
         validateClient(nickname,client);
-        serverRef.disconnect(nickname,client);
-        serverRef.updateMsg(nickname + " has disconnected");
+        try {
+            serverRef.disconnect(nickname, client);
+            serverRef.updateMsg(nickname + " has disconnected");
+            proxy.updateError(new CheckDisconnectMessage(nickname, false));
+        } catch (IllegalStateException stateException){
+            proxy.updateError(new CheckDisconnectMessage(nickname,true, stateException.getMessage()));
+        }
     }
 
     @Override
@@ -162,7 +170,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void sendMsg(String nickname, VirtualClient client, String message) {
         validateClient(nickname, client);
-        String fullMessage = nickname + "> " + message;
+        String fullMessage = nickname + ": " + message;
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
     }
@@ -179,12 +187,13 @@ public class ClientHandler implements Runnable, VirtualServer {
         }
     }
 
+
     @Override
     public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
 
     }
 
-    private void closeSocket(){
+    void closeSocket(){
         try {
             // TODO check if checks are needed
             if(inputStream != null){

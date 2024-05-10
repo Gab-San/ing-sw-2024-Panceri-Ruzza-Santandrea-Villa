@@ -25,4 +25,14 @@ public class DrawMessage implements TCPClientMessage{
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.draw(nickname, virtualClient, deck, card);
     }
+
+    @Override
+    public String toString() {
+        return "DRAW CARD";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

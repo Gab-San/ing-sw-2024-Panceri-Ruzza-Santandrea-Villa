@@ -12,26 +12,51 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.*;
+import java.util.concurrent.*;
 
-public class TCPClient extends Thread implements CommandPassthrough, VirtualClient {
+public class TCPClient implements CommandPassthrough, VirtualClient{
 
     private final Socket clientSocket;
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
     private final Queue<TCPServerMessage> updateQueue;
-    private String nickname = "Gamba";
-
+    private final Queue<TCPServerErrorMessage> errorChecks;
+    private String nickname;
     public TCPClient(String hostAddr,int objPort) throws IOException, UnknownHostException, IllegalArgumentException {
         this.clientSocket = new Socket(hostAddr, objPort);
         outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
-        initializeCommandExecutor();
+        errorChecks = new LinkedBlockingQueue<>();
+        startReader();
+        startCommandExecutor();
+        startErrorExecutor();
     }
 
-    private void initializeCommandExecutor(){
+    private void startErrorExecutor() {
+        new Thread(
+                () -> {
+                    while(!clientSocket.isClosed()){
+                        TCPServerErrorMessage errorMessage;
+                        synchronized (errorChecks){
+                            while(errorChecks.isEmpty()){
+                                try{
+                                    errorChecks.wait();
+                                } catch (InterruptedException e){
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                            errorMessage = errorChecks.remove();
+                        }
+                        errorMessage.handle(this);
+                    }
+                }
+        ).start();
+    }
+
+    private void startCommandExecutor(){
         new Thread(
                 () -> {
                     while (!clientSocket.isClosed()){
@@ -59,31 +84,50 @@ public class TCPClient extends Thread implements CommandPassthrough, VirtualClie
         ).start();
     }
 
-    @Override
-    public void run() {
-        System.out.println("Client started!");
-        try{
-            while (!clientSocket.isClosed()){
-                TCPMessage commandFromServer;
-                commandFromServer = (TCPMessage) inputStream.readObject();
-                synchronized (updateQueue) {
-                    updateQueue.offer((TCPServerMessage) commandFromServer);
-                    updateQueue.notifyAll();
-                    System.out.println("Added " + commandFromServer + " to the queue");
+
+    public void startReader() {
+        new Thread(
+                () -> {
+                    System.out.println("Client started!");
+                    try {
+                        while (!clientSocket.isClosed()) {
+                            TCPMessage commandFromServer;
+                            commandFromServer = (TCPMessage) inputStream.readObject();
+                            if (!commandFromServer.isError()) {
+                                synchronized (updateQueue) {
+                                    updateQueue.offer((TCPServerMessage) commandFromServer);
+                                    updateQueue.notifyAll();
+                                    System.out.println("Added " + commandFromServer + " to the queue");
+                                }
+                            } else {
+                                synchronized (errorChecks) {
+                                    errorChecks.offer((TCPServerErrorMessage) commandFromServer);
+                                    errorChecks.notifyAll();
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        closeSocket();
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        } catch (IOException e) {
-            closeSocket();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        ).start();
+    }
+
+    boolean isClosed(){
+        return clientSocket.isClosed();
     }
 
     @Override
-    public void update(String msg) throws RemoteException {
-
+    public void update(String msg){
+        System.out.println(msg);
+        System.out.flush();
     }
-
+    public void updateError(String errorMsg){
+        System.err.println(errorMsg);
+        System.err.flush();
+    }
     @Override
     public void ping() throws RemoteException {
         try{
@@ -94,7 +138,7 @@ public class TCPClient extends Thread implements CommandPassthrough, VirtualClie
         }
     }
 
-    private void closeSocket(){
+    void closeSocket(){
         try{
             if(outputStream != null) {
                 outputStream.close();
@@ -107,6 +151,12 @@ public class TCPClient extends Thread implements CommandPassthrough, VirtualClie
             }
         } catch (IOException e){
             e.printStackTrace(System.err);
+        }
+    }
+
+    public void setNickname(String nickname){
+        if(this.nickname == null) {
+            this.nickname = nickname;
         }
     }
 
@@ -159,6 +209,7 @@ public class TCPClient extends Thread implements CommandPassthrough, VirtualClie
         }
     }
 
+
     @Override
     public void setNumOfPlayers(int num) throws IllegalStateException, RemoteException {
         sendCommand(new SetNumofPlayerMessage(nickname,num));
@@ -166,15 +217,8 @@ public class TCPClient extends Thread implements CommandPassthrough, VirtualClie
 
     @Override
     public void disconnect() throws IllegalStateException, RemoteException {
-        validateConnection();
-        try{
-            outputStream.writeObject(new ConnectMessage(nickname));
-            outputStream.flush();
-            closeSocket();
-        } catch (IOException e) {
-            closeSocket();
-            throw new RemoteException("Connection Lost: " + e.getMessage());
-        }
+        sendCommand(new DisconnectMessage(nickname));
+        pingServer();
     }
 
     @Override

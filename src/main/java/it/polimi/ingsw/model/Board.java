@@ -54,8 +54,7 @@ public class Board {
         startingDeck = new StartingCardDeck();
         isPlayerDeadlocked = new Hashtable<>();
     }
-
-<<<<<<< HEAD
+    
 
     /**
      * Constructs the board (as in initializing the game) and automatically makes the given players join
@@ -73,26 +72,6 @@ public class Board {
         }
     }
 
-=======
-    //TODO UNCOMMENT
-    /**
-     * Constructs the board (as in initializing the game) and automatically makes the given players join
-     * @param players 1-4 players that are joining this game
-     * @throws InvalidParameterException if the parameter players has an illegal player count (0 or >4)
-     * @throws IllegalStateException if players contains duplicates
-     * @throws DeckInstantiationException if the decks can't be initialized
-     */
-    public Board(String gameID, Player... players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
-        this(gameID);
-        if(players.length < 1 || players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
-        for(Player p : players) {
-            addPlayer(p); // never throws NullPointerException as p != null
-        }
-    }
-
-    //TODO: timer to check for players who lose connection during their turn
-    //  we could also periodically ping the clients saved in gameInfo
->>>>>>> 5825146 (Developing TCP connection)
     public int getCurrentTurn() {
         return currentTurn;
     }

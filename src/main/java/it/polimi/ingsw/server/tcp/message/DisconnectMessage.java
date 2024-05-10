@@ -19,4 +19,14 @@ public class DisconnectMessage implements TCPClientMessage{
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.disconnect(nickname, virtualClient);
     }
+
+    @Override
+    public String toString() {
+        return "DISCONNECT";
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
 }

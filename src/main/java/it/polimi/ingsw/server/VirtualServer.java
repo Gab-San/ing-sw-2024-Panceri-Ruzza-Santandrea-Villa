@@ -8,7 +8,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface VirtualServer extends Remote {
-
     void connect(String nickname, VirtualClient client) throws IllegalStateException, RemoteException;
     void setNumOfPlayers(String nickname, VirtualClient client, int num) throws IllegalStateException, RemoteException;
     void disconnect(String nickname, VirtualClient client) throws IllegalStateException, RemoteException;
@@ -19,7 +18,6 @@ public interface VirtualServer extends Remote {
     void draw(String nickname, VirtualClient client, char deck, int card) throws IllegalStateException, RemoteException;
     void startGame(String nickname, VirtualClient client) throws IllegalStateException, RemoteException;
     void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException;
-
     void ping() throws RemoteException;
 
     void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException;
