@@ -1,13 +1,18 @@
 package it.polimi.ingsw.server;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
-import it.polimi.ingsw.server.rmi.RMIServer;
 
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 // FIXME: add VirtualClient to all function calls (to check that a client doesn't send commands for other players)?
 public class CentralServer {
@@ -101,20 +106,25 @@ public class CentralServer {
         //TODO: unsubscribe client from all observers
     }
 
-    public static void main(String[] args) throws RemoteException {
-        RMIServer rmiServer = new RMIServer();
-        System.out.println("RMI Server started and bound successfully");
-        System.out.println("Waiting for messages...");
-    }
-
     public synchronized void updateMsg(String fullMessage) {
+        List<String> disconnectedClients = new ArrayList<>();
         for(String nickname : playerClients.keySet()){
             try{
-                playerClients.get(nickname).update(fullMessage);
+                playerClients.get(nickname).update(colorize(fullMessage, Attribute.GREEN_TEXT()));
             }catch (RemoteException e){
-                disconnect(nickname, playerClients.get(nickname));
-                System.out.println("Disconnected " + nickname + " for connection loss.");
+                disconnectedClients.add(nickname);
+//                System.out.println("Disconnected " + nickname + " for connection loss.");
             }
+        }
+        disconnectConnectionLossClients(disconnectedClients);
+    }
+
+    private void disconnectConnectionLossClients(List<String> disconnectedClients) {
+        for(String nickname: disconnectedClients){
+            disconnect(nickname, playerClients.get(nickname));
+        }
+        for(String nickname: disconnectedClients){
+            updateMsg("Disconnected " + nickname + " for connection loss");
         }
     }
 }
