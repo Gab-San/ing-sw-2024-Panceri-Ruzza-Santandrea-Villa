@@ -47,6 +47,7 @@ public class Board {
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
+        gamePhase = GamePhase.CREATE;
         resourceDeck = new PlayableDeck(new ResourceCardFactory());
         goldDeck = new PlayableDeck(new GoldCardFactory());
         objectiveDeck = new ObjectiveDeck();
@@ -393,6 +394,11 @@ public class Board {
      * @throws IllegalStateException if there is no player in this game with the given nickname
      */
     public void removePlayer(String nickname) throws IllegalStateException {
+        //FIXME questo metodo è errato perchè non permette di disconnettersi
+        // e riconnettersi. Il turno di un giocatore non connesso dev'essere solamente skippato.
+        // Semmai questo metodo può essere utilizzato in tutte quelle fasi di gioco in cui
+        // non è ancora definito il player (CreationState, JoinState, etc..) e invece se ne
+        // deve definire un altro per gli stati successivi
         Player player = getPlayerByNickname(nickname);
 
         // remove playArea and scoreboard

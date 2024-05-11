@@ -26,12 +26,7 @@ public class Player {
     public boolean equals(Object other) {
         if(other == this) return true;
         if(other instanceof Player player){
-            return nickname.equals(player.nickname); // &&
-                    //FIXME: compare other attributes?? Nickname is unique so it should be enough
-            /*        isConnected == player.isConnected &&
-                    turn == player.turn &&
-                    hand.equals(player.hand) &&
-                    color.equals(player.color);       */
+            return nickname.equals(player.nickname);
         }
         else return false;
     }

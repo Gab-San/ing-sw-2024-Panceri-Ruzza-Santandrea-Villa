@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -9,24 +10,41 @@ import it.polimi.ingsw.server.VirtualClient;
 
 public class CreationState extends GameState{
 
-    public CreationState(Board board) {
-        super(board);
-        board.setGamePhase(GamePhase.SNOFP);
+    public CreationState(Board board, BoardController controller) {
+        super(board, controller);
     }
 
     @Override
-    public GameState join(String nickname, VirtualClient client) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO JOIN THE GAME DURING CREATION STATE");
+    public void join(String nickname, VirtualClient client) throws IllegalStateException {
+        if(!board.getPlayerAreas().isEmpty()) {
+            throw new IllegalStateException("WAITING FOR THE CONNECTED PLAYER TO START THE LOBBY...");
+        }
+
+        board.addPlayer(new Player(nickname));
+        //TODO this client list will be eliminated after implementing listeners
+        board.getGameInfo().addClient(client);
+        board.setGamePhase(GamePhase.SNP);
     }
 
     @Override
-    public GameState setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
-        if(board.getGamePhase()!=GamePhase.SNOFP)
+    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
+        if(board.getGamePhase()!=GamePhase.SNP)
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
         board.getPlayerByNickname(nickname); // throws on player not in game
         if(num<2 || num>4)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
-        return nextState(num);
+        //FIXME: CORRECT TESTS
+        if (controller != null) {
+            controller.setPlayerNumber(num);
+        }
+        transition(new JoinState(board, controller, num));
+    }
+
+    @Override
+    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+        board.removePlayer(nickname); // throws exception if player isn't in game
+        board.getGameInfo().removeClient(client);
+        board.setGamePhase(GamePhase.CREATE);
     }
 
     @Override
@@ -40,25 +58,22 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public GameState chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
+    public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE DURING CREATION STATE");
     }
 
     @Override
-    public GameState draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
+    public void draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING CREATION STATE");
     }
 
     @Override
-    public GameState placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
-    }
-    private GameState nextState(int num) {
-        return new JoinState(board, num);
     }
 
     @Override
-    public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
 }

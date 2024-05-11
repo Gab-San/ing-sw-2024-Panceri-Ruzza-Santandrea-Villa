@@ -15,16 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CreationStateTest extends BaseBoardControllerTest {
     CreationState creationState;
     private Class<? extends GameState> nextStateClass;
-
+    BoardController controller;
     @BeforeEach
     public void setUpCreationState(){
-        creationState = new CreationState(board);
+        creationState = new CreationState(board, null);
         nextStateClass = JoinState.class;
         assertEquals(creationState.board, this.board, "The board changed");
-    }
-    protected GameState upToJoinState(int numOfPlayers){
-        creationState = new CreationState(board);
-        return creationState.setNumOfPlayers(firstPlayer.getNickname(), numOfPlayers);
     }
 
     @Test
@@ -36,18 +32,19 @@ public class CreationStateTest extends BaseBoardControllerTest {
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4,5,6})
     public void setNumOfPlayersTest(int i) {
-        assertEquals(GamePhase.SNOFP, board.getGamePhase());
+        assertEquals(GamePhase.SNP, board.getGamePhase());
         assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers("definitelyNotRight", i),"Does not throw IllegalArgumentException with nickname not inside the game");
         if (i > 4 || i < 2) {
             assertThrows(IllegalArgumentException.class, () -> creationState.setNumOfPlayers(firstPlayer.getNickname(), i), "Does not throw IllegalArgumentException when i=" + i);
         } else {
+            //FIXME FIX TEST
             GameState nextGameState = creationState.setNumOfPlayers(firstPlayer.getNickname(), i);
             assertEquals(nextGameState.board, this.board, "The board changed");
             assertEquals(nextGameState.getClass(), nextStateClass, "Test with i=" + i + " wrong next state: " +
                     "it is expected" + nextStateClass + ", but it is " + nextGameState.getClass());
             assertSame(nextGameState.board, this.board, "Test with i=" + i + " wrong board in nextGameState: " +
                     "it is expected" + board + ", but it is " + nextGameState.board);
-            assertEquals(GamePhase.JP, board.getGamePhase(), "wrong phase at the end");
+            assertEquals(GamePhase.JOIN, board.getGamePhase(), "wrong phase at the end");
         }
     }
 

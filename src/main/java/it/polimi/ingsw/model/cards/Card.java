@@ -75,8 +75,7 @@ public abstract class Card {
         return isFaceUp;
     }
 
-    //TODO decide if to return null or an empty string
-    public String getCardID() {return cardID != null ? cardID : "";}
+    public String getCardID() {return cardID != "" ? cardID : "";}
 
     // OBJECT METHODS
     /**

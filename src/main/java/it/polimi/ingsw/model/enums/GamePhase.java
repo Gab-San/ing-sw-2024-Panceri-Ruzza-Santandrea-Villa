@@ -4,14 +4,12 @@ package it.polimi.ingsw.model.enums;
  * Enumeration of all phases of the game (as in particular states the game can be in at a given time)
  */
 public enum GamePhase {
-    CP("CREATION PHASE"),
-    SNOFP("SET NUMBER OF PLAYERS PHASE"),
-    CBP("CREATE BOARD PHASE"),
-    JP("JOIN PHASE"),
-    SP("SETUP PHASE"),
-    GSCP("GIVE STARTING CARD PHASE"),
+    CREATE("CREATION PHASE"),
+    SNP("SET NUMBER OF PLAYERS PHASE"),
+    JOIN("JOIN PHASE"),
+    SETUP("SETUP PHASE"),
     PSCP("PLACE STARTING CARD PHASE"),
-    CPCP("CHOOSE PLAYER COLOR PHASE"),
+    CHOOSECOLOR("CHOOSE PLAYER COLOR PHASE"),
     DFHP("DEAL FIRST HAND PHASE"),
     DSOCP("DEAL SECRET OBJECTIVE CARDS PHASE"),
     CSOCP("CHOOSE SECRET OBJECTIVE CARD PHASE"),

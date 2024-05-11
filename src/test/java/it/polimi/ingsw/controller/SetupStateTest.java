@@ -65,7 +65,7 @@ public class SetupStateTest extends BaseBoardControllerTest{
         assertEquals(SetupState.class, setupState.getClass());
         assertEquals(SetupState.class, setupState.getClass());
         assertThrows(IllegalStateException.class, ()->setupState.placeStartingCard(board.getPlayerAreas().keySet().stream().findAny().map(Player::getNickname).toString(), true));
-        assertEquals(board.getGamePhase(), GamePhase.CPCP);
+        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
     }
     public void placeStartingCardUntilAll(int numOfPlayers){
         setUp(numOfPlayers);
@@ -75,7 +75,7 @@ public class SetupStateTest extends BaseBoardControllerTest{
             assertEquals(board.getGamePhase(), GamePhase.PSCP);
             setupState.placeStartingCard(p.getNickname(), true);
         }
-        assertEquals(board.getGamePhase(), GamePhase.CPCP);
+        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
     }
 
     @Test

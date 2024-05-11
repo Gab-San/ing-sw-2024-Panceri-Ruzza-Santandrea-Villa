@@ -27,10 +27,7 @@ public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         String id = node.get("cardId").asText();
-
-        // TODO: [GAMBA] {After View} Set Images
-//        startJS.setFrontImageFileName(node.get("frontImageFileName").asText());
-//        startJS.setBackImageFileName(node.get("backImageFileName").asText());
+        
 
         // Getting Central Front Resources
         List<GameResource> centralFrontResources = new ArrayList<>();

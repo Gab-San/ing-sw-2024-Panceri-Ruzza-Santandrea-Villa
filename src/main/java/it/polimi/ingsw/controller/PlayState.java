@@ -124,7 +124,7 @@ public class PlayState extends GameState {
     }
 
     private GameState nextState() throws IllegalStateException {
-        return new EndgameState(board);
+        return new EndgameState(board, controller);
     }
 
     @Override

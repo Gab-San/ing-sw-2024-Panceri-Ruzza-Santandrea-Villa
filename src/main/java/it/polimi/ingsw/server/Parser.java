@@ -16,16 +16,6 @@ public class Parser {
     private final CommandPassthrough virtualClient;
     // TODO: DELETE MODEL VIEW
     private final ModelView view;
-    public Parser(){
-        //TODO Decide whether to handle exception or remove constructor
-        try {
-            this.virtualClient = new RMIClient();
-        } catch (NotBoundException | RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        this.view = new ModelView();
-    }
-
     public Parser(CommandPassthrough virtualClient, ModelView view){
         this.virtualClient = virtualClient;
         this.view = view;

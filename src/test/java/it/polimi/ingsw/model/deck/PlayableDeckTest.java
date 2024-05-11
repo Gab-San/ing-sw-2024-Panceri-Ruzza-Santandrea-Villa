@@ -108,7 +108,7 @@ class PlayableDeckTest {
             try {
                 playableDeck.getTopCard();
                 synchronized (playableDeck){
-                    //TODO with a 50 millisec sleep the deck is able to replenish
+                    //With a 50 millisec sleep the deck is able to replenish
                     playableDeck.wait(50);
                 }
                 counter++;
