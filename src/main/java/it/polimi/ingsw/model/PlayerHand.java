@@ -138,6 +138,7 @@ public class PlayerHand{
      */
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
+        //FIXME VISTO IL CONTROLLO FATTO NEL BOARDCONTROLLER QUESTO NON È UN PO' RIDONDANTE?
         if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
 
         secretObjective.remove(2-choice); // 2-choice == the index that was not chosen

@@ -61,6 +61,7 @@ public class BoardController {
             gameState.startGame(nickname, numOfPlayers);
     }
 
+    //FIXME: In realtà tutte queste azioni si potrebbero mettere nella join di ciascuno stato
     public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
             throws IllegalStateException {
         synchronized (gameState.board){

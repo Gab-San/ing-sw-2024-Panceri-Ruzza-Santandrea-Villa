@@ -13,9 +13,9 @@ import it.polimi.ingsw.server.VirtualClient;
 public class EndgameState extends GameState{
     public EndgameState(Board board, BoardController controller) {
         super(board, controller);
-        board.setGamePhase(GamePhase.ESOCP);
         evaluateSecretObjectives();
-        board.setGamePhase(GamePhase.STWP);
+        board.setGamePhase(GamePhase.SHOWWIN);
+        //FIXME There's nothing to show the winner. Is this all implemented in the view?
     }
 
     @Override
@@ -30,7 +30,7 @@ public class EndgameState extends GameState{
 
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
-
+        //TODO implement disconnection.
     }
 
     @Override
@@ -57,8 +57,9 @@ public class EndgameState extends GameState{
     }
 
     private void evaluateSecretObjectives() throws IllegalStateException{
-        if(board.getGamePhase()!=GamePhase.ESOCP)
-            throw new IllegalStateException("IMPOSSIBLE EVALUATE SECRET OBJECTIVES IN THIS PHASE");
+        board.setGamePhase(GamePhase.EVALOBJ);
+//        if(board.getGamePhase()!=GamePhase.EVALOBJ)
+//            throw new IllegalStateException("IMPOSSIBLE EVALUATE SECRET OBJECTIVES IN THIS PHASE");
         for(Player player : board.getPlayerAreas().keySet()){
             ObjectiveCard objCard = player.getHand().getSecretObjective();
             objCard.turnFaceUp(); // reveal secret objective
@@ -68,7 +69,7 @@ public class EndgameState extends GameState{
     }
     @Override
     public void startGame(String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException {
-        if(board.getGamePhase()!=GamePhase.STWP)
+        if(board.getGamePhase()!=GamePhase.SHOWWIN)
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
         if(numOfPlayers < board.getPlayerAreas().size()){
