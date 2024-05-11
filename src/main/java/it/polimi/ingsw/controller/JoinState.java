@@ -10,14 +10,11 @@ import it.polimi.ingsw.server.VirtualClient;
 
 public class JoinState extends GameState {
     int numOfPlayersToStart;
-    public JoinState(Board board){
-        super(board);
-        board.setGamePhase(GamePhase.JP);
-    }
 
     public JoinState(Board board, int num){
         super(board);
         numOfPlayersToStart=num;
+        board.setGamePhase(GamePhase.JP);
     }
     @Override
     public GameState join(String nickname, VirtualClient client) throws IllegalStateException {

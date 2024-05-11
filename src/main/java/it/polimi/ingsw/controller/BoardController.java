@@ -18,7 +18,7 @@ public class BoardController {
     }
     public BoardController (String gameID, Player... players) throws DeckInstantiationException {
         synchronized (this) {
-            this.gameState = new JoinState(new Board(gameID, players));
+            this.gameState = new JoinState(new Board(gameID, players), players.length);
         }
     }
 

@@ -54,8 +54,8 @@ public class CreationState extends GameState{
         throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD DURING CREATION STATE");
     }
     private GameState nextState(int num) {
-            return new JoinState(board, num);
-        }
+        return new JoinState(board, num);
+    }
 
     @Override
     public GameState startGame (String nickname, int numOfPlayers) throws IllegalStateException {
