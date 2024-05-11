@@ -29,22 +29,22 @@ public class BoardController {
         gameState.setNumOfPlayers(nickname, num);
     }
 
-    public void disconnect(String nickname, VirtualClient client)
+    public synchronized void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException{
         gameState.disconnect(nickname, client);
 
     }
 
-    public void placeStartingCard(String nickname, boolean placeOnFront)
+    public synchronized void placeStartingCard(String nickname, boolean placeOnFront)
             throws IllegalStateException, IllegalArgumentException{
         gameState.placeStartingCard(nickname, placeOnFront);
     }
-    public void chooseYourColor(String nickname, PlayerColor color)
+    public synchronized void chooseYourColor(String nickname, PlayerColor color)
             throws IllegalStateException, IllegalArgumentException, DeckException, InterruptedException{
         gameState.chooseYourColor(nickname, color);
     }
 
-    public void chooseSecretObjective(String nickname, int choice)
+    public synchronized void chooseSecretObjective(String nickname, int choice)
             throws IllegalStateException{
         gameState.chooseSecretObjective(nickname, choice);
     }
@@ -96,6 +96,5 @@ public class BoardController {
     }
     void setGameState(GameState nextState){
         gameState = nextState;
-
     }
 }
