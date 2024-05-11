@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards.objective;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.*;
 import java.security.InvalidParameterException;
