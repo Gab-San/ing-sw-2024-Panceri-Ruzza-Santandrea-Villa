@@ -54,7 +54,7 @@ public class Board {
         startingDeck = new StartingCardDeck();
         isPlayerDeadlocked = new Hashtable<>();
     }
-    
+
 
     /**
      * Constructs the board (as in initializing the game) and automatically makes the given players join

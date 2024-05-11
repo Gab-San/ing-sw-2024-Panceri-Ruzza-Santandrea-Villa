@@ -5,7 +5,7 @@ import java.io.IOException;
 public class ServerRun {
     public static void main(String[] args) {
         try {
-            new TCPServer(8888).start();
+            new TCPServer(8888);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

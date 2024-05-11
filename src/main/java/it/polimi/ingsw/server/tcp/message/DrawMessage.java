@@ -26,10 +26,6 @@ public class DrawMessage implements TCPClientMessage{
         virtualServer.draw(nickname, virtualClient, deck, card);
     }
 
-    @Override
-    public String toString() {
-        return "DRAW CARD";
-    }
 
     @Override
     public boolean isError() {

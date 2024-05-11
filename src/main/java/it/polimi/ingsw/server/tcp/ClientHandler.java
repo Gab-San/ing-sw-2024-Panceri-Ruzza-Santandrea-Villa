@@ -8,6 +8,10 @@ import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
 import it.polimi.ingsw.server.tcp.message.*;
+
+import it.polimi.ingsw.server.tcp.message.errors.ErrorConnectMessage;
+import it.polimi.ingsw.server.tcp.message.errors.ErrorMessage;
+import it.polimi.ingsw.server.tcp.message.errors.PingMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,6 +26,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private final Queue<TCPClientMessage> commandQueue;
+    private final Queue<TCPClientErrorMessage> errorQueue;
     private final CentralServer serverRef;
     private final ClientProxy proxy;
     public ClientHandler(Socket connectionSocket){
@@ -33,12 +38,36 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
         commandQueue = new LinkedBlockingQueue<>();
+        errorQueue = new LinkedBlockingQueue<>();
         serverRef = CentralServer.getSingleton();
         proxy = new ClientProxy(this, outputStream);
-        initializeCommandExecutor();
+        startCommandExecutor();
+        startErrorExecutor();
+    }
+//region SOCKET THREADS
+    private void startErrorExecutor() {
+        new Thread(
+                () -> {
+                    while(!connectionSocket.isClosed()){
+                        TCPClientErrorMessage errorMessage;
+                        synchronized (errorQueue){
+                            while(errorQueue.isEmpty()){
+                                try{
+                                    errorQueue.wait();
+                                } catch (InterruptedException e){
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                            errorMessage = errorQueue.remove();
+                        }
+                        errorMessage.handle(this);
+                    }
+                }
+        ).start();
     }
 
-    private void initializeCommandExecutor(){
+    private void startCommandExecutor(){
         new Thread(
                 () -> {
                     while (!connectionSocket.isClosed()){
@@ -55,7 +84,6 @@ public class ClientHandler implements Runnable, VirtualServer {
                             command = commandQueue.remove();
                         }
                         try {
-                            System.out.println("Executing " + command + "...");
                             command.execute(this, proxy);
                         } catch (RemoteException e) {
                             System.err.println(e.getMessage() + "\n" + e.getCause().getMessage());
@@ -73,12 +101,18 @@ public class ClientHandler implements Runnable, VirtualServer {
     public void run() {
         try{
             while (!connectionSocket.isClosed()){
-                TCPClientMessage commandFromClient;
-                commandFromClient = (TCPClientMessage) inputStream.readObject();
-                synchronized (commandQueue) {
-                    commandQueue.offer(commandFromClient);
-                    commandQueue.notifyAll();
-                    System.out.println("Added " + commandFromClient + " to the queue");
+                TCPMessage commandFromClient;
+                commandFromClient = (TCPMessage) inputStream.readObject();
+                if(!commandFromClient.isError()) {
+                    synchronized (commandQueue) {
+                        commandQueue.offer((TCPClientMessage) commandFromClient);
+                        commandQueue.notifyAll();
+                    }
+                } else{
+                    synchronized (errorQueue) {
+                        errorQueue.offer((TCPClientErrorMessage) commandFromClient);
+                        errorQueue.notifyAll();
+                    }
                 }
             }
         } catch (IOException e) {
@@ -87,35 +121,53 @@ public class ClientHandler implements Runnable, VirtualServer {
             throw new RuntimeException(e);
         }
     }
+//endregion
 
-    private void validateClient(String nickname, VirtualClient client) throws IllegalStateException{
+//region AUXILIARY FUNCTIONS
+    private void validateClient(String nickname, VirtualClient client) {
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
-            throw new IllegalStateException("Illegal request, wrong client!");
+            proxy.updateError(new ErrorMessage("Illegal request, wrong client!"));
     }
 
     private void issueCommand(GameCommand command) throws IllegalStateException{
         try {
             serverRef.issueGameCommand(command);
         }catch (InterruptedException e) {
-            throw new IllegalStateException("Couldn't issue command");
+            proxy.updateError(new ErrorMessage("Couldn't issue command!"));
         }
     }
 
+//endregion
+
+//region VIRTUAL SERVER IMPLEMENTATION
+    //region IMPLEMENTED & TESTED
     @Override
     public void connect(String nickname, VirtualClient client){
         try {
             serverRef.connect(nickname, client);
             proxy.setUsername(nickname);
             serverRef.updateMsg(nickname + " has connected");
-            proxy.updateError(new CheckConnectMessage(nickname, false));
+            proxy.updateError(new ErrorConnectMessage(nickname, false));
         } catch (IllegalStateException stateException){
-            proxy.updateError(new CheckConnectMessage(nickname, true, stateException.getMessage()));
+            proxy.updateError(new ErrorConnectMessage(nickname, true, stateException.getMessage()));
         }
     }
 
+    @Override
+    public void testCmd(String nickname, VirtualClient client, String text){
+    }
 
     @Override
-    public void setNumOfPlayers(String nickname, VirtualClient client, int num) throws IllegalStateException {
+    public void sendMsg(String nickname, VirtualClient client, String message) {
+        validateClient(nickname, client);
+        String fullMessage = nickname + ": " + message;
+        System.out.println(fullMessage);
+        serverRef.updateMsg(fullMessage);
+    }
+    //endregion
+
+    @Override
+    public void setNumOfPlayers(String nickname, VirtualClient client, int num)  {
         validateClient(nickname, client);
         issueCommand(new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num));
     }
@@ -126,26 +178,27 @@ public class ClientHandler implements Runnable, VirtualServer {
         try {
             serverRef.disconnect(nickname, client);
             serverRef.updateMsg(nickname + " has disconnected");
-            proxy.updateError(new CheckDisconnectMessage(nickname, false));
         } catch (IllegalStateException stateException){
-            proxy.updateError(new CheckDisconnectMessage(nickname,true, stateException.getMessage()));
+            proxy.updateError(new ErrorMessage(stateException.getMessage()));
+        } finally {
+            closeSocket();
         }
     }
 
     @Override
-    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront) throws IllegalStateException {
+    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {
         validateClient(nickname, client);
         issueCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
     }
 
     @Override
-    public void chooseColor(String nickname, VirtualClient client, char colour) throws IllegalStateException {
+    public void chooseColor(String nickname, VirtualClient client, char colour)  {
         validateClient(nickname, client);
         issueCommand(new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour)));
     }
 
     @Override
-    public void chooseObjective(String nickname, VirtualClient client, int choice) throws IllegalStateException {
+    public void chooseObjective(String nickname, VirtualClient client, int choice) {
         validateClient(nickname, client);
         issueCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
     }
@@ -156,43 +209,31 @@ public class ClientHandler implements Runnable, VirtualServer {
     }
 
     @Override
-    public void draw(String nickname, VirtualClient client, char deck, int card) throws IllegalStateException {
+    public void draw(String nickname, VirtualClient client, char deck, int card) {
         validateClient(nickname, client);
         issueCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
     }
 
     @Override
-    public void startGame(String nickname, VirtualClient client) throws IllegalStateException {
+    public void startGame(String nickname, VirtualClient client) {
         validateClient(nickname, client);
         issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname));
     }
 
-    @Override
-    public void sendMsg(String nickname, VirtualClient client, String message) {
-        validateClient(nickname, client);
-        String fullMessage = nickname + ": " + message;
-        System.out.println(fullMessage);
-        serverRef.updateMsg(fullMessage);
-    }
-
+    
 
     @Override
     public void ping() throws RemoteException {
-        System.out.println("Server was pinged from " + connectionSocket.getInetAddress());
         try{
-            outputStream.writeObject(new PingMessage(true));
+            outputStream.writeObject(new PingMessage());
             outputStream.flush();
         } catch (IOException e) {
-            throw new RemoteException("Can't ping client", e);
+            closeSocket();
         }
     }
+//endregion
 
-
-    @Override
-    public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
-
-    }
-
+//region SOCKET FUNCTIONS
     void closeSocket(){
         try {
             // TODO check if checks are needed
@@ -207,8 +248,9 @@ public class ClientHandler implements Runnable, VirtualServer {
             if(connectionSocket != null) {
                 connectionSocket.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
+        } catch (IOException ignore) {
         }
     }
+
+//endregion
 }

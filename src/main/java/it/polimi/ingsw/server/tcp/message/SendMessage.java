@@ -28,11 +28,6 @@ public class SendMessage implements TCPClientMessage, TCPServerMessage {
     }
 
     @Override
-    public String toString() {
-        return "SEND MESSAGE";
-    }
-
-    @Override
     public boolean isError() {
         return false;
     }

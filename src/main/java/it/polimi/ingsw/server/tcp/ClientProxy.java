@@ -1,12 +1,16 @@
 package it.polimi.ingsw.server.tcp;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.server.tcp.message.errors.PingMessage;
 import it.polimi.ingsw.server.tcp.message.SendMessage;
 import it.polimi.ingsw.server.tcp.message.TCPServerErrorMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class ClientProxy implements VirtualClient {
 
@@ -21,6 +25,7 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public void update(String msg) throws RemoteException {
+        ping();
         try{
             outputStream.writeObject(new SendMessage(nickname, msg));
             outputStream.flush();
@@ -32,7 +37,8 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public void ping() throws RemoteException {
-        //TODO implement ping
+        System.out.println(colorize("Pinging from proxy...", Attribute.BLUE_TEXT()));
+        clientHandler.ping();
     }
 
     void setUsername(String nickname){
@@ -41,7 +47,7 @@ public class ClientProxy implements VirtualClient {
 
     void updateError(TCPServerErrorMessage message){
         try{
-            System.out.println("UPDATING ERROR");
+            ping();
             outputStream.writeObject(message);
             outputStream.flush();
         } catch (IOException e) {

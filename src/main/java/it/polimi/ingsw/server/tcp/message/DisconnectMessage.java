@@ -20,10 +20,6 @@ public class DisconnectMessage implements TCPClientMessage{
         virtualServer.disconnect(nickname, virtualClient);
     }
 
-    @Override
-    public String toString() {
-        return "DISCONNECT";
-    }
 
     @Override
     public boolean isError() {

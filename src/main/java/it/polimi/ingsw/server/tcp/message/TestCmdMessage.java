@@ -25,11 +25,6 @@ public class TestCmdMessage implements TCPClientMessage{
     }
 
     @Override
-    public String toString() {
-        return "TEST";
-    }
-
-    @Override
     public boolean isError() {
         return false;
     }

@@ -15,7 +15,7 @@ public class ServerRunnerTest {
         }
 
         try {
-            new TCPServer(8888).start();
+            new TCPServer(8888);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

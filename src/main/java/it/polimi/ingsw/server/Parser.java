@@ -46,6 +46,7 @@ public class Parser {
                 parseConnectCmd(commandComponents);
                 break;
             case "disconnect":
+            case "quit":
                 parseDisconnectCmd();
                 break;
             case "restart":

@@ -21,11 +21,6 @@ public class RestartGameMessage implements TCPClientMessage {
     }
 
     @Override
-    public String toString() {
-        return "RESTART GAME";
-    }
-
-    @Override
     public boolean isError() {
         return false;
     }

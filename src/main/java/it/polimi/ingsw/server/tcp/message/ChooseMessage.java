@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 public class ChooseMessage implements TCPClientMessage{
 
     @Serial
-    private static final long serialVersionUID = 9L;
+    private static final long serialVersionUID = 0011L;
     private final boolean isColor;
     private final String nickname;
     private final int choice;
@@ -40,10 +40,6 @@ public class ChooseMessage implements TCPClientMessage{
         virtualServer.chooseObjective(nickname, virtualClient, choice);
     }
 
-    @Override
-    public String toString() {
-        return isColor ? "CHOOSE COLOR" : "CHOOSE OBJECTIVE";
-    }
 
     @Override
     public boolean isError() {

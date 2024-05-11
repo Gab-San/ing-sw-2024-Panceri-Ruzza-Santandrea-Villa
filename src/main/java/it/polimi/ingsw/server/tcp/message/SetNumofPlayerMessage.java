@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 
 public class SetNumofPlayerMessage implements TCPClientMessage{
     @Serial
-    private static final long serialVersionUID = 8L;
+    private static final long serialVersionUID = 0010L;
     private final String nickname;
     private final int numOfPlayers;
 
@@ -20,11 +20,6 @@ public class SetNumofPlayerMessage implements TCPClientMessage{
     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.setNumOfPlayers(nickname,virtualClient,numOfPlayers);
-    }
-
-    @Override
-    public String toString() {
-        return "SET NUM OF PLAYER";
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 
 public class ConnectMessage implements TCPClientMessage{
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 0001L;
     private final String nickname;
     public ConnectMessage(String nickname){
         this.nickname = nickname;
@@ -17,11 +17,6 @@ public class ConnectMessage implements TCPClientMessage{
     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.connect(nickname, virtualClient);
-    }
-
-    @Override
-    public String toString() {
-        return "CONNECT";
     }
 
     @Override
