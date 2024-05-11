@@ -3,7 +3,10 @@ package it.polimi.ingsw.server;
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
+import it.polimi.ingsw.server.rmi.RMIServer;
+import it.polimi.ingsw.server.tcp.TCPServer;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,14 +24,16 @@ public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final BlockingQueue<GameCommand> commandQueue;
-    private final BoardController gameRef;
+    private BoardController gameRef;
 
     private CentralServer() throws IllegalStateException{
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
         gameRef = new BoardController("");
         //TODO: review the update/command queue executors
-        new Thread(getQueueExtractor(commandQueue)).start();
+        Thread executorThread = new Thread(getQueueExtractor(commandQueue));
+        executorThread.setDaemon(true);
+        executorThread.start();
     }
 
     public synchronized static CentralServer getSingleton() throws IllegalStateException{
@@ -56,6 +61,9 @@ public class CentralServer {
                         command.execute();
                     }catch (IllegalStateException e){
                         System.err.println("IllegalStateException raised while executing a command.");
+                        System.err.println(e.getMessage());
+                    }catch (IllegalArgumentException e){
+                        System.err.println("IllegalArgumentException raised while executing a command.");
                         System.err.println(e.getMessage());
                     }
                 }
@@ -98,6 +106,7 @@ public class CentralServer {
     }
 
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
+        //FIXME This check is useless: someone who is not connected is blocked by the client
         if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
         if(!client.equals(playerClients.get(nickname))) throw new IllegalStateException("Illegal request, Client instance does not match!");
 
@@ -129,4 +138,17 @@ public class CentralServer {
             updateMsg("Disconnected " + nickname + " for connection loss");
         }
     }
+    public static void main(String[] args) {
+        try {
+            new TCPServer( Integer.parseInt(args[0]) );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            new RMIServer(Integer.parseInt(args[1]));
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

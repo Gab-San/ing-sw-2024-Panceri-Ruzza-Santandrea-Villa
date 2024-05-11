@@ -24,8 +24,11 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
     private final Queue<TCPServerMessage> updateQueue;
     private final Queue<TCPServerErrorMessage> errorQueue;
     private String nickname;
-    public TCPClient(String hostAddr,int objPort) throws IOException, UnknownHostException, IllegalArgumentException {
-        this.clientSocket = new Socket(hostAddr, objPort);
+    public TCPClient(int port) throws IOException {
+        this("localhost", port);
+    }
+    public TCPClient(String hostAddr,int connectionPort) throws IOException, UnknownHostException{
+        this.clientSocket = new Socket(hostAddr, connectionPort);
         outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
@@ -117,11 +120,11 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
 //endregion
 
 //region FOR TEST PURPOSES
-    boolean isClosed(){
+    public boolean isClosed(){
         return clientSocket.isClosed();
     }
 
-    String getNickname(){
+    public String getNickname(){
         return nickname;
     }
 
@@ -137,7 +140,7 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
 //endregion
 
 //region SOCKET FUNCTIONS
-    void closeSocket(){
+    public void closeSocket(){
         try{
             if(outputStream != null) {
                 outputStream.close();
@@ -229,19 +232,17 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
         }
     }
 
-    //endregion
     @Override
     public void setNumOfPlayers(int num) throws IllegalStateException, RemoteException {
         sendCommand(new SetNumofPlayerMessage(nickname,num));
     }
-
+    //endregion
 
 
 
     @Override
     public void disconnect() throws IllegalStateException, RemoteException {
         sendCommand(new DisconnectMessage(nickname));
-        ping();
         closeSocket();
     }
 

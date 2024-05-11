@@ -18,7 +18,7 @@ public class TCPServer {
 
 
     private void startServer() {
-        System.out.println("Server is running...");
+        System.out.println("TCP server waiting for client...");
         new Thread(
                 () -> {
                     try {
@@ -36,7 +36,7 @@ public class TCPServer {
         ).start();
     }
 
-    void closeServer(){
+    public void closeServer(){
         handlerPool.shutdown();
         try {
             serverSocket.close();

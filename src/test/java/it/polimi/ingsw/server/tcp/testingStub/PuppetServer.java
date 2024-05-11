@@ -1,14 +1,10 @@
 package it.polimi.ingsw.server.tcp.testingStub;
 
-import it.polimi.ingsw.server.tcp.ClientHandler;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PuppetServer {
     private final ServerSocket serverSocket;

@@ -2,32 +2,32 @@ package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.server.*;
+import it.polimi.ingsw.server.CommandPassthrough;
 import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.server.VirtualServer;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
 public class RMIClient extends UnicastRemoteObject implements VirtualClient, CommandPassthrough {
     private String nickname = null;
     private final VirtualServer server;
 
-    public RMIClient() throws RemoteException, NotBoundException{
-        this("localhost");
+    public RMIClient(int registryPort) throws RemoteException, NotBoundException{
+        this("localhost", registryPort);
     }
-    public RMIClient(String registryIP) throws RemoteException, NotBoundException {
+    public RMIClient(String registryIP, int registryPort) throws RemoteException, NotBoundException {
         super();
-        Registry registry = LocateRegistry.getRegistry(registryIP, RMIServer.REGISTRY_PORT);
+        Registry registry = LocateRegistry.getRegistry(registryIP, registryPort);
         server = (VirtualServer) registry.lookup(RMIServer.CANONICAL_NAME);
     }
 
     @Override
     public void update(String msg) throws RemoteException {
-        System.out.println("\n"+msg); // temp function
-        System.out.print("> "); // temp function
+        System.out.println(msg); // temp function
     }
 
     /**

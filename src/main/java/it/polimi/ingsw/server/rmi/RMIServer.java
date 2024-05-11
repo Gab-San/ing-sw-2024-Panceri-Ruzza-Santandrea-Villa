@@ -15,19 +15,20 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RMIServer implements VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
-    public static final int REGISTRY_PORT = 1234;
+    public final int REGISTRY_PORT;
     CentralServer serverRef;
 
     /**
      * Instantiates the RMIServer and binds it to the registry
      * @throws RemoteException on registry binding failure
      */
-    public RMIServer() throws RemoteException {
+    public RMIServer(int connectionPort) throws RemoteException {
         serverRef = CentralServer.getSingleton();
-
+        this.REGISTRY_PORT = connectionPort;
         VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
+        System.out.println("RMI server waiting for client...");
     }
 
     private void validateClient(String nickname, VirtualClient client) throws IllegalStateException{

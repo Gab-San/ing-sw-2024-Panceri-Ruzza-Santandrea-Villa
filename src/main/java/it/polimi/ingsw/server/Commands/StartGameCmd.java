@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
-
 import java.util.Random;
 
 public class StartGameCmd extends GameCommand {

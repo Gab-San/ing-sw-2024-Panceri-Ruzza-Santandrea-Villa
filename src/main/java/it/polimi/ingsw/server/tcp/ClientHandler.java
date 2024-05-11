@@ -164,7 +164,6 @@ public class ClientHandler implements Runnable, VirtualServer {
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
     }
-    //endregion
 
     @Override
     public void setNumOfPlayers(String nickname, VirtualClient client, int num)  {
@@ -184,6 +183,11 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
     }
+    //endregion
+
+
+
+
 
     @Override
     public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {

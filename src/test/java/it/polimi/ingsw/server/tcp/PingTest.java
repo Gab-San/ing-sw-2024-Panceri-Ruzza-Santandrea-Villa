@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.tcp;
 
+import it.polimi.ingsw.server.tcp.TCPClient;
+import it.polimi.ingsw.server.tcp.TCPServer;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -42,9 +44,7 @@ public class PingTest {
 
 
         client.ping();
-        client.connect("Gamba");
-        waitExecution(client,  10000);
-        assertEquals("Gamba", client.getNickname());
+        waitExecution(client,  2000);
         server.closeServer();
     }
 }

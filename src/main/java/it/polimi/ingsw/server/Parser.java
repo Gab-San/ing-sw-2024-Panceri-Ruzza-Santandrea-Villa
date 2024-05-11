@@ -74,20 +74,21 @@ public class Parser {
 
     private void parseReconnectCmd(List<String> commandComponents) throws IllegalArgumentException{
         List<String> cmdArgs = commandComponents.stream().skip(1).toList();
+        if(cmdArgs.size() < 3){
+            throw new IllegalArgumentException("Too few arguments.\n" +
+                    "Format as such: reconnect TCP/RMI hostname port");
+        }
+
+        String hostAddr = cmdArgs.get(1);
+        int port;
+        try {
+            port = Integer.parseInt(cmdArgs.get(2));
+        } catch (NumberFormatException formatException){
+            throw new IllegalArgumentException(formatException.getMessage());
+        }
 
 
         if(cmdArgs.get(0).equalsIgnoreCase("TCP") || cmdArgs.get(0).equalsIgnoreCase("SOCKET")){
-            if(cmdArgs.size() < 3){
-                throw new IllegalArgumentException("Too few arguments.\n" +
-                        "Format as such: reconnect TCP/RMI hostname port");
-            }
-            String hostAddr = cmdArgs.get(1);
-            int port;
-            try {
-                port = Integer.parseInt(cmdArgs.get(2));
-            } catch (NumberFormatException formatException){
-                throw new IllegalArgumentException(formatException.getMessage());
-            }
 
             try {
                 virtualClient = new TCPClient(hostAddr, port);
@@ -98,13 +99,9 @@ public class Parser {
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
-        if(cmdArgs.size() < 2){
-            throw new IllegalArgumentException("Too few arguments.\n" +
-                    "Format as such: reconnect RMI hostname");
-        }
 
         try {
-            virtualClient = new RMIClient(cmdArgs.get(1));
+            virtualClient = new RMIClient(hostAddr, port);
         } catch (RemoteException | NotBoundException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
