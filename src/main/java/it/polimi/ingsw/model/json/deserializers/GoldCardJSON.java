@@ -11,8 +11,6 @@ public class GoldCardJSON {
     private PointOnPlace pointsOnPlace;
     private List<CornerJ> cornersJS;
     private GameResource backResource;
-    private String frontImageFileName;
-    private String backImageFileName;
 
     public String getCardId() {
         return cardId;
@@ -52,21 +50,5 @@ public class GoldCardJSON {
 
     public void setBackResource(GameResource backResource) {
         this.backResource = backResource;
-    }
-
-    public String getFrontImageFileName() {
-        return frontImageFileName;
-    }
-
-    public void setFrontImageFileName(String frontImageFileName) {
-        this.frontImageFileName = frontImageFileName;
-    }
-
-    public String getBackImageFileName() {
-        return backImageFileName;
-    }
-
-    public void setBackImageFileName(String backImageFileName) {
-        this.backImageFileName = backImageFileName;
     }
 }

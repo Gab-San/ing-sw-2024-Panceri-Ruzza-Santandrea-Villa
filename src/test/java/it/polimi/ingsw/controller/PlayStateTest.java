@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import org.junit.jupiter.api.Test;
 
-public class PlayStateTest extends BaseBoardControllerTest {
+public class PlayStateTest{
     GameState playState;
 
     public void setUp(int numOfPlayers){

@@ -415,6 +415,7 @@ public class Board {
             currentTurn--;
     }
 
+    //FIXME Questa funzione non è mai usata
     /**
      * @return Set of all colors that have not yet been chosen by a player
      */
@@ -426,6 +427,8 @@ public class Board {
         }
         return colors;
     }
+
+    //FIXME Questa funzione non è mai usata
     /**
      * @return a random color among colors that have not yet been chosen by a player
      */

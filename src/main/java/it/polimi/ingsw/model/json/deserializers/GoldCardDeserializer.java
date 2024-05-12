@@ -31,9 +31,6 @@ public class GoldCardDeserializer extends StdDeserializer<GoldCardJSON> {
 
         goldJ.setBackResource(GameResource.getResourceFromName(node.get("backResource").asText()));
 
-        goldJ.setFrontImageFileName(node.get("frontImageFileName").asText());
-        goldJ.setBackImageFileName(node.get("backImageFileName").asText());
-
         goldJ.setCornersJS( JsonFunctions.parseJsonCorners(node)  );
 
         goldJ.setPlacementCost(JsonFunctions.parsePlacementCost(node));

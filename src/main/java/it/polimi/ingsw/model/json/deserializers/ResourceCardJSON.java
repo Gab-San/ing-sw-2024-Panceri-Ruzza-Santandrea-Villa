@@ -9,8 +9,6 @@ public class ResourceCardJSON {
     private int pointsOnPlace;
     private List<CornerJ> cornerJS;
     private GameResource backResource;
-    private String frontImageFileName;
-    private String backImageFileName;
 
     public String getCardId() {
         return cardId;
@@ -44,19 +42,4 @@ public class ResourceCardJSON {
         this.backResource = backResource;
     }
 
-    public String getFrontImageFileName() {
-        return frontImageFileName;
-    }
-
-    void setFrontImageFileName(String frontImageFileName) {
-        this.frontImageFileName = frontImageFileName;
-    }
-
-    public String getBackImageFileName() {
-        return backImageFileName;
-    }
-
-    void setBackImageFileName(String backImageFileName) {
-        this.backImageFileName = backImageFileName;
-    }
 }

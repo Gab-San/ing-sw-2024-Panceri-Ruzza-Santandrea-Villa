@@ -29,7 +29,7 @@ public class JoinStateTest {
         joinUntilSetupState(numOfPlayers);
     }
 
-    protected void joinUntilSetupState(int numOfPlayers){
+    private void joinUntilSetupState(int numOfPlayers){
         setUp(numOfPlayers);
         assertEquals(JoinState.class, controller.getGameState().getClass());
         GameState nextGS=null;

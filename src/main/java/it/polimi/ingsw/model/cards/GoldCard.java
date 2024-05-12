@@ -56,11 +56,6 @@ public class GoldCard extends PlayCard{
         }
     }
 
-    public GoldCard(GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
-                    GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
-        this(null, backResource, pointsOnPlace, plCost, goldStrat, corners);
-    }
-
     public GoldCard(String cardID, GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
         super(cardID, backResource, pointsOnPlace, corners);
