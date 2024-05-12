@@ -8,11 +8,13 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.List;
+
 public class CreationState extends GameState{
 
-    public CreationState(Board board, BoardController controller) {
-        super(board, controller);
-        board.setGamePhase(GamePhase.CREATE);
+
+    public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
+        super(board, controller, disconnectingPlayers);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CreationState extends GameState{
         if (controller != null) {
             controller.setPlayerNumber(num);
         }
-        transition(new JoinState(board, controller, num));
+        transition(new JoinState(board, controller, disconnectingPlayers, num));
     }
 
     @Override

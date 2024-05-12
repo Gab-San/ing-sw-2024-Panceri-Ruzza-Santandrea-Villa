@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,5 +34,5 @@ public class Game {
             //TODO: implement this with View updates
         }
     }
-
+    public Set<VirtualClient> getClientList(){return Collections.unmodifiableSet(clientList);}
 }

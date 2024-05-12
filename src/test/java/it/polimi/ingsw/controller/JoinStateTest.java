@@ -47,6 +47,8 @@ public class JoinStateTest {
     }
 
     //FIXME non ho idea di cosa testi questo test
+
+    //[FLAVIO] controlla se restituisce le exceptions in caso di input errati, nel test sopra non viene controllato
 //    @Test
 //    public void joinTest() {
 //        setUp(4);

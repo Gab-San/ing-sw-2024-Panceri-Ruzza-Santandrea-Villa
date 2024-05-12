@@ -136,6 +136,8 @@ public class PlayerHand{
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
      * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
      */
+
+    //FIXME: SE CHOISE E' 0,1,2 NON RESTITUISCE UN'ECCEZIONE
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
         //FIXME VISTO IL CONTROLLO FATTO NEL BOARDCONTROLLER QUESTO NON È UN PO' RIDONDANTE?

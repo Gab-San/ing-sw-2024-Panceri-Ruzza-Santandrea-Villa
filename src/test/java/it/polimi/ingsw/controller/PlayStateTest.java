@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller;
 
 import org.junit.jupiter.api.Test;
 
+//TODO QUESTO TEST VA COMPLETATO
+
 public class PlayStateTest{
     GameState playState;
 

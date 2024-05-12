@@ -9,14 +9,22 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BoardController {
     private GameState gameState;
     private int numberOfPlayer;
     public BoardController (String gameID) throws DeckInstantiationException {
-            this.gameState = new CreationState(new Board(gameID), this);
+        this.gameState = new CreationState(new Board(gameID), this, new ArrayList<>());
     }
+
     public BoardController (String gameID, Player... players) throws DeckInstantiationException {
-            this.gameState = new JoinState(new Board(gameID, players), this, players.length);
+            //FIXME: [FLAVIO] a cosa serve? Se inserisco la lunghezza di players allora dovrei passare già a setup state
+            // dato che joinState cambia quando entrano i giocatori fino alla lunghezza players.lenth ...
+            this.gameState = new JoinState(new Board(gameID, players), this, new ArrayList<>(),players.length);
+
     }
 
     public synchronized void join(String nickname, VirtualClient client)
@@ -28,11 +36,23 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.setNumOfPlayers(nickname, num);
     }
-
-    public synchronized void disconnect(String nickname, VirtualClient client)
+    //FIXME: [FLAVIO] attenzione alle synch
+    /*you want to update disconnecting players senza sincronizzare su this in modo che anche mentre stai svolgendo
+    * un'altra azione ti viene aggiunto il giocatore che vuole sconnettersi, altrimenti disconnectingPlayers risulta
+    * completamente inutile perché deve aspettare tutte le azioni precedenti alla disconnect per potersi updateare.
+    * Invece si vorrebbe che si updati ogni volta senza dovar aspettare altre azioni:
+    * se faccio 4 join e 1 disconnect, se tutto è synch su this allora avrò conflitti, se invece appena chiamo disconnect
+    * aggiorno disconnectingPlayers allora è molto probabile (ma non certo) che il game non starti/ non abbia conflitto
+    * NOTA: è impossibile avere la sicurezza che non avvenga il conflitto in quanto porterebbe a uno stallo dovuto a
+    *       multiple synch su Object diversi*/
+    public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException{
-        gameState.disconnect(nickname, client);
-
+        synchronized(gameState.disconnectingPlayers){
+            gameState.disconnectingPlayers.add(nickname);
+        }
+        synchronized(this){
+            gameState.disconnect(nickname, client);
+        }
     }
 
     public synchronized void placeStartingCard(String nickname, boolean placeOnFront)
@@ -57,12 +77,16 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
+
     public synchronized void startGame(String nickname, int numOfPlayers)
             throws IllegalStateException{
         gameState.startGame(nickname, numOfPlayers);
     }
 
     //FIXME: In realtà tutte queste azioni si potrebbero mettere nella join di ciascuno stato
+
+    /*[FLAVIO]sono d'accordo, ma o va fatto un nuovo metodo indipendente
+    * oppure join va implementato in maniera diversa cambiando la signature */
     public synchronized void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
             throws IllegalStateException {
         if(!gameState.board.containsPlayer(nickname))

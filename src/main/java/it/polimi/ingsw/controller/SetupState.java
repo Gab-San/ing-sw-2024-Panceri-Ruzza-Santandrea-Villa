@@ -16,9 +16,9 @@ public class SetupState extends GameState{
     public Set<String> playersWhoPlacedStartingCard;
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
-    public SetupState(Board board, BoardController controller) {
-        super(board, controller);
-        board.setGamePhase(GamePhase.SETUP); // Sta fase si potrebbe anche eliminare
+    public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
+        super(board, controller, disconnectingPlayers);
+        board.setGamePhase(GamePhase.SETUP);
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
@@ -46,11 +46,6 @@ public class SetupState extends GameState{
     public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException {
         //TODO handle disconnection. At this time the disconnected player should not be eliminated
-        // But since it is setup state it could still be
-        //for now, just remove player
-        board.removePlayer(nickname);
-        //TODO unsubscribe player's client from observers
-        //   and push current state to client (possibly done in board.replaceClient())
     }
 
     @Override
@@ -58,6 +53,8 @@ public class SetupState extends GameState{
             throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.PLACESTARTING)
             //FIXME: could replace the switch on gamePhase with condition checks on board
+
+            //[FLAVIO]preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD IN THIS PHASE"); // default should never be thrown
                 case SETUP ->
@@ -82,6 +79,8 @@ public class SetupState extends GameState{
         //Controls on gamePhase
         if(board.getGamePhase() != GamePhase.CHOOSECOLOR)
             //FIXME: could replace the switch on gamePhase with condition checks on board
+
+            //[FLAVIO] preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE"); // default should never be thrown
                 case SETUP, PLACESTARTING -> new IllegalStateException("Must wait for all players to place their starting card");
@@ -110,6 +109,9 @@ public class SetupState extends GameState{
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.CHOOSEOBJECTIVE)
             //FIXME: could replace the switch on gamePhase with condition checks on board
+
+            //[FLAVIO] preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
+
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE CARD IN THIS PHASE");
                 case SETUP, PLACESTARTING, CHOOSECOLOR, DEALCARDS ->
@@ -145,6 +147,7 @@ public class SetupState extends GameState{
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
     }
 
+
     private void nextState() throws IllegalStateException {
         board.setGamePhase(GamePhase.CHOOSEFIRSTPLAYER);
         board.setCurrentTurn(1);
@@ -155,7 +158,8 @@ public class SetupState extends GameState{
             int randomIndex = random.nextInt(players.size());
             players.remove(randomIndex).setTurn(i); // removes from list and sets player turn
         }
-        transition(new PlayState(board, controller));
+
+        transition(new PlayState(board, controller, disconnectingPlayers));
     }
 
     private void drawFirstHand() throws IllegalStateException, DeckException, InterruptedException {

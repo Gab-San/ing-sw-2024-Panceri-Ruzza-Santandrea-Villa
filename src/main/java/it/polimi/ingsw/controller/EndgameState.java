@@ -3,17 +3,18 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EndgameState extends GameState{
-    public EndgameState(Board board, BoardController controller) {
-        super(board, controller);
-        board.setGamePhase(GamePhase.EVALOBJ);
+    public EndgameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
+        super(board, controller,disconnectingPlayers);
         evaluateSecretObjectives();
         board.setGamePhase(GamePhase.SHOWWIN);
         //FIXME There's nothing to show the winner. Is this all implemented in the view?
@@ -41,7 +42,7 @@ public class EndgameState extends GameState{
                 .count();
         if(numOfConnectedPlayers == 0){
             String ID = board.getGameInfo().getGameID();
-            transition(new CreationState(new Board(ID), controller));
+            transition(new CreationState(new Board(ID), controller, new ArrayList<>()));
         }
     }
 
@@ -49,6 +50,7 @@ public class EndgameState extends GameState{
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING ENDGAME STATE");
     }
+
     public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE YOUR COLOR DURING ENDGAME STATE");
     }
@@ -90,12 +92,11 @@ public class EndgameState extends GameState{
         if(board.getPlayerAreas().size() < numOfPlayers) {
             // if not enough players are connected for the new game, go to Join State
             // the setPhase is done in the constructor
-            transition( new JoinState(newBoard, controller, numOfPlayers) );
+            transition( new JoinState(newBoard, controller, new ArrayList<>(), numOfPlayers) );
         }
         else{ // numOfPlayers == board.getPlayerAreas().size() , skip join state
             // the setPhase is done in the constructor
-            transition( new SetupState(newBoard, controller) );
+            transition( new SetupState(newBoard, controller, new ArrayList<>()) );
         }
-
     }
 }

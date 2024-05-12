@@ -8,11 +8,13 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
+import java.util.List;
+
 public class JoinState extends GameState {
     int numOfPlayersToStart;
 
-    public JoinState(Board board, BoardController controller, int num){
-        super(board, controller);
+    public JoinState(Board board, BoardController controller, List<String> disconnectingPlayers, int num){
+        super(board, controller, disconnectingPlayers);
         numOfPlayersToStart=num;
         board.setGamePhase(GamePhase.JOIN);
     }
@@ -25,7 +27,7 @@ public class JoinState extends GameState {
         //TODO cambiare con iscrizione ai listener
         board.getGameInfo().addClient(client);
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {
-            transition(new SetupState(board, controller));
+            transition(new SetupState(board, controller, disconnectingPlayers));
         }
     }
 
