@@ -24,7 +24,7 @@ public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final BlockingQueue<GameCommand> commandQueue;
-    private BoardController gameRef;
+    private final BoardController gameRef;
 
     private CentralServer() throws IllegalStateException{
         playerClients = new Hashtable<>();
@@ -136,18 +136,6 @@ public class CentralServer {
         }
         for(String nickname: disconnectedClients){
             updateMsg("Disconnected " + nickname + " for connection loss");
-        }
-    }
-    public static void main(String[] args) {
-        try {
-            new TCPServer( Integer.parseInt(args[0]) );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            new RMIServer(Integer.parseInt(args[1]));
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
         }
     }
 

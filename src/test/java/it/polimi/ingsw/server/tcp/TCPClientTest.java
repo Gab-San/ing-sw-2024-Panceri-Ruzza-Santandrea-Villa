@@ -1,9 +1,13 @@
 package it.polimi.ingsw.server.tcp;
 
+import it.polimi.ingsw.Point;
+import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.tcp.testingStub.PuppetServer;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
@@ -13,21 +17,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TCPClientTest {
-    private ExecutorService pool = Executors.newCachedThreadPool();
-    private static TCPServer tcpServer;
+    private final ExecutorService pool = Executors.newCachedThreadPool();
+    private TCPServer server;
 
-    @BeforeAll
-    static void setup(){
-        try {
-            tcpServer = new TCPServer(8888);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @BeforeEach
+    void resetMySingleton() throws NoSuchFieldException, IllegalAccessException, IOException {
+        Field singleton = CentralServer.class.getDeclaredField("singleton");
+        singleton.setAccessible(true);
+        singleton.set(null, null);
+        server = new TCPServer(8888);
     }
 
-    @AfterAll
-    static void close(){
-        tcpServer.closeServer();
+    @AfterEach
+    void close(){
+        server.closeServer();
     }
 
     private void validateClient(TCPClient client){
@@ -72,7 +75,6 @@ class TCPClientTest {
     }
 
     @Test
-    @Order(1)
     void testDisconnect() throws RemoteException {
 
         TCPClient client;
@@ -88,7 +90,6 @@ class TCPClientTest {
             throw new RuntimeException(e);
         }
         validateClient(client);
-
         client.disconnect();
         assertTrue(client.isClosed());
 
@@ -105,9 +106,8 @@ class TCPClientTest {
     }
 
     @Test
-    @Order(2)
+    @DisplayName("Basic connect testing")
     void testConnect() {
-
         TCPClient client;
         try {
             client = new TCPClient("localhost", 8888);
@@ -125,8 +125,8 @@ class TCPClientTest {
     }
 
     @Test
-    @Order(3)
-    void testConnect2() {
+    @DisplayName("Connecting a second time with a different nickname")
+    void testConnect2() throws RemoteException {
 
         TCPClient client;
         try {
@@ -134,56 +134,31 @@ class TCPClientTest {
         } catch (IOException e){
             throw new RuntimeException(e);
         }
-        try {
-            client.connect("Gamba");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            client.connect("Giovanni");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+
+        client.connect("Gamba");
+        client.connect("Giovanni");
+
         waitExecution(client, 2000);
         assertNotEquals("Giovanni",client.getNickname());
     }
 
     @Test
-    @Order(4)
-    void testConnect3() throws RemoteException, InterruptedException {
-        TCPClient cli1;
-        try {
-            cli1 = new TCPClient("localhost", 8888);
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
-        TCPClient cli2;
-        try {
-            cli2 = new TCPClient("localhost", 8888);
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
-        cli1.connect("Gamba");
-        Thread.sleep(10);
-        cli2.connect("Gamba");
-
+    @DisplayName("Connecting with two clients same nickname")
+    void testConnect3() throws IOException, InterruptedException {
+        TCPClient cli1 = new TCPClient("localhost", 8888);
+        cli1.closeSocket();
+        assertThrows(
+                RemoteException.class,
+                () -> cli1.connect("Gamba")
+        );
         waitExecution(cli1, 2000);
-        assertNull(cli2.getNickname());
-        cli2.closeSocket();
+        assertNull(cli1.getNickname());
     }
 
     @Test
-    @Order(5)
-    void testConnect4() throws RemoteException{
-        TCPClient client;
-        try {
-            client = new TCPClient("localhost", 8888);
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
+    @DisplayName("Closing socket before connect check message")
+    void testConnect4() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
         client.connect("Gianni");
         client.closeSocket();
         assertThrows(
@@ -193,22 +168,23 @@ class TCPClientTest {
     }
 
     @Test
-    @Order(6)
-    void testConnect5() throws RemoteException {
-        PuppetServer server;
-        try {
-            server = new PuppetServer(10000);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @DisplayName("Closing socket before connect")
+    void testConnect5() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Gianni");
+        client.closeSocket();
+        assertThrows(
+                IllegalStateException.class,
+                () -> client.testCmd("SUS")
+        );
+    }
 
-        TCPClient client;
-        try {
-            client = new TCPClient("localhost", 10000);
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
+    @Test
+    @DisplayName("Pinging after closing server socket")
+    void testRemoteException() throws IOException {
+        PuppetServer server = new PuppetServer(10000);
 
+        TCPClient client = new TCPClient("localhost", 10000);
         pool.execute(
                 server::closeServer
         );
@@ -221,14 +197,8 @@ class TCPClientTest {
 
 
     @Test
-    void testCmd() throws RemoteException {
-        TCPClient client;
-
-        try {
-            client = new TCPClient("localhost", 8888);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    void testCmd() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
 
         client.connect("Giovanni");
         validateClient(client);
@@ -237,30 +207,69 @@ class TCPClientTest {
     }
 
     @Test
-    void testSendMsg() {
-        TCPClient client;
-        try {
-            client = new TCPClient("localhost", 8888);
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
-        try {
-            client.connect("Giacomo");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+    void testSendMsg() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
         validateClient(client);
-        try {
-            client.sendMsg("Ciao ragazzi");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            client.sendMsg("Come va?");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        client.sendMsg("Ciao ragazzi");
+        client.sendMsg("Come va?");
         waitExecution(client, 5000);
     }
+
+
+    @Test
+    void testChooseColor() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.chooseColor('b');
+        waitExecution(client, 2000);
+    }
+
+    @Test
+    void testChooseObjective() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.chooseObjective(2);
+        waitExecution(client, 2000);
+    }
+
+    @Test
+    void testDraw() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.draw('r', 0);
+        waitExecution(client, 2000);
+    }
+
+
+    @Test
+    void testStartGame() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.startGame();
+        waitExecution(client, 5000);
+    }
+
+    @Test
+    void testPlaceStartingCard() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.placeStartCard(true);
+        waitExecution(client, 2000);
+    }
+
+    @Test
+    void testPlaceCard() throws IOException {
+        TCPClient client = new TCPClient("localhost", 8888);
+        client.connect("Giacomo");
+        validateClient(client);
+        client.placeCard("R2", new Point(1,1), CornerDirection.TR, true);
+        waitExecution(client, 2000);
+    }
+
 }

@@ -7,7 +7,6 @@ import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
-
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,7 +15,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIServer implements VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
     public final int REGISTRY_PORT;
-    CentralServer serverRef;
+    private final CentralServer serverRef;
+    private Registry registry;
 
     /**
      * Instantiates the RMIServer and binds it to the registry
@@ -24,6 +24,15 @@ public class RMIServer implements VirtualServer {
      */
     public RMIServer(int connectionPort) throws RemoteException {
         serverRef = CentralServer.getSingleton();
+        this.REGISTRY_PORT = connectionPort;
+        VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
+        this.registry = LocateRegistry.createRegistry(REGISTRY_PORT);
+        registry.rebind(CANONICAL_NAME, stub);
+        System.out.println("RMI server waiting for client...");
+    }
+
+    RMIServer(int connectionPort, CentralServer serverRef) throws RemoteException {
+        this.serverRef = serverRef;
         this.REGISTRY_PORT = connectionPort;
         VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
@@ -116,8 +125,12 @@ public class RMIServer implements VirtualServer {
         return;
     }
 
+
     @Override
     public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
+    }
 
+    public void closeServer() throws RemoteException {
+        UnicastRemoteObject.unexportObject(registry, true);
     }
 }

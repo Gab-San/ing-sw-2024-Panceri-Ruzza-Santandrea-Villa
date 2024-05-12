@@ -236,15 +236,15 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
     public void setNumOfPlayers(int num) throws IllegalStateException, RemoteException {
         sendCommand(new SetNumofPlayerMessage(nickname,num));
     }
-    //endregion
-
-
 
     @Override
     public void disconnect() throws IllegalStateException, RemoteException {
         sendCommand(new DisconnectMessage(nickname));
         closeSocket();
     }
+
+    //endregion
+
 
     @Override
     public void placeStartCard(boolean placeOnFront) throws IllegalStateException, RemoteException {
