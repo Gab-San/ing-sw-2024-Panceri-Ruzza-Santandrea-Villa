@@ -20,4 +20,9 @@ public class ViewPlayArea {
         this.freeCorners = new LinkedList<>();
     }
 
+    public void placeCard(Point p, ViewCard card){
+        cardMatrix.put(p, card);
+    }
+
+
 }
