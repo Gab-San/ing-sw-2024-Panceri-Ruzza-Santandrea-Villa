@@ -6,7 +6,7 @@ public class PlayStateTest extends BaseBoardControllerTest {
     GameState playState;
 
     public void setUp(int numOfPlayers){
-        GameState playState = new SetupStateTest().advanceToPlayState(numOfPlayers);
+
     }
 
     @Test

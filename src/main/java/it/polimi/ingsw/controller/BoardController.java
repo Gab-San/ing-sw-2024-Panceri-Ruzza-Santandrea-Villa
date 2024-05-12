@@ -88,6 +88,10 @@ public class BoardController {
         }
     }
 
+    GameState getGameState(){
+        return gameState;
+    }
+
     void setPlayerNumber(int numberOfPlayer){
         this.numberOfPlayer = numberOfPlayer;
     }

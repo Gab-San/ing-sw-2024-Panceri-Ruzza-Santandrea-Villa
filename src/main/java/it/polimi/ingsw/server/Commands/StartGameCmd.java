@@ -10,6 +10,6 @@ public class StartGameCmd extends GameCommand{
 
     @Override
     public void execute() throws IllegalStateException {
-        this.gameController.startGame(nickname);
+//        this.gameController.startGame(nickname);
     }
 }

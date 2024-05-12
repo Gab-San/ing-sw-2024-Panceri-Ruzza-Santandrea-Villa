@@ -5,9 +5,9 @@ import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class BaseBoardControllerTest {
-    BoardController boardController;
-    Board board;
-    Player firstPlayer;
+    private BoardController boardController;
+    private Board board;
+    private Player firstPlayer;
 
     @BeforeEach
     public void setUpBase(){
