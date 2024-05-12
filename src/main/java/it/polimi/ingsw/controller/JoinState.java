@@ -24,7 +24,7 @@ public class JoinState extends GameState {
         board.addPlayer(new Player(nickname)); // throws exception if player can't be added
         //TODO cambiare con iscrizione ai listener
         board.getGameInfo().addClient(client);
-        if( !(this.board.getPlayerAreas().size() < numOfPlayersToStart) ) {
+        if(board.getPlayerAreas().size() == numOfPlayersToStart) {
             transition(new SetupState(board, controller));
         }
     }
@@ -38,6 +38,8 @@ public class JoinState extends GameState {
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         board.removePlayer(nickname); // throws exception if player isn't in game
         board.getGameInfo().removeClient(client);
+        //TODO unsubscribe player's client from observers
+        //   and push current state to client (possibly done in board.replaceClient())
     }
 
     @Override

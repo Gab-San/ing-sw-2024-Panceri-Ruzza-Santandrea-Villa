@@ -43,7 +43,7 @@ public class JoinStateTest {
         }
         assertNotNull(nextGS);
         assertEquals(SetupState.class, nextGS.getClass());
-        assertEquals(board.getGamePhase(), GamePhase.PSCP);
+        assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
     }
 
     //FIXME non ho idea di cosa testi questo test

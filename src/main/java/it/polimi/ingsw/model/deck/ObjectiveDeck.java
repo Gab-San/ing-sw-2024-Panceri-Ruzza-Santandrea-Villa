@@ -30,7 +30,8 @@ public class ObjectiveDeck {
             throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
                     deckException.getDeck());
         }
-        reveal();
+        firstRevealed = null;
+        secondRevealed = null;
     }
 
 
@@ -55,10 +56,11 @@ public class ObjectiveDeck {
     }
 
     /**
-     * This method should be called once in the setup
+     * This method should be called once per game during setup
      */
-    private void reveal() {
+    public void reveal() {
         synchronized (cardDeck) {
+            if(firstRevealed != null) return;
             try {
                 firstRevealed = getCard();
                 secondRevealed = getCard();

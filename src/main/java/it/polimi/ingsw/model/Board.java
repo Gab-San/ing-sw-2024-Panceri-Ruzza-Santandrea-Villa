@@ -156,6 +156,15 @@ public class Board {
     }
 
     /**
+     * @return player whose turn corresponds to the currentTurn
+     * @throws IllegalStateException if turns have not been assigned turns yet (no player has turn = currentTurn >= 1)
+     */
+    public Player getCurrentPlayer() throws IllegalStateException{
+        return playerAreas.keySet().stream()
+                .filter(p -> p.getTurn() == currentTurn)
+                .findFirst().orElseThrow(()->new IllegalStateException("Players have not been assigned turns yet."));
+    }
+    /**
      * Adds a player to the game
      * @param player player that is joining the game
      * @throws IllegalStateException if the player had already joined or if the current game is full (4 players)
@@ -367,6 +376,9 @@ public class Board {
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
+    public void revealObjectives(){
+        objectiveDeck.reveal();
+    }
 
     /**
      * @param nickname player's nickname
@@ -390,15 +402,16 @@ public class Board {
 
     /**
      * Removes the player with given nickname from the game (deleting all his information)
+     * Should only be called during Creation or Join states
      * @param nickname player's nickname
      * @throws IllegalStateException if there is no player in this game with the given nickname
      */
     public void removePlayer(String nickname) throws IllegalStateException {
-        //FIXME questo metodo è errato perchè non permette di disconnettersi
-        // e riconnettersi. Il turno di un giocatore non connesso dev'essere solamente skippato.
-        // Semmai questo metodo può essere utilizzato in tutte quelle fasi di gioco in cui
+        //FIXME questo metodo non permette di disconnettersi e riconnettersi.
+        // Questo metodo va utilizzato in tutte quelle fasi di gioco in cui
         // non è ancora definito il player (CreationState, JoinState, etc..) e invece se ne
-        // deve definire un altro per gli stati successivi
+        // deve definire un altro per gli stati successivi.
+
         //TODO questo metodo è errato perchè non permette di disconnettersi
         // e riconnettersi. Il turno deve solamente essere skippato
         Player player = getPlayerByNickname(nickname);
@@ -415,7 +428,23 @@ public class Board {
             currentTurn--;
     }
 
-    //FIXME Questa funzione non è mai usata
+    /**
+     * Disconnects player with given nickname without removing their information from the board
+     * @param nickname player's nickname
+     * @throws IllegalStateException if there is no player with given nickname
+     */
+    public void disconnectPlayer(String nickname) throws IllegalStateException{
+        getPlayerByNickname(nickname).setConnected(false);
+    }
+    /**
+     * Reconnects player with given nickname
+     * @param nickname player's nickname
+     * @throws IllegalStateException if there is no player with given nickname
+     */
+    public void reconnectPlayer(String nickname) throws IllegalStateException{
+        getPlayerByNickname(nickname).setConnected(true);
+    }
+
     /**
      * @return Set of all colors that have not yet been chosen by a player
      */

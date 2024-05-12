@@ -2,18 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.testclass.PuppetClient;
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.PlayerColor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.BooleanString;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,12 +33,13 @@ public class SetupStateTest {
         }
         assertNotNull(nextGS);
         assertEquals(SetupState.class, nextGS.getClass());
-        assertEquals(board.getGamePhase(), GamePhase.PSCP);
+        assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
     }
 
 //    public void advanceToPlayState(int numOfPlayers){
 //        setUp(numOfPlayers);
 //        //FIXME i giocatori non hanno ancora un turno associato
+//              [Ale] non serve, la chiamata è per avere una lista di player, non importa l'ordine
 //        List<Player> players = board.getPlayersByTurn();
 //        for(Player p : players){
 //            controller.placeStartingCard(p.getNickname(), false);

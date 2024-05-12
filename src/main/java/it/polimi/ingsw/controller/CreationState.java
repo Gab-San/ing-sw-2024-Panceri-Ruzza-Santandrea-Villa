@@ -12,6 +12,7 @@ public class CreationState extends GameState{
 
     public CreationState(Board board, BoardController controller) {
         super(board, controller);
+        board.setGamePhase(GamePhase.CREATE);
     }
 
     @Override
@@ -23,12 +24,12 @@ public class CreationState extends GameState{
         board.addPlayer(new Player(nickname));
         //TODO this client list will be eliminated after implementing listeners
         board.getGameInfo().addClient(client);
-        board.setGamePhase(GamePhase.SNP);
+        board.setGamePhase(GamePhase.SETNUMPLAYERS);
     }
 
     @Override
     public void setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException {
-        if(board.getGamePhase()!=GamePhase.SNP)
+        if(board.getGamePhase()!=GamePhase.SETNUMPLAYERS)
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
         board.getPlayerByNickname(nickname); // throws on player not in game
         if(num<2 || num>4)
@@ -45,6 +46,8 @@ public class CreationState extends GameState{
         board.removePlayer(nickname); // throws exception if player isn't in game
         board.getGameInfo().removeClient(client);
         board.setGamePhase(GamePhase.CREATE);
+        //TODO unsubscribe player's client from observers
+        //   and push current state to client (possibly done in board.replaceClient())
     }
 
     @Override

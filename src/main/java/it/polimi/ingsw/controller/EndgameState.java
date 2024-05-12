@@ -13,9 +13,11 @@ import it.polimi.ingsw.server.VirtualClient;
 public class EndgameState extends GameState{
     public EndgameState(Board board, BoardController controller) {
         super(board, controller);
+        board.setGamePhase(GamePhase.EVALOBJ);
         evaluateSecretObjectives();
         board.setGamePhase(GamePhase.SHOWWIN);
         //FIXME There's nothing to show the winner. Is this all implemented in the view?
+        // [Ale] Yes. As a consequence of the gamephase SHOWWIN
     }
 
     @Override
@@ -30,7 +32,17 @@ public class EndgameState extends GameState{
 
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
-        //TODO implement disconnection.
+        board.disconnectPlayer(nickname);
+        //TODO unsubscribe player's client from observers
+        //   and push current state to client (possibly done in board.replaceClient())
+
+        int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
+                .filter(Player::isConnected)
+                .count();
+        if(numOfConnectedPlayers == 0){
+            String ID = board.getGameInfo().getGameID();
+            transition(new CreationState(new Board(ID), controller));
+        }
     }
 
     @Override
@@ -57,9 +69,6 @@ public class EndgameState extends GameState{
     }
 
     private void evaluateSecretObjectives() throws IllegalStateException{
-        board.setGamePhase(GamePhase.EVALOBJ);
-//        if(board.getGamePhase()!=GamePhase.EVALOBJ)
-//            throw new IllegalStateException("IMPOSSIBLE EVALUATE SECRET OBJECTIVES IN THIS PHASE");
         for(Player player : board.getPlayerAreas().keySet()){
             ObjectiveCard objCard = player.getHand().getSecretObjective();
             objCard.turnFaceUp(); // reveal secret objective

@@ -57,24 +57,22 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
-    synchronized void startGame(String nickname, int numOfPlayers) throws IllegalStateException{
-            gameState.startGame(nickname, numOfPlayers);
+    public synchronized void startGame(String nickname, int numOfPlayers)
+            throws IllegalStateException{
+        gameState.startGame(nickname, numOfPlayers);
     }
 
     //FIXME: In realtà tutte queste azioni si potrebbero mettere nella join di ciascuno stato
-    public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
+    public synchronized void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
             throws IllegalStateException {
-        synchronized (gameState.board){
-            if(!gameState.board.containsPlayer(nickname))
-                throw new IllegalStateException(nickname + " isn't connected to this game.");
-            gameState.board.getGameInfo().removeClient(oldClient);
-            gameState.board.getGameInfo().addClient(newClient);
-            //TODO: push game update to the client that just reconnected
-        }
+        if(!gameState.board.containsPlayer(nickname))
+            throw new IllegalStateException(nickname + " isn't connected to this game.");
+        gameState.board.getGameInfo().removeClient(oldClient);
+        gameState.board.getGameInfo().addClient(newClient);
+        //TODO: push game update to the client that just reconnected
     }
 
     public String getGameID(){
-        // don't need to synchronize on board as all fields accessed are final
         return gameState.board.getGameInfo().getGameID();
     }
 
@@ -88,17 +86,18 @@ public class BoardController {
         }
     }
 
-    GameState getGameState(){
+    synchronized GameState getGameState(){
         return gameState;
     }
-
-    void setPlayerNumber(int numberOfPlayer){
-        this.numberOfPlayer = numberOfPlayer;
-    }
-    int getPlayerNumber(){
-        return numberOfPlayer;
-    }
-    void setGameState(GameState nextState){
+    synchronized void setGameState(GameState nextState){
         gameState = nextState;
     }
+
+    synchronized void setPlayerNumber(int numberOfPlayer){
+        this.numberOfPlayer = numberOfPlayer;
+    }
+    synchronized int getPlayerNumber(){
+        return numberOfPlayer;
+    }
+
 }

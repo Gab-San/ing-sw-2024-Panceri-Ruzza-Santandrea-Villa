@@ -36,7 +36,7 @@ public class CreationStateTest {
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4,5,6})
     public void setNumOfPlayersTest(int i) {
-        assertEquals(GamePhase.SNP, board.getGamePhase());
+        assertEquals(GamePhase.SETNUMPLAYERS, board.getGamePhase());
         assertThrows(IllegalArgumentException.class, () -> controller.setNumOfPlayers("definitelyNotRight", i),"Does not throw IllegalArgumentException with nickname not inside the game");
         if (i < 2|| i > 4) {
             assertThrows(IllegalArgumentException.class, () -> controller.setNumOfPlayers(playerNickname, i), "Does not throw IllegalArgumentException when i=" + i);
