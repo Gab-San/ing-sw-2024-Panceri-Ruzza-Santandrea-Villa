@@ -258,7 +258,7 @@ public class Parser {
 
         String cardToPlace;
         Point placementPos;
-        CornerDirection cornDir;
+        String cornDir;
 
         String argsString =  argsStr.toString().trim();
         Matcher cardMatcher = Pattern.compile("[RGrg][0-39]").matcher(argsString);
@@ -277,7 +277,7 @@ public class Parser {
 
         Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);
         if(dirMatcher.find()){
-            cornDir = CornerDirection.getDirectionFromString(dirMatcher.group());
+            cornDir = dirMatcher.group();
         } else {
             throw new IllegalArgumentException("missing direction");
         }

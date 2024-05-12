@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.exceptions.DeckException;
 
 public class ChooseColorCmd extends GameCommand{
     private final PlayerColor color;
@@ -10,7 +11,8 @@ public class ChooseColorCmd extends GameCommand{
         this.color = color;
     }
     @Override
-    public void execute() throws IllegalStateException {
+    public void execute() throws IllegalStateException, InterruptedException, DeckException {
+
         this.gameController.chooseYourColor(nickname, color);
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
+import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.Commands.GameCommand;
 import it.polimi.ingsw.server.rmi.RMIServer;
 import it.polimi.ingsw.server.tcp.TCPServer;
@@ -64,6 +65,9 @@ public class CentralServer {
                         System.err.println(e.getMessage());
                     }catch (IllegalArgumentException e){
                         System.err.println("IllegalArgumentException raised while executing a command.");
+                        System.err.println(e.getMessage());
+                    } catch (DeckException e) {
+                        System.err.println("DeckException raised while executing a command");
                         System.err.println(e.getMessage());
                     }
                 }

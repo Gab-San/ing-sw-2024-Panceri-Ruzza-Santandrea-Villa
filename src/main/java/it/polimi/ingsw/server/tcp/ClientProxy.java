@@ -37,7 +37,6 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public void ping() throws RemoteException {
-        System.out.println(colorize("Pinging from proxy...", Attribute.BLUE_TEXT()));
         clientHandler.ping();
     }
 

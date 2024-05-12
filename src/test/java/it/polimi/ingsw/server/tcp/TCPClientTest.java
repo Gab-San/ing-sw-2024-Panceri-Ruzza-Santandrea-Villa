@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.tcp;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.tcp.testingStub.PuppetServer;
 import org.junit.jupiter.api.*;
@@ -268,7 +267,7 @@ class TCPClientTest {
         TCPClient client = new TCPClient("localhost", 8888);
         client.connect("Giacomo");
         validateClient(client);
-        client.placeCard("R2", new Point(1,1), CornerDirection.TR, true);
+        client.placeCard("R2", new Point(1,1), "TR", true);
         waitExecution(client, 2000);
     }
 

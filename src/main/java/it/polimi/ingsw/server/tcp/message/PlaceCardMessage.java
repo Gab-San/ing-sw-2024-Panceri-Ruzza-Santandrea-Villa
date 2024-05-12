@@ -1,0 +1,36 @@
+package it.polimi.ingsw.server.tcp.message;
+
+import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.server.VirtualServer;
+
+import java.rmi.RemoteException;
+
+public class PlaceCardMessage implements TCPClientMessage{
+    private final String nickname;
+    private final String cardID;
+    private final int xPosition;
+    private final int yPosition;
+    private final String cornDirection;
+    private final boolean placeOnFront;
+
+    public PlaceCardMessage(String nickname, String cardID,
+                            int xPosition, int yPosition, String cornDirection, boolean placeOnFront) {
+        this.nickname = nickname;
+        this.cardID = cardID;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.cornDirection = cornDirection;
+        this.placeOnFront = placeOnFront;
+    }
+
+    @Override
+    public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
+        virtualServer.placeCard(nickname, virtualClient, cardID,
+                xPosition, yPosition,cornDirection, placeOnFront);
+    }
+
+    @Override
+    public boolean isError() {
+        return false;
+    }
+}

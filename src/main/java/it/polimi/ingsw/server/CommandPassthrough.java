@@ -13,7 +13,7 @@ public interface CommandPassthrough {
     void placeStartCard(boolean placeOnFront) throws IllegalStateException, RemoteException;
     void chooseColor(char color) throws IllegalStateException, RemoteException;
     void chooseObjective(int choice) throws IllegalStateException, RemoteException;
-    void placeCard(String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException;
+    void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException;
     void draw(char deck, int card) throws IllegalStateException, RemoteException;
     void startGame() throws IllegalStateException, RemoteException;
 

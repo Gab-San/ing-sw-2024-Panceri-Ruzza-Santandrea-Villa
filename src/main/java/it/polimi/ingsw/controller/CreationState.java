@@ -38,7 +38,6 @@ public class CreationState extends GameState{
             System.out.println(colorize("Controller: UPDATING ERROR IDX OUT OF BOUNDS!", Attribute.YELLOW_BACK()));
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + " PLAYERS");
         }
-
         System.out.println(colorize("Controller: Number of players set", Attribute.YELLOW_BACK()));
         transition(new JoinState(board, controller, disconnectingPlayers, num));
     }

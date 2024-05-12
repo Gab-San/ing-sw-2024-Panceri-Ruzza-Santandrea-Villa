@@ -183,17 +183,6 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
     }
-    //endregion
-
-
-
-
-
-    @Override
-    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {
-        validateClient(nickname, client);
-        issueCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
-    }
 
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour)  {
@@ -207,24 +196,12 @@ public class ClientHandler implements Runnable, VirtualServer {
         issueCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
     }
 
-    @Override
-    public void placeCard(String nickname, VirtualClient client, String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
-
-    }
 
     @Override
     public void draw(String nickname, VirtualClient client, char deck, int card) {
         validateClient(nickname, client);
         issueCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
     }
-
-    @Override
-    public void startGame(String nickname, VirtualClient client) {
-        validateClient(nickname, client);
-        issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname));
-    }
-
-    
 
     @Override
     public void ping() throws RemoteException {
@@ -235,6 +212,40 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
     }
+    //endregion
+
+
+    @Override
+    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {
+        validateClient(nickname, client);
+        issueCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
+    }
+
+
+
+
+    @Override
+    public void placeCard(String nickname, VirtualClient client, String cardID, int row,
+                          int col, String cornerDir, boolean placeOnFront) throws IllegalStateException {
+        issueCommand(new PlacePlayCmd(
+                serverRef.getGameRef(),
+                nickname,
+                cardID,
+                new Point(row, col),
+                CornerDirection.getDirectionFromString(cornerDir),
+                placeOnFront
+        ));
+    }
+
+
+
+    @Override
+    public void startGame(String nickname, VirtualClient client) {
+        validateClient(nickname, client);
+        issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname));
+    }
+
+
 //endregion
 
 //region SOCKET FUNCTIONS

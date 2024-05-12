@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
+
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -91,9 +93,11 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void placeCard(String nickname, VirtualClient client, String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public void placeCard(String nickname, VirtualClient client, String cardID,int row,
+                          int col, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         validateClient(nickname, client);
-        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID, placePos, cornerDir, placeOnFront);
+        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID,
+                new Point(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
         issueCommand(command);
     }
 
@@ -130,7 +134,10 @@ public class RMIServer implements VirtualServer {
     public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
     }
 
-    public void closeServer() throws RemoteException {
+
+    public void closeServer() throws RemoteException, NotBoundException {
+        registry.unbind(CANONICAL_NAME);
+
         UnicastRemoteObject.unexportObject(registry, true);
     }
 }

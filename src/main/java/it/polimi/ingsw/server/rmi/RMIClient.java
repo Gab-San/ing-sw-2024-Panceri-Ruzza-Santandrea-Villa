@@ -93,9 +93,10 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
     }
 
     @Override
-    public void placeCard(String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
+    public void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.placeCard(nickname, this, cardID, placePos, cornerDir, placeOnFront);
+        server.placeCard(nickname, this, cardID, placePos.row(),
+                placePos.col(), cornerDir, placeOnFront);
     }
     @Override
     public void draw(char deck, int card) throws IllegalStateException, RemoteException {

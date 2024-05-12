@@ -243,14 +243,6 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
         closeSocket();
     }
 
-    //endregion
-
-
-    @Override
-    public void placeStartCard(boolean placeOnFront) throws IllegalStateException, RemoteException {
-
-    }
-
     @Override
     public void chooseColor(char color) throws IllegalStateException, RemoteException {
         sendCommand(new ChooseMessage(nickname, color));
@@ -262,18 +254,27 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
     }
 
     @Override
-    public void placeCard(String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
-
-    }
-
-    @Override
     public void draw(char deck, int card) throws IllegalStateException, RemoteException {
         sendCommand(new DrawMessage(nickname, deck, card));
     }
+    //endregion
+
 
     @Override
+    public void placeStartCard(boolean placeOnFront) throws IllegalStateException, RemoteException {
+        sendCommand(new PlaceStartingCardMessage(nickname,placeOnFront));
+    }
+
+
+    @Override
+    public void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
+        sendCommand(new PlaceCardMessage(nickname, cardID,
+                placePos.row(), placePos.col(),cornerDir,placeOnFront));
+    }
+
+    //FIXME: CANNOT DO ANYTHING WITH THIS METHOD
+    @Override
     public void startGame() throws IllegalStateException, RemoteException {
-        new RestartGameMessage(nickname);
     }
 //endregion
 }

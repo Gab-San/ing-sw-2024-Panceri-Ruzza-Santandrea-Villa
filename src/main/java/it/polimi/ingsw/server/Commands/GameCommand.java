@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
+import it.polimi.ingsw.model.exceptions.DeckException;
 
 abstract public class GameCommand{
     public final BoardController gameController;
@@ -10,7 +11,7 @@ abstract public class GameCommand{
         this.nickname = nickname;
     }
 
-    abstract public void execute() throws IllegalStateException;
+    abstract public void execute() throws IllegalStateException, InterruptedException, DeckException;
     public String getNickname(){
         return nickname;
     }
