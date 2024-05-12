@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.controller.testclass.PuppetClient;
+import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -9,107 +11,116 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JoinStateTest extends BaseBoardControllerTest {
-//    GameState joinState;
-///*
-//    public JoinStateTest(int i){
-//        CreationStateTest creationStateTest=new CreationStateTest();
-//        joinState=creationStateTest.upToJoinState(i);
-//    }*/
-//
-//    private void setUp(int numOfPlayers){
-//        joinState = new CreationState(board).setNumOfPlayers(firstPlayer.getNickname(), numOfPlayers);
-//    }
-//
-//    @ParameterizedTest
-//    @ValueSource(ints={2,3,4})
-//    public void joinUntilNextStateTest(int numOfPlayers){
-//        joinUntilSetupState(numOfPlayers);
-//    }
-//
-//    protected GameState joinUntilSetupState(int numOfPlayers){
-//        setUp(numOfPlayers);
-//        assertEquals(JoinState.class, joinState.getClass(), "bho");
-//        GameState nextGS=null;
-//        for(int j = 2; j <= numOfPlayers; j++){
-//            nextGS = joinState.join("Player"+j, null);
-//        }
-//        assertNotNull(nextGS);
-//        assertEquals(SetupState.class, nextGS.getClass());
-//        assertEquals(board.getGamePhase(), GamePhase.PSCP);
-//        return nextGS;
-//    }
-//
+public class JoinStateTest {
+    private BoardController controller;
+    private Board board;
+    private final String playerNickname = "Flavio";
+
+    private void setUp(int numOfPlayers){
+        controller = new BoardController("Flavio's Game");
+        controller.join(playerNickname, new PuppetClient());
+        controller.setNumOfPlayers(playerNickname, numOfPlayers);
+        board = controller.getGameState().board;
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints={2,3,4})
+    public void joinUntilNextStateTest(int numOfPlayers){
+        joinUntilSetupState(numOfPlayers);
+    }
+
+    protected void joinUntilSetupState(int numOfPlayers){
+        setUp(numOfPlayers);
+        assertEquals(JoinState.class, controller.getGameState().getClass());
+        GameState nextGS=null;
+        for(int j = 2; j <= numOfPlayers; j++){
+            controller.join("Player " + j, new PuppetClient());
+            nextGS = controller.getGameState();
+            if(j < numOfPlayers){
+                assertNotNull(nextGS);
+                assertEquals(JoinState.class, nextGS.getClass());
+            }
+        }
+        assertNotNull(nextGS);
+        assertEquals(SetupState.class, nextGS.getClass());
+        assertEquals(board.getGamePhase(), GamePhase.PSCP);
+    }
+
+    //FIXME non ho idea di cosa testi questo test
 //    @Test
 //    public void joinTest() {
 //        setUp(4);
-//        //TODO: FIXME: virtual client is null, must be added assertion with VirtualClient != null
-//        assertThrows(IllegalStateException.class, () -> joinState.join(firstPlayer.getNickname(), null), "Join doesn't throw IllegalStateException with client==null");
-//        // only test join failures here
+//        assertThrows(IllegalStateException.class, () -> controller.join("RAND", null), "Join doesn't throw IllegalStateException with client==null");
+//        assertThrows(IllegalStateException.class, () -> controller.join("RAND", new PuppetClient()), "Join doesn't throw IllegalStateException after full lobby");
 //    }
 //
-//    @ParameterizedTest
-//    @ValueSource(ints={0,1,2,3,4,5,6})
-//    public void setNumOfPlayersTest(int i) {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.setNumOfPlayers("definitelyNotRight", i), "SetNumOfPlayers doesn't throw IllegalStateException wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.setNumOfPlayers(firstPlayer.getNickname(), i), "SetNumOfPlayers doesn't throw IllegalStateException with i="+i);
-//    }
-//
-//    @Test
-//    public void placeStartingCardTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeStartingCard(firstPlayer.getNickname(), true), "PlaceStartingCard doesn't throw IllegalStateException with placeOnFront==true");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeStartingCard(firstPlayer.getNickname(), false), "PlaceStartingCard doesn't throw IllegalStateException with placeOnFront==false");
-//    }
-//
-//    @Test
-//    public void chooseYourColorTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseYourColor("definitelyNotRight", PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with color==BLUE");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.RED),"ChooseYourColor doesn't throw IllegalStateException with color==RED");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.GREEN),"ChooseYourColor doesn't throw IllegalStateException with color==GREEN");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseYourColor(firstPlayer.getNickname(), PlayerColor.YELLOW),"ChooseYourColor doesn't throw IllegalStateException with color==YELLOW");
-//    }
-//
-//    @Test
-//    public void chooseSecretObjectiveTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseSecretObjective("definitelyNotRight", 0), "ChooseSecretObjective doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseSecretObjective(firstPlayer.getNickname(), 0), "ChooseSecretObjective doesn't throw IllegalStateException with choice==0");
-//        assertThrows(IllegalStateException.class, () -> joinState.chooseSecretObjective(firstPlayer.getNickname(), 1), "ChooseSecretObjective doesn't throw IllegalStateException with choice==1");
-//    }
-//
-//    @Test
-//    public void placeCardTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.placeCard("definitelyNotRight", "r0", new Point(0, 0), CornerDirection.TR, true), "PlaceCard doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeCard(firstPlayer.getNickname(), "r0", new Point(0, 0), CornerDirection.TR, true),"PlaceCard doesn't throw IllegalStateException");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeCard(firstPlayer.getNickname(), "r2", new Point(1, 0), CornerDirection.TL, false),"PlaceCard doesn't throw IllegalStateException");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeCard(firstPlayer.getNickname(), "g22", new Point(0, 1), CornerDirection.BL, true),"PlaceCard doesn't throw IllegalStateException");
-//        assertThrows(IllegalStateException.class, () -> joinState.placeCard(firstPlayer.getNickname(), "g8", new Point(1, 1), CornerDirection.BL, false),"PlaceCard doesn't throw IllegalStateException");
-//    }
-//
-//    @Test
-//    public void drawTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.draw("definitelyNotRight", 'r', 0), "Draw doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'r', 0), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==0");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'r', 1), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==1");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'r', 2), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==2");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'g', 0), "Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==0");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'g', 1), "Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==1");
-//        assertThrows(IllegalStateException.class, () -> joinState.draw(firstPlayer.getNickname(), 'g', 2),"Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==2");
-//    }
-//
-//    @Test
-//    public void startGameTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> joinState.startGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> joinState.startGame(firstPlayer.getNickname(), 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
-//        assertThrows(IllegalStateException.class, () -> joinState.startGame(firstPlayer.getNickname(), 3),"StartGame doesn't throw IllegalStateException with numOfPlayers==3");
-//        assertThrows(IllegalStateException.class, () -> joinState.startGame(firstPlayer.getNickname(), 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
-//    }
+    @ParameterizedTest
+    @ValueSource(ints={0,1,2,3,4,5,6})
+    public void setNumOfPlayersTest(int i) {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.setNumOfPlayers("definitelyNotRight", i), "SetNumOfPlayers doesn't throw IllegalStateException wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.setNumOfPlayers(playerNickname, i), "SetNumOfPlayers doesn't throw IllegalStateException with i="+i);
+    }
+
+    @Test
+    public void placeStartingCardTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.placeStartingCard(playerNickname, true), "PlaceStartingCard doesn't throw IllegalStateException with placeOnFront==true");
+        assertThrows(IllegalStateException.class, () -> controller.placeStartingCard(playerNickname, false), "PlaceStartingCard doesn't throw IllegalStateException with placeOnFront==false");
+    }
+
+    @Test
+    public void chooseYourColorTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with color==BLUE");
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.RED),"ChooseYourColor doesn't throw IllegalStateException with color==RED");
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.GREEN),"ChooseYourColor doesn't throw IllegalStateException with color==GREEN");
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.YELLOW),"ChooseYourColor doesn't throw IllegalStateException with color==YELLOW");
+    }
+
+    @Test
+    public void chooseSecretObjectiveTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.chooseSecretObjective("definitelyNotRight", 0), "ChooseSecretObjective doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.chooseSecretObjective(playerNickname, 0), "ChooseSecretObjective doesn't throw IllegalStateException with choice==0");
+        assertThrows(IllegalStateException.class, () -> controller.chooseSecretObjective(playerNickname, 1), "ChooseSecretObjective doesn't throw IllegalStateException with choice==1");
+    }
+
+    @Test
+    public void placeCardTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.placeCard("definitelyNotRight", "r0", new Point(0, 0), CornerDirection.TR, true), "PlaceCard doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r0", new Point(0, 0), CornerDirection.TR, true),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r2", new Point(1, 0), CornerDirection.TL, false),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g22", new Point(0, 1), CornerDirection.BL, true),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g8", new Point(1, 1), CornerDirection.BL, false),"PlaceCard doesn't throw IllegalStateException");
+    }
+
+    @Test
+    public void drawTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.draw("definitelyNotRight", 'r', 0), "Draw doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'r', 0), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==0");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'r', 1), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==1");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'r', 2), "Draw doesn't throw IllegalStateException with deckFrom==r and cardPos==2");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'g', 0), "Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==0");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'g', 1), "Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==1");
+        assertThrows(IllegalStateException.class, () -> controller.draw(playerNickname, 'g', 2),"Draw doesn't throw IllegalStateException with deckFrom==g and cardPos==2");
+    }
+
+    @Test
+    public void startGameTest() {
+        setUp(4);
+        assertThrows(IllegalStateException.class, () -> controller.startGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
+        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 3),"StartGame doesn't throw IllegalStateException with numOfPlayers==3");
+        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
+    }
+
+    @Test
+    public void disconnectTest(){
+        //TODO Test disconnect
+    }
 }

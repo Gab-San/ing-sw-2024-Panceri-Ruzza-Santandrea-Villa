@@ -103,6 +103,11 @@ public class CreationStateTest {
         assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 3),"StartGame doesn't throw IllegalStateException with numOfPlayers==3");
         assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
+
+    @Test
+    public void connectDisconnectTest(){
+        //TODO test disconnect
+    }
 }
 
 
