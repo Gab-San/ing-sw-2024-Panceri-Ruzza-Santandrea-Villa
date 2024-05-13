@@ -18,5 +18,5 @@ public class ModelView {
     public ModelView getPlayerHand(){ return this;
     }
     public boolean isFaceUp(String card) { return true; }
-     public int getPlayerCount() { return new Random().nextInt(1,5); } //upper bound exclusive
+     public int getPlayerCount() { return new Random().nextInt(3) + 2; } //upper bound exclusive
  }

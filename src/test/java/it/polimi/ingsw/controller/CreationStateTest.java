@@ -14,13 +14,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CreationStateTest {
+public class CreationStateTest extends GeneralControlTest{
     private BoardController controller;
     private Class<? extends GameState> nextStateClass;
     private Board board;
     private final String playerNickname = "Flavio";
     @BeforeEach
-    public void setUpcontroller(){
+    public void setUpController(){
         controller = new BoardController("Gamba Game");
         nextStateClass = JoinState.class;
         board = controller.getGameState().board;

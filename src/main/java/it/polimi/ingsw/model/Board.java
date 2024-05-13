@@ -86,8 +86,6 @@ public class Board {
         }
     }
 
-    //TODO: timer to check for players who lose connection during their turn
-    //  we could also periodically ping the clients saved in gameInfo
     public int getCurrentTurn() {
         return currentTurn;
     }
@@ -236,6 +234,7 @@ public class Board {
 
         //scoreboard update
         addScore(player, placedCard.calculatePointsOnPlace(playArea));
+        //TODO: add checkEndgame notification to clients
     }
     /**
      * Places the player's starting card on their playArea
@@ -245,7 +244,6 @@ public class Board {
      */
     public void placeStartingCard(Player player, boolean placeOnFront) throws IllegalStateException{
         StartingCard startingCard = player.getHand().getStartingCard();
-        //TODO card face should be controller by the card not by the method
         if(startingCard == null) throw new IllegalStateException("Player doesn't have a starting card yet!");
         if(placeOnFront)
             startingCard.turnFaceUp();
@@ -402,18 +400,11 @@ public class Board {
 
     /**
      * Removes the player with given nickname from the game (deleting all his information)
-     * Should only be called during Creation or Join states
+     * Should only be called during Creation or Join states.
      * @param nickname player's nickname
      * @throws IllegalStateException if there is no player in this game with the given nickname
      */
     public void removePlayer(String nickname) throws IllegalStateException {
-        //FIXME questo metodo non permette di disconnettersi e riconnettersi.
-        // Questo metodo va utilizzato in tutte quelle fasi di gioco in cui
-        // non è ancora definito il player (CreationState, JoinState, etc..) e invece se ne
-        // deve definire un altro per gli stati successivi.
-
-        //TODO questo metodo è errato perchè non permette di disconnettersi
-        // e riconnettersi. Il turno deve solamente essere skippato
         Player player = getPlayerByNickname(nickname);
 
         // remove playArea and scoreboard
@@ -457,7 +448,6 @@ public class Board {
         return colors;
     }
 
-    //FIXME Questa funzione non è mai usata
     /**
      * @return a random color among colors that have not yet been chosen by a player
      */

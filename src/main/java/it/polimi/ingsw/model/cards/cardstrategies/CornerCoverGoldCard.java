@@ -29,7 +29,6 @@ public class CornerCoverGoldCard implements GoldCardStrategy{
                 coversCorner = corner.isOccupied() && corner.isVisible() ;
             else {
                 try {
-                    //TODO This try branch can be reached only if getting the reference to the placed card
                     coversCorner = playArea.getCardMatrix().get(card.getPosition().move(dir)) != null;
                 }catch (IllegalStateException e){
                     coversCorner = playArea.getCardMatrix().get(card.getCorner(dir).getCardRef().getPosition().move(dir)) != null;

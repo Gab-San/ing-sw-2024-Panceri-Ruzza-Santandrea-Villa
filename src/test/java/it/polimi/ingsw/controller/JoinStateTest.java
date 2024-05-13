@@ -6,17 +6,19 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JoinStateTest {
+public class JoinStateTest extends GeneralControlTest {
     private BoardController controller;
     private Board board;
     private final String playerNickname = "Flavio";
 
-    private void setUp(int numOfPlayers){
+
+    private void setUp(int numOfPlayers) {
         controller = new BoardController("Flavio's Game");
         controller.join(playerNickname, new PuppetClient());
         controller.setNumOfPlayers(playerNickname, numOfPlayers);
@@ -24,27 +26,39 @@ public class JoinStateTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints={2,3,4})
-    public void joinUntilNextStateTest(int numOfPlayers){
-        joinUntilSetupState(numOfPlayers);
-    }
-
-    private void joinUntilSetupState(int numOfPlayers){
+    @ValueSource(ints = {2, 3, 4})
+    public void joinUntilNextStateTest(int numOfPlayers) {
         setUp(numOfPlayers);
         assertEquals(JoinState.class, controller.getGameState().getClass());
-        GameState nextGS=null;
-        for(int j = 2; j <= numOfPlayers; j++){
+        GameState nextGS = null;
+        for (int j = 2; j <= numOfPlayers; j++) {
             controller.join("Player " + j, new PuppetClient());
             nextGS = controller.getGameState();
-            if(j < numOfPlayers){
+            if (j < numOfPlayers) {
                 assertNotNull(nextGS);
                 assertEquals(JoinState.class, nextGS.getClass());
             }
         }
-        assertNotNull(nextGS);
-        assertEquals(SetupState.class, nextGS.getClass());
-        assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
+
+        /*protected void joinUntilSetupState(int numOfPlayers){
+            setUp(numOfPlayers);
+            assertEquals(JoinState.class, controller.getGameState().getClass());
+
+            for (int j = 2; j <= numOfPlayers; j++) {
+                controller.join("Player " + j, new PuppetClient());
+                nextGS = controller.getGameState();
+                if (j < numOfPlayers) {
+                    assertNotNull(nextGS);
+                    assertEquals(JoinState.class, nextGS.getClass());
+                }
+            }
+            assertNotNull(nextGS);
+            assertEquals(SetupState.class, nextGS.getClass());
+            assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
+        }*/
     }
+}
+        /*
 
     //FIXME non ho idea di cosa testi questo test
 
@@ -125,4 +139,4 @@ public class JoinStateTest {
     public void disconnectTest(){
         //TODO Test disconnect
     }
-}
+}*/

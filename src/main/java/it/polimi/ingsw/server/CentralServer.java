@@ -25,7 +25,6 @@ public class CentralServer {
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
         gameRef = new BoardController("");
-        //TODO: review the update/command queue executors
         new Thread(getQueueExtractor(commandQueue)).start();
     }
 
@@ -43,7 +42,6 @@ public class CentralServer {
         return gameRef; // not synchronized as gameRef is final
     }
 
-    //FIXME Work onto executor for game commands
     private Runnable getQueueExtractor(BlockingQueue<GameCommand> queue){
         return () -> {
             try {
@@ -57,13 +55,13 @@ public class CentralServer {
                     }
                 }
             }catch (InterruptedException e){
-                //TODO: handle exception?
+                //TODO: [Ale] handle exception? Maybe restart the thread or crash CentralServer
+                //   restarting the thread may be better (avoids a crash??)
                 System.err.println("Queue thread was interrupted. Closing now.");
             }
         };
     }
 
-    // TODO: add custom exception for invalid connection? (duplicate nickname)
     public synchronized void connect(String nickname, VirtualClient client) throws IllegalStateException{
         //check unique nickname
         if(playerClients.containsValue(client))

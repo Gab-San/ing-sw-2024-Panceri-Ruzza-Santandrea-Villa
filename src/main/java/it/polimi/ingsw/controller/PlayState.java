@@ -75,14 +75,6 @@ public class PlayState extends GameState {
     public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException {
 
         Player player = board.getPlayerByNickname(nickname); // throws if player isn't in game
-        //FIXME: [Ale] Questo check dovrebbe essere inutile,
-        //                  la phase è settata correttamente già in postDrawChecks()
-        if (!player.getHand().isHandFull()) {
-            //serve per quando un giocatore si disconnette e si riconnette in un successivo momento
-            board.setGamePhase(GamePhase.DRAWCARD); //giocatore non ha tutte le carte in mano, allora deve pescare
-            currentPlayerHasPlacedCard=true; //serve per poter pescare la carta: se non ho 3 carte in mano, allora ne ho piazzata almeno 1
-            throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE, YOUR HAND AIN'T FULL");
-        }
 
         if(board.getGamePhase() != GamePhase.PLACECARD)
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
@@ -129,11 +121,6 @@ public class PlayState extends GameState {
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to draw yet");
 
-        //FIXME Com'è possibile capitare in questa situazione? (mano piena in draw phase? [Ale])
-        /*[FLAVIO] dovrebbe essere impossibile, ci penso e poi in caso lo tolgo,*/
-        if (player.getHand().isHandFull())
-            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE, YOUR HAND IS FULL");
-
         switch(cardPos) {
             case 0:
                 try {board.drawTop(deckFrom, player.getHand());}
@@ -158,25 +145,6 @@ public class PlayState extends GameState {
         boolean isLastPlayerTurn = board.getCurrentTurn() == board.getPlayerAreas().size();
         if(lastRound && isLastPlayerTurn)
             nextState();
-        //FIXME: last round non deve essere alzato appena un giocatore raggiunge i 20?
-        // quindi non devi fare il controllo senza isLastPlayerTurn?
-        // Altrimenti dovremmo mettere qualcosa in checkEndGame che
-        // almeno si occupi di notificare
-        // [Ale] Potremmo anche delegare alla view la notifica immediata, siccome ha accesso alla scoreboard.
-        //          La view può controllare l'endgame ad ogni piazzamento di carta.
-        //      Questo sistema nel controller mi sembra valido e funziona.
-
-        /*[FLAVIO] si, va alzato subito ma è un controllo che possono fare gli observer: se lo fa il controller cade nel
-        * problema che è impossibile conprendere se è stato svolto l'ultimo turno o meno:
-        * se il quarto giocatore arriva a 20 punti quando piazza la carta, allora se segno subito lastRound quando
-        * poi il giocatore pesca risulta che lastRound è vero e che essendo l'ultimo giocatore la patita finisce
-        * senza fare il giro finale.
-        * ne avevo già parlato con qualcuno, che la notifica del last turn andrebbe fatta dalla view
-        * indipendentemente dal controller, al tempo non avevamo ancora deciso per gli observer, adesso possiamo far
-        * fare la notifica agli observer
-        *
-        * eventualmente se così non andasse bene, basta aggiungere un latro attributo sul controller che tiene
-        * conto dei casi come nell'esempio*/
         if(isLastPlayerTurn && board.checkEndgame())
             lastRound=true;
         // if a player disconnected after place card but before draw:

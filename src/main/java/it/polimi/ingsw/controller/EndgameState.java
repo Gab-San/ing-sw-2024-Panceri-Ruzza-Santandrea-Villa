@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EndgameState extends GameState{
     public EndgameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
@@ -86,6 +87,10 @@ public class EndgameState extends GameState{
         if(numOfPlayers < board.getPlayerAreas().size()){
             throw new IllegalArgumentException("Can't reduce number of players on game restart.");
         }
+
+        //TODO: must be checked
+        for(Player p : board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
+            board.removePlayer(p.getNickname());
 
         Board newBoard = new Board(this.board.getGameInfo().getGameID() , this.board.getPlayerAreas().keySet().stream().toList());
 

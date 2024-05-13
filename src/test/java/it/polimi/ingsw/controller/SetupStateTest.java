@@ -1,14 +1,19 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.testclass.PuppetClient;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.GamePhase;
-
+import it.polimi.ingsw.model.enums.PlayerColor;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 //TODO QUESTO TEST VA COMPLETATO!!!
 
-public class SetupStateTest {
+public class SetupStateTest extends GeneralControlTest{
     private BoardController controller;
     private Board board;
     private final String playerNickname = "Flavio";
@@ -22,7 +27,7 @@ public class SetupStateTest {
     }
 
 
-    private void joinUntilSetupState(int numOfPlayers){
+      public void joinUntilSetupState(int numOfPlayers){
         assertEquals(JoinState.class, controller.getGameState().getClass());
         GameState nextGS=null;
         for(int j = 2; j <= numOfPlayers; j++){
@@ -72,46 +77,59 @@ public class SetupStateTest {
 //        assertThrows(IllegalStateException.class, () -> controller.setNumOfPlayers(playerNickname, i), "SetNumOfPlayers doesn't throw IllegalStateException with i="+i);
 //    }
 //
-//    @Test
-//    public void placeStartingCardTest() {
-//        setUp(4);
-//        //assertThrows(NullPointerException.class, );
-//        assertThrows(IllegalStateException.class, () -> controller.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and true");
-//        assertThrows(IllegalStateException.class, () -> controller.placeStartingCard("definitelyNotRight", false), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and false");
-//        try {
-//            assertEquals(board.getGamePhase(), GamePhase.PSCP);
-//            placeStartingCardUntilAll(4);
-//        }catch (IllegalStateException e){fail("PlaceStartingCard throws IllegalStareException even though there's no error");}
-//        catch (IllegalArgumentException e){fail("PlaceStartingCard throws IllegalArgumentException even though there's no error");}
-//        assertEquals(controller.class, controller.getClass());
-//        assertEquals(controller.class, controller.getClass());
-//        assertThrows(IllegalStateException.class, ()->controller.placeStartingCard(board.getPlayerAreas().keySet().stream().findAny().map(Player::getNickname).toString(), true));
-//        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
-//    }
-//    public void placeStartingCardUntilAll(int numOfPlayers){
-//        setUp(numOfPlayers);
-//        assertEquals(controller.class, controller.getClass());
-//        GameState nextGS=null;
-//        for(Player p : board.getPlayersByTurn()) {
-//            assertEquals(board.getGamePhase(), GamePhase.PSCP);
-//            controller.placeStartingCard(p.getNickname(), true);
-//        }
-//        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
-//    }
-//
-//    @Test
-//    public void chooseYourColorTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", PlayerColor.RED),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", PlayerColor.GREEN),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", PlayerColor.YELLOW),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.BLUE),"ChooseYourColor doesn't throw IllegalStateException with color==BLUE");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.RED),"ChooseYourColor doesn't throw IllegalStateException with color==RED");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.GREEN),"ChooseYourColor doesn't throw IllegalStateException with color==GREEN");
-//        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor(playerNickname, PlayerColor.YELLOW),"ChooseYourColor doesn't throw IllegalStateException with color==YELLOW");
-//    }
-//
+    @ParameterizedTest
+    @ValueSource(ints = {2,3,4})
+    public void placeStartingCardTest(int numOfPlayers) {
+        setUp(numOfPlayers);
+
+        assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
+        assertEquals(controller.getGameState().getClass(), SetupState.class);
+
+        //assertThrows(NullPointerException.class, );
+        assertThrows(IllegalArgumentException.class, () -> controller.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and true");
+        assertThrows(IllegalArgumentException.class, () -> controller.placeStartingCard("definitelyNotRight", false), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and false");
+        try {
+            assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
+            assertEquals(controller.getGameState().getClass(), SetupState.class);
+            placeStartingCardUntilAll(numOfPlayers);
+        }catch (IllegalStateException e){fail("PlaceStartingCard throws IllegalStareException even though there's no error");}
+        catch (IllegalArgumentException e){fail("PlaceStartingCard throws IllegalArgumentException even though there's no error");}
+        assertEquals(controller.getGameState().getClass(), SetupState.class);
+        assertEquals(board, controller.getGameState().board);
+        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
+        //controllo che dopo la fine mi throwa le eccezioni necessarie se richiamo lo stesso metodo anche correttamente
+        assertThrows(IllegalStateException.class, ()->controller.placeStartingCard(board.getPlayerAreas().keySet().stream().findAny().map(Player::getNickname).toString(), true));
+    }
+    public void placeStartingCardUntilAll(int numOfPlayers){
+        //setUp(numOfPlayers); già fatto nel metodo chiamante
+        //assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING); già controllato
+        //GameState nextGS=null; inutile, metodo void
+        for(Player p : board.getPlayersByTurn()) {
+            assertEquals(controller.getGameState().board.getGamePhase(), GamePhase.PLACESTARTING);
+            assertEquals(controller.getGameState().getClass(), SetupState.class);
+            controller.placeStartingCard(p.getNickname(), true);
+        }
+        assertEquals(controller.getGameState().board.getGamePhase(), GamePhase.CHOOSECOLOR);
+        assertEquals(controller.getGameState().getClass(), SetupState.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource (ints={2,3,4})
+    public void chooseYourColorTest(int numOfPlayers) {
+        setUp(numOfPlayers);
+        placeStartingCardUntilAll(numOfPlayers);
+
+        assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
+        assertEquals(controller.getGameState().getClass(), SetupState.class);
+
+        for(Player p : board.getPlayerAreas().keySet())
+            controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
+
+        assertThrows(IllegalArgumentException.class,()-> controller.chooseSecretObjective("Player 1, ", 0), "error on chose");
+        // assertThrows(IllegalArgumentException.class, () -> controller.chooseYourColor("definitelyNotRight", board.getRandomAvailableColor()),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
+
+    }
+
 //    @ParameterizedTest
 //    @ValueSource (ints={-3,-2,-1,0,1,2,3,4,5})
 //    public void chooseSecretObjectiveTest(int i) {

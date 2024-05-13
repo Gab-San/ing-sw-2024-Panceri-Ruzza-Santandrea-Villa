@@ -45,16 +45,22 @@ public class SetupState extends GameState{
     @Override
     public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException {
-        //TODO handle disconnection. At this time the disconnected player should not be eliminated
+        //TODO handle disconnection.
+        //    Disconnected player completes setup randomly.
+        board.disconnectPlayer(nickname);
+        //TODO unsubscribe player's client from observers
+        //   and push current state to client (possibly done in board.replaceClient())
+
+        // CANNOT DO THIS IF PLAYER IS NOT REMOVED OTHERWISE THE GAME WOULDN'T PROGRESS
+        playersWhoPlacedStartingCard.remove(nickname);
+        playersWhoChoseColor.remove(nickname);
+        playersWhoChoseSecretObjective.remove(nickname);
     }
 
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront)
             throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.PLACESTARTING)
-            //FIXME: could replace the switch on gamePhase with condition checks on board
-
-            //[FLAVIO]preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD IN THIS PHASE"); // default should never be thrown
                 case SETUP ->
@@ -78,9 +84,6 @@ public class SetupState extends GameState{
             throws IllegalStateException, IllegalArgumentException {
         //Controls on gamePhase
         if(board.getGamePhase() != GamePhase.CHOOSECOLOR)
-            //FIXME: could replace the switch on gamePhase with condition checks on board
-
-            //[FLAVIO] preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE"); // default should never be thrown
                 case SETUP, PLACESTARTING -> new IllegalStateException("Must wait for all players to place their starting card");
@@ -108,10 +111,6 @@ public class SetupState extends GameState{
     @Override
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.CHOOSEOBJECTIVE)
-            //FIXME: could replace the switch on gamePhase with condition checks on board
-
-            //[FLAVIO] preferirei tenere la gestione delle GamePhases e i loro controlli solo sul controller
-
             throw switch (board.getGamePhase()){
                 default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE CARD IN THIS PHASE");
                 case SETUP, PLACESTARTING, CHOOSECOLOR, DEALCARDS ->

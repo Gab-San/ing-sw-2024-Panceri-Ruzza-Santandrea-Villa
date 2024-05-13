@@ -31,15 +31,6 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.setNumOfPlayers(nickname, num);
     }
-    //FIXME: [FLAVIO] attenzione alle synch
-    /*you want to update disconnecting players senza sincronizzare su this in modo che anche mentre stai svolgendo
-    * un'altra azione ti viene aggiunto il giocatore che vuole sconnettersi, altrimenti disconnectingPlayers risulta
-    * completamente inutile perché deve aspettare tutte le azioni precedenti alla disconnect per potersi updateare.
-    * Invece si vorrebbe che si updati ogni volta senza dovar aspettare altre azioni:
-    * se faccio 4 join e 1 disconnect, se tutto è synch su this allora avrò conflitti, se invece appena chiamo disconnect
-    * aggiorno disconnectingPlayers allora è molto probabile (ma non certo) che il game non starti/ non abbia conflitto
-    * NOTA: è impossibile avere la sicurezza che non avvenga il conflitto in quanto porterebbe a uno stallo dovuto a
-    *       multiple synch su Object diversi*/
     public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException{
         synchronized(gameState.disconnectingPlayers){
@@ -72,17 +63,15 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
-
-
     public synchronized void startGame(String nickname, int numOfPlayers)
             throws IllegalStateException{
         gameState.startGame(nickname, numOfPlayers);
     }
 
-    //FIXME: In realtà tutte queste azioni si potrebbero mettere nella join di ciascuno stato
+    //TODO: timer to check for players who lose connection during their turn
+    //  we could also periodically ping the clients saved in gameInfo
 
-    /*[FLAVIO]sono d'accordo, ma o va fatto un nuovo metodo indipendente
-    * oppure join va implementato in maniera diversa cambiando la signature */
+    //FIXME: Remove oldClient and use Map<String, VirtualClient> in the observers */
     public synchronized void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
             throws IllegalStateException {
         if(!gameState.board.containsPlayer(nickname))

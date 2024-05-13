@@ -29,11 +29,6 @@ public class Game {
     public String getGameID(){
         return gameID;
     }
-    public void updateAll(){
-        // could also synchronize on the single client? Probably not necessary though
-        synchronized (clientList){
-            //TODO: implement this with View updates
-        }
-    }
+
     public Set<VirtualClient> getClientList(){return Collections.unmodifiableSet(clientList);}
 }

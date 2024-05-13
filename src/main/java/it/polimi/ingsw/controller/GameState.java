@@ -38,6 +38,8 @@ public abstract class GameState {
 
     abstract public void join (String nickname, VirtualClient client) throws IllegalStateException;
     abstract public void setNumOfPlayers(String nickname, int num) throws IllegalStateException, IllegalArgumentException;
+
+    // divcerso per ogni state: join, endgame elimino tutto. play setup non elimino plsyArea
     abstract public void disconnect (String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException;
     abstract public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException;
     abstract public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException, IllegalArgumentException;

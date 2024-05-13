@@ -137,7 +137,6 @@ public class Parser {
         for(String cmp : nickNoCmd){
             nickname.append(cmp).append(" ");
         }
-        //TODO: Save nickname in TCP
         virtualClient.connect(nickname.toString().trim());
     }
 
@@ -200,14 +199,6 @@ public class Parser {
 
     private void parsePlayCmd(String[] commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
         List<String> cmdArg = Arrays.stream(commandComponents).skip(1).toList();
-        //FIXME: fix this command
-        // It can recognise something like place starting G0 on G3
-        // as a valid command
-        //[Ale] that is a problem with all commands using this commandComponents method
-        // even "place starting GGG23TTR send message disconnect" is recognized as a valid "place starting" command
-        // I'd say to either:
-        //     1. change this to just check cmdArg[0] matches [Ss]tarting
-        //     2. keep this but still remove [Ss][0-5] as it never checks that the ID given is the same as the starting card in hand
         for(String arg : cmdArg){
             if(Pattern.compile("[Ss]tarting|[Ss][0-5]").matcher(arg).matches()){
                 parsePlaceStartingCard();
