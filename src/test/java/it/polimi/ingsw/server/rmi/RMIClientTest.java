@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.rmi;
 
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.CentralServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +32,23 @@ class RMIClientTest {
     }
 
     @Test
-    void update() {
+    void update() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.update("Si va a letto!");
     }
 
     @Test
-    void sendMsg() {
+    void sendMsg() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.connect("Ale");
+        client.sendMsg("Sono Ale sto mandando un messaggio");
     }
 
     @Test
-    void testCmd() {
+    void testCmd() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.connect("Cacca");
+        client.testCmd("TEST");
     }
 
     @Test
@@ -141,19 +150,28 @@ class RMIClientTest {
         cli2.chooseColor('B');
         cli2.chooseColor('R');
         client.chooseObjective(0);
-        cli2.chooseObjective(2);
+        client.chooseObjective(2);
         cli2.chooseObjective(1);
     }
 
     @Test
-    void placeCard() {
+    void placeCard() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.connect("Claudio");
+        client.placeCard("S0", new Point(1,1), "TL", true);
     }
 
     @Test
-    void draw() {
+    void draw() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.connect("Davide");
+        client.draw('R', 0);
     }
 
     @Test
-    void startGame() {
+    void startGame() throws NotBoundException, RemoteException {
+        RMIClient client = new RMIClient(1234);
+        client.connect("Stupido");
+        client.startGame(3);
     }
 }

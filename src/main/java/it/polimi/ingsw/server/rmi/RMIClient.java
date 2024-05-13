@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.rmi;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.server.CommandPassthrough;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
@@ -105,8 +104,8 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
     }
 
     @Override
-    public void startGame() throws IllegalStateException, RemoteException {
+    public void startGame(int numOfPlayers) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.startGame(nickname, this);
+        server.startGame(nickname, this, numOfPlayers);
     }
 }

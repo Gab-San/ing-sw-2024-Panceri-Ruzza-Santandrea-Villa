@@ -39,7 +39,7 @@ public class TCPServer {
     public void closeServer(){
         handlerPool.shutdown();
         try {
-            serverSocket.close();
+            if(!serverSocket.isClosed()) serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }

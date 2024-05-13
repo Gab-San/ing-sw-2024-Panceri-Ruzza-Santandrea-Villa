@@ -4,14 +4,16 @@ import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.server.Commands.GameCommand;
 import java.util.Random;
 
-public class StartGameCmd extends GameCommand {
-    public StartGameCmd(BoardController gameRef, String nickname) {
-        super(gameRef, nickname);
+
+public class StartGameCmd extends GameCommand{
+    private final int numOfPlayers;
+    public StartGameCmd(BoardController gameController, String nickname, int numOfPlayers){
+        super(gameController, nickname);
+        this.numOfPlayers = numOfPlayers;
     }
 
     @Override
     public void execute() throws IllegalStateException {
-        int numOfPlayers = new Random().nextInt(4) + 1;
-        gameController.restartGame(nickname, numOfPlayers);
+        this.gameController.restartGame(nickname, numOfPlayers);
     }
 }

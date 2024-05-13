@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp.testingStub;
+package it.polimi.ingsw.server.testingStub;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

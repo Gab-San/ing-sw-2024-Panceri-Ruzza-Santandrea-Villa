@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.tcp;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.CentralServer;
-import it.polimi.ingsw.server.tcp.testingStub.PuppetServer;
+import it.polimi.ingsw.server.testingStub.PuppetServer;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 class TCPClientTest {
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private TCPServer server;
@@ -119,7 +119,7 @@ class TCPClientTest {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        waitExecution(client,  2000);
+        waitExecution(client,  3000);
         assertEquals("Gamba", client.getNickname());
     }
 
@@ -142,7 +142,7 @@ class TCPClientTest {
     }
 
     @Test
-    @DisplayName("Connecting with two clients same nickname")
+    @DisplayName("Connecting after closing socket")
     void testConnect3() throws IOException, InterruptedException {
         TCPClient cli1 = new TCPClient("localhost", 8888);
         cli1.closeSocket();
@@ -184,9 +184,7 @@ class TCPClientTest {
         PuppetServer server = new PuppetServer(10000);
 
         TCPClient client = new TCPClient("localhost", 10000);
-        pool.execute(
-                server::closeServer
-        );
+        server.closeServer();
         assertThrows(
                 RemoteException.class,
                 client::ping
@@ -203,6 +201,18 @@ class TCPClientTest {
         validateClient(client);
         client.testCmd("SONO GIOVANNI STO TESTANDO");
         waitExecution(client, 1500);
+    }
+
+    @Test
+    void testSendMsgFail() throws IOException{
+        TCPClient client = new TCPClient(8888);
+        client.connect("Gamba");
+        validateClient(client);
+        client.closeSocket();
+        assertThrows(
+                RemoteException.class,
+                () ->client.sendMsg("Test fail")
+        );
     }
 
     @Test
@@ -249,7 +259,7 @@ class TCPClientTest {
         TCPClient client = new TCPClient("localhost", 8888);
         client.connect("Giacomo");
         validateClient(client);
-        client.startGame();
+        client.startGame(3);
         waitExecution(client, 5000);
     }
 
@@ -269,6 +279,15 @@ class TCPClientTest {
         validateClient(client);
         client.placeCard("R2", new Point(1,1), "TR", true);
         waitExecution(client, 2000);
+    }
+
+    @Test
+    void setNumOfPlayers() throws IOException {
+        TCPClient client = new TCPClient(8888);
+        client.connect("Gamba");
+        validateClient(client);
+        client.setNumOfPlayers(2);
+        waitExecution(client, 500);
     }
 
 }

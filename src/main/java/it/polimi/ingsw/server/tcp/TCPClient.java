@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.tcp;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.server.CommandPassthrough;
+import it.polimi.ingsw.server.Commands.StartGameCmd;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.tcp.message.*;
 import it.polimi.ingsw.server.tcp.message.errors.PingMessage;
@@ -120,11 +120,11 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
 //endregion
 
 //region FOR TEST PURPOSES
-    public boolean isClosed(){
+    boolean isClosed(){
         return clientSocket.isClosed();
     }
 
-    public String getNickname(){
+    String getNickname(){
         return nickname;
     }
 
@@ -145,14 +145,14 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
             if(outputStream != null) {
                 outputStream.close();
             }
-            if(inputStream != null) {
+            if(inputStream != null ) {
                 inputStream.close();
             }
-            if(clientSocket != null){
+            if(!clientSocket.isClosed()){
                 clientSocket.close();
             }
         } catch (IOException e){
-            e.printStackTrace(System.err);
+            System.err.println(e.getMessage());
         }
     }
 
@@ -200,7 +200,6 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
 //endregion
 
 //region VIRTUAL SERVER INTERFACE
-    //region IMPLEMENTED & TESTED
     @Override
     public void connect(String nickname) throws IllegalStateException, RemoteException {
         try{
@@ -257,7 +256,6 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
     public void draw(char deck, int card) throws IllegalStateException, RemoteException {
         sendCommand(new DrawMessage(nickname, deck, card));
     }
-    //endregion
 
 
     @Override
@@ -272,9 +270,9 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
                 placePos.row(), placePos.col(),cornerDir,placeOnFront));
     }
 
-    //FIXME: CANNOT DO ANYTHING WITH THIS METHOD
     @Override
-    public void startGame() throws IllegalStateException, RemoteException {
+    public void startGame(int numOfPlayers) throws IllegalStateException, RemoteException {
+        sendCommand(new RestartGameMessage(nickname, numOfPlayers));
     }
 //endregion
 }

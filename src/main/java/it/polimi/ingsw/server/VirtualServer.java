@@ -1,9 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.server.rmi.RMIClient;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -17,7 +13,7 @@ public interface VirtualServer extends Remote {
     void placeCard(String nickname, VirtualClient client, String cardID,
                    int row, int col, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException;
     void draw(String nickname, VirtualClient client, char deck, int card) throws IllegalStateException, RemoteException;
-    void startGame(String nickname, VirtualClient client) throws IllegalStateException, RemoteException;
+    void startGame(String nickname, VirtualClient client, int numOfPlayers) throws IllegalStateException, RemoteException;
     void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException;
     void ping() throws RemoteException;
 

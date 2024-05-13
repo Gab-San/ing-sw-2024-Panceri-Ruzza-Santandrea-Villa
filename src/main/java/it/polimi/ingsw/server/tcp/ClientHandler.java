@@ -240,9 +240,9 @@ public class ClientHandler implements Runnable, VirtualServer {
 
 
     @Override
-    public void startGame(String nickname, VirtualClient client) {
+    public void startGame(String nickname, VirtualClient client, int numOfPlayers) {
         validateClient(nickname, client);
-        issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname));
+        issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
     }
 
 
@@ -251,7 +251,6 @@ public class ClientHandler implements Runnable, VirtualServer {
 //region SOCKET FUNCTIONS
     void closeSocket(){
         try {
-            // TODO check if checks are needed
             if(inputStream != null){
                 inputStream.close();
             }
@@ -260,7 +259,7 @@ public class ClientHandler implements Runnable, VirtualServer {
                 outputStream.close();
             }
 
-            if(connectionSocket != null) {
+            if(!connectionSocket.isClosed()) {
                 connectionSocket.close();
             }
         } catch (IOException ignore) {

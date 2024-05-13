@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 
 import java.rmi.RemoteException;
 
@@ -15,7 +14,8 @@ public interface CommandPassthrough {
     void chooseObjective(int choice) throws IllegalStateException, RemoteException;
     void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException;
     void draw(char deck, int card) throws IllegalStateException, RemoteException;
-    void startGame() throws IllegalStateException, RemoteException;
 
     void testCmd(String msg) throws RemoteException;
+
+    void startGame(int numOfPlayers) throws IllegalStateException, RemoteException;
 }

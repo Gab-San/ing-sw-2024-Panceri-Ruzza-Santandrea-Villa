@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class GoldCardFactoryTest {
     static GoldCardFactory gFactory;
 
@@ -46,19 +48,11 @@ class GoldCardFactoryTest {
 
     @Test
     void tryToImportFromWrongFile(){
-        GoldCardFactory goldCardFactory = null;
-        try {
-            goldCardFactory = new GoldCardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile");
-        } catch (DeckInstantiationException deckExc){
-            deckExc.printStackTrace(System.err);
-        }
+        GoldCardFactory goldCardFactory = new GoldCardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile");
 
-        try {
-            assert goldCardFactory != null;
-            GoldCard goldCard = (GoldCard) goldCardFactory.addCardToDeck();
-            System.out.println(goldCard);
-        } catch (DeckException deckExc){
-            deckExc.printStackTrace(System.err);
-        }
+        assertThrows(
+            DeckException.class,
+            goldCardFactory::addCardToDeck
+        );
     }
 }

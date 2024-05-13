@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.server.rmi.RMIClient;
 import it.polimi.ingsw.server.tcp.TCPClient;
 
@@ -25,7 +24,7 @@ public class Parser {
     }
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
-        List<String> commandComponents = Arrays.stream(command.trim().split("\\s+")).distinct().toList();
+        List<String> commandComponents = Arrays.stream(command.trim().toLowerCase().split("\\s+")).distinct().toList();
         String keyCommand = "";
         if(!commandComponents.isEmpty())
             keyCommand = commandComponents.get(0).toLowerCase();
@@ -72,9 +71,9 @@ public class Parser {
 
     }
 
-    private void parseReconnectCmd(List<String> commandComponents) throws IllegalArgumentException{
+    private void parseReconnectCmd(List<String> commandComponents) throws IllegalArgumentException {
         List<String> cmdArgs = commandComponents.stream().skip(1).toList();
-        if(cmdArgs.size() < 3){
+        if (cmdArgs.size() < 3) {
             throw new IllegalArgumentException("Too few arguments.\n" +
                     "Format as such: reconnect TCP/RMI hostname port");
         }
@@ -83,29 +82,31 @@ public class Parser {
         int port;
         try {
             port = Integer.parseInt(cmdArgs.get(2));
-        } catch (NumberFormatException formatException){
+        } catch (NumberFormatException formatException) {
             throw new IllegalArgumentException(formatException.getMessage());
         }
 
 
-        if(cmdArgs.get(0).equalsIgnoreCase("TCP") || cmdArgs.get(0).equalsIgnoreCase("SOCKET")){
-
-            try {
-                virtualClient = new TCPClient(hostAddr, port);
-                return;
-            } catch (UnknownHostException exc){
-                throw new IllegalArgumentException("Wrong host: " + exc.getMessage());
-            } catch (IOException e) {
-                throw new IllegalArgumentException(e.getMessage());
-            }
+        switch (cmdArgs.get(0)) {
+            case "tcp":
+            case "socket":
+                try {
+                    virtualClient = new TCPClient(hostAddr, port);
+                    return;
+                } catch (UnknownHostException exc) {
+                    throw new IllegalArgumentException("Wrong host: " + exc.getMessage());
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(e.getMessage());
+                }
+            case "rmi":
+                try {
+                    virtualClient = new RMIClient(hostAddr, port);
+                } catch (RemoteException | NotBoundException e) {
+                    throw new IllegalArgumentException(e.getMessage());
+                }
+            default:
+                throw new IllegalArgumentException("Command not recognised");
         }
-
-        try {
-            virtualClient = new RMIClient(hostAddr, port);
-        } catch (RemoteException | NotBoundException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-
     }
 
     private void parseSetNumPlayers(List<String> commandComponents) throws IllegalArgumentException, RemoteException, IllegalStateException {
@@ -150,7 +151,7 @@ public class Parser {
     }
 
     private void parseRestartCmd() throws RemoteException, IllegalStateException {
-        virtualClient.startGame();
+//        virtualClient.startGame();
     }
 
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {

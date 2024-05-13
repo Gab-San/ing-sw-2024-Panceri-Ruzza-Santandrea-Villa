@@ -1,5 +1,10 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.server.tcp.TCPClient;
+import it.polimi.ingsw.server.testingStub.PuppetClient;
+import it.polimi.ingsw.server.testingStub.PuppetServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.MatchResult;
@@ -9,6 +14,12 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {
+    private Parser parser;
+    @BeforeEach
+    void setup() {
+        parser = new Parser(new PuppetClient(), new ModelView());
+    }
+
 
     @Test
     void patternTest(){
@@ -45,4 +56,30 @@ class ParserTest {
                 matcher.group()
         );
     }
+
+    @Test
+    void parseReconnectCmd(){
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand(" RECONNECT   ")
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand("RECONNECT   TCP ")
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand("RECONNECT TCP www.gg 4561")
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand("RECONNECT rmi www.gg 4561")
+        );
+
+    }
+
+
 }

@@ -33,14 +33,6 @@ public class RMIServer implements VirtualServer {
         System.out.println("RMI server waiting for client...");
     }
 
-    RMIServer(int connectionPort, CentralServer serverRef) throws RemoteException {
-        this.serverRef = serverRef;
-        this.REGISTRY_PORT = connectionPort;
-        VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
-        Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
-        registry.rebind(CANONICAL_NAME, stub);
-        System.out.println("RMI server waiting for client...");
-    }
 
     private void validateClient(String nickname, VirtualClient client) throws IllegalStateException{
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
@@ -109,9 +101,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void startGame(String nickname, VirtualClient client) throws IllegalStateException, RemoteException {
+    public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException{
         validateClient(nickname, client);
-        StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname);
+        StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers);
         issueCommand(command);
     }
 
@@ -137,7 +129,6 @@ public class RMIServer implements VirtualServer {
 
     public void closeServer() throws RemoteException, NotBoundException {
         registry.unbind(CANONICAL_NAME);
-
         UnicastRemoteObject.unexportObject(registry, true);
     }
 }

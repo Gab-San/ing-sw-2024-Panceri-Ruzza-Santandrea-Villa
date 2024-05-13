@@ -56,9 +56,21 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
-    public synchronized void restartGame(String nickname, int numOfPlayers)
-            throws IllegalStateException{
-        gameState.restartGame(nickname, numOfPlayers);
+
+    public synchronized void restartGame(String nickname, int numOfPlayers) throws IllegalStateException{
+            gameState.restartGame(nickname, numOfPlayers);
+    }
+
+    //FIXME: In realtà tutte queste azioni si potrebbero mettere nella join di ciascuno stato
+    public void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
+            throws IllegalStateException {
+        synchronized (gameState.board){
+            if(!gameState.board.containsPlayer(nickname))
+                throw new IllegalStateException(nickname + " isn't connected to this game.");
+            gameState.board.getGameInfo().removeClient(oldClient);
+            gameState.board.getGameInfo().addClient(newClient);
+            //TODO: push game update to the client that just reconnected
+        }
     }
 
     public String getGameID(){
