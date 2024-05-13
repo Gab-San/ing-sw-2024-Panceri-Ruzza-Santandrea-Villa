@@ -6,7 +6,7 @@ public enum PlayerColor {
     YELLOW('Y'),
     GREEN('G');
     private final char colourInitial;
-    private PlayerColor(char colourInitial){
+    PlayerColor(char colourInitial){
         this.colourInitial = colourInitial;
     }
     public static PlayerColor parseColour(char colour) {

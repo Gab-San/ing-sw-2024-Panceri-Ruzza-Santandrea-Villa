@@ -27,7 +27,7 @@ public class TCPClient implements CommandPassthrough, VirtualClient{
     public TCPClient(int port) throws IOException {
         this("localhost", port);
     }
-    public TCPClient(String hostAddr,int connectionPort) throws IOException, UnknownHostException{
+    public TCPClient(String hostAddr,int connectionPort) throws IOException{
         this.clientSocket = new Socket(hostAddr, connectionPort);
         outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
