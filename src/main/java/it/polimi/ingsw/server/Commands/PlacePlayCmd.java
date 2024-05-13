@@ -21,6 +21,6 @@ public class PlacePlayCmd extends GameCommand{
 
     @Override
     public void execute() throws IllegalStateException {
-//        this.gameController.placeCard(nickname,cardID,placePos,cornerDir,placeOnFront);
+        this.gameController.placeCard(nickname,cardID,placePos,cornerDir,placeOnFront);
     }
 }

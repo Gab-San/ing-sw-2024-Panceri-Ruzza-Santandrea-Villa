@@ -10,6 +10,6 @@ public class SetNumOfPlayersCmd extends GameCommand{
     }
     @Override
     public void execute() throws IllegalStateException {
-        //this.gameController.setNumOfPlayers(nickname, numOfPlayers);
+        this.gameController.setNumOfPlayers(nickname, numOfPlayers);
     }
 }

@@ -10,8 +10,6 @@ import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BoardController {
     private GameState gameState;
@@ -60,7 +58,7 @@ public class BoardController {
         gameState.placeStartingCard(nickname, placeOnFront);
     }
     public synchronized void chooseYourColor(String nickname, PlayerColor color)
-            throws IllegalStateException, IllegalArgumentException, DeckException, InterruptedException{
+            throws IllegalStateException, IllegalArgumentException{
         gameState.chooseYourColor(nickname, color);
     }
 

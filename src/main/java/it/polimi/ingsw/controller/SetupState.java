@@ -75,7 +75,7 @@ public class SetupState extends GameState{
     }
     @Override
     public void chooseYourColor(String nickname, PlayerColor color)
-            throws IllegalStateException, IllegalArgumentException, InterruptedException, DeckException {
+            throws IllegalStateException, IllegalArgumentException {
         //Controls on gamePhase
         if(board.getGamePhase() != GamePhase.CHOOSECOLOR)
             //FIXME: could replace the switch on gamePhase with condition checks on board
@@ -162,16 +162,18 @@ public class SetupState extends GameState{
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 
-    private void drawFirstHand() throws IllegalStateException, DeckException, InterruptedException {
+    private void drawFirstHand() throws IllegalStateException {
         int drawSleepTime = 3;
-        for(Player player : board.getPlayerAreas().keySet()) {
-            board.drawTop(Board.RESOURCE_DECK, player.getHand());
-            Thread.sleep(drawSleepTime);
-            board.drawTop(Board.RESOURCE_DECK, player.getHand());
-            Thread.sleep(drawSleepTime);
-            board.drawTop(Board.GOLD_DECK, player.getHand());
-            Thread.sleep(drawSleepTime);
-        }
+        try {
+            for (Player player : board.getPlayerAreas().keySet()) {
+                board.drawTop(Board.RESOURCE_DECK, player.getHand());
+                Thread.sleep(drawSleepTime);
+                board.drawTop(Board.RESOURCE_DECK, player.getHand());
+                Thread.sleep(drawSleepTime);
+                board.drawTop(Board.GOLD_DECK, player.getHand());
+                Thread.sleep(drawSleepTime);
+            }
+        }catch (DeckException | InterruptedException ignored){/*TODO: handling exception*/ System.err.println("drawFirstHand error");}
     }
     private void giveSecretObjectives(){
         for(Player player : board.getPlayerAreas().keySet()) {
