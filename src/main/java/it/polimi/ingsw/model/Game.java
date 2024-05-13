@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO: replace this class with observer pattern
 public class Game {
     private final String gameID;
     private final Set<VirtualClient> clientList;

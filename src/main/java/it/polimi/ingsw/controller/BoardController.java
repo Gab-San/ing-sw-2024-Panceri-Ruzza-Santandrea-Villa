@@ -19,10 +19,7 @@ public class BoardController {
     }
 
     public BoardController (String gameID, Player... players) throws DeckInstantiationException {
-            //FIXME: [FLAVIO] a cosa serve? Se inserisco la lunghezza di players allora dovrei passare già a setup state
-            // dato che joinState cambia quando entrano i giocatori fino alla lunghezza players.lenth ...
-            this.gameState = new JoinState(new Board(gameID, players), this, new ArrayList<>(),players.length);
-
+        this.gameState = new SetupState(new Board(gameID, players), this, new ArrayList<>());
     }
 
     public synchronized void join(String nickname, VirtualClient client)
@@ -74,6 +71,7 @@ public class BoardController {
                                        CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException{
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
+
 
 
     public synchronized void startGame(String nickname, int numOfPlayers)

@@ -19,10 +19,8 @@ public class PlayState extends GameState {
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
-        if(board.getPlayersByTurn().get(board.getCurrentTurn()).getHand().isHandFull())
-            currentPlayerHasPlacedCard = false;
-        else currentPlayerHasPlacedCard = true;
         lastRound = false;
+        currentPlayerHasPlacedCard = false;
         board.setGamePhase(GamePhase.PLACECARD);
     }
 
@@ -53,6 +51,11 @@ public class PlayState extends GameState {
                 board.setGamePhase(GamePhase.PLACECARD);
             }
         }
+        board.disconnectPlayer(nickname);
+        //TODO unsubscribe player's client from observers
+        //   and push current state to client (possibly done in board.replaceClient())
+        if(board.getCurrentPlayer().getNickname().equals(nickname))
+            postDrawChecks();
     }
 
     @Override
@@ -72,6 +75,8 @@ public class PlayState extends GameState {
     public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException {
 
         Player player = board.getPlayerByNickname(nickname); // throws if player isn't in game
+        //FIXME: [Ale] Questo check dovrebbe essere inutile,
+        //                  la phase è settata correttamente già in postDrawChecks()
         if (!player.getHand().isHandFull()) {
             //serve per quando un giocatore si disconnette e si riconnette in un successivo momento
             board.setGamePhase(GamePhase.DRAWCARD); //giocatore non ha tutte le carte in mano, allora deve pescare
@@ -91,19 +96,13 @@ public class PlayState extends GameState {
         PlayArea playerPlayArea = board.getPlayerAreas().get(player);
         Corner corner = playerPlayArea.getCardMatrix().get(cardPos).getCorner(cornerDir);
 
-        //FIXME Questo controllo diventa inutile, lo si fa anche sopra
-        //[FLAVIO] vero, lo tolgo
-//         if(!player.getHand().isHandFull())
-//            throw new IllegalStateException("PLAYER HAS NOT DRAWN A CARD IN THE LAST ROUND"); // should never be thrown
-
         PlayCard cardToPlace = player.getHand().getCardByID(cardID);
         if(placeOnFront) cardToPlace.turnFaceUp();
         else cardToPlace.turnFaceDown();
 
         board.placeCard(player, cardToPlace, corner);
 
-
-        if(board.canDraw()){ //it is always possible to draw, there's always at least a drawable card on the board
+        if(board.canDraw()){
             currentPlayerHasPlacedCard = true;
             board.setGamePhase(GamePhase.DRAWCARD);
         }
@@ -116,19 +115,24 @@ public class PlayState extends GameState {
     public void draw(String nickname, char deckFrom, int cardPos)
             throws IllegalStateException, IllegalArgumentException {
 
-        //FIXME Com'è possibile capitare in questa situazione?
-        /*[FLAVIO] dovrebbe essere impossibile, ci penso e poi in caso lo tolgo,
-        * in ogni caso andrebbe spostato dopo il controllo che chi chiami il metodo sia il currPlayer*/
+        if(board.getGamePhase() != GamePhase.DRAWCARD)
+            throw new IllegalStateException("Player has not placed a card yet!");
+
         Player player = board.getPlayerByNickname(nickname);
+        
         if (player.getHand().isHandFull())
             throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE, YOUR HAND IS FULL");
         if(board.getGamePhase() != GamePhase.DRAWCARD)
             throw new IllegalStateException("Player has not placed a card yet!");
         if(!board.canDraw()) // should never happen as placeCard already checks for this
             throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD: THERE IS NO CARD TO DRAW");
-        
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to draw yet");
+
+        //FIXME Com'è possibile capitare in questa situazione? (mano piena in draw phase? [Ale])
+        /*[FLAVIO] dovrebbe essere impossibile, ci penso e poi in caso lo tolgo,*/
+        if (player.getHand().isHandFull())
+            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE, YOUR HAND IS FULL");
 
         switch(cardPos) {
             case 0:
@@ -175,36 +179,21 @@ public class PlayState extends GameState {
         * conto dei casi come nell'esempio*/
         if(isLastPlayerTurn && board.checkEndgame())
             lastRound=true;
-        if(board.nextTurn()) { //sono valutati anche i giocatori che sono disconnessi??
-            currentPlayerHasPlacedCard = false;
-            board.setGamePhase(GamePhase.PLACECARD);
+        // if a player disconnected after place card but before draw:
+        //      that player skips the placeCard step (if he can draw)
+        if(board.nextTurn()) {
+            currentPlayerHasPlacedCard = board.canDraw() && !board.getCurrentPlayer().getHand().isHandFull();
+            if(currentPlayerHasPlacedCard)
+                board.setGamePhase(GamePhase.DRAWCARD);
+            else
+                board.setGamePhase(GamePhase.PLACECARD);
         }
+        else nextState();
     }
 
     private void nextState() throws IllegalStateException {
-        //FIXME Questa parte di codice è inutile
-        // si controllano già le disconnesioni e inoltre se un giocatore riesce a pescare
-        // allora non conta che si disconnetta successivamente, il turno andrà al successivo come
-        // normalmente e la partita non si blocca
-
-        /* la ragione per cui è necassario è che se il currPlayer ha caduta di connessione senza fare nessuna azione
-        * dopo disconnessione (per esempio: place card, va a buon fine e poi si disconnette)
-        * risulterà impossibile cambiare il GameState senza avere controlli sulla disconnessione nel NextState,
-        * in quanto non arriverà mai la notifica al controller: in particolare se nessun giocatore farà altre azioni
-        * dato che non risulta il loro turno*/
-
-
-//        Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
-//        if(!player.isConnected()) {
-//            if (board.nextTurn()) {
-//                currentPlayerHasPlacedCard = false;
-//                board.setGamePhase(GamePhase.PCP);
-//            } else return new EndgameState(board, disconnectingPlayers); // no player can do any action, then just end the game
-//        }
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }
-
-
 
     @Override
     public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {

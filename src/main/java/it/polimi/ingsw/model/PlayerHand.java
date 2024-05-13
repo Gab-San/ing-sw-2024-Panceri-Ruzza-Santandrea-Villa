@@ -41,6 +41,10 @@ public class PlayerHand{
         else return false;
     }
 
+    /**
+     * @param card the card to look for in hand
+     * @return true if the card is in hand (comparing with ==), false otherwise
+     */
     public boolean containsCard(@NotNull PlayCard card) {
         for(PlayCard c : cards){
             if(c == card) return true;
@@ -121,7 +125,7 @@ public class PlayerHand{
      */
     public void setObjectiveCard(ObjectiveCard secretObjective) throws PlayerHandException {
         if(this.secretObjective.size() >= MAX_OBJECTIVES)
-            throw new PlayerHandException("Two objective cards were already dealt.", playerRef, ObjectiveCard.class);
+            throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
 
         if(this.secretObjective.contains(secretObjective))
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
@@ -136,11 +140,13 @@ public class PlayerHand{
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
      * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
      */
-
     //FIXME: SE CHOISE E' 0,1,2 NON RESTITUISCE UN'ECCEZIONE
+    //[Ale] no, se choice è 0 lancia IndexOutOfBoundsException perchè fa secretObjective.remove(2);
+    // se invece choice è 1 o 2 è corretto che non lanci nulla.
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
         //FIXME VISTO IL CONTROLLO FATTO NEL BOARDCONTROLLER QUESTO NON È UN PO' RIDONDANTE?
+        //[Ale] è ridondante: se ho un solo obiettivo la remove lancia IndexOutOfBoundsException per ogni choice != 1
         if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
 
         secretObjective.remove(2-choice); // 2-choice == the index that was not chosen

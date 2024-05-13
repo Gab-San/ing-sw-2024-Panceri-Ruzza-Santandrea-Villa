@@ -47,7 +47,7 @@ public class Parser {
                 parseDisconnectCmd();
                 break;
             case "restart":
-                parseRestartCmd();
+                parseRestartCmd(commandComponents);
                 break;
             case "send":
                 parseSendCmd(commandComponents);
@@ -109,8 +109,20 @@ public class Parser {
         virtualClient.sendMsg(msg.toString().trim());
     }
 
-    private void parseRestartCmd() throws RemoteException, IllegalStateException {
-        virtualClient.startGame();
+    private void parseRestartCmd(String[] commandComponents) throws RemoteException, IllegalStateException {
+        if(commandComponents.length < 2) throw new IllegalArgumentException("Restart command must provide a valid number of players.");
+        List<String> numNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
+
+        int numPlayers = -1;
+        for(String n : numNoCmd){
+            try{
+                numPlayers = Integer.parseInt(n);
+                if(numPlayers > 4) throw new IllegalArgumentException("Restart command must provide a number of players < 4");
+                if(numPlayers < view.getPlayerCount()) throw new IllegalArgumentException("Restart command must provide a number of players equal or greater than the current player count");
+            }catch (NumberFormatException ignored){}
+        }
+
+        virtualClient.startGame(numPlayers);
     }
 
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {
@@ -191,6 +203,11 @@ public class Parser {
         //FIXME: fix this command
         // It can recognise something like place starting G0 on G3
         // as a valid command
+        //[Ale] that is a problem with all commands using this commandComponents method
+        // even "place starting GGG23TTR send message disconnect" is recognized as a valid "place starting" command
+        // I'd say to either:
+        //     1. change this to just check cmdArg[0] matches [Ss]tarting
+        //     2. keep this but still remove [Ss][0-5] as it never checks that the ID given is the same as the starting card in hand
         for(String arg : cmdArg){
             if(Pattern.compile("[Ss]tarting|[Ss][0-5]").matcher(arg).matches()){
                 parsePlaceStartingCard();
