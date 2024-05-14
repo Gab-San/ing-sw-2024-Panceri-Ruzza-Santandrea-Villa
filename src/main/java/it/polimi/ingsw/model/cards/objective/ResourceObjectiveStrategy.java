@@ -40,7 +40,6 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
 
         return resourceForCompletion.equals(resObj.resourceForCompletion);
     }
-
     @Override
     public String toString() {
         return "Resources Needed: " +resourceForCompletion.toString();

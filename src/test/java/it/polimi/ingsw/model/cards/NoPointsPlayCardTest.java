@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +12,8 @@ import java.security.InvalidParameterException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
-import static it.polimi.ingsw.model.enums.CornerDirection.BR;
+import static it.polimi.ingsw.CornerDirection.*;
+import static it.polimi.ingsw.CornerDirection.BR;
 import static it.polimi.ingsw.model.enums.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 

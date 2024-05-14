@@ -11,7 +11,7 @@ import org.junit.jupiter.api.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
+import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 

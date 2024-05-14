@@ -1,24 +1,25 @@
-package it.polimi.ingsw.view.model.enums;
+package it.polimi.ingsw;
+
 /**
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)
  */
-public enum CornerDirectionView {
-    TL("TOP LEFT"), TR("TOP RIGHT"), BL("BOTTOM LEFT"), BR("BOTTOM RIGHT");
+public enum CornerDirection {
+    TL("TL"), TR("TR"), BL("BL"), BR("BR");
     // Could be useful for debugging information or to display to the player
-    private final String extendedName;
-    CornerDirectionView(String extendedName){
-        this.extendedName = extendedName;
+    private final String stringId;
+    CornerDirection(String stringId){
+        this.stringId = stringId;
     }
 
     @Override
     public String toString() {
-        return extendedName;
+        return stringId;
     }
 
     /**
      * @return the direction opposite to this <br> (TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR)
      */
-    public it.polimi.ingsw.view.model.enums.CornerDirectionView opposite(){
+    public CornerDirection opposite(){
         switch (this){
             default: // never triggered, but necessary to compile
             case TL: return BR;
@@ -34,7 +35,7 @@ public enum CornerDirectionView {
      * @return the direction as an enum value
      * @throws IllegalArgumentException if the string does not describe a valid direction
      */
-    public static it.polimi.ingsw.view.model.enums.CornerDirectionView getDirectionFromString(String dirName) throws IllegalArgumentException{
+    public static CornerDirection getDirectionFromString(String dirName) throws IllegalArgumentException{
         return switch (dirName) {
             case "TL" -> TL;
             case "TR" -> TR;

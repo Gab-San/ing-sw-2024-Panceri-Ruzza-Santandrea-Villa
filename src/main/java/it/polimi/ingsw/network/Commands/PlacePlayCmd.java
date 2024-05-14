@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.Commands;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 
 public class PlacePlayCmd extends GameCommand{
 

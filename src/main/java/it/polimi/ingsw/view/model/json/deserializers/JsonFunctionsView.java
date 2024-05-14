@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view.model.json.deserializers;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.enums.GameResourceView;
 import org.jetbrains.annotations.NotNull;

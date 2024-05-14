@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.*;
 import org.jetbrains.annotations.*;
 

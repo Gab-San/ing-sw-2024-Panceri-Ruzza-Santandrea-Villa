@@ -4,7 +4,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;

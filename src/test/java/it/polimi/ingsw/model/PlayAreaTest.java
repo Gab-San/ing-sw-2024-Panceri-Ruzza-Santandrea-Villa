@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static it.polimi.ingsw.model.enums.GameResource.*;
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
+import static it.polimi.ingsw.CornerDirection.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayAreaTest {

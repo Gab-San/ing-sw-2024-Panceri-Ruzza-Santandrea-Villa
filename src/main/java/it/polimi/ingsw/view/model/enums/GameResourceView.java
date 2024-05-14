@@ -10,7 +10,7 @@ public enum GameResourceView {
     private GameResourceView(int resourceIndex){
         this.resourceIndex = resourceIndex;
     }
-    public static it.polimi.ingsw.view.model.enums.GameResourceView getResourceFromName(String resName){
+    public static GameResourceView getResourceFromName(String resName){
         switch (resName){
             case "M": return it.polimi.ingsw.view.model.enums.GameResourceView.M;
             case "B": return it.polimi.ingsw.view.model.enums.GameResourceView.B;

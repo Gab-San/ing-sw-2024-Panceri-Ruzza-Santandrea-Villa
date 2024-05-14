@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.model.cards;
 
-public class ViewCard {
+public abstract class ViewCard {
     private final String cardID;
     protected boolean isFaceUp;
 

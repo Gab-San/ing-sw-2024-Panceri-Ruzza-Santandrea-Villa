@@ -4,10 +4,10 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.*;
 import java.security.InvalidParameterException;
-import static it.polimi.ingsw.model.enums.CornerDirection.TL;
-import static it.polimi.ingsw.model.enums.CornerDirection.TR;
-import static it.polimi.ingsw.model.enums.CornerDirection.BL;
-import static it.polimi.ingsw.model.enums.CornerDirection.BR;
+import static it.polimi.ingsw.CornerDirection.TL;
+import static it.polimi.ingsw.CornerDirection.TR;
+import static it.polimi.ingsw.CornerDirection.BL;
+import static it.polimi.ingsw.CornerDirection.BR;
 import java.util.*;
 
 /**

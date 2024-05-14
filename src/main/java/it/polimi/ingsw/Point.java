@@ -1,7 +1,5 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
-
 public record Point(int row, int col) {
     /**
      * Constructs a Point as a copy of another point

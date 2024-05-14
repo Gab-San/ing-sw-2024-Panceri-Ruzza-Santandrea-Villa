@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.model.cards;
 
+
 public class ViewObjectiveCard extends ViewCard {
-    public ViewObjectiveCard(String cardID) {
+    String objectiveStrategy;
+    public ViewObjectiveCard(String cardID, String strategy) {
         super(cardID);
     }
 }

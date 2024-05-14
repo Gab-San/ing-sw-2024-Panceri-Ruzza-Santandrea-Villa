@@ -1,10 +1,19 @@
 package it.polimi.ingsw.view.model.cards;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+/*Necessari
+
+placementCost (stringa singola)
+pointsOnPlace
+backResource
+corners Mappa direction-resource
+
+ */
 
 public class ViewPlaceableCard extends ViewCard{
     Map<CornerDirection, ViewCorner> corners;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.Commands.*;

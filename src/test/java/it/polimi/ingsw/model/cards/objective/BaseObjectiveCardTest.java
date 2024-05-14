@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.junit.jupiter.api.BeforeEach;
 
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
+import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.model.enums.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 

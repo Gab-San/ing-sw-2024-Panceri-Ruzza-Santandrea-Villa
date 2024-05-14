@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import org.junit.jupiter.api.Test;

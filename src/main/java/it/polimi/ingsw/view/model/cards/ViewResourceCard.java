@@ -1,7 +1,10 @@
 package it.polimi.ingsw.view.model.cards;
 
-public class ViewResourceCard extends ViewPlaceableCard {
-    public ViewResourceCard(String cardID) {
-        super(cardID);
+import java.util.List;
+
+public class ViewResourceCard extends ViewPlayCard {
+
+    public ViewResourceCard(String cardID, List<ViewCorner> corners, int pointsOnPlace) throws IllegalArgumentException {
+        super(cardID, corners, pointsOnPlace);
     }
 }

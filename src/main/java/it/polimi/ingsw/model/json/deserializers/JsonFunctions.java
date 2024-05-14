@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.cards.cardstrategies.SimpleGoldCard;
 import it.polimi.ingsw.model.cards.objective.PatternObjective;
 import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.NotNull;
 
