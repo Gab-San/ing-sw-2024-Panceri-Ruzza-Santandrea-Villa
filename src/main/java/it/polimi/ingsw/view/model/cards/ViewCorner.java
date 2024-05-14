@@ -1,31 +1,30 @@
 package it.polimi.ingsw.view.model.cards;
 
-import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.view.model.enums.GameResourceView;
 
 public class ViewCorner {
-    private final GameResource frontResource;
-    private final GameResource backResource;
+    private final GameResourceView frontResource;
+    private final GameResourceView backResource;
     private boolean visible;
     private ViewPlaceableCard cardRef;
     private final CornerDirection direction;
 
-    public ViewCorner(GameResource frontResource, GameResource backResource, CornerDirection direction, ViewPlaceableCard cardRef){
+    public ViewCorner(GameResourceView frontResource, GameResourceView backResource, CornerDirection direction, ViewPlaceableCard cardRef){
         this.frontResource = frontResource;
         this.backResource = backResource;
         this.direction = direction;
         visible = true;
         this.cardRef = cardRef;
     }
-    public ViewCorner(GameResource frontResource, GameResource backResource, CornerDirection direction){
+    public ViewCorner(GameResourceView frontResource, GameResourceView backResource, CornerDirection direction){
         this(frontResource, backResource, direction, null);
     }
 
-    public GameResource getFrontResource() {
+    public GameResourceView getFrontResource() {
         return frontResource;
     }
-    public GameResource getBackResource() {
+    public GameResourceView getBackResource() {
         return backResource;
     }
 

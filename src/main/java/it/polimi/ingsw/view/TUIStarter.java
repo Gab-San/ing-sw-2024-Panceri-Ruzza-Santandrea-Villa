@@ -1,4 +1,4 @@
-import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
+package it.polimi.ingsw.view;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -17,18 +17,10 @@ public class TUIStarter {
         out.println("Enter card ID (e.g., G0, G33):");
         String cardId = scanner.nextLine();
 
-        GoldCardJSON card = retrieveCardFromModel(cardId);
+        out.println("Enter card color (red, purple, green, cyan):");
+        String color = scanner.nextLine();
 
-        // Disegna la carta specificata
-        DrawGoldCard drawGoldCard = new DrawGoldCard();
-        drawGoldCard.drawCard(card, out, true); // Disegna il fronte della carta
-
-        scanner.close();
-    }
-
-    private static GoldCardJSON retrieveCardFromModel(String cardId) {
-        GoldCardJSON card = new GoldCardJSON();
-        card.setCardId(cardId);
-        return card;
+        // Stampa la carta nel terminale con il colore scelto
+        PrintCard.printCardBackground(cardId, color);
     }
 }
