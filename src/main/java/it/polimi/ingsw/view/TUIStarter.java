@@ -7,6 +7,7 @@ public class TUIStarter {
     public static void startTUI() {
         Scanner scanner = new Scanner(System.in);
         PrintWriter out = new PrintWriter(System.out, true);
+        PrintCard printCard = new PrintCard();
 
         out.println("Enter connection type (TCP o RMI):");
         String connectionType = scanner.nextLine();
@@ -21,6 +22,6 @@ public class TUIStarter {
         String color = scanner.nextLine();
 
         // Stampa la carta nel terminale con il colore scelto
-        PrintCard.printCardBackground(cardId, color);
+        //printCard.printCard(cardId, color);
     }
 }

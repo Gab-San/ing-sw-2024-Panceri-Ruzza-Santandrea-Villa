@@ -11,17 +11,29 @@ public enum GameResourceView {
         this.resourceIndex = resourceIndex;
     }
     public static GameResourceView getResourceFromName(String resName){
-        switch (resName){
-            case "M": return it.polimi.ingsw.view.model.enums.GameResourceView.M;
-            case "B": return it.polimi.ingsw.view.model.enums.GameResourceView.B;
-            case "L" : return it.polimi.ingsw.view.model.enums.GameResourceView.L;
-            case "W": return it.polimi.ingsw.view.model.enums.GameResourceView.W;
-            case "S": return it.polimi.ingsw.view.model.enums.GameResourceView.S;
-            case "P" : return it.polimi.ingsw.view.model.enums.GameResourceView.P;
-            case "Q": return it.polimi.ingsw.view.model.enums.GameResourceView.Q;
-            case "F": return it.polimi.ingsw.view.model.enums.GameResourceView.F;
-            default: return null;
-        }
+        return switch (resName) {
+            case "M" -> GameResourceView.M;
+            case "B" -> GameResourceView.B;
+            case "L" -> GameResourceView.L;
+            case "W" -> GameResourceView.W;
+            case "S" -> GameResourceView.S;
+            case "P" -> GameResourceView.P;
+            case "Q" -> GameResourceView.Q;
+            case "F" -> GameResourceView.F;
+            default -> null;
+        };
+    }
+    public String toString(){
+        return switch (this) {
+            case M -> "M";
+            case B -> "B";
+            case L -> "L";
+            case W -> "W";
+            case S -> "S";
+            case P -> "P";
+            case Q -> "Q";
+            case F -> "F";
+        };
     }
 
     public int getResourceIndex(){
