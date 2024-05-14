@@ -27,10 +27,10 @@ public class Board {
     private final PlayableDeck resourceDeck, goldDeck;
     private final ObjectiveDeck objectiveDeck;
     private final StartingCardDeck startingDeck;
-    public static final char STARTING_DECK = 's';
-    public static final char OBJECTIVE_DECK = 'o';
-    public static final char RESOURCE_DECK = 'r';
-    public static final char GOLD_DECK = 'g';
+    public static final char STARTING_DECK = 'S';
+    public static final char OBJECTIVE_DECK = 'O';
+    public static final char RESOURCE_DECK = 'R';
+    public static final char GOLD_DECK = 'G';
     private final Map<Player, Boolean> isPlayerDeadlocked;
 
     private int currentTurn;

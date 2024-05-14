@@ -143,8 +143,11 @@ public class PlayState extends GameState {
 
     private void postDrawChecks(){
         boolean isLastPlayerTurn = board.getCurrentTurn() == board.getPlayerAreas().size();
-        if(lastRound && isLastPlayerTurn)
+        if(lastRound && isLastPlayerTurn) {
             nextState();
+            return;
+        }
+
         if(isLastPlayerTurn && board.checkEndgame())
             lastRound=true;
         // if a player disconnected after place card but before draw:
