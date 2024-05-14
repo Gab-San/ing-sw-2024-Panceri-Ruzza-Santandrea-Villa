@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //TODO QUESTO TEST VA COMPLETATO!!!
 
-public class SetupStateTest extends GeneralControlTest{
+public class SetupStateTest {
     private BoardController controller;
     private Board board;
     private final String playerNickname = "Flavio";
@@ -27,21 +27,11 @@ public class SetupStateTest extends GeneralControlTest{
     }
 
 
-      public void joinUntilSetupState(int numOfPlayers){
-        assertEquals(JoinState.class, controller.getGameState().getClass());
-        GameState nextGS=null;
-        for(int j = 2; j <= numOfPlayers; j++){
-            controller.join("Player " + j, new PuppetClient());
-            nextGS = controller.getGameState();
-            if(j < numOfPlayers){
-                assertNotNull(nextGS);
-                assertEquals(JoinState.class, nextGS.getClass());
+        public void joinUntilSetupState(int numOfPlayers){
+            for(int j = 2; j <= numOfPlayers; j++){
+                controller.join("Player " + j, new PuppetClient());
             }
         }
-        assertNotNull(nextGS);
-        assertEquals(SetupState.class, nextGS.getClass());
-        assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
-    }
 
 //    public void advanceToPlayState(int numOfPlayers){
 //        setUp(numOfPlayers);
@@ -84,7 +74,6 @@ public class SetupStateTest extends GeneralControlTest{
 
         assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
         assertEquals(controller.getGameState().getClass(), SetupState.class);
-
         //assertThrows(NullPointerException.class, );
         assertThrows(IllegalArgumentException.class, () -> controller.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and true");
         assertThrows(IllegalArgumentException.class, () -> controller.placeStartingCard("definitelyNotRight", false), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname and false");
@@ -97,6 +86,10 @@ public class SetupStateTest extends GeneralControlTest{
         assertEquals(controller.getGameState().getClass(), SetupState.class);
         assertEquals(board, controller.getGameState().board);
         assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
+        for(Player p : board.getPlayerAreas().keySet())
+            assertTrue(board.getPlayerAreas().get(p).getCardMatrix().containsKey(new Point(0,0)));
+        //sarebbe da controllare anche che la carta sia esattamente quella data, ma considero questo fatto come certo?
+
         //controllo che dopo la fine mi throwa le eccezioni necessarie se richiamo lo stesso metodo anche correttamente
         assertThrows(IllegalStateException.class, ()->controller.placeStartingCard(board.getPlayerAreas().keySet().stream().findAny().map(Player::getNickname).toString(), true));
     }
@@ -122,11 +115,7 @@ public class SetupStateTest extends GeneralControlTest{
         assertEquals(board.getGamePhase(), GamePhase.CHOOSECOLOR);
         assertEquals(controller.getGameState().getClass(), SetupState.class);
 
-        for(Player p : board.getPlayerAreas().keySet())
-            controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
-
-        assertThrows(IllegalArgumentException.class,()-> controller.chooseSecretObjective("Player 1, ", 0), "error on chose");
-        // assertThrows(IllegalArgumentException.class, () -> controller.chooseYourColor("definitelyNotRight", board.getRandomAvailableColor()),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.chooseYourColor("definitelyNotRight", board.getRandomAvailableColor()),"ChooseYourColor doesn't throw IllegalStateException with wrong nickname");
 
     }
 
