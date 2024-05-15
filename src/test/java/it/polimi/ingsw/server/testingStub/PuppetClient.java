@@ -18,11 +18,6 @@ public class PuppetClient implements CommandPassthrough {
     }
 
     @Override
-    public void testCmd(String text) {
-        System.out.println(colorize("TEST COMMAND CALLED", textColorFormat));
-    }
-
-    @Override
     public void connect(String nickname) throws IllegalStateException {
         System.out.println(colorize("CONNECT COMMAND CALLED WITH ARGS:\n"
                 + nickname, textColorFormat));
@@ -77,5 +72,10 @@ public class PuppetClient implements CommandPassthrough {
     public void startGame(int numOfPlayers) throws IllegalStateException {
         System.out.println(colorize("START GAME COMMAND CALLED WITH ARGS:\n"
                 + numOfPlayers, textColorFormat));
+    }
+
+    @Override
+    public void ping() throws RemoteException {
+        System.out.println("Ping Called");
     }
 }

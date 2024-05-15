@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp;
+package it.polimi.ingsw.server.tcp.server;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
@@ -7,11 +7,14 @@ import it.polimi.ingsw.server.CentralServer;
 import it.polimi.ingsw.server.Commands.*;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
+import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
 import it.polimi.ingsw.server.tcp.message.*;
 
-import it.polimi.ingsw.server.tcp.message.errors.ErrorConnectMessage;
-import it.polimi.ingsw.server.tcp.message.errors.ErrorMessage;
-import it.polimi.ingsw.server.tcp.message.errors.PingMessage;
+import it.polimi.ingsw.server.tcp.message.PingMessage;
+import it.polimi.ingsw.server.tcp.message.TCPClientCheckMessage;
+import it.polimi.ingsw.server.tcp.server.message.CheckMessage;
+
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,9 +29,9 @@ public class ClientHandler implements Runnable, VirtualServer {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private final Queue<TCPClientMessage> commandQueue;
-    private final Queue<TCPClientErrorMessage> errorQueue;
+    private final Queue<TCPClientCheckMessage> errorQueue;
     private final CentralServer serverRef;
-    private final ClientProxy proxy;
+    private final ServerSideProxy proxy;
     public ClientHandler(Socket connectionSocket){
         this.connectionSocket = connectionSocket;
         try {
@@ -40,7 +43,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         commandQueue = new LinkedBlockingQueue<>();
         errorQueue = new LinkedBlockingQueue<>();
         serverRef = CentralServer.getSingleton();
-        proxy = new ClientProxy(this, outputStream);
+        proxy = new ServerSideProxy(this, outputStream);
         startCommandExecutor();
         startErrorExecutor();
     }
@@ -49,7 +52,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         new Thread(
                 () -> {
                     while(!connectionSocket.isClosed()){
-                        TCPClientErrorMessage errorMessage;
+                        TCPClientCheckMessage errorMessage;
                         synchronized (errorQueue){
                             while(errorQueue.isEmpty()){
                                 try{
@@ -83,8 +86,15 @@ public class ClientHandler implements Runnable, VirtualServer {
 
                             command = commandQueue.remove();
                         }
+
+
+
                         try {
                             command.execute(this, proxy);
+                        } catch (IllegalStateException stateException) {
+                            proxy.sendCheck(new CheckMessage(stateException));
+                        } catch (IllegalArgumentException argException){
+                            proxy.sendCheck(new CheckMessage(argException));
                         } catch (RemoteException e) {
                             System.err.println(e.getMessage() + "\n" + e.getCause().getMessage());
                             closeSocket();
@@ -103,14 +113,14 @@ public class ClientHandler implements Runnable, VirtualServer {
             while (!connectionSocket.isClosed()){
                 TCPMessage commandFromClient;
                 commandFromClient = (TCPMessage) inputStream.readObject();
-                if(!commandFromClient.isError()) {
+                if(!commandFromClient.isCheck()) {
                     synchronized (commandQueue) {
                         commandQueue.offer((TCPClientMessage) commandFromClient);
                         commandQueue.notifyAll();
                     }
                 } else{
                     synchronized (errorQueue) {
-                        errorQueue.offer((TCPClientErrorMessage) commandFromClient);
+                        errorQueue.offer((TCPClientCheckMessage) commandFromClient);
                         errorQueue.notifyAll();
                     }
                 }
@@ -126,14 +136,15 @@ public class ClientHandler implements Runnable, VirtualServer {
 //region AUXILIARY FUNCTIONS
     private void validateClient(String nickname, VirtualClient client) {
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
-            proxy.updateError(new ErrorMessage("Illegal request, wrong client!"));
+//            proxy.updateError(new ErrorMessage("Illegal request, wrong client!"));
+            return;
     }
 
     private void issueCommand(GameCommand command) throws IllegalStateException{
         try {
             serverRef.issueGameCommand(command);
         }catch (InterruptedException e) {
-            proxy.updateError(new ErrorMessage("Couldn't issue command!"));
+//            proxy.updateError(new ErrorMessage("Couldn't issue command!"));
         }
     }
 
@@ -143,14 +154,10 @@ public class ClientHandler implements Runnable, VirtualServer {
     //region IMPLEMENTED & TESTED
     @Override
     public void connect(String nickname, VirtualClient client){
-        try {
-            serverRef.connect(nickname, client);
-            proxy.setUsername(nickname);
-            serverRef.updateMsg(nickname + " has connected");
-            proxy.updateError(new ErrorConnectMessage(nickname, false));
-        } catch (IllegalStateException stateException){
-            proxy.updateError(new ErrorConnectMessage(nickname, true, stateException.getMessage()));
-        }
+        serverRef.connect(nickname, client);
+        proxy.setUsername(nickname);
+        serverRef.updateMsg(nickname + " has connected");
+        proxy.sendCheck(new CheckMessage());
     }
 
     @Override
@@ -172,16 +179,13 @@ public class ClientHandler implements Runnable, VirtualServer {
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) {
+    public void disconnect(String nickname, VirtualClient client)
+            throws IllegalStateException, IllegalArgumentException, RemoteException {
         validateClient(nickname,client);
-        try {
-            serverRef.disconnect(nickname, client);
-            serverRef.updateMsg(nickname + " has disconnected");
-        } catch (IllegalStateException stateException){
-            proxy.updateError(new ErrorMessage(stateException.getMessage()));
-        } finally {
-            closeSocket();
-        }
+        serverRef.disconnect(nickname, client);
+        serverRef.updateMsg(nickname + " has disconnected");
+        proxy.sendCheck(new CheckMessage());
+        closeSocket();
     }
 
     @Override
@@ -240,7 +244,7 @@ public class ClientHandler implements Runnable, VirtualServer {
 
 
     @Override
-    public void startGame(String nickname, VirtualClient client, int numOfPlayers) {
+    public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
         issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
     }

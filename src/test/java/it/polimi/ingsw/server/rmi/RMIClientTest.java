@@ -44,12 +44,6 @@ class RMIClientTest {
         client.sendMsg("Sono Ale sto mandando un messaggio");
     }
 
-    @Test
-    void testCmd() throws NotBoundException, RemoteException {
-        RMIClient client = new RMIClient(1234);
-        client.connect("Cacca");
-        client.testCmd("TEST");
-    }
 
     @Test
     void connect() throws NotBoundException, RemoteException {

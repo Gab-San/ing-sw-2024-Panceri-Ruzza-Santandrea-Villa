@@ -18,7 +18,7 @@ public class RMIServer implements VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
     public final int REGISTRY_PORT;
     private final CentralServer serverRef;
-    private Registry registry;
+    private final Registry registry;
 
     /**
      * Instantiates the RMIServer and binds it to the registry
@@ -47,38 +47,38 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void connect(String nickname, VirtualClient client) throws IllegalStateException {
+    public void connect(String nickname, VirtualClient client) throws IllegalStateException, RemoteException{
         serverRef.connect(nickname, client);
         serverRef.updateMsg(nickname + " has connected");
     }
 
     @Override
-    public void setNumOfPlayers(String nickname, VirtualClient client, int num) throws IllegalStateException {
+    public void setNumOfPlayers(String nickname, VirtualClient client, int num) throws RemoteException {
         validateClient(nickname, client);
         SetNumOfPlayersCmd command = new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num);
         issueCommand(command);
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException {
+    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException, RemoteException {
         serverRef.disconnect(nickname, client);
         serverRef.updateMsg(nickname + " has disconnected");
     }
 
     @Override
-    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront) throws IllegalStateException {
+    public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
         PlaceStartingCmd command = new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront);
         issueCommand(command);
     }
     @Override
-    public void chooseColor(String nickname, VirtualClient client, char colour) throws IllegalStateException{
+    public void chooseColor(String nickname, VirtualClient client, char colour) throws RemoteException{
         validateClient(nickname, client);
         ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour) );
         issueCommand(command);
     }
     @Override
-    public void chooseObjective(String nickname, VirtualClient client, int choice) throws IllegalStateException {
+    public void chooseObjective(String nickname, VirtualClient client, int choice) throws RemoteException {
         validateClient(nickname, client);
         ChooseObjCmd command = new ChooseObjCmd(serverRef.getGameRef(), nickname, choice);
         issueCommand(command);
@@ -86,7 +86,7 @@ public class RMIServer implements VirtualServer {
 
     @Override
     public void placeCard(String nickname, VirtualClient client, String cardID,int row,
-                          int col, String cornerDir, boolean placeOnFront) throws IllegalStateException {
+                          int col, String cornerDir, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
         PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID,
                 new Point(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
@@ -94,7 +94,7 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void draw(String nickname, VirtualClient client, char deck, int card) throws IllegalStateException {
+    public void draw(String nickname, VirtualClient client, char deck, int card) throws RemoteException {
         validateClient(nickname, client);
         DrawCmd command = new DrawCmd(serverRef.getGameRef(), nickname, deck, card);
         issueCommand(command);
@@ -109,7 +109,7 @@ public class RMIServer implements VirtualServer {
 
 
     @Override
-    public void sendMsg(String nickname, VirtualClient client, String message) {
+    public void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException{
         validateClient(nickname, client);
         String fullMessage = nickname + ": " + message;
         System.out.println(fullMessage);

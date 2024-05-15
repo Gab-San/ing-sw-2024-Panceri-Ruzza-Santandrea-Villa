@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.VirtualServer;
 import java.io.Serial;
 import java.rmi.RemoteException;
 
-public class TestCmdMessage implements TCPClientMessage{
+public class TestCmdMessage implements TCPClientMessage {
 
     @Serial
     private static final long serialVersionUID = 10000L;
@@ -25,7 +25,7 @@ public class TestCmdMessage implements TCPClientMessage{
     }
 
     @Override
-    public boolean isError() {
+    public boolean isCheck() {
         return false;
     }
 }

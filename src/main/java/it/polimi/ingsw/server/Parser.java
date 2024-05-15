@@ -2,7 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.rmi.RMIClient;
-import it.polimi.ingsw.server.tcp.TCPClient;
+import it.polimi.ingsw.server.tcp.client.TCPClientSocket;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -14,11 +14,11 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    private CommandPassthrough virtualClient;
+    private CommandPassthrough virtualServer;
     // TODO: DELETE MODEL VIEW
     private final ModelView view;
-    public Parser(CommandPassthrough virtualClient, ModelView view){
-        this.virtualClient = virtualClient;
+    public Parser(CommandPassthrough virtualServer, ModelView view){
+        this.virtualServer = virtualServer;
         this.view = view;
     }
 
@@ -88,14 +88,15 @@ public class Parser {
             case "tcp":
             case "socket":
                 try {
-                    virtualClient = new TCPClient(hostAddr, port);
+                    TCPClientSocket socket = new TCPClientSocket(hostAddr, port);
+                    virtualServer = socket.getProxy();
                     break;
                 }  catch (IOException e) {
                     throw new IllegalArgumentException(e.getMessage());
                 }
             case "rmi":
                 try {
-                    virtualClient = new RMIClient(hostAddr, port);
+                    virtualServer = new RMIClient(hostAddr, port);
                     break;
                 } catch (RemoteException | NotBoundException e) {
                     throw new IllegalArgumentException(e.getMessage());
@@ -114,7 +115,7 @@ public class Parser {
                     + exception.getMessage() + "2 and 4");
         }
 
-        virtualClient.setNumOfPlayers(numOfPlayers);
+        virtualServer.setNumOfPlayers(numOfPlayers);
     }
 
     private int searchForNumber(List<String> numCmdComp, String numberBounds) throws IndexOutOfBoundsException{
@@ -133,7 +134,7 @@ public class Parser {
                 (cmp) -> msg.append(cmp).append(" ")
         );
 
-        virtualClient.sendMsg(msg.toString().trim());
+        virtualServer.sendMsg(msg.toString().trim());
     }
 
     private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalStateException {
@@ -146,11 +147,11 @@ public class Parser {
         } catch (IndexOutOfBoundsException outOfBoundsException){
             throw new IllegalArgumentException("Invalid number of players." + outOfBoundsException.getMessage() + "2 and 4");
         }
-        virtualClient.startGame(numOfPlayers);
+        virtualServer.startGame(numOfPlayers);
     }
 
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {
-        virtualClient.disconnect();
+        virtualServer.disconnect();
     }
 
     private void parseConnectCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
@@ -161,7 +162,7 @@ public class Parser {
             nickname.append(cmp).append(" ");
         }
 
-        virtualClient.connect(nickname.toString().trim());
+        virtualServer.connect(nickname.toString().trim());
     }
 
     private void parseChooseCmd(List<String> cmdArgs) throws RemoteException,IllegalArgumentException, IllegalStateException {
@@ -190,7 +191,7 @@ public class Parser {
     private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         for (String arg : cmdArgs) {
             if (Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()) {
-                virtualClient.chooseColor(arg.toUpperCase().charAt(0));
+                virtualServer.chooseColor(arg.toUpperCase().charAt(0));
                 return;
             }
         }
@@ -205,7 +206,7 @@ public class Parser {
     private void parseChooseObjCmd(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         try{
             int choice = searchForNumber(cmdArgs, "[1-2]");
-            virtualClient.chooseObjective(choice);
+            virtualServer.chooseObjective(choice);
         }catch (IndexOutOfBoundsException e){
             throw new IllegalArgumentException(
                             """
@@ -249,7 +250,7 @@ public class Parser {
                     "For example: \"R1\" is the first revealed card of the Resource Deck");
         }
 
-        virtualClient.draw(deck, position);
+        virtualServer.draw(deck, position);
     }
 
     private void parsePlayCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
@@ -301,7 +302,7 @@ public class Parser {
             throw new IllegalArgumentException("missing direction");
         }
         //TODO get player card flip state
-        virtualClient.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
+        virtualServer.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
     }
 
 
@@ -310,7 +311,7 @@ public class Parser {
                 Maybe you meant: Place starting card
                 """);
         //TODO Add getting the player card flip state
-        virtualClient.placeStartCard(view.getPlayerStartingCard().isFaceUp());
+        virtualServer.placeStartCard(view.getPlayerStartingCard().isFaceUp());
     }
 
 }

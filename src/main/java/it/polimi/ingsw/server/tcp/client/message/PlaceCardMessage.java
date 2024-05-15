@@ -1,12 +1,13 @@
-package it.polimi.ingsw.server.tcp.message;
+package it.polimi.ingsw.server.tcp.client.message;
 
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
+import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
 
 import java.io.Serial;
 import java.rmi.RemoteException;
 
-public class PlaceCardMessage implements TCPClientMessage{
+public class PlaceCardMessage implements TCPClientMessage {
     @Serial
     private static final long serialVersionUID = 7382L;
     private final String nickname;
@@ -33,7 +34,7 @@ public class PlaceCardMessage implements TCPClientMessage{
     }
 
     @Override
-    public boolean isError() {
+    public boolean isCheck() {
         return false;
     }
 }

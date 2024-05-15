@@ -4,10 +4,7 @@ import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.Commands.GameCommand;
-import it.polimi.ingsw.server.rmi.RMIServer;
-import it.polimi.ingsw.server.tcp.TCPServer;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -109,7 +106,7 @@ public class CentralServer {
         }
     }
 
-    public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException{
+    public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
         //FIXME This check is useless: someone who is not connected is blocked by the client
         if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
         if(!client.equals(playerClients.get(nickname))) throw new IllegalStateException("Illegal request, Client instance does not match!");
@@ -119,7 +116,6 @@ public class CentralServer {
         commandQueue.removeAll(
             commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
         );
-        //TODO: unsubscribe client from all observers
     }
 
     public synchronized void updateMsg(String fullMessage) {

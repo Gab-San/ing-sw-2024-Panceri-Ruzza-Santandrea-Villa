@@ -395,9 +395,8 @@ public class Board {
      * @param nickname player's nickname
      * @throws IllegalStateException if there is no player in this game with the given nickname
      */
-    public void removePlayer(String nickname) throws IllegalStateException {
+    public void removePlayer(String nickname) throws IllegalStateException, IllegalArgumentException {
         Player player = getPlayerByNickname(nickname);
-
         // remove playArea and scoreboard
         playerAreas.remove(player);
         scoreboard.remove(player);

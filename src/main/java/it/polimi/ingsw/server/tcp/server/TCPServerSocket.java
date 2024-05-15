@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp;
+package it.polimi.ingsw.server.tcp.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,11 +6,11 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class TCPServer {
+public class TCPServerSocket {
     private final ServerSocket serverSocket;
     private final ExecutorService handlerPool;
 
-    public TCPServer(int objPort) throws IOException, IllegalArgumentException {
+    public TCPServerSocket(int objPort) throws IOException, IllegalArgumentException {
         serverSocket = new ServerSocket(objPort);
         handlerPool = Executors.newCachedThreadPool();
         startServer();

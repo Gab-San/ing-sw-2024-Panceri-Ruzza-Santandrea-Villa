@@ -28,7 +28,7 @@ public class SendMessage implements TCPClientMessage, TCPServerMessage {
     }
 
     @Override
-    public boolean isError() {
+    public boolean isCheck() {
         return false;
     }
 }

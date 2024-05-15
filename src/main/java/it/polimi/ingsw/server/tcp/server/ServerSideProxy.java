@@ -1,23 +1,19 @@
-package it.polimi.ingsw.server.tcp;
+package it.polimi.ingsw.server.tcp.server;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.tcp.message.errors.PingMessage;
 import it.polimi.ingsw.server.tcp.message.SendMessage;
-import it.polimi.ingsw.server.tcp.message.TCPServerErrorMessage;
+import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
-public class ClientProxy implements VirtualClient {
+public class ServerSideProxy implements VirtualClient {
 
     private final ObjectOutputStream outputStream;
     private final ClientHandler clientHandler;
     private String nickname;
-    public ClientProxy(ClientHandler clientHandler,ObjectOutputStream outputStream) {
+    public ServerSideProxy(ClientHandler clientHandler, ObjectOutputStream outputStream) {
         this.clientHandler = clientHandler;
         this.outputStream = outputStream;
     }
@@ -44,7 +40,7 @@ public class ClientProxy implements VirtualClient {
         this.nickname = nickname;
     }
 
-    void updateError(TCPServerErrorMessage message){
+    public void sendCheck(TCPServerCheckMessage message){
         try{
             ping();
             outputStream.writeObject(message);
