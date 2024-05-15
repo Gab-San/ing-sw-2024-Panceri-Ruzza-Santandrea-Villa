@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.view.tui.TUIStarter;
+
 import java.util.Scanner;
 
 public class GameStart {

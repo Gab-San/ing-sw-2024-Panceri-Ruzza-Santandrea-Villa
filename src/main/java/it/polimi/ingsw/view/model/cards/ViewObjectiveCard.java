@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.model.cards;
 
 
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 public class ViewObjectiveCard extends ViewCard {
     String objectiveStrategyType;
@@ -13,7 +13,7 @@ public class ViewObjectiveCard extends ViewCard {
         this.objectiveStrategyValue = objectiveStrategyValue;
     }
 
-    public GameResourceView getCardColour(){
+    public GameResource getCardColour(){
         return null;
     }
     public String[] getObjectiveStrategyAsStringRows(){

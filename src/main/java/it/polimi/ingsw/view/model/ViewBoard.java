@@ -19,8 +19,7 @@ public class ViewBoard {
 
     private final ViewDeck<ViewResourceCard> resourceCardDeck;
     private final ViewDeck<ViewGoldCard> goldCardDeck;
-    private ViewObjectiveCard firstSharedObjective;
-    private ViewObjectiveCard secondSharedObjective;
+    private final ViewDeck<ViewObjectiveCard> objectiveCardViewDeck;
 
     private final Map<String, ViewPlayArea> playerAreas;
     private final Map<String, Boolean> isPlayerDeadlocked;
@@ -31,8 +30,7 @@ public class ViewBoard {
     public ViewBoard(){
         resourceCardDeck = new ViewDeck<>();
         goldCardDeck = new ViewDeck<>();
-        firstSharedObjective = null;
-        secondSharedObjective = null;
+        objectiveCardViewDeck = new ViewDeck<>();
 
         playerAreas = new Hashtable<>();
         isPlayerDeadlocked = new Hashtable<>();
@@ -44,18 +42,8 @@ public class ViewBoard {
     public ViewDeck<ViewGoldCard> getGoldCardDeck() {
         return goldCardDeck;
     }
-
-    public ViewObjectiveCard getFirstSharedObjective() {
-        return firstSharedObjective;
-    }
-    public void setFirstSharedObjective(ViewObjectiveCard firstSharedObjective) {
-        this.firstSharedObjective = firstSharedObjective;
-    }
-    public ViewObjectiveCard getSecondSharedObjective() {
-        return secondSharedObjective;
-    }
-    public void setSecondSharedObjective(ViewObjectiveCard secondSharedObjective) {
-        this.secondSharedObjective = secondSharedObjective;
+    public ViewDeck<ViewObjectiveCard> getObjectiveCardDeck() {
+        return objectiveCardViewDeck;
     }
 
     public Map<String, ViewPlayArea> getPlayerAreas() {

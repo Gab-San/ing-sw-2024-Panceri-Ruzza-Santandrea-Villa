@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
 import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
-import static it.polimi.ingsw.model.enums.GameResource.WOLF;
+import static it.polimi.ingsw.GameResource.WOLF;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EventTest {

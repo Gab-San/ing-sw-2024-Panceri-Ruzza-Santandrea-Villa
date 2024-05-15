@@ -8,9 +8,8 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 

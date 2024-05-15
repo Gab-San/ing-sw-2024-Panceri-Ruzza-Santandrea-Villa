@@ -2,9 +2,8 @@ package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.view.model.cards.*;
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 import java.util.*;
 
@@ -16,7 +15,7 @@ public class ViewPlayArea {
     // we can represent other players in PlayArea as it's a very simple representation
     // the local player (using the client) will use ViewPlayerHand to see their own hand
     private boolean isConnected;
-    private List<GameResourceView> cardsInHand;
+    private List<GameResource> cardsInHand;
 
     public ViewPlayArea() {
         this.cardMatrix = new Hashtable<>();
@@ -39,7 +38,7 @@ public class ViewPlayArea {
                 dirCard.getCorner(dir.opposite()).cover();
                 freeCorners.remove(dirCard.getCorner(dir.opposite()));
             }
-            else if(card.getCornerResource(dir) != GameResourceView.F)
+            else if(card.getCornerResource(dir) != GameResource.FILLED)
                 freeCorners.add(card.getCorner(dir));
         }
     }

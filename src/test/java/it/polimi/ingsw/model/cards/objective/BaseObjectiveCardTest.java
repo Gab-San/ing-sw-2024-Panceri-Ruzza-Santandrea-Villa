@@ -3,11 +3,11 @@ package it.polimi.ingsw.model.cards.objective;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.BeforeEach;
 
 import static it.polimi.ingsw.CornerDirection.*;
-import static it.polimi.ingsw.model.enums.GameResource.*;
+import static it.polimi.ingsw.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BaseObjectiveCardTest {

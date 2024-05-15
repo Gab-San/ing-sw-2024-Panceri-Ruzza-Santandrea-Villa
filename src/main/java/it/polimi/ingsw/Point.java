@@ -34,7 +34,7 @@ public record Point(int row, int col) {
      * @param directions ordered sequence of moves to apply to this point
      * @return the destination point obtained by applying successive moves
      */
-    public Point move(CornerDirection ...directions){
+    public Point move(CornerDirection...directions){
         Point p = this;
         for (CornerDirection c : directions){
             p = p.move(c);

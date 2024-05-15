@@ -4,14 +4,14 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.objective.PatternObjective;
 import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Hashtable;
 
-import static it.polimi.ingsw.model.enums.GameResource.*;
+import static it.polimi.ingsw.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerHandTest {

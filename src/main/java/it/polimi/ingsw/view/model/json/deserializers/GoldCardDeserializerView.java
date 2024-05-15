@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class GoldCardDeserializerView extends StdDeserializer<GoldCardJSONView> 
 
         goldJ.setCardId(node.get("cardId").asText());
 
-        goldJ.setBackResource(GameResourceView.getResourceFromName(node.get("backResource").asText()));
+        goldJ.setBackResource(GameResource.getResourceFromNameInitial(node.get("backResource").asText()));
 
         goldJ.setCornersJS(JsonFunctionsView.parseJsonCorners(node));
 

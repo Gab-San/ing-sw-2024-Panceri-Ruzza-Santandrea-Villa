@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
 import it.polimi.ingsw.network.VirtualClient;
 

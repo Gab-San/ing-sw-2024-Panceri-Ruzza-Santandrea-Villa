@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 
 import java.io.Serializable;
 

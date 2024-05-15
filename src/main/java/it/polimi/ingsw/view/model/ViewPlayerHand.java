@@ -43,4 +43,18 @@ public class ViewPlayerHand {
     public void flipCard(int index) throws IndexOutOfBoundsException{
         cards.get(index-1).flip();
     }
+    /**
+     * Flips the card in hand identified by cardID
+     * @param cardID ID of the card to flip
+     * @throws IllegalArgumentException there is no card in hand with given cardID
+     */
+    public void flipCard(String cardID) throws IllegalArgumentException{
+        for(ViewPlayCard c : cards){
+            if(c.getCardID().equals(cardID)) {
+                c.flip();
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Card " + cardID + " is not in this hand.");
+    }
 }

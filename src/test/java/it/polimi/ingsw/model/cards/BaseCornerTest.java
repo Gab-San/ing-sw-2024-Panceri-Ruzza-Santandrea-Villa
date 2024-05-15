@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static it.polimi.ingsw.model.enums.GameResource.BUTTERFLY;
-import static it.polimi.ingsw.model.enums.GameResource.FILLED;
+import static it.polimi.ingsw.GameResource.BUTTERFLY;
+import static it.polimi.ingsw.GameResource.FILLED;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BaseCornerTest {

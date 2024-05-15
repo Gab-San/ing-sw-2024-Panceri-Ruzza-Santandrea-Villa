@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.functions;
 
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 
 import java.util.Hashtable;
 import java.util.Map;

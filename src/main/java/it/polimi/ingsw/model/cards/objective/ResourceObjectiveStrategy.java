@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Hashtable;

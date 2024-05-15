@@ -51,7 +51,7 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.draw(nickname, deckFrom, cardPos);
     }
-    public synchronized void placeCard(String nickname, String cardID,Point cardPos,
+    public synchronized void placeCard(String nickname, String cardID, Point cardPos,
                                        CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException{
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }

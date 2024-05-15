@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlaceableCard;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.Test;
 
 import java.util.Hashtable;
@@ -10,8 +10,8 @@ import java.util.Map;
 
 import static it.polimi.ingsw.CornerDirection.BR;
 import static it.polimi.ingsw.CornerDirection.TR;
-import static it.polimi.ingsw.model.enums.GameResource.LEAF;
-import static it.polimi.ingsw.model.enums.GameResource.WOLF;
+import static it.polimi.ingsw.GameResource.LEAF;
+import static it.polimi.ingsw.GameResource.WOLF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 

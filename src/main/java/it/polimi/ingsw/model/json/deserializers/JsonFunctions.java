@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.cards.objective.PatternObjective;
 import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

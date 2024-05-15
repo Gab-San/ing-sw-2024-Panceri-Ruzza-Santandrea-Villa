@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.json.deserializers.CornerJ;
 import it.polimi.ingsw.model.json.deserializers.PointOnPlace;
 

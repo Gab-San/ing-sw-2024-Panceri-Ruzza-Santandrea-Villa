@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -21,8 +21,8 @@ public abstract class ViewPlaceableCard extends ViewCard{
         }
     }
 
-    abstract public GameResourceView getCardColour();
-    public GameResourceView getCornerResource(CornerDirection dir){
+    abstract public GameResource getCardColour();
+    public GameResource getCornerResource(CornerDirection dir){
         return corners.get(dir).getResource();
     }
     public ViewCorner getCorner(CornerDirection dir) {

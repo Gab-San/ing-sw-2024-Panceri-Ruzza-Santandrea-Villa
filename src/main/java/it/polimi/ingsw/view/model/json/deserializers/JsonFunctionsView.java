@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.model.json.deserializers;
 import com.fasterxml.jackson.databind.JsonNode;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public interface JsonFunctionsView {
         node.get("corners").forEach(
                 (e) -> {
                     CornerDirection dir = CornerDirection.getDirectionFromString(e.get("direction").asText());
-                    GameResourceView frontRes = GameResourceView.getResourceFromName(e.get("frontResource").asText());
-                    GameResourceView backRes = GameResourceView.getResourceFromName(e.get("backResource").asText());
+                    GameResource frontRes = GameResource.getResourceFromNameInitial(e.get("frontResource").asText());
+                    GameResource backRes = GameResource.getResourceFromNameInitial(e.get("backResource").asText());
 
                     ViewCorner toAdd = new ViewCorner(frontRes, backRes, dir);
                     corners.add(toAdd);
@@ -41,8 +41,8 @@ public interface JsonFunctionsView {
 
     static List<ViewCorner> parseCorners(@NotNull List<CornerJView> jCorners){
         return jCorners.stream().map(e -> new ViewCorner(
-                GameResourceView.getResourceFromName(e.getFrontResource()),
-                GameResourceView.getResourceFromName(e.getBackResource()),
+                GameResource.getResourceFromNameInitial(e.getFrontResource()),
+                GameResource.getResourceFromNameInitial(e.getBackResource()),
                 CornerDirection.getDirectionFromString(e.getDirection())
         )).collect(Collectors.toList());
     }

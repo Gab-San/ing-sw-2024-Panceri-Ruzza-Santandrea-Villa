@@ -9,12 +9,13 @@ import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.remote.events.playarea.FreeCornersUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaPlacedCardEvent;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.VisibleResourcesUpdateEvent;
+import it.polimi.ingsw.GameResource;
+
 import org.jetbrains.annotations.*;
 
 import java.util.*;

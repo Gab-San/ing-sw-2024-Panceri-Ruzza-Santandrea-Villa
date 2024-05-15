@@ -1,24 +1,23 @@
 package it.polimi.ingsw.view.model.cards;
 
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ViewStartCard extends ViewPlaceableCard {
-    private final List<GameResourceView> centralFrontResources;
+    private final List<GameResource> centralFrontResources;
 
-    public ViewStartCard(String cardID, String imageFrontName, String imageBackName, List<ViewCorner> corners, List<GameResourceView> centralFrontResources) {
+    public ViewStartCard(String cardID, String imageFrontName, String imageBackName, List<ViewCorner> corners, List<GameResource> centralFrontResources) {
         super(cardID, imageFrontName, imageBackName, corners);
         this.centralFrontResources = centralFrontResources;
     }
 
     @Override
-    public GameResourceView getCardColour() {
+    public GameResource getCardColour() {
         return null;
     }
-    public GameResourceView[] getCentralFrontResourcesAsArray() {
-        GameResourceView[] resourceArray = new GameResourceView[3];
+    public GameResource[] getCentralFrontResourcesAsArray() {
+        GameResource[] resourceArray = new GameResource[3];
         for (int i = 0; i < 3; i++) {
             try{
                 resourceArray[i] = centralFrontResources.get(i);

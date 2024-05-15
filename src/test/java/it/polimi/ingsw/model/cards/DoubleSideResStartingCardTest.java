@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +12,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import static it.polimi.ingsw.CornerDirection.*;
-import static it.polimi.ingsw.model.enums.GameResource.*;
-import static it.polimi.ingsw.model.enums.GameResource.MUSHROOM;
+import static it.polimi.ingsw.GameResource.*;
+import static it.polimi.ingsw.GameResource.MUSHROOM;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DoubleSideResStartingCardTest {

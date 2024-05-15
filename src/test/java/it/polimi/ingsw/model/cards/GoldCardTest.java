@@ -5,14 +5,14 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.ItemCountGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.SimpleGoldCard;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.*;
 
 import java.util.Hashtable;
 import java.util.Map;
 
 import static it.polimi.ingsw.CornerDirection.*;
-import static it.polimi.ingsw.model.enums.GameResource.*;
+import static it.polimi.ingsw.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GoldCardTest {

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.model.json.deserializers;
 
-import it.polimi.ingsw.model.json.deserializers.CornerJ;
-import it.polimi.ingsw.view.model.enums.GameResourceView;
+import it.polimi.ingsw.GameResource;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class GoldCardJSONView {
     private String placementCost;
     private String pointsOnPlace;
     private List<CornerJView> cornersJS;
-    private GameResourceView backResource;
+    private GameResource backResource;
 
     public String getCardId() {
         return cardId;
@@ -37,11 +36,11 @@ public class GoldCardJSONView {
         this.pointsOnPlace = pointsOnPlace;
     }
 
-    public GameResourceView getBackResource() {
+    public GameResource getBackResource() {
         return backResource;
     }
 
-    public void setBackResource(GameResourceView backResource) {
+    public void setBackResource(GameResource backResource) {
         this.backResource = backResource;
     }
 
