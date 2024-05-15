@@ -50,6 +50,11 @@ public class PlayableDeck {
         return returnCard;
     }
 
+    //[FLAVIO] it's needed for testing, I need to know if firstRevealedCard exists, with a throw it's impossible
+    public boolean existFirstRevealedCard(){return !(firstRevealedCard==null);}
+    //[FLAVIO] it's needed for testing, I need to know if secondRevealedCard exists, with a throw it's impossible
+    public boolean existSecondRevealedCard(){return !(secondRevealedCard==null);}
+
     public synchronized PlayCard getFirstRevealedCard() throws DeckException {
         if(firstRevealedCard == null){
             throw new DeckException("Trying to draw from empty position", PlayableDeck.class);

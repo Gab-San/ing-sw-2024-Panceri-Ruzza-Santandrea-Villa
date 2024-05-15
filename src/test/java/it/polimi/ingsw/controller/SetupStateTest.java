@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,26 +38,15 @@ public class SetupStateTest {
         }
     }
 
-    //    public void advanceToPlayState(int numOfPlayers){
-//        setUp(numOfPlayers);
-//        //FIXME i giocatori non hanno ancora un turno associato
-//              [Ale] non serve, la chiamata è per avere una lista di player, non importa l'ordine
-//        List<Player> players = board.getPlayersByTurn();
-//        for(Player p : players){
-//            controller.placeStartingCard(p.getNickname(), false);
-//        }
-//        for(Player p : players){
-//            assertDoesNotThrow(()->controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor()));
-//        }
-//        GameState nextState = null;
-//        for(Player p : players){
-//            nextState = controller.chooseSecretObjective(p.getNickname(), 1);
-//        }
-//        assertNotNull(nextState);
-//        assertEquals(PlayState.class, nextState.getClass());
-//        return nextState;
-//    }
-//
+    public void advanceToPlayState(int numOfPlayers){
+        setUp(numOfPlayers);
+        placeAllStarting(numOfPlayers);
+        giveAllColors(numOfPlayers);
+        giveAllSecretObjectives(numOfPlayers);
+
+        assertEquals(PlayState.class, controller.getGameState().getClass());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
     public void joinTest(int numOfPlayers) {
@@ -83,7 +73,7 @@ public class SetupStateTest {
             assertThrows(IllegalStateException.class, () -> controller.setNumOfPlayers(playerNickname, new Random().nextInt(3)+2), "SetNumOfPlayers doesn't throw IllegalStateException with i=" + i);
         }
     }
-//
+
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
     public void placeStartingCardTest(int numOfPlayers) {
@@ -218,6 +208,12 @@ public class SetupStateTest {
         }
         assertEquals(controller.getGameState().board.getGamePhase(), GamePhase.PLACECARD);
         assertEquals(controller.getGameState().getClass(), PlayState.class);
+    }
+
+    private void giveAllSecretObjectives(int numOpPlayers){
+        for(Player p : board.getPlayerAreas().keySet()){
+            controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2)+1);
+        }
     }
 
     @ParameterizedTest
