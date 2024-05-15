@@ -91,7 +91,10 @@ public class PlayArea {
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite());
                 if (dirCorner.isOccupied())
-                    throw new IllegalStateException("Should not place here, corner " + dir + " is occupied");
+                    throw new IllegalStateException("Should not place here, corner " + dir + " is placing on occupied corner " + dirCorner.getDirection() + "\n"
+                        + "Of card with ID: " + dirCard.getCardID() + "\n"
+                        + "Occupied value: " + dirCorner.isOccupied() + " Resource: " + dirCorner.getResource()
+                    );
             }
         }
 
@@ -118,16 +121,25 @@ public class PlayArea {
             }
             else{
                 if(!card.getCorner(dir).isOccupied()) { // if that corner isn't FILLED
-                    freeCorners.add(card.getCorner(dir));
+                    boolean isCornerFree = true;
+                    Point pointToCheck = cardPos.move(dir);
+                    for(CornerDirection dir2 : CornerDirection.values()) {
+                        PlaceableCard cardDir = cardMatrix.get(pointToCheck.move(dir2));
+                        if (cardDir != null && cardDir.getCorner(dir2.opposite()).isOccupied()) {
+                            isCornerFree = false;
+                            break;
+                        }
+                    }
+                    if(isCornerFree) freeCorners.add(card.getCorner(dir));
                 }
                 else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
                     Point pointLocked = cardPos.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()){
                         PlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
                         if(cardDir != null) {
-                            Corner possibleLockedCorner = cardDir.getCorner(dir2.opposite());
-                            if (!possibleLockedCorner.isOccupied()) // if it's not FILLED
-                                freeCorners.remove(possibleLockedCorner);
+                            Corner lockedCorner = cardDir.getCorner(dir2.opposite());
+                            lockedCorner.occupy();
+                            freeCorners.remove(lockedCorner);
                         }
                     }
                 }

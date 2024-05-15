@@ -44,6 +44,15 @@ public record Point(int row, int col) {
         return p;
     }
 
+    public boolean equals(Object other){
+        if(other == this) return true;
+        if(other instanceof Point otherPoint){
+            return otherPoint.row == this.row &&
+                    otherPoint.col == this.col;
+        }
+        else return false;
+    }
+
     /**
      * @param p other point to add to this
      * @return Point obtained from the sum of this' and p's rows and columns
