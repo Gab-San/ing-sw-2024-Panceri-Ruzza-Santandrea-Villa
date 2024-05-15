@@ -33,7 +33,10 @@ public class CentralServer {
     }
 
     public void issueGameCommand(GameCommand action) {
-        commandQueue.offer(action);
+        synchronized (commandQueue) {
+            commandQueue.offer(action);
+            commandQueue.notifyAll();
+        }
     }
     public synchronized VirtualClient getClientFromNickname(String nickname){
         return playerClients.get(nickname);

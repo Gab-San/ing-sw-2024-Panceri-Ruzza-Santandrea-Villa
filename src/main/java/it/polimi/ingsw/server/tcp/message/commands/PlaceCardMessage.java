@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp.message;
+package it.polimi.ingsw.server.tcp.message.commands;
 
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;

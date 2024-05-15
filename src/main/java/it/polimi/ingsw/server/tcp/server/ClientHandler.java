@@ -10,7 +10,8 @@ import it.polimi.ingsw.server.VirtualServer;
 import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
 import it.polimi.ingsw.server.tcp.message.*;
 
-import it.polimi.ingsw.server.tcp.message.PingMessage;
+import it.polimi.ingsw.server.tcp.message.commands.PingMessage;
+
 import it.polimi.ingsw.server.tcp.message.TCPClientCheckMessage;
 import it.polimi.ingsw.server.tcp.message.checkMessages.CheckMessage;
 
@@ -31,7 +32,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     private final Queue<TCPClientMessage> commandQueue;
     private final Queue<TCPClientCheckMessage> errorQueue;
     private final CentralServer serverRef;
-    private final ServerSideProxy proxy;
+    private final ClientProxy proxy;
     public ClientHandler(Socket connectionSocket){
         this.connectionSocket = connectionSocket;
         try {
@@ -43,7 +44,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         commandQueue = new LinkedBlockingQueue<>();
         errorQueue = new LinkedBlockingQueue<>();
         serverRef = CentralServer.getSingleton();
-        proxy = new ServerSideProxy(this, outputStream);
+        proxy = new ClientProxy(this, outputStream);
         startCommandExecutor();
 //        startErrorExecutor();
     }
@@ -156,9 +157,6 @@ public class ClientHandler implements Runnable, VirtualServer {
         proxy.sendCheck(new CheckMessage());
     }
 
-    @Override
-    public void testCmd(String nickname, VirtualClient client, String text){
-    }
 
     @Override
     public void sendMsg(String nickname, VirtualClient client, String message) {

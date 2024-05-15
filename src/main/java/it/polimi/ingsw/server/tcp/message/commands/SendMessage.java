@@ -1,7 +1,9 @@
-package it.polimi.ingsw.server.tcp.message;
+package it.polimi.ingsw.server.tcp.message.commands;
 
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
+import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
+import it.polimi.ingsw.server.tcp.message.TCPServerMessage;
 
 import java.io.Serial;
 import java.rmi.RemoteException;

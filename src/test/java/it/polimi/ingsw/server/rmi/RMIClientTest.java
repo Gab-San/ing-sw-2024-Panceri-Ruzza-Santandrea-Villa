@@ -40,48 +40,48 @@ class RMIClientTest {
     @Test
     void sendMsg() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
-        client.sendMsg("Sono Ale sto mandando un messaggio");
+        client.getProxy().connect("Ale");
+        client.getProxy().sendMsg("Sono Ale sto mandando un messaggio");
     }
 
 
     @Test
     void connect() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Gamba");
+        client.getProxy().connect("Gamba");
         assertDoesNotThrow(
-                client::disconnect
+                client.getProxy()::disconnect
         );
     }
 
     @Test
     void connectError() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Gamba");
+        client.getProxy().connect("Gamba");
         assertThrows(
                 IllegalStateException.class,
-                () -> client.connect("Giovanni")
+                () -> client.getProxy().connect("Giovanni")
         );
     }
     @Test
     void connectError2() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
+        client.getProxy().connect("Ale");
         RMIClient cli2 = new RMIClient(1234);
         assertThrows(
                 IllegalStateException.class,
-                () -> cli2.connect("Ale")
+                () -> cli2.getProxy().connect("Ale")
         );
     }
 
     @Test
     void connectError3() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
+        client.getProxy().connect("Ale");
         RMIClient cli2 = new RMIClient(1234);
         assertThrows(
                 IllegalStateException.class,
-                () -> cli2.connect("Gamba")
+                () -> cli2.getProxy().connect("Gamba")
         );
     }
 
@@ -90,82 +90,82 @@ class RMIClientTest {
         RMIClient client = new RMIClient(1234);
         assertThrows(
                 IllegalStateException.class,
-                client::disconnect
+                client.getProxy()::disconnect
         );
-        client.connect("Giovanni");
-        client.disconnect();
+        client.getProxy().connect("Giovanni");
+        client.getProxy().disconnect();
         assertDoesNotThrow(
-                () -> client.connect("Giovanni")
+                () -> client.getProxy().connect("Giovanni")
         );
     }
 
     @Test
     void setNumOfPlayers() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
-        client.setNumOfPlayers(2);
+        client.getProxy().connect("Ale");
+        client.getProxy().setNumOfPlayers(2);
     }
 
     @Test
     void placeStartCard() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
-        client.setNumOfPlayers(2);
+        client.getProxy().connect("Ale");
+        client.getProxy().setNumOfPlayers(2);
         RMIClient cli2 = new RMIClient(1234);
-        cli2.connect("Gamba");
-        client.placeStartCard(true);
-        cli2.placeStartCard(true);
+        cli2.getProxy().connect("Gamba");
+        client.getProxy().placeStartCard(true);
+        cli2.getProxy().placeStartCard(true);
     }
 
     @Test
     void chooseColor() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
-        client.setNumOfPlayers(2);
+        client.getProxy().connect("Ale");
+        client.getProxy().setNumOfPlayers(2);
         RMIClient cli2 = new RMIClient(1234);
-        cli2.connect("Gamba");
-        client.placeStartCard(true);
-        cli2.placeStartCard(true);
-        client.chooseColor('B');
-        cli2.chooseColor('B');
-        cli2.chooseColor('R');
+        cli2.getProxy().connect("Gamba");
+        client.getProxy().placeStartCard(true);
+        cli2.getProxy().placeStartCard(true);
+        client.getProxy().chooseColor('B');
+        cli2.getProxy().chooseColor('B');
+        cli2.getProxy().chooseColor('R');
     }
 
     @Test
     void chooseObjective() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Ale");
-        client.setNumOfPlayers(2);
+        client.getProxy().connect("Ale");
+        client.getProxy().setNumOfPlayers(2);
         RMIClient cli2 = new RMIClient(1234);
-        cli2.connect("Gamba");
-        client.placeStartCard(true);
-        cli2.placeStartCard(true);
-        client.chooseColor('B');
-        cli2.chooseColor('B');
-        cli2.chooseColor('R');
-        client.chooseObjective(0);
-        client.chooseObjective(2);
-        cli2.chooseObjective(1);
+        cli2.getProxy().connect("Gamba");
+        client.getProxy().placeStartCard(true);
+        cli2.getProxy().placeStartCard(true);
+        client.getProxy().chooseColor('B');
+        cli2.getProxy().chooseColor('B');
+        cli2.getProxy().chooseColor('R');
+        client.getProxy().chooseObjective(0);
+        client.getProxy().chooseObjective(2);
+        cli2.getProxy().chooseObjective(1);
     }
 
     @Test
     void placeCard() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Claudio");
-        client.placeCard("S0", new Point(1,1), "TL", true);
+        client.getProxy().connect("Claudio");
+        client.getProxy().placeCard("S0", new Point(1,1), "TL", true);
     }
 
     @Test
     void draw() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Davide");
-        client.draw('R', 0);
+        client.getProxy().connect("Davide");
+        client.getProxy().draw('R', 0);
     }
 
     @Test
     void startGame() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.connect("Stupido");
-        client.startGame(3);
+        client.getProxy().connect("Stupido");
+        client.getProxy().startGame(3);
     }
 }

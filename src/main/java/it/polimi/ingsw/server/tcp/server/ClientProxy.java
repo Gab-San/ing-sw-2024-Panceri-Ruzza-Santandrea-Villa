@@ -1,19 +1,19 @@
 package it.polimi.ingsw.server.tcp.server;
 
 import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.tcp.message.SendMessage;
+import it.polimi.ingsw.server.tcp.message.commands.SendMessage;
 import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 
-public class ServerSideProxy implements VirtualClient {
+public class ClientProxy implements VirtualClient {
 
     private final ObjectOutputStream outputStream;
     private final ClientHandler clientHandler;
     private String nickname;
-    public ServerSideProxy(ClientHandler clientHandler, ObjectOutputStream outputStream) {
+    public ClientProxy(ClientHandler clientHandler, ObjectOutputStream outputStream) {
         this.clientHandler = clientHandler;
         this.outputStream = outputStream;
     }

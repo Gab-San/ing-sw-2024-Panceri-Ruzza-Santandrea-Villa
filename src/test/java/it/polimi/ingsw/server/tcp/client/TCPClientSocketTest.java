@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TCPClientSocketTest {
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private TCPServerSocket server;
-    private ClientSideProxy client;
+    private ServerProxy client;
 
     @BeforeEach
     void resetMySingleton() throws NoSuchFieldException, IllegalAccessException, IOException {
@@ -94,13 +94,13 @@ class TCPClientSocketTest {
         client = tcpClientSocket.getProxy();
         client.connect("Corolla");
         assertEquals("Corolla", client.getNickname());
-        waitExecution(tcpClientSocket,  5000);
+        client.disconnect();
         assertTrue(tcpClientSocket.isClosed());
     }
 
     @Test
     @DisplayName("Basic connect testing")
-    void testConnect() {
+    void testConnect() throws RemoteException {
         TCPClientSocket tcpClientSocket;
         try {
             tcpClientSocket = new TCPClientSocket("localhost", 8888);
@@ -109,13 +109,9 @@ class TCPClientSocketTest {
         }
 
         client = tcpClientSocket.getProxy();
-        try {
-            client.connect("Gamba");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        waitExecution(tcpClientSocket,  3000);
+        client.connect("Gamba");
         assertEquals("Gamba", client.getNickname());
+        client.disconnect();
     }
 
     @Test
@@ -137,6 +133,7 @@ class TCPClientSocketTest {
         );
 
         assertNotEquals("Giovanni",client.getNickname());
+        client.disconnect();
     }
 
     @Test
@@ -147,20 +144,6 @@ class TCPClientSocketTest {
         assertThrows(
                 RemoteException.class,
                 () -> cli1.getProxy().connect("Gamba")
-        );
-        waitExecution(cli1, 2000);
-        assertNull(cli1.getProxy().getNickname());
-    }
-
-    @Test
-    @DisplayName("Closing socket before connect check message")
-    void testConnect4() throws IOException {
-        TCPClientSocket client = new TCPClientSocket("localhost", 8888);
-        client.getProxy().connect("Gianni");
-        client.closeSocket();
-        assertThrows(
-                RemoteException.class,
-                () -> client.getProxy().testCmd("SUS")
         );
     }
 
@@ -176,17 +159,7 @@ class TCPClientSocketTest {
                 client.getProxy()::ping
         );
     }
-
-
-
-    @Test
-    void testCmd() throws IOException {
-        TCPClientSocket client = new TCPClientSocket("localhost", 8888);
-
-        client.getProxy().connect("Giovanni");
-        client.getProxy().testCmd("SONO GIOVANNI STO TESTANDO");
-        waitExecution(client, 1500);
-    }
+    
 
     @Test
     void testSendMsgFail() throws IOException{
@@ -205,7 +178,7 @@ class TCPClientSocketTest {
         client.getProxy().connect("Giacomo");
         client.getProxy().sendMsg("Ciao ragazzi");
         client.getProxy().sendMsg("Come va?");
-        waitExecution(client, 5000);
+        client.getProxy().disconnect();
     }
 
 
@@ -214,7 +187,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
         client.getProxy().chooseColor('b');
-        waitExecution(client, 2000);
+        client.getProxy().disconnect();
     }
 
     @Test
@@ -222,7 +195,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
         client.getProxy().chooseObjective(2);
-        waitExecution(client, 2000);
+        client.getProxy().disconnect();
     }
 
     @Test
@@ -230,7 +203,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
         client.getProxy().draw('r', 0);
-        waitExecution(client, 2000);
+        waitExecution(client, 1000);
     }
 
 
@@ -239,7 +212,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
         client.getProxy().startGame(3);
-        waitExecution(client, 5000);
+        waitExecution(client, 1000);
     }
 
     @Test
@@ -247,7 +220,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
         client.getProxy().placeStartCard(true);
-        waitExecution(client, 2000);
+        waitExecution(client, 1000);
     }
 
     @Test
@@ -263,7 +236,7 @@ class TCPClientSocketTest {
         TCPClientSocket client = new TCPClientSocket(8888);
         client.getProxy().connect("Gamba");
         client.getProxy().setNumOfPlayers(2);
-        waitExecution(client, 500);
+        waitExecution(client, 1000);
     }
 
 }

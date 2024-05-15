@@ -96,7 +96,8 @@ public class Parser {
                 }
             case "rmi":
                 try {
-                    virtualServer = new RMIClient(hostAddr, port);
+                    RMIClient rmiClient = new RMIClient(hostAddr, port);
+                    virtualServer = rmiClient.getProxy();
                     break;
                 } catch (RemoteException | NotBoundException e) {
                     throw new IllegalArgumentException(e.getMessage());

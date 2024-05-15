@@ -115,11 +115,6 @@ public class RMIServer implements VirtualServer {
     }
 
 
-    @Override
-    public void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException {
-    }
-
-
     public void closeServer() throws RemoteException, NotBoundException {
         registry.unbind(CANONICAL_NAME);
         UnicastRemoteObject.unexportObject(registry, true);

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.tcp.message.checkMessages;
 
-import it.polimi.ingsw.server.tcp.client.ClientSideProxy;
+import it.polimi.ingsw.server.tcp.client.ServerProxy;
 import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
 
 import java.io.Serial;
@@ -29,7 +29,7 @@ public class CheckMessage implements TCPServerCheckMessage {
     }
 
     @Override
-    public void handle(ClientSideProxy client) throws IllegalStateException, IllegalArgumentException{
+    public void handle(ServerProxy client) throws IllegalStateException, IllegalArgumentException{
         if(stateException != null){
             throw stateException;
         }

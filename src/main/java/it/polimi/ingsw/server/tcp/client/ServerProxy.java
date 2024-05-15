@@ -4,7 +4,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.CommandPassthrough;
 import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
 import it.polimi.ingsw.server.tcp.message.*;
-import it.polimi.ingsw.server.tcp.message.PingMessage;
+import it.polimi.ingsw.server.tcp.message.commands.*;
 import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
 
 import java.io.IOException;
@@ -13,12 +13,12 @@ import java.rmi.RemoteException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ClientSideProxy implements CommandPassthrough {
+public class ServerProxy implements CommandPassthrough {
     private final ObjectOutputStream outputStream;
     private String nickname;
     private final TCPClientSocket clientSocket;
     private final Queue<TCPServerCheckMessage> checkQueue;
-    public ClientSideProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
+    public ServerProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
         this.outputStream = outputStream;
         this.clientSocket = clientSocket;
         checkQueue = new LinkedBlockingQueue<>();

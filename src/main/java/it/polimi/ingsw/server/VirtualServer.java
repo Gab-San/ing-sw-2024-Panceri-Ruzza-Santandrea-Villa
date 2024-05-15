@@ -17,6 +17,4 @@ public interface VirtualServer extends Remote {
     void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException;
     void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException;
     void ping() throws RemoteException;
-
-    void testCmd(String nickname, VirtualClient rmiClient, String text) throws RemoteException;
 }

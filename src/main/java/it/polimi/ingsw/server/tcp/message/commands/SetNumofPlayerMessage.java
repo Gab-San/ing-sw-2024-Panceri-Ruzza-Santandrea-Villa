@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp.message;
+package it.polimi.ingsw.server.tcp.message.commands;
 
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.VirtualServer;
@@ -7,26 +7,21 @@ import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
 import java.io.Serial;
 import java.rmi.RemoteException;
 
-public class DrawMessage implements TCPClientMessage {
-
+public class SetNumofPlayerMessage implements TCPClientMessage {
     @Serial
-    private static final long serialVersionUID = 65L;
+    private static final long serialVersionUID = 0010L;
     private final String nickname;
-    private final char deck;
-    private final int card;
+    private final int numOfPlayers;
 
-    public DrawMessage(String nickname, char deck, int card) {
+    public SetNumofPlayerMessage(String nickname, int numOfPlayers) {
         this.nickname = nickname;
-        this.deck = deck;
-        this.card = card;
+        this.numOfPlayers = numOfPlayers;
     }
-
 
     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
-        virtualServer.draw(nickname, virtualClient, deck, card);
+        virtualServer.setNumOfPlayers(nickname,virtualClient,numOfPlayers);
     }
-
 
     @Override
     public boolean isCheck() {
