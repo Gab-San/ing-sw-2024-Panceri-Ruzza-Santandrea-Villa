@@ -17,7 +17,6 @@ public class TCPClientSocket implements VirtualClient{
 
     private final Socket clientSocket;
     private final ObjectInputStream inputStream;
-    private final ObjectOutputStream outputStream;
     private final Queue<TCPServerMessage> updateQueue;
     private final ClientSideProxy proxy;
     public TCPClientSocket(int port) throws IOException {
@@ -26,10 +25,9 @@ public class TCPClientSocket implements VirtualClient{
 
     public TCPClientSocket(String hostAddr, int connectionPort) throws IOException{
         this.clientSocket = new Socket(hostAddr, connectionPort);
-        outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
-        this.proxy = new ClientSideProxy(outputStream, this);
+        this.proxy = new ClientSideProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
         startReader();
         startCommandExecutor();
     }
@@ -110,14 +108,11 @@ public class TCPClientSocket implements VirtualClient{
 //region SOCKET FUNCTIONS
     public void closeSocket(){
         try{
-            if(outputStream != null) {
-                outputStream.close();
-            }
-            if(inputStream != null ) {
-                inputStream.close();
-            }
-            if(!clientSocket.isClosed()){
+            if(!clientSocket.isClosed()) {
+                if (inputStream != null) inputStream.close();
+
                 clientSocket.close();
+
             }
         } catch (IOException e){
             System.err.println(e.getMessage());

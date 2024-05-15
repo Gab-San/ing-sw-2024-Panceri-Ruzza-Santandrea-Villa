@@ -16,35 +16,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ClientSideProxy implements CommandPassthrough {
     private final ObjectOutputStream outputStream;
     private String nickname;
-    private final TCPClientSocket client;
+    private final TCPClientSocket clientSocket;
     private final Queue<TCPServerCheckMessage> checkQueue;
-    public ClientSideProxy(ObjectOutputStream outputStream, TCPClientSocket client){
+    public ClientSideProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
         this.outputStream = outputStream;
-        this.client = client;
+        this.clientSocket = clientSocket;
         checkQueue = new LinkedBlockingQueue<>();
-        startErrorExecutor();
-    }
-
-    private void startErrorExecutor() {
-        new Thread(
-                () -> {
-                    while(!client.isClosed()){
-                        TCPServerCheckMessage checkMessage;
-                        synchronized (checkQueue){
-                            while(checkQueue.isEmpty()){
-                                try{
-                                    checkQueue.wait();
-                                } catch (InterruptedException e){
-                                    throw new RuntimeException(e);
-                                }
-                            }
-
-                            checkMessage = checkQueue.remove();
-                        }
-                        checkMessage.handle(this);
-                    }
-                }
-        ).start();
     }
 
 //region PROXY FUNCTIONS
@@ -53,6 +30,22 @@ public class ClientSideProxy implements CommandPassthrough {
             checkQueue.offer(checkMessage);
             checkQueue.notifyAll();
         }
+    }
+    void closeProxy(){
+        try{
+            if(clientSocket.isClosed()) {
+                return;
+            }
+            if(outputStream != null) outputStream.close();
+
+            clientSocket.closeSocket();
+        } catch (IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    String getNickname(){
+        return nickname;
     }
 //endregion
 
@@ -70,7 +63,7 @@ public class ClientSideProxy implements CommandPassthrough {
             outputStream.writeObject(command);
             outputStream.flush();
         } catch (IOException exception){
-            client.closeSocket();
+            closeProxy();
             throw new RemoteException("Connection Lost: " + exception.getMessage());
         }
     }
@@ -112,7 +105,7 @@ public class ClientSideProxy implements CommandPassthrough {
             waitForCheck();
             this.nickname = nickname;
         } catch (IOException e) {
-            client.closeSocket();
+            closeProxy();
             throw new RemoteException("Connection Lost: " + e.getMessage());
         }
     }
@@ -121,7 +114,7 @@ public class ClientSideProxy implements CommandPassthrough {
     public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
         sendCommand(new DisconnectMessage(nickname));
         waitForCheck();
-        client.closeSocket();
+        closeProxy();
     }
 
     @Override

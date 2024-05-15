@@ -138,8 +138,9 @@ public class ClientHandler implements Runnable, VirtualServer {
 
 //region AUXILIARY FUNCTIONS
     private void validateClient(String nickname, VirtualClient client) {
+        //TODO is this check useful?
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
-//            proxy.updateError(new ErrorMessage("Illegal request, wrong client!"));
+//            proxy.sendCheck(new ErrorMessage("Illegal request, wrong client!"));
             return;
     }
 
