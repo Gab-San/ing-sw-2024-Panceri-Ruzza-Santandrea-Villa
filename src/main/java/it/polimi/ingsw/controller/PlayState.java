@@ -184,7 +184,6 @@ public class PlayState extends GameState {
         }
         else nextState();
     }
-
     private void nextState() throws IllegalStateException {
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }

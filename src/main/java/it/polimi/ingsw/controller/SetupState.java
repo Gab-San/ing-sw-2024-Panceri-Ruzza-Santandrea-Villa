@@ -198,6 +198,7 @@ public class SetupState extends GameState{
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 
+
     private void drawFirstHand(){
         try {
             for (Player player : board.getPlayerAreas().keySet()) {

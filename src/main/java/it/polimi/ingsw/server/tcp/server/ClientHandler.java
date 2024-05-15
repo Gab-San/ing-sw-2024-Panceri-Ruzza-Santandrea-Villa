@@ -12,7 +12,7 @@ import it.polimi.ingsw.server.tcp.message.*;
 
 import it.polimi.ingsw.server.tcp.message.PingMessage;
 import it.polimi.ingsw.server.tcp.message.TCPClientCheckMessage;
-import it.polimi.ingsw.server.tcp.server.message.CheckMessage;
+import it.polimi.ingsw.server.tcp.message.checkMessages.CheckMessage;
 
 
 import java.io.IOException;
@@ -45,30 +45,33 @@ public class ClientHandler implements Runnable, VirtualServer {
         serverRef = CentralServer.getSingleton();
         proxy = new ServerSideProxy(this, outputStream);
         startCommandExecutor();
-        startErrorExecutor();
+//        startErrorExecutor();
     }
 //region SOCKET THREADS
-    private void startErrorExecutor() {
-        new Thread(
-                () -> {
-                    while(!connectionSocket.isClosed()){
-                        TCPClientCheckMessage errorMessage;
-                        synchronized (errorQueue){
-                            while(errorQueue.isEmpty()){
-                                try{
-                                    errorQueue.wait();
-                                } catch (InterruptedException e){
-                                    throw new RuntimeException(e);
-                                }
-                            }
 
-                            errorMessage = errorQueue.remove();
-                        }
-                        errorMessage.handle(this);
-                    }
-                }
-        ).start();
-    }
+//TODO check if the startErrorExecutor is needed
+
+//    private void startErrorExecutor() {
+//        new Thread(
+//                () -> {
+//                    while(!connectionSocket.isClosed()){
+//                        TCPClientCheckMessage errorMessage;
+//                        synchronized (errorQueue){
+//                            while(errorQueue.isEmpty()){
+//                                try{
+//                                    errorQueue.wait();
+//                                } catch (InterruptedException e){
+//                                    throw new RuntimeException(e);
+//                                }
+//                            }
+//
+//                            errorMessage = errorQueue.remove();
+//                        }
+//                        errorMessage.handle(this);
+//                    }
+//                }
+//        ).start();
+//    }
 
     private void startCommandExecutor(){
         new Thread(
@@ -140,20 +143,12 @@ public class ClientHandler implements Runnable, VirtualServer {
             return;
     }
 
-    private void issueCommand(GameCommand command) throws IllegalStateException{
-        try {
-            serverRef.issueGameCommand(command);
-        }catch (InterruptedException e) {
-//            proxy.updateError(new ErrorMessage("Couldn't issue command!"));
-        }
-    }
 
 //endregion
 
 //region VIRTUAL SERVER IMPLEMENTATION
-    //region IMPLEMENTED & TESTED
     @Override
-    public void connect(String nickname, VirtualClient client){
+    public void connect(String nickname, VirtualClient client) throws IllegalStateException{
         serverRef.connect(nickname, client);
         proxy.setUsername(nickname);
         serverRef.updateMsg(nickname + " has connected");
@@ -175,7 +170,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void setNumOfPlayers(String nickname, VirtualClient client, int num)  {
         validateClient(nickname, client);
-        issueCommand(new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num));
+        serverRef.issueGameCommand(new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num));
     }
 
     @Override
@@ -191,20 +186,21 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour)  {
         validateClient(nickname, client);
-        issueCommand(new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour)));
+        serverRef.issueGameCommand(new ChooseColorCmd(serverRef.getGameRef(), nickname,
+                PlayerColor.parseColour(colour)));
     }
 
     @Override
     public void chooseObjective(String nickname, VirtualClient client, int choice) {
         validateClient(nickname, client);
-        issueCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
+        serverRef.issueGameCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
     }
 
 
     @Override
     public void draw(String nickname, VirtualClient client, char deck, int card) {
         validateClient(nickname, client);
-        issueCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
+        serverRef.issueGameCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
     }
 
     @Override
@@ -216,13 +212,12 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
     }
-    //endregion
 
 
     @Override
     public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {
         validateClient(nickname, client);
-        issueCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
+        serverRef.issueGameCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
     }
 
 
@@ -231,7 +226,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void placeCard(String nickname, VirtualClient client, String cardID, int row,
                           int col, String cornerDir, boolean placeOnFront) throws IllegalStateException {
-        issueCommand(new PlacePlayCmd(
+        serverRef.issueGameCommand(new PlacePlayCmd(
                 serverRef.getGameRef(),
                 nickname,
                 cardID,
@@ -246,7 +241,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
-        issueCommand(new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
+        serverRef.issueGameCommand(new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
     }
 
 

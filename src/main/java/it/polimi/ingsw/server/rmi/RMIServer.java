@@ -38,13 +38,6 @@ public class RMIServer implements VirtualServer {
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
             throw new IllegalStateException("Illegal request, wrong client!");
     }
-    private void issueCommand(GameCommand command) throws IllegalStateException{
-        try {
-            serverRef.issueGameCommand(command);
-        }catch (InterruptedException e) {
-            throw new IllegalStateException("Couldn't issue command");
-        }
-    }
 
     @Override
     public void connect(String nickname, VirtualClient client) throws IllegalStateException, RemoteException{
@@ -56,7 +49,7 @@ public class RMIServer implements VirtualServer {
     public void setNumOfPlayers(String nickname, VirtualClient client, int num) throws RemoteException {
         validateClient(nickname, client);
         SetNumOfPlayersCmd command = new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
 
     @Override
@@ -69,19 +62,19 @@ public class RMIServer implements VirtualServer {
     public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
         PlaceStartingCmd command = new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour) throws RemoteException{
         validateClient(nickname, client);
         ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour) );
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
     @Override
     public void chooseObjective(String nickname, VirtualClient client, int choice) throws RemoteException {
         validateClient(nickname, client);
         ChooseObjCmd command = new ChooseObjCmd(serverRef.getGameRef(), nickname, choice);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
 
     @Override
@@ -90,21 +83,21 @@ public class RMIServer implements VirtualServer {
         validateClient(nickname, client);
         PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID,
                 new Point(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
 
     @Override
     public void draw(String nickname, VirtualClient client, char deck, int card) throws RemoteException {
         validateClient(nickname, client);
         DrawCmd command = new DrawCmd(serverRef.getGameRef(), nickname, deck, card);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
 
     @Override
     public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException{
         validateClient(nickname, client);
         StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers);
-        issueCommand(command);
+        serverRef.issueGameCommand(command);
     }
 
 

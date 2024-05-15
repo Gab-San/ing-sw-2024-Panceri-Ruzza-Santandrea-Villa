@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.tcp.client;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.CommandPassthrough;
 import it.polimi.ingsw.server.tcp.message.TCPClientMessage;
-import it.polimi.ingsw.server.tcp.client.message.*;
 import it.polimi.ingsw.server.tcp.message.*;
 import it.polimi.ingsw.server.tcp.message.PingMessage;
 import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
@@ -119,8 +118,9 @@ public class ClientSideProxy implements CommandPassthrough {
     }
 
     @Override
-    public void disconnect() throws IllegalStateException, RemoteException {
+    public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
         sendCommand(new DisconnectMessage(nickname));
+        waitForCheck();
         client.closeSocket();
     }
 

@@ -11,7 +11,7 @@ abstract public class GameCommand{
         this.nickname = nickname;
     }
 
-    abstract public void execute() throws IllegalStateException, InterruptedException, DeckException;
+    abstract public void execute() throws IllegalStateException, DeckException;
     public String getNickname(){
         return nickname;
     }

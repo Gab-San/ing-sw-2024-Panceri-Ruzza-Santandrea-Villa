@@ -6,32 +6,25 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.Commands.GameCommand;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 import static com.diogonunes.jcolor.Ansi.colorize;
 
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-// FIXME: add VirtualClient to all function calls (to check that a client doesn't send commands for other players)?
 public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
-    private final BlockingQueue<GameCommand> commandQueue;
+    private final Queue<GameCommand> commandQueue;
     private final BoardController gameRef;
 
     private CentralServer() throws IllegalStateException{
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
         gameRef = new BoardController("");
-        //TODO: review the update/command queue executors
-        Thread executorThread = new Thread(getQueueExtractor(commandQueue));
-        executorThread.setDaemon(true);
-        executorThread.start();
+        startCommandExecutor();
+
     }
 
     public synchronized static CentralServer getSingleton() throws IllegalStateException{
@@ -39,8 +32,8 @@ public class CentralServer {
         return singleton;
     }
 
-    public void issueGameCommand(GameCommand action) throws InterruptedException {
-        commandQueue.put(action);
+    public void issueGameCommand(GameCommand action) {
+        commandQueue.offer(action);
     }
     public synchronized VirtualClient getClientFromNickname(String nickname){
         return playerClients.get(nickname);
@@ -49,30 +42,42 @@ public class CentralServer {
         return gameRef; // not synchronized as gameRef is final
     }
 
-    //FIXME Work onto executor for game commands
-    private Runnable getQueueExtractor(BlockingQueue<GameCommand> queue){
-        return () -> {
-            try {
-                while(true) {
-                    GameCommand command = queue.take();
-                    try {
-                        command.execute();
-                    }catch (IllegalStateException e){
-                        System.err.println("IllegalStateException raised while executing a command.");
-                        System.err.println(e.getMessage());
-                    }catch (IllegalArgumentException e){
-                        System.err.println("IllegalArgumentException raised while executing a command.");
-                        System.err.println(e.getMessage());
-                    } catch (DeckException e) {
-                        System.err.println("DeckException raised while executing a command");
-                        System.err.println(e.getMessage());
-                    }
+
+    private void startCommandExecutor(){
+        Thread commandExecutor = new Thread(
+                () -> {
+                        while (true) {
+                            GameCommand command;
+                            synchronized (commandQueue) {
+                                while (commandQueue.isEmpty()) {
+                                    try {
+                                        commandQueue.wait();
+                                    } catch (InterruptedException e) {
+                                        //TODO handle exception
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                command = commandQueue.remove();
+                            }
+
+                            try {
+                                command.execute();
+                            } catch (IllegalStateException e) {
+                                System.err.println("IllegalStateException raised while executing a command.");
+                                System.err.println(e.getMessage());
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("IllegalArgumentException raised while executing a command.");
+                                System.err.println(e.getMessage());
+                            } catch (DeckException e) {
+                                System.err.println("DeckException raised while executing a command");
+                                System.err.println(e.getMessage());
+                            }
+                        }
                 }
-            }catch (InterruptedException e){
-                //TODO: handle exception?
-                System.err.println("Queue thread was interrupted. Closing now.");
-            }
-        };
+        );
+
+        commandExecutor.setDaemon(true);
+        commandExecutor.start();
     }
 
     // TODO: add custom exception for invalid connection? (duplicate nickname)

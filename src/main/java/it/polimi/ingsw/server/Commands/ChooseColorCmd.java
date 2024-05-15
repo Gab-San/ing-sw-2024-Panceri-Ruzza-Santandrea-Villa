@@ -11,7 +11,7 @@ public class ChooseColorCmd extends GameCommand{
         this.color = color;
     }
     @Override
-    public void execute() throws IllegalStateException, InterruptedException, DeckException {
+    public void execute() throws IllegalStateException, IllegalArgumentException{
 
         this.gameController.chooseYourColor(nickname, color);
     }

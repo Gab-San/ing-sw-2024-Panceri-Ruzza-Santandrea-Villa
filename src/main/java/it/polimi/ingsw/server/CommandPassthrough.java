@@ -9,7 +9,7 @@ public interface CommandPassthrough extends Remote{
     void sendMsg(String msg) throws RemoteException;
     void connect(String nickname) throws IllegalStateException, RemoteException;
     void setNumOfPlayers(int num) throws RemoteException;
-    void disconnect() throws IllegalStateException, RemoteException;
+    void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException;
     void placeStartCard(boolean placeOnFront) throws RemoteException;
     void chooseColor(char color) throws RemoteException;
     void chooseObjective(int choice) throws RemoteException;

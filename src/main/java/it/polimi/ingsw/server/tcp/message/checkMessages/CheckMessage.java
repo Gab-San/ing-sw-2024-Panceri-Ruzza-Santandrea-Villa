@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.tcp.server.message;
+package it.polimi.ingsw.server.tcp.message.checkMessages;
 
 import it.polimi.ingsw.server.tcp.client.ClientSideProxy;
 import it.polimi.ingsw.server.tcp.message.TCPServerCheckMessage;
