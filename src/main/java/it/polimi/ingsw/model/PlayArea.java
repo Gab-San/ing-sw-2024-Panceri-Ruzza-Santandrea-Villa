@@ -91,10 +91,7 @@ public class PlayArea {
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite());
                 if (dirCorner.isOccupied())
-                    throw new IllegalStateException("Should not place here, corner " + dir + " is placing on occupied corner " + dirCorner.getDirection() + "\n"
-                        + "Of card with ID: " + dirCard.getCardID() + "\n"
-                        + "Occupied value: " + dirCorner.isOccupied() + " Resource: " + dirCorner.getResource()
-                    );
+                    throw new IllegalStateException("Should not place here, corner " + dir + " is occupied");
             }
         }
 

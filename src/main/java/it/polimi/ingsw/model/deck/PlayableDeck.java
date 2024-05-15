@@ -17,6 +17,7 @@ public class PlayableDeck {
     private static final int FIRST_POSITION = 1;
     private static final int SECOND_POSITION = 2;
 
+
     public PlayableDeck(CardFactory cardFactory, int initialCapacity) throws DeckInstantiationException {
         cardDeck = new ArrayDeque<>(initialCapacity);
         this.cardFactory = cardFactory;
@@ -50,10 +51,11 @@ public class PlayableDeck {
         return returnCard;
     }
 
+    //FIXME: remove the test methods? There is no other way to check for the revealed card existance though
     //[FLAVIO] it's needed for testing, I need to know if firstRevealedCard exists, with a throw it's impossible
-    public boolean existFirstRevealedCard(){return !(firstRevealedCard==null);}
+    public boolean existFirstRevealedCard(){ return firstRevealedCard!=null; }
     //[FLAVIO] it's needed for testing, I need to know if secondRevealedCard exists, with a throw it's impossible
-    public boolean existSecondRevealedCard(){return !(secondRevealedCard==null);}
+    public boolean existSecondRevealedCard(){ return secondRevealedCard!=null; }
 
     public synchronized PlayCard getFirstRevealedCard() throws DeckException {
         if(firstRevealedCard == null){

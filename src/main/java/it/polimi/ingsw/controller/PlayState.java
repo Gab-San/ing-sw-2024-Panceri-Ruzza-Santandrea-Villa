@@ -121,28 +121,36 @@ public class PlayState extends GameState {
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to draw yet");
 
-        switch(cardPos) {
-            case 0:
-                try {board.drawTop(deckFrom, player.getHand());}
-                catch (DeckException e) {System.out.println(e.getMessage()); }
-                break;
-            case 1:
-                try {board.drawFirst(deckFrom, player.getHand());}
-                catch (DeckException e) {System.out.println(e.getMessage());}
-                break;
-            case 2:
-                try {board.drawSecond(deckFrom, player.getHand());}
-                catch (DeckException e) {System.out.println(e.getMessage());}
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid card position for this draw command.");
+        try {
+            switch (cardPos) {
+                case 0:
+                    board.drawTop(deckFrom, player.getHand());
+                    break;
+                case 1:
+                    board.drawFirst(deckFrom, player.getHand());
+                    break;
+                case 2:
+                    board.drawSecond(deckFrom, player.getHand());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid card position for this draw command.");
+            }
+        }catch (DeckException e){
+            System.out.println(e.getMessage());
+            throw new IllegalStateException("Deck " + deckFrom + " is empty! Can't draw from position " + cardPos);
         }
 
         postDrawChecks();
     }
 
     private void postDrawChecks(){
-        boolean isLastPlayerTurn = board.getCurrentTurn() == board.getPlayerAreas().size();
+        int lastPlayerTurn = board.getPlayerAreas().keySet().stream()
+                // only look at players that are connected and NOT deadlocked
+                .filter(p -> p.isConnected() && !board.getPlayerDeadlocks().get(p))
+                .mapToInt(Player::getTurn)
+                .max()
+                .orElse(0); // if all players are deadlocked/disconnected, this doesn't matter
+        boolean isLastPlayerTurn = board.getCurrentTurn() >= lastPlayerTurn;
         if(lastRound && isLastPlayerTurn) {
             nextState();
             return;
@@ -159,10 +167,6 @@ public class PlayState extends GameState {
             else
                 board.setGamePhase(GamePhase.PLACECARD);
         }
-        //FIXME Se tutti i giocatori sono disconnessi in realtà si dovrebbe andare direttamente
-        // in creation state, non sarebbe meglio farlo direttamente sulla disconnect?
-        // Oppure come prima cosa dell'ENDGAME potremmo fare un check che ci sia almeno un client
-        // connesso
         else nextState();
     }
 
