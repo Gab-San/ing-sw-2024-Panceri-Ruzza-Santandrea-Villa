@@ -15,7 +15,7 @@ import static it.polimi.ingsw.model.enums.GameResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerHandTest {
-    Player p = new Player("Test", null, 1);
+    Player p = new Player("Test");
     PlayerHand hand;
     PlayCard card1 = new ResourceCard(LEAF);
     PlayCard card2 = new ResourceCard(LEAF);
@@ -25,6 +25,7 @@ public class PlayerHandTest {
     @BeforeEach
     public void setupHand(){
         hand = new PlayerHand(p);
+        p.setTurn(1);
     }
 
     @Test

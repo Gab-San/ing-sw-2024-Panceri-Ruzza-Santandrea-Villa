@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EndgameState extends GameState{
+
     public EndgameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller,disconnectingPlayers);
+        board.setGamePhase(GamePhase.EVALOBJ);
         evaluateSecretObjectives();
         board.setGamePhase(GamePhase.SHOWWIN);
         //FIXME There's nothing to show the winner. Is this all implemented in the view?
@@ -35,12 +37,12 @@ public class EndgameState extends GameState{
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         board.disconnectPlayer(nickname);
-        //TODO unsubscribe player's client from observers
-        //   and push current state to client (possibly done in board.replaceClient())
+        disconnectingPlayers.remove(nickname);
 
         int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
                 .filter(Player::isConnected)
                 .count();
+
         if(numOfConnectedPlayers == 0){
             String ID = board.getGameInfo().getGameID();
             transition(new CreationState(new Board(ID), controller, new ArrayList<>()));
@@ -71,14 +73,6 @@ public class EndgameState extends GameState{
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }
 
-    private void evaluateSecretObjectives() throws IllegalStateException{
-        for(Player player : board.getPlayerAreas().keySet()){
-            ObjectiveCard objCard = player.getHand().getSecretObjective();
-            objCard.turnFaceUp(); // reveal secret objective
-            int points = objCard.calculatePoints(board.getPlayerAreas().get(player));
-            board.addScore(player, points);
-        }
-    }
     @Override
     public void startGame(String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase()!=GamePhase.SHOWWIN)
@@ -88,7 +82,13 @@ public class EndgameState extends GameState{
             throw new IllegalArgumentException("Can't reduce number of players on game restart.");
         }
 
-        //TODO: must be checked
+        //This check returns if some players want to disconnect so that if the lock
+        // on this was taken by the start game the disconnect can take the lock and compute
+        if(!disconnectingPlayers.isEmpty()){
+            //TODO notify clients
+            return;
+        }
+
         for(Player p : board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
             board.removePlayer(p.getNickname());
 
@@ -104,4 +104,16 @@ public class EndgameState extends GameState{
             transition( new SetupState(newBoard, controller, new ArrayList<>()) );
         }
     }
+
+
+//region AUXILIARY FUNCTIONS
+    private void evaluateSecretObjectives() throws IllegalStateException{
+        for(Player player : board.getPlayerAreas().keySet()){
+            ObjectiveCard objCard = player.getHand().getSecretObjective();
+            objCard.turnFaceUp(); // reveal secret objective
+            int points = objCard.calculatePoints(board.getPlayerAreas().get(player));
+            board.addScore(player, points);
+        }
+    }
+//endregion
 }

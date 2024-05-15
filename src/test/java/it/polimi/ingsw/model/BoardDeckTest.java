@@ -67,6 +67,7 @@ public class BoardDeckTest extends BaseBoardTest{
     }
     @Test
     public void revealedObjectivesTest(){
+        board.revealObjectives();
         List<ObjectiveCard> revealedObjectiveList = board.getRevealedObjectives();
         assertEquals(2, revealedObjectiveList.size());
         assertNotEquals(revealedObjectiveList.get(0), revealedObjectiveList.get(1));

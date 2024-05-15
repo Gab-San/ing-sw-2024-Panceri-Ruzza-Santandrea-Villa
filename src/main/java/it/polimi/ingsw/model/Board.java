@@ -55,20 +55,6 @@ public class Board {
         isPlayerDeadlocked = new Hashtable<>();
     }
 
-    /**
-     * Constructs the board (as in initializing the game) and automatically makes the given players join
-     * @param players 1-4 players that are joining this game
-     * @throws InvalidParameterException if the parameter players has an illegal player count (0 or >4)
-     * @throws IllegalStateException if players contains duplicates
-     * @throws DeckInstantiationException if the decks can't be initialized
-     */
-    public Board(String gameID, Player ...players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
-        this(gameID);
-        if(players.length < 1 || players.length > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players! Too high.");
-        for(Player p : players) {
-            addPlayer(p); // never throws NullPointerException as p != null
-        }
-    }
 
     /**
      * Constructs the board (as in initializing the game) and automatically makes the given players join
@@ -82,7 +68,7 @@ public class Board {
         this(gameID);
         if(players.isEmpty() || players.size() > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players!");
         for(Player p: players){
-            addPlayer(p);
+            addPlayer(new Player(p.getNickname()));
         }
     }
 
@@ -424,8 +410,9 @@ public class Board {
      * @param nickname player's nickname
      * @throws IllegalStateException if there is no player with given nickname
      */
-    public void disconnectPlayer(String nickname) throws IllegalStateException{
+    public void disconnectPlayer(String nickname) throws IllegalArgumentException{
         getPlayerByNickname(nickname).setConnected(false);
+        //TODO unsubscribe player from listeners
     }
     /**
      * Reconnects player with given nickname

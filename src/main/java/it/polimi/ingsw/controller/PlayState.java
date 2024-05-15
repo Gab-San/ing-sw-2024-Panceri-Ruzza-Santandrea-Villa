@@ -159,6 +159,10 @@ public class PlayState extends GameState {
             else
                 board.setGamePhase(GamePhase.PLACECARD);
         }
+        //FIXME Se tutti i giocatori sono disconnessi in realtà si dovrebbe andare direttamente
+        // in creation state, non sarebbe meglio farlo direttamente sulla disconnect?
+        // Oppure come prima cosa dell'ENDGAME potremmo fare un check che ci sia almeno un client
+        // connesso
         else nextState();
     }
 

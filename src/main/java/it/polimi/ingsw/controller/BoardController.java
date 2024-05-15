@@ -18,9 +18,6 @@ public class BoardController {
         this.gameState = new CreationState(new Board(gameID), this, new ArrayList<>());
     }
 
-    public BoardController (String gameID, Player... players) throws DeckInstantiationException {
-        this.gameState = new SetupState(new Board(gameID, players), this, new ArrayList<>());
-    }
 
     public synchronized void join(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException{

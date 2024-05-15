@@ -7,12 +7,14 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.server.VirtualClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
-//TODO QUESTO TEST VA COMPLETATO!
+import static org.junit.jupiter.api.Assertions.*;
 
 class EndgameStateTest {
 
@@ -20,14 +22,17 @@ class EndgameStateTest {
     private Board board;
     private final String playerNickname = "Flavio";
     private final String secondPlNick = "Player 2";
+    private final List<VirtualClient> clientList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
         controller = new BoardController("Flavio's Game");
-        controller.join(playerNickname, new PuppetClient());
-        controller.setNumOfPlayers(playerNickname, 2);
+        VirtualClient flaviosClient = new PuppetClient();
+        clientList.add(flaviosClient);
+        controller.join(playerNickname, flaviosClient);
+        controller.setNumOfPlayers(playerNickname, 3);
         board = controller.getGameState().board;
-        joinUntilPlayState(2);
+        joinUntilPlayState(3);
     }
 
 
@@ -35,7 +40,8 @@ class EndgameStateTest {
         assertEquals(JoinState.class, controller.getGameState().getClass());
         GameState nextGS=null;
         for(int j = 2; j <= numOfPlayers; j++){
-            controller.join("Player " + j, new PuppetClient());
+            clientList.add(new PuppetClient());
+            controller.join("Player " + j, clientList.get(j - 1));
             nextGS = controller.getGameState();
             if(j < numOfPlayers){
                 assertNotNull(nextGS);
@@ -49,12 +55,33 @@ class EndgameStateTest {
 
     private void joinUntilPlayState(int numOfPlayers) {
         joinUntilSetupState(numOfPlayers);
+
+        //FOR TWO PLAYERS
         controller.placeStartingCard(playerNickname, false);
         controller.placeStartingCard(secondPlNick, false);
+        //FOR THREE PLAYERS
+        controller.placeStartingCard("Player 3", false);
+        //FOR FOUR PLAYERS
+//        controller.placeStartingCard("Player 4", false);
+        //CHOOSING COLOR
+        //FOR TWO PLAYERS
         controller.chooseYourColor(playerNickname, PlayerColor.BLUE);
         controller.chooseYourColor(secondPlNick, PlayerColor.GREEN);
+        //FOR THREE PLAYERS
+        controller.chooseYourColor("Player 3", PlayerColor.YELLOW);
+        //FOR FOUR PLAYERS
+//        controller.chooseYourColor("Player 4", PlayerColor.RED);
+
+        //CHOOSING SECRET OBJ
+        //FOR TWO PLAYERS
         controller.chooseSecretObjective(playerNickname, 1);
         controller.chooseSecretObjective(secondPlNick, 2);
+        //FOR THREE PLAYERS
+        controller.chooseSecretObjective("Player 3", 2);
+        //FOR FOUR PLAYERS
+//        controller.chooseSecretObjective("Player 4", 1);
+        assertEquals(PlayState.class, controller.getGameState().getClass());
+        // FIRST TURN
         Player currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -67,6 +94,7 @@ class EndgameStateTest {
                 'R',
                 0
                 );
+        //SECOND TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -77,6 +105,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
+        // THIRD TURN
         currentPlayer = board.getCurrentPlayer();
         board.addScore(currentPlayer, 20);
         controller.placeCard(currentPlayer.getNickname(),
@@ -90,6 +119,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
+        // FOURTH TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -100,6 +130,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
+        //FIRST TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -110,6 +141,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
+        // SECOND TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -139,11 +171,15 @@ class EndgameStateTest {
                 IllegalStateException.class,
                 () -> controller.setNumOfPlayers("Cugole", 3)
         );
-
     }
 
     @Test
     void disconnect() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> controller.disconnect("Player 4", clientList.get(2))
+        );
+        controller.disconnect("Player 3", clientList.get(2));
     }
 
     @Test
@@ -190,5 +226,59 @@ class EndgameStateTest {
 
     @Test
     void startGame() {
+        assertThrows(
+          IllegalArgumentException.class,
+                () -> controller.startGame(playerNickname, 2)
+        );
+        controller.startGame(playerNickname, 4);
+        assertEquals(JoinState.class, controller.getGameState().getClass());
+        clientList.add( new PuppetClient() );
+        controller.join("Player 4", clientList.get(3));
+        assertEquals(SetupState.class, controller.getGameState().getClass());
+    }
+
+    @Test
+    void startGameWhileDisconnecting() throws InterruptedException {
+        new Thread(
+                () ->controller.disconnect("Player 3",clientList.get(2))
+        ).start();
+        Thread startingThread = new Thread(
+                () ->{
+                    try {
+                        controller.startGame(playerNickname, 3);
+                    } catch (IllegalStateException ignore){
+                    }
+                }
+        );
+        startingThread.start();
+        controller.disconnect(secondPlNick, clientList.get(1));
+        startingThread.join();
+        boolean gameRestarted = false;
+        while (!gameRestarted){
+            try{
+                if(controller.getGameState().getClass() == JoinState.class) {
+                    break;
+                }
+                controller.startGame(playerNickname, 3);
+                gameRestarted = true;
+            } catch (IllegalStateException exception){
+                System.err.println(exception.getMessage());
+            }
+        }
+        assertEquals(JoinState.class, controller.getGameState().getClass());
+    }
+
+    @Test
+    void restartGameWithFullLobby() {
+        controller.startGame(playerNickname, 3);
+        assertEquals(SetupState.class, controller.getGameState().getClass());
+    }
+
+    @Test
+    void restartWhenAllDisconnected(){
+        controller.disconnect(playerNickname, clientList.get(0));
+        controller.disconnect(secondPlNick, clientList.get(1));
+        controller.disconnect("Player 3", clientList.get(2));
+        assertEquals(CreationState.class, controller.getGameState().getClass());
     }
 }

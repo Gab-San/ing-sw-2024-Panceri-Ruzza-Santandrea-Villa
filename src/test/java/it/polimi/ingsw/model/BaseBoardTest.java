@@ -23,7 +23,8 @@ public class BaseBoardTest {
     protected void joinPlayers(int num) throws IllegalStateException{
         players = new Player[num];
         for (int i = 0; i < num; i++) {
-            players[i] = new Player("player"+(i+1), null, i+1);
+            players[i] = new Player("player"+(i+1));
+            players[i].setTurn(i+1);
             board.addPlayer(players[i]);
         }
     }

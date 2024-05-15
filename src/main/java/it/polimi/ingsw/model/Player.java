@@ -12,14 +12,9 @@ public class Player {
     private PlayerColor color;
 
     public Player(String nickname){
-        this(nickname, null, 0);
-    }
-    public Player(String nickname, PlayerColor color, int turn){
         this.nickname = nickname;
-        this.turn = turn;
         isConnected = true;
         hand = new PlayerHand(this);
-        this.color = color;
     }
 
     @Override
