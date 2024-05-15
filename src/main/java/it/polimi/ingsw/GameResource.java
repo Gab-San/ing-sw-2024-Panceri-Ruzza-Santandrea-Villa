@@ -37,6 +37,15 @@ public enum GameResource {
             default -> null;
         };
     }
+    public static GameResource getResourceFromColor(String colorName){
+        return switch (colorName.toUpperCase()){
+            case "RED" -> MUSHROOM;
+            case "PURPLE" -> BUTTERFLY;
+            case "GREEN" -> LEAF;
+            case "BLUE" -> WOLF;
+            default -> null;
+        };
+    }
     public String toString(){
         return switch (this) {
             case MUSHROOM -> "M";

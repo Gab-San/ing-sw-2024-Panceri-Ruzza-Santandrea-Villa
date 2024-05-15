@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 class ConsoleBackgroundColors {
-    static final String RESET = "\u001B[0m";  //Resetta il colore
+    static final String RESET = "\u001B[00m";  //Resetta il colore
 
     // Normal intensity backgrounds
     static final String WHITE = "\u001B[47m"; //Colore bianco per i bordi

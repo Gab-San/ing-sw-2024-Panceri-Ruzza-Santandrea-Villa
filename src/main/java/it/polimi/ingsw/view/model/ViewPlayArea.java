@@ -22,6 +22,19 @@ public class ViewPlayArea {
         this.visibleResources = new Hashtable<>();
         this.freeCorners = new LinkedList<>();
     }
+    /**
+     * Places a card at position (0,0), handling freeCorners list <br>
+     * @param startCard starting card to place
+     */
+    public void placeStarting(ViewStartCard startCard){
+        Point zero = new Point(0,0);
+        cardMatrix.put(zero, startCard);
+        startCard.setPosition(zero);
+        for(CornerDirection dir : CornerDirection.values()) {
+            if(startCard.getCorner(dir).getResource() != GameResource.FILLED)
+                freeCorners.add(startCard.getCorner(dir));
+        }
+    }
 
     /**
      * Places a card at position, covering corners and handling freeCorners list <br>
@@ -31,9 +44,9 @@ public class ViewPlayArea {
      */
     public void placeCard(Point position, ViewPlaceableCard card){
         cardMatrix.put(position, card);
+        card.setPosition(position);
         for(CornerDirection dir : CornerDirection.values()){
-            Point dirPos = position.move(dir);
-            ViewPlaceableCard dirCard = cardMatrix.get(dirPos);
+            ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
             if(dirCard != null){
                 dirCard.getCorner(dir.opposite()).cover();
                 freeCorners.remove(dirCard.getCorner(dir.opposite()));
