@@ -1,62 +1,41 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.Point;
+import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
-import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class PrintPlayerUI {
-    private final PrintCard printCard;
     private final PrintPlayArea printPlayArea;
-    private static final int cardSpacing = 4;
-
-    public PrintPlayerUI(){
-        printCard = new PrintCard();
-        printPlayArea = new PrintPlayArea();
+    private Point printCenter;
+    private final PrintPlayerHand printPlayerHand;
+    private final String nickname;
+    public PrintPlayerUI(ViewPlayerHand hand, ViewPlayArea playArea){
+        printPlayArea = new PrintPlayArea(playArea);
+        printPlayerHand = new PrintPlayerHand(hand);
+        printCenter = new Point(0,0);
+        this.nickname = hand.getNickname();
     }
 
-    private void printCardsSideBySide(List<String[]> cardsAsStringRows){
-        if(cardsAsStringRows.isEmpty()) return;
+    public void printUI(){
+        System.out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.row() + "," + printCenter.col() +"): ");
+        printPlayArea.printPlayArea(printCenter);
 
-        String spacing = printCard.getSpaces(cardSpacing);
-        for (int i = 0; i < cardsAsStringRows.get(0).length; i++) {
-            for (String[] cardAsRows : cardsAsStringRows){
-                System.out.print(cardAsRows[i] + spacing);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
+        System.out.println("\nYour (" + nickname + "'s) hand: ");
+        printPlayerHand.printHand();
+
+        System.out.flush();
     }
 
-    public void printCardsInHand(ViewPlayerHand hand){
-        List<String[]> cardsAsStringRows = new LinkedList<>();
-        for(ViewPlayCard c : hand.getCards()){
-            cardsAsStringRows.add(printCard.getCardAsStringRows(c));
-        }
-        printCardsSideBySide(cardsAsStringRows);
+    public void moveView(CornerDirection ...directions){
+        printCenter = printCenter.move(directions);
+        printUI();
     }
-    public void printSecretObjectives(ViewPlayerHand hand){
-        List<String[]> cardsAsStringRows = new LinkedList<>();
-        for(ViewObjectiveCard c : hand.getSecretObjectives()){
-            cardsAsStringRows.add(printCard.getCardAsStringRows(c));
-        }
-        printCardsSideBySide(cardsAsStringRows);
+    public void setCenter(int row, int col) {
+        setCenter(new Point(row, col));
     }
-
-    public void printHand(ViewPlayerHand hand){
-        System.out.println("Nickname: " + hand.getNickname());
-
-        System.out.println("Secret objective: ");
-        printSecretObjectives(hand);
-
-        if(hand.getStartCard() != null){
-            System.out.println("Starting card in hand: ");
-            printCard.printCard(hand.getStartCard());
-        }
-
-        System.out.println("Cards in hand: ");
-        printCardsInHand(hand);
+    public void setCenter(Point center) {
+        printCenter = center;
+        printUI();
     }
 }

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
-import it.polimi.ingsw.view.tui.PrintPlayerUI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -11,17 +11,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class PrintPlayerUITest {
-    static PrintPlayerUI printPlayerUI;
+public class PrintPlayerHandTest {
+    static PrintPlayerHand printPlayerHand;
     static ViewPlayerHand hand;
 
     @BeforeAll
     static void setUp(){
-        printPlayerUI = new PrintPlayerUI();
+        printPlayerHand = new PrintPlayerHand(hand);
         hand = new ViewPlayerHand("Test_Player");
     }
 
-    private static List<ViewPlayCard> getRandomPlayCardList(int num, boolean allFront){
+    static List<ViewPlayCard> getRandomPlayCardList(int num, boolean allFront){
         List<ViewPlaceableCard> cardList = ViewCardGenerator.getRandomCards(num, allFront);
         List<ViewPlayCard> playList = new LinkedList<>();
         for(ViewPlaceableCard card : cardList){
@@ -29,7 +29,7 @@ public class PrintPlayerUITest {
         }
         return playList;
     }
-    private static List<ViewObjectiveCard> getObjectiveCardList(){
+    static List<ViewObjectiveCard> getRandomObjectiveCardList(){
         List<ViewObjectiveCard> objList = new LinkedList<>();
         Random random = new Random();
         if(random.nextBoolean())
@@ -44,10 +44,10 @@ public class PrintPlayerUITest {
     void printPlayerHandTest(int handSize){
         System.err.println("Hand size = " + handSize);
         System.err.flush();
-        hand.setStartCard((ViewStartCard) ViewCardGenerator.getRandomStartingCard());
+        hand.setStartCard(ViewCardGenerator.getRandomStartingCard());
         hand.setCards(getRandomPlayCardList(handSize, true));
-        hand.setSecretObjectiveCards(getObjectiveCardList());
-        printPlayerUI.printHand(hand);
+        hand.setSecretObjectiveCards(getRandomObjectiveCardList());
+        printPlayerHand.printHand();
         System.out.flush();
         System.err.println("\n"); //2 line spacing
         System.err.flush();

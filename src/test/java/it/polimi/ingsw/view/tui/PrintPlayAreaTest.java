@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.*;
@@ -26,15 +26,15 @@ public class PrintPlayAreaTest {
     @BeforeEach
     void setUp(){
         random = new Random();
-        printPlayArea = new PrintPlayArea();
         playArea = new ViewPlayArea();
+        printPlayArea = new PrintPlayArea(playArea);
 
-        ViewStartCard startCard = (ViewStartCard) (getRandomStartingCard());
+        ViewStartCard startCard = getRandomStartingCard();
         playArea.placeStarting(startCard);
     }
     void printOnCenter(Point center){
         System.out.println("Printing PlayArea centered on: (" + center.row() + ", " + center.col() + ")");
-        printPlayArea.printPlayArea(playArea, center);
+        printPlayArea.printPlayArea(center);
     }
     void printPlayArea(Point ...centers){
         for(Point c : centers){
@@ -79,7 +79,7 @@ public class PrintPlayAreaTest {
     }
     @Test
     void testPrintPlayArea_mixedCards(){
-        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(20, false));
+        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(40, false));
 
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());

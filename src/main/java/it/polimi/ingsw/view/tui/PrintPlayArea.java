@@ -16,9 +16,10 @@ import static it.polimi.ingsw.CornerDirection.*;
 
 public class PrintPlayArea {
     private final PrintCard printCard;
-
-    public PrintPlayArea(){
+    private ViewPlayArea playArea;
+    public PrintPlayArea(ViewPlayArea playArea){
         printCard = new PrintCard();
+        this.playArea = playArea;
     }
 
     /**
@@ -67,7 +68,7 @@ public class PrintPlayArea {
                  botCard
      */
     //FIXME: this is probably a bit brute-forcing
-    public void printPlayArea(ViewPlayArea playArea, Point center){
+    public void printPlayArea(Point center){
         final Set<CornerDirection> fillCorners = new HashSet<>();
 
         ViewPlaceableCard topCard = playArea.getCardMatrix().get(center.move(TL, TR));

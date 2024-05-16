@@ -1,6 +1,7 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.model.cards.ObjectiveCard;
+import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.tui.PrintCard;
 import org.junit.jupiter.api.BeforeAll;
