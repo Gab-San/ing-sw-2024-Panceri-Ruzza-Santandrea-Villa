@@ -200,15 +200,19 @@ public class PlayStateTest{
     }
 
     private void drawRandomCard(Player player){
-        PlayableDeck goldDeck=board.getGoldDeck();
-        PlayableDeck resourceDeck=board.getResourceDeck();
+        System.err.println("drawableCards.size()=" + drawableCards.size());
+
         char[] cardToDraw = drawableCards.get(new Random().nextInt(drawableCards.size()));
-        try{
+        if(!player.equals(board.getCurrentPlayer()))
             controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
-        }catch (/*DeckException |*/ IllegalArgumentException | IllegalStateException e){
-            drawableCards.remove(cardToDraw);
-            drawRandomCard(player);
+        else {
+            try {
+                controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
+            } catch (/*DeckException |*/ IllegalArgumentException | IllegalStateException e) {
+                drawableCards.remove(cardToDraw);
+                drawRandomCard(player);
             }
+        }
     }
 
     @ParameterizedTest
@@ -223,7 +227,7 @@ public class PlayStateTest{
 
     @ParameterizedTest
     @ValueSource(ints = {2,3,4})
-    public void simulateGame(int numOfPlayers){
+    public void simulateRandomGame(int numOfPlayers){
         setUp(numOfPlayers);
         assertEquals(GamePhase.PLACECARD,board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
