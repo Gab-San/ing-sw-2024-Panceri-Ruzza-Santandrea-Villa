@@ -20,11 +20,13 @@ public class ViewGoldCard extends ViewPlayCard{
 
     @Override
     public String getPointsOnPlaceAsString() {
-        return super.getPointsOnPlaceAsString() + " | " + strategyAsString;
+        if(!isFaceUp || pointsOnPlace <= 0) return "";
+        else return super.getPointsOnPlaceAsString() + " | " + strategyAsString;
     }
 
     public String getPlacementCostAsString(){
-        return placementCost.stream()
+        if(!isFaceUp) return "";
+        else return placementCost.stream()
                 .map(GameResource::toString)
                 .collect(Collectors.joining());
     }

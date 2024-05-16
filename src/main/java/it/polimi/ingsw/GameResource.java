@@ -58,6 +58,15 @@ public enum GameResource {
             case FILLED -> "F";
         };
     }
+    public String asColor(){
+        return switch (this) {
+            case MUSHROOM -> "R";
+            case BUTTERFLY -> "P";
+            case LEAF -> "G";
+            case WOLF -> "B";
+            default -> "*";
+        };
+    }
 
     public int getResourceIndex(){
         return resourceIndex - 1;

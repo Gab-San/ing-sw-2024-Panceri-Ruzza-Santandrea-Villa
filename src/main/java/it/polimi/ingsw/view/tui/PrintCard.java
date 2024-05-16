@@ -34,6 +34,12 @@ public class PrintCard {
                 break;
         }
     }
+    private String insertID(String cardRow, String cardID){
+        return cardRow.replace(
+                colorCode + getSpaces(cardID.length()+cardIDSpacing),
+                colorCode + getSpaces(cardIDSpacing) + cardID
+        );
+    }
     String getSpaces(int length){
         return " ".repeat(Math.max(0, length));
     }
@@ -72,10 +78,7 @@ public class PrintCard {
         card[3] = getCenterRow(null);
         card[4] = getCornerRow(playCard.getCornerResource(BL), playCard.getCornerResource(BR), playCard.getPlacementCostAsString());
 
-        card[2] = card[2].replace(
-                    colorCode + getSpaces(playCard.getCardID().length()+cardIDSpacing),
-                colorCode + getSpaces(cardIDSpacing) + playCard.getCardID()
-        );
+        card[2] = insertID(card[2], playCard.getCardID());
         return card;
     }
     String[] getCardAsStringRows(ViewStartCard startCard) {
@@ -90,10 +93,7 @@ public class PrintCard {
         card[3] = getCenterRow(centralResources[2]);
         card[4] = getCornerRow(startCard.getCornerResource(BL), startCard.getCornerResource(BR), "");
 
-        card[2] = card[2].replace(
-                colorCode + getSpaces(startCard.getCardID().length()+cardIDSpacing),
-                colorCode + getSpaces(cardIDSpacing) + startCard.getCardID()
-        );
+        card[2] = insertID(card[2], startCard.getCardID());
         return card;
     }
     String[] getCardAsStringRows(ViewPlaceableCard card){
@@ -108,11 +108,41 @@ public class PrintCard {
             return nullCardAsSpaces;
         }
 
-        // FIXME: [Ale] non mi piace usare instanceof, ma non mi viene un'altra soluzione
-        //          il metodo getCardAsStringRows deve sapere se è play o starting card
+        // FIXME: [Ale] non mi piace usare instanceof, ma non mi viene un'altra soluzione.
+        //          Il metodo getCardAsStringRows deve sapere se è play o starting card.
         if(card instanceof ViewPlayCard playCard)
             return getCardAsStringRows(playCard);
         else return getCardAsStringRows((ViewStartCard) card);
+    }
+
+    private String getPatternRow(String pattern, int rowIdx){
+        String row = pattern.split(" ")[rowIdx];
+        String spacing = getSpaces(2);
+        return row.charAt(0) + spacing + row.charAt(1) + spacing + row.charAt(2);
+    }
+    public String[] getCardAsStringRows(ViewObjectiveCard objCard){
+        setColorCode(objCard.getCardColour());
+
+        String[] card = new String[5];
+        String emptyRow = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
+        card[0] = emptyRow;
+        card[1] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyValue(), 0) : emptyRow;
+        card[2] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyValue(), 1) : objCard.getObjectiveStrategyValue();
+        card[3] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyValue(), 2) : emptyRow;
+        card[4] = card[0];
+
+        for (int i = 1; i <= 3; i++) {
+            int missingSpaces = card[0].length() - card[i].length();
+            if(missingSpaces%2 > 0) card[i] += " ";
+            String padding = getSpaces(missingSpaces/2);
+            card[i] = padding + card[i] + padding;
+        }
+        for (int i = 0; i < card.length; i++) {
+            card[i] = colorCode + card[i] + RESET;
+        }
+
+        card[2] = insertID(card[2], objCard.getCardID());
+        return card;
     }
 
     public void printCard(ViewPlaceableCard card) {
@@ -120,11 +150,9 @@ public class PrintCard {
             System.out.println(line);
         }
     }
-
-    public static void main(String[] args) {
-        PrintCard testPrinter = new PrintCard();
-        // Esempio di utilizzo
-        //testPrinter.printCard(/* card instance here */);
+    public void printCard(ViewObjectiveCard card) {
+        for (String line : getCardAsStringRows(card)) {
+            System.out.println(line);
+        }
     }
-
 }

@@ -88,7 +88,6 @@ public class PrintPlayArea {
         ViewPlaceableCard botLeftCard = playArea.getCardMatrix().get(center.move(BL, BL));
         ViewPlaceableCard botRightCard = playArea.getCardMatrix().get(center.move(BR, BR));
 
-        String topSpaces = printCard.getSpaces((PrintCard.cornerStringAsSpacesLength + PrintCard.cornerRowSpaceCount)*2);
         String TLSpaces = printCard.getSpaces(PrintCard.cornerStringAsSpacesLength + PrintCard.cornerRowSpaceCount);
         String inBetweenSpaces = printCard.getSpaces(PrintCard.cornerRowSpaceCount);
 

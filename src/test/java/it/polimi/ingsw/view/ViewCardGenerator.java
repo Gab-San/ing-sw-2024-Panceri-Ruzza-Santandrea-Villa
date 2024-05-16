@@ -12,6 +12,7 @@ public class ViewCardGenerator {
     private static Random random=null;
     private static List<GameResource> resources;
     private static int numOfResources;
+
     enum Distribution{
         RANDOM,
         ONLY_RESOURCE,
@@ -30,6 +31,10 @@ public class ViewCardGenerator {
         setUp();
         return resources.get(random.nextInt(numOfResources));
     }
+    public static GameResource getRandomResourceNotNull(){
+        setUp();
+        return resources.get(random.nextInt(numOfResources-1));
+    }
     public static List<ViewCorner> getRandomCornerList(){
         setUp();
         List<ViewCorner> cornerList = new LinkedList<>();
@@ -39,7 +44,7 @@ public class ViewCardGenerator {
         cornerList.add(new ViewCorner(getRandomResource(), getRandomResource(), BL));
         return cornerList;
     }
-    public static ViewPlaceableCard getRandomStartingCard(){
+    public static ViewStartCard getRandomStartingCard(){
         setUp();
         List<GameResource> centralResources = new LinkedList<>();
         GameResource res = null;
@@ -113,6 +118,22 @@ public class ViewCardGenerator {
             cards.add(makeEmptyCard(faceUp));
         }
         return cards;
+    }
+    public static ViewObjectiveCard getRandomObjectiveCard(boolean patternType) {
+        String type = patternType ? ViewObjectiveCard.PATTERN_TYPE : ViewObjectiveCard.RESOURCE_TYPE;
+        StringBuilder value = new StringBuilder();
+        int len = patternType ? 9 : random.nextInt(4)+2;
+        for (int i = 1; i <= len; i++) {
+            GameResource res = getRandomResourceNotNull();
+            if(patternType)
+                value.append(res.asColor());
+            else value.append(res.toString());
+            if(patternType && i%3 == 0 && i != len){
+                value.append(" ");
+            }
+        }
+        return new ViewObjectiveCard("O"+random.nextInt(16), "", "",
+                type, value.toString());
     }
 
 }

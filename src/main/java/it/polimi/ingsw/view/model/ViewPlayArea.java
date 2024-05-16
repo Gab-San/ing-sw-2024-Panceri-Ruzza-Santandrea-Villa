@@ -71,4 +71,17 @@ public class ViewPlayArea {
         return Collections.unmodifiableList(freeCorners);
     }
 
+    public void setConnected(boolean isConnected){
+        this.isConnected = isConnected;
+    }
+    public boolean isConnected(){
+        return isConnected;
+    }
+    public void setHand(List<GameResource> cardsInHand){
+        this.cardsInHand.clear();
+        this.cardsInHand.addAll(cardsInHand);
+    }
+    public List<GameResource> getHand(){
+        return Collections.unmodifiableList(cardsInHand);
+    }
 }

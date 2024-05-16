@@ -22,18 +22,22 @@ public class ViewBoard {
     private final ViewDeck<ViewObjectiveCard> objectiveCardViewDeck;
 
     private final Map<String, ViewPlayArea> playerAreas;
+    private final ViewPlayerHand playerHand;
     private final Map<String, Boolean> isPlayerDeadlocked;
 
     private int currentTurn;
     private GamePhase gamePhase;
 
-    public ViewBoard(){
+    public ViewBoard(String nickname){
         resourceCardDeck = new ViewDeck<>();
         goldCardDeck = new ViewDeck<>();
         objectiveCardViewDeck = new ViewDeck<>();
 
         playerAreas = new Hashtable<>();
+        playerHand = new ViewPlayerHand(nickname);
         isPlayerDeadlocked = new Hashtable<>();
+
+        addPlayer(nickname); // adds the player of this client
     }
 
     public ViewDeck<ViewResourceCard> getResourceCardDeck() {
@@ -52,6 +56,9 @@ public class ViewBoard {
     public Map<String, Boolean> getPlayerDeadlocks() {
         return isPlayerDeadlocked;
     }
+    public ViewPlayerHand getPlayerHand() {
+        return playerHand;
+    }
 
     public int getCurrentTurn() {
         return currentTurn;
@@ -65,5 +72,20 @@ public class ViewBoard {
     }
     public void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
+    }
+
+    public void addPlayer(String nickname){
+        playerAreas.put(nickname, new ViewPlayArea());
+        isPlayerDeadlocked.put(nickname, false);
+    }
+    public void removePlayer(String nickname){
+        playerAreas.remove(nickname);
+        isPlayerDeadlocked.remove(nickname);
+    }
+    public void disconnectPlayer(String nickname){
+        playerAreas.get(nickname).setConnected(false);
+    }
+    public void reconnectPlayer(String nickname){
+        playerAreas.get(nickname).setConnected(true);
     }
 }

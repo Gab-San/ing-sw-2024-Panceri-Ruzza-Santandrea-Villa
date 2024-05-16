@@ -19,7 +19,8 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
         return backResource;
     }
     public String getPointsOnPlaceAsString() {
-        return pointsOnPlace > 0 ? Integer.toString(pointsOnPlace) : "";
+        if(!isFaceUp) return "";
+        else return pointsOnPlace > 0 ? Integer.toString(pointsOnPlace) : "";
     }
     abstract public String getPlacementCostAsString();
 }
