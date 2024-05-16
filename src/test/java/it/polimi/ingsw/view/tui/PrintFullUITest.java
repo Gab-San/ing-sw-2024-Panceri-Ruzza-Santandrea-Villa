@@ -56,13 +56,20 @@ public class PrintFullUITest {
     }
 
     static void cls(){
-        System.out.print("\n".repeat(50)); // cls equivalent
+        //TODO: delete \n screen before release (needed for IDE console cls)
+        System.out.print("\n".repeat(50)); // cls for IDE
+
+        //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        }catch (Exception ignore){}
     }
     static void printCommandLegend(){
         System.out.println("Valid commands: ");
-        System.out.println("-\t Move <up|right|left|down|center>");
-        System.out.println("-\t Flip <1-3>");
-        System.out.println("-\t Flip <cardID | starting>");
+        System.out.print("-\t Move <up|right|left|down|center>");
+        System.out.println("\t\t-\t Flip <1-3 | cardID | starting>");
+        System.out.print("-\t Legend (shows this list)");
+        System.out.println("\t\t\t\t-\t Flush <hand | objective | starting>");
     }
     public static void main(String[] args) {
         System.out.println("TEST UI movement");
@@ -71,9 +78,9 @@ public class PrintFullUITest {
 
         String input = ""; String error = "";
         test.printPlayerUI.printUI();
-
         while (!input.matches("[qQ]|[qQ]uit")){
-            System.out.print("Input command \"Move [direction]\": ");
+            printCommandLegend();
+            System.out.print("Input command: ");
             input = scanner.nextLine();
             if(input.matches("[mM]ove [a-zA-Z]+")){
                 String direction = input.substring("move ".length());
@@ -89,21 +96,41 @@ public class PrintFullUITest {
             }
             else if(input.matches("[fF]lip [1-3]")){
                 int index = Integer.parseInt(input.substring("flip ".length()));
-                test.board.getPlayerHand().flipCard(index);
-                cls();
-                test.printPlayerUI.printUI();
+                try{ test.board.getPlayerHand().flipCard(index); }
+                catch (IndexOutOfBoundsException e){ error = "Index too high!"; }
+                if(error.isEmpty()) {
+                    cls();
+                    test.printPlayerUI.printUI();
+                }
             }
-            else if(input.matches("[fF]lip [RG][1-40]|[fF]lip [sS]tarting")){
-                test.board.getPlayerHand().flipCard(input.substring("flip ".length()));
-                cls();
-                test.printPlayerUI.printUI();
+            else if(input.matches("[fF]lip [rRgG][0-9]?[0-9]|[fF]lip [sS]tarting")){
+                try{ test.board.getPlayerHand().flipCard(input.substring("flip ".length()).toUpperCase()); }
+                catch (IllegalArgumentException e){ error = e.getMessage(); }
+                if(error.isEmpty()) {
+                    cls();
+                    test.printPlayerUI.printUI();
+                }
             }
             else if(input.matches("[lL]egend")){
                 printCommandLegend();
             }
+            else if(input.matches("[fF]lush [a-zA-Z]+")){
+                String argument = input.substring("flush ".length());
+                switch (argument) {
+                    case "hand": test.board.getPlayerHand().setCards(new LinkedList<>()); break;
+                    case "objective": test.board.getPlayerHand().setSecretObjectiveCards(new LinkedList<>()); break;
+                    case "starting": test.board.getPlayerHand().clearStartCard(); break;
+                    default: error = "Invalid flush argument"; break;
+                }
+                if(error.isEmpty()) {
+                    cls();
+                    test.printPlayerUI.printUI();
+                }
+            }
             else error = "Invalid command.";
 
             if(!error.isEmpty()) {
+                cls();
                 test.printPlayerUI.printUI();
                 System.out.println(RED_TEXT + error + RESET);
                 error = "";

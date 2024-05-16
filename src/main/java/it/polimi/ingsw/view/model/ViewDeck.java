@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.model;
 
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 
 public class ViewDeck<C extends ViewCard>{
     private boolean isEmpty;
+    private C topCard;
     private C firstRevealed;
     private C secondRevealed;
 
@@ -14,10 +16,14 @@ public class ViewDeck<C extends ViewCard>{
     }
 
     public boolean isEmpty() {
-        return isEmpty;
+        return topCard == null;
     }
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
+
+    public C getTopCard() {
+        return topCard;
+    }
+    public void setTopCard(C topCard) {
+        this.topCard = topCard;
     }
 
     public C getFirstRevealed() {

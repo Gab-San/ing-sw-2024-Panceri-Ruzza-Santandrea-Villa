@@ -10,32 +10,19 @@ import java.util.List;
 public class PrintPlayerHand {
     private final PrintCard printCard;
     private static final int cardSpacing = 4;
-    private ViewPlayerHand hand;
+    private final ViewPlayerHand hand;
     public PrintPlayerHand(ViewPlayerHand hand){
         printCard = new PrintCard();
         this.hand = hand;
     }
 
-    private void printCardsSideBySide(List<String[]> cardsAsStringRows){
-        if(cardsAsStringRows.isEmpty()) return;
-
-        String spacing = printCard.getSpaces(cardSpacing);
-        for (int i = 0; i < cardsAsStringRows.get(0).length; i++) {
-            for (String[] cardAsRows : cardsAsStringRows){
-                System.out.print(cardAsRows[i] + spacing);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-    }
-
     public void printCardsInHand(){
         List<String[]> cardsAsStringRows = new LinkedList<>(hand.getCards().stream().map(printCard::getCardAsStringRows).toList());
-        printCardsSideBySide(cardsAsStringRows);
+        printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
     }
     public void printSecretObjectives(){
         List<String[]> cardsAsStringRows = new LinkedList<>(hand.getSecretObjectives().stream().map(printCard::getCardAsStringRows).toList());
-        printCardsSideBySide(cardsAsStringRows);
+        printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
     }
     public void printStartingCard(){
         printCard.printCard(hand.getStartCard());
@@ -63,8 +50,9 @@ public class PrintPlayerHand {
 
         List<String[]> cardsAsStringRows = new LinkedList<>(hand.getCards().stream().map(printCard::getCardAsStringRows).toList());
         cardsAsStringRows.addAll(hand.getSecretObjectives().stream().map(printCard::getCardAsStringRows).toList());
-        cardsAsStringRows.add(printCard.getCardAsStringRows(hand.getStartCard()));
-        printCardsSideBySide(cardsAsStringRows);
+        if(hand.getStartCard() != null)
+            cardsAsStringRows.add(printCard.getCardAsStringRows(hand.getStartCard()));
+        printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
         System.out.println();
     }
 }

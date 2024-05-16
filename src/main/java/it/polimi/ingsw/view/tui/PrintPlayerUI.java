@@ -18,7 +18,7 @@ public class PrintPlayerUI {
     }
 
     public void printUI(){
-        System.out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.row() + "," + printCenter.col() +"): ");
+        System.out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 
         System.out.println("\nYour (" + nickname + "'s) hand: ");

@@ -3,6 +3,8 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.GameResource;
 
+import java.util.List;
+
 import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
 
@@ -154,5 +156,17 @@ public class PrintCard {
         for (String line : getCardAsStringRows(card)) {
             System.out.println(line);
         }
+    }
+    public void printCardsSideBySide(List<String[]> cardsAsStringRows, int cardSpacing){
+        if(cardsAsStringRows.isEmpty()) return;
+
+        String spacing = getSpaces(cardSpacing);
+        for (int i = 0; i < cardsAsStringRows.get(0).length; i++) {
+            for (String[] cardAsRows : cardsAsStringRows){
+                System.out.print(cardAsRows[i] + spacing);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
     }
 }
