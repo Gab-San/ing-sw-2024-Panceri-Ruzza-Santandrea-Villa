@@ -200,15 +200,13 @@ public class PlayStateTest{
     }
 
     private void drawRandomCard(Player player){
-        System.err.println("drawableCards.size()=" + drawableCards.size());
-
         char[] cardToDraw = drawableCards.get(new Random().nextInt(drawableCards.size()));
         if(!player.equals(board.getCurrentPlayer()))
             controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
         else {
             try {
                 controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
-            } catch (/*DeckException |*/ IllegalArgumentException | IllegalStateException e) {
+            } catch (IllegalArgumentException | IllegalStateException e) {
                 drawableCards.remove(cardToDraw);
                 drawRandomCard(player);
             }
@@ -227,80 +225,139 @@ public class PlayStateTest{
 
     @ParameterizedTest
     @ValueSource(ints = {2,3,4})
+    //@RepeatedTest(200)
     public void simulateRandomGame(int numOfPlayers){
-        setUp(numOfPlayers);
+        setUp(/*4*/numOfPlayers);
+        //int numOfPlayers=4;
         assertEquals(GamePhase.PLACECARD,board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
 
         boolean endgame=false;
-        boolean isLastTurn=false;
+        int isLastTurn=0;
         int i=1;
         List<Player> playersByTurn=board.getPlayersByTurn();
         List<String> nicknamesByTurn=playersByTurn.stream().map(Player::getNickname).toList();
         System.err.println(nicknamesByTurn);
+        Player lastPlayer=null;
 
-        while(EndgameState.class != controller.getGameState().getClass()) {
+        while(isLastTurn!=numOfPlayers) {
+            //setup test single turn
             Player currPlayer = board.getCurrentPlayer();
+            lastPlayer=currPlayer;
             int turn = board.getCurrentTurn();
+            System.err.println("endgame="+endgame+"\n\n");
             System.err.println("il turno è "+i);
+            System.err.println("started turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
+
             System.err.println("currPlayer is " + currPlayer.getNickname());
+
+            /*if (endgame && turn == numOfPlayers){
+                System.err.println(">>>>>>>ISLASTTURN IS TRUE<<<<<<<");
+                isLastTurn ++;
+            }
+            if (board.checkEndgame() && turn==numOfPlayers){
+                System.err.println(">>>>>>>ENDGAME IS TRUE<<<<<<<");
+                endgame = true;
+            }*/
 
             System.err.println("I'M PLACING");
             assertEquals(board.getCurrentPlayer(), currPlayer, "currPlayer is " + currPlayer.getNickname() +" instead of "+board.getCurrentPlayer());
             placeRandomCard(currPlayer);
 
-            if(GamePhase.SHOWWIN==board.getGamePhase())
-                    break;
+            System.err.println("isLastTurn="+isLastTurn);
+
+
+            //se non posso più pescare
             if (!board.canDraw()) {
+                //se sono all'ultimo turno dell'ultimo round
+                if(isLastTurn==numOfPlayers-1){  //diventerà endgame && currPlayer.equals(last player who can play-1)
+                    if(endgame){
+                        System.err.println(">>>>>>>ISLASTTURN IS TRUE<<<<<<<");
+                        isLastTurn ++;
+                    }
+                    break;
+                }
+                //se non sono all'ultimo turno dell'ultimo round
                 System.err.println("board can draw="+board.canDraw());
                 assertEquals(GamePhase.PLACECARD, board.getGamePhase());
                 assertEquals(PlayState.class, controller.getGameState().getClass());
                 assertEquals(board, controller.getGameState().board);
                 assertEquals(turn==numOfPlayers ? 1 : turn + 1, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
                 assertEquals(board.getCurrentPlayer(), board.getPlayersByTurn().get(currPlayer.getTurn() == numOfPlayers ? 0 : currPlayer.getTurn()));
-            }
-            else{
-                System.err.println("can draw: "+board.canDraw());
 
+                /*if (endgame && turn == numOfPlayers)
+                    isLastTurn ++;
+                if (board.checkEndgame())
+                    endgame = true;*/
+            }
+            else{ //se posso ancora pescare
+                System.err.println("can draw: "+board.canDraw());
+                //controllo che sia in drawState/Phase (se posso pescare devo sempre entrare qui prima di terminare il game)
                 assertEquals(GamePhase.DRAWCARD, board.getGamePhase(), "WRONG AFTER PLACE");
                 assertEquals(PlayState.class, controller.getGameState().getClass());
                 assertEquals(board, controller.getGameState().board);
                 assertEquals(turn, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
                 assertEquals(currPlayer, board.getCurrentPlayer());
+                //
+                if(board.getGamePhase()==GamePhase.DRAWCARD) { //questo controllo è ridondante con gli assert precedenti
+                    //System.err.println("I'M DRAWING");
+                    drawRandomCard(currPlayer);
+                    //se sono all'ultimo turno dell'ultimo round
+                    if(isLastTurn==numOfPlayers-1){  //diventerà endgame && currPlayer.equals(last player who can play-1)
+                        if(endgame){
+                            System.err.println(">>>>>>>ISLASTTURN IS TRUE<<<<<<<");
+                            isLastTurn ++;
+                        }
+                        break;
+                    }
+                    //se non sono all'ultimo turno dell'ultimo round
+                    assertEquals(GamePhase.PLACECARD, board.getGamePhase(), "WRONG AFTER DRAW");
+                    assertEquals(PlayState.class, controller.getGameState().getClass());
+                    assertEquals(board, controller.getGameState().board);
+                    assertEquals(turn == numOfPlayers ? 1 : turn + 1, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
+                    assertEquals(board.getCurrentPlayer(), board.getPlayersByTurn().get(currPlayer.getTurn() == numOfPlayers ? 0 : currPlayer.getTurn()));
 
-                System.err.println("I'M DRAWING");
-                drawRandomCard(currPlayer);
-
-                if(GamePhase.SHOWWIN==board.getGamePhase())
-                    break;
-                assertEquals(GamePhase.PLACECARD, board.getGamePhase(), "WRONG AFTER DRAW");
-                assertEquals(PlayState.class, controller.getGameState().getClass());
-                assertEquals(board, controller.getGameState().board);
-                assertEquals(turn == numOfPlayers ? 1 : turn + 1, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
-                assertEquals(board.getCurrentPlayer(), board.getPlayersByTurn().get(currPlayer.getTurn() == numOfPlayers ? 0 : currPlayer.getTurn()));
-
-
-                if (isLastTurn && turn == 1) {
+                    //already controlled in if(!board.canDraw())
+                /*if (isLastTurn && turn == 1) {
                     assertEquals(GamePhase.SHOWWIN, board.getGamePhase());
                     assertEquals(EndgameState.class, controller.getGameState().getClass());
-                } else {
+                } else {*/
+                    //ripetizione degli assert precedenti
                     assertEquals(GamePhase.PLACECARD, board.getGamePhase());
                     assertEquals(PlayState.class, controller.getGameState().getClass());
                     assertEquals(board, controller.getGameState().board);
                     assertEquals(turn == numOfPlayers ? 1 : turn + 1, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
                     assertEquals(board.getCurrentPlayer(), board.getPlayersByTurn().get(currPlayer.getTurn() == numOfPlayers ? 0 : currPlayer.getTurn()));
+                    //}
+
+                    /*if (endgame && turn == numOfPlayers)
+                        isLastTurn ++;
+                    if (board.checkEndgame())
+                        endgame = true;*/
+                    System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
                 }
-
-                if (endgame && turn == 1)
-                    isLastTurn = true;
-                if (board.checkEndgame() && turn == numOfPlayers)
-                    endgame = true;
-                System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
-                i++;
             }
-        }
+            //valutazione per controllare che finisca il game correttamente
+            if(endgame){
+                System.err.println(">>>>>>>ISLASTTURN IS TRUE<<<<<<<");
+                isLastTurn ++;
+            }
+            if (board.checkEndgame() && turn==numOfPlayers){
+                System.err.println(">>>>>>>ENDGAME IS TRUE<<<<<<<");
+                endgame = true;
+            }
 
+            System.err.println(">>>>>>>>>>>>>>>>>CHECK END GAME IS "+board.checkEndgame()+"<<<<<<<<<<<<<<<<<");
+            i++;
+        }
+        assertEquals(lastPlayer, playersByTurn.get(playersByTurn.size()-1));
+        System.err.println("last player is "+ lastPlayer.getNickname());
+        System.err.println("finito al turno "+ i);
+        assertTrue(endgame, "endgame may be false");
+        assertTrue(isLastTurn==numOfPlayers, "isLastTurn is "+isLastTurn);
         assertEquals(GamePhase.SHOWWIN, board.getGamePhase());
         assertEquals(EndgameState.class, controller.getGameState().getClass());
     }
+
+    private void controlPostPlace(){}
 }

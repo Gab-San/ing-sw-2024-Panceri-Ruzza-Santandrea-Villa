@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayState extends GameState {
     private boolean lastRound;
@@ -33,6 +34,11 @@ public class PlayState extends GameState {
         }catch (IllegalStateException e){
             throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE", e);
         }
+
+        //FIXME: [FLAVIO] non dovrebbe mai succedere in quanto il turno dei giocatori disconnessi viene saltato
+        Player player=board.getPlayerByNickname(nickname);
+        if(board.getCurrentPlayer().equals(player))
+            postDrawChecks();
     }
 
     @Override
@@ -44,18 +50,24 @@ public class PlayState extends GameState {
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         //TODO implement disconnect
 
-        Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
-        if(player.getNickname().equals(nickname)){
-            if(board.nextTurn()) {
-                currentPlayerHasPlacedCard = false;
-                board.setGamePhase(GamePhase.PLACECARD);
-            }
-        }
+        if(board.getPlayerAreas().keySet().stream()
+                .map(Player::getNickname).filter((s)->{return s.equals(nickname);}).findAny().isEmpty())
+            //se non esiste un giocatore con quel nickname
+            throw new IllegalArgumentException(nickname+" non fa parte della fartita, non può disconnettersi");
         board.disconnectPlayer(nickname);
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
-        if(board.getCurrentPlayer().getNickname().equals(nickname))
+
+        Player player=board.getCurrentPlayer();
+        if(player.getNickname().equals(nickname)){
             postDrawChecks();
+        }
+        if(board.getPlayerAreas().keySet().stream()
+                // only look at players that are connected
+                .filter(Player:: isConnected)
+                .collect(Collectors.toSet())
+                .isEmpty())
+            nextState();
     }
 
     @Override

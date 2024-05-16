@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SetupState extends GameState{
     public Set<String> playersWhoPlacedStartingCard;
@@ -45,16 +46,32 @@ public class SetupState extends GameState{
     @Override
     public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException {
+
         //TODO handle disconnection.
         //    Disconnected player completes setup randomly.
         board.disconnectPlayer(nickname);
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
 
-        // CANNOT DO THIS IF PLAYER IS NOT REMOVED OTHERWISE THE GAME WOULDN'T PROGRESS
-        playersWhoPlacedStartingCard.remove(nickname);
-        playersWhoChoseColor.remove(nickname);
-        playersWhoChoseSecretObjective.remove(nickname);
+        if(board.getPlayerAreas().keySet().stream()
+                // only look at players that are connected
+                .filter(Player:: isConnected)
+                .collect(Collectors.toSet())
+                        .isEmpty())
+        { //se si sono disconnessi tutti i giocatori => torno a creation state
+            for(Player p : board.getPlayerAreas().keySet())
+                board.removePlayer(p.getNickname());
+            transition(new CreationState(board, controller, new ArrayList<>()));
+            return;
+        }
+        Player player=board.getPlayerByNickname(nickname);
+        if(playersWhoPlacedStartingCard.add(nickname))
+            board.placeStartingCard(player, new Random().nextBoolean());
+        if(playersWhoChoseColor.add(nickname))
+            player.setColor(board.getRandomAvailableColor());
+        if(playersWhoChoseSecretObjective.add(nickname))
+            player.getHand().chooseObjective(new Random().nextInt(2)+1);
+
     }
 
     @Override
