@@ -81,8 +81,7 @@ public class PlayState extends GameState {
         if (currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had already placed a card!");
 
-        int currentTurn = board.getCurrentTurn();
-        if(!board.getPlayersByTurn().get(currentTurn).equals(player))
+        if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to place the card yet");
 
         PlayArea playerPlayArea = board.getPlayerAreas().get(player);
@@ -111,13 +110,6 @@ public class PlayState extends GameState {
             throw new IllegalStateException("Player has not placed a card yet!");
 
         Player player = board.getPlayerByNickname(nickname);
-        
-        if (player.getHand().isHandFull())
-            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD IN THIS PHASE, YOUR HAND IS FULL");
-        if(board.getGamePhase() != GamePhase.DRAWCARD)
-            throw new IllegalStateException("Player has not placed a card yet!");
-        if(!board.canDraw()) // should never happen as placeCard already checks for this
-            throw new IllegalStateException("IMPOSSIBLE TO DRAW A CARD: THERE IS NO CARD TO DRAW");
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to draw yet");
 
