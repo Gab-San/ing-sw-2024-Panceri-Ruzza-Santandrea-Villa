@@ -12,7 +12,8 @@ abstract public class GameCommand{
     }
 
     abstract public void execute() throws IllegalStateException, DeckException;
-    public String getNickname(){
+
+    public String getNickname() {
         return nickname;
     }
 }

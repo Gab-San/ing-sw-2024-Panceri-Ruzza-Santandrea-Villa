@@ -77,9 +77,9 @@ public class RMIServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void startGame(int numOfPlayers) throws IllegalStateException, RemoteException {
+    public void restartGame(int numOfPlayers) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.startGame(nickname, client, numOfPlayers);
+        server.restartGame(nickname, client, numOfPlayers);
     }
 
     @Override

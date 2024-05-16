@@ -29,12 +29,12 @@ public class SetupStateTest {
         joinUntilSetupState(numOfPlayers);
     }
 
-
     public void joinUntilSetupState(int numOfPlayers) {
         for (int j = 2; j <= numOfPlayers; j++) {
             controller.join("Player " + j, new PuppetClient());
         }
     }
+
 
     public void advanceToPlayState(int numOfPlayers){
         setUp(numOfPlayers);

@@ -69,7 +69,7 @@ public class PuppetClient implements CommandPassthrough {
     }
 
     @Override
-    public void startGame(int numOfPlayers) throws IllegalStateException {
+    public void restartGame(int numOfPlayers) throws IllegalStateException {
         System.out.println(colorize("START GAME COMMAND CALLED WITH ARGS:\n"
                 + numOfPlayers, textColorFormat));
     }

@@ -159,7 +159,6 @@ class TCPClientSocketTest {
                 client.getProxy()::ping
         );
     }
-    
 
     @Test
     void testSendMsgFail() throws IOException{
@@ -211,7 +210,7 @@ class TCPClientSocketTest {
     void testStartGame() throws IOException {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
-        client.getProxy().startGame(3);
+        client.getProxy().restartGame(3);
         waitExecution(client, 1000);
     }
 

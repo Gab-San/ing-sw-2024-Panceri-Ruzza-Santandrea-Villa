@@ -90,7 +90,7 @@ public class TCPClientSocket implements VirtualClient{
 //endregion
 
 //region FOR TEST PURPOSES
-    boolean isClosed(){
+public boolean isClosed(){
         return clientSocket.isClosed();
     }
 

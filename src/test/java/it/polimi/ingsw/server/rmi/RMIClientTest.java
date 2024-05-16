@@ -44,7 +44,6 @@ class RMIClientTest {
         client.getProxy().sendMsg("Sono Ale sto mandando un messaggio");
     }
 
-
     @Test
     void connect() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
@@ -166,6 +165,6 @@ class RMIClientTest {
     void startGame() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Stupido");
-        client.getProxy().startGame(3);
+        client.getProxy().restartGame(3);
     }
 }

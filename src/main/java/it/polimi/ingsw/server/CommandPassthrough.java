@@ -15,7 +15,7 @@ public interface CommandPassthrough extends Remote{
     void chooseObjective(int choice) throws RemoteException;
     void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws RemoteException;
     void draw(char deck, int card) throws RemoteException;
-    void startGame(int numOfPlayers) throws RemoteException;
+    void restartGame(int numOfPlayers) throws RemoteException;
     void ping() throws RemoteException;
 
 }

@@ -94,9 +94,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException{
+    public void restartGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
-        StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers);
+        RestartGameCmd command = new RestartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers);
         serverRef.issueGameCommand(command);
     }
 

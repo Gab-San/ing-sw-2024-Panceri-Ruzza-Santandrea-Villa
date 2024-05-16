@@ -1,13 +1,10 @@
 package it.polimi.ingsw.server.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.server.Commands.GameCommand;
-import java.util.Random;
 
-
-public class StartGameCmd extends GameCommand{
+public class RestartGameCmd extends GameCommand{
     private final int numOfPlayers;
-    public StartGameCmd(BoardController gameController, String nickname, int numOfPlayers){
+    public RestartGameCmd(BoardController gameController, String nickname, int numOfPlayers){
         super(gameController, nickname);
         this.numOfPlayers = numOfPlayers;
     }

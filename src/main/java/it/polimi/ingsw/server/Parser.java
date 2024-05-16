@@ -148,7 +148,7 @@ public class Parser {
         } catch (IndexOutOfBoundsException outOfBoundsException){
             throw new IllegalArgumentException("Invalid number of players." + outOfBoundsException.getMessage() + "2 and 4");
         }
-        virtualServer.startGame(numOfPlayers);
+        virtualServer.restartGame(numOfPlayers);
     }
 
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {

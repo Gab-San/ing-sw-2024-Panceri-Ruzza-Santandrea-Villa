@@ -238,9 +238,9 @@ public class ClientHandler implements Runnable, VirtualServer {
 
 
     @Override
-    public void startGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
+    public void restartGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
-        serverRef.issueGameCommand(new StartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
+        serverRef.issueGameCommand(new RestartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
     }
 
 

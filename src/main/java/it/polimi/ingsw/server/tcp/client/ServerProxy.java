@@ -158,7 +158,7 @@ public class ServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void startGame(int numOfPlayers) throws RemoteException {
+    public void restartGame(int numOfPlayers) throws RemoteException {
         sendCommand(new RestartGameMessage(nickname, numOfPlayers));
     }
 //endregion
