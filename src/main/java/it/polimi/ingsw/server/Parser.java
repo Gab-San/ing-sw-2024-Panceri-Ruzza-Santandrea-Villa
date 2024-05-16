@@ -2,9 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.server.rmi.RMIClient;
 
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -57,9 +55,6 @@ public class Parser {
             case "start":
                 parseSetNumPlayers(commandComponents);
                 break;
-            case "test":
-                parseTestCmd(commandComponents);
-                break;
             default:
                 throw new IllegalArgumentException("Command not recognised");
         }
@@ -87,16 +82,6 @@ public class Parser {
         throw new IndexOutOfBoundsException("The number of players selected must be between 2 and 4");
     }
 
-    private void parseTestCmd(String[] commandComponents) throws RemoteException {
-        List<String> textNoCmd =  Arrays.stream(commandComponents).skip(1).toList();
-
-        StringBuilder text = new StringBuilder();
-        for(String cmp : textNoCmd){
-            text.append(cmp).append(" ");
-        }
-
-        virtualClient.testCmd(text.toString().trim());
-    }
 
     private void parseSendCmd(String[] commandComponents) throws RemoteException {
         List<String> msgNoCmd =  Arrays.stream(commandComponents).skip(1).toList();

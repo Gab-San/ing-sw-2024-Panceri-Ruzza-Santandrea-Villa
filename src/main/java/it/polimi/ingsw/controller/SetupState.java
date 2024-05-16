@@ -162,28 +162,35 @@ public class SetupState extends GameState{
     }
 
     private void drawFirstHand() throws IllegalStateException {
-        int drawSleepTime = 3;
         try {
             for (Player player : board.getPlayerAreas().keySet()) {
                 board.drawTop(Board.RESOURCE_DECK, player.getHand());
-                Thread.sleep(drawSleepTime);
                 board.drawTop(Board.RESOURCE_DECK, player.getHand());
-                Thread.sleep(drawSleepTime);
                 board.drawTop(Board.GOLD_DECK, player.getHand());
-                Thread.sleep(drawSleepTime);
             }
-        }catch (DeckException | InterruptedException ignored){/*TODO: handling exception*/ System.err.println("drawFirstHand error");}
+        }catch (DeckException e){
+            /*TODO: handling exception*/
+            System.err.println("ERROR WHILE DEALING FIRST CARDS FOR THE FIRST TIME");
+        }
     }
     private void giveSecretObjectives(){
         for(Player player : board.getPlayerAreas().keySet()) {
-            try {board.deal(Board.OBJECTIVE_DECK, player.getHand());}
-            catch (DeckException e){/*TODO: handling exception */ System.err.println("giveSecretObjectives error");}
+            try {
+                board.deal(Board.OBJECTIVE_DECK, player.getHand());
+            }
+            catch (DeckException e){
+                /*TODO: handling exception */ System.err.println("ERROR WHILE GIVING STARTING CARD!");
+            }
         }
     }
     private void giveStartingCard(){
         for(Player player : board.getPlayerAreas().keySet()) {
-            try {board.deal(Board.STARTING_DECK, player.getHand());}
-            catch (DeckException e){/*TODO: handling exception */ System.err.println("giveStartingCard error");}
+            try {
+                board.deal(Board.STARTING_DECK, player.getHand());
+            }catch (DeckException e){
+                /*TODO: handle exception check if exception is useful*/
+                System.err.println("ERROR WHILE GIVING STARTING CARD!");
+            }
         }
     }
 

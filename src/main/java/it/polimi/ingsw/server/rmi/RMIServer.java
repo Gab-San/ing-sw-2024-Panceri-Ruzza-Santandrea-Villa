@@ -109,12 +109,6 @@ public class RMIServer implements VirtualServer {
         serverRef.updateMsg(fullMessage);
     }
     @Override
-    public void testCmd(String nickname, VirtualClient client, String text){
-        validateClient(nickname, client);
-        TestCmd command = new TestCmd(serverRef.getGameRef(), nickname, text);
-        issueCommand(command);
-    }
-    @Override
     public void ping(){
         return;
     }

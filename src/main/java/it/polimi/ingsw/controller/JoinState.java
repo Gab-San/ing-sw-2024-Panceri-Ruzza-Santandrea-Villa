@@ -23,9 +23,9 @@ public class JoinState extends GameState {
         //should be impossible to be triggered, but in case of future of the addition of other phases, it may be necessary
         if(board.getGamePhase()!=GamePhase.JOIN)
             throw new IllegalStateException("IMPOSSIBLE TO JOIN IN THIS PHASE");
-        board.addPlayer(new Player(nickname)); // throws exception if player can't be added
-        //TODO cambiare con iscrizione ai listener
-        board.getGameInfo().addClient(client);
+        board.addPlayer(new Player(nickname));
+        //TODO iscrivere il giocatore ai listener
+        if(!disconnectingPlayers.isEmpty()) return;
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {
             transition(new SetupState(board, controller, disconnectingPlayers));
         }
@@ -38,10 +38,9 @@ public class JoinState extends GameState {
 
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
-        board.removePlayer(nickname); // throws exception if player isn't in game
-        board.getGameInfo().removeClient(client);
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
+        board.removePlayer(nickname); // throws exception if player isn't in game
     }
 
     @Override

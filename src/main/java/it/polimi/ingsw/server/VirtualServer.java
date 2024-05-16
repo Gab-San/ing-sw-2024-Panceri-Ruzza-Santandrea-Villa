@@ -17,6 +17,5 @@ public interface VirtualServer extends Remote {
     void draw(String nickname, VirtualClient client, char deck, int card) throws IllegalStateException, RemoteException;
     void startGame(String nickname, VirtualClient client, int numPlayers) throws IllegalStateException, RemoteException;
     void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException;
-    void testCmd(String nickname, VirtualClient client, String text) throws RemoteException;
     void ping() throws RemoteException;
 }

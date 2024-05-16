@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 
 public interface CommandPassthrough {
     void sendMsg(String msg) throws RemoteException;
-    void testCmd(String text)throws RemoteException;
     void connect(String nickname) throws IllegalStateException, RemoteException;
     void setNumOfPlayers(int num) throws IllegalStateException, RemoteException;
     void disconnect() throws IllegalStateException, RemoteException;

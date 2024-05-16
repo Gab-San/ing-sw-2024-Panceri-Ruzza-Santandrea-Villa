@@ -251,7 +251,7 @@ public class Board {
      *                              or if dealing the requested cards to player's hand is an invalid action
      * @throws DeckException if the specified deck is empty
      */
-    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, PlayerHandException, DeckException {
         //TODO [Gamba] choose whether to handle the deck exception
         switch (deck){
             case STARTING_DECK:
