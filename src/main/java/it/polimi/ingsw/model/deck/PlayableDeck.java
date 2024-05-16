@@ -5,11 +5,11 @@ import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class PlayableDeck {
-    private final BlockingQueue<PlayCard> cardDeck;
+    private final Deque<PlayCard> cardDeck;
     private final CardFactory cardFactory;
     private PlayCard firstRevealedCard;
     private PlayCard secondRevealedCard;
@@ -17,25 +17,21 @@ public class PlayableDeck {
     private static final int FIRST_POSITION = 1;
     private static final int SECOND_POSITION = 2;
 
-    public PlayableDeck(CardFactory cardFactory) throws DeckInstantiationException {
-        cardDeck = new ArrayBlockingQueue<>(6,true);
+    public PlayableDeck(CardFactory cardFactory, int initialCapacity) throws DeckInstantiationException {
+        cardDeck = new ArrayDeque<>(initialCapacity);
         this.cardFactory = cardFactory;
         try {
-            fillDeck(1);
-        } catch (DeckException deckException){
-            throw new DeckInstantiationException("Error while filling the deck", deckException, PlayableDeck.class);
+            fillDeck(initialCapacity);
+        } catch (DeckException e) {
+            throw new DeckInstantiationException("Error while filling deck");
         }
         reveal(FIRST_POSITION);
         reveal(SECOND_POSITION);
     }
 
-    private void fillDeck(int remainingCapacity) throws DeckException {
-        while (cardDeck.remainingCapacity() > remainingCapacity){
-            try {
-                cardDeck.put(cardFactory.addCardToDeck());
-            } catch (InterruptedException e) {
-                //TODO handle exception
-            }
+    private void fillDeck(int initialCapacity) throws DeckException {
+        for(int i = 0; i < initialCapacity; i++ ){
+            cardDeck.add(cardFactory.addCardToDeck());
         }
     }
 
@@ -45,19 +41,12 @@ public class PlayableDeck {
         }
 
         PlayCard returnCard;
-
+        returnCard = cardDeck.remove();
         try {
-            returnCard = cardDeck.take();
-        } catch (InterruptedException exception) {
-            throw new DeckException(exception, PlayableDeck.class);
+            cardDeck.add(cardFactory.addCardToDeck());
+        } catch (DeckException ignored){
+            // If the cardFactory is empty there's no mean to throw an error
         }
-
-        new Thread(() -> {
-            try {
-                fillDeck(3);
-            } catch (DeckException ignored) {
-            }
-        }).start();
         return returnCard;
     }
 
@@ -65,7 +54,6 @@ public class PlayableDeck {
         if(firstRevealedCard == null){
             throw new DeckException("Trying to draw from empty position", PlayableDeck.class);
         }
-
         PlayCard returnCard = firstRevealedCard;
         reveal(FIRST_POSITION);
         return returnCard;

@@ -48,8 +48,8 @@ public class Board {
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
         gamePhase = GamePhase.CREATE;
-        resourceDeck = new PlayableDeck(new ResourceCardFactory());
-        goldDeck = new PlayableDeck(new GoldCardFactory());
+        resourceDeck = new PlayableDeck(new ResourceCardFactory(), 8);
+        goldDeck = new PlayableDeck(new GoldCardFactory(), 5);
         objectiveDeck = new ObjectiveDeck();
         startingDeck = new StartingCardDeck();
         isPlayerDeadlocked = new Hashtable<>();

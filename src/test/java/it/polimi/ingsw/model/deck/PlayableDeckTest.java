@@ -13,7 +13,7 @@ class PlayableDeckTest {
     @BeforeAll
     static void setup() {
         try {
-            playableDeck = new PlayableDeck(new ResourceCardFactory());
+            playableDeck = new PlayableDeck(new ResourceCardFactory(),6);
         } catch (DeckInstantiationException deckExc) {
             deckExc.printStackTrace(System.err);
         }
@@ -107,20 +107,14 @@ class PlayableDeckTest {
         while(true){
             try {
                 playableDeck.getTopCard();
-                synchronized (playableDeck){
-                    //With a 50 millisec sleep the deck is able to replenish
-                    playableDeck.wait(50);
-                }
                 counter++;
                 System.out.println(counter);
-            } catch (DeckException deckException){
+            } catch (DeckException deckException) {
                 System.err.println(deckException.getMessage());
-                if(deckException.getCause() != null){
+                if (deckException.getCause() != null) {
                     System.err.println(deckException.getCause().getMessage());
                 }
                 break;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }
     }
