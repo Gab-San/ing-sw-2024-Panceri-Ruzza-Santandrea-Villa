@@ -5,21 +5,19 @@ import it.polimi.ingsw.controller.testclass.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.Corner;
-import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 //TODO QUESTO TEST VA COMPLETATO
@@ -237,26 +235,28 @@ public class PlayStateTest{
         assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
 
-    //@ParameterizedTest
-    //@ValueSource(ints = {2,3,4})
-
-    @RepeatedTest(20)
-    public void simulateGame(/*int numOfPlayers*/){
-        setUp(4/*numOfPlayers*/);
-        int numOfPlayers=4;
+    @ParameterizedTest
+    @ValueSource(ints = {2,3,4})
+    public void simulateGame(int numOfPlayers){
+        setUp(numOfPlayers);
         assertEquals(GamePhase.PLACECARD,board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
 
         boolean endgame=false;
         boolean isLastTurn=false;
         int i=1;
+        List<Player> playersByTurn=board.getPlayersByTurn();
+        List<String> nicknamesByTurn=playersByTurn.stream().map(Player::getNickname).toList();
+        System.err.println(nicknamesByTurn);
 
         while(EndgameState.class != controller.getGameState().getClass()) {
             Player currPlayer = board.getCurrentPlayer();
             int turn = board.getCurrentTurn();
             System.err.println("il turno è "+i);
+            System.err.println("currPlayer is " + currPlayer.getNickname());
 
             System.err.println("I'M PLACING");
+            assertEquals(board.getCurrentPlayer(), currPlayer, "currPlayer is " + currPlayer.getNickname() +" instead of "+board.getCurrentPlayer());
             placeRandomCard(currPlayer);
 
             if(GamePhase.SHOWWIN==board.getGamePhase())
@@ -281,14 +281,15 @@ public class PlayStateTest{
                 System.err.println("I'M DRAWING");
                 drawRandomCard(currPlayer);
 
+                if(GamePhase.SHOWWIN==board.getGamePhase())
+                    break;
                 assertEquals(GamePhase.PLACECARD, board.getGamePhase(), "WRONG AFTER DRAW");
                 assertEquals(PlayState.class, controller.getGameState().getClass());
                 assertEquals(board, controller.getGameState().board);
                 assertEquals(turn == numOfPlayers ? 1 : turn + 1, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
                 assertEquals(board.getCurrentPlayer(), board.getPlayersByTurn().get(currPlayer.getTurn() == numOfPlayers ? 0 : currPlayer.getTurn()));
 
-                if(GamePhase.SHOWWIN==board.getGamePhase())
-                    break;
+
                 if (isLastTurn && turn == 1) {
                     assertEquals(GamePhase.SHOWWIN, board.getGamePhase());
                     assertEquals(EndgameState.class, controller.getGameState().getClass());
