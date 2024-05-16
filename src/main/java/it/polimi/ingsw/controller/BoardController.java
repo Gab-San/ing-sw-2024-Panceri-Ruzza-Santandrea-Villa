@@ -61,19 +61,6 @@ public class BoardController {
         gameState.restartGame(nickname, numOfPlayers);
     }
 
-    //TODO: timer to check for players who lose connection during their turn
-    //  we could also periodically ping the clients saved in gameInfo
-
-    //FIXME: Remove oldClient and use Map<String, VirtualClient> in the observers */
-    public synchronized void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
-            throws IllegalStateException {
-        if(!gameState.board.containsPlayer(nickname))
-            throw new IllegalStateException(nickname + " isn't connected to this game.");
-        gameState.board.getGameInfo().removeClient(oldClient);
-        gameState.board.getGameInfo().addClient(newClient);
-        //TODO: push game update to the client that just reconnected
-    }
-
     public String getGameID(){
         return gameState.board.getGameInfo().getGameID();
     }

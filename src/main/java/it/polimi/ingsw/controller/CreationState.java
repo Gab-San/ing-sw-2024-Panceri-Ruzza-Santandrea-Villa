@@ -11,8 +11,6 @@ import it.polimi.ingsw.server.VirtualClient;
 import java.util.List;
 
 public class CreationState extends GameState{
-
-
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
     }
@@ -74,4 +72,5 @@ public class CreationState extends GameState{
     public void restartGame (String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
+
 }
