@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class PlayerHand{
     static final int MAX_CARDS = 3;
@@ -68,7 +69,7 @@ public class PlayerHand{
      */
     public PlayCard getCardByID(String cardID) throws IllegalArgumentException{
         return cards.stream()
-                .filter(card -> cardID.equals(card.getCardID()))
+                .filter(card -> card != null && cardID.equals(card.getCardID()))
                 .findFirst().orElseThrow(()->new IllegalArgumentException("Player hand does not contain a card with ID " + cardID));
     }
     /**
@@ -83,13 +84,12 @@ public class PlayerHand{
 
     /**
      * Adds a card to this hand
-     * @param card the card to add
+     * @param drawCard the card to add
      * @throws PlayerHandException if the hand is full or already contains the given card
      */
-    public void addCard(@NotNull PlayCard card) throws PlayerHandException{
-        if(isHandFull()) throw new PlayerHandException("Too many cards in hand!", playerRef, card.getClass());
-        if(this.containsCard(card)) throw new PlayerHandException("Card is already in hand!", playerRef, card.getClass());
-        cards.add(card);
+    public void addCard(@NotNull Supplier<PlayCard> drawCard) throws PlayerHandException{
+        if(isHandFull()) throw new PlayerHandException("Too many cards in hand!", playerRef);
+        cards.add(drawCard.get());
     }
     public boolean isHandFull() {
         return cards.size() >= MAX_CARDS;
@@ -131,7 +131,21 @@ public class PlayerHand{
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
 
         this.secretObjective.add(secretObjective);
+    } 
+    
+    /**
+     * Adds an objective card to the hand
+     * @param drawCard the function that supplies the objective card to add
+     * @throws PlayerHandException if two objective cards were already dealt or the objective card was already in this hand
+     */
+    public void setObjectiveCard(Supplier<ObjectiveCard> drawCard) throws PlayerHandException {
+        if(this.secretObjective.size() >= MAX_OBJECTIVES)
+            throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
+
+        this.secretObjective.add(drawCard.get());
     }
+    
+    
     public List<ObjectiveCard> getObjectiveChoices() {
         return secretObjective;
     }
@@ -166,6 +180,19 @@ public class PlayerHand{
             throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
         }
         this.startingCard = startingCard;
+    }
+    
+    /**
+     * Sets this hand's starting card only if it isn't set already
+     * @param drawCard the function the draws the startingCard
+     * @throws PlayerHandException if the starting card was already dealt
+     */
+    public void setStartingCard(Supplier<StartingCard> drawCard){
+        //FIXME: Is this exception needed?
+        if(this.startingCard != null){
+            throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
+        }
+        this.startingCard = drawCard.get();
     }
 
 }

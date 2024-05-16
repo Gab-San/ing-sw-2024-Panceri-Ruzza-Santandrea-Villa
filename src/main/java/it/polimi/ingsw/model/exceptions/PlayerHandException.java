@@ -15,6 +15,10 @@ public class PlayerHandException extends PlayerException{
         super(msg, player);
         this.cardClass = cardClass;
     }
+    
+    public PlayerHandException(String msg, Player player){
+        this(msg,player,null);
+    }
 
     public PlayerHandException(String msg, Throwable cause, Player player, Class<?> cardClass){
         super(msg, cause, player);

@@ -141,7 +141,7 @@ public class Board {
 
     /**
      * @return player whose turn corresponds to the currentTurn
-     * @throws IllegalStateException if turns have not been assigned turns yet (no player has turn = currentTurn >= 1)
+     * @throws IllegalStateException if turns have not been assigned turns yet (no player has turned = currentTurn >= 1)
      */
     public Player getCurrentPlayer() throws IllegalStateException{
         return playerAreas.keySet().stream()
@@ -186,10 +186,10 @@ public class Board {
      */
     public boolean checkEndgame(){
         return scoreboard.values().stream()
-                .anyMatch(score -> score >= ENDGAME_SCORE)
-                ||
-                (resourceDeck.isTopEmpty() && goldDeck.isTopEmpty())
-                ;
+                .anyMatch(
+                        score -> score >= ENDGAME_SCORE
+                        || (resourceDeck.isEmpty() && goldDeck.isEmpty())
+                );
     }
 
     /**
@@ -249,31 +249,17 @@ public class Board {
      * @param playerHand which hand to deal the card(s) to
      * @throws IllegalStateException if the deck specified isn't Board.STARTING_DECK or Board.OBJECTIVE_DECK <br>
      *                              or if dealing the requested cards to player's hand is an invalid action
-     * @throws DeckException if the specified deck is empty
      */
-    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, PlayerHandException, DeckException {
-        //TODO [Gamba] choose whether to handle the deck exception
+    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, PlayerHandException {
         switch (deck){
             case STARTING_DECK:
-                StartingCard startingCard = startingDeck.getCard();
-                try {
-                    playerHand.setStartingCard(startingCard);
-                }catch (PlayerHandException e){
-                    startingDeck.putCard(startingCard);
-                    throw e;
-                }
+                playerHand.setStartingCard(startingDeck::getCard);
                 break;
             case OBJECTIVE_DECK:
-                ObjectiveCard objCard1 = objectiveDeck.getCard();
-                ObjectiveCard objCard2 = objectiveDeck.getCard();
-                try {
-                    playerHand.setObjectiveCard(objCard1);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
-                    playerHand.setObjectiveCard(objCard2);   // so separating this is not necessary. The second can't throw if the first doesn't throw
-                }catch (PlayerHandException e){
-                    objectiveDeck.putCard(objCard1);
-                    objectiveDeck.putCard(objCard2);
-                    throw e;
-                }
+                //Maybe since we set the objectiveCards only when dealing, and we have a lambda,
+                //maybe we can use the lambda twice to draw two cards
+                playerHand.setObjectiveCard(objectiveDeck::getCard);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
+                playerHand.setObjectiveCard(objectiveDeck::getCard);   // so separating this is not necessary.
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-dealable deck");
@@ -298,16 +284,22 @@ public class Board {
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException{
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
-                playerHand.addCard(resourceDeck.getTopCard());
+                if(resourceDeck.isEmpty()){
+                    throw new DeckException("Deck is empty!", PlayableDeck.class);
+                }
+                playerHand.addCard(resourceDeck::getTopCard);
                 break;
             case GOLD_DECK:
-                playerHand.addCard(goldDeck.getTopCard());
+                if(goldDeck.isEmpty()){
+                    throw new DeckException("Deck is empty!", PlayableDeck.class);
+                }
+                playerHand.addCard(goldDeck::getTopCard);
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-drawable deck");
@@ -322,16 +314,22 @@ public class Board {
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException{
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
-                playerHand.addCard(resourceDeck.getFirstRevealedCard());
+                if(!resourceDeck.hasFirstRevealed()) {
+                    throw new DeckException("There is no first card!", PlayableDeck.class);
+                }
+                playerHand.addCard(resourceDeck::getFirstRevealedCard);
                 break;
             case GOLD_DECK:
-                playerHand.addCard(goldDeck.getFirstRevealedCard());
+                if(!goldDeck.hasFirstRevealed()){
+                    throw new DeckException("There is no first card!", PlayableDeck.class);
+                }
+                playerHand.addCard(goldDeck::getFirstRevealedCard);
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-drawable deck");
@@ -346,16 +344,22 @@ public class Board {
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
-                playerHand.addCard(resourceDeck.getSecondRevealedCard());
+                if(!resourceDeck.hasSecondRevealed()) {
+                    throw new DeckException("There is no second card!", PlayableDeck.class);
+                }
+                playerHand.addCard(resourceDeck::getSecondRevealedCard);
                 break;
             case GOLD_DECK:
-                playerHand.addCard(goldDeck.getSecondRevealedCard());
+                if(!goldDeck.hasSecondRevealed()){
+                    throw new DeckException("There is no second card!", PlayableDeck.class);
+                }
+                playerHand.addCard(goldDeck::getSecondRevealedCard);
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-drawable deck");

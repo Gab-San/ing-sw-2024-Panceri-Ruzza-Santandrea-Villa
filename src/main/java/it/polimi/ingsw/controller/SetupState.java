@@ -161,7 +161,7 @@ public class SetupState extends GameState{
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 
-    private void drawFirstHand() throws IllegalStateException {
+    private void drawFirstHand(){
         try {
             for (Player player : board.getPlayerAreas().keySet()) {
                 board.drawTop(Board.RESOURCE_DECK, player.getHand());
@@ -175,22 +175,12 @@ public class SetupState extends GameState{
     }
     private void giveSecretObjectives(){
         for(Player player : board.getPlayerAreas().keySet()) {
-            try {
-                board.deal(Board.OBJECTIVE_DECK, player.getHand());
-            }
-            catch (DeckException e){
-                /*TODO: handling exception */ System.err.println("ERROR WHILE GIVING STARTING CARD!");
-            }
+            board.deal(Board.OBJECTIVE_DECK, player.getHand());
         }
     }
     private void giveStartingCard(){
         for(Player player : board.getPlayerAreas().keySet()) {
-            try {
-                board.deal(Board.STARTING_DECK, player.getHand());
-            }catch (DeckException e){
-                /*TODO: handle exception check if exception is useful*/
-                System.err.println("ERROR WHILE GIVING STARTING CARD!");
-            }
+            board.deal(Board.STARTING_DECK, player.getHand());
         }
     }
 

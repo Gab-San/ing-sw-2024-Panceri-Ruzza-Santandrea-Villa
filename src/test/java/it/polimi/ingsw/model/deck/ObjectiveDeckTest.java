@@ -19,14 +19,9 @@ class ObjectiveDeckTest {
 
     @Test
     void getCard() {
-        while (true){
-            try {
-                ObjectiveCard objectiveCard = objDeck.getCard();
-                System.out.println(objectiveCard);
-            } catch (DeckException deckExc){
-                deckExc.printStackTrace(System.err);
-                break;
-            }
+        while (!objDeck.isEmpty()){
+            ObjectiveCard objectiveCard = objDeck.getCard();
+            System.out.println(objectiveCard);
         }
     }
 
@@ -39,7 +34,4 @@ class ObjectiveDeckTest {
     void getSecondRevealed() {
         System.out.println(objDeck.getSecondRevealed());
     }
-
-
-
 }

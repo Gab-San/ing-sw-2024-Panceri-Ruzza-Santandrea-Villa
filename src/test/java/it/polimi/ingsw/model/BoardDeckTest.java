@@ -26,8 +26,8 @@ public class BoardDeckTest extends BaseBoardTest{
                 assertThrows(IllegalStateException.class, ()->board.deal(Board.RESOURCE_DECK, player.getHand()));
                 assertThrows(IllegalStateException.class, ()->board.deal(Board.GOLD_DECK, player.getHand()));
             }
-        }catch (DeckException e){
-            fail("DeckException was raised: " + e.getMessage());
+        }catch (PlayerHandException e){
+            fail("PlayerHandException was raised: " + e.getMessage());
         }
 
         for(Player player  : players){
@@ -42,11 +42,8 @@ public class BoardDeckTest extends BaseBoardTest{
         try{
             for(Player player : players){
                 board.drawTop(deck, player.getHand());
-                Thread.sleep(deckSleepTime); // sleeps are needed to allow the deck threads to refill the deck in time
                 board.drawFirst(deck, player.getHand());
-                Thread.sleep(deckSleepTime);
                 board.drawSecond(deck, player.getHand());
-                Thread.sleep(deckSleepTime);
 
                 assertDoesNotThrow(()->player.getHand().getCard(2));
                 assertThrows(IndexOutOfBoundsException.class, ()->player.getHand().getCard(3));

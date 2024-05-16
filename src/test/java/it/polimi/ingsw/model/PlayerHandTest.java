@@ -32,7 +32,7 @@ public class PlayerHandTest {
     public void containsCardTest(){
         assertEquals(card1, card2);
         assertNotSame(card1, card2);
-        hand.addCard(card1);
+        hand.addCard(() -> card1);
         assertTrue(hand.containsCard(card1));
         assertFalse(hand.containsCard(card2));
         assertFalse(hand.containsCard(card3));
@@ -42,18 +42,17 @@ public class PlayerHandTest {
     public void addCardTest(){
         assertEquals(card1, card2);
         assertNotSame(card1, card2);
-        hand.addCard(card1);
-        hand.addCard(card2);
-        assertThrows(PlayerHandException.class, ()->hand.addCard(card2));
-        assertDoesNotThrow(()->hand.addCard(card3));
-        assertThrows(PlayerHandException.class, ()->hand.addCard(card4));
+        hand.addCard(() -> card1);
+        hand.addCard(() -> card2);
+        assertDoesNotThrow(()->hand.addCard(() -> card3));
+        assertThrows(PlayerHandException.class, ()->hand.addCard(() -> card4));
     }
 
     @Test
     public void removeCardTest(){
-        hand.addCard(card1);
-        hand.addCard(card2);
-        hand.addCard(card3);
+        hand.addCard(() -> card1);
+        hand.addCard(() -> card2);
+        hand.addCard(() -> card3);
         assertTrue(hand.containsCard(card2));
         hand.removeCard(card2);
         assertFalse(hand.containsCard(card2));
@@ -67,9 +66,9 @@ public class PlayerHandTest {
 
     @Test
     public void popCardTest(){
-        hand.addCard(card1);
-        hand.addCard(card2);
-        hand.addCard(card3);
+        hand.addCard(() -> card1);
+        hand.addCard(() -> card2);
+        hand.addCard(() -> card3);
         assertSame(hand.popCard(1), card2);
         assertFalse(hand.containsCard(card2));
     }

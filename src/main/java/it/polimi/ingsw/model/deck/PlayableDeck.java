@@ -36,11 +36,7 @@ public class PlayableDeck {
         }
     }
 
-    public synchronized PlayCard getTopCard() throws DeckException{
-        if(cardDeck.isEmpty()){
-            throw new DeckException("Deck is empty", PlayableDeck.class);
-        }
-
+    public synchronized PlayCard getTopCard(){
         PlayCard returnCard;
         returnCard = cardDeck.remove();
         try {
@@ -51,52 +47,52 @@ public class PlayableDeck {
         return returnCard;
     }
 
-    public synchronized PlayCard getFirstRevealedCard() throws DeckException {
-        if(firstRevealedCard == null){
-            throw new DeckException("Trying to draw from empty position", PlayableDeck.class);
-        }
+    public synchronized PlayCard getFirstRevealedCard(){
         PlayCard returnCard = firstRevealedCard;
         reveal(FIRST_POSITION);
         return returnCard;
     }
 
-    public synchronized PlayCard getSecondRevealedCard() throws DeckException{
-        if(secondRevealedCard == null){
-            throw new DeckException("Trying to draw from empty position", PlayableDeck.class);
-        }
-
+    public synchronized PlayCard getSecondRevealedCard(){
         PlayCard returnCard = secondRevealedCard;
         reveal(SECOND_POSITION);
         return returnCard;
     }
 
 
-    private void reveal(int position) throws IllegalStateException{
+    private void reveal(int position){
         switch(position){
             case FIRST_POSITION:
-                try {
-                    firstRevealedCard = getTopCard();
-                } catch (DeckException deckException){
+                if(cardDeck.isEmpty()) {
                     firstRevealedCard = null;
+                    break;
                 }
+                firstRevealedCard = getTopCard();
                 break;
             case SECOND_POSITION:
-                try {
-                    secondRevealedCard = getTopCard();
-                } catch (DeckException deckException){
+                if(cardDeck.isEmpty()) {
                     secondRevealedCard = null;
+                    break;
                 }
+                secondRevealedCard = getTopCard();
                 break;
             default:
-                throw new IllegalStateException("Trying to position in non-position");
+                break;
         }
     }
 
-    public synchronized boolean isTopEmpty(){
-        return cardFactory.isEmpty() && cardDeck.isEmpty();
+    public synchronized boolean isEmpty(){
+        return cardDeck.isEmpty();
     }
     public synchronized boolean isCompletelyEmpty(){
-        return isTopEmpty() && firstRevealedCard == null && secondRevealedCard == null;
+        return isEmpty() && !hasSecondRevealed() && !hasFirstRevealed();
     }
 
+    public boolean hasFirstRevealed() {
+        return firstRevealedCard != null;
+    }
+
+    public boolean hasSecondRevealed() {
+        return secondRevealedCard != null;
+    }
 }

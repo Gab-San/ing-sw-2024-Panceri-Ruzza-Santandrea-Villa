@@ -38,17 +38,9 @@ public class ObjectiveDeck {
     /**
      * This method should be called once at the start of the match by each player
      * @return the first card of the deck
-     * @throws DeckException if deck is empty
      */
-    public ObjectiveCard getCard() throws DeckException {
-        //FIXME [GAMBA] Understand if it's thread safe
-        // - There's no need to synchronize since the construction is not threaded
-        synchronized (cardDeck) {
-            if (cardDeck.isEmpty()) {
-                throw new DeckException("The deck is empty", ObjectiveDeck.class);
-            }
-            return cardDeck.remove(getRandomCard());
-        }
+    public ObjectiveCard getCard(){
+        return cardDeck.remove(getRandomCard());
     }
 
     private int getRandomCard() {
@@ -59,22 +51,9 @@ public class ObjectiveDeck {
      * This method should be called once per game during setup
      */
     public void reveal() {
-        synchronized (cardDeck) {
-            if(firstRevealed != null) return;
-            try {
-                firstRevealed = getCard();
-                secondRevealed = getCard();
-            } catch (DeckException emptyDeck) {
-                emptyDeck.printStackTrace(System.err);
-            }
-        }
-    }
-
-    public void putCard(ObjectiveCard card){
-        synchronized (cardDeck){
-            if(!cardDeck.contains(card))
-                cardDeck.add(card);
-        }
+        if(firstRevealed != null) return;
+        firstRevealed = getCard();
+        secondRevealed = getCard();
     }
 
     /**
@@ -108,6 +87,9 @@ public class ObjectiveDeck {
         } catch (IOException exc){
             throw new DeckException("Error reading file JSON", exc, ObjectiveDeck.class);
         }
+    }
 
+    public boolean isEmpty(){
+        return cardDeck.isEmpty();
     }
 }
