@@ -56,7 +56,7 @@ public class SetupStateTest {
                 placeAllStarting(numOfPlayers);
             if(i==2)
                 giveAllColors(numOfPlayers);
-            assertThrows(IllegalStateException.class, () -> controller.join(playerNickname, new PuppetClient()), "Join doesn't throw IllegalStateException with client==null");
+            assertThrows(IllegalStateException.class, () -> controller.join(playerNickname, new PuppetClient()), "Join doesn't throw IllegalStateException with client!=null");
         }
     }
 

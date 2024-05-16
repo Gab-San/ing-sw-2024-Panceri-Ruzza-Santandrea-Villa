@@ -424,10 +424,14 @@ public class Board {
     /**
      * Reconnects player with given nickname
      * @param nickname player's nickname
-     * @throws IllegalStateException if there is no player with given nickname
+     * @throws IllegalStateException if there is no player with given nickname or if player is already connected
      */
     public void reconnectPlayer(String nickname) throws IllegalStateException{
-        getPlayerByNickname(nickname).setConnected(true);
+        Player player = getPlayerByNickname(nickname);
+        if(player.isConnected())
+            throw new IllegalStateException("Player " + nickname + " is already connected.");
+        else
+            player.setConnected(true);
     }
 
     /**
