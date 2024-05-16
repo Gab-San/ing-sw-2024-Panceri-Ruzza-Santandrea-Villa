@@ -80,7 +80,7 @@ public class PlayState extends GameState {
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         if (currentPlayerHasPlacedCard)
             throw new IllegalStateException("Player had already placed a card!");
-        
+
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to place the card yet");
 
@@ -129,7 +129,7 @@ public class PlayState extends GameState {
             }
         }catch (DeckException e){
             System.out.println(e.getMessage());
-            throw new IllegalStateException("Deck " + deckFrom + " is empty! Can't draw from position " + cardPos);
+            throw new IllegalArgumentException("Deck " + deckFrom + " is empty! Can't draw from position " + cardPos);
         }
 
         postDrawChecks();

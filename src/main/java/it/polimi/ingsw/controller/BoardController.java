@@ -52,7 +52,7 @@ public class BoardController {
         gameState.chooseSecretObjective(nickname, choice);
     }
     public synchronized void draw(String nickname, char deckFrom, int cardPos)
-            throws IllegalStateException{
+            throws IllegalStateException, IllegalArgumentException{
         gameState.draw(nickname, deckFrom, cardPos);
     }
     public synchronized void placeCard(String nickname, String cardID,Point cardPos,

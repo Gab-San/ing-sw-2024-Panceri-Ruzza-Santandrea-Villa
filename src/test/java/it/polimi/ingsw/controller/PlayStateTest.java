@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.exceptions.DeckException;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -27,6 +28,8 @@ public class PlayStateTest{
     private Board board;
     private final String playerNickname = "Flavio";
 
+    private List<char[]> drawableCards;
+
     public void setUp(int numOfPlayers){
         controller = new BoardController("Flavio's Game");
         controller.join(playerNickname, new PuppetClient());
@@ -36,6 +39,13 @@ public class PlayStateTest{
         placeAllStarting(numOfPlayers);
         giveAllColors(numOfPlayers);
         giveAllSecretObjectives(numOfPlayers);
+        drawableCards=new ArrayList<>();
+        drawableCards.add(new char[]{'R','1'});
+        drawableCards.add(new char[]{'R','2'});
+        drawableCards.add(new char[]{'R','0'});
+        drawableCards.add(new char[]{'G','1'});
+        drawableCards.add(new char[]{'G','2'});
+        drawableCards.add(new char[]{'G','0'});
     }
     public void joinUntilSetupState(int numOfPlayers) {
         for (int j = 2; j <= numOfPlayers; j++) {
@@ -154,14 +164,7 @@ public class PlayStateTest{
 
         Corner corner=currPlayArea.getFreeCorners().get(new Random ().nextInt(currPlayArea.getFreeCorners().size()));
         Point pos=corner.getCardRef().getPosition();
-/*
-        Map<Point, PlaceableCard> currMatrix= currPlayArea.getCardMatrix();
-        Point pos =null;
-        for(Point coo : currMatrix.keySet()){
-            //cerco la carta che contenga il corner scelto
-            if(currMatrix.get(coo).getFreeCorners().contains(corner))
-                pos=coo;
-        }*/
+
         assertNotEquals(null, pos, "there's an error somewhere"); //should never be happening but to pr
         controller.placeCard(player.getNickname(), cardID, pos, corner.getDirection(), flipped);
     }
@@ -199,30 +202,13 @@ public class PlayStateTest{
     private void drawRandomCard(Player player){
         PlayableDeck goldDeck=board.getGoldDeck();
         PlayableDeck resourceDeck=board.getResourceDeck();
-        List<char[]> drawableCards =new ArrayList<>();
-        if(!goldDeck.isTopEmpty()){
-            drawableCards.add(new char[]{'G','1'});
-            drawableCards.add(new char[]{'G','2'});
-            drawableCards.add(new char[]{'G','0'});
-        }else{
-            if(goldDeck.existFirstRevealedCard())
-                drawableCards.add(new char[]{'G','1'});
-            if(goldDeck.existSecondRevealedCard())
-                drawableCards.add(new char[]{'G','2'});
-        }
-        if(!resourceDeck.isTopEmpty()){
-            drawableCards.add(new char[]{'R','1'});
-            drawableCards.add(new char[]{'R','2'});
-            drawableCards.add(new char[]{'R','0'});
-        }
-        else{
-            if(resourceDeck.existFirstRevealedCard())
-                drawableCards.add(new char[]{'R','1'});
-            if(resourceDeck.existSecondRevealedCard())
-                drawableCards.add(new char[]{'R','2'});
-        }
         char[] cardToDraw = drawableCards.get(new Random().nextInt(drawableCards.size()));
-        controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
+        try{
+            controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
+        }catch (/*DeckException |*/ IllegalArgumentException | IllegalStateException e){
+            drawableCards.remove(cardToDraw);
+            drawRandomCard(player);
+            }
     }
 
     @ParameterizedTest

@@ -199,12 +199,6 @@ public class Board {
         return !(resourceDeck.isCompletelyEmpty() && goldDeck.isCompletelyEmpty());
     }
 
-    //[FLAVIO] it's needed for testing, I need to know what cards of a specific deck are available
-    public PlayableDeck getResourceDeck(){return resourceDeck;}
-
-    //[FLAVIO] it's needed for testing, I need to know what cards of a specific deck are available
-    public PlayableDeck getGoldDeck(){return goldDeck;}
-
 
     /**
      * Places the given card on the given corner on player's playArea <br>
