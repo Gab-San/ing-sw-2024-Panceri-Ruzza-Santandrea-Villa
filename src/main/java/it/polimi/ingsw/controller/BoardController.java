@@ -24,13 +24,13 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.setNumOfPlayers(nickname, num);
     }
-    public void disconnect(String nickname, VirtualClient client)
+    public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException{
         synchronized(gameState.disconnectingPlayers){
             gameState.disconnectingPlayers.add(nickname);
         }
         synchronized(this){
-            gameState.disconnect(nickname, client);
+            gameState.disconnect(nickname);
         }
     }
 
@@ -56,9 +56,9 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
-    public synchronized void startGame(String nickname, int numOfPlayers)
+    public synchronized void restartGame(String nickname, int numOfPlayers)
             throws IllegalStateException{
-        gameState.startGame(nickname, numOfPlayers);
+        gameState.restartGame(nickname, numOfPlayers);
     }
 
     //TODO: timer to check for players who lose connection during their turn

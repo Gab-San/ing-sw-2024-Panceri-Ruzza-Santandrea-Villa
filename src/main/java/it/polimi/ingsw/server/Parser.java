@@ -107,7 +107,7 @@ public class Parser {
             }catch (NumberFormatException ignored){}
         }
 
-        virtualClient.startGame(numPlayers);
+        virtualClient.restartGame(numPlayers);
     }
 
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {

@@ -43,7 +43,7 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client)
+    public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException {
         //TODO handle disconnection.
         //    Disconnected player completes setup randomly.
@@ -195,7 +195,7 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING SETUP STATE");
     }
 }

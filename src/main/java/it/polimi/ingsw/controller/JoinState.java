@@ -37,7 +37,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
         board.removePlayer(nickname); // throws exception if player isn't in game
@@ -67,7 +67,7 @@ public class JoinState extends GameState {
     }
 
     @Override
-    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME DURING JOIN STATE");
     }
 }

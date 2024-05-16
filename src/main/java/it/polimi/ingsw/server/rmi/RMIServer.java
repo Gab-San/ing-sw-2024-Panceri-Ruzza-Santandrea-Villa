@@ -95,9 +95,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void startGame(String nickname, VirtualClient client, int numPlayers) throws IllegalStateException{
+    public void restartGame(String nickname, VirtualClient client, int numPlayers) throws IllegalStateException{
         validateClient(nickname, client);
-        StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname, numPlayers);
+        RestartGameCmd command = new RestartGameCmd(serverRef.getGameRef(), nickname, numPlayers);
         issueCommand(command);
     }
 

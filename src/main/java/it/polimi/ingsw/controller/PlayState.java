@@ -41,7 +41,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         //TODO implement disconnect
 
         Player player=board.getPlayersByTurn().get(board.getCurrentTurn());
@@ -167,7 +167,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
     }
 }

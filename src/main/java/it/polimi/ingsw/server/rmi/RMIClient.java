@@ -98,9 +98,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
     }
 
     @Override
-    public void startGame(int numPlayers) throws IllegalStateException, RemoteException {
+    public void restartGame(int numPlayers) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.startGame(nickname, this, numPlayers);
+        server.restartGame(nickname, this, numPlayers);
     }
 
     public static void main(String[] args) throws RemoteException, NotBoundException {

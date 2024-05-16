@@ -177,9 +177,9 @@ class EndgameStateTest {
     void disconnect() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> controller.disconnect("Player 4", clientList.get(2))
+                () -> controller.disconnect("Player 4")
         );
-        controller.disconnect("Player 3", clientList.get(2));
+        controller.disconnect("Player 3");
     }
 
     @Test
@@ -228,9 +228,9 @@ class EndgameStateTest {
     void startGame() {
         assertThrows(
           IllegalArgumentException.class,
-                () -> controller.startGame(playerNickname, 2)
+                () -> controller.restartGame(playerNickname, 2)
         );
-        controller.startGame(playerNickname, 4);
+        controller.restartGame(playerNickname, 4);
         assertEquals(JoinState.class, controller.getGameState().getClass());
         clientList.add( new PuppetClient() );
         controller.join("Player 4", clientList.get(3));
@@ -240,18 +240,18 @@ class EndgameStateTest {
     @Test
     void startGameWhileDisconnecting() throws InterruptedException {
         new Thread(
-                () ->controller.disconnect("Player 3",clientList.get(2))
+                () ->controller.disconnect("Player 3")
         ).start();
         Thread startingThread = new Thread(
                 () ->{
                     try {
-                        controller.startGame(playerNickname, 3);
+                        controller.restartGame(playerNickname, 3);
                     } catch (IllegalStateException ignore){
                     }
                 }
         );
         startingThread.start();
-        controller.disconnect(secondPlNick, clientList.get(1));
+        controller.disconnect(secondPlNick);
         startingThread.join();
         boolean gameRestarted = false;
         while (!gameRestarted){
@@ -259,7 +259,7 @@ class EndgameStateTest {
                 if(controller.getGameState().getClass() == JoinState.class) {
                     break;
                 }
-                controller.startGame(playerNickname, 3);
+                controller.restartGame(playerNickname, 3);
                 gameRestarted = true;
             } catch (IllegalStateException exception){
                 System.err.println(exception.getMessage());
@@ -270,15 +270,15 @@ class EndgameStateTest {
 
     @Test
     void restartGameWithFullLobby() {
-        controller.startGame(playerNickname, 3);
+        controller.restartGame(playerNickname, 3);
         assertEquals(SetupState.class, controller.getGameState().getClass());
     }
 
     @Test
     void restartWhenAllDisconnected(){
-        controller.disconnect(playerNickname, clientList.get(0));
-        controller.disconnect(secondPlNick, clientList.get(1));
-        controller.disconnect("Player 3", clientList.get(2));
+        controller.disconnect(playerNickname);
+        controller.disconnect(secondPlNick);
+        controller.disconnect("Player 3");
         assertEquals(CreationState.class, controller.getGameState().getClass());
     }
 }

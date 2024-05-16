@@ -216,10 +216,10 @@ public class PlayStateTest{
     @ValueSource(ints={2,3,4})
     public void startGameTest(int numOfPlayers) {
         setUp(numOfPlayers);
-        assertThrows(IllegalStateException.class, () -> controller.startGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 3), "StartGame doesn't throw IllegalStateException with numOfPlayers==3");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 3), "StartGame doesn't throw IllegalStateException with numOfPlayers==3");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
 
     @ParameterizedTest
