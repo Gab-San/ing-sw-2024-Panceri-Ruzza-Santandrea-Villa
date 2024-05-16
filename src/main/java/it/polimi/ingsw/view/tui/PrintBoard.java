@@ -25,10 +25,12 @@ public class PrintBoard {
         deckBacks.add(printCard.getCardAsStringRows(board.getGoldCardDeck().getTopCard()));
         deckBacks.add(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getTopCard()));
         for(String[] card : deckBacks){
+            // only match resource and gold cards, objective cards are already hidden in PrintCard
             Matcher matcher = Pattern.compile("[RG][0-9]?[0-9]").matcher(card[2]);
             if(matcher.find()){
-                String replacementString = matcher.group().length() == 2 ? "R " : "R  ";
-                card[2] = card[2].replaceFirst("R[0-9]?[0-9]", replacementString);
+                String cardID = matcher.group();
+                String replacementString = cardID.charAt(0) + printCard.getSpaces(cardID.length()-1);
+                card[2] = card[2].replaceFirst("[RG][0-9]?[0-9]", replacementString);
             }
         }
 

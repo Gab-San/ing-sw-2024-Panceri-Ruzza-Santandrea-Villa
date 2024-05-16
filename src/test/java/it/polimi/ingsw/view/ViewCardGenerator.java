@@ -57,14 +57,14 @@ public class ViewCardGenerator {
         return new ViewStartCard("S0"+random.nextInt(9), "", "",
                 getRandomCornerList(), centralResources);
     }
-    public static ViewPlaceableCard getRandomResourceCard(){
+    public static ViewResourceCard getRandomResourceCard(){
         setUp();
         GameResource randColor;
         randColor = resources.get(random.nextInt(4)); // only the first 4 are valid colors
         return new ViewResourceCard("R"+random.nextInt(40), "", "",
                 getRandomCornerList(), random.nextInt(2), randColor);
     }
-    public static ViewPlaceableCard getRandomGoldCard(){
+    public static ViewGoldCard getRandomGoldCard(){
         setUp();
         GameResource randColor;
         randColor = resources.get(random.nextInt(4)); // only the first 4 are valid colors
@@ -89,6 +89,7 @@ public class ViewCardGenerator {
         return getRandomCards(num,allFront, Distribution.RANDOM);
     }
     private static List<ViewPlaceableCard> getRandomCards(int num, boolean allFront, Distribution distribution){
+        setUp();
         List<ViewPlaceableCard> cards = new LinkedList<>();
         for (int i = 0; i < num; i++) {
             ViewPlaceableCard card =
@@ -103,6 +104,7 @@ public class ViewCardGenerator {
         return cards;
     }
     private static ViewPlaceableCard makeEmptyCard(boolean faceUp){
+        setUp();
         List<ViewCorner> listEmptyCorners = new LinkedList<>();
         for(CornerDirection dir : CornerDirection.values()){
             listEmptyCorners.add(new ViewCorner(null, null, dir));
@@ -113,6 +115,7 @@ public class ViewCardGenerator {
         return card;
     }
     public static List<ViewPlaceableCard> getEmptyCards(int num, boolean faceUp){
+        setUp();
         List<ViewPlaceableCard> cards = new LinkedList<>();
         for (int i = 0; i < num; i++) {
             cards.add(makeEmptyCard(faceUp));
@@ -120,6 +123,7 @@ public class ViewCardGenerator {
         return cards;
     }
     public static ViewObjectiveCard getRandomObjectiveCard(boolean patternType) {
+        setUp();
         String type = patternType ? ViewObjectiveCard.PATTERN_TYPE : ViewObjectiveCard.RESOURCE_TYPE;
         StringBuilder value = new StringBuilder();
         int len = patternType ? 9 : random.nextInt(4)+2;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.model;
 
+import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
@@ -41,8 +42,10 @@ public class ViewPlayerHand {
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         this.secretObjectiveCards.clear();
         this.secretObjectiveCards.addAll(secretObjectiveCards);
+        this.secretObjectiveCards.forEach(ViewCard::turnFaceUp);
     }
     public void setStartCard(ViewStartCard startCard){
+        if(startCard != null) startCard.turnFaceUp();
         this.startCard = startCard;
     }
     public void clearStartCard(){
@@ -70,7 +73,7 @@ public class ViewPlayerHand {
             }
         }
         if(startCard != null){
-            boolean matchesStartingCard = startCard.getCardID().equals(cardID) || cardID.matches("[sS]tarting");
+            boolean matchesStartingCard = startCard.getCardID().equals(cardID) || cardID.matches("[sS]tarting|STARTING");
             if(matchesStartingCard){
                 startCard.flip();
                 return;

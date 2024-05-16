@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 public class PrintObjectiveCardTest {
     static PrintCard printCard;
 
@@ -19,11 +21,19 @@ public class PrintObjectiveCardTest {
     @RepeatedTest(4)
     void patternObjectivePrintTest(){
         ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(true);
+        objectiveCard.turnFaceUp();
         printCard.printCard(objectiveCard);
     }
     @RepeatedTest(4)
     void resourceObjectivePrintTest(){
         ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(false);
+        objectiveCard.turnFaceUp();
+        printCard.printCard(objectiveCard);
+    }
+    @RepeatedTest(4)
+    void objectiveBackPrintTest(){
+        ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(new Random().nextBoolean());
+        objectiveCard.turnFaceDown();
         printCard.printCard(objectiveCard);
     }
 }

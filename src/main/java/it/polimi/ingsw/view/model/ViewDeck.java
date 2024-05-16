@@ -1,16 +1,14 @@
 package it.polimi.ingsw.view.model;
 
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 
 public class ViewDeck<C extends ViewCard>{
-    private boolean isEmpty;
     private C topCard;
     private C firstRevealed;
     private C secondRevealed;
 
     public ViewDeck(){
-        isEmpty = false;
+        topCard = null;
         firstRevealed = null;
         secondRevealed = null;
     }
@@ -22,21 +20,24 @@ public class ViewDeck<C extends ViewCard>{
     public C getTopCard() {
         return topCard;
     }
-    public void setTopCard(C topCard) {
-        this.topCard = topCard;
+    public void setTopCard(C card) {
+        if(card != null) card.turnFaceDown();
+        this.topCard = card;
     }
 
     public C getFirstRevealed() {
         return firstRevealed;
     }
-    public void setFirstRevealed(C firstRevealed) {
-        this.firstRevealed = firstRevealed;
+    public void setFirstRevealed(C card) {
+        if(card != null) card.turnFaceUp();
+        this.firstRevealed = card;
     }
 
     public C getSecondRevealed() {
         return secondRevealed;
     }
-    public void setSecondRevealed(C secondRevealed) {
-        this.secondRevealed = secondRevealed;
+    public void setSecondRevealed(C card) {
+        if(card != null) card.turnFaceUp();
+        this.secondRevealed = card;
     }
 }
