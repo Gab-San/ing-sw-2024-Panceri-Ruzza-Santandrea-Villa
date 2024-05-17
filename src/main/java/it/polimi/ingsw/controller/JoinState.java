@@ -24,6 +24,7 @@ public class JoinState extends GameState {
         if(board.getGamePhase()!=GamePhase.JOIN)
             throw new IllegalStateException("IMPOSSIBLE TO JOIN IN THIS PHASE");
         board.addPlayer(new Player(nickname));
+
         //TODO iscrivere il giocatore ai listener
         if(!disconnectingPlayers.isEmpty()) return;
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {

@@ -29,7 +29,7 @@ public class SetupState extends GameState{
         timers=new TurnTimerController(controller);
         giveStartingCard();
         board.setGamePhase(GamePhase.PLACESTARTING);
-        timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
     }
 
     @Override
@@ -59,26 +59,29 @@ public class SetupState extends GameState{
         board.disconnectPlayer(nickname);
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
-
-        if(board.getPlayerAreas().keySet().stream()
+        Set<Player> playerConnessi=board.getPlayerAreas().keySet().stream()
                 // only look at players that are connected
                 .filter(Player:: isConnected)
-                .collect(Collectors.toSet())
-                        .isEmpty())
-        { //se si sono disconnessi tutti i giocatori => torno a creation state
-            for(Player p : board.getPlayerAreas().keySet())
+                .collect(Collectors.toSet());
+        System.err.println(playerConnessi+" è vuoto? "+playerConnessi.isEmpty());
+        if(playerConnessi.isEmpty()) {
+            //se si sono disconnessi tutti i giocatori => torno a creation state
+            for(Player p : new HashSet<>(board.getPlayerAreas().keySet()))
                 board.removePlayer(p.getNickname());
             transition(new CreationState(board, controller, new ArrayList<>()));
             return;
         }
 
-        Player player=board.getPlayerByNickname(nickname);
-        if(!playersWhoPlacedStartingCard.contains(nickname))
-            controller.placeStartingCard(nickname, new Random().nextBoolean());
-        if(!playersWhoChoseColor.contains(nickname))
-            controller.chooseYourColor(nickname, board.getRandomAvailableColor());
-        if(!playersWhoChoseSecretObjective.contains(nickname))
-            controller.chooseSecretObjective(nickname, new Random().nextInt(2)+1);
+        //Player player=board.getPlayerByNickname(nickname);
+        if(board.getGamePhase()==GamePhase.PLACESTARTING)
+            if(!playersWhoPlacedStartingCard.contains(nickname))
+                controller.placeStartingCard(nickname, new Random().nextBoolean());
+        if(board.getGamePhase()==GamePhase.CHOOSECOLOR)
+            if(!playersWhoChoseColor.contains(nickname))
+                controller.chooseYourColor(nickname, board.getRandomAvailableColor());
+        if(board.getGamePhase()==GamePhase.CHOOSEOBJECTIVE)
+            if(!playersWhoChoseSecretObjective.contains(nickname))
+                controller.chooseSecretObjective(nickname, new Random().nextInt(2)+1);
     }
 
     @Override
@@ -102,7 +105,9 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);
-            timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+            for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
+                controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
         }
     }
     @Override
@@ -132,7 +137,10 @@ public class SetupState extends GameState{
             board.revealObjectives();
             giveSecretObjectives();
             board.setGamePhase(GamePhase.CHOOSEOBJECTIVE);
-            timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+            System.err.println();
+            for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
+                controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2)+1);
         }
     }
 

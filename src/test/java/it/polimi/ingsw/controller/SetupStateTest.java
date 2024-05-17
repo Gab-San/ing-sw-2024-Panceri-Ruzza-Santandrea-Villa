@@ -269,11 +269,37 @@ public class SetupStateTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
-    public void testWithDisconnect(int numOfPlayers){
+    public void testAllDisconnect(int numOfPlayers){
         setUp(numOfPlayers);
         for(Player p: board.getPlayerAreas().keySet())
             controller.disconnect(p.getNickname());
+        assertEquals(GamePhase.CREATE, board.getGamePhase());
+        assertEquals(CreationState.class ,controller.getGameState().getClass());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void testWithDisconnect(int numOfPlayers){
+        setUp(numOfPlayers);
+        assertEquals(GamePhase.PLACESTARTING, board.getGamePhase());
+        Player discPlayer=board.getPlayerAreas().keySet().stream().findAny().stream().toList().get(0);
+
+        controller.disconnect(discPlayer.getNickname());
+
+        System.err.println(discPlayer.getNickname());
+
+        for(Player p: board.getPlayerAreas().keySet())
+            if(!p.equals(discPlayer))
+                controller.placeStartingCard(p.getNickname(), true);
+        for(Player p: board.getPlayerAreas().keySet())
+            if(!p.equals(discPlayer))
+                controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
+        for(Player p: board.getPlayerAreas().keySet())
+            if(!p.equals(discPlayer))
+                controller.chooseSecretObjective(p.getNickname(), 1);
+
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class ,controller.getGameState().getClass());
     }
+
 }

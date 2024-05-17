@@ -13,6 +13,7 @@ import java.util.List;
 public class CreationState extends GameState{
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
+        board.setGamePhase(GamePhase.CREATE);
     }
 
     @Override
