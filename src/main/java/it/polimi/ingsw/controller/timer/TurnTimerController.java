@@ -35,7 +35,7 @@ public class TurnTimerController {
      * @param turnTimeSeconds time of each turn in seconds
      */
     public void startTimer(Player currPlayer, int turnTimeSeconds){
-        System.out.println(colorize("Starting Timer for " + currPlayer.getNickname(), Attribute.BRIGHT_BLUE_TEXT()));
+        //System.out.println(colorize("Starting Timer for " + currPlayer.getNickname(), Attribute.BRIGHT_BLUE_TEXT()));
         TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds);
         Future<?> timerFuture = timersPool.submit(timer);
         tasks.put(currPlayer, timerFuture);
@@ -50,6 +50,7 @@ public class TurnTimerController {
         task.cancel(true);
         tasks.remove(currPlayer);
     }
+
 
 
     public void startAll(List<Player> playerList, int turnTime){

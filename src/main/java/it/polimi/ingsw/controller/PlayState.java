@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
@@ -20,12 +21,16 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
+    private TurnTimerController timerCurrPlayer;
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
+        timerCurrPlayer=new TurnTimerController(controller);
         board.setGamePhase(GamePhase.PLACECARD);
+        Player player=board.getCurrentPlayer();
+        timerCurrPlayer.startTimer(player, 302);
     }
 
     @Override
@@ -114,6 +119,7 @@ public class PlayState extends GameState {
             board.setGamePhase(GamePhase.DRAWCARD);
         }
         else{
+            timerCurrPlayer.stopTimer(player);
             postDrawChecks();
         }
     }
@@ -147,7 +153,7 @@ public class PlayState extends GameState {
         }catch (DeckException e){
             throw new IllegalArgumentException(e.getMessage() + "Can't draw from position " + cardPos);
         }
-
+        timerCurrPlayer.stopTimer(player);
         postDrawChecks();
     }
 
@@ -174,6 +180,7 @@ public class PlayState extends GameState {
                 board.setGamePhase(GamePhase.DRAWCARD);
             else
                 board.setGamePhase(GamePhase.PLACECARD);
+            timerCurrPlayer.startTimer(board.getCurrentPlayer(), 302);
         }
         else nextState();
     }

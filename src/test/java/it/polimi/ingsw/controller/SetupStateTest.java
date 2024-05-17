@@ -266,4 +266,14 @@ public class SetupStateTest {
             assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
         }
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void testWithDisconnect(int numOfPlayers){
+        setUp(numOfPlayers);
+        for(Player p: board.getPlayerAreas().keySet())
+            controller.disconnect(p.getNickname());
+        assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+        assertEquals(PlayState.class ,controller.getGameState().getClass());
+    }
 }

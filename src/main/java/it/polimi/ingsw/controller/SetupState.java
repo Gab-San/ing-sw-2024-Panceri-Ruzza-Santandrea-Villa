@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
@@ -17,14 +18,18 @@ public class SetupState extends GameState{
     public Set<String> playersWhoPlacedStartingCard;
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
+
+    private final TurnTimerController timers;
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         board.setGamePhase(GamePhase.SETUP);
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
+        timers=new TurnTimerController(controller);
         giveStartingCard();
         board.setGamePhase(GamePhase.PLACESTARTING);
+        timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
     }
 
     @Override
@@ -47,6 +52,8 @@ public class SetupState extends GameState{
     public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException {
 
+        if(!board.getPlayerAreas().keySet().stream().map(Player::getNickname).toList().contains(nickname))
+            throw  new IllegalArgumentException(nickname+" non fa parte della partita");
         //TODO handle disconnection.
         //    Disconnected player completes setup randomly.
         board.disconnectPlayer(nickname);
@@ -64,14 +71,14 @@ public class SetupState extends GameState{
             transition(new CreationState(board, controller, new ArrayList<>()));
             return;
         }
-        Player player=board.getPlayerByNickname(nickname);
-        if(playersWhoPlacedStartingCard.add(nickname))
-            board.placeStartingCard(player, new Random().nextBoolean());
-        if(playersWhoChoseColor.add(nickname))
-            player.setColor(board.getRandomAvailableColor());
-        if(playersWhoChoseSecretObjective.add(nickname))
-            player.getHand().chooseObjective(new Random().nextInt(2)+1);
 
+        Player player=board.getPlayerByNickname(nickname);
+        if(!playersWhoPlacedStartingCard.contains(nickname))
+            controller.placeStartingCard(nickname, new Random().nextBoolean());
+        if(!playersWhoChoseColor.contains(nickname))
+            controller.chooseYourColor(nickname, board.getRandomAvailableColor());
+        if(!playersWhoChoseSecretObjective.contains(nickname))
+            controller.chooseSecretObjective(nickname, new Random().nextInt(2)+1);
     }
 
     @Override
@@ -90,10 +97,12 @@ public class SetupState extends GameState{
 
         Player player = board.getPlayerByNickname(nickname);
         board.placeStartingCard(player, placeOnFront);
+        timers.stopTimer(player);
 
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);
+            timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
         }
     }
     @Override
@@ -114,6 +123,7 @@ public class SetupState extends GameState{
 
         Player player = board.getPlayerByNickname(nickname);
         player.setColor(color);
+        timers.stopTimer(player);
 
         playersWhoChoseColor.add(nickname);
         if(playersWhoChoseColor.size()==board.getPlayerAreas().size()) {
@@ -122,6 +132,7 @@ public class SetupState extends GameState{
             board.revealObjectives();
             giveSecretObjectives();
             board.setGamePhase(GamePhase.CHOOSEOBJECTIVE);
+            timers.startAll(board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList(), 62);
         }
     }
 
@@ -146,6 +157,7 @@ public class SetupState extends GameState{
         }catch (IndexOutOfBoundsException e){
             throw new IllegalArgumentException("Invalid choice. Must be 1 or 2, entered " + choice + " instead.");
         }
+        timers.stopTimer(player);
         playersWhoChoseSecretObjective.add(nickname);
 
         if(playersWhoChoseSecretObjective.size() == board.getPlayerAreas().size()) {

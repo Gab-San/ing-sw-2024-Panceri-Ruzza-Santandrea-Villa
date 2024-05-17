@@ -29,7 +29,7 @@ public class TurnTimer implements Runnable{
 
 //                try {
 //                    player.pingListener(player.getNickname());
-                    System.err.println("Seconds remaining " + secondsElapsed);
+                    //System.err.println("Seconds remaining " + secondsElapsed);
 //                } catch (RemoteException e) {
 //                    controller.disconnect(player.getNickname());
 //                    break;
