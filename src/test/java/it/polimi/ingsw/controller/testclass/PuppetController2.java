@@ -1,8 +1,9 @@
 package it.polimi.ingsw.controller.testclass;
 
+
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.controller.timer.ActionTimerController;
+import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
@@ -13,14 +14,14 @@ import java.util.List;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class PuppetController extends BoardController{
-    private Board board;
-    private final ActionTimerController actionTimerController;
-    private List<String> connectedNicks;
-    public PuppetController(String gameID) throws DeckInstantiationException {
+public class PuppetController2 extends BoardController {
+    private final Board board;
+    private final TurnTimerController turnTimerController;
+    private final List<String> connectedNicks;
+    public PuppetController2(String gameID) throws DeckInstantiationException {
         super(gameID);
         board = new Board(gameID);
-        this.actionTimerController = new ActionTimerController(this);
+        this.turnTimerController = new TurnTimerController(this);
         connectedNicks = new ArrayList<>();
     }
 
@@ -29,22 +30,18 @@ public class PuppetController extends BoardController{
         System.out.println(colorize("PLAYER CONNECTING...", Attribute.YELLOW_TEXT()));
         board.addPlayer(new Player(nickname));
         Player player = board.getPlayerByNickname(nickname);
-        actionTimerController.startTimer(player, 5);
+        turnTimerController.startTimer(player, 5);
         connectedNicks.add(nickname);
     }
 
     public synchronized void interruptTimer(String nickname){
-        actionTimerController.stopTimer(board.getPlayerByNickname(nickname));
+        turnTimerController.stopTimer(board.getPlayerByNickname(nickname));
     }
 
-    public synchronized void resetTimer(String nickname){
-        actionTimerController.resetTimer(board.getPlayerByNickname(nickname));
-    }
 
     @Override
     public synchronized void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         System.out.println(colorize("DISCONNECTING PLAYER...", Attribute.YELLOW_TEXT()));
-        actionTimerController.stopTimer(board.getPlayerByNickname(nickname));
         board.removePlayer(nickname);
         connectedNicks.remove(nickname);
     }
@@ -60,12 +57,9 @@ public class PuppetController extends BoardController{
     }
 
     public synchronized void startAllTimers(){
-        actionTimerController.startAll(board.getPlayerAreas().keySet().stream().toList(), 5);
+        turnTimerController.startAll(board.getPlayerAreas().keySet().stream().toList(), 5);
     }
     public synchronized void stopAllTimers(){
-        actionTimerController.stopAll();
-    }
-    public synchronized void resetAllTimers(){
-        actionTimerController.resetAll(board.getPlayerAreas().keySet().stream().toList());
+        turnTimerController.stopAll();
     }
 }

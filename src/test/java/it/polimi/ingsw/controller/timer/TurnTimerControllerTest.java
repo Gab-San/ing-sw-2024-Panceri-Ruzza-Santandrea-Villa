@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TimerControllerTest {
+class TurnTimerControllerTest {
 
     @Test
     void timerTest() throws InterruptedException {
@@ -18,7 +18,7 @@ class TimerControllerTest {
     }
 
     @Test
-    void timerTest2() throws InterruptedException {
+    void timerTestStop() throws InterruptedException {
         PuppetController controller = new PuppetController("Gamba's game");
         controller.join("Giacomo", new PuppetClient());
         Thread.sleep(1000);
@@ -26,14 +26,6 @@ class TimerControllerTest {
         assertTrue(controller.contains("Giacomo"));
     }
 
-    @Test
-    void timerTestRestart() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
-        controller.join("Giacomo", new PuppetClient());
-        Thread.sleep(2000);
-        controller.resetTimer("Giacomo");
-        while (controller.contains("Giacomo"));
-    }
 
     @Test
     void timerTestAll() throws InterruptedException {
@@ -47,7 +39,7 @@ class TimerControllerTest {
     }
 
     @Test
-    void timerTestAll2() throws InterruptedException {
+    void timerTestStopAll() throws InterruptedException {
         PuppetController controller = new PuppetController("Gamba's game");
         controller.singleJoin("Giacomo", new PuppetClient());
         controller.singleJoin("FRIZZI", new PuppetClient());
@@ -57,19 +49,8 @@ class TimerControllerTest {
         Thread.sleep(3000);
         controller.stopAllTimers();
         assertTrue(controller.contains("Paolino"));
-    }
-
-    @Test
-    void timerTestAll3() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
-        controller.singleJoin("Giacomo", new PuppetClient());
-        controller.singleJoin("FRIZZI", new PuppetClient());
-        controller.singleJoin("Paolino", new PuppetClient());
-        Thread.sleep(2000);
-        controller.startAllTimers();
-        Thread.sleep(3000);
-        controller.resetAllTimers();
-        while (controller.contains("Paolino"));
+        assertTrue(controller.contains("FRIZZI"));
+        assertTrue(controller.contains("Giacomo"));
     }
 
 }
