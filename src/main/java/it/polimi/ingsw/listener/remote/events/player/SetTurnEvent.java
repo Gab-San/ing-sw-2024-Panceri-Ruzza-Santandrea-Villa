@@ -1,4 +1,4 @@
-package it.polimi.ingsw.listener.events.network.player;
+package it.polimi.ingsw.listener.remote.events.player;
 
 import it.polimi.ingsw.server.VirtualClient;
 

@@ -1,6 +1,6 @@
-package it.polimi.ingsw.listener.events.network.player;
+package it.polimi.ingsw.listener.remote.events.player;
 
-import it.polimi.ingsw.listener.events.network.NetworkEvent;
+import it.polimi.ingsw.listener.remote.events.NetworkEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;

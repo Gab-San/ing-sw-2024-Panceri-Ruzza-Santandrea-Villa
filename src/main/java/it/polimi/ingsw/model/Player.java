@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.listener.events.GameEvent;
+import it.polimi.ingsw.listener.GameEvent;
 import it.polimi.ingsw.listener.GameListener;
 import it.polimi.ingsw.listener.GameSubject;
 import org.jetbrains.annotations.Range;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Player implements GameSubject {
     private final String nickname;
@@ -17,13 +17,13 @@ public class Player implements GameSubject {
     private boolean isConnected;
     private final PlayerHand hand;
     private PlayerColor color;
-    private final Map<String, GameListener> playerListeners;
+    private final List<GameListener> gameListenerList;
 
     public Player(String nickname){
         this.nickname = nickname;
         isConnected = true;
         hand = new PlayerHand(this);
-        playerListeners = new HashMap<>();
+        gameListenerList = new LinkedList<>();
     }
 
     @Override
@@ -62,26 +62,21 @@ public class Player implements GameSubject {
     }
     public void setColor(PlayerColor newColor){ this.color=newColor;}
 
+
     @Override
-    public void addListener(String nickname, GameListener client) {
-        playerListeners.put(nickname, client);
+    public void addListener(GameListener listener) {
+        gameListenerList.add(listener);
     }
 
     @Override
-    public void removeListener(String nickname) {
-        playerListeners.remove(nickname);
+    public void removeListener(GameListener listener) {
+        gameListenerList.remove(listener);
     }
 
     @Override
-    public void notifyAllListener(GameEvent event) throws RemoteException {
-        for(String nickname: playerListeners.keySet()){
-            playerListeners.get(nickname).listen(event);
+    public void notifyListeners(GameEvent event) throws RemoteException {
+        for(GameListener listener: gameListenerList){
+            listener.listen(event);
         }
     }
-
-    @Override
-    public void notifyListener(String nickname, GameEvent event) throws RemoteException {
-        playerListeners.get(nickname).listen(event);
-    }
-
 }

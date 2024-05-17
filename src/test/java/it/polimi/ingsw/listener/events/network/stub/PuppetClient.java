@@ -1,8 +1,6 @@
 package it.polimi.ingsw.listener.events.network.stub;
 
 
-import it.polimi.ingsw.listener.events.GameEvent;
-import it.polimi.ingsw.listener.events.network.NetworkEvent;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -45,11 +43,4 @@ public class PuppetClient implements VirtualClient {
         view.getPlayer(nickname).setConnected(isConnected);
     }
 
-    @Override
-    public void listen(GameEvent event) throws RemoteException {
-        if(!(event instanceof NetworkEvent command)){
-            return;
-        }
-        command.executeEvent(this);
-    }
 }

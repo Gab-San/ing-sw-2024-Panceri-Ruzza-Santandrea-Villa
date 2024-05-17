@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.events.network.player.PlayerEvent;
+import it.polimi.ingsw.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -19,7 +19,6 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.listener.GameSubject;
 import it.polimi.ingsw.server.VirtualClient;
 
-import java.rmi.RemoteException;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,11 +44,13 @@ public class Board {
 
     private final List<GameSubject> observableObjects;
     private final List<GameListener> observer;
+    private final RemoteHandler remoteHandler;
     /**
      * Constructs the Board (as in initializing the game)
      * @throws DeckInstantiationException if the decks can't be initialized
      */
     public Board(String gameID) throws DeckInstantiationException {
+        observableObjects = new LinkedList<>();
         currentTurn = 1;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
@@ -61,8 +62,9 @@ public class Board {
         startingDeck = new StartingCardDeck();
         isPlayerDeadlocked = new Hashtable<>();
 
-        observableObjects = new LinkedList<>();
         observer = new LinkedList<>();
+        remoteHandler = new RemoteHandler();
+        subscribeListener(remoteHandler);
     }
 
 
@@ -465,19 +467,17 @@ public class Board {
         return colors.stream().unordered().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
     }
 
-
-    public void subscribeToListeners(String nickname, VirtualClient client){
-        observer.add(client);
-        for(GameSubject gameSubject : observableObjects){
-            gameSubject.addListener(nickname, client);
+    public void subscribeListener(GameListener listener){
+        observer.add(listener);
+        for(GameSubject subject: observableObjects){
+            subject.addListener(listener);
         }
     }
 
-    public void unsubscribeToListeners(String nickname){
-        for(GameSubject gameSubject : observableObjects){
-            gameSubject.removeListener(nickname);
+    public void unsubscribeListener(GameListener listener){
+        observer.remove(listener);
+        for(GameSubject subject: observableObjects){
+            subject.removeListener(listener);
         }
-        //ERRATO: non sono i client a essere listener
-        observer.remove(nickname);
     }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller.timer;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.listener.events.network.PingEvent;
+import it.polimi.ingsw.listener.remote.events.PingEvent;
 
 import java.rmi.RemoteException;
 

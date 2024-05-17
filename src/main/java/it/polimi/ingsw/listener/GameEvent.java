@@ -1,4 +1,4 @@
-package it.polimi.ingsw.listener.events;
+package it.polimi.ingsw.listener;
 
 import java.rmi.RemoteException;
 
