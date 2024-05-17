@@ -54,7 +54,7 @@ public class ViewCardGenerator {
         }
         centralResources.add(getRandomResource()); // the other 2 can be random
         centralResources.add(getRandomResource());
-        return new ViewStartCard("S0"+random.nextInt(9), "", "",
+        return new ViewStartCard("S"+random.nextInt(9), "", "",
                 getRandomCornerList(), centralResources);
     }
     public static ViewResourceCard getRandomResourceCard(){

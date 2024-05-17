@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.view.model.ViewBoard;
 
 import java.util.LinkedList;
@@ -7,17 +8,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrintBoard {
+public class PrintBoardUI implements UI_Printer {
     static final int cardSpacing = 4;
     PrintCard printCard;
     ViewBoard board;
 
-    public PrintBoard(ViewBoard board){
+    public PrintBoardUI(ViewBoard board){
         this.board = board;
         this.printCard = new PrintCard();
     }
 
-    public void printBoardUI(){
+    @Override
+    public void printUI(){
         System.out.println("Central Board: \n");
 
         List<String[]> deckBacks = new LinkedList<>();
@@ -47,5 +49,15 @@ public class PrintBoard {
         printCard.printCardsSideBySide(deckBacks, cardSpacing);
         printCard.printCardsSideBySide(deckFirstRevealed, cardSpacing);
         printCard.printCardsSideBySide(deckSecondRevealed, cardSpacing);
+    }
+
+    @Override
+    public void moveView(CornerDirection... cornerDirections) {
+        printUI();
+    }
+
+    @Override
+    public void setCenter(int row, int col) {
+        printUI();
     }
 }

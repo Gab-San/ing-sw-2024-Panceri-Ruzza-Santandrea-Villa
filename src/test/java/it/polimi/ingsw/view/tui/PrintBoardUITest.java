@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class PrintBoardTest {
-    PrintBoard printBoard;
+public class PrintBoardUITest {
+    PrintBoardUI printBoardUI;
     ViewBoard board;
     Random random;
 
     @BeforeEach
     void setUp(){
         board = new ViewBoard("testPlayer");
-        printBoard = new PrintBoard(board);
+        printBoardUI = new PrintBoardUI(board);
         random = new Random();
 
         board.getResourceCardDeck().setTopCard(getRandomResourceCard());
@@ -34,7 +34,7 @@ public class PrintBoardTest {
 
     @AfterEach
     void printUI(){
-        printBoard.printBoardUI();
+        printBoardUI.printUI();
         System.out.println("End of Board test print.\n\n");
     }
 

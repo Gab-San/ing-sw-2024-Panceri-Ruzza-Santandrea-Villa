@@ -5,7 +5,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 
-public abstract class PrintUI {
+public abstract class PrintUI implements UI_Printer {
     protected final PrintPlayArea printPlayArea;
     protected Point printCenter;
     protected final PrintHand printHand;
@@ -17,13 +17,15 @@ public abstract class PrintUI {
         printCenter = new Point(0,0);
         this.nickname = hand.getNickname();
     }
-
+    @Override
     abstract public void printUI();
 
+    @Override
     public void moveView(CornerDirection...directions){
         printCenter = printCenter.move(directions);
         printUI();
     }
+    @Override
     public void setCenter(int row, int col) {
         setCenter(new Point(row, col));
     }

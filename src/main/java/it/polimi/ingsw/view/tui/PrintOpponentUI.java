@@ -8,6 +8,7 @@ public class PrintOpponentUI extends PrintUI{
         super(hand, playArea);
     }
 
+    @Override
     public void printUI(){
         System.out.println(nickname + "'s playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
