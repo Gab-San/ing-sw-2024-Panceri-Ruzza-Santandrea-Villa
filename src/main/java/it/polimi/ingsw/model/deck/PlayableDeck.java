@@ -1,14 +1,18 @@
 package it.polimi.ingsw.model.deck;
 
+import it.polimi.ingsw.listener.GameEvent;
+import it.polimi.ingsw.listener.GameListener;
+import it.polimi.ingsw.listener.GameSubject;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.exceptions.ListenException;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class PlayableDeck {
+public class PlayableDeck implements GameSubject {
     private final Deque<PlayCard> cardDeck;
     private final CardFactory cardFactory;
     private PlayCard firstRevealedCard;
@@ -94,5 +98,25 @@ public class PlayableDeck {
 
     public boolean hasSecondRevealed() {
         return secondRevealedCard != null;
+    }
+
+    @Override
+    public void addListener(GameListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(GameListener listener) {
+
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) {
+
+    }
+
+    @Override
+    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+
     }
 }

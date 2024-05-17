@@ -22,11 +22,6 @@ public class PuppetClient implements VirtualClient {
     }
 
     @Override
-    public void updatePlayer(String nickname) {
-
-    }
-
-    @Override
     public void updatePlayer(String nickname, PlayerColor colour) {
 
     }
@@ -38,6 +33,11 @@ public class PuppetClient implements VirtualClient {
 
     @Override
     public void updatePlayer(String nickname, boolean isConnected) {
+
+    }
+
+    @Override
+    public void createPlayer(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 }

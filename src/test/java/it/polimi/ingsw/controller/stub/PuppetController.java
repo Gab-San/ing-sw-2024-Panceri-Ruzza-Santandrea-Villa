@@ -29,7 +29,7 @@ public class PuppetController extends BoardController{
         System.out.println(colorize("PLAYER CONNECTING...", Attribute.YELLOW_TEXT()));
         board.addPlayer(new Player(nickname));
         Player player = board.getPlayerByNickname(nickname);
-        board.subscribeToListeners(player.getNickname(), client);
+        board.subscribeClientToUpdates(player.getNickname(), client);
         actionTimerController.startTimer(player, 5);
         connectedNicks.add(nickname);
     }
@@ -47,7 +47,7 @@ public class PuppetController extends BoardController{
         System.out.println(colorize("DISCONNECTING PLAYER...", Attribute.YELLOW_TEXT()));
         actionTimerController.stopTimer(board.getPlayerByNickname(nickname));
         board.removePlayer(nickname);
-        board.unsubscribeToListeners(nickname);
+        board.unsubscribeClientFromUpdates(nickname);
         connectedNicks.remove(nickname);
     }
 
@@ -58,7 +58,7 @@ public class PuppetController extends BoardController{
     public synchronized void singleJoin(String nickname, VirtualClient client){
         System.out.println(colorize("PLAYER CONNECTING...", Attribute.YELLOW_TEXT()));
         board.addPlayer(new Player(nickname));
-        board.subscribeToListeners(nickname,  client);
+        board.subscribeClientToUpdates(nickname,  client);
         connectedNicks.add(nickname);
     }
 

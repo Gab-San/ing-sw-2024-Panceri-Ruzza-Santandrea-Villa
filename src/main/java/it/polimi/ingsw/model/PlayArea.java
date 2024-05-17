@@ -1,17 +1,21 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.listener.GameEvent;
+import it.polimi.ingsw.listener.GameListener;
+import it.polimi.ingsw.listener.GameSubject;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.model.exceptions.ListenException;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 
-public class PlayArea {
+public class PlayArea implements GameSubject {
     private final Map<Point, PlaceableCard> cardMatrix;
     private final Hashtable<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
@@ -154,5 +158,25 @@ public class PlayArea {
 
         }
         return (PlayCard) card;
+    }
+
+    @Override
+    public void addListener(GameListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(GameListener listener) {
+
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) {
+
+    }
+
+    @Override
+    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+
     }
 }

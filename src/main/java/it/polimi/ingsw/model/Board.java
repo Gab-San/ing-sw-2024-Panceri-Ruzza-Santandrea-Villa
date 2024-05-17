@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.listener.GameEvent;
 import it.polimi.ingsw.listener.GameListener;
 import it.polimi.ingsw.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.cards.Corner;
@@ -15,6 +16,7 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
+import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.listener.GameSubject;
 import it.polimi.ingsw.server.VirtualClient;
@@ -23,7 +25,7 @@ import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Board {
+public class Board implements GameSubject{
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAYERS = 4;
     private final Map<Player, Integer> scoreboard;
@@ -43,7 +45,7 @@ public class Board {
     private final Game gameInfo;
 
     private final List<GameSubject> observableObjects;
-    private final List<GameListener> observer;
+    private final List<GameListener> gameListeners;
     private final RemoteHandler remoteHandler;
     /**
      * Constructs the Board (as in initializing the game)
@@ -51,6 +53,8 @@ public class Board {
      */
     public Board(String gameID) throws DeckInstantiationException {
         observableObjects = new LinkedList<>();
+        gameListeners = new LinkedList<>();
+
         currentTurn = 1;
         scoreboard = new Hashtable<>();
         playerAreas = new Hashtable<>();
@@ -58,13 +62,16 @@ public class Board {
         gamePhase = GamePhase.CREATE;
         resourceDeck = new PlayableDeck(new ResourceCardFactory(), 8);
         goldDeck = new PlayableDeck(new GoldCardFactory(), 5);
+        observableObjects.add(resourceDeck);
+        observableObjects.add(goldDeck);
         objectiveDeck = new ObjectiveDeck();
+        observableObjects.add(objectiveDeck);
         startingDeck = new StartingCardDeck();
+        observableObjects.add(startingDeck);
         isPlayerDeadlocked = new Hashtable<>();
-
-        observer = new LinkedList<>();
-        remoteHandler = new RemoteHandler();
-        subscribeListener(remoteHandler);
+        observableObjects.add(this);
+        remoteHandler = RemoteHandler.getInstance();
+        subscribeListenerToAll(remoteHandler);
     }
 
 
@@ -84,6 +91,7 @@ public class Board {
         }
     }
 
+//region TURN METHODS
     public int getCurrentTurn() {
         return currentTurn;
     }
@@ -119,6 +127,9 @@ public class Board {
 
         return true;
     }
+//endregion
+
+//region GAME STATUS METHODS
     public GamePhase getGamePhase() {
         return gamePhase;
     }
@@ -128,22 +139,10 @@ public class Board {
     public Game getGameInfo(){
         return gameInfo;
     }
-    /**
-     * @return list of players ordered by their turn
-     */
-    public List<Player> getPlayersByTurn(){
-        return playerAreas.keySet().stream()
-                .sorted(Comparator.comparingInt(Player::getTurn))
-                .toList();
-    }
-    /**
-     * @return list of players ordered by their score
-     */
-    public List<Player> getPlayersByScore(){
-        return playerAreas.keySet().stream()
-                .sorted(Comparator.comparingInt(scoreboard::get))
-                .toList();
-    }
+
+//endregion
+
+//region GETTERS
     public Map<Player, PlayArea> getPlayerAreas(){
         return playerAreas;
     }
@@ -151,34 +150,32 @@ public class Board {
         return isPlayerDeadlocked;
     }
 
-    /**
-     * @return player whose turn corresponds to the currentTurn
-     * @throws IllegalStateException if turns have not been assigned turns yet (no player has turned = currentTurn >= 1)
-     */
-    public Player getCurrentPlayer() throws IllegalStateException{
-        return playerAreas.keySet().stream()
-                .filter(p -> p.getTurn() == currentTurn)
-                .findFirst().orElseThrow(()->new IllegalStateException("Players have not been assigned turns yet."));
-    }
-    /**
-     * Adds a player to the game
-     * @param player player that is joining the game
-     * @throws IllegalStateException if the player had already joined or if the current game is full (4 players)
-     */
-    public void addPlayer(Player player) throws NullPointerException, IllegalStateException{
-        if(player == null) throw new NullPointerException("Null player reference.");
-        if(playerAreas.containsKey(player)) throw new IllegalStateException("Cannot add a player already in game.");
-        if(playerAreas.size() >= MAX_PLAYERS) throw new IllegalStateException("Max number of players already in game.");
-        setScore(player, 0);
-        playerAreas.put(player, new PlayArea());
-        player.setTurn(playerAreas.size());
-        isPlayerDeadlocked.put(player, false);
-        observableObjects.add(player);
-    }
-
     public Map<Player, Integer> getScoreboard(){
         return scoreboard;
     }
+
+    /**
+     * @return Set of all colors that have not yet been chosen by a player
+     */
+    public Set<PlayerColor> getAvailableColors(){
+        Set<PlayerColor> colors = Arrays.stream(PlayerColor.values()).collect(Collectors.toSet());
+        for(Player p : playerAreas.keySet()){
+            if(p.getColor() != null)
+                colors.remove(p.getColor());
+        }
+        return colors;
+    }
+
+    /**
+     * @return a random color among colors that have not yet been chosen by a player
+     */
+    public PlayerColor getRandomAvailableColor() throws IllegalStateException{
+        Set<PlayerColor> colors = getAvailableColors();
+        return colors.stream().unordered().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
+    }
+//endregion
+
+//region BOARD SETTER METHODS
 
     /**
      * Adds points to player's score
@@ -194,6 +191,7 @@ public class Board {
     protected void setScore(Player player, int score){
         scoreboard.put(player, score);
     }
+//endregion
 
     /**
      * @return true if any player has a score >= ENDGAME_SCORE or if both decks are empty <br>
@@ -206,6 +204,7 @@ public class Board {
                 );
     }
 
+//region DECKS METHODS
     /**
      * @return true if there is at least one card to draw on the board (among revealed cards or top deck)
      */
@@ -383,13 +382,35 @@ public class Board {
         objectiveDeck.reveal();
     }
 
+//endregion
+
+//region PLAYER METHODS
+    //region GETTERS
     /**
-     * @param nickname player's nickname
-     * @return true if the player is in this game
+     * @return list of players ordered by their turn
      */
-    public boolean containsPlayer(String nickname) {
+    public List<Player> getPlayersByTurn(){
         return playerAreas.keySet().stream()
-                .anyMatch(p -> p.getNickname().equals(nickname));
+                .sorted(Comparator.comparingInt(Player::getTurn))
+                .toList();
+    }
+    /**
+     * @return list of players ordered by their score
+     */
+    public List<Player> getPlayersByScore(){
+        return playerAreas.keySet().stream()
+                .sorted(Comparator.comparingInt(scoreboard::get))
+                .toList();
+    }
+
+    /**
+     * @return player whose turn corresponds to the currentTurn
+     * @throws IllegalStateException if turns have not been assigned turns yet (no player has turned = currentTurn >= 1)
+     */
+    public Player getCurrentPlayer() throws IllegalStateException{
+        return playerAreas.keySet().stream()
+                .filter(p -> p.getTurn() == currentTurn)
+                .findFirst().orElseThrow(()->new IllegalStateException("Players have not been assigned turns yet."));
     }
 
     /**
@@ -402,6 +423,41 @@ public class Board {
                 .filter(p -> p.getNickname().equals(nickname))
                 .findFirst().orElseThrow(()-> new IllegalArgumentException("Cannot find a player with given nickname in this game") );
     }
+
+    /**
+     * @param nickname player's nickname
+     * @return true if the player is in this game
+     */
+    public boolean containsPlayer(String nickname) {
+        return playerAreas.keySet().stream()
+                .anyMatch(p -> p.getNickname().equals(nickname));
+    }
+    //endregion
+    /**
+     * Adds a player to the game
+     * @param player player that is joining the game
+     * @throws IllegalStateException if the player had already joined or if the current game is full (4 players)
+     */
+    public void addPlayer(Player player) throws NullPointerException, IllegalStateException{
+        if(player == null) throw new NullPointerException("Null player reference.");
+        if(playerAreas.containsKey(player)) throw new IllegalStateException("Cannot add a player already in game.");
+        if(playerAreas.size() >= MAX_PLAYERS) throw new IllegalStateException("Max number of players already in game.");
+        // Player was already created
+        // Listing player as observable object
+        observableObjects.add(player);
+        player.addListener(remoteHandler);
+        // Setting score on scoreboard
+        setScore(player, 0);
+        // Creating Playarea and listing as observable
+        PlayArea joiningPlayerArea = new PlayArea();
+        observableObjects.add(joiningPlayerArea);
+        joiningPlayerArea.addListener(remoteHandler);
+        
+        playerAreas.put(player, joiningPlayerArea);
+        player.setTurn(playerAreas.size());
+        isPlayerDeadlocked.put(player, false);
+    }
+
 
     /**
      * Removes the player with given nickname from the game (deleting all his information)
@@ -446,38 +502,50 @@ public class Board {
         else
             player.setConnected(true);
     }
+//endregion
 
-    /**
-     * @return Set of all colors that have not yet been chosen by a player
-     */
-    public Set<PlayerColor> getAvailableColors(){
-        Set<PlayerColor> colors = Arrays.stream(PlayerColor.values()).collect(Collectors.toSet());
-        for(Player p : playerAreas.keySet()){
-            if(p.getColor() != null)
-                colors.remove(p.getColor());
-        }
-        return colors;
-    }
 
-    /**
-     * @return a random color among colors that have not yet been chosen by a player
-     */
-    public PlayerColor getRandomAvailableColor() throws IllegalStateException{
-        Set<PlayerColor> colors = getAvailableColors();
-        return colors.stream().unordered().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
-    }
-
-    public void subscribeListener(GameListener listener){
-        observer.add(listener);
+//region LISTENER METHODS
+    public void subscribeListenerToAll(GameListener listener){
         for(GameSubject subject: observableObjects){
             subject.addListener(listener);
         }
     }
 
-    public void unsubscribeListener(GameListener listener){
-        observer.remove(listener);
+    public void unsubscribeListenerFromAll(GameListener listener){
         for(GameSubject subject: observableObjects){
             subject.removeListener(listener);
         }
     }
+
+    @Override
+    public void addListener(GameListener listener) {
+        gameListeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(GameListener listener) {
+        gameListeners.remove(listener);
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) {
+        for(GameListener listener: gameListeners){
+            listener.listen(event);
+        }
+    }
+
+    @Override
+    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+        listener.listen(event);
+    }
+
+    public void subscribeClientToUpdates(String nickname, VirtualClient client){
+        remoteHandler.addClient(nickname,client);
+    }
+
+    public void unsubscribeClientFromUpdates(String nickname){
+        remoteHandler.removeClient(nickname);
+    }
+//endregion
 }

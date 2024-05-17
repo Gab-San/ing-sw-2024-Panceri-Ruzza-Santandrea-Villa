@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.listener.remote.events.player.PlayerStateUpdateEvent;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.listener.GameEvent;
 import it.polimi.ingsw.listener.GameListener;
 import it.polimi.ingsw.listener.GameSubject;
+import it.polimi.ingsw.model.exceptions.ListenException;
 import org.jetbrains.annotations.Range;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class Player implements GameSubject {
     @Override
     public void addListener(GameListener listener) {
         gameListenerList.add(listener);
+        notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected,turn, color));
     }
 
     @Override
@@ -74,9 +76,14 @@ public class Player implements GameSubject {
     }
 
     @Override
-    public void notifyListeners(GameEvent event) throws RemoteException {
+    public void notifyAllListeners(GameEvent event) {
         for(GameListener listener: gameListenerList){
             listener.listen(event);
         }
+    }
+
+    @Override
+    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+        listener.listen(event);
     }
 }

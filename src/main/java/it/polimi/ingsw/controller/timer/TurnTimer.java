@@ -1,10 +1,10 @@
 package it.polimi.ingsw.controller.timer;
 
 import it.polimi.ingsw.controller.BoardController;
+import it.polimi.ingsw.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.listener.remote.events.PingEvent;
-
-import java.rmi.RemoteException;
+import it.polimi.ingsw.model.exceptions.ListenException;
 
 public class TurnTimer implements Runnable{
 
@@ -13,12 +13,14 @@ public class TurnTimer implements Runnable{
     private boolean reset;
     private final int turnTime;
     private int secondsElapsed;
+    private final RemoteHandler remoteHandler;
     public TurnTimer(BoardController controller, Player player, int turnTime){
         this.player = player;
         this.turnTime = turnTime;
         secondsElapsed = turnTime;
         reset = false;
         this.controller = controller;
+        remoteHandler = RemoteHandler.getInstance();
     }
 
     @Override
@@ -29,13 +31,11 @@ public class TurnTimer implements Runnable{
                 reset = false;
             }
             try {
-
                 try {
-                    player.notifyListener(player.getNickname(), new PingEvent());
+                    player.notifyListener(remoteHandler, new PingEvent(player.getNickname()));
                     System.err.println("Seconds remaining " + secondsElapsed);
-                } catch (RemoteException e) {
+                } catch (ListenException connectionException){
                     controller.disconnect(player.getNickname());
-                    break;
                 }
 
                 Thread.sleep(1000);

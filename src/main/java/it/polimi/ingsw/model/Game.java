@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.*;
 
-// TODO: replace this class with observer pattern
 public class Game {
     private final String gameID;
     private final Map<String, VirtualClient> clientList;

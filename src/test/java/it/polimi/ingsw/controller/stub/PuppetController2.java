@@ -31,7 +31,7 @@ public class PuppetController2 extends BoardController {
         board.addPlayer(new Player(nickname));
         Player player = board.getPlayerByNickname(nickname);
         turnTimerController.startTimer(player, 5);
-        board.subscribeToListeners(nickname, client);
+        board.subscribeClientToUpdates(nickname, client);
         connectedNicks.add(nickname);
     }
 
@@ -44,7 +44,7 @@ public class PuppetController2 extends BoardController {
     public synchronized void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         System.out.println(colorize("DISCONNECTING PLAYER...", Attribute.YELLOW_TEXT()));
         board.removePlayer(nickname);
-        board.unsubscribeToListeners(nickname);
+        board.unsubscribeClientFromUpdates(nickname);
         connectedNicks.remove(nickname);
     }
 
@@ -55,7 +55,7 @@ public class PuppetController2 extends BoardController {
     public synchronized void singleJoin(String nickname, VirtualClient client){
         System.out.println(colorize("PLAYER CONNECTING...", Attribute.YELLOW_TEXT()));
         board.addPlayer(new Player(nickname));
-        board.subscribeToListeners(nickname, client);
+        board.subscribeClientToUpdates(nickname, client);
         connectedNicks.add(nickname);
     }
 

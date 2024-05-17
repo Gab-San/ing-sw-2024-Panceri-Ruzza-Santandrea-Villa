@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
 
-public class PlayerEvent implements NetworkEvent {
+abstract public class PlayerEvent implements NetworkEvent {
     protected final String nickname;
 
     public PlayerEvent(String nickname) {
@@ -13,7 +13,5 @@ public class PlayerEvent implements NetworkEvent {
     }
 
     @Override
-    public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.updatePlayer(nickname);
-    }
+    abstract public void executeEvent(VirtualClient virtualClient) throws RemoteException;
 }

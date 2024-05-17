@@ -4,6 +4,8 @@ import it.polimi.ingsw.listener.remote.events.NetworkEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.Future;
 
 public class UpdateTask implements Runnable{
@@ -23,25 +25,32 @@ public class UpdateTask implements Runnable{
      */
     @Override
     public void run() {
+
         while (true) {
-            try {
-                NetworkEvent updateEvent;
-                synchronized (eventRecord) {
-                    if (!eventRecord.hasNext(client)) {
-                        try {
-                            eventRecord.wait();
-                        } catch (InterruptedException e) {
-                            System.err.println(e.getMessage());
-                        }
+            NetworkEvent updateEvent;
+            List<NetworkEvent> history = eventRecord.getHistory(client);
+            ListIterator<NetworkEvent> iterator = history.listIterator();
+
+            synchronized (eventRecord) {
+                while (!iterator.hasNext()){
+                    try {
+                        eventRecord.wait();
+                    } catch (InterruptedException e) {
+                        System.err.println(e.getMessage());
                     }
-                    updateEvent = eventRecord.getNext(client);
+                    history = eventRecord.getHistory(client);
+                    iterator = history.listIterator();
                 }
-                try {
+            }
+
+            try {
+                while (iterator.hasNext()) {
+                    updateEvent = iterator.next();
                     updateEvent.executeEvent(client);
-                } catch (RemoteException e) {
-                    break;
                 }
-            } catch (NullPointerException pointerException){
+                int lastUpdate = iterator.nextIndex();
+                eventRecord.saveLastUpdate(client, lastUpdate);
+            } catch (RemoteException e) {
                 break;
             }
         }

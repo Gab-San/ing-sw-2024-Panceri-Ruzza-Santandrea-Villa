@@ -1,6 +1,7 @@
-package it.polimi.ingsw.listener.events.network.stub;
+package it.polimi.ingsw.listener.remote.events.stub;
 
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.enums.PlayerColor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,8 +17,13 @@ public class StubView {
         return playerList.stream().filter(p -> p.getNickname().equals(nickname)).findAny().orElseThrow();
     }
 
-    public void addPlayer(String nickname){
-        playerList.add(new Player(nickname));
+    public void addPlayer(String nickname, boolean isConnected, int turn, PlayerColor colour){
+        Player player = new Player(nickname);
+        player.setConnected(isConnected);
+        player.setTurn(turn);
+        player.setColor(colour);
+        playerList.add(player);
+
     }
 
 }
