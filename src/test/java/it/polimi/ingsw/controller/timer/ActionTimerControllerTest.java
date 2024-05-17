@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.timer;
 
-import it.polimi.ingsw.controller.testclass.PuppetClient;
-import it.polimi.ingsw.controller.testclass.PuppetController;
+import it.polimi.ingsw.controller.stub.PuppetClient;
+import it.polimi.ingsw.controller.stub.PuppetController;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

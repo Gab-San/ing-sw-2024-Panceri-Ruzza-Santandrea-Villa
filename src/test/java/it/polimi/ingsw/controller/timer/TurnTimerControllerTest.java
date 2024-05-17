@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.timer;
 
-import it.polimi.ingsw.controller.testclass.PuppetClient;
-import it.polimi.ingsw.controller.testclass.PuppetController;
+import it.polimi.ingsw.controller.stub.PuppetClient;
+import it.polimi.ingsw.controller.stub.PuppetController2;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +10,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTest() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
+        PuppetController2 controller = new PuppetController2("Gamba's game");
         controller.join("Gamba", new PuppetClient());
         Thread.sleep(1000);
         controller.join("Fibonacci", new PuppetClient());
@@ -19,7 +19,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestStop() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
+        PuppetController2 controller = new PuppetController2("Gamba's game");
         controller.join("Giacomo", new PuppetClient());
         Thread.sleep(1000);
         controller.interruptTimer("Giacomo");
@@ -29,7 +29,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestAll() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
+        PuppetController2 controller = new PuppetController2("Gamba's game");
         controller.singleJoin("Giacomo", new PuppetClient());
         controller.singleJoin("FRIZZI", new PuppetClient());
         controller.singleJoin("Paolino", new PuppetClient());
@@ -40,7 +40,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestStopAll() throws InterruptedException {
-        PuppetController controller = new PuppetController("Gamba's game");
+        PuppetController2 controller = new PuppetController2("Gamba's game");
         controller.singleJoin("Giacomo", new PuppetClient());
         controller.singleJoin("FRIZZI", new PuppetClient());
         controller.singleJoin("Paolino", new PuppetClient());

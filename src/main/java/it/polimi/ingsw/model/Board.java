@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.listener.GameListener;
+import it.polimi.ingsw.listener.events.network.player.PlayerEvent;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -14,7 +16,10 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
+import it.polimi.ingsw.listener.GameSubject;
+import it.polimi.ingsw.server.VirtualClient;
 
+import java.rmi.RemoteException;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +43,8 @@ public class Board {
 
     private final Game gameInfo;
 
+    private final List<GameSubject> observableObjects;
+    private final List<GameListener> observer;
     /**
      * Constructs the Board (as in initializing the game)
      * @throws DeckInstantiationException if the decks can't be initialized
@@ -53,6 +60,9 @@ public class Board {
         objectiveDeck = new ObjectiveDeck();
         startingDeck = new StartingCardDeck();
         isPlayerDeadlocked = new Hashtable<>();
+
+        observableObjects = new LinkedList<>();
+        observer = new LinkedList<>();
     }
 
 
@@ -161,7 +171,9 @@ public class Board {
         playerAreas.put(player, new PlayArea());
         player.setTurn(playerAreas.size());
         isPlayerDeadlocked.put(player, false);
+        observableObjects.add(player);
     }
+
     public Map<Player, Integer> getScoreboard(){
         return scoreboard;
     }
@@ -408,6 +420,7 @@ public class Board {
         // fix current turn if it was another player's turn
         if(currentTurn >= player.getTurn())
             currentTurn--;
+        observableObjects.remove(player);
     }
 
     /**
@@ -450,5 +463,21 @@ public class Board {
     public PlayerColor getRandomAvailableColor() throws IllegalStateException{
         Set<PlayerColor> colors = getAvailableColors();
         return colors.stream().unordered().findFirst().orElseThrow(()->new IllegalStateException("No player colors are available"));
+    }
+
+
+    public void subscribeToListeners(String nickname, VirtualClient client){
+        observer.add(client);
+        for(GameSubject gameSubject : observableObjects){
+            gameSubject.addListener(nickname, client);
+        }
+    }
+
+    public void unsubscribeToListeners(String nickname){
+        for(GameSubject gameSubject : observableObjects){
+            gameSubject.removeListener(nickname);
+        }
+        //ERRATO: non sono i client a essere listener
+        observer.remove(nickname);
     }
 }
