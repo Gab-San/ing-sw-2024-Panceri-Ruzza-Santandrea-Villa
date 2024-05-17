@@ -68,7 +68,7 @@ public class PrintCard {
         return colorCode + getSpaces(middleRowSideSpaceCount) + middleChar + getSpaces(middleRowSideSpaceCount) + RESET;
     }
 
-    private String[] getCardAsStringRows(ViewPlayCard playCard){
+    private String[] getCardAsStringRows(ViewPlayCard playCard, boolean hideID){
         setColorCode(playCard.getCardColour());
 
         GameResource centralResource = playCard.isFaceUp() ? null : playCard.getCardColour();
@@ -80,10 +80,11 @@ public class PrintCard {
         card[3] = getCenterRow(null);
         card[4] = getCornerRow(playCard.getCornerResource(BL), playCard.getCornerResource(BR), playCard.getPlacementCostAsString());
 
-        card[2] = insertID(card[2], playCard.getCardID());
+        String ID = playCard.getCardID();
+        card[2] = insertID(card[2], playCard.isFaceUp() || !hideID ? ID : ID.charAt(0)+" ");
         return card;
     }
-    private String[] getCardAsStringRows(ViewStartCard startCard) {
+    private String[] getCardAsStringRows(ViewStartCard startCard, boolean hideID) {
         setColorCode(startCard.getCardColour());
 
         GameResource[] centralResources = startCard.isFaceUp() ? startCard.getCentralFrontResourcesAsArray() : new GameResource[3];
@@ -95,10 +96,13 @@ public class PrintCard {
         card[3] = getCenterRow(centralResources[2]);
         card[4] = getCornerRow(startCard.getCornerResource(BL), startCard.getCornerResource(BR), "");
 
-        card[2] = insertID(card[2], startCard.getCardID());
+        card[2] = insertID(card[2], startCard.isFaceUp() || !hideID ? startCard.getCardID() : "S ");
         return card;
     }
     public String[] getCardAsStringRows(ViewCard card){
+        return getCardAsStringRows(card, false);
+    }
+    public String[] getCardAsStringRows(ViewCard card, boolean hideID){
         if(card == null){
             String[] nullCardAsSpaces = new String[5];
             for (int i = 1; i < nullCardAsSpaces.length-1; i++) {
@@ -113,10 +117,10 @@ public class PrintCard {
         // FIXME: [Ale] non mi piace usare instanceof, ma non mi viene un'altra soluzione.
         //          Il metodo getCardAsStringRows deve sapere se è play, starting, o objective card.
         if(card instanceof ViewPlayCard playCard)
-            return getCardAsStringRows(playCard);
+            return getCardAsStringRows(playCard, hideID);
         else if(card instanceof ViewStartCard startCard)
-            return getCardAsStringRows(startCard);
-        else return getCardAsStringRows((ViewObjectiveCard) card);
+            return getCardAsStringRows(startCard, hideID);
+        else return getCardAsStringRows((ViewObjectiveCard) card, hideID);
         // ViewCard is abstract, the card must be of 1 of the 3 types, no need to explicitly check the last instanceof ViewObjectiveCard
     }
 
@@ -125,7 +129,7 @@ public class PrintCard {
         String spacing = getSpaces(2);
         return row.charAt(0) + spacing + row.charAt(1) + spacing + row.charAt(2);
     }
-    private String[] getCardAsStringRows(ViewObjectiveCard objCard){
+    private String[] getCardAsStringRows(ViewObjectiveCard objCard, boolean hideID){
         setColorCode(objCard.getCardColour());
 
         String[] card = new String[5];
@@ -148,7 +152,7 @@ public class PrintCard {
             card[i] = colorCode + card[i] + RESET;
         }
 
-        card[2] = insertID(card[2], objCard.isFaceUp() ? objCard.getCardID() : "O ");
+        card[2] = insertID(card[2], objCard.isFaceUp() || !hideID ? objCard.getCardID() : "O ");
         return card;
     }
 

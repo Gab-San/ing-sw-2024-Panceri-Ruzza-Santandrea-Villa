@@ -14,7 +14,7 @@ public class PrintOpponentUI extends PrintUI{
         printPlayArea.printPlayArea(printCenter);
 
         System.out.println("\nOpponent's hand: ");
-        printHand.printHand();
+        printHand.printHand(true);
 
         System.out.flush();
     }

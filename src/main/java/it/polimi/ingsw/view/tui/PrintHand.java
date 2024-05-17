@@ -30,7 +30,11 @@ public class PrintHand {
         int diff = desiredLength - str.length();
         return diff > 0 ? str + printCard.getSpaces(diff) : str;
     }
+
     public void printHand(){
+        printHand(false);
+    }
+    public void printHand(boolean hideID){
         System.out.println("Nickname: " + hand.getNickname());
 
         int cardLength = PrintCard.cornerStringAsSpacesLength*2 + PrintCard.cornerRowSpaceCount + cardSpacing;
@@ -46,10 +50,11 @@ public class PrintHand {
 
         System.out.println(headerLine);
 
-        List<String[]> cardsAsStringRows = new LinkedList<>(hand.getCards().stream().map(printCard::getCardAsStringRows).toList());
-        cardsAsStringRows.addAll(hand.getSecretObjectives().stream().map(printCard::getCardAsStringRows).toList());
+        List<String[]> cardsAsStringRows = new LinkedList<>(hand.getCards().stream().map(c->printCard.getCardAsStringRows(c, hideID)).toList());
+        List<String[]> cardsInHand = hand.getSecretObjectives().stream().map(c->printCard.getCardAsStringRows(c, hideID)).toList();
+        cardsAsStringRows.addAll(cardsInHand);
         if(hand.getStartCard() != null)
-            cardsAsStringRows.add(printCard.getCardAsStringRows(hand.getStartCard()));
+            cardsAsStringRows.add(printCard.getCardAsStringRows(hand.getStartCard(), hideID));
         printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
         System.out.println();
     }

@@ -108,7 +108,14 @@ public class PrintFullUITest {
             printCommandLegend();
             System.out.print("Input command: ");
             input = scanner.nextLine();
-            if(input.matches("[mM]ove [a-zA-Z]+")){
+
+            if(printUI == test.printBoardUI && input.matches("[mM]ove [a-zA-Z]+")){
+                error = "You can't move on the Board UI";
+            }
+            else if(printUI != test.printPlayerUI && input.matches("[fF]lip [a-zA-Z0-9]+|[fF]lush [a-zA-Z]+")){
+                error = "You must be on your UI to flush or flip cards";
+            }
+            else if(input.matches("[mM]ove [a-zA-Z]+")){
                 String direction = input.substring("move ".length());
                 cls();
                 switch (direction.toLowerCase()){
@@ -119,9 +126,6 @@ public class PrintFullUITest {
                     case "center": printUI.setCenter(0,0); break;
                     default: error = "Invalid move direction."; break;
                 }
-            }
-            else if(printUI != test.printPlayerUI && input.matches("[fF]lip [a-zA-Z0-9]+|[fF]lush [a-zA-Z]+")){
-                error = "You must be on your UI to flush or flip cards";
             }
             else if(input.matches("[fF]lip [1-3]")){
                 int index = Integer.parseInt(input.substring("flip ".length()));
