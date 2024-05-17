@@ -1,11 +1,9 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -13,11 +11,9 @@ import java.util.ArrayList;
 
 public class BoardController {
     private GameState gameState;
-    private int numberOfPlayer;
     public BoardController (String gameID) throws DeckInstantiationException {
         this.gameState = new CreationState(new Board(gameID), this, new ArrayList<>());
     }
-
 
     public synchronized void join(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException{
@@ -28,13 +24,13 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.setNumOfPlayers(nickname, num);
     }
-    public void disconnect(String nickname, VirtualClient client)
+    public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException{
         synchronized(gameState.disconnectingPlayers){
             gameState.disconnectingPlayers.add(nickname);
         }
         synchronized(this){
-            gameState.disconnect(nickname, client);
+            gameState.disconnect(nickname);
         }
     }
 
@@ -60,36 +56,13 @@ public class BoardController {
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }
 
-    public synchronized void startGame(String nickname, int numOfPlayers)
+    public synchronized void restartGame(String nickname, int numOfPlayers)
             throws IllegalStateException{
-        gameState.startGame(nickname, numOfPlayers);
-    }
-
-    //TODO: timer to check for players who lose connection during their turn
-    //  we could also periodically ping the clients saved in gameInfo
-
-    //FIXME: Remove oldClient and use Map<String, VirtualClient> in the observers */
-    public synchronized void replaceClient(String nickname, VirtualClient oldClient, VirtualClient newClient)
-            throws IllegalStateException {
-        if(!gameState.board.containsPlayer(nickname))
-            throw new IllegalStateException(nickname + " isn't connected to this game.");
-        gameState.board.getGameInfo().removeClient(oldClient);
-        gameState.board.getGameInfo().addClient(newClient);
-        //TODO: push game update to the client that just reconnected
+        gameState.restartGame(nickname, numOfPlayers);
     }
 
     public String getGameID(){
         return gameState.board.getGameInfo().getGameID();
-    }
-
-    //TODO: delete this test method when we're done
-    public synchronized void testPrint(String text) throws IllegalStateException {
-        System.out.println("Function call received " + text);
-        if (text.toLowerCase().contains("throw")) {
-            System.out.println("THROWING ILLEGAL STATE TEST");
-            System.out.flush();
-            throw new IllegalStateException("Testing IllegalStateException thrown in queue thread.");
-        }
     }
 
     synchronized GameState getGameState(){
@@ -99,11 +72,5 @@ public class BoardController {
         gameState = nextState;
     }
 
-    synchronized void setPlayerNumber(int numberOfPlayer){
-        this.numberOfPlayer = numberOfPlayer;
-    }
-    synchronized int getPlayerNumber(){
-        return numberOfPlayer;
-    }
 
 }

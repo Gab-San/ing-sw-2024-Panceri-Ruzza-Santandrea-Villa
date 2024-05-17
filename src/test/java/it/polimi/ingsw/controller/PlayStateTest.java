@@ -7,18 +7,18 @@ import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlayCard;
-import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.model.exceptions.DeckException;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 //TODO QUESTO TEST VA COMPLETATO
@@ -119,9 +119,7 @@ public class PlayStateTest{
         assertEquals(PlayState.class, controller.getGameState().getClass());
 
         assertThrows(IndexOutOfBoundsException.class, ()-> placeRandomCard(new Player("definitelyNotRight")), "PlaceCard does not throws IllegalArgumentException with wrong nickname");
-        assertThrows(IllegalStateException.class, ()-> placeRandomCard(Objects.requireNonNull(board.getPlayerAreas().keySet().stream().filter((p) -> {
-                    return !p.equals(board.getCurrentPlayer());
-                }).findAny().orElse(null))),
+        assertThrows(IllegalStateException.class, ()-> placeRandomCard(Objects.requireNonNull(board.getPlayerAreas().keySet().stream().filter((p) -> !p.equals(board.getCurrentPlayer())).findAny().orElse(null))),
                 "PlaceCard does not throws IllegalArgumentException with wrong nickname");
 
         Player currPlayer=board.getCurrentPlayer();
@@ -179,9 +177,7 @@ public class PlayStateTest{
         assertEquals(PlayState.class, controller.getGameState().getClass());
 
         assertThrows(IllegalArgumentException.class, ()-> drawRandomCard(new Player("definitelyNotRight")), "DrawCard does not throws IllegalArgumentException with wrong nickname");
-        assertThrows(IllegalStateException.class, ()-> drawRandomCard(Objects.requireNonNull(board.getPlayerAreas().keySet().stream().filter((p) -> {
-                    return !p.equals(board.getCurrentPlayer());
-                }).findAny().orElse(null))),
+        assertThrows(IllegalStateException.class, ()-> drawRandomCard(Objects.requireNonNull(board.getPlayerAreas().keySet().stream().filter((p) -> !p.equals(board.getCurrentPlayer())).findAny().orElse(null))),
                 "PlaceCard does not throws IllegalArgumentException with wrong nickname");
 
         Player currPlayer=board.getCurrentPlayer();
@@ -190,7 +186,9 @@ public class PlayStateTest{
             assertEquals(GamePhase.DRAWCARD,board.getGamePhase());
             assertEquals(PlayState.class, controller.getGameState().getClass());
             drawRandomCard(currPlayer);
-        }catch (IllegalStateException | IllegalArgumentException e) {fail("DrawRandomCard throws IllegalStateException when it shouldn't: "+ e.getMessage());}
+        }catch (IllegalStateException | IllegalArgumentException e) {
+            fail("DrawRandomCard throws IllegalStateException when it shouldn't: "+ e.getMessage());
+        }
 
         assertEquals(GamePhase.PLACECARD,board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
@@ -200,6 +198,8 @@ public class PlayStateTest{
     }
 
     private void drawRandomCard(Player player){
+
+        System.err.println("drawableCards.size()=" + drawableCards.size());
         char[] cardToDraw = drawableCards.get(new Random().nextInt(drawableCards.size()));
         if(!player.equals(board.getCurrentPlayer()))
             controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
@@ -217,10 +217,10 @@ public class PlayStateTest{
     @ValueSource(ints={2,3,4})
     public void startGameTest(int numOfPlayers) {
         setUp(numOfPlayers);
-        assertThrows(IllegalStateException.class, () -> controller.startGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 3), "StartGame doesn't throw IllegalStateException with numOfPlayers==3");
-        assertThrows(IllegalStateException.class, () -> controller.startGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame("definitelyNotRight", 2), "StartGame doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 3), "StartGame doesn't throw IllegalStateException with numOfPlayers==3");
+        assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4), "StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
 
     @ParameterizedTest

@@ -27,18 +27,9 @@ public class StartingCardDeck {
         }
     }
 
-    public StartingCard getCard() throws DeckException {
-        if(cardDeck.isEmpty()){
-            throw new DeckException("Deck is Empty");
-        }
+    public StartingCard getCard(){
         int cardIdx = getRandomCard();
         return cardDeck.remove(cardIdx);
-    }
-    public void putCard(StartingCard card){
-        synchronized (cardDeck){
-            if(!cardDeck.contains(card))
-                cardDeck.add(card);
-        }
     }
 
     private List<StartingCard> importFromJson() throws DeckException {

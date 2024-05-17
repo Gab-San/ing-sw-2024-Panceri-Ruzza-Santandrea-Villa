@@ -11,8 +11,6 @@ import it.polimi.ingsw.server.VirtualClient;
 import java.util.List;
 
 public class CreationState extends GameState{
-
-
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
     }
@@ -22,10 +20,8 @@ public class CreationState extends GameState{
         if(!board.getPlayerAreas().isEmpty()) {
             throw new IllegalStateException("WAITING FOR THE CONNECTED PLAYER TO START THE LOBBY...");
         }
-
         board.addPlayer(new Player(nickname));
-        //TODO this client list will be eliminated after implementing listeners
-        board.getGameInfo().addClient(client);
+        //TODO subscribe player to clients
         board.setGamePhase(GamePhase.SETNUMPLAYERS);
     }
 
@@ -36,20 +32,15 @@ public class CreationState extends GameState{
         board.getPlayerByNickname(nickname); // throws on player not in game
         if(num<2 || num>4)
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + "PLAYERS");
-        //FIXME: CORRECT TESTS
-        if (controller != null) {
-            controller.setPlayerNumber(num);
-        }
         transition(new JoinState(board, controller, disconnectingPlayers, num));
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
-        board.removePlayer(nickname); // throws exception if player isn't in game
-        board.getGameInfo().removeClient(client);
-        board.setGamePhase(GamePhase.CREATE);
+    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+        board.removePlayer(nickname);
         //TODO unsubscribe player's client from observers
         //   and push current state to client (possibly done in board.replaceClient())
+        board.setGamePhase(GamePhase.CREATE);
     }
 
     @Override
@@ -78,7 +69,8 @@ public class CreationState extends GameState{
     }
 
     @Override
-    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void restartGame (String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START ANOTHER GAME DURING CREATION STATE");
     }
+
 }

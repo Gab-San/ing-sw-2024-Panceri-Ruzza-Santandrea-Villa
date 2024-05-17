@@ -96,7 +96,7 @@ public class CentralServer {
         if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
         if(!client.equals(playerClients.get(nickname))) throw new IllegalStateException("Illegal request, Client instance does not match!");
 
-        gameRef.disconnect(nickname, client);
+        gameRef.disconnect(nickname);
         playerClients.remove(nickname);
         commandQueue.removeAll(
             commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()

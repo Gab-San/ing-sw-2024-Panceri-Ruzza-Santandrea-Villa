@@ -45,11 +45,6 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
         validateConnection();
         server.sendMsg(nickname, this, msg);
     }
-    @Override
-    public void testCmd(String text) throws RemoteException{
-        validateConnection();
-        server.testCmd(nickname, this, text);
-    }
 
     private void validateConnection() throws IllegalStateException, RemoteException{
         if(nickname == null){
@@ -103,9 +98,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient, Com
     }
 
     @Override
-    public void startGame(int numPlayers) throws IllegalStateException, RemoteException {
+    public void restartGame(int numPlayers) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.startGame(nickname, this, numPlayers);
+        server.restartGame(nickname, this, numPlayers);
     }
 
     public static void main(String[] args) throws RemoteException, NotBoundException {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
@@ -13,6 +14,8 @@ import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class PlayState extends GameState {
     private boolean lastRound;
@@ -47,7 +50,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         //TODO implement disconnect
 
         if(board.getPlayerAreas().keySet().stream()
@@ -84,7 +87,8 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException {
+    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront)
+            throws IllegalStateException, IllegalArgumentException {
 
         Player player = board.getPlayerByNickname(nickname); // throws if player isn't in game
 
@@ -125,6 +129,7 @@ public class PlayState extends GameState {
         if(!board.getCurrentPlayer().equals(player))
             throw new IllegalStateException("It's not your turn to draw yet");
 
+        //TODO handle PlayerHandException
         try {
             switch (cardPos) {
                 case 0:
@@ -140,8 +145,7 @@ public class PlayState extends GameState {
                     throw new IllegalArgumentException("Invalid card position for this draw command.");
             }
         }catch (DeckException e){
-            System.out.println(e.getMessage());
-            throw new IllegalArgumentException("Deck " + deckFrom + " is empty! Can't draw from position " + cardPos);
+            throw new IllegalArgumentException(e.getMessage() + "Can't draw from position " + cardPos);
         }
 
         postDrawChecks();
@@ -179,7 +183,7 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void startGame (String nickname, int numOfPlayers) throws IllegalStateException {
+    public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
     }
 }

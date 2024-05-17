@@ -35,7 +35,7 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         board.disconnectPlayer(nickname);
         disconnectingPlayers.remove(nickname);
 
@@ -74,7 +74,7 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void startGame(String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException {
+    public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase()!=GamePhase.SHOWWIN)
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game

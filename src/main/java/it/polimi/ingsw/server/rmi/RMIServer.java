@@ -95,9 +95,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void startGame(String nickname, VirtualClient client, int numPlayers) throws IllegalStateException{
+    public void restartGame(String nickname, VirtualClient client, int numPlayers) throws IllegalStateException{
         validateClient(nickname, client);
-        StartGameCmd command = new StartGameCmd(serverRef.getGameRef(), nickname, numPlayers);
+        RestartGameCmd command = new RestartGameCmd(serverRef.getGameRef(), nickname, numPlayers);
         issueCommand(command);
     }
 
@@ -107,12 +107,6 @@ public class RMIServer implements VirtualServer {
         String fullMessage = nickname + "> " + message;
         System.out.println(fullMessage);
         serverRef.updateMsg(fullMessage);
-    }
-    @Override
-    public void testCmd(String nickname, VirtualClient client, String text){
-        validateClient(nickname, client);
-        TestCmd command = new TestCmd(serverRef.getGameRef(), nickname, text);
-        issueCommand(command);
     }
     @Override
     public void ping(){
