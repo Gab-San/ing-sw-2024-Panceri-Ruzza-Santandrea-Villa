@@ -16,12 +16,12 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 import static it.polimi.ingsw.view.tui.PrintPlayerHandTest.getRandomObjectiveCardList;
 import static it.polimi.ingsw.view.tui.PrintPlayerHandTest.getRandomPlayCardList;
 
-public class PrintFullUITest {
+public class PrintPlayerUITest {
     PrintPlayerUI printPlayerUI;
     Random random;
     ViewBoard board;
 
-    PrintFullUITest(){
+    PrintPlayerUITest(){
         setUp();
     }
 
@@ -49,7 +49,7 @@ public class PrintFullUITest {
         ViewPlayerHand myHand = board.getPlayerHand();
         fillHandRandomly(myHand);
 
-        ViewPlayArea myPlayArea = board.getPlayerAreas().get(board.getPlayerHand().getNickname());
+        ViewPlayArea myPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
         fillPlayAreaRandomly(myPlayArea);
 
         printPlayerUI = new PrintPlayerUI(myHand, myPlayArea);
@@ -73,7 +73,7 @@ public class PrintFullUITest {
     }
     public static void main(String[] args) {
         System.out.println("TEST UI movement");
-        PrintFullUITest test = new PrintFullUITest();
+        PrintPlayerUITest test = new PrintPlayerUITest();
         Scanner scanner = new Scanner(System.in);
 
         String input = ""; String error = "";

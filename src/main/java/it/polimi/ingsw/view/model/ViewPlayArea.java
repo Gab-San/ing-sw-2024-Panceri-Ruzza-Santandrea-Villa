@@ -11,16 +11,13 @@ public class ViewPlayArea {
     private final Map<Point, ViewPlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<ViewCorner> freeCorners;
-
-    // we can represent other players in PlayArea as it's a very simple representation
-    // the local player (using the client) will use ViewPlayerHand to see their own hand
-    private boolean isConnected;
-    private List<GameResource> cardsInHand;
+    private GameResource color;
 
     public ViewPlayArea() {
         this.cardMatrix = new Hashtable<>();
         this.visibleResources = new Hashtable<>();
         this.freeCorners = new LinkedList<>();
+        color = null;
     }
     /**
      * Places a card at position (0,0), handling freeCorners list <br>
@@ -71,17 +68,10 @@ public class ViewPlayArea {
         return Collections.unmodifiableList(freeCorners);
     }
 
-    public void setConnected(boolean isConnected){
-        this.isConnected = isConnected;
+    public GameResource getColor() {
+        return color;
     }
-    public boolean isConnected(){
-        return isConnected;
-    }
-    public void setHand(List<GameResource> cardsInHand){
-        this.cardsInHand.clear();
-        this.cardsInHand.addAll(cardsInHand);
-    }
-    public List<GameResource> getHand(){
-        return Collections.unmodifiableList(cardsInHand);
+    public void setColor(GameResource color) {
+        this.color = color;
     }
 }

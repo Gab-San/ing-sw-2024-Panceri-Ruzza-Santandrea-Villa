@@ -22,6 +22,7 @@ public class ViewBoard {
     private final ViewDeck<ViewObjectiveCard> objectiveCardViewDeck;
 
     private final Map<String, ViewPlayArea> playerAreas;
+    private final Map<String, ViewOpponentHand> opponentHands;
     private final ViewPlayerHand playerHand;
     private final Map<String, Boolean> isPlayerDeadlocked;
 
@@ -34,10 +35,12 @@ public class ViewBoard {
         objectiveCardViewDeck = new ViewDeck<>();
 
         playerAreas = new Hashtable<>();
+        opponentHands = new Hashtable<>();
         playerHand = new ViewPlayerHand(nickname);
         isPlayerDeadlocked = new Hashtable<>();
 
-        addPlayer(nickname); // adds the player of this client
+        playerAreas.put(nickname, new ViewPlayArea());
+        isPlayerDeadlocked.put(nickname, false);
     }
 
     public ViewDeck<ViewResourceCard> getResourceCardDeck() {
@@ -50,14 +53,17 @@ public class ViewBoard {
         return objectiveCardViewDeck;
     }
 
-    public Map<String, ViewPlayArea> getPlayerAreas() {
-        return playerAreas;
+    public ViewPlayArea getPlayerArea(String nickname) {
+        return playerAreas.get(nickname);
     }
     public Map<String, Boolean> getPlayerDeadlocks() {
         return isPlayerDeadlocked;
     }
     public ViewPlayerHand getPlayerHand() {
         return playerHand;
+    }
+    public ViewOpponentHand getOpponentHand(String nickname){
+        return opponentHands.get(nickname);
     }
 
     public int getCurrentTurn() {
@@ -76,16 +82,18 @@ public class ViewBoard {
 
     public void addPlayer(String nickname){
         playerAreas.put(nickname, new ViewPlayArea());
+        opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
     }
     public void removePlayer(String nickname){
         playerAreas.remove(nickname);
+        opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
     }
     public void disconnectPlayer(String nickname){
-        playerAreas.get(nickname).setConnected(false);
+        getOpponentHand(nickname).setConnected(false);
     }
     public void reconnectPlayer(String nickname){
-        playerAreas.get(nickname).setConnected(true);
+        getOpponentHand(nickname).setConnected(true);
     }
 }

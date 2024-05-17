@@ -1,17 +1,15 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.view.model.ViewPlayerHand;
-import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
+import it.polimi.ingsw.view.model.ViewHand;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class PrintPlayerHand {
+public class PrintHand {
     private final PrintCard printCard;
     private static final int cardSpacing = 4;
-    private final ViewPlayerHand hand;
-    public PrintPlayerHand(ViewPlayerHand hand){
+    private final ViewHand hand;
+    public PrintHand(ViewHand hand){
         printCard = new PrintCard();
         this.hand = hand;
     }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.view.ViewCardGenerator;
+import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,14 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class PrintPlayerHandTest {
-    static PrintHand printPlayerHand;
-    static ViewPlayerHand hand;
+public class PrintOpponentHandTest {
+    static PrintHand printHand;
+    static ViewOpponentHand hand;
+    static Random random;
 
     @BeforeAll
     static void setUp(){
-        hand = new ViewPlayerHand("Test_Player");
-        printPlayerHand = new PrintHand(hand);
+        hand = new ViewOpponentHand("Test_Player");
+        printHand = new PrintHand(hand);
+        random = new Random();
     }
 
     static List<ViewPlayCard> getRandomPlayCardList(int num, boolean allFront){
@@ -41,13 +44,14 @@ public abstract class PrintPlayerHandTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0,1,2,3})
-    void printPlayerHandTest(int handSize){
-        System.out.println(ConsoleTextColors.RED_TEXT + "Hand size = " + handSize + ConsoleTextColors.RESET);
+    void printOpponentHandTest(int handSize){
+        boolean front = random.nextBoolean();
+        System.out.println(ConsoleTextColors.RED_TEXT + "(Front = " + front + ") Hand size = " + handSize + ConsoleTextColors.RESET);
         System.out.flush();
         hand.setStartCard(ViewCardGenerator.getRandomStartingCard());
-        hand.setCards(getRandomPlayCardList(handSize, true));
+        hand.setCards(getRandomPlayCardList(handSize, front));
         hand.setSecretObjectiveCards(getRandomObjectiveCardList());
-        printPlayerHand.printHand();
+        printHand.printHand();
         System.out.println("\n"); //2 line spacing
         System.out.flush();
     }
