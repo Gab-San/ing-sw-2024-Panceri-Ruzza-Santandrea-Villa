@@ -1,13 +1,12 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
-import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
-import javax.swing.text.View;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +15,9 @@ import static it.polimi.ingsw.CornerDirection.*;
 
 public class PrintPlayArea {
     private final PrintCard printCard;
-    private ViewPlayArea playArea;
+    private final ViewPlayArea playArea;
+    private final String freeCornerColor = ConsoleTextColors.WHITE_BRIGHT_TEXT;
+
     public PrintPlayArea(ViewPlayArea playArea){
         printCard = new PrintCard();
         this.playArea = playArea;
@@ -35,6 +36,14 @@ public class PrintPlayArea {
             case TR, BR -> row.substring(0, row.length() - PrintCard.cornerStringLength) + spaces;
         };
     }
+    private String recolorCorner(String row, CornerDirection dir, String color) {
+        int rightCorner = PrintCard.cornerStringLength;
+        int leftCorner = row.length() - PrintCard.cornerStringLength;
+        return switch (dir){
+            case TL, BL -> color + row.substring(0, rightCorner) + RESET + row.substring(rightCorner);
+            case TR, BR -> row.substring(0, leftCorner) + color + row.substring(leftCorner) + RESET;
+        };
+    }
 
     private String[] getCardAsStringRows(ViewPlaceableCard card, Set<CornerDirection> fillCorners){
         String[] cardAsStringRows = printCard.getCardAsStringRows(card);
@@ -50,9 +59,22 @@ public class PrintPlayArea {
                         break;
                 }
             }
+            else // card != null && corner visible
+                // getCardAt() == null condition is checked first for efficiency
+                if(playArea.getCardAt(card.getPosition().move(dir)) == null && playArea.getFreeCorners().contains(card.getCorner(dir))){
+                    switch (dir) {
+                        case TR, TL:
+                            cardAsStringRows[0] = recolorCorner(cardAsStringRows[0], dir, freeCornerColor);
+                            break;
+                        case BR, BL:
+                            cardAsStringRows[4] = recolorCorner(cardAsStringRows[4], dir, freeCornerColor);
+                            break;
+                    }
+                }
         }
         return cardAsStringRows;
     }
+
 
     private void print(String str){
         System.out.print(str);
@@ -211,5 +233,17 @@ public class PrintPlayArea {
         print(botLeftCardRows[2]);  print(inBetweenSpaces); print(botCardRows[2]);  print(inBetweenSpaces); print(botRightCardRows[2]); endl();
         print(botLeftCardRows[3]);  print(inBetweenSpaces); print(botCardRows[3]);  print(inBetweenSpaces); print(botRightCardRows[3]); endl();
         print(botLeftCardRows[4]);  print(inBetweenSpaces); print(botCardRows[4]);  print(inBetweenSpaces); print(botRightCardRows[4]); endl();
+
+        //visible Resources print:
+        print("\nVisible Resources: ");
+        boolean onePrinted = false;
+        for(GameResource res : GameResource.values()){
+            Integer amount = playArea.getVisibleResources().get(res);
+            if(amount != null) {
+                if(onePrinted) print(" , ");
+                print(ConsoleBackgroundColors.getColorFromEnum(res) + " " + amount + "x " + res + " " + ConsoleBackgroundColors.RESET);
+                onePrinted = true;
+            }
+        } endl();
     }
 }

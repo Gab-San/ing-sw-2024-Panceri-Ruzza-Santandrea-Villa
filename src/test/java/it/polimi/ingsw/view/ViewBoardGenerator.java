@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.model.functions.UsefulFunc;
 import it.polimi.ingsw.view.model.ViewDeck;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
@@ -9,7 +11,7 @@ import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -40,13 +42,22 @@ public class ViewBoardGenerator {
     }
     public static void fillPlayAreaRandomly(ViewPlayArea playArea){
         playArea.placeStarting(getRandomStartingCard());
-        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(30, false));
+        List<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(30, false));
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
             Point position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
+        int numOfVisibleResources = random.nextInt(30*4);
+        int[] resAmount = new int[7];
+        for (int i = 0; i < numOfVisibleResources; i++) {
+            GameResource res = getRandomResource();
+            if(res != null && res != GameResource.FILLED)
+                resAmount[res.getResourceIndex()]++;
+            else i--;
+        }
+        playArea.setVisibleResources(UsefulFunc.resourceArrayToMap(resAmount));
     }
     public static <C extends ViewCard> void fillDeckRandomly(ViewDeck<C> deck, Class<C> cardClass){
         Supplier<C> cardMaker;

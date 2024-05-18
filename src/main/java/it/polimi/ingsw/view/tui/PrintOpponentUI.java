@@ -3,8 +3,7 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class PrintOpponentUI extends PrintUI{
     private ViewOpponentHand hand;
@@ -18,7 +17,9 @@ public class PrintOpponentUI extends PrintUI{
         System.out.println(nickname + "'s playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 
-        System.out.println("\nOpponent's hand: " + (hand.isConnected() ? "" : RED_TEXT + "[DISCONNECTED]" + RESET));
+        String disconnectedText = RED_TEXT + "[DISCONNECTED]" + RESET;
+        String connectedText = GREEN_TEXT + "[CONNECTED]" + RESET;
+        System.out.println("\nOpponent's hand: " + (hand.isConnected() ? connectedText : disconnectedText));
         printHand.printHand(true);
 
         System.out.flush();

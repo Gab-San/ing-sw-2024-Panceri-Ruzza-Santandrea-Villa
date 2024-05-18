@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 class ConsoleTextColors {
     // Reset
-    static final String RESET = "\033[0m";  // Text Reset
+    static final String RESET = "\033[00m";  // Text Reset
 
     // Regular Colors
     static final String BLACK_TEXT = "\033[0;30m";  
