@@ -17,7 +17,7 @@ import java.util.*;
 
 public class PlayArea implements GameSubject {
     private final Map<Point, PlaceableCard> cardMatrix;
-    private final Hashtable<GameResource, Integer> visibleResources;
+    private final Map<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
 
     /**

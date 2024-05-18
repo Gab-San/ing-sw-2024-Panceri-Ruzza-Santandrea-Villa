@@ -19,6 +19,9 @@ import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.events.board.BoardStateUpdateEvent;
+import it.polimi.ingsw.model.listener.remote.events.board.ChangeScoreEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.security.InvalidParameterException;
@@ -37,6 +40,7 @@ public class Board implements GameSubject{
     public static final char OBJECTIVE_DECK = 'O';
     public static final char RESOURCE_DECK = 'R';
     public static final char GOLD_DECK = 'G';
+
     private final Map<Player, Boolean> isPlayerDeadlocked;
 
     private int currentTurn;
@@ -55,10 +59,14 @@ public class Board implements GameSubject{
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
 
+        // Controlled in Board
         currentTurn = 1;
+        // Controlled in Board
         scoreboard = new Hashtable<>();
+        // Probably should notify
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
+        // Controlled in Board
         gamePhase = GamePhase.CREATE;
         resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
         goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
@@ -67,10 +75,10 @@ public class Board implements GameSubject{
         objectiveDeck = new ObjectiveDeck();
         observableObjects.add(objectiveDeck);
         startingDeck = new StartingCardDeck();
+        // Controlled in Board
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);
         remoteHandler = RemoteHandler.getInstance();
-
         subscribeListenerToAll(remoteHandler);
     }
 
@@ -190,6 +198,7 @@ public class Board implements GameSubject{
     }
     protected void setScore(Player player, int score){
         scoreboard.put(player, score);
+        notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
 //endregion
 
@@ -456,7 +465,12 @@ public class Board implements GameSubject{
         playerAreas.put(player, joiningPlayerArea);
         //FIXME is this needed?
         player.setTurn(playerAreas.size());
-        isPlayerDeadlocked.put(player, false);
+        setPlayerDeadLock(player, false);
+    }
+
+    public void setPlayerDeadLock(Player player, boolean isDeadLocked){
+        isPlayerDeadlocked.put(player, isDeadLocked);
+        notifyAllListeners(new PlayerDeadLockedEvent(player.getNickname(), isDeadLocked));
     }
 
 
@@ -471,14 +485,21 @@ public class Board implements GameSubject{
 
         // remove playArea and scoreboard
         playerAreas.remove(player);
+        // Probably should notify
         scoreboard.remove(player);
+        //TODO ADD SCOREBOARD EVENT
         //decrement turn of each player that followed the removed player in turn order
         playerAreas.keySet().stream()
                 .filter(p -> p.getTurn() > player.getTurn())
                 .forEach(p -> p.setTurn(p.getTurn()-1));
+
+        //FIXME check if this is correct
+
         // fix current turn if it was another player's turn
         if(currentTurn >= player.getTurn())
             currentTurn--;
+        //TODO Notify that the player was removed
+        //TODO unsubscribe player from updates
         observableObjects.remove(player);
     }
 
@@ -489,7 +510,7 @@ public class Board implements GameSubject{
      */
     public void disconnectPlayer(String nickname) throws IllegalArgumentException{
         getPlayerByNickname(nickname).setConnected(false);
-        //TODO unsubscribe player from listeners
+        //TODO unsubscribe player from updates
     }
     /**
      * Reconnects player with given nickname
@@ -498,13 +519,13 @@ public class Board implements GameSubject{
      */
     public void reconnectPlayer(String nickname) throws IllegalStateException{
         Player player = getPlayerByNickname(nickname);
+        //FIXME Questo potrebbe creare errori?
         if(player.isConnected())
             throw new IllegalStateException("Player " + nickname + " is already connected.");
         else
             player.setConnected(true);
     }
 //endregion
-
 
 //region LISTENER METHODS
     public void subscribeListenerToAll(GameListener listener){
@@ -522,6 +543,7 @@ public class Board implements GameSubject{
     @Override
     public void addListener(GameListener listener) {
         gameListeners.add(listener);
+        notifyListener(listener, new BoardStateUpdateEvent(currentTurn, scoreboard, gamePhase, isPlayerDeadlocked));
     }
 
     @Override
