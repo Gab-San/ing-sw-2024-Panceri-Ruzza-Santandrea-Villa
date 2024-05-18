@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.tcp.server;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.Commands.*;
 import it.polimi.ingsw.network.VirtualClient;

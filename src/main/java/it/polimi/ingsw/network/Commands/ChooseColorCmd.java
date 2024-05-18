@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.Commands;
 
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.PlayerColor;
 
 public class ChooseColorCmd extends GameCommand{
     private final PlayerColor color;

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 

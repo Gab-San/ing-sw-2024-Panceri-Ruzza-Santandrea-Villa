@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.enums;
+package it.polimi.ingsw;
 
 public enum PlayerColor {
     BLUE('B'),

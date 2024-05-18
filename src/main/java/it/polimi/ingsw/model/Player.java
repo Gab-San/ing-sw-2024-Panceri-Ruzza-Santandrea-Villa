@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.listener.remote.events.player.PlayerStateUpdateEven
 import it.polimi.ingsw.model.listener.remote.events.player.SetColorEvent;
 import it.polimi.ingsw.model.listener.remote.events.player.SetConnectEvent;
 import it.polimi.ingsw.model.listener.remote.events.player.SetTurnEvent;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;

@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.Hashtable;
