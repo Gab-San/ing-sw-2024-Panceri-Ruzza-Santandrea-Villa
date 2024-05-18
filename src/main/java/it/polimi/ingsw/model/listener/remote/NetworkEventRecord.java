@@ -1,7 +1,7 @@
-package it.polimi.ingsw.listener.remote;
+package it.polimi.ingsw.model.listener.remote;
 
 
-import it.polimi.ingsw.listener.remote.events.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.util.*;

@@ -1,9 +1,9 @@
-package it.polimi.ingsw.listener.remote;
+package it.polimi.ingsw.model.listener.remote;
 
-import it.polimi.ingsw.listener.GameEvent;
-import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.remote.events.NetworkEvent;
-import it.polimi.ingsw.listener.remote.events.PingEvent;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.PingEvent;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.server.VirtualClient;
 

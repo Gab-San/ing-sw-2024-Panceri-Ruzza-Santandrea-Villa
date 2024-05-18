@@ -1,9 +1,7 @@
 package it.polimi.ingsw.controller.stub;
 
 import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.listener.remote.events.NetworkEvent;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.listener.GameEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -38,6 +36,26 @@ public class PuppetClient implements VirtualClient {
 
     @Override
     public void createPlayer(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+
+    }
+
+    @Override
+    public void deckReveal(char deck, String revealedId, int cardPosition) {
+
+    }
+
+    @Override
+    public void createDeck(char deck, String topId, String firstId, String secondId) {
+
+    }
+
+    @Override
+    public void deckUpdate(char deck, String cardID) {
+
+    }
+
+    @Override
+    public void emptyDeck(char deck) {
 
     }
 }

@@ -1,29 +1,39 @@
 package it.polimi.ingsw.model.deck;
 
-import it.polimi.ingsw.listener.GameEvent;
-import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.GameSubject;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
+import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
+import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlayableDeck implements GameSubject {
     private final Deque<PlayCard> cardDeck;
     private final CardFactory cardFactory;
     private PlayCard firstRevealedCard;
     private PlayCard secondRevealedCard;
+    private final char deckType;
 
-    private static final int FIRST_POSITION = 1;
-    private static final int SECOND_POSITION = 2;
+    public static final int FIRST_POSITION = 1;
+    public static final int SECOND_POSITION = 2;
+    private final List<GameListener> gameListenerList;
 
 
-    public PlayableDeck(CardFactory cardFactory, int initialCapacity) throws DeckInstantiationException {
+    public PlayableDeck(char deckType, CardFactory cardFactory, int initialCapacity) throws DeckInstantiationException {
+        this.deckType = deckType;
         cardDeck = new ArrayDeque<>(initialCapacity);
+        gameListenerList = new LinkedList<>();
         this.cardFactory = cardFactory;
         try {
             fillDeck(initialCapacity);
@@ -48,6 +58,7 @@ public class PlayableDeck implements GameSubject {
         } catch (DeckException ignored){
             // If the cardFactory is empty there's no mean to throw an error
         }
+        notifyAllListeners(new DrawnCardEvent(deckType, cardDeck.peek()));
         return returnCard;
     }
 
@@ -69,16 +80,20 @@ public class PlayableDeck implements GameSubject {
             case FIRST_POSITION:
                 if(cardDeck.isEmpty()) {
                     firstRevealedCard = null;
+                    notifyAllListeners(new DeckRevealEvent(deckType, null, FIRST_POSITION));
                     break;
                 }
                 firstRevealedCard = getTopCard();
+                notifyAllListeners(new DeckRevealEvent(deckType, firstRevealedCard, FIRST_POSITION));
                 break;
             case SECOND_POSITION:
                 if(cardDeck.isEmpty()) {
                     secondRevealedCard = null;
+                    notifyAllListeners(new DeckRevealEvent(deckType, null, FIRST_POSITION));
                     break;
                 }
                 secondRevealedCard = getTopCard();
+                notifyAllListeners(new DeckRevealEvent(deckType, firstRevealedCard, FIRST_POSITION));
                 break;
             default:
                 break;
@@ -89,34 +104,37 @@ public class PlayableDeck implements GameSubject {
         return cardDeck.isEmpty();
     }
     public synchronized boolean isCompletelyEmpty(){
-        return isEmpty() && !hasSecondRevealed() && !hasFirstRevealed();
+        return isEmpty() && isSecondRevealedEmpty() && isFirstRevealedEmpty();
     }
 
-    public boolean hasFirstRevealed() {
-        return firstRevealedCard != null;
+    public boolean isFirstRevealedEmpty() {
+        return firstRevealedCard == null;
     }
 
-    public boolean hasSecondRevealed() {
-        return secondRevealedCard != null;
+    public boolean isSecondRevealedEmpty() {
+        return secondRevealedCard == null;
     }
 
     @Override
     public void addListener(GameListener listener) {
-
+        gameListenerList.add(listener);
+        notifyListener(listener, new DeckStateUpdateEvent(deckType, cardDeck.peek(), firstRevealedCard, secondRevealedCard));
     }
 
     @Override
     public void removeListener(GameListener listener) {
-
+        gameListenerList.remove(listener);
     }
 
     @Override
     public void notifyAllListeners(GameEvent event) {
-
+        for(GameListener listener: gameListenerList){
+            listener.listen(event);
+        }
     }
 
     @Override
     public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-
+        listener.listen(event);
     }
 }

@@ -25,10 +25,16 @@ class EventTest {
         board.subscribeClientToUpdates(nick,client);
         board.addPlayer(new Player(nick));
         board.addPlayer(new Player("Corradino"));
-        board.subscribeClientToUpdates("SUSSY", new PuppetClient("SUSSY", view));
-        board.addPlayer(new Player("PUPPA"));
-        board.addPlayer(new Player("LAVANDA"));
-        board.subscribeClientToUpdates("GIOVANNA", new PuppetClient("GIOVANNA", view));
-        while (!client.notificationReceived) Thread.sleep(500);
+//        board.subscribeClientToUpdates("SUSSY", new PuppetClient("SUSSY", view));
+//        board.addPlayer(new Player("PUPPA"));
+        board.unsubscribeClientFromUpdates(nick);
+//        board.addPlayer(new Player("LAVANDA"));
+//        board.subscribeClientToUpdates("GIOVANNA", new PuppetClient("GIOVANNA", view));
+        Thread.sleep(2000);
+        System.err.println("Disconnected Client");
+        PuppetClient puppetClient = new PuppetClient("Gorlanino", view);
+        board.subscribeClientToUpdates(nick, puppetClient);
+
+        while (!puppetClient.notificationReceived) Thread.sleep(1000);
     }
 }

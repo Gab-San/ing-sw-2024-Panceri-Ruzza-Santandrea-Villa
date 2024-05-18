@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.listener.GameEvent;
-import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.remote.RemoteHandler;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
-import it.polimi.ingsw.listener.GameSubject;
+import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.security.InvalidParameterException;
@@ -60,17 +60,17 @@ public class Board implements GameSubject{
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
         gamePhase = GamePhase.CREATE;
-        resourceDeck = new PlayableDeck(new ResourceCardFactory(), 8);
-        goldDeck = new PlayableDeck(new GoldCardFactory(), 5);
+        resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
+        goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
         observableObjects.add(resourceDeck);
         observableObjects.add(goldDeck);
         objectiveDeck = new ObjectiveDeck();
         observableObjects.add(objectiveDeck);
         startingDeck = new StartingCardDeck();
-        observableObjects.add(startingDeck);
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);
         remoteHandler = RemoteHandler.getInstance();
+
         subscribeListenerToAll(remoteHandler);
     }
 
@@ -333,13 +333,13 @@ public class Board implements GameSubject{
 
         switch (deck){
             case RESOURCE_DECK:
-                if(!resourceDeck.hasFirstRevealed()) {
+                if(resourceDeck.isFirstRevealedEmpty()) {
                     throw new DeckException("There is no first card!", PlayableDeck.class);
                 }
                 playerHand.addCard(resourceDeck::getFirstRevealedCard);
                 break;
             case GOLD_DECK:
-                if(!goldDeck.hasFirstRevealed()){
+                if(goldDeck.isFirstRevealedEmpty()){
                     throw new DeckException("There is no first card!", PlayableDeck.class);
                 }
                 playerHand.addCard(goldDeck::getFirstRevealedCard);
@@ -363,13 +363,13 @@ public class Board implements GameSubject{
 
         switch (deck){
             case RESOURCE_DECK:
-                if(!resourceDeck.hasSecondRevealed()) {
+                if(resourceDeck.isSecondRevealedEmpty()) {
                     throw new DeckException("There is no second card!", PlayableDeck.class);
                 }
                 playerHand.addCard(resourceDeck::getSecondRevealedCard);
                 break;
             case GOLD_DECK:
-                if(!goldDeck.hasSecondRevealed()){
+                if(goldDeck.isSecondRevealedEmpty()){
                     throw new DeckException("There is no second card!", PlayableDeck.class);
                 }
                 playerHand.addCard(goldDeck::getSecondRevealedCard);
@@ -454,6 +454,7 @@ public class Board implements GameSubject{
         joiningPlayerArea.addListener(remoteHandler);
         
         playerAreas.put(player, joiningPlayerArea);
+        //FIXME is this needed?
         player.setTurn(playerAreas.size());
         isPlayerDeadlocked.put(player, false);
     }

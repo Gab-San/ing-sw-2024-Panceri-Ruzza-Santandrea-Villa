@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.listener.remote.events.player.PlayerStateUpdateEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.PlayerStateUpdateEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.SetColorEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.SetConnectEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.SetTurnEvent;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.listener.GameEvent;
-import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.GameSubject;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import org.jetbrains.annotations.Range;
 
@@ -21,10 +24,11 @@ public class Player implements GameSubject {
     private final List<GameListener> gameListenerList;
 
     public Player(String nickname){
+        gameListenerList = new LinkedList<>();
+
         this.nickname = nickname;
         isConnected = true;
         hand = new PlayerHand(this);
-        gameListenerList = new LinkedList<>();
     }
 
     @Override
@@ -48,12 +52,14 @@ public class Player implements GameSubject {
     }
     public void setTurn(int turn) {
         this.turn = turn;
+        notifyAllListeners(new SetTurnEvent(nickname, turn));
     }
     public boolean isConnected() {
         return isConnected;
     }
     public void setConnected(boolean connected) {
         isConnected = connected;
+        notifyAllListeners(new SetConnectEvent(nickname, connected));
     }
     public PlayerHand getHand() {
         return hand;
@@ -61,7 +67,10 @@ public class Player implements GameSubject {
     public PlayerColor getColor() {
         return color;
     }
-    public void setColor(PlayerColor newColor){ this.color=newColor;}
+    public void setColor(PlayerColor newColor){
+        this.color=newColor;
+        notifyAllListeners(new SetColorEvent(nickname, newColor));
+    }
 
 
     @Override

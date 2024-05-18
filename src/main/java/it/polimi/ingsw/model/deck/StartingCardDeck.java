@@ -2,13 +2,9 @@ package it.polimi.ingsw.model.deck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import it.polimi.ingsw.listener.GameEvent;
-import it.polimi.ingsw.listener.GameListener;
-import it.polimi.ingsw.listener.GameSubject;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
-import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.json.deserializers.StartingCardDeserializer;
 
 import java.io.File;
@@ -17,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StartingCardDeck implements GameSubject {
+public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;
 
@@ -53,23 +49,5 @@ public class StartingCardDeck implements GameSubject {
         return new Random().nextInt(cardDeck.size());
     }
 
-    @Override
-    public void addListener(GameListener listener) {
 
-    }
-
-    @Override
-    public void removeListener(GameListener listener) {
-
-    }
-
-    @Override
-    public void notifyAllListeners(GameEvent event) {
-
-    }
-
-    @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-
-    }
 }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller.timer;
 
 import it.polimi.ingsw.controller.BoardController;
-import it.polimi.ingsw.listener.remote.RemoteHandler;
+import it.polimi.ingsw.model.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.listener.remote.events.PingEvent;
+import it.polimi.ingsw.model.listener.remote.events.PingEvent;
 import it.polimi.ingsw.model.exceptions.ListenException;
 
 public class TurnTimer implements Runnable{

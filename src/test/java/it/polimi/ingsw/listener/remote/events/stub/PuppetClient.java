@@ -37,6 +37,9 @@ public class PuppetClient implements VirtualClient {
 
     @Override
     public synchronized void updatePlayer(String nickname, int playerTurn) {
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof player creation with:\n" +
+                nickname + "\n" +
+                playerTurn, Attribute.MAGENTA_TEXT()));
         view.getPlayer(nickname).setTurn(playerTurn);
     }
 
@@ -54,6 +57,31 @@ public class PuppetClient implements VirtualClient {
                 colour, Attribute.MAGENTA_TEXT()));
         notificationReceived = true;
         view.addPlayer(nickname, isConnected, turn, colour);
+    }
+
+    @Override
+    public void deckReveal(char deck, String revealedId, int cardPosition) {
+
+    }
+
+    @Override
+    public void createDeck(char deck, String topId, String firstId, String secondId) {
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+                "[DECK TYPE]" + deck + "\n" +
+                "[TOP CARD]" + topId + "\n" +
+                "[FIRST CARD]" + firstId + "\n" +
+                "[SECOND CARD]" + secondId, Attribute.MAGENTA_TEXT()));
+        notificationReceived = true;
+    }
+
+    @Override
+    public void deckUpdate(char deck, String cardID) {
+
+    }
+
+    @Override
+    public void emptyDeck(char deck) {
+
     }
 
 }
