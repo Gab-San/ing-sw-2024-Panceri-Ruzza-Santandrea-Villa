@@ -5,6 +5,8 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.GameResource;
 
+import static it.polimi.ingsw.GameResource.FILLED;
+
 import java.util.*;
 
 public class ViewPlayArea {
@@ -28,7 +30,7 @@ public class ViewPlayArea {
         cardMatrix.put(zero, startCard);
         startCard.setPosition(zero);
         for(CornerDirection dir : CornerDirection.values()) {
-            if(startCard.getCorner(dir).getResource() != GameResource.FILLED)
+            if(startCard.getCorner(dir).getResource() != FILLED)
                 freeCorners.add(startCard.getCorner(dir));
         }
     }
@@ -48,19 +50,63 @@ public class ViewPlayArea {
                 dirCard.getCorner(dir.opposite()).cover();
                 freeCorners.remove(dirCard.getCorner(dir.opposite()));
             }
-            else if(card.getCornerResource(dir) != GameResource.FILLED)
-                freeCorners.add(card.getCorner(dir));
+            else{
+                if(card.getCornerResource(dir) != FILLED){
+                    boolean isCornerFree = true;
+                    Point pointToCheck = position.move(dir);
+                    for(CornerDirection dir2 : CornerDirection.values()) {
+                        ViewPlaceableCard cardDir = cardMatrix.get(pointToCheck.move(dir2));
+                        if (cardDir != null && cardDir.getCornerResource(dir2.opposite()) == FILLED) {
+                            isCornerFree = false;
+                            break;
+                        }
+                    }
+                    if(isCornerFree) freeCorners.add(card.getCorner(dir));
+                }
+                else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
+                    Point pointLocked = position.move(dir);
+                    for(CornerDirection dir2 : CornerDirection.values()){
+                        ViewPlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
+                        if(cardDir != null) {
+                            ViewCorner possibleLockedCorner = cardDir.getCorner(dir2.opposite());
+                            if (possibleLockedCorner.getResource() != FILLED)
+                                freeCorners.remove(possibleLockedCorner);
+                        }
+                    }
+                }
+            }
         }
     }
 
-    public Map<Point, ViewPlaceableCard> getCardMatrix() {
-        return Collections.unmodifiableMap(cardMatrix);
+    private int countResource(GameResource res, String placementCostString){
+        if(placementCostString.isEmpty()) return 0;
+        return (int) Arrays.stream(placementCostString.split(""))
+                .filter(s -> s.equals(res.toString()))
+                .count();
     }
+    public boolean validatePlacement(Point position, ViewPlayCard playCard){
+        if(cardMatrix.get(position) != null) return false;
+
+        // checks valid cost before placing
+        for(GameResource res : GameResource.values()){
+            if (visibleResources.get(res) == null || visibleResources.get(res) < countResource(res, playCard.getPlacementCostAsString()))
+                return false;
+        }
+        // checks for FILLED corners, invalid placement if it would cover any
+        for(CornerDirection dir : CornerDirection.values()){
+            ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
+            if(dirCard != null && dirCard.getCornerResource(dir.opposite()) == FILLED)
+                return false;
+        }
+
+        return true;
+    }
+
     public ViewPlaceableCard getCardAt(Point position){
         return cardMatrix.get(position);
     }
     public ViewPlaceableCard getCardAt(int row, int col){
-        return getCardAt(new Point(row, col));
+        return cardMatrix.get(new Point(row, col));
     }
 
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){

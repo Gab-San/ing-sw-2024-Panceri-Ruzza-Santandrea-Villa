@@ -71,23 +71,23 @@ public class PrintPlayArea {
     public void printPlayArea(Point center){
         final Set<CornerDirection> fillCorners = new HashSet<>();
 
-        ViewPlaceableCard topCard = playArea.getCardMatrix().get(center.move(TL, TR));
-        ViewPlaceableCard topLeftCard = playArea.getCardMatrix().get(center.move(TL, TL));
-        ViewPlaceableCard topRightCard = playArea.getCardMatrix().get(center.move(TR, TR));
+        ViewPlaceableCard topCard = playArea.getCardAt(center.move(TL, TR));
+        ViewPlaceableCard topLeftCard = playArea.getCardAt(center.move(TL, TL));
+        ViewPlaceableCard topRightCard = playArea.getCardAt(center.move(TR, TR));
 
-        ViewPlaceableCard TLCard = playArea.getCardMatrix().get(center.move(TL));
-        ViewPlaceableCard TRCard = playArea.getCardMatrix().get(center.move(TR));
+        ViewPlaceableCard TLCard = playArea.getCardAt(center.move(TL));
+        ViewPlaceableCard TRCard = playArea.getCardAt(center.move(TR));
 
-        ViewPlaceableCard leftCard = playArea.getCardMatrix().get(center.move(TL, BL));
-        ViewPlaceableCard midCard = playArea.getCardMatrix().get(center);
-        ViewPlaceableCard rightCard = playArea.getCardMatrix().get(center.move(TR, BR));
+        ViewPlaceableCard leftCard = playArea.getCardAt(center.move(TL, BL));
+        ViewPlaceableCard midCard = playArea.getCardAt(center);
+        ViewPlaceableCard rightCard = playArea.getCardAt(center.move(TR, BR));
 
-        ViewPlaceableCard BLCard = playArea.getCardMatrix().get(center.move(BL));
-        ViewPlaceableCard BRCard = playArea.getCardMatrix().get(center.move(BR));
+        ViewPlaceableCard BLCard = playArea.getCardAt(center.move(BL));
+        ViewPlaceableCard BRCard = playArea.getCardAt(center.move(BR));
 
-        ViewPlaceableCard botCard = playArea.getCardMatrix().get(center.move(BL, BR));
-        ViewPlaceableCard botLeftCard = playArea.getCardMatrix().get(center.move(BL, BL));
-        ViewPlaceableCard botRightCard = playArea.getCardMatrix().get(center.move(BR, BR));
+        ViewPlaceableCard botCard = playArea.getCardAt(center.move(BL, BR));
+        ViewPlaceableCard botLeftCard = playArea.getCardAt(center.move(BL, BL));
+        ViewPlaceableCard botRightCard = playArea.getCardAt(center.move(BR, BR));
 
         String TLSpaces = printCard.getSpaces(PrintCard.cornerStringAsSpacesLength + PrintCard.cornerRowSpaceCount);
         String inBetweenSpaces = printCard.getSpaces(PrintCard.cornerRowSpaceCount);
