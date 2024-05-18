@@ -14,9 +14,9 @@ public class ViewPlayArea {
     private GameResource color;
 
     public ViewPlayArea() {
-        this.cardMatrix = new Hashtable<>();
-        this.visibleResources = new Hashtable<>();
-        this.freeCorners = new LinkedList<>();
+        this.cardMatrix = Collections.synchronizedMap(new Hashtable<>());
+        this.visibleResources = Collections.synchronizedMap(new Hashtable<>());
+        this.freeCorners = Collections.synchronizedList(new LinkedList<>());
         color = null;
     }
     /**
@@ -53,8 +53,14 @@ public class ViewPlayArea {
         }
     }
 
-    public Map<Point, ViewPlaceableCard> getCardMatrix(){
+    public Map<Point, ViewPlaceableCard> getCardMatrix() {
         return Collections.unmodifiableMap(cardMatrix);
+    }
+    public ViewPlaceableCard getCardAt(Point position){
+        return cardMatrix.get(position);
+    }
+    public ViewPlaceableCard getCardAt(int row, int col){
+        return getCardAt(new Point(row, col));
     }
 
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){
@@ -68,10 +74,10 @@ public class ViewPlayArea {
         return Collections.unmodifiableList(freeCorners);
     }
 
-    public GameResource getColor() {
+    public synchronized GameResource getColor() {
         return color;
     }
-    public void setColor(GameResource color) {
+    public synchronized void setColor(GameResource color) {
         this.color = color;
     }
 }

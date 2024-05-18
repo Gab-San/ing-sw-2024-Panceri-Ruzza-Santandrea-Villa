@@ -25,21 +25,23 @@ public class ViewCorner {
     }
 
     public GameResource getResource() {
-        return cardRef.isFaceUp ? frontResource : backResource;
-    }
-    public boolean isVisible(){
-        return isVisible;
-    }
-    public void cover(){
-        isVisible = false;
-    }
-    public ViewPlaceableCard getCardRef() {
-        return cardRef;
-    }
-    public void setCardRef(ViewPlaceableCard card) {
-        cardRef = card;
+        return cardRef.isFaceUp() ? frontResource : backResource;
     }
     public CornerDirection getDirection() {
         return direction;
+    }
+
+    public synchronized boolean isVisible(){
+        return isVisible;
+    }
+    public synchronized void cover(){
+        isVisible = false;
+    }
+
+    public synchronized ViewPlaceableCard getCardRef() {
+        return cardRef;
+    }
+    public synchronized void setCardRef(ViewPlaceableCard card) {
+        cardRef = card;
     }
 }

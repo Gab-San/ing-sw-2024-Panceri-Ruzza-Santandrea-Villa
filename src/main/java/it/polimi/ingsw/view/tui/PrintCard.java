@@ -135,11 +135,11 @@ public class PrintCard {
         String[] card = new String[5];
         String emptyRow = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
         card[0] = emptyRow;
-        card[1] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyValue(), 0) : emptyRow;
+        card[1] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 0) : emptyRow;
         if(objCard.isFaceUp())
-            card[2] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyValue(), 1) : objCard.getObjectiveStrategyValue();
+            card[2] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 1) : objCard.getObjectiveStrategyAsString();
         else card[2] = emptyRow;
-        card[3] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyValue(), 2) : emptyRow;
+        card[3] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 2) : emptyRow;
         card[4] = card[0];
 
         for (int i = 1; i <= 3; i++) {

@@ -16,10 +16,10 @@ public class ViewOpponentHand extends ViewHand{
         isConnected = true;
     }
 
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return isConnected;
     }
-    public void setConnected(boolean connected) {
+    public synchronized void setConnected(boolean connected) {
         isConnected = connected;
     }
 

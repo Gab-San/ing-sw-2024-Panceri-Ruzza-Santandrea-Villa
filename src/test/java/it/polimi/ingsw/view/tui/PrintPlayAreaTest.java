@@ -97,9 +97,12 @@ public class PrintPlayAreaTest {
         Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(10, false));
 
         for(ViewPlaceableCard card : cards){
-            List<ViewCorner> rightCorners = playArea.getFreeCorners().stream()
-                    .filter(c -> c.getDirection() == TR || c.getDirection()==BR)
-                    .toList();
+            List<ViewCorner> rightCorners;
+            synchronized (playArea.getFreeCorners()) {
+                rightCorners = playArea.getFreeCorners().stream()
+                        .filter(c -> c.getDirection() == TR || c.getDirection() == BR)
+                        .toList();
+            }
             int randomCornerIdx = random.nextInt(rightCorners.size());
             ViewCorner corner = rightCorners.get(randomCornerIdx);
             Point position = corner.getCardRef().getPosition().move(corner.getDirection());

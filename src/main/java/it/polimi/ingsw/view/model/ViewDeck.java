@@ -13,30 +13,30 @@ public class ViewDeck<C extends ViewCard>{
         secondRevealed = null;
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return topCard == null;
     }
 
-    public C getTopCard() {
+    public synchronized C getTopCard() {
         return topCard;
     }
-    public void setTopCard(C card) {
+    public synchronized void setTopCard(C card) {
         if(card != null) card.turnFaceDown();
         this.topCard = card;
     }
 
-    public C getFirstRevealed() {
+    public synchronized C getFirstRevealed() {
         return firstRevealed;
     }
-    public void setFirstRevealed(C card) {
+    public synchronized void setFirstRevealed(C card) {
         if(card != null) card.turnFaceUp();
         this.firstRevealed = card;
     }
 
-    public C getSecondRevealed() {
+    public synchronized C getSecondRevealed() {
         return secondRevealed;
     }
-    public void setSecondRevealed(C card) {
+    public synchronized void setSecondRevealed(C card) {
         if(card != null) card.turnFaceUp();
         this.secondRevealed = card;
     }

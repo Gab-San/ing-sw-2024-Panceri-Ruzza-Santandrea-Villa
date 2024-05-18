@@ -52,39 +52,39 @@ public class ViewBoard {
         return objectiveCardViewDeck;
     }
 
-    public ViewPlayArea getPlayerArea(String nickname) {
+    public synchronized ViewPlayArea getPlayerArea(String nickname) {
         return playerAreas.get(nickname);
     }
-    public Map<String, Boolean> getPlayerDeadlocks() {
-        return isPlayerDeadlocked;
+    public synchronized boolean isPlayerDeadlocked(String nickname) {
+        return isPlayerDeadlocked.get(nickname);
     }
     public ViewPlayerHand getPlayerHand() {
         return playerHand;
     }
-    public ViewOpponentHand getOpponentHand(String nickname){
+    public synchronized ViewOpponentHand getOpponentHand(String nickname){
         return opponentHands.get(nickname);
     }
 
-    public int getCurrentTurn() {
+    public synchronized int getCurrentTurn() {
         return currentTurn;
     }
-    public void setCurrentTurn(int currentTurn) {
+    public synchronized void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
     }
 
-    public GamePhase getGamePhase() {
+    public synchronized GamePhase getGamePhase() {
         return gamePhase;
     }
-    public void setGamePhase(GamePhase gamePhase) {
+    public synchronized void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
     }
 
-    public void addPlayer(String nickname){
+    public synchronized void addPlayer(String nickname){
         playerAreas.put(nickname, new ViewPlayArea());
         opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
     }
-    public void removePlayer(String nickname){
+    public synchronized void removePlayer(String nickname){
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);

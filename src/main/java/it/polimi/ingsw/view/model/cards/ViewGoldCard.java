@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.GameResource;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,18 +15,18 @@ public class ViewGoldCard extends ViewPlayCard{
                         int pointsOnPlace, GameResource backResource, List<GameResource> placementCost, String strategyAsString) {
 
         super(cardID, imageFrontName, imageBackName, corners, pointsOnPlace, backResource);
-        this.placementCost = placementCost.stream().sorted(Comparator.comparingInt(GameResource::getResourceIndex)).toList();
+        this.placementCost = placementCost.stream().sorted(Comparator.comparingInt(GameResource::getResourceIndex)).toList(); // unmodifiable == thread-safe
         this.strategyAsString = strategyAsString;
     }
 
     @Override
     public String getPointsOnPlaceAsString() {
-        if(!isFaceUp || pointsOnPlace <= 0) return "";
+        if(!isFaceUp() || pointsOnPlace <= 0) return "";
         else return super.getPointsOnPlaceAsString() + " | " + strategyAsString;
     }
 
     public String getPlacementCostAsString(){
-        if(!isFaceUp) return "";
+        if(!isFaceUp()) return "";
         else return placementCost.stream()
                 .map(GameResource::toString)
                 .collect(Collectors.joining());

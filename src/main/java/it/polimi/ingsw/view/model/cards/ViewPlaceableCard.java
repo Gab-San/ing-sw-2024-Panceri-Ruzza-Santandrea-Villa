@@ -4,24 +4,25 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.Point;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class ViewPlaceableCard extends ViewCard{
-    Map<CornerDirection, ViewCorner> corners;
-    Point position;
+    private final Map<CornerDirection, ViewCorner> corners;
+    private Point position;
 
     public ViewPlaceableCard(String cardID, String imageFrontName, String imageBackName, List<ViewCorner> corners) {
         super(cardID, imageFrontName, imageBackName);
-        this.corners = new Hashtable<>();
-        position = null;
-        for(ViewCorner c : corners){
+
+        Map<CornerDirection, ViewCorner> thisCorners = new Hashtable<>();
+        for(ViewCorner c : corners) {
             ViewCorner corner = new ViewCorner(c);
             corner.setCardRef(this);
-            if(this.corners.put(corner.getDirection(), corner) != null)
+            if(thisCorners.put(corner.getDirection(), corner) != null)
                 throw new IllegalArgumentException("Corners with duplicate directions were passed in ViewPlaceableCard constructor");
         }
+
+        this.corners = Collections.unmodifiableMap(thisCorners);
+        this.position = null;
     }
 
     abstract public GameResource getCardColour();
@@ -32,10 +33,10 @@ public abstract class ViewPlaceableCard extends ViewCard{
         return corners.get(dir);
     }
 
-    public void setPosition(Point position) {
+    public synchronized void setPosition(Point position) {
         this.position = position;
     }
-    public Point getPosition(){
+    public synchronized Point getPosition(){
         return position;
     }
 }

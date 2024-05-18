@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.model;
 
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
@@ -14,12 +15,16 @@ public abstract class ViewHand {
     private final List<ViewPlayCard> cards;
     private ViewStartCard startCard;
     private final List<ViewObjectiveCard> secretObjectiveCards;
+    private PlayerColor color;
+    private int turn;
 
     public ViewHand(String nickname) {
         this.nickname = nickname;
-        this.cards = new LinkedList<>();
+        this.cards = Collections.synchronizedList(new LinkedList<>());
         startCard = null;
-        this.secretObjectiveCards = new LinkedList<>();
+        this.secretObjectiveCards = Collections.synchronizedList(new LinkedList<>());
+        color = null;
+        turn = 0;
     }
 
     public String getNickname(){
@@ -31,25 +36,39 @@ public abstract class ViewHand {
     public List<ViewObjectiveCard> getSecretObjectives(){
         return Collections.unmodifiableList(secretObjectiveCards);
     }
-    public ViewStartCard getStartCard(){
+
+    public synchronized ViewStartCard getStartCard(){
         return startCard;
     }
+    protected synchronized void setStartCard(ViewStartCard startCard){
+        this.startCard = startCard;
+    }
+    public synchronized void clearStartCard(){
+        startCard = null;
+    }
 
-    public void setCards(List<ViewPlayCard> cards){
+    public synchronized void setCards(List<ViewPlayCard> cards){
         this.cards.clear();
         if(cards == null) return;
         this.cards.addAll(cards);
     }
-    protected void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
+    protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         this.secretObjectiveCards.clear();
         if(secretObjectiveCards == null) return;
         this.secretObjectiveCards.addAll(secretObjectiveCards);
     }
-    protected void setStartCard(ViewStartCard startCard){
-        this.startCard = startCard;
+
+    public synchronized PlayerColor getColor() {
+        return color;
     }
-    public void clearStartCard(){
-        startCard = null;
+    public synchronized void setColor(PlayerColor color) {
+        this.color = color;
     }
 
+    public synchronized int getTurn() {
+        return turn;
+    }
+    public synchronized void setTurn(int turn) {
+        this.turn = turn;
+    }
 }

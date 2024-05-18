@@ -16,17 +16,24 @@ public abstract class ViewCard {
     public String getCardID(){
         return cardID;
     }
-    public boolean isFaceUp(){
+    public synchronized boolean isFaceUp(){
         return isFaceUp;
     }
-    public void flip(){
+    public synchronized void flip(){
         isFaceUp = !isFaceUp;
         // eventual GUI code here
     }
-    public void turnFaceUp(){
+    public synchronized void turnFaceUp(){
         if(!isFaceUp) flip();
     }
-    public void turnFaceDown(){
+    public synchronized void turnFaceDown(){
         if(isFaceUp) flip();
+    }
+
+    public String getImageFrontName() {
+        return imageFrontName;
+    }
+    public String getImageBackName() {
+        return imageBackName;
     }
 }
