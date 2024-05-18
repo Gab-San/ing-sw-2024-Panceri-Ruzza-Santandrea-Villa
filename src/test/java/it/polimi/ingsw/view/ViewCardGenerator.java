@@ -79,20 +79,20 @@ public class ViewCardGenerator {
         return new ViewGoldCard("G"+random.nextInt(40), "", "",
                 getRandomCornerList(), 1+random.nextInt(2), randColor, placementCost, "TEST");
     }
-    public static List<ViewPlaceableCard> getRandomResourceCards(int num, boolean allFront){
+    public static List<ViewPlayCard> getRandomResourceCards(int num, boolean allFront){
         return getRandomCards(num,allFront,Distribution.ONLY_RESOURCE);
     }
-    public static List<ViewPlaceableCard> getRandomGoldCards(int num, boolean allFront){
+    public static List<ViewPlayCard> getRandomGoldCards(int num, boolean allFront){
         return getRandomCards(num,allFront,Distribution.ONLY_GOLD);
     }
-    public static List<ViewPlaceableCard> getRandomCards(int num, boolean allFront){
+    public static List<ViewPlayCard> getRandomCards(int num, boolean allFront){
         return getRandomCards(num,allFront, Distribution.RANDOM);
     }
-    private static List<ViewPlaceableCard> getRandomCards(int num, boolean allFront, Distribution distribution){
+    private static List<ViewPlayCard> getRandomCards(int num, boolean allFront, Distribution distribution){
         setUp();
-        List<ViewPlaceableCard> cards = new LinkedList<>();
+        List<ViewPlayCard> cards = new LinkedList<>();
         for (int i = 0; i < num; i++) {
-            ViewPlaceableCard card =
+            ViewPlayCard card =
             switch (distribution){
                 case RANDOM -> random.nextBoolean() ? getRandomResourceCard() : getRandomGoldCard();
                 case ONLY_RESOURCE -> getRandomResourceCard();
@@ -138,6 +138,15 @@ public class ViewCardGenerator {
         }
         return new ViewObjectiveCard("O"+random.nextInt(16), "", "",
                 type, value.toString());
+    }
+    public static List<ViewObjectiveCard> getRandomObjectiveCards(int num){
+        setUp();
+        List<ViewObjectiveCard> cards = new LinkedList<>();
+        for (int i = 0; i < num; i++) {
+            ViewObjectiveCard card = getRandomObjectiveCard(random.nextBoolean());
+            cards.add(card);
+        }
+        return cards;
     }
 
 }

@@ -1,36 +1,39 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
-import it.polimi.ingsw.view.tui.PrintCard;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
 public class PrintObjectiveCardTest {
     static PrintCard printCard;
+    static final int REPETITIONS = 8;
 
     @BeforeAll
     static void setUp(){
         printCard = new PrintCard();
     }
+    @AfterEach
+    void println(){
+        System.out.println();
+    }
 
-    @RepeatedTest(4)
+    @RepeatedTest(REPETITIONS)
     void patternObjectivePrintTest(){
         ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(true);
         objectiveCard.turnFaceUp();
         printCard.printCard(objectiveCard);
     }
-    @RepeatedTest(4)
+    @RepeatedTest(REPETITIONS)
     void resourceObjectivePrintTest(){
         ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(false);
         objectiveCard.turnFaceUp();
         printCard.printCard(objectiveCard);
     }
-    @RepeatedTest(4)
+    @RepeatedTest(REPETITIONS)
     void objectiveBackPrintTest(){
         ViewObjectiveCard objectiveCard = ViewCardGenerator.getRandomObjectiveCard(new Random().nextBoolean());
         objectiveCard.turnFaceDown();

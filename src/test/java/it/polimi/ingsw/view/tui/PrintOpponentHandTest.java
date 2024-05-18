@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import static it.polimi.ingsw.view.ViewBoardGenerator.fillHandRandomly;
+
 public class PrintOpponentHandTest {
     static PrintHand printHand;
     static ViewOpponentHand hand;
@@ -24,14 +26,6 @@ public class PrintOpponentHandTest {
         random = new Random();
     }
 
-    static List<ViewPlayCard> getRandomPlayCardList(int num, boolean allFront){
-        List<ViewPlaceableCard> cardList = ViewCardGenerator.getRandomCards(num, allFront);
-        List<ViewPlayCard> playList = new LinkedList<>();
-        for(ViewPlaceableCard card : cardList){
-            playList.add((ViewPlayCard) card);
-        }
-        return playList;
-    }
     static List<ViewObjectiveCard> getRandomObjectiveCardList(){
         List<ViewObjectiveCard> objList = new LinkedList<>();
         Random random = new Random();
@@ -48,9 +42,7 @@ public class PrintOpponentHandTest {
         boolean front = random.nextBoolean();
         System.out.println(ConsoleTextColors.RED_TEXT + "(Front = " + front + ") Hand size = " + handSize + ConsoleTextColors.RESET);
         System.out.flush();
-        hand.setStartCard(ViewCardGenerator.getRandomStartingCard());
-        hand.setCards(getRandomPlayCardList(handSize, front));
-        hand.setSecretObjectiveCards(getRandomObjectiveCardList());
+        fillHandRandomly(hand);
         printHand.printHand();
         System.out.println("\n"); //2 line spacing
         System.out.flush();

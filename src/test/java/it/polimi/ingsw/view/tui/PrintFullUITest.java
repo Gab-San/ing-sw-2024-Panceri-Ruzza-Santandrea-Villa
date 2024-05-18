@@ -5,13 +5,10 @@ import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import static it.polimi.ingsw.CornerDirection.*;
-import static it.polimi.ingsw.view.ViewCardGenerator.*;
+import static it.polimi.ingsw.view.ViewBoardGenerator.*;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
-import static it.polimi.ingsw.view.tui.PrintPlayerHandTest.getRandomObjectiveCardList;
-import static it.polimi.ingsw.view.tui.PrintPlayerHandTest.getRandomPlayCardList;
 
 public class PrintFullUITest {
     final PrintPlayerUI printPlayerUI;
@@ -45,39 +42,6 @@ public class PrintFullUITest {
         printPlayerUI = new PrintPlayerUI(myHand, myPlayArea);
     }
 
-    void fillHandRandomly(ViewPlayerHand hand){
-        hand.setStartCard(getRandomStartingCard());
-        hand.setCards(getRandomPlayCardList(3, true));
-        hand.setSecretObjectiveCards(getRandomObjectiveCardList());
-    }
-    void fillHandRandomly(ViewOpponentHand hand){
-        hand.setStartCard(getRandomStartingCard());
-        hand.setCards(getRandomPlayCardList(3, true));
-        hand.setSecretObjectiveCards(getRandomObjectiveCardList());
-    }
-    void fillPlayAreaRandomly(ViewPlayArea playArea){
-        playArea.placeStarting(getRandomStartingCard());
-        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(30, false));
-        for(ViewPlaceableCard card : cards){
-            int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
-            ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
-            playArea.placeCard(position, card);
-        }
-    }
-    <C extends ViewCard> void fillDeckRandomly(ViewDeck<C> deck, Class<C> cardClass){
-        Supplier<C> cardMaker;
-        if (cardClass.equals(ViewResourceCard.class))
-            cardMaker = () -> (C) getRandomResourceCard();
-        else if (cardClass.equals(ViewGoldCard.class))
-            cardMaker = () -> (C) getRandomGoldCard();
-        else
-            cardMaker = () -> (C) getRandomObjectiveCard(random.nextBoolean());
-
-        deck.setTopCard(cardMaker.get());
-        deck.setFirstRevealed(cardMaker.get());
-        deck.setSecondRevealed(cardMaker.get());
-    }
 
     static void cls(){
         //TODO: delete \n screen before release (needed for IDE console cls)

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.PlayerColor;
+
 class ConsoleBackgroundColors {
     static final String RESET = "\u001B[00m";  //Resetta il colore
 
@@ -20,4 +23,24 @@ class ConsoleBackgroundColors {
     static final String PURPLE_BRIGHT = "\033[0;105m";
     static final String CYAN_BRIGHT = "\033[0;106m";
     static final String WHITE_BRIGHT = "\033[0;107m";
+
+    public static String getColorFromEnum(PlayerColor color){
+        if(color == null) return RESET;
+        return switch (color){
+            case BLUE -> BLUE;
+            case RED -> RED;
+            case GREEN -> GREEN;
+            case YELLOW -> YELLOW;
+        };
+    }
+    public static String getColorFromEnum(GameResource resource){
+        if(resource == null) return YELLOW;
+        return switch (resource){
+            case MUSHROOM -> RED;
+            case BUTTERFLY -> PURPLE;
+            case LEAF -> GREEN;
+            case WOLF -> BLUE;
+            default -> YELLOW;
+        };
+    }
 }

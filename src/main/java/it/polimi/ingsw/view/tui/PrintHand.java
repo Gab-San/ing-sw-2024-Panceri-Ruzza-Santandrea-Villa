@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.view.model.ViewHand;
 
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.RESET;
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,18 +17,6 @@ public class PrintHand {
         this.hand = hand;
     }
 
-    public void printCardsInHand(){
-        List<String[]> cardsAsStringRows = new LinkedList<>(hand.getCards().stream().map(printCard::getCardAsStringRows).toList());
-        printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
-    }
-    public void printSecretObjectives(){
-        List<String[]> cardsAsStringRows = new LinkedList<>(hand.getSecretObjectives().stream().map(printCard::getCardAsStringRows).toList());
-        printCard.printCardsSideBySide(cardsAsStringRows, cardSpacing);
-    }
-    public void printStartingCard(){
-        printCard.printCard(hand.getStartCard());
-    }
-
     private String pad(String str, int desiredLength){
         int diff = desiredLength - str.length();
         return diff > 0 ? str + printCard.getSpaces(diff) : str;
@@ -35,7 +26,14 @@ public class PrintHand {
         printHand(false);
     }
     public void printHand(boolean hideID){
-        System.out.println("Nickname: " + hand.getNickname());
+        System.out.print("Nickname: " + hand.getNickname());
+        if(hand.getTurn() > 0)
+            System.out.print("\t- Turn: " + hand.getTurn());
+        if(hand.getColor() != null){
+            System.out.print("\t- Color: " + getColorFromEnum(hand.getColor()) + " " + hand.getColor() + " " + RESET);
+        }
+
+        System.out.println();
 
         int cardLength = PrintCard.cornerStringAsSpacesLength*2 + PrintCard.cornerRowSpaceCount + cardSpacing;
         String headerLine = "";

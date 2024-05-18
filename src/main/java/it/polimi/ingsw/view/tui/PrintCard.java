@@ -17,24 +17,7 @@ public class PrintCard {
     private String colorCode;
 
     void setColorCode(GameResource color){
-        if(color == null) colorCode = YELLOW; //starting + objective have null card color
-        else switch (color) {
-            case MUSHROOM: //mushroom
-                colorCode = RED;
-                break;
-            case BUTTERFLY: //butterfly
-                colorCode = PURPLE;
-                break;
-            case LEAF: //leaf
-                colorCode = GREEN;
-                break;
-            case WOLF: //wolf
-                colorCode = BLUE;
-                break;
-            default: //starting + objective, use as default
-                colorCode = YELLOW;
-                break;
-        }
+        colorCode = getColorFromEnum(color);
     }
     private String insertID(String cardRow, String cardID){
         return cardRow.replace(
