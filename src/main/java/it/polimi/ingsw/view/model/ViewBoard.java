@@ -21,6 +21,7 @@ public class ViewBoard {
     private final Map<String, ViewOpponentHand> opponentHands;
     private final ViewPlayerHand playerHand;
     private final Map<String, Boolean> isPlayerDeadlocked;
+    private final Map<String, Integer> scoreboard;
 
     private int currentTurn;
     private GamePhase gamePhase;
@@ -34,6 +35,7 @@ public class ViewBoard {
         opponentHands = new Hashtable<>();
         playerHand = new ViewPlayerHand(nickname);
         isPlayerDeadlocked = new Hashtable<>();
+        scoreboard = new Hashtable<>();
 
         playerAreas.put(nickname, new ViewPlayArea());
         isPlayerDeadlocked.put(nickname, false);
@@ -66,6 +68,23 @@ public class ViewBoard {
         list.sort(Comparator.comparingInt(ViewHand::getTurn));
         return list;
     }
+    public synchronized List<ViewHand> getAllPlayerHands(){
+        List<ViewHand> nicknames = new LinkedList<>();
+        nicknames.add(playerHand);
+        nicknames.addAll(getOpponents());
+        return nicknames;
+    }
+
+    public synchronized int getScore(String nickname){
+        return scoreboard.get(nickname);
+    }
+    public synchronized void setScore(String nickname, int score){
+        scoreboard.put(nickname, score);
+    }
+    public synchronized boolean isEndgame(){
+        int maxScore = scoreboard.values().stream().max(Integer::compare).orElse(0);
+        return maxScore >= ENDGAME_SCORE;
+    }
 
     public synchronized int getCurrentTurn() {
         return currentTurn;
@@ -85,6 +104,7 @@ public class ViewBoard {
         playerAreas.put(nickname, new ViewPlayArea());
         opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
+        scoreboard.put(nickname, 0);
     }
     public synchronized void removePlayer(String nickname){
         playerAreas.remove(nickname);

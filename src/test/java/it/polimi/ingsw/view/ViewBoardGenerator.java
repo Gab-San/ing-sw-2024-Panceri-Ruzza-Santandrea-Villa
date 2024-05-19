@@ -25,6 +25,10 @@ public class ViewBoardGenerator {
         return colors[random.nextInt(colors.length)];
     }
 
+    public static int getRandomScore(){
+        return random.nextInt(30);
+    }
+
     public static void fillHandRandomly(ViewPlayerHand hand){
         hand.setStartCard(getRandomStartingCard());
         hand.setCards(getRandomCards(3, true));

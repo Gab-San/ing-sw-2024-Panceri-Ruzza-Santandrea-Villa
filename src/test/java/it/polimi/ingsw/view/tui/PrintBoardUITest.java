@@ -1,10 +1,13 @@
 package it.polimi.ingsw.view.tui;
 
+import static it.polimi.ingsw.view.ViewBoardGenerator.getRandomScore;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
 import it.polimi.ingsw.view.model.ViewBoard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Random;
 
@@ -18,6 +21,8 @@ public class PrintBoardUITest {
         board = new ViewBoard("testPlayer");
         printBoardUI = new PrintBoardUI(board);
         random = new Random();
+
+        randomScoresTest(); // set random scores
 
         board.getResourceCardDeck().setTopCard(getRandomResourceCard());
         board.getResourceCardDeck().setFirstRevealed(getRandomResourceCard());
@@ -75,4 +80,21 @@ public class PrintBoardUITest {
         board.getObjectiveCardDeck().setSecondRevealed(null);
     }
 
+    @ParameterizedTest
+    @ValueSource(ints={0,1,2,5,8,15,20,23,28,29})
+    void allPlayersOnSameScoreTest(int score){
+        board.getAllPlayerHands().forEach(h->board.setScore(h.getNickname(), score));
+    }
+    @Test
+    void randomScoresTest(){
+        board.getAllPlayerHands().forEach(h->board.setScore(h.getNickname(), getRandomScore()));
+    }
+    @Test
+    void endgameTest(){
+        board.getAllPlayerHands().forEach(h->board.setScore(h.getNickname(), getRandomScore()));
+        board.setScore(
+                board.getAllPlayerHands().stream().findAny().orElseThrow().getNickname(),
+                random.nextInt(10)+20
+        );
+    }
 }

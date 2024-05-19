@@ -29,10 +29,12 @@ public class PrintFullUITest {
         fillHandRandomly(myHand);
         ViewPlayArea myPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
         fillPlayAreaRandomly(myPlayArea);
+        board.setScore(myHand.getNickname(), getRandomScore());
 
         printOpponentUIMap = new Hashtable<>();
         for(String opponentNickname : new String[]{"Player2", "Player3", "Player4"}){
             board.addPlayer(opponentNickname);
+            board.setScore(opponentNickname, getRandomScore());
             fillHandRandomly(board.getOpponentHand(opponentNickname));
             fillPlayAreaRandomly(board.getPlayerArea(opponentNickname));
             PrintOpponentUI printOpponentUI = new PrintOpponentUI(board.getOpponentHand(opponentNickname), board.getPlayerArea(opponentNickname));

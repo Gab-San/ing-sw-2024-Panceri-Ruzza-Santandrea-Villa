@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.tui.printers.PrintCard;
 
@@ -12,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_BRIGHT_TEXT;
 
 public class PrintBoardUI implements Scene {
     static final int cardSpacing = 4;
@@ -25,7 +27,26 @@ public class PrintBoardUI implements Scene {
 
     @Override
     public void display(){
-        System.out.println("Central Board: \n");
+        System.out.print("Scoreboard:\t");
+        if(board.isEndgame())
+            System.out.print(YELLOW_BRIGHT_TEXT + "[ENDGAME]" + RESET);
+        System.out.println("\n");
+        for (int i = 0; i <= 29; i++) {
+            StringBuilder playersOnI = new StringBuilder();
+            List<ViewHand> hands = board.getAllPlayerHands();
+            for(ViewHand hand : hands){
+                if(board.getScore(hand.getNickname()) == i){
+                    String playerMarker = getColorFromEnum(hand.getColor()) + " " + RESET;
+                    playersOnI.append(playerMarker).append(" ");
+                }
+            }
+
+            if(i == ViewBoard.ENDGAME_SCORE) System.out.print(YELLOW_BRIGHT_TEXT + i + RESET);
+            else System.out.print(i);
+            System.out.print(" " + playersOnI + RESET);
+        }
+
+        System.out.println("\n\nCentral Board: \n");
 
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard()));
