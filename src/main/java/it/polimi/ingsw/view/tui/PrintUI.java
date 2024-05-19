@@ -4,6 +4,8 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.tui.printers.PrintHand;
+import it.polimi.ingsw.view.tui.printers.PrintPlayArea;
 
 public abstract class PrintUI implements Scene {
     protected final PrintPlayArea printPlayArea;

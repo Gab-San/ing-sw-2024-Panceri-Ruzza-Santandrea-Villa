@@ -1,10 +1,12 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
+import it.polimi.ingsw.view.tui.ConsoleBackgroundColors;
+import it.polimi.ingsw.view.tui.ConsoleTextColors;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 

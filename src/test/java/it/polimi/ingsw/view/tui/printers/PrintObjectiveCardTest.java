@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;

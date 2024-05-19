@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.GameResource;
@@ -25,7 +25,7 @@ public class PrintCard {
                 colorCode + getSpaces(cardIDSpacing) + cardID
         );
     }
-    String getSpaces(int length){
+    public String getSpaces(int length){
         return " ".repeat(Math.max(0, length));
     }
     private String getCornerRow(GameResource leftResource, GameResource rightResource, String centerString){

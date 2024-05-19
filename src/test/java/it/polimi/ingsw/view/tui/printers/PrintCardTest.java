@@ -1,11 +1,10 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.view.model.cards.*;
 import static it.polimi.ingsw.GameResource.*;
 import static it.polimi.ingsw.CornerDirection.*;
 
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.view.tui.PrintCard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

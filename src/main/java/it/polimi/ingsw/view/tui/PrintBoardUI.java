@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
+import it.polimi.ingsw.view.tui.printers.PrintCard;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.GREEN_TEXT;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
 
 public class PrintBoardUI implements Scene {
     static final int cardSpacing = 4;

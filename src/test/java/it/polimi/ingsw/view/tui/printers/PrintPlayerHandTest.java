@@ -1,6 +1,7 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.view.model.ViewPlayerHand;
+import it.polimi.ingsw.view.tui.ConsoleTextColors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

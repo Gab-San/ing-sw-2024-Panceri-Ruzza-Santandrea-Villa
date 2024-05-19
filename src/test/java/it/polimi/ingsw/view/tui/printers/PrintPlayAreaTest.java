@@ -1,9 +1,8 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
-import it.polimi.ingsw.view.tui.PrintPlayArea;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +13,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-import static it.polimi.ingsw.GameResource.*;
 import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
 
