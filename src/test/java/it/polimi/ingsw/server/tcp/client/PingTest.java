@@ -1,15 +1,11 @@
 package it.polimi.ingsw.server.tcp.client;
 
 import it.polimi.ingsw.server.CommandPassthrough;
-import it.polimi.ingsw.server.VirtualServer;
-import it.polimi.ingsw.server.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.server.tcp.server.TCPServerSocket;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PingTest {
 

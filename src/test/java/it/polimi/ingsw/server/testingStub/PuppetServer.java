@@ -28,7 +28,7 @@ public class PuppetServer {
                             handler.run();
                         }
                     } catch (IOException exception) {
-//                        exception.printStackTrace(System.err);
+                        System.err.println(exception.getMessage());
                         closeServer();
                     }
                 }
@@ -57,6 +57,7 @@ class ConnectionHandler {
             ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
             Object obj = inputStream.readObject();
+            System.out.println(obj);
         } catch (IOException e) {
             close();
         } catch (ClassNotFoundException e) {

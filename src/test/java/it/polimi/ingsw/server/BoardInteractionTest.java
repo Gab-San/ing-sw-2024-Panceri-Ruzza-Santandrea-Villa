@@ -131,4 +131,27 @@ public class BoardInteractionTest {
                 () -> cli3.getProxy().connect("SUSI")
         );
     }
+
+
+
+    @Test
+    void testSetNumOfPlayers3() throws RemoteException {
+        TCPClientSocket client;
+        try {
+            client = new TCPClientSocket("localhost", 8888);
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+
+        try {
+            client.getProxy().connect("Fuffy");
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        client.getProxy().setNumOfPlayers(4);
+        waitExecution(client,  1000);
+    }
+
 }

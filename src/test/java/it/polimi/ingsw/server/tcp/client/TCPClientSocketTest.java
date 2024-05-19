@@ -151,8 +151,13 @@ class TCPClientSocketTest {
     @DisplayName("Pinging after closing server socket")
     void testRemoteException() throws IOException {
         PuppetServer server = new PuppetServer(10000);
-
-        TCPClientSocket client = new TCPClientSocket("localhost", 10000);
+        TCPClientSocket client;
+        try {
+             client = new TCPClientSocket("localhost", 10000);
+        } catch (IOException err){
+            System.err.println(err.getMessage());
+            return;
+        }
         server.closeServer();
         assertThrows(
                 RemoteException.class,

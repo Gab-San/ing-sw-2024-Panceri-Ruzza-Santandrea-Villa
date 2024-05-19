@@ -25,9 +25,9 @@ public class TCPClientSocket implements VirtualClient{
 
     public TCPClientSocket(String hostAddr, int connectionPort) throws IOException{
         this.clientSocket = new Socket(hostAddr, connectionPort);
+        this.proxy = new ServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
-        this.proxy = new ServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
         startReader();
         startCommandExecutor();
     }

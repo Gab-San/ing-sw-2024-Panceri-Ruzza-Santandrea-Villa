@@ -38,7 +38,7 @@ public class SetupState extends GameState{
             board.reconnectPlayer(nickname);
             //TODO resubscribe player's client to observers
             //   and push current state to client (possibly done in board.replaceClient())
-        }catch (IllegalStateException e){
+        }catch (IllegalStateException| IllegalArgumentException e){
             throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE", e);
         }
     }

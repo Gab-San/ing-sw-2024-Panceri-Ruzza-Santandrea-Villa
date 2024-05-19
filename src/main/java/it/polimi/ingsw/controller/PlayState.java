@@ -1,12 +1,12 @@
 package it.polimi.ingsw.controller;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.cards.Corner;
+import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -16,12 +16,10 @@ import it.polimi.ingsw.server.VirtualClient;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
-    private TurnTimerController timerCurrPlayer;
+    private final TurnTimerController timerCurrPlayer;
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -59,7 +57,7 @@ public class PlayState extends GameState {
         //TODO implement disconnect
 
         if(board.getPlayerAreas().keySet().stream()
-                .map(Player::getNickname).filter((s)->{return s.equals(nickname);}).findAny().isEmpty())
+                .map(Player::getNickname).filter((s)-> s.equals(nickname)).findAny().isEmpty())
             //se non esiste un giocatore con quel nickname
             throw new IllegalArgumentException(nickname+" non fa parte della fartita, non può disconnettersi");
         board.disconnectPlayer(nickname);

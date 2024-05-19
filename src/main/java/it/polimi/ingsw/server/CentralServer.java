@@ -8,8 +8,6 @@ import it.polimi.ingsw.server.Commands.GameCommand;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
