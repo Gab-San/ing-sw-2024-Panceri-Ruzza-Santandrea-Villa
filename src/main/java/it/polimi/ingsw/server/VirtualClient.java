@@ -57,4 +57,8 @@ public interface VirtualClient extends Remote{
     void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException;
 
     void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException;
+
+    void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException;
+
+    void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;
 }

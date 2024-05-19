@@ -1,4 +1,4 @@
-package it.polimi.ingsw.listener.remote.events.stub;
+package it.polimi.ingsw.model.listener.remote.events.stub;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.PlayerColor;

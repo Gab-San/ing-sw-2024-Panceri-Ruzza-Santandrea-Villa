@@ -138,7 +138,7 @@ public class PlayerHand implements GameSubject {
      * @param secretObjective the objective card to add
      * @throws PlayerHandException if two objective cards were already dealt or the objective card was already in this hand
      */
-    public void setObjectiveCard(ObjectiveCard secretObjective) throws PlayerHandException {
+    public void addObjectiveCard(ObjectiveCard secretObjective) throws PlayerHandException {
         if(this.secretObjective.size() >= MAX_OBJECTIVES)
             throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
 
@@ -154,7 +154,7 @@ public class PlayerHand implements GameSubject {
      * @param drawCard the function that supplies the objective card to add
      * @throws PlayerHandException if two objective cards were already dealt or the objective card was already in this hand
      */
-    public void setObjectiveCard(Supplier<ObjectiveCard> drawCard) throws PlayerHandException {
+    public void addObjectiveCard(Supplier<ObjectiveCard> drawCard) throws PlayerHandException {
         if(this.secretObjective.size() >= MAX_OBJECTIVES)
             throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
         ObjectiveCard objectiveCard = drawCard.get();

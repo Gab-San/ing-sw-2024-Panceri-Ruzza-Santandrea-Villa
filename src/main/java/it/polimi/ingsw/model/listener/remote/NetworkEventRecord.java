@@ -23,8 +23,10 @@ public class NetworkEventRecord {
             this.notifyAll();
     }
 
-    public synchronized void subscribeClient(VirtualClient virtualClient){
-        clientUpdateStatus.put(virtualClient, 0);
+    public void subscribeClient(VirtualClient virtualClient){
+        synchronized (clientUpdateStatus) {
+            clientUpdateStatus.put(virtualClient, 0);
+        }
     }
 
     public void unlistClient(VirtualClient virtualClient){
@@ -34,8 +36,11 @@ public class NetworkEventRecord {
     }
 
     public List<NetworkEvent> getHistory(VirtualClient virtualClient){
+        Integer lastUpdate;
         synchronized (clientUpdateStatus) {
-            Integer lastUpdate = clientUpdateStatus.get(virtualClient);
+            lastUpdate = clientUpdateStatus.get(virtualClient);
+        }
+        synchronized (this) {
             return new LinkedList<>(eventsHistory.subList(lastUpdate, eventsHistory.size()));
         }
     }

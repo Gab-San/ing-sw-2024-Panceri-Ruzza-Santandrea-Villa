@@ -80,20 +80,20 @@ public class PlayerHandTest {
         ObjectiveCard obj3 = new ObjectiveCard(new PatternObjectiveStrategy(new PatternObjective("**G *P* G**")), 1);
         assertThrows(PlayerHandException.class, ()->hand.getSecretObjective());
 
-        hand.setObjectiveCard(obj1);
-        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj1));
+        hand.addObjectiveCard(obj1);
+        assertThrows(PlayerHandException.class, ()->hand.addObjectiveCard(obj1));
         assertEquals(obj1, obj1bis);
-        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj1bis));
+        assertThrows(PlayerHandException.class, ()->hand.addObjectiveCard(obj1bis));
 
-        hand.setObjectiveCard(obj2);
-        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj3));
+        hand.addObjectiveCard(obj2);
+        assertThrows(PlayerHandException.class, ()->hand.addObjectiveCard(obj3));
         assertEquals(2, hand.getObjectiveChoices().size());
 
         hand.chooseObjective(1);
         assertSame(hand.getSecretObjective(), obj1);
         assertEquals(1, hand.getObjectiveChoices().size());
 
-        assertThrows(PlayerHandException.class, ()->hand.setObjectiveCard(obj3));
+        assertThrows(PlayerHandException.class, ()->hand.addObjectiveCard(obj3));
     }
 
     @Test

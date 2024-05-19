@@ -27,7 +27,6 @@ public class UpdateTask implements Runnable{
     public void run() {
 
         while (true) {
-            NetworkEvent updateEvent;
             List<NetworkEvent> history = eventRecord.getHistory(client);
             ListIterator<NetworkEvent> iterator = history.listIterator();
 
@@ -43,7 +42,7 @@ public class UpdateTask implements Runnable{
 
             try {
                 while (iterator.hasNext()) {
-                    updateEvent = iterator.next();
+                    NetworkEvent updateEvent = iterator.next();
                     updateEvent.executeEvent(client);
                 }
                 int lastUpdate = iterator.nextIndex();

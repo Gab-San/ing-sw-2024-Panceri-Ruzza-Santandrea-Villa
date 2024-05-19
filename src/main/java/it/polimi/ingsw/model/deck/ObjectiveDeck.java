@@ -78,8 +78,8 @@ public class ObjectiveDeck implements GameSubject {
     public void reveal() {
         if(firstRevealed != null) return;
         firstRevealed = getCard();
-        secondRevealed = getCard();
         notifyAllListeners(new DeckRevealEvent(Board.OBJECTIVE_DECK, firstRevealed, PlayableDeck.FIRST_POSITION));
+        secondRevealed = getCard();
         notifyAllListeners(new DeckRevealEvent(Board.OBJECTIVE_DECK, secondRevealed, PlayableDeck.SECOND_POSITION));
     }
 

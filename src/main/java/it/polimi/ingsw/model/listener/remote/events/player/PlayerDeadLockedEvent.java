@@ -13,6 +13,6 @@ public class PlayerDeadLockedEvent extends PlayerEvent{
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-
+        virtualClient.playerDeadLockUpdate(nickname, isDeadLocked);
     }
 }

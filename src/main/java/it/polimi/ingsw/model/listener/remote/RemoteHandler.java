@@ -27,6 +27,12 @@ public class RemoteHandler implements GameListener{
 
 
     public void addClient(String nickname, VirtualClient client){
+        if(playerClients.containsValue(client)){
+            //TODO decide if to return an exception
+            System.err.println("Client already connected");
+            return;
+        }
+
         //Compiles the map
         playerClients.put(nickname, client);
         //Associates with an iterator
@@ -36,8 +42,8 @@ public class RemoteHandler implements GameListener{
     }
     public void removeClient(String nickname){
         VirtualClient virtualClient = playerClients.get(nickname);
-        eventRecord.unlistClient(virtualClient);
         eventRecord.forceRemoveTask(virtualClient);
+        eventRecord.unlistClient(virtualClient);
         playerClients.remove(nickname);
     }
     @Override

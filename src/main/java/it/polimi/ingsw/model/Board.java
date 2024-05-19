@@ -299,8 +299,8 @@ public class Board implements GameSubject{
             case OBJECTIVE_DECK:
                 //Maybe since we set the objectiveCards only when dealing, and we have a lambda,
                 //maybe we can use the lambda twice to draw two cards
-                playerHand.setObjectiveCard(objectiveDeck::getCard);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
-                playerHand.setObjectiveCard(objectiveDeck::getCard);   // so separating this is not necessary.
+                playerHand.addObjectiveCard(objectiveDeck::getCard);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
+                playerHand.addObjectiveCard(objectiveDeck::getCard);   // so separating this is not necessary.
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-dealable deck");
