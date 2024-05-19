@@ -463,8 +463,7 @@ public class Board implements GameSubject{
         joiningPlayerArea.addListener(remoteHandler);
         
         playerAreas.put(player, joiningPlayerArea);
-        //FIXME is this needed?
-        player.setTurn(playerAreas.size());
+
         setPlayerDeadLock(player, false);
     }
 
@@ -492,11 +491,6 @@ public class Board implements GameSubject{
                 .filter(p -> p.getTurn() > player.getTurn())
                 .forEach(p -> p.setTurn(p.getTurn()-1));
 
-        //FIXME check if this is correct
-
-        // fix current turn if it was another player's turn
-        if(currentTurn >= player.getTurn())
-            currentTurn--;
         //TODO Notify that the player was removed
         //TODO unsubscribe player from updates
         observableObjects.remove(player);
@@ -518,7 +512,6 @@ public class Board implements GameSubject{
      */
     public void reconnectPlayer(String nickname) throws IllegalStateException{
         Player player = getPlayerByNickname(nickname);
-        //FIXME Questo potrebbe creare errori?
         if(player.isConnected())
             throw new IllegalStateException("Player " + nickname + " is already connected.");
         else

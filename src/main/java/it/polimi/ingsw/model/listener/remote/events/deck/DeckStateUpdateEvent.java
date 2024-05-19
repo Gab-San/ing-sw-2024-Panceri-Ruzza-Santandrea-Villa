@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.listener.remote.events.deck;
 
+import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -22,7 +24,21 @@ public class DeckStateUpdateEvent extends DeckEvent{
         String topId = (topCard == null) ? null : topCard.getCardID();
         String firstId = (firstRevealedCard == null) ? null : firstRevealedCard.getCardID();
         String secondId = (secondRevealedCard == null) ? null : secondRevealedCard.getCardID();
+        if(topId == null && firstId == null && secondId == null){
+            virtualClient.createEmptyDeck(deck);
+            return;
+        }
 
+        if(topId == null && firstId == null){
+            virtualClient.createDeck(deck, secondId, PlayableDeck.SECOND_POSITION);
+            return;
+        }
+        if(topId == null && secondId == null){
+            virtualClient.createDeck(deck ,firstId, PlayableDeck.FIRST_POSITION);
+        }
+        if(topId == null){
+            virtualClient.createDeck(deck, firstId, secondId);
+        }
         virtualClient.createDeck(deck, topId, firstId, secondId);
     }
 }

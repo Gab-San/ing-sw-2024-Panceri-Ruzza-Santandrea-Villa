@@ -17,6 +17,8 @@ public interface VirtualClient extends Remote{
     void deckReveal(char deck, String revealedId, int cardPosition) throws RemoteException;
 
     void createDeck(char deck, String topId, String firstId, String secondId) throws RemoteException;
+    void createDeck(char deck, String revealedId, int cardPosition) throws RemoteException;
+    void createDeck(char deck, String firstId, String secondId) throws RemoteException;
 
     void deckUpdate(char deck, String cardID) throws RemoteException;
 
@@ -27,4 +29,10 @@ public interface VirtualClient extends Remote{
     void updateScore(String nickname, int score) throws RemoteException;
 
     void updateTurn(int currentTurn) throws RemoteException;
+
+    void emptyReveal(char deck, int cardPosition) throws RemoteException;
+
+    void createEmptyDeck(char deck) throws RemoteException;
+
+
 }

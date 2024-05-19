@@ -18,6 +18,10 @@ public class DeckRevealEvent extends DeckEvent{
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         String revealedId = (revealedCard == null) ? null : revealedCard.getCardID();
+        if(revealedId == null){
+            virtualClient.emptyReveal(deck, cardPosition);
+            return;
+        }
         virtualClient.deckReveal(deck, revealedId, cardPosition);
     }
 }

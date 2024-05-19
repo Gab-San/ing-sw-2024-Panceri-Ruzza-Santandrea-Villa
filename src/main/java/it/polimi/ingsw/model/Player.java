@@ -25,9 +25,9 @@ public class Player implements GameSubject {
 
     public Player(String nickname){
         gameListenerList = new LinkedList<>();
-
         this.nickname = nickname;
         isConnected = true;
+        turn = 0;
         hand = new PlayerHand(this);
     }
 
@@ -76,7 +76,7 @@ public class Player implements GameSubject {
     @Override
     public void addListener(GameListener listener) {
         gameListenerList.add(listener);
-        notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected,turn, color));
+        notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected, turn, color));
     }
 
     @Override

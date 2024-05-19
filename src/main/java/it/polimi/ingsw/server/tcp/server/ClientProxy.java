@@ -69,6 +69,16 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
+    public void createDeck(char deck, String revealedId, int cardPosition) throws RemoteException {
+
+    }
+
+    @Override
+    public void createDeck(char deck, String firstId, String secondId) throws RemoteException {
+
+    }
+
+    @Override
     public void deckUpdate(char deck, String cardID) throws RemoteException {
 
     }
@@ -90,6 +100,16 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public void updateTurn(int currentTurn) throws RemoteException {
+
+    }
+
+    @Override
+    public void emptyReveal(char deck, int cardPosition) throws RemoteException {
+
+    }
+
+    @Override
+    public void createEmptyDeck(char deck) throws RemoteException {
 
     }
 
