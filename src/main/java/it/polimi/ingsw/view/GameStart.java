@@ -13,13 +13,13 @@ public class GameStart {
         String gameMode = scanner.nextLine();
 
         if (gameMode.equalsIgnoreCase("GUI")) {
+            scanner.close();
             GUIStarter.startGUI();
         } else if (gameMode.equalsIgnoreCase("TUI")) {
+            scanner.close();
             TUIStarter.startTUI();
         } else {
             System.out.println("Modalità di gioco non valida.");
         }
-
-        scanner.close();
     }
 }

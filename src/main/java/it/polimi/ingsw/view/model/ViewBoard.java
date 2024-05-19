@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.model;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.view.model.cards.*;
 
@@ -8,13 +7,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class ViewBoard {
-    public static final int ENDGAME_SCORE = Board.ENDGAME_SCORE;
-    public static final int MAX_PLAYERS = Board.MAX_PLAYERS;
+    public static final int ENDGAME_SCORE = 20;
+    public static final int MAX_PLAYERS = 4;
 
-    public static final char STARTING_DECK = Board.STARTING_DECK;
-    public static final char OBJECTIVE_DECK = Board.OBJECTIVE_DECK;
-    public static final char RESOURCE_DECK = Board.RESOURCE_DECK;
-    public static final char GOLD_DECK = Board.GOLD_DECK;
+    public static final char OBJECTIVE_DECK = 'O';
+    public static final char RESOURCE_DECK = 'R';
+    public static final char GOLD_DECK = 'G';
 
     private final ViewDeck<ViewResourceCard> resourceCardDeck;
     private final ViewDeck<ViewGoldCard> goldCardDeck;
