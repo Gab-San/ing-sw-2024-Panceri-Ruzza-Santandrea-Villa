@@ -175,7 +175,7 @@ public class PlayerHand implements GameSubject {
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
         if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
-        ObjectiveCard removeCard = secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
+        secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
         MAX_OBJECTIVES = 1;
         notifyAllListeners(new PlayerHandChooseObjectiveCardEvent(playerRef.getNickname(), getSecretObjective()));
     }

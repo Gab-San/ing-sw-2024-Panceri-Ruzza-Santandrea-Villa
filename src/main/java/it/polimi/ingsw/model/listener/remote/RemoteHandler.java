@@ -18,17 +18,13 @@ public class RemoteHandler implements GameListener{
     private final Map<String, VirtualClient> playerClients;
     private final NetworkEventRecord eventRecord;
     private final ExecutorService updateThreadPool;
-    private static RemoteHandler instance;
-    private RemoteHandler() {
+
+    public RemoteHandler() {
         this.playerClients = new Hashtable<>();
         eventRecord = new NetworkEventRecord();
         updateThreadPool = Executors.newCachedThreadPool();
     }
 
-    public synchronized static RemoteHandler getInstance(){
-        if(instance == null) instance = new RemoteHandler();
-        return instance;
-    }
 
     public void addClient(String nickname, VirtualClient client){
         //Compiles the map

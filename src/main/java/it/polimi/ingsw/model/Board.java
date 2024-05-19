@@ -80,7 +80,7 @@ public class Board implements GameSubject{
         // Controlled in Board
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);
-        remoteHandler = RemoteHandler.getInstance();
+        remoteHandler = new RemoteHandler();
         subscribeListenerToAll(remoteHandler);
     }
 
@@ -146,10 +146,6 @@ public class Board implements GameSubject{
     public GamePhase getGamePhase() {
         return gamePhase;
     }
-    public void setGamePhase(GamePhase gamePhase) {
-        this.gamePhase = gamePhase;
-        notifyAllListeners(new ChangePhaseEvent(gamePhase));
-    }
     public Game getGameInfo(){
         return gameInfo;
     }
@@ -209,6 +205,11 @@ public class Board implements GameSubject{
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
+
+    public void setGamePhase(GamePhase gamePhase) {
+        this.gamePhase = gamePhase;
+        notifyAllListeners(new ChangePhaseEvent(gamePhase));
+    }
 //endregion
 
     /**
@@ -224,6 +225,11 @@ public class Board implements GameSubject{
             return true;
         }
         return false;
+    }
+
+    public void setPlayerDeadLock(Player player, boolean isDeadLocked){
+        isPlayerDeadlocked.put(player, isDeadLocked);
+        notifyAllListeners(new PlayerDeadLockedEvent(player.getNickname(), isDeadLocked));
     }
 
 //region DECKS METHODS
@@ -471,19 +477,16 @@ public class Board implements GameSubject{
         // Setting score on scoreboard
         setScore(player, 0);
         // Creating Playarea and listing as observable
-        PlayArea joiningPlayerArea = new PlayArea();
+        PlayArea joiningPlayerArea = new PlayArea(player.getNickname());
         observableObjects.add(joiningPlayerArea);
         joiningPlayerArea.addListener(remoteHandler);
-        
+
         playerAreas.put(player, joiningPlayerArea);
 
         setPlayerDeadLock(player, false);
     }
 
-    public void setPlayerDeadLock(Player player, boolean isDeadLocked){
-        isPlayerDeadlocked.put(player, isDeadLocked);
-        notifyAllListeners(new PlayerDeadLockedEvent(player.getNickname(), isDeadLocked));
-    }
+
 
 
     /**

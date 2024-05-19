@@ -1,10 +1,15 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
+import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 
 public interface VirtualClient extends Remote{
     void update(String msg) throws RemoteException;
@@ -44,4 +49,12 @@ public interface VirtualClient extends Remote{
     void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException;
 
     void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException;
+
+    void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException;
+
+    void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException;
+
+    void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException;
+
+    void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException;
 }

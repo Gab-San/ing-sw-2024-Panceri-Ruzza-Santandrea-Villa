@@ -4,16 +4,16 @@ package it.polimi.ingsw.model.enums;
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)
  */
 public enum CornerDirection {
-    TL("TOP LEFT"), TR("TOP RIGHT"), BL("BOTTOM LEFT"), BR("BOTTOM RIGHT");
+    TL("TL"), TR("TR"), BL("BL"), BR("BR");
     // Could be useful for debugging information or to display to the player
-    private final String extendedName;
-    CornerDirection(String extendedName){
-        this.extendedName = extendedName;
+    private final String stringId;
+    CornerDirection(String stringId){
+        this.stringId = stringId;
     }
 
     @Override
     public String toString() {
-        return extendedName;
+        return stringId;
     }
 
     /**

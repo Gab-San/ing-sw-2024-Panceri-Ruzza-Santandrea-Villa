@@ -11,19 +11,30 @@ import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.remote.events.playarea.FreeCornersUpdate;
+import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaPlacedCardEvent;
+import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
+import it.polimi.ingsw.model.listener.remote.events.playarea.VisibleResourcesUpdateEvent;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 
 public class PlayArea implements GameSubject {
+    private final String owner;
     private final Map<Point, PlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
-
+    private final List<GameListener> gameListeners;
     /**
      * Constructs PlayArea with empty cardMatrix, no visible resources and no freeCorners
      */
     public PlayArea(){
+        this(null);
+    }
+
+    public PlayArea(String owner){
+        this.owner = owner;
+        gameListeners = new LinkedList<>();
         cardMatrix = new Hashtable<>();
         visibleResources = new Hashtable<>();
         freeCorners = new LinkedList<>();
@@ -62,14 +73,16 @@ public class PlayArea implements GameSubject {
         Point cardPos = new Point(0,0);
         PlaceableCard card = startCard.setPosition(cardPos);
         cardMatrix.put(cardPos, card);
-
+        notifyAllListeners(new PlayAreaPlacedCardEvent(owner, card, cardPos));
         // add resources to visibleResources
         Map<GameResource, Integer> cardResources = card.getCardResources();
         for(GameResource r : cardResources.keySet()){
             visibleResources.put(r, cardResources.get(r));
         }
+        notifyAllListeners(new VisibleResourcesUpdateEvent(owner, visibleResources));
         // add corners to freeCorners
         freeCorners.addAll(card.getFreeCorners());
+        notifyAllListeners(new FreeCornersUpdate(owner, freeCorners));
     }
     /**
      * Places a card in cardMatrix and occupies corners, updates visibleResources and freeCorners
@@ -102,6 +115,7 @@ public class PlayArea implements GameSubject {
         // place card
         PlaceableCard card = playCard.setPosition(cardPos);
         cardMatrix.put(cardPos, card);
+        notifyAllListeners(new PlayAreaPlacedCardEvent(owner, card, cardPos));
 
         // update adjacent cards,
         // subtract covered corners' resources from visibleResources,
@@ -157,26 +171,31 @@ public class PlayArea implements GameSubject {
             );
 
         }
+        notifyAllListeners(new VisibleResourcesUpdateEvent(owner, visibleResources));
+        notifyAllListeners(new FreeCornersUpdate(owner, freeCorners));
         return (PlayCard) card;
     }
 
     @Override
     public void addListener(GameListener listener) {
-
+        gameListeners.add(listener);
+        notifyListener(listener, new PlayAreaStateUpdate(owner, cardMatrix, visibleResources, freeCorners));
     }
 
     @Override
     public void removeListener(GameListener listener) {
-
+        gameListeners.remove(listener);
     }
 
     @Override
     public void notifyAllListeners(GameEvent event) {
-
+        for(GameListener listener: gameListeners){
+            listener.listen(event);
+        }
     }
 
     @Override
     public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-
+        listener.listen(event);
     }
 }
