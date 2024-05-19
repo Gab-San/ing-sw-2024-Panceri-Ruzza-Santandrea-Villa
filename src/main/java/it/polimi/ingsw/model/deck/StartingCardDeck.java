@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.deck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StartingCardDeck {
+public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;
 
@@ -49,5 +48,6 @@ public class StartingCardDeck {
     protected int getRandomCard() {
         return new Random().nextInt(cardDeck.size());
     }
+
 
 }

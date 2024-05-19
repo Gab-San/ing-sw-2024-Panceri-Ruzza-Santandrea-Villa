@@ -1,42 +1,23 @@
-package it.polimi.ingsw.server.rmi;
+package it.polimi.ingsw.controller.stub;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.VirtualServer;
 
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
-public class RMIClient extends UnicastRemoteObject implements VirtualClient {
+import static com.diogonunes.jcolor.Ansi.colorize;
 
-    private final RMIServerProxy proxy;
-
-    public RMIClient(int registryPort) throws RemoteException, NotBoundException{
-        this("localhost", registryPort);
-    }
-    public RMIClient(String registryIP, int registryPort) throws RemoteException, NotBoundException {
-        super();
-        Registry registry = LocateRegistry.getRegistry(registryIP, registryPort);
-        VirtualServer server = (VirtualServer) registry.lookup(RMIServer.CANONICAL_NAME);
-        this.proxy = new RMIServerProxy(this, server);
-    }
-
+public class PuppetClient implements VirtualClient {
     @Override
     public void update(String msg) throws RemoteException {
-        System.out.println(msg); // temp function
+
     }
 
-    /**
-     * If a call to this function successfully returns, then this client is still connected
-     * @throws RemoteException on connection loss
-     */
     @Override
     public void ping() throws RemoteException {
-        return;
+        System.out.println(colorize("Pinging client...", Attribute.BLACK_TEXT(), Attribute.WHITE_BACK()));
     }
 
     @Override
@@ -92,9 +73,5 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public void updateTurn(int currentTurn) throws RemoteException {
 
-    }
-
-    public RMIServerProxy getProxy(){
-        return proxy;
     }
 }

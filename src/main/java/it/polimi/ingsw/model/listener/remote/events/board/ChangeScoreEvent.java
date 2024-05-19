@@ -1,0 +1,20 @@
+package it.polimi.ingsw.model.listener.remote.events.board;
+
+import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
+import it.polimi.ingsw.server.VirtualClient;
+
+import java.rmi.RemoteException;
+
+public class ChangeScoreEvent implements NetworkEvent {
+    private final String nickname;
+    private final int score;
+    public ChangeScoreEvent(String nickname, int score) {
+        this.nickname = nickname;
+        this.score = score;
+    }
+
+    @Override
+    public void executeEvent(VirtualClient virtualClient) throws RemoteException {
+        virtualClient.updateScore(nickname, score);
+    }
+}

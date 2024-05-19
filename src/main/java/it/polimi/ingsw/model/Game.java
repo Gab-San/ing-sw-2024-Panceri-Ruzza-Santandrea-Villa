@@ -2,33 +2,30 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.server.VirtualClient;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-// TODO: replace this class with observer pattern
 public class Game {
     private final String gameID;
-    private final Set<VirtualClient> clientList;
+    private final Map<String, VirtualClient> clientList;
 
     public Game(String gameID){
         this.gameID = gameID;
-        clientList = new HashSet<>();
+        clientList = new Hashtable<>();
     }
 
-    public void addClient(VirtualClient client){
+    public void addClient(String nickname, VirtualClient client){
         synchronized (clientList) {
-            clientList.add(client);
+            clientList.put(nickname, client);
         }
     }
-    public void removeClient(VirtualClient client){
+    public void removeClient(String nickname){
         synchronized (clientList) {
-            clientList.remove(client);
+            clientList.remove(nickname);
         }
     }
     public String getGameID(){
         return gameID;
     }
 
-    public Set<VirtualClient> getClientList(){return Collections.unmodifiableSet(clientList);}
+    public Map<String, VirtualClient> getClientList(){return Collections.unmodifiableMap(clientList);}
 }

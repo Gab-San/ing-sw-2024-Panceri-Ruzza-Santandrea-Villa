@@ -31,6 +31,7 @@ public class ObjectiveCard extends Card {
     }
 
     public ObjectiveCard(String cardID, ObjectiveStrategy strategy, int pointsPerSolve){
+        super(cardID);
         this.strategy = strategy;
         this.pointsPerSolve = pointsPerSolve;
     }
