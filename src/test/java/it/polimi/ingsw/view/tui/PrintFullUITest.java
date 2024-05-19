@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
@@ -66,8 +65,8 @@ public class PrintFullUITest {
         Scanner scanner = new Scanner(System.in);
 
         String input = ""; String error = "";
-        UI_Printer printUI = test.printPlayerUI;
-        printUI.printUI();
+        Scene printUI = test.printPlayerUI;
+        printUI.display();
         while (!input.matches("[qQ]|[qQ]uit")){
             printCommandLegend();
             System.out.print("Input command: ");
@@ -97,7 +96,7 @@ public class PrintFullUITest {
                 catch (IndexOutOfBoundsException e){ error = "Index too high!"; }
                 if(error.isEmpty()) {
                     cls();
-                    printUI.printUI();
+                    printUI.display();
                 }
             }
             else if(input.matches("[fF]lip [rRgGsS][0-9]?[0-9]|[fF]lip [sS]tarting")){
@@ -105,7 +104,7 @@ public class PrintFullUITest {
                 catch (IllegalArgumentException e){ error = e.getMessage(); }
                 if(error.isEmpty()) {
                     cls();
-                    printUI.printUI();
+                    printUI.display();
                 }
             }
 //            else if(input.matches("[lL]egend")){
@@ -121,7 +120,7 @@ public class PrintFullUITest {
                 }
                 if(error.isEmpty()) {
                     cls();
-                    printUI.printUI();
+                    printUI.display();
                 }
             }
             else if(input.matches("[vV]iew [a-zA-Z0-9]+")){
@@ -138,14 +137,14 @@ public class PrintFullUITest {
                 }
                 if(error.isEmpty()) {
                     cls();
-                    printUI.printUI();
+                    printUI.display();
                 }
             }
             else error = "Invalid command.";
 
             if(!error.isEmpty()) {
                 cls();
-                printUI.printUI();
+                printUI.display();
                 System.out.println(RED_TEXT + error + RESET);
                 error = "";
             }

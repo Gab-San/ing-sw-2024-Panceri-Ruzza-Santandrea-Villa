@@ -117,16 +117,21 @@ public class PrintCard {
 
         String[] card = new String[5];
         String emptyRow = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
-        card[0] = emptyRow;
+        int pointPerSolveLength = Integer.toString(objCard.getPointsPerSolve()).length();
+        if(objCard.isFaceUp())
+                                            //-1 is needed as middleRowSideSpaceCount already considers a character to print in the middle
+            card[0] = getSpaces(middleRowSideSpaceCount - (pointPerSolveLength-1)/2) + objCard.getPointsPerSolve() + getSpaces(middleRowSideSpaceCount + pointPerSolveLength%2);
+        else card[0] = emptyRow;
         card[1] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 0) : emptyRow;
         if(objCard.isFaceUp())
             card[2] = objCard.isPatternType() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 1) : objCard.getObjectiveStrategyAsString();
         else card[2] = emptyRow;
         card[3] = objCard.isPatternType() && objCard.isFaceUp() ? getPatternRow(objCard.getObjectiveStrategyAsString(), 2) : emptyRow;
-        card[4] = card[0];
+        card[4] = emptyRow;
 
         for (int i = 1; i <= 3; i++) {
-            int missingSpaces = card[0].length() - card[i].length();
+            int missingSpaces = emptyRow.length() - card[i].length();
+            if(missingSpaces < 0) continue;
             if(missingSpaces%2 > 0) card[i] += " ";
             String padding = getSpaces(missingSpaces/2);
             card[i] = padding + card[i] + padding;

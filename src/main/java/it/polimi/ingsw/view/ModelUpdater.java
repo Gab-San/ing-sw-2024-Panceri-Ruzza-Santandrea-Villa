@@ -51,9 +51,15 @@ public class ModelUpdater {
     private void deckCardTypeMismatch(){
         throw new IllegalArgumentException("Deck type and Card type mismatch");
     }
-    void createDeck(char deck, ViewCard topCard, ViewCard firstRevealed, ViewCard secondRevealed){
+    private void illegalArgument(){
+        throw new IllegalArgumentException("Illegal argument passed.");
+    }
+    void createDeck(char deck, String topCardId, String firstRevealedId, String secondRevealedId){
         try {
-            //FIXME: maybe just pass cardID and import from json?
+            //TODO: import from json
+            ViewCard topCard = null;
+            ViewCard firstRevealed = null;
+            ViewCard secondRevealed = null;
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
                     board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
@@ -84,7 +90,7 @@ public class ModelUpdater {
             case ViewBoard.OBJECTIVE_DECK -> board.getObjectiveCardDeck().getTopCard();
             default -> null;
         };
-        if(topCard == null || cardPosition > 2 || cardPosition < 1) return;
+        if(revealedId == null || cardPosition > 2 || cardPosition < 1) illegalArgument();
 
         if(!topCard.getCardID().equals(revealedId)){
             //TODO: import from JSON here
@@ -113,9 +119,10 @@ public class ModelUpdater {
             deckCardTypeMismatch();
         }
     }
-    void deckUpdate(char deck, ViewCard topCard){
+    void deckUpdate(char deck, String topCardId){
         try {
-            //FIXME: maybe just pass cardID and import from json?
+            //TODO: import from json
+            ViewCard topCard = null;
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
                     board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
@@ -143,6 +150,25 @@ public class ModelUpdater {
                 break;
             case ViewBoard.OBJECTIVE_DECK:
                 board.getObjectiveCardDeck().setTopCard(null);
+                break;
+            default: return;
+        }
+    }
+    void emptyReveal(char deck, int position){
+        if(position > 2 || position < 1) illegalArgument();
+        boolean first = position == 1;
+        switch (deck) {
+            case ViewBoard.RESOURCE_DECK:
+                if (first) board.getResourceCardDeck().setFirstRevealed(null);
+                else board.getResourceCardDeck().setSecondRevealed(null);
+                break;
+            case ViewBoard.GOLD_DECK:
+                if (first) board.getGoldCardDeck().setFirstRevealed(null);
+                else board.getGoldCardDeck().setSecondRevealed(null);
+                break;
+            case ViewBoard.OBJECTIVE_DECK:
+                if (first) board.getObjectiveCardDeck().setFirstRevealed(null);
+                else board.getObjectiveCardDeck().setSecondRevealed(null);
                 break;
             default: return;
         }

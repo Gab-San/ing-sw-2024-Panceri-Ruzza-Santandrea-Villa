@@ -1,14 +1,20 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewOpponentHand;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrintBoardUI implements UI_Printer {
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.GREEN_TEXT;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
+
+public class PrintBoardUI implements Scene {
     static final int cardSpacing = 4;
     PrintCard printCard;
     ViewBoard board;
@@ -19,7 +25,7 @@ public class PrintBoardUI implements UI_Printer {
     }
 
     @Override
-    public void printUI(){
+    public void display(){
         System.out.println("Central Board: \n");
 
         List<String[]> deckBacks = new LinkedList<>();
@@ -49,15 +55,20 @@ public class PrintBoardUI implements UI_Printer {
         printCard.printCardsSideBySide(deckBacks, cardSpacing);
         printCard.printCardsSideBySide(deckFirstRevealed, cardSpacing);
         printCard.printCardsSideBySide(deckSecondRevealed, cardSpacing);
+
+        String myColor = getColorFromEnum(board.getPlayerHand().getColor());
+        System.out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
+        for(ViewOpponentHand opponent : board.getOpponents()){
+            System.out.print("\t\t" + getColorFromEnum(opponent.getColor()) + " " + opponent.getNickname() + " " + RESET);
+        }
+        System.out.println();
     }
 
     @Override
-    public void moveView(CornerDirection... cornerDirections) {
-        printUI();
-    }
-
+    public void moveView(CornerDirection... cornerDirections) { display(); }
     @Override
-    public void setCenter(int row, int col) {
-        printUI();
-    }
+    public void setCenter(int row, int col) { display(); }
+    @Override
+    public void setCenter(Point center) { display(); }
+
 }

@@ -34,7 +34,7 @@ public class PrintBoardUITest {
 
     @AfterEach
     void printUI(){
-        printBoardUI.printUI();
+        printBoardUI.display();
         System.out.println("End of Board test print.\n\n");
     }
 

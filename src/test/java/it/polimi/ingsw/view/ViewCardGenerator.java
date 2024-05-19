@@ -137,7 +137,7 @@ public class ViewCardGenerator {
             }
         }
         return new ViewObjectiveCard("O"+random.nextInt(16), "", "",
-                type, value.toString());
+                type, random.nextInt(15) ,  value.toString());
     }
     public static List<ViewObjectiveCard> getRandomObjectiveCards(int num){
         setUp();

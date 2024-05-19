@@ -9,7 +9,7 @@ public class PrintPlayerUI extends PrintUI {
     }
 
     @Override
-    public void printUI(){
+    public void display(){
         System.out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 

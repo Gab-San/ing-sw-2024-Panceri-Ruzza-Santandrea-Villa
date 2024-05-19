@@ -3,8 +3,7 @@ package it.polimi.ingsw.view.model;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.view.model.cards.*;
 
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 public class ViewBoard {
     public static final int ENDGAME_SCORE = 20;
@@ -61,6 +60,11 @@ public class ViewBoard {
     }
     public synchronized ViewOpponentHand getOpponentHand(String nickname){
         return opponentHands.get(nickname);
+    }
+    public synchronized List<ViewOpponentHand> getOpponents(){
+        List<ViewOpponentHand> list = new LinkedList<>(opponentHands.values());
+        list.sort(Comparator.comparingInt(ViewHand::getTurn));
+        return list;
     }
 
     public synchronized int getCurrentTurn() {
