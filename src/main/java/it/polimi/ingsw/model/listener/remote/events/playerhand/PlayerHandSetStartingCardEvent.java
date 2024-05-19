@@ -1,0 +1,20 @@
+package it.polimi.ingsw.model.listener.remote.events.playerhand;
+
+import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
+import it.polimi.ingsw.server.VirtualClient;
+
+import java.rmi.RemoteException;
+
+public class PlayerHandSetStartingCardEvent extends PlayerEvent {
+    private final String startingCardId;
+    public PlayerHandSetStartingCardEvent(String nickname, StartingCard startingCard) {
+        super(nickname);
+        startingCardId = startingCard.getCardID();
+    }
+
+    @Override
+    public void executeEvent(VirtualClient virtualClient) throws RemoteException {
+        virtualClient.playerHandSetStartingCard(nickname, startingCardId);
+    }
+}

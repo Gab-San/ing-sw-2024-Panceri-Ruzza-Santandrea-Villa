@@ -19,8 +19,7 @@ import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.GameSubject;
-import it.polimi.ingsw.model.listener.remote.events.board.BoardStateUpdateEvent;
-import it.polimi.ingsw.model.listener.remote.events.board.ChangeScoreEvent;
+import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
 import it.polimi.ingsw.server.VirtualClient;
 
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 
 public class Board implements GameSubject{
     public static final int ENDGAME_SCORE = 20;
+    public static final int MAX_PLAY_SCORE = 29;
     public static final int MAX_PLAYERS = 4;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
@@ -60,14 +60,15 @@ public class Board implements GameSubject{
         gameListeners = new LinkedList<>();
 
         // Controlled in Board
-        currentTurn = 1;
+        setCurrentTurn(1);
         // Controlled in Board
         scoreboard = new Hashtable<>();
         // Probably should notify
         playerAreas = new Hashtable<>();
         gameInfo = new Game(gameID);
         // Controlled in Board
-        gamePhase = GamePhase.CREATE;
+        setGamePhase(GamePhase.CREATE);
+
         resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
         goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
         observableObjects.add(resourceDeck);
@@ -75,6 +76,7 @@ public class Board implements GameSubject{
         objectiveDeck = new ObjectiveDeck();
         observableObjects.add(objectiveDeck);
         startingDeck = new StartingCardDeck();
+
         // Controlled in Board
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);
@@ -105,6 +107,7 @@ public class Board implements GameSubject{
     }
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
+        notifyAllListeners(new ChangeTurnEvent(currentTurn));
     }
     /**
      * Increments currentTurn, unless it's the last turn (turn == num players) in which case it sets currentTurn to 1. <br>
@@ -127,11 +130,13 @@ public class Board implements GameSubject{
         List<Player> playersByTurn = getPlayersByTurn();
         do {
             if(currentTurn >= playerAreas.size())
-                currentTurn = 1;
-            else
-                currentTurn++;
+                setCurrentTurn(1);
+            else {
+                int nextTurn = currentTurn + 1;
+                setCurrentTurn(nextTurn);
+            }
             nextPlayer = playersByTurn.get(currentTurn-1);
-        }while(!nextPlayer.isConnected() || isPlayerDeadlocked.get(nextPlayer));
+        } while(!nextPlayer.isConnected() || isPlayerDeadlocked.get(nextPlayer));
 
         return true;
     }
@@ -143,6 +148,7 @@ public class Board implements GameSubject{
     }
     public void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
+        notifyAllListeners(new ChangePhaseEvent(gamePhase));
     }
     public Game getGameInfo(){
         return gameInfo;
@@ -197,6 +203,9 @@ public class Board implements GameSubject{
         setScore(player, newScore);
     }
     protected void setScore(Player player, int score){
+        if(gamePhase != GamePhase.EVALOBJ && score > MAX_PLAY_SCORE){
+            score = 29;
+        }
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
@@ -206,11 +215,15 @@ public class Board implements GameSubject{
      * @return true if any player has a score >= ENDGAME_SCORE or if both decks are empty <br>
      */
     public boolean checkEndgame(){
-        return scoreboard.values().stream()
+        if(scoreboard.values().stream()
                 .anyMatch(
                         score -> score >= ENDGAME_SCORE
                         || (resourceDeck.isEmpty() && goldDeck.isEmpty())
-                );
+                )){
+            notifyAllListeners(new EndgameCheckEvent());
+            return true;
+        }
+        return false;
     }
 
 //region DECKS METHODS

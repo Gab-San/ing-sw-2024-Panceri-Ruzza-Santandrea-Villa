@@ -3,7 +3,12 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.StartingCard;
+import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.events.playerhand.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,19 +16,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PlayerHand{
+public class PlayerHand implements GameSubject {
     static final int MAX_CARDS = 3;
     private final List<PlayCard> cards;
     private final List<ObjectiveCard> secretObjective;
     private StartingCard startingCard;
     private int MAX_OBJECTIVES;
     private final Player playerRef;
+    private final List<GameListener> gameListenerList;
 
     /**
      * Constructs a completely empty hand
      * @param playerRef the player who owns this hand
      */
     PlayerHand(Player playerRef){
+        this.gameListenerList = new LinkedList<>();
         cards = new LinkedList<>();
         secretObjective = new ArrayList<>(2);
         startingCard = null;
@@ -79,7 +86,11 @@ public class PlayerHand{
      */
     public PlayCard popCard(int pos) throws IndexOutOfBoundsException{
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
-        else return cards.remove(pos);
+        else {
+            PlayCard poppedCard = cards.remove(pos);
+            notifyAllListeners(new PlayerHandRemoveCardEvent(playerRef.getNickname(), poppedCard));
+            return poppedCard;
+        }
     }
 
     /**
@@ -89,11 +100,14 @@ public class PlayerHand{
      */
     public void addCard(@NotNull Supplier<PlayCard> drawCard) throws PlayerHandException{
         if(isHandFull()) throw new PlayerHandException("Too many cards in hand!", playerRef);
-        cards.add(drawCard.get());
+        PlayCard drawnCard = drawCard.get();
+        notifyAllListeners(new PlayerHandDrawEvent(playerRef.getNickname(), drawnCard));
+        cards.add(drawnCard);
     }
     public boolean isHandFull() {
         return cards.size() >= MAX_CARDS;
     }
+
     /**
      * Removes the given card to this hand
      * @param card the card to remove
@@ -103,7 +117,8 @@ public class PlayerHand{
         if(!containsCard(card)) throw new PlayerHandException("Card wasn't in hand!", playerRef, card.getClass());
         for (int i = 0; i < cards.size(); i++) {
             if(cards.get(i) == card) {
-                cards.remove(i); // need this loop as cards.remove(card) would use the .equals method
+                PlayCard cardToRemove = cards.remove(i); // need this loop as cards.remove(card) would use the .equals method
+                notifyAllListeners(new PlayerHandRemoveCardEvent(playerRef.getNickname(), cardToRemove));
                 return;
             }
         }
@@ -131,6 +146,7 @@ public class PlayerHand{
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
 
         this.secretObjective.add(secretObjective);
+        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), secretObjective));
     } 
     
     /**
@@ -141,14 +157,16 @@ public class PlayerHand{
     public void setObjectiveCard(Supplier<ObjectiveCard> drawCard) throws PlayerHandException {
         if(this.secretObjective.size() >= MAX_OBJECTIVES)
             throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
-
-        this.secretObjective.add(drawCard.get());
+        ObjectiveCard objectiveCard = drawCard.get();
+        this.secretObjective.add(objectiveCard);
+        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
     }
     
     
     public List<ObjectiveCard> getObjectiveChoices() {
         return secretObjective;
     }
+
     /**
      * @param choice index of the chosen secret objective (1 or 2)
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
@@ -157,9 +175,9 @@ public class PlayerHand{
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
         if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
-
-        secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
+        ObjectiveCard removeCard = secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
         MAX_OBJECTIVES = 1;
+        notifyAllListeners(new PlayerHandChooseObjectiveCardEvent(playerRef.getNickname(), getSecretObjective()));
     }
 
     /**
@@ -180,6 +198,7 @@ public class PlayerHand{
             throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
         }
         this.startingCard = startingCard;
+        notifyAllListeners(new PlayerHandSetStartingCardEvent(playerRef.getNickname(), startingCard));
     }
     
     /**
@@ -188,12 +207,34 @@ public class PlayerHand{
      * @throws PlayerHandException if the starting card was already dealt
      */
     public void setStartingCard(Supplier<StartingCard> drawCard){
-        //FIXME: Is this exception needed?
         if(this.startingCard != null){
             throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
         }
         this.startingCard = drawCard.get();
+        notifyAllListeners(new PlayerHandSetStartingCardEvent(playerRef.getNickname(), startingCard));
     }
 
+    @Override
+    public void addListener(GameListener listener) {
+        gameListenerList.add(listener);
+        notifyListener(listener, new PlayerHandStateUpdateEvent(playerRef.getNickname(), cards, secretObjective, startingCard));
+    }
+
+    @Override
+    public void removeListener(GameListener listener) {
+        gameListenerList.remove(listener);
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) {
+        for(GameListener listener: gameListenerList){
+            listener.listen(event);
+        }
+    }
+
+    @Override
+    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+        listener.listen(event);
+    }
 }
 

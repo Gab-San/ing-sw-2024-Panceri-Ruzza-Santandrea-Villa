@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.listener.remote.events.deck;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.server.VirtualClient;
@@ -30,15 +29,15 @@ public class DeckStateUpdateEvent extends DeckEvent{
         }
 
         if(topId == null && firstId == null){
-            virtualClient.createDeck(deck, secondId, PlayableDeck.SECOND_POSITION);
+            virtualClient.setDeckState(deck, secondId, PlayableDeck.SECOND_POSITION);
             return;
         }
         if(topId == null && secondId == null){
-            virtualClient.createDeck(deck ,firstId, PlayableDeck.FIRST_POSITION);
+            virtualClient.setDeckState(deck ,firstId, PlayableDeck.FIRST_POSITION);
         }
         if(topId == null){
-            virtualClient.createDeck(deck, firstId, secondId);
+            virtualClient.setDeckState(deck, firstId, secondId);
         }
-        virtualClient.createDeck(deck, topId, firstId, secondId);
+        virtualClient.setDeckState(deck, topId, firstId, secondId);
     }
 }

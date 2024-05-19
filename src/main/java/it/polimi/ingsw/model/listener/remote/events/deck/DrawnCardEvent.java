@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.listener.remote.events.deck;
 
 import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.deck.PlayableDeck;
 import it.polimi.ingsw.server.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -18,6 +19,6 @@ public class DrawnCardEvent extends DeckEvent{
             virtualClient.emptyDeck(deck);
             return;
         }
-        virtualClient.deckUpdate(deck, topCard.getCardID());
+        virtualClient.deckUpdate(deck, topCard.getCardID(), PlayableDeck.TOP_POSITION);
     }
 }

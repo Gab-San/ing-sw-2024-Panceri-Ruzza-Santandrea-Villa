@@ -24,7 +24,7 @@ public class PlayableDeck implements GameSubject {
     private PlayCard firstRevealedCard;
     private PlayCard secondRevealedCard;
     private final char deckType;
-
+    public static final int TOP_POSITION = 0;
     public static final int FIRST_POSITION = 1;
     public static final int SECOND_POSITION = 2;
     private final List<GameListener> gameListenerList;

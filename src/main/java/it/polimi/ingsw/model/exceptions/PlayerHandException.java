@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.exceptions;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerHand;
-import it.polimi.ingsw.model.cards.Card;
 
 public class PlayerHandException extends PlayerException{
-    private Class<?> cardClass;
+    private final Class<?> cardClass;
     public PlayerHandException(Player player,Class<?> cardClass){
         super(player);
         this.cardClass = cardClass;

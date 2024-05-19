@@ -22,6 +22,6 @@ public class DeckRevealEvent extends DeckEvent{
             virtualClient.emptyReveal(deck, cardPosition);
             return;
         }
-        virtualClient.deckReveal(deck, revealedId, cardPosition);
+        virtualClient.deckUpdate(deck, revealedId, cardPosition);
     }
 }

@@ -77,6 +77,7 @@ public class Player implements GameSubject {
     public void addListener(GameListener listener) {
         gameListenerList.add(listener);
         notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected, turn, color));
+        hand.addListener(listener);
     }
 
     @Override

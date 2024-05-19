@@ -186,7 +186,6 @@ public class SetupState extends GameState{
 
     private void nextState() throws IllegalStateException {
         board.setGamePhase(GamePhase.CHOOSEFIRSTPLAYER);
-        board.setCurrentTurn(1);
         List<Player> players = new LinkedList<>(board.getPlayerAreas().keySet());
         final int numOfPlayers = players.size();
         Random random = new Random();

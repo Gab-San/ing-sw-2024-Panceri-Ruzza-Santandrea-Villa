@@ -154,34 +154,30 @@ public boolean isClosed(){
     }
 
     @Override
-    public void createPlayer(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 
     @Override
-    public void deckReveal(char deck, String revealedId, int cardPosition) throws RemoteException {
+    public void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException {
 
     }
 
     @Override
-    public void createDeck(char deck, String topId, String firstId, String secondId) throws RemoteException {
+    public void setDeckState(char deck, String topId, String firstId, String secondId) throws RemoteException {
 
     }
 
     @Override
-    public void createDeck(char deck, String revealedId, int cardPosition) throws RemoteException {
+    public void setDeckState(char deck, String revealedId, int cardPosition) throws RemoteException {
 
     }
 
     @Override
-    public void createDeck(char deck, String firstId, String secondId) throws RemoteException {
+    public void setDeckState(char deck, String firstId, String secondId) throws RemoteException {
 
     }
 
-    @Override
-    public void deckUpdate(char deck, String cardID) throws RemoteException {
-
-    }
 
     @Override
     public void emptyDeck(char deck) throws RemoteException {
@@ -210,6 +206,21 @@ public boolean isClosed(){
 
     @Override
     public void createEmptyDeck(char deck) throws RemoteException {
+
+    }
+
+    @Override
+    public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
+
+    }
+
+    @Override
+    public void playerHandDrawUpdate(String nickname, String drawnCardId) throws RemoteException {
+
+    }
+
+    @Override
+    public void playerHandRemoveCard(String nickname, String playCardId) throws RemoteException {
 
     }
 

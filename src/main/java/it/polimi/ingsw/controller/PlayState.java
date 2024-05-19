@@ -23,6 +23,7 @@ public class PlayState extends GameState {
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
+        board.setCurrentTurn(1);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
         timerCurrPlayer=new TurnTimerController(controller);

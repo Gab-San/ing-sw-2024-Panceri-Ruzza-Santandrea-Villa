@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.exceptions;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerHand;
 
 public class PlayerException extends RuntimeException{
-    private Player player;
+    private final Player player;
     public PlayerException(String msg, Player player){
         super(msg);
         this.player = player;
