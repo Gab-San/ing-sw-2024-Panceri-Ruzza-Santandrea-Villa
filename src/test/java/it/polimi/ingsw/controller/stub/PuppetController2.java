@@ -7,7 +7,7 @@ import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ public class PuppetController2 extends BoardController {
     private final Board board;
     private final TurnTimerController turnTimerController;
     private final List<String> connectedNicks;
-    public PuppetController2(String gameID) throws DeckInstantiationException {
-        super(gameID);
-        board = new Board(gameID);
+    public PuppetController2() throws DeckInstantiationException {
+        super();
+        board = new Board();
         this.turnTimerController = new TurnTimerController(this);
         connectedNicks = new ArrayList<>();
     }

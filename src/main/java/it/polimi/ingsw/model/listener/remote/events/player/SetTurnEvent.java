@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.player;
 
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 

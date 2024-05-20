@@ -17,7 +17,7 @@ public class JoinStateTest {
     private final String playerNickname = "Flavio";
 
     private void setUp(int numOfPlayers){
-        controller = new BoardController("Flavio's Game");
+        controller = new BoardController();
         controller.join(playerNickname, new PuppetClient());
         controller.setNumOfPlayers(playerNickname, numOfPlayers);
         board = controller.getGameState().board;
@@ -46,14 +46,7 @@ public class JoinStateTest {
         assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
     }
 
-    //FIXME non ho idea di cosa testi questo test
-//    @Test
-//    public void joinTest() {
-//        setUp(4);
-//        assertThrows(IllegalStateException.class, () -> controller.join("RAND", null), "Join doesn't throw IllegalStateException with client==null");
-//        assertThrows(IllegalStateException.class, () -> controller.join("RAND", new PuppetClient()), "Join doesn't throw IllegalStateException after full lobby");
-//    }
-//
+
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4,5,6})
     public void setNumOfPlayersTest(int i) {

@@ -37,8 +37,7 @@ public abstract class CardFactory{
         try(BufferedReader reader = Files.newBufferedReader(filePath, charset)){
             reader.lines().flatMap(e -> Arrays.stream(e.trim().split("\\s+"))).forEach(idList::add);
         } catch(IOException ioException){
-            // TODO: [GAMBA] Handle exception
-            ioException.printStackTrace(System.err);
+            System.exit(-1);
         }
         return idList;
     }

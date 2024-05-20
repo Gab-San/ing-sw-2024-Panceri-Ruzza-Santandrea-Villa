@@ -22,7 +22,7 @@ public class SetupStateTest {
     private final String playerNickname = "Flavio";
 
     public void setUp(int numOfPlayers) {
-        controller = new BoardController("Flavio's Game");
+        controller = new BoardController();
         controller.join(playerNickname, new PuppetClient());
         controller.setNumOfPlayers(playerNickname, numOfPlayers);
         board = controller.getGameState().board;

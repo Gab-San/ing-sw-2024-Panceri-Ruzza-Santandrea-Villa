@@ -185,7 +185,8 @@ public class PlayerHand implements GameSubject {
      * @throws PlayerHandException if starting card was not dealt
      */
     public StartingCard getStartingCard() throws PlayerHandException {
-        if(startingCard == null) throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
+        if(startingCard == null)
+            throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }
     /**
@@ -206,13 +207,19 @@ public class PlayerHand implements GameSubject {
      * @param drawCard the function the draws the startingCard
      * @throws PlayerHandException if the starting card was already dealt
      */
-    public void setStartingCard(Supplier<StartingCard> drawCard){
+    public void setStartingCard(Supplier<StartingCard> drawCard) throws PlayerHandException {
         if(this.startingCard != null){
             throw new PlayerHandException("Starting Card already set", playerRef, StartingCard.class);
         }
         this.startingCard = drawCard.get();
         notifyAllListeners(new PlayerHandSetStartingCardEvent(playerRef.getNickname(), startingCard));
     }
+
+
+    public Player getPlayerRef(){
+        return playerRef;
+    }
+
 
     @Override
     public void addListener(GameListener listener) {

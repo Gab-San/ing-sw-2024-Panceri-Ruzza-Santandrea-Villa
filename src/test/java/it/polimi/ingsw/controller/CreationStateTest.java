@@ -21,7 +21,7 @@ public class CreationStateTest {
     private final String playerNickname = "Flavio";
     @BeforeEach
     public void setUpcontroller(){
-        controller = new BoardController("Gamba Game");
+        controller = new BoardController();
         nextStateClass = JoinState.class;
         board = controller.getGameState().board;
         assertEquals(controller.getGameState().board,board , "The board changed");

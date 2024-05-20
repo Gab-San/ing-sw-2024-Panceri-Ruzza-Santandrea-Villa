@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.listener.remote.events.playarea;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 

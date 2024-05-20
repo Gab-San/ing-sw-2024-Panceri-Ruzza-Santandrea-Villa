@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.listener.remote.events.stub;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
-import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
-import it.polimi.ingsw.server.testingStub.PuppetClient;
+import it.polimi.ingsw.model.listener.remote.NetworkEvent;
 
 import java.rmi.RemoteException;
 

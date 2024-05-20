@@ -4,6 +4,7 @@ public class DeckInstantiationException extends RuntimeException {
 
     private Class<?> factoryType;
     // TODO: Delete exception
+    // and substitute with System exit
     public DeckInstantiationException(){
         super();
     }

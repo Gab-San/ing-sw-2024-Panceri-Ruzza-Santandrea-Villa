@@ -3,128 +3,96 @@
     "cardId": "O0",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["**R *R* R**"],
-    "frontImageFileName": "img_B0_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["**R *R* R**"]
   },
   {
     "cardId": "O1",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["G** *G* **G"],
-    "frontImageFileName": "img_B0_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["G** *G* **G"]
   },
   {
     "cardId": "O2",
     "type" : "PATTERNTYPE",
     "pattern": ["**B *B* B**"],
-    "points": 2,
-    "frontImageFileName": "img_B2_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "points": 2
   },
   {
     "cardId": "O3",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["P** *P* **P"],
-    "frontImageFileName": "img_B3_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["P** *P* **P"]
   },
   {
     "cardId": "O4",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*R* *R* **G"],
-    "frontImageFileName": "img_B4_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["*R* *R* **G"]
   },
   {
     "cardId": "O5",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*G* *G* P**"],
-    "frontImageFileName": "img_B5_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["*G* *G* P**"]
   },
   {
     "cardId": "O6",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*R* B** B**"],
-    "frontImageFileName": "img_B6_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["*R* B** B**"]
   },
   {
     "cardId": "O7",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["B** *P* *P*"],
-    "frontImageFileName": "img_B7_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["B** *P* *P*"]
   },
   {
     "cardId": "O8",
     "type" : "RESOURCETYPE",
     "points": 2,
-    "pattern": ["WOLF", "WOLF", "WOLF"],
-    "frontImageFileName": "img_B10_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["WOLF", "WOLF", "WOLF"]
   },
   {
     "cardId": "09",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["LEAF", "LEAF", "LEAF"],
-    "frontImageFileName": "img_B9_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["LEAF", "LEAF", "LEAF"]
   },
   {
     "cardId": "O10",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"],
-    "frontImageFileName": "img_B8_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"]
   },
   {
     "cardId": "O11",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["BUTTERFLY", "BUTTERFLY", "BUTTERFLY"],
-    "frontImageFileName": "img_B11_front.png",
-    "backImageFileName": "img_B0_back.png"
+    "pattern": ["BUTTERFLY", "BUTTERFLY", "BUTTERFLY"]
   },
   {
     "cardId": "O12",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["QUILL", "QUILL"],
-    "frontImageFileName": "img_B15_front.png",
-    "backImageFileName": "img_B12_back.png"
+    "pattern": ["QUILL", "QUILL"]
   },
   {
     "cardId": "O13",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["POTION", "POTION"],
-    "frontImageFileName": "img_B14_front.png",
-    "backImageFileName": "img_B12_back.png"
+    "pattern": ["POTION", "POTION"]
   },
   {
     "cardId": "O14",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["SCROLL", "SCROLL"],
-    "frontImageFileName": "img_B13_front.png",
-    "backImageFileName": "img_B12_back.png"
+    "pattern": ["SCROLL", "SCROLL"]
   },
   {
     "cardId": "O15",
     "type": "RESOURCETYPE",
     "points": 3,
-    "pattern": ["QUILL", "SCROLL", "POTION"],
-    "frontImageFileName": "img_B12_front.png",
-    "backImageFileName": "img_B12_back.png"
+    "pattern": ["QUILL", "SCROLL", "POTION"]
   }
 ]

@@ -10,7 +10,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTest() throws InterruptedException {
-        PuppetController2 controller = new PuppetController2("Gamba's game");
+        PuppetController2 controller = new PuppetController2();
         controller.join("Gamba", new PuppetClient());
         Thread.sleep(1000);
         controller.join("Fibonacci", new PuppetClient());
@@ -19,7 +19,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestStop() throws InterruptedException {
-        PuppetController2 controller = new PuppetController2("Gamba's game");
+        PuppetController2 controller = new PuppetController2();
         controller.join("Giacomo", new PuppetClient());
         Thread.sleep(1000);
         controller.interruptTimer("Giacomo");
@@ -29,7 +29,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestAll() throws InterruptedException {
-        PuppetController2 controller = new PuppetController2("Gamba's game");
+        PuppetController2 controller = new PuppetController2();
         controller.singleJoin("Giacomo", new PuppetClient());
         controller.singleJoin("FRIZZI", new PuppetClient());
         controller.singleJoin("Paolino", new PuppetClient());
@@ -40,7 +40,7 @@ class TurnTimerControllerTest {
 
     @Test
     void timerTestStopAll() throws InterruptedException {
-        PuppetController2 controller = new PuppetController2("Gamba's game");
+        PuppetController2 controller = new PuppetController2();
         controller.singleJoin("Giacomo", new PuppetClient());
         controller.singleJoin("FRIZZI", new PuppetClient());
         controller.singleJoin("Paolino", new PuppetClient());

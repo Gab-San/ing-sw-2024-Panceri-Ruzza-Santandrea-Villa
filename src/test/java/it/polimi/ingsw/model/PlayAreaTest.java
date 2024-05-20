@@ -20,7 +20,6 @@ class PlayAreaTest {
     Map<GameResource, Integer> oldVisibleRes;
     List<Corner> oldFreeCorners;
 
-    // TODO: duplicate tests placing card on front and back
     void setUp(boolean placeStartingCardOnFront) {
         playArea = new PlayArea();
         startingCard = new StartingCard(
@@ -97,6 +96,7 @@ class PlayAreaTest {
     }
     @Test
     @DisplayName("Test placement of a PlayCard")
+    // TODO: duplicate this test placing card on back
     void testPlaceCard() {
         setUp(false);
 

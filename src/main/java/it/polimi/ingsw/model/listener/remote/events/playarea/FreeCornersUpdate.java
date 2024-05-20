@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.listener.remote.events.playarea;
 
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;

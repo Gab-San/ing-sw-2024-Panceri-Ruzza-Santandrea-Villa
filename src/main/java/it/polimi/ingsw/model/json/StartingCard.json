@@ -7,9 +7,7 @@
         {"direction": "TR", "frontResource": "LEAF","backResource": "LEAF"},
         {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "BUTTERFLY"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "WOLF"}
-      ],
-      "frontImageFileName": "img_S0_front.png",
-      "backImageFileName": "img_S0_back.png"
+      ]
     },
     {
       "cardId": "S1",
@@ -19,9 +17,7 @@
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "BUTTERFLY"}
-      ],
-      "frontImageFileName": "img_S1_front.png",
-      "backImageFileName": "img_S1_back.png"
+      ]
     },
     {
       "cardId": "S2",
@@ -31,9 +27,7 @@
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "MUSHROOM"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "LEAF"}
-      ],
-      "frontImageFileName": "img_S2_front.png",
-      "backImageFileName": "img_S2_back.png"
+      ]
     },
     {
       "cardId": "S3",
@@ -43,9 +37,7 @@
         {"direction": "TR", "frontResource": "NULL", "backResource": "BUTTERFLY"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "MUSHROOM"}
-      ],
-      "frontImageFileName": "img_S3_front.png",
-      "backImageFileName": "img_S3_back.png"
+      ]
     },
     {
       "cardId": "S4",
@@ -55,9 +47,7 @@
         {"direction": "TR", "frontResource": "NULL", "backResource": "MUSHROOM"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "WOLF"}
-      ],
-      "frontImageFileName": "img_S4_front.png",
-      "backImageFileName": "img_S4_back.png"
+      ]
     },
     {
       "cardId": "S5",
@@ -67,8 +57,6 @@
         {"direction": "TR", "frontResource": "NULL", "backResource": "WOLF"},
         {"direction": "BL", "frontResource": "FILLED", "backResource": "LEAF"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "BUTTERFLY"}
-      ],
-      "frontImageFileName": "img_S5_front.png",
-      "backImageFileName": "img_S5_back.png"
+      ]
     }
 ]

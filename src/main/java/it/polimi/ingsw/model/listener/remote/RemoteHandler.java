@@ -2,12 +2,9 @@ package it.polimi.ingsw.model.listener.remote;
 
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
-import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
-import it.polimi.ingsw.model.listener.remote.events.PingEvent;
 import it.polimi.ingsw.model.exceptions.ListenException;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
-import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +23,7 @@ public class RemoteHandler implements GameListener{
     }
 
 
-    public void addClient(String nickname, VirtualClient client){
+    public synchronized void addClient(String nickname, VirtualClient client){
         if(playerClients.containsValue(client)){
             //TODO decide if to return an exception
             System.err.println("Client already connected");
@@ -40,8 +37,9 @@ public class RemoteHandler implements GameListener{
         //Send updates until disconnection
         submitUpdates(nickname);
     }
-    public void removeClient(String nickname){
-        if(!playerClients.containsKey(nickname)) return;
+    public synchronized void removeClient(String nickname){
+        if(!playerClients.containsKey(nickname))
+            return;
         VirtualClient virtualClient = playerClients.get(nickname);
         eventRecord.forceRemoveTask(virtualClient);
         eventRecord.unlistClient(virtualClient);
@@ -51,14 +49,6 @@ public class RemoteHandler implements GameListener{
     public synchronized void listen(GameEvent event) throws ListenException {
         if(!(event instanceof NetworkEvent)){
             return;
-        }
-        if(event instanceof PingEvent pingEvent){
-            VirtualClient client = playerClients.get(pingEvent.getNickname());
-            try {
-                client.ping();
-            } catch (RemoteException e) {
-                throw new ListenException(e);
-            }
         }
         eventRecord.addEvent((NetworkEvent) event);
     }

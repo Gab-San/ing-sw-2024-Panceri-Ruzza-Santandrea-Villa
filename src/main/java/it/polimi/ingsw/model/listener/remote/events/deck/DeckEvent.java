@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.deck;
 
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.listener.remote.events.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.NetworkEvent;
 
 abstract public class DeckEvent implements NetworkEvent {
     protected final char deck;

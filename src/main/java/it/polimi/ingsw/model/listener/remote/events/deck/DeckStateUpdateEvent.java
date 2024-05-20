@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.listener.remote.events.deck;
 
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.deck.PlayableDeck;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 

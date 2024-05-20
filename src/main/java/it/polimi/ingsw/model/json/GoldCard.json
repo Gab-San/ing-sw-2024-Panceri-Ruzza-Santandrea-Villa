@@ -12,9 +12,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "QUILL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G0_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G1",
@@ -29,9 +27,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G1_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G2",
@@ -46,9 +42,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G2_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G3",
@@ -63,9 +57,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G3_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G4",
@@ -80,9 +72,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G4_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G5",
@@ -97,9 +87,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G5_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G6",
@@ -113,9 +101,7 @@
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G6_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G7",
@@ -129,9 +115,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G7_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G8",
@@ -145,9 +129,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G8_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "type": "GoldCard",
@@ -162,9 +144,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_G9_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "G10",
@@ -179,9 +159,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G10_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G11",
@@ -196,9 +174,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G11_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G12",
@@ -213,9 +189,7 @@
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G12_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G13",
@@ -230,9 +204,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G13_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "type": "GoldCard",
@@ -248,9 +220,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G14_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G15",
@@ -265,9 +235,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G15_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G16",
@@ -281,9 +249,7 @@
         {"direction": "BL", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G16_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G17",
@@ -297,9 +263,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G17_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G18",
@@ -313,9 +277,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G18_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G19",
@@ -329,9 +291,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_G19_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "G20",
@@ -346,9 +306,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G20_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G21",
@@ -363,9 +321,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "SCROLL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G21_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G22",
@@ -380,9 +336,7 @@
         {"direction": "BL", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G22_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G23",
@@ -397,9 +351,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G23_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G24",
@@ -414,9 +366,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G24_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G25",
@@ -431,9 +381,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G25_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G26",
@@ -447,9 +395,7 @@
         {"direction": "BL", "frontResource": "SCROLL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G26_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G27",
@@ -463,9 +409,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G27_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G28",
@@ -479,9 +423,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "QUILL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G28_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G29",
@@ -495,9 +437,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_G29_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "G30",
@@ -512,9 +452,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G30_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G31",
@@ -529,9 +467,7 @@
         {"direction": "BL", "frontResource": "SCROLL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G31_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G32",
@@ -546,9 +482,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "POTION", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G32_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G33",
@@ -563,9 +497,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G33_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G34",
@@ -580,9 +512,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G34_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G35",
@@ -597,9 +527,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G35_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G36",
@@ -613,9 +541,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G36_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G37",
@@ -629,9 +555,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G37_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G38",
@@ -645,9 +569,7 @@
         {"direction": "BL", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G38_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "G39",
@@ -661,8 +583,6 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_G39_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "backResource": "BUTTERFLY"
     }
 ]

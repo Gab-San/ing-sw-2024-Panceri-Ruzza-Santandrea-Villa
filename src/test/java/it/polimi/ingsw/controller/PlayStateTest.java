@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//TODO QUESTO TEST VA COMPLETATO
-
 public class PlayStateTest {
     private BoardController controller;
     private Board board;
@@ -33,7 +31,7 @@ public class PlayStateTest {
     private List<char[]> drawableCards;
 
     public void setUp(int numOfPlayers) {
-        controller = new BoardController("Flavio's Game");
+        controller = new BoardController();
         controller.join(playerNickname, new PuppetClient());
         controller.setNumOfPlayers(playerNickname, numOfPlayers);
         board = controller.getGameState().board;

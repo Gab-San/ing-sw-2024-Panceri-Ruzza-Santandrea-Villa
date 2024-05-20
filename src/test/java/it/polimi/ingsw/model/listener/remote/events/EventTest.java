@@ -41,7 +41,7 @@ class EventTest {
     void setup(){
         view = new StubView();
         StubClient client = new StubClient(nick, view);
-        board = new Board("SUSSY BAKA");
+        board = new Board();
         board.subscribeClientToUpdates(nick, client);
     }
 

@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class EndgameStateTest {
 
     @BeforeEach
     public void setUp() {
-        controller = new BoardController("Flavio's Game");
+        controller = new BoardController();
         VirtualClient flaviosClient = new PuppetClient();
         clientList.add(flaviosClient);
         controller.join(playerNickname, flaviosClient);

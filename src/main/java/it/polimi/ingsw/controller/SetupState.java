@@ -9,7 +9,11 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,8 +30,13 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
-        timers=new TurnTimerController(controller);
-        giveStartingCard();
+        timers = new TurnTimerController(controller);
+        try {
+            giveStartingCard();
+        } catch (IllegalStateException e){
+            //TODO add crash event
+            throw e;
+        }
         board.setGamePhase(GamePhase.PLACESTARTING);
         timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
     }
@@ -36,16 +45,10 @@ public class SetupState extends GameState{
     public void join(String nickname, VirtualClient client) throws IllegalStateException {
         try{
             board.reconnectPlayer(nickname);
-            //TODO resubscribe player's client to observers
-            //   and push current state to client (possibly done in board.replaceClient())
-        }catch (IllegalStateException| IllegalArgumentException e){
+            board.subscribeClientToUpdates(nickname, client);
+        }catch (IllegalStateException | IllegalArgumentException e){
             throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE", e);
         }
-    }
-
-    @Override
-    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
-        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE");
     }
 
     @Override
@@ -54,17 +57,15 @@ public class SetupState extends GameState{
 
         if(!board.getPlayerAreas().keySet().stream().map(Player::getNickname).toList().contains(nickname))
             throw  new IllegalArgumentException(nickname+" non fa parte della partita");
-        //TODO handle disconnection.
-        //    Disconnected player completes setup randomly.
+
         board.disconnectPlayer(nickname);
-        //TODO unsubscribe player's client from observers
-        //   and push current state to client (possibly done in board.replaceClient())
-        Set<Player> playerConnessi=board.getPlayerAreas().keySet().stream()
+        board.unsubscribeClientFromUpdates(nickname);
+        Set<Player> connectedPlayers =board.getPlayerAreas().keySet().stream()
                 // only look at players that are connected
                 .filter(Player:: isConnected)
                 .collect(Collectors.toSet());
-        System.err.println(playerConnessi+" è vuoto? "+playerConnessi.isEmpty());
-        if(playerConnessi.isEmpty()) {
+        System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
+        if(connectedPlayers .isEmpty()) {
             //se si sono disconnessi tutti i giocatori => torno a creation state
             for(Player p : new HashSet<>(board.getPlayerAreas().keySet()))
                 board.removePlayer(p.getNickname());
@@ -72,7 +73,6 @@ public class SetupState extends GameState{
             return;
         }
 
-        //Player player=board.getPlayerByNickname(nickname);
         if(board.getGamePhase()==GamePhase.PLACESTARTING)
             if(!playersWhoPlacedStartingCard.contains(nickname))
                 controller.placeStartingCard(nickname, new Random().nextBoolean());
@@ -84,24 +84,49 @@ public class SetupState extends GameState{
                 controller.chooseSecretObjective(nickname, new Random().nextInt(2)+1);
     }
 
+
+    @Override
+    public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
+        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE" ));
+        throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE");
+    }
+
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront)
             throws IllegalStateException, IllegalArgumentException {
-        if(board.getGamePhase() != GamePhase.PLACESTARTING)
-            throw switch (board.getGamePhase()){
-                default -> new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD IN THIS PHASE"); // default should never be thrown
-                case SETUP ->
-                        new IllegalStateException("Must wait for all players to receive their starting card");
-                case CHOOSECOLOR, DEALCARDS, CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER ->
-                        new IllegalStateException("Starting cards were already placed!");
-            };
-        if(playersWhoPlacedStartingCard.contains(nickname))
+        if (board.getGamePhase() != GamePhase.PLACESTARTING){
+            switch (board.getGamePhase()) {
+                case SETUP:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "MUST WAIT FOR ALL PLAYERS TO RECEIVE THEIR STARTING CARD"));
+                    throw new IllegalStateException("Must wait for all players to receive their starting card");
+                case CHOOSECOLOR, DEALCARDS, CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "STARTING CARDS WERE ALREADY PLACED!"));
+                    throw new IllegalStateException("Starting cards were already placed!");
+                default:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE"));
+                    throw new IllegalStateException("IMPOSSIBLE TO PLACE A STARTING CARD IN THIS PHASE"); // default should never be thrown
+            }
+        }
+
+        if(playersWhoPlacedStartingCard.contains(nickname)) {
+            board.notifyAllListeners(new IllegalActionError(nickname, nickname + " HAS ALREADY PLACED THEIR STARTING CARD") );
             throw new IllegalStateException(nickname + " has already placed their starting card.");
+        }
+        Player player;
+        try {
+             player = board.getPlayerByNickname(nickname);
+        } catch (IllegalArgumentException argumentException){
+            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
+            throw argumentException;
+        }
+        try {
+            board.placeStartingCard(player, placeOnFront);
+        } catch (IllegalStateException e){
+            board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage().toUpperCase()));
+            throw e;
+        }
 
-        Player player = board.getPlayerByNickname(nickname);
-        board.placeStartingCard(player, placeOnFront);
         timers.stopTimer(player);
-
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);
@@ -113,32 +138,65 @@ public class SetupState extends GameState{
     @Override
     public void chooseYourColor(String nickname, PlayerColor color)
             throws IllegalStateException, IllegalArgumentException {
-        //Controls on gamePhase
-        if(board.getGamePhase() != GamePhase.CHOOSECOLOR)
-            throw switch (board.getGamePhase()){
-                default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE"); // default should never be thrown
-                case SETUP, PLACESTARTING -> new IllegalStateException("Must wait for all players to place their starting card");
-                case DEALCARDS, CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER -> new IllegalStateException("Colors were already chosen!");
-            };
 
-        if(playersWhoChoseColor.contains(nickname))
+        if(board.getGamePhase() != GamePhase.CHOOSECOLOR) {
+            switch (board.getGamePhase()) {
+
+                case SETUP, PLACESTARTING:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "Must wait for all players to place their starting card".toUpperCase()));
+                    throw new IllegalStateException("Must wait for all players to place their starting card");
+                case DEALCARDS, CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "Colors were already chosen!".toUpperCase()));
+                    throw new IllegalStateException("Colors were already chosen!");
+                default:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE"));
+                    throw new IllegalStateException("IMPOSSIBLE TO CHOOSE A COLOR IN THIS PHASE");
+            }
+        }
+
+        if(playersWhoChoseColor.contains(nickname)) {
+            board.notifyAllListeners(new IllegalActionError(nickname,(nickname + " has already chosen his color").toUpperCase() ));
             throw new IllegalStateException(nickname + " has already chosen his color.");
-        if(!board.getAvailableColors().contains(color))
+        }
+        if(!board.getAvailableColors().contains(color)) {
+            board.notifyAllListeners(new IllegalActionError(nickname, (color + " not available").toUpperCase()));
             throw new IllegalStateException(color + " not available.");
+        }
+        Player player;
+        try {
+             player = board.getPlayerByNickname(nickname);
+        } catch (IllegalArgumentException argumentException){
+            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
+            throw argumentException;
+        }
 
-        Player player = board.getPlayerByNickname(nickname);
         player.setColor(color);
         timers.stopTimer(player);
 
         playersWhoChoseColor.add(nickname);
         if(playersWhoChoseColor.size()==board.getPlayerAreas().size()) {
             board.setGamePhase(GamePhase.DEALCARDS);
-            drawFirstHand();
+            try {
+                drawFirstHand();
+            } catch ( DeckException e ) {
+                //TODO: add crash event
+                board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage().toUpperCase()));
+                throw new IllegalStateException(e);
+            } catch (PlayerHandException | IllegalStateException exc){
+                board.notifyAllListeners(new IllegalActionError(nickname, exc.getMessage().toUpperCase()));
+                throw new IllegalStateException(exc);
+            }
+
             board.revealObjectives();
-            giveSecretObjectives();
+            try {
+                giveSecretObjectives();
+            } catch (IllegalStateException e){
+                //TODO add crash event
+                throw e;
+            }
+
             board.setGamePhase(GamePhase.CHOOSEOBJECTIVE);
             timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
-            System.err.println();
             for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
                 controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2)+1);
         }
@@ -147,22 +205,39 @@ public class SetupState extends GameState{
     @Override
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.CHOOSEOBJECTIVE)
-            throw switch (board.getGamePhase()){
-                default -> new IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE CARD IN THIS PHASE");
-                case SETUP, PLACESTARTING, CHOOSECOLOR, DEALCARDS ->
-                        new IllegalStateException("Must wait until all players have received their first hand");
-                case CHOOSEFIRSTPLAYER ->
-                        new IllegalStateException("Secret objectives were already chosen!");
-            };
-        if(playersWhoChoseSecretObjective.contains(nickname))
-            throw new IllegalStateException(nickname + " has already chosen his secret objective card.");
+            switch (board.getGamePhase()){
+                case SETUP, PLACESTARTING, CHOOSECOLOR, DEALCARDS:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "Must wait until all players have received their first hand".toUpperCase()));
+                    throw new IllegalStateException("Must wait until all players have received their first hand");
+                case CHOOSEFIRSTPLAYER:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "Secret objectives were already chosen!".toUpperCase()));
+                    throw new  IllegalStateException("Secret objectives were already chosen!");
+                default:
+                    board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE CARD IN THIS PHASE"));
+                    throw new  IllegalStateException("IMPOSSIBLE TO CHOOSE A SECRET OBJECTIVE CARD IN THIS PHASE");
+        }
 
-        Player player = board.getPlayerByNickname(nickname); // throws IllegalArgumentException on player not in game
+        if(playersWhoChoseSecretObjective.contains(nickname)) {
+            board.notifyAllListeners(new IllegalActionError(nickname, (nickname + " has already chosen his secret objective card.").toUpperCase()));
+            throw new IllegalStateException(nickname + " has already chosen his secret objective card.");
+        }
+
+        Player player;
+        try {
+            player = board.getPlayerByNickname(nickname);
+        } catch (IllegalArgumentException argumentException){
+            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
+            throw new IllegalArgumentException(argumentException.getMessage());
+        }
+
         try{
             player.getHand().chooseObjective(choice);
         }catch (PlayerHandException e){
-            throw new IllegalStateException(e.getMessage()); // should never be thrown given the above checks
+            //TODO check if add crash event
+            board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage()));
+            throw new IllegalStateException(e.getMessage());
         }catch (IndexOutOfBoundsException e){
+            board.notifyAllListeners(new IllegalParameterError(nickname, e.getMessage()));
             throw new IllegalArgumentException("Invalid choice. Must be 1 or 2, entered " + choice + " instead.");
         }
         timers.stopTimer(player);
@@ -175,11 +250,13 @@ public class SetupState extends GameState{
 
     @Override
     public void draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
+        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO DRAW DURING SETUP STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING SETUP STATE");
     }
 
     @Override
     public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
+        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
     }
 
@@ -198,24 +275,19 @@ public class SetupState extends GameState{
     }
 
 
-    private void drawFirstHand(){
-        try {
-            for (Player player : board.getPlayerAreas().keySet()) {
-                board.drawTop(Board.RESOURCE_DECK, player.getHand());
-                board.drawTop(Board.RESOURCE_DECK, player.getHand());
-                board.drawTop(Board.GOLD_DECK, player.getHand());
-            }
-        }catch (DeckException e){
-            /*TODO: handling exception*/
-            System.err.println("ERROR WHILE DEALING FIRST CARDS FOR THE FIRST TIME");
+    private void drawFirstHand() throws PlayerHandException, DeckException {
+        for (Player player : board.getPlayerAreas().keySet()) {
+            board.drawTop(Board.RESOURCE_DECK, player.getHand());
+            board.drawTop(Board.RESOURCE_DECK, player.getHand());
+            board.drawTop(Board.GOLD_DECK, player.getHand());
         }
     }
-    private void giveSecretObjectives(){
+    private void giveSecretObjectives() throws IllegalStateException {
         for(Player player : board.getPlayerAreas().keySet()) {
             board.deal(Board.OBJECTIVE_DECK, player.getHand());
         }
     }
-    private void giveStartingCard(){
+    private void giveStartingCard() throws IllegalStateException{
         for(Player player : board.getPlayerAreas().keySet()) {
             board.deal(Board.STARTING_DECK, player.getHand());
         }
@@ -223,6 +295,7 @@ public class SetupState extends GameState{
 
     @Override
     public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
+        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START GAME DURING SETUP STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING SETUP STATE");
     }
 }

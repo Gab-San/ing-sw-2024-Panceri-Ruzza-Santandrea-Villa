@@ -8,9 +8,7 @@
           {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
           {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R0_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R1",
@@ -21,9 +19,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R1_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R2",
@@ -34,9 +30,7 @@
         {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R2_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R3",
@@ -47,9 +41,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R3_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R4",
@@ -60,9 +52,7 @@
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R4_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R5",
@@ -73,9 +63,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R5_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R6",
@@ -86,9 +74,7 @@
         {"direction": "BL", "frontResource": "SCROLL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R6_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R7",
@@ -99,9 +85,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R7_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R8",
@@ -112,9 +96,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R8_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R9",
@@ -125,9 +107,7 @@
         {"direction": "BL", "frontResource": "MUSHROOM", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "MUSHROOM",
-      "frontImageFileName": "img_R9_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "backResource": "MUSHROOM"
     },
     {
       "cardId": "R10",
@@ -138,9 +118,7 @@
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R10_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R11",
@@ -151,9 +129,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R11_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R12",
@@ -164,9 +140,7 @@
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "LEAF", "backResource": "NULL"}
         ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R12_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R13",
@@ -177,9 +151,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "LEAF", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R13_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R14",
@@ -190,9 +162,7 @@
         {"direction": "BL", "frontResource": "QUILL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "LEAF", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R14_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R15",
@@ -203,9 +173,7 @@
           {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
           {"direction": "BR", "frontResource": "POTION", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R15_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R16",
@@ -216,9 +184,7 @@
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R16_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R17",
@@ -229,9 +195,7 @@
         {"direction": "BL", "frontResource": "LEAF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R17_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R18",
@@ -242,9 +206,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "LEAF", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R18_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R19",
@@ -255,9 +217,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "LEAF",
-      "frontImageFileName": "img_R19_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "backResource": "LEAF"
     },
     {
       "cardId": "R20",
@@ -268,9 +228,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R20_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R21",
@@ -281,9 +239,7 @@
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R21_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R22",
@@ -294,9 +250,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ], 
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R22_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R23",
@@ -307,9 +261,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R23_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R24",
@@ -320,9 +272,7 @@
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R24_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R25",
@@ -333,9 +283,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "SCROLL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R25_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R26",
@@ -346,9 +294,7 @@
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R26_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R27",
@@ -359,9 +305,7 @@
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R27_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R28",
@@ -372,9 +316,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R28_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R29",
@@ -385,9 +327,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "WOLF",
-      "frontImageFileName": "img_R29_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "WOLF"
     },
     {
       "cardId": "R30",
@@ -398,9 +338,7 @@
           {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
           {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R30_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R31",
@@ -411,9 +349,7 @@
           {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "NULL"},
           {"direction": "BR", "frontResource": "BUTTERFLY", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R31_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R32",
@@ -424,9 +360,7 @@
         {"direction": "BL", "frontResource": "BUTTERFLY", "backResource": "NULL"}, 
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R32_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R33",
@@ -437,9 +371,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "BUTTERFLY", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R33_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R34",
@@ -450,9 +382,7 @@
         {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "BUTTERFLY", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R34_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R35",
@@ -463,9 +393,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "MUSHROOM", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R35_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R36",
@@ -476,9 +404,7 @@
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "FILLED", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R36_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R37",
@@ -489,9 +415,7 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R37_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R38",
@@ -502,9 +426,7 @@
         {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "BUTTERFLY", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R38_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     },
     {
       "cardId": "R39",
@@ -515,8 +437,6 @@
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ],
-      "backResource": "BUTTERFLY",
-      "frontImageFileName": "img_R39_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "backResource": "BUTTERFLY"
     }
 ]

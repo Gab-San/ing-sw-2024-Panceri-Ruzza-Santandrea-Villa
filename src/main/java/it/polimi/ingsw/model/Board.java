@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.listener.GameEvent;
-import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.*;
+import it.polimi.ingsw.model.listener.remote.RemoteErrorHandler;
 import it.polimi.ingsw.model.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
@@ -18,10 +18,11 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
-import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -46,16 +47,18 @@ public class Board implements GameSubject{
     private int currentTurn;
     private GamePhase gamePhase;
 
-    private final Game gameInfo;
-
+//region LISTENER ATTRIBUTES
     private final List<GameSubject> observableObjects;
     private final List<GameListener> gameListeners;
     private final RemoteHandler remoteHandler;
+    private final RemoteErrorHandler errorHandler;
+//endregion
+
     /**
      * Constructs the Board (as in initializing the game)
      * @throws DeckInstantiationException if the decks can't be initialized
      */
-    public Board(String gameID) throws DeckInstantiationException {
+    public Board() throws DeckInstantiationException {
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
 
@@ -65,7 +68,6 @@ public class Board implements GameSubject{
         scoreboard = new Hashtable<>();
         // Probably should notify
         playerAreas = new Hashtable<>();
-        gameInfo = new Game(gameID);
         // Controlled in Board
         setGamePhase(GamePhase.CREATE);
 
@@ -81,20 +83,21 @@ public class Board implements GameSubject{
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);
         remoteHandler = new RemoteHandler();
+        errorHandler = new RemoteErrorHandler();
         subscribeListenerToAll(remoteHandler);
+        subscribeListenerToAll(errorHandler);
     }
 
 
     /**
      * Constructs the board (as in initializing the game) and automatically makes the given players join
-     * @param gameID game's ID
      * @param players list of 1-4 players that are joining this game
      * @throws InvalidParameterException if the list of players has an illegal player count (0 or >4)
      * @throws IllegalStateException if players contains duplicates
      * @throws DeckInstantiationException if the decks can't be initialized
      */
-    public Board(String gameID, List<Player> players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
-        this(gameID);
+    public Board(List<Player> players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
+        this();
         if(players.isEmpty() || players.size() > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players!");
         for(Player p: players){
             addPlayer(new Player(p.getNickname()));
@@ -146,9 +149,6 @@ public class Board implements GameSubject{
     public GamePhase getGamePhase() {
         return gamePhase;
     }
-    public Game getGameInfo(){
-        return gameInfo;
-    }
 
 //endregion
 
@@ -194,7 +194,10 @@ public class Board implements GameSubject{
      * @throws IllegalArgumentException if the player isn't in game
      */
     public void addScore(Player player, int amount) throws IllegalArgumentException{
-        if(!scoreboard.containsKey(player)) throw new IllegalArgumentException("Player not in game!");
+        if(!scoreboard.containsKey(player)){
+            notifyAllListeners(new IllegalGameAccessError(player.getNickname(), "Player not in game!".toUpperCase()));
+            throw new IllegalArgumentException("Player not in game!");
+        }
         int newScore = scoreboard.get(player) + amount;
         setScore(player, newScore);
     }
@@ -202,6 +205,7 @@ public class Board implements GameSubject{
         if(gamePhase != GamePhase.EVALOBJ && score > MAX_PLAY_SCORE){
             score = 29;
         }
+        //TODO in case add endgame notification
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
@@ -262,7 +266,6 @@ public class Board implements GameSubject{
 
         //scoreboard update
         addScore(player, placedCard.calculatePointsOnPlace(playArea));
-        //TODO: add checkEndgame notification to clients
     }
     /**
      * Places the player's starting card on their playArea
@@ -271,14 +274,20 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if the action is invalid (e.g. if the player hasn't received a startingCard yet or has already placed it)
      */
     public void placeStartingCard(Player player, boolean placeOnFront) throws IllegalStateException{
-        StartingCard startingCard = player.getHand().getStartingCard();
-        if(startingCard == null) throw new IllegalStateException("Player doesn't have a starting card yet!");
+        StartingCard startingCard;
+        try{
+            startingCard = player.getHand().getStartingCard();
+        }
+        catch(PlayerHandException e){
+            throw new IllegalStateException("Player doesn't have a starting card yet!");
+        }
+
         if(placeOnFront)
             startingCard.turnFaceUp();
         else
             startingCard.turnFaceDown();
 
-        playerAreas.get(player).placeStartingCard(startingCard); // throws RuntimeException if the startingCard was already placed
+        playerAreas.get(player).placeStartingCard(startingCard);
     }
 
     /**
@@ -291,16 +300,28 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if the deck specified isn't Board.STARTING_DECK or Board.OBJECTIVE_DECK <br>
      *                              or if dealing the requested cards to player's hand is an invalid action
      */
-    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException, PlayerHandException {
+    public void deal(char deck, PlayerHand playerHand) throws IllegalStateException{
         switch (deck){
             case STARTING_DECK:
-                playerHand.setStartingCard(startingDeck::getCard);
+                try {
+                    playerHand.setStartingCard(startingDeck::getCard);
+                } catch (PlayerHandException e){
+                    Player p = playerHand.getPlayerRef();
+                    notifyAllListeners(new IllegalStateError(p.getNickname(), e.getMessage()));
+                    throw new IllegalStateException(e);
+                }
                 break;
             case OBJECTIVE_DECK:
                 //Maybe since we set the objectiveCards only when dealing, and we have a lambda,
                 //maybe we can use the lambda twice to draw two cards
-                playerHand.addObjectiveCard(objectiveDeck::getCard);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
-                playerHand.addObjectiveCard(objectiveDeck::getCard);   // so separating this is not necessary.
+                try {
+                    playerHand.addObjectiveCard(objectiveDeck::getCard);   // hand will never have only one objective card with MAX_OBJECTIVES = 2
+                    playerHand.addObjectiveCard(objectiveDeck::getCard);   // so separating this is not necessary.
+                } catch (PlayerHandException e){
+                    Player p = playerHand.getPlayerRef();
+                    notifyAllListeners(new IllegalStateError(p.getNickname(), e.getMessage()));
+                    throw new IllegalStateException(e);
+                }
                 break;
             default:
                 throw new IllegalStateException("Choosing a non-dealable deck");
@@ -325,7 +346,7 @@ public class Board implements GameSubject{
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException{
+    public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
@@ -355,7 +376,7 @@ public class Board implements GameSubject{
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException{
+    public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
@@ -385,7 +406,7 @@ public class Board implements GameSubject{
      * @throws DeckException if the specified deck is empty
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
-    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException {
+    public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
@@ -438,7 +459,10 @@ public class Board implements GameSubject{
     public Player getCurrentPlayer() throws IllegalStateException{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getTurn() == currentTurn)
-                .findFirst().orElseThrow(()->new IllegalStateException("Players have not been assigned turns yet."));
+                .findFirst().orElseThrow(()->{
+                    notifyAllListeners(new IllegalStateError("all", "Players have not been assigned turns yet."));
+                    return new IllegalStateException("Players have not been assigned turns yet.");
+                });
     }
 
     /**
@@ -449,17 +473,9 @@ public class Board implements GameSubject{
     public Player getPlayerByNickname(String nickname) throws IllegalArgumentException{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getNickname().equals(nickname))
-                .findFirst().orElseThrow(()-> new IllegalArgumentException("Cannot find a player with given nickname in this game") );
+                .findFirst().orElseThrow(()-> new IllegalArgumentException("Cannot find a player with given nickname in this game".toUpperCase()) );
     }
 
-    /**
-     * @param nickname player's nickname
-     * @return true if the player is in this game
-     */
-    public boolean containsPlayer(String nickname) {
-        return playerAreas.keySet().stream()
-                .anyMatch(p -> p.getNickname().equals(nickname));
-    }
     //endregion
     /**
      * Adds a player to the game
@@ -474,12 +490,14 @@ public class Board implements GameSubject{
         // Listing player as observable object
         observableObjects.add(player);
         player.addListener(remoteHandler);
+        player.addListener(errorHandler);
         // Setting score on scoreboard
         setScore(player, 0);
-        // Creating Playarea and listing as observable
+        // Creating PlayArea and listing as observable
         PlayArea joiningPlayerArea = new PlayArea(player.getNickname());
         observableObjects.add(joiningPlayerArea);
         joiningPlayerArea.addListener(remoteHandler);
+        joiningPlayerArea.addListener(errorHandler);
 
         playerAreas.put(player, joiningPlayerArea);
 
@@ -501,14 +519,13 @@ public class Board implements GameSubject{
         playerAreas.remove(player);
         // Probably should notify
         scoreboard.remove(player);
-        //TODO ADD SCOREBOARD EVENT
+        // TODO ADD SCOREBOARD EVENT
+        // TODO NOTIFY PLAYER REMOVAL
         //decrement turn of each player that followed the removed player in turn order
         playerAreas.keySet().stream()
                 .filter(p -> p.getTurn() > player.getTurn())
                 .forEach(p -> p.setTurn(p.getTurn()-1));
 
-        //TODO Notify that the player was removed
-        //TODO unsubscribe player from updates
         observableObjects.remove(player);
     }
 
@@ -519,7 +536,6 @@ public class Board implements GameSubject{
      */
     public void disconnectPlayer(String nickname) throws IllegalArgumentException{
         getPlayerByNickname(nickname).setConnected(false);
-        //TODO unsubscribe player from updates
     }
     /**
      * Reconnects player with given nickname
@@ -536,15 +552,9 @@ public class Board implements GameSubject{
 //endregion
 
 //region LISTENER METHODS
-    public void subscribeListenerToAll(GameListener listener){
+    void subscribeListenerToAll(GameListener listener){
         for(GameSubject subject: observableObjects){
             subject.addListener(listener);
-        }
-    }
-
-    public void unsubscribeListenerFromAll(GameListener listener){
-        for(GameSubject subject: observableObjects){
-            subject.removeListener(listener);
         }
     }
 
@@ -573,10 +583,13 @@ public class Board implements GameSubject{
 
     public void subscribeClientToUpdates(String nickname, VirtualClient client){
         remoteHandler.addClient(nickname,client);
+        errorHandler.addClient(nickname, client);
     }
 
     public void unsubscribeClientFromUpdates(String nickname){
         remoteHandler.removeClient(nickname);
+        errorHandler.removeClient(nickname);
     }
+
 //endregion
 }

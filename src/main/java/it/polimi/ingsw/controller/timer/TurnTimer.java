@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller.timer;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.remote.errors.PingEvent;
 
 public class TurnTimer implements Runnable{
 
@@ -26,11 +28,11 @@ public class TurnTimer implements Runnable{
                 reset = false;
             }
             try {
-//                try {
-//                    player.notifyListener(remoteHandler, new PingEvent(player.getNickname()));
-//                } catch (ListenException connectionException){
-//                    controller.disconnect(player.getNickname());
-//                }
+                try {
+                    player.notifyAllListeners(new PingEvent(player.getNickname()));
+                } catch (ListenException connectionException){
+                    controller.disconnect(player.getNickname());
+                }
 
                 Thread.sleep(1000);
                 secondsElapsed--;

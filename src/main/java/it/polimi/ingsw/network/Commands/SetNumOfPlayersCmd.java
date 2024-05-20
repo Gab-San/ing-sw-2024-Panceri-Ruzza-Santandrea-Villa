@@ -1,0 +1,15 @@
+package it.polimi.ingsw.network.Commands;
+
+import it.polimi.ingsw.controller.BoardController;
+
+public class SetNumOfPlayersCmd extends GameCommand{
+    private final int numOfPlayers;
+    public SetNumOfPlayersCmd(BoardController gameController, String nickname, int num){
+        super(gameController, nickname);
+        numOfPlayers = num;
+    }
+    @Override
+    public void execute(){
+        this.gameController.setNumOfPlayers(nickname, numOfPlayers);
+    }
+}

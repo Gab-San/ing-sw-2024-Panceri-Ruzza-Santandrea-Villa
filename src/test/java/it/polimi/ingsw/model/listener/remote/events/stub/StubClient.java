@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
-import it.polimi.ingsw.server.VirtualClient;
+import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 import java.util.List;

@@ -16,7 +16,7 @@ public class BaseBoardTest {
 
     @BeforeEach
     public void setUp(){
-        board = new Board("testGame");
+        board = new Board();
         players = null;
         board.setCurrentTurn(1);
     }

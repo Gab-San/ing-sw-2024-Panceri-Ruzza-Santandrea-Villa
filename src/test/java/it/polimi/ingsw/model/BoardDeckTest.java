@@ -20,8 +20,8 @@ public class BoardDeckTest extends BaseBoardTest{
             for(Player player  : players){
                 board.deal(Board.STARTING_DECK, player.getHand());
                 board.deal(Board.OBJECTIVE_DECK, player.getHand());
-                assertThrows(PlayerHandException.class, ()->board.deal(Board.OBJECTIVE_DECK, player.getHand()));
-                assertThrows(PlayerHandException.class, ()->board.deal(Board.STARTING_DECK, player.getHand()));
+                assertThrows(IllegalStateException.class, ()->board.deal(Board.OBJECTIVE_DECK, player.getHand()));
+                assertThrows(IllegalStateException.class, ()->board.deal(Board.STARTING_DECK, player.getHand()));
 
                 assertThrows(IllegalStateException.class, ()->board.deal(Board.RESOURCE_DECK, player.getHand()));
                 assertThrows(IllegalStateException.class, ()->board.deal(Board.GOLD_DECK, player.getHand()));

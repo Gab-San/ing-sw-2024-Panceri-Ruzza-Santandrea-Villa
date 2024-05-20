@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.json.deserializers;
 
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.enums.GameResource;
-
 public class PointOnPlace {
     private String type;
     private int amount;
