@@ -1,7 +1,10 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.scenes;
 
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.rmi.RMIClient;
+import it.polimi.ingsw.view.Scene;
 
 import java.io.PrintWriter;
 import java.rmi.NotBoundException;
@@ -10,14 +13,21 @@ import java.util.Scanner;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
-public class TUIStarter {
-    private static void printError(PrintWriter out, String msg){
+public class PrintConnectTechUI implements Scene {
+    PrintWriter out;
+    Scanner scanner;
+
+    public PrintConnectTechUI(){
+        scanner = new Scanner(System.in);
+        out = new PrintWriter(System.out, true);
+    }
+    @Override
+    public void displayError(String msg){
         out.println(RED_TEXT + msg + RESET);
     }
 
-    public static void startTUI() {
-        Scanner scanner = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out, true);
+    @Override
+    public void display() {
 
         String connectionType;
         VirtualClient client;
@@ -26,29 +36,33 @@ public class TUIStarter {
             connectionType = scanner.nextLine();
             if(connectionType.matches("tcp|TCP")){
                 //TODO: instantiate TCP client
-                printError(out, "TCP still WIP.");
+                displayError("TCP still WIP.");
                 connectionType = "";
             } else if (connectionType.matches("rmi|RMI")) {
                 //TODO: instantiate RMI client
                 try {
                     client = new RMIClient();
                 }catch (RemoteException | NotBoundException e){
-                    printError(out, "Error while trying to create the RMI client.");
+                    displayError("Error while trying to create the RMI client.");
                 }
             }
-            else printError(out, "Invalid input.");
+            else displayError("Invalid input.");
         }while (!connectionType.matches("tcp|TCP|RMI|rmi"));
 
-        String nickname = "";
-        String regex = "[a-zA-Z0-9_]+";
-        do {
-            out.print("Choose your nickname: ");
-            nickname = scanner.nextLine();
-            if(nickname.matches(regex)){
-                //TODO: attempt client.connect(nickname)
-            }
-            else printError(out, "Invalid input.");
-        }while (!nickname.matches(regex));
+        scanner.close();
+        new PrintNicknameSelectUI().display();
+    }
 
+    @Override
+    public void moveView(CornerDirection... cornerDirections) {
+        display();
+    }
+    @Override
+    public void setCenter(int row, int col) {
+        display();
+    }
+    @Override
+    public void setCenter(Point center) {
+        display();
     }
 }

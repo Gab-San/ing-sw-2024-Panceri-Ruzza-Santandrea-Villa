@@ -1,5 +1,6 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.scenes;
 
+import it.polimi.ingsw.view.Scene;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
@@ -9,14 +10,14 @@ import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.ViewBoardGenerator.*;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
-public class PrintFullUITest {
+public class PrintFullGameUITest {
     final PrintPlayerUI printPlayerUI;
     final Map<String, PrintOpponentUI> printOpponentUIMap;
     final PrintBoardUI printBoardUI;
     final Random random;
     final ViewBoard board;
 
-    PrintFullUITest(){
+    PrintFullGameUITest(){
         random = new Random();
         board = new ViewBoard("Test_Player");
 
@@ -63,7 +64,7 @@ public class PrintFullUITest {
     }
     public static void main(String[] args) {
         System.out.println("TEST FULL UI");
-        PrintFullUITest test = new PrintFullUITest();
+        PrintFullGameUITest test = new PrintFullGameUITest();
         Scanner scanner = new Scanner(System.in);
 
         String input = ""; String error = "";

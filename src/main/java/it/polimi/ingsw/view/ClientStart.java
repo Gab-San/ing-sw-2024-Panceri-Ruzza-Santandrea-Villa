@@ -1,11 +1,10 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.view.tui.TUIStarter;
+import it.polimi.ingsw.view.tui.scenes.PrintConnectTechUI;
 
 import java.util.Scanner;
 
-public class GameStart {
-
+public class ClientStart {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -17,7 +16,7 @@ public class GameStart {
             GUIStarter.startGUI();
         } else if (gameMode.equalsIgnoreCase("TUI")) {
             scanner.close();
-            TUIStarter.startTUI();
+            new PrintConnectTechUI().display();
         } else {
             System.out.println("Modalità di gioco non valida.");
         }

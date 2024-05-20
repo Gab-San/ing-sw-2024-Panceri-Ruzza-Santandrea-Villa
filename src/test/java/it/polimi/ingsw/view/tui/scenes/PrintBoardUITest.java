@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui.scenes;
 
 import static it.polimi.ingsw.view.ViewBoardGenerator.getRandomScore;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
