@@ -67,7 +67,7 @@
     "cardId": "O8",
     "type" : "RESOURCETYPE",
     "points": 2,
-    "pattern": ["WOLF", "WOLF", "WOLF"],
+    "pattern": "WWW",
     "frontImageFileName": "img_B10_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -75,7 +75,7 @@
     "cardId": "09",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["LEAF", "LEAF", "LEAF"],
+    "pattern": "LLL",
     "frontImageFileName": "img_B9_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -83,7 +83,7 @@
     "cardId": "10",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"],
+    "pattern": "MMM",
     "frontImageFileName": "img_B8_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -91,7 +91,7 @@
     "cardId": "11",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["BUTTERFLY", "BUTTERFLY", "BUTTERFLY"],
+    "pattern": "BBB",
     "frontImageFileName": "img_B11_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -99,7 +99,7 @@
     "cardId": "12",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["QUILL", "QUILL"],
+    "pattern": "QQ",
     "frontImageFileName": "img_B15_front.png",
     "backImageFileName": "img_B12_back.png"
   },
@@ -107,7 +107,7 @@
     "cardId": "13",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["POTION", "POTION"],
+    "pattern": "PP",
     "frontImageFileName": "img_B14_front.png",
     "backImageFileName": "img_B12_back.png"
   },
@@ -115,7 +115,7 @@
     "cardId": "14",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["SCROLL", "SCROLL"],
+    "pattern": "SS",
     "frontImageFileName": "img_B13_front.png",
     "backImageFileName": "img_B12_back.png"
   },
@@ -123,7 +123,7 @@
     "cardId": "15",
     "type": "RESOURCETYPE",
     "points": 3,
-    "pattern": ["QUILL", "SCROLL", "POTION"],
+    "pattern": "QSP",
     "frontImageFileName": "img_B12_front.png",
     "backImageFileName": "img_B12_back.png"
   }

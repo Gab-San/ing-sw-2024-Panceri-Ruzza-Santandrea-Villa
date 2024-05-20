@@ -57,23 +57,25 @@ public class PrintFullGameUITest {
         else{
             System.out.print("\033[H\033[2J");
             //FIXME: [Ale] choose which cls to use
-//            //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
-//            try {
-//                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-//            }catch (Exception ignore){}
+            //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
+            try {
+                if (System.getProperty("os.name").contains("Windows"))
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                else Runtime.getRuntime().exec("clear");
+            } catch (Exception ignored) {}
         }
-
         System.out.flush();
     }
     static void printCommandLegend(){
         System.out.println("Valid commands: ");
-        System.out.print("-\t Move <up|right|left|down|center>");
-        System.out.println("\t\t\t\t-\t Flip <1-3 | cardID | starting>");
-        System.out.print("-\t View <me | board | any player nickname>");
+        System.out.print(" -\tMove <up|right|left|down|center>         ");
+        System.out.println("\t\t-\t Flip <1-3 | cardID | starting>     ");
+        System.out.print(" -\tView <me | board | any player nickname>  ");
         //System.out.print("-\t Legend (shows this list)");
         System.out.println("\t\t-\t Flush <hand | objective | starting>");
     }
     public static void main(String[] args) {
+        cls();
         System.out.println("TEST FULL UI");
         PrintFullGameUITest test = new PrintFullGameUITest();
         Scanner scanner = new Scanner(System.in);

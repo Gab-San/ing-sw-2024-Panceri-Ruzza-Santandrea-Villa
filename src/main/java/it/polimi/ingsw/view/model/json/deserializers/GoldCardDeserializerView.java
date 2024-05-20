@@ -37,6 +37,9 @@ public class GoldCardDeserializerView extends StdDeserializer<GoldCardJSONView> 
 
         goldJ.setPointsOnPlace(node.get("pointsOnPlace").asText());
 
+        goldJ.setImgFront(node.get("frontImageFileName").asText());
+        goldJ.setImgBack(node.get("backImageFileName").asText());
+
         return goldJ;
     }
 }

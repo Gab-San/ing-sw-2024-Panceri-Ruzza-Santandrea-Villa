@@ -2,8 +2,8 @@ package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.server.VirtualClient;
-import it.polimi.ingsw.server.rmi.RMIClient;
+import it.polimi.ingsw.network.VirtualClient;
+import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.view.Scene;
 
 import java.io.PrintWriter;
@@ -41,7 +41,8 @@ public class PrintConnectTechUI implements Scene {
             } else if (connectionType.matches("rmi|RMI")) {
                 //TODO: instantiate RMI client
                 try {
-                    client = new RMIClient();
+                    // FIXME: [Ale] properly set the registryPort here
+                    client = new RMIClient(0);
                 }catch (RemoteException | NotBoundException e){
                     displayError("Error while trying to create the RMI client.");
                 }
