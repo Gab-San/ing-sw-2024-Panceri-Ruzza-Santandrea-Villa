@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.tui.printers.PrintCard;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,7 @@ public class PrintBoardUI implements Scene {
         out.print("Scoreboard:\t");
         if(board.isEndgame())
             out.print(YELLOW_BRIGHT_TEXT + "[ENDGAME]" + RESET);
+        else out.print("score <- " + CYAN_BRIGHT + " " + RESET);
         out.println("\n");
         for (int i = 0; i <= 29; i++) {
             StringBuilder playersOnI = new StringBuilder();
@@ -59,9 +61,9 @@ public class PrintBoardUI implements Scene {
         out.println("\n\nCentral Board: \n");
 
         List<String[]> deckBacks = new LinkedList<>();
-        deckBacks.add(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard()));
-        deckBacks.add(printCard.getCardAsStringRows(board.getGoldCardDeck().getTopCard()));
-        deckBacks.add(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getTopCard()));
+        deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard())));
+        deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getGoldCardDeck().getTopCard())));
+        deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getTopCard())));
         for(String[] card : deckBacks){
             // only match resource and gold cards, objective cards are already hidden in PrintCard
             Matcher matcher = Pattern.compile("[RG][0-9]?[0-9]").matcher(card[2]);
@@ -73,14 +75,14 @@ public class PrintBoardUI implements Scene {
         }
 
         List<String[]> deckFirstRevealed = new LinkedList<>();
-        deckFirstRevealed.add(printCard.getCardAsStringRows(board.getResourceCardDeck().getFirstRevealed()));
-        deckFirstRevealed.add(printCard.getCardAsStringRows(board.getGoldCardDeck().getFirstRevealed()));
-        deckFirstRevealed.add(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getFirstRevealed()));
+        deckFirstRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getFirstRevealed())));
+        deckFirstRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getGoldCardDeck().getFirstRevealed())));
+        deckFirstRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getFirstRevealed())));
 
         List<String[]> deckSecondRevealed = new LinkedList<>();
-        deckSecondRevealed.add(printCard.getCardAsStringRows(board.getResourceCardDeck().getSecondRevealed()));
-        deckSecondRevealed.add(printCard.getCardAsStringRows(board.getGoldCardDeck().getSecondRevealed()));
-        deckSecondRevealed.add(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getSecondRevealed()));
+        deckSecondRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getSecondRevealed())));
+        deckSecondRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getGoldCardDeck().getSecondRevealed())));
+        deckSecondRevealed.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getSecondRevealed())));
 
         printCard.printCardsSideBySide(deckBacks, cardSpacing);
         printCard.printCardsSideBySide(deckFirstRevealed, cardSpacing);
@@ -90,7 +92,7 @@ public class PrintBoardUI implements Scene {
         out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
         for(ViewOpponentHand opponent : board.getOpponents()){
             String colorBG = getColorFromEnum(opponent.getColor());
-            String connectionFG = opponent.isConnected() ? GREEN_BRIGHT_TEXT : RED_BRIGHT_TEXT;
+            String connectionFG = opponent.isConnected() ? "" : RED_BRIGHT_TEXT;
             out.print("\t\t" +  combine(connectionFG, colorBG) + " " + opponent.getNickname() + " " + RESET);
         }
         out.println();

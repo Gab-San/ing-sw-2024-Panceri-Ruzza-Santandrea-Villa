@@ -1,8 +1,10 @@
 package it.polimi.ingsw.view.tui.scenes;
 
-import static it.polimi.ingsw.view.ViewBoardGenerator.getRandomScore;
+import static it.polimi.ingsw.view.ViewBoardGenerator.*;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
+
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewHand;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,11 @@ public class PrintBoardUITest {
         random = new Random();
 
         randomScoresTest(); // set random scores
+        board.addPlayer("Player2");
+        board.addPlayer("Player3");
+        board.addPlayer("Player4");
+        board.getAllPlayerHands().forEach(h->h.setColor(getRandomAvailableColor(board)));
+        // set random colors for all players
 
         board.getResourceCardDeck().setTopCard(getRandomResourceCard());
         board.getResourceCardDeck().setFirstRevealed(getRandomResourceCard());

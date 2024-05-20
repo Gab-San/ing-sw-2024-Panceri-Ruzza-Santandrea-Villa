@@ -166,4 +166,13 @@ public class PrintCard {
         }
         System.out.print("\n");
     }
+
+    public String[] cutAllCornersIfEmpty(String[] cardAsStringRows){
+        String emptyRow = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
+        if(cardAsStringRows[2].equals(emptyRow)){
+            cardAsStringRows[0] = emptyRow;
+            cardAsStringRows[4] = emptyRow;
+        }
+        return cardAsStringRows;
+    }
 }

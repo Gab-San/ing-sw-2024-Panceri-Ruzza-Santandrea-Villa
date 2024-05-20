@@ -3,16 +3,12 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.functions.UsefulFunc;
-import it.polimi.ingsw.view.model.ViewDeck;
-import it.polimi.ingsw.view.model.ViewOpponentHand;
-import it.polimi.ingsw.view.model.ViewPlayArea;
-import it.polimi.ingsw.view.model.ViewPlayerHand;
+import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
@@ -20,9 +16,17 @@ import static it.polimi.ingsw.view.ViewCardGenerator.*;
 public class ViewBoardGenerator {
     static final Random random = new Random();
 
-    private static PlayerColor getRandomPlayerColor(){
+    public static PlayerColor getRandomPlayerColor(){
         PlayerColor[] colors = PlayerColor.values();
         return colors[random.nextInt(colors.length)];
+    }
+
+    public static PlayerColor getRandomAvailableColor(ViewBoard board){
+        List<PlayerColor> colors = new LinkedList<>(List.of(PlayerColor.values()));
+        board.getAllPlayerHands().forEach(h->colors.remove(h.getColor()));
+        if(!colors.isEmpty())
+            return colors.get(random.nextInt(colors.size()));
+        else return null;
     }
 
     public static int getRandomScore(){
