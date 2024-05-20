@@ -22,7 +22,7 @@ public abstract class PrintGameUI implements Scene {
         printHand = new PrintHand(hand);
         printCenter = new Point(0,0);
         this.nickname = hand.getNickname();
-        out = new PrintWriter(System.out);
+        out = new PrintWriter(System.out, true);
     }
     @Override
     abstract public void display();

@@ -47,12 +47,23 @@ public class PrintFullGameUITest {
 
     static void cls(){
         //TODO: delete \n screen before release (needed for IDE console cls)
-        System.out.print("\n".repeat(50)); // cls for IDE
-
-        //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
+//         // cls for IDE
+        boolean runningIntelliJ = false;
         try {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        }catch (Exception ignore){}
+            runningIntelliJ = PrintFullGameUITest.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
+        } catch (ClassNotFoundException ignored) {}
+
+        if(runningIntelliJ) System.out.print("\n".repeat(50));
+        else{
+            System.out.print("\033[H\033[2J");
+            //FIXME: [Ale] choose which cls to use
+//            //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
+//            try {
+//                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+//            }catch (Exception ignore){}
+        }
+
+        System.out.flush();
     }
     static void printCommandLegend(){
         System.out.println("Valid commands: ");

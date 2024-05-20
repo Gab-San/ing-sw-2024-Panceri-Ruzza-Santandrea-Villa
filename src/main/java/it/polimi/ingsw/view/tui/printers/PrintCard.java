@@ -2,17 +2,20 @@ package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.tui.ConsoleColorsCombiner;
 
 import java.util.List;
 
 import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.BLACK_TEXT;
 
 public class PrintCard {
     static final int cornerRowSpaceCount = 16;  // Exact spacing between Corners
     static final int middleRowSideSpaceCount = 10;  // Spacing of the middle row sides (excluding the resource character in the center)
-    static final int cornerStringLength = (WHITE + " M " + RESET).length();
-    static final int cornerStringAsSpacesLength = (WHITE + " M " + RESET).length() - (WHITE + RESET).length();
+    static final String cornerColor = ConsoleColorsCombiner.combine(BLACK_TEXT, WHITE);
+    static final int cornerStringLength = (cornerColor + " M " + RESET).length();
+    static final int cornerStringAsSpacesLength = (" M ").length();
     private final int cardIDSpacing = 2;
     private String colorCode;
 
@@ -37,7 +40,9 @@ public class PrintCard {
         String leftResourceStr = leftResource == null ? " " : leftResource.toString();
         String rightResourceStr = rightResource == null ? " " : rightResource.toString();
 
-        return WHITE + " " + leftResourceStr + " " + RESET + colorCode + halfSpace + centerString + halfSpace + RESET + WHITE + " " + rightResourceStr + " " + RESET;
+        return cornerColor + " " + leftResourceStr + " " + RESET +
+                colorCode + halfSpace + centerString + halfSpace + RESET +
+                cornerColor + " " + rightResourceStr + " " + RESET;
     }
     private String getCenterRow(GameResource centralResource){
         String middleChar;
@@ -91,7 +96,7 @@ public class PrintCard {
             for (int i = 1; i < nullCardAsSpaces.length-1; i++) {
                 nullCardAsSpaces[i] = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
             }
-            String cornerSubstitute = RESET + "   " + RESET;
+            String cornerSubstitute = cornerColor + "   " + RESET;
             nullCardAsSpaces[0] = cornerSubstitute + getSpaces(cornerRowSpaceCount) + cornerSubstitute;
             nullCardAsSpaces[4] = nullCardAsSpaces[0];
             return nullCardAsSpaces;

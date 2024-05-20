@@ -6,19 +6,20 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.tui.ConsoleBackgroundColors;
+import it.polimi.ingsw.view.tui.ConsoleColorsCombiner;
 import it.polimi.ingsw.view.tui.ConsoleTextColors;
-
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static it.polimi.ingsw.CornerDirection.*;
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.WHITE;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class PrintPlayArea {
     private final PrintCard printCard;
     private final ViewPlayArea playArea;
-    private final String freeCornerColor = ConsoleTextColors.WHITE_BRIGHT_TEXT;
+    private final String freeCornerColor = ConsoleColorsCombiner.combine(BLACK_BRIGHT_TEXT, WHITE);
 
     public PrintPlayArea(ViewPlayArea playArea){
         printCard = new PrintCard();

@@ -4,25 +4,28 @@ import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 
 public class ConsoleBackgroundColors {
-  public static final String RESET = "\u001B[00m";  //Resetta il colore
+    public static final String PREFIX = "\u001B[";
+    public static final String POSTFIX = "m";
+    
+  public static final String RESET = PREFIX + "00" + POSTFIX;  //Resetta il colore
 
     // Normal intensity backgrounds
-  public static final String WHITE = "\u001B[47m"; //Colore bianco per i bordi
-  public static final String RED = "\u001B[41m";
-  public static final String PURPLE = "\u001B[45m";
-  public static final String GREEN = "\u001B[42m";
-  public static final String BLUE = "\033[44m";
-  public static final String YELLOW = "\033[43m";
+  public static final String WHITE = PREFIX + "47" + POSTFIX; //Colore bianco per i bordi
+  public static final String RED = PREFIX + "41" + POSTFIX;
+  public static final String PURPLE = PREFIX + "45" + POSTFIX;
+  public static final String GREEN = PREFIX + "42" + POSTFIX;
+  public static final String BLUE = PREFIX + "44" + POSTFIX;
+  public static final String YELLOW = PREFIX + "43" + POSTFIX;
 
     // High Intensity backgrounds
-  public static final String BLACK_BRIGHT = "\033[0;100m";
-  public static final String RED_BRIGHT = "\033[0;101m";
-  public static final String GREEN_BRIGHT = "\033[0;102m";
-  public static final String YELLOW_BRIGHT = "\033[0;103m";
-  public static final String BLUE_BRIGHT = "\033[0;104m";
-  public static final String PURPLE_BRIGHT = "\033[0;105m";
-  public static final String CYAN_BRIGHT = "\033[0;106m";
-  public static final String WHITE_BRIGHT = "\033[0;107m";
+  public static final String BLACK_BRIGHT = PREFIX + "0;100" + POSTFIX;
+  public static final String RED_BRIGHT = PREFIX + "0;101" + POSTFIX;
+  public static final String GREEN_BRIGHT = PREFIX + "0;102" + POSTFIX;
+  public static final String YELLOW_BRIGHT = PREFIX + "0;103" + POSTFIX;
+  public static final String BLUE_BRIGHT = PREFIX + "0;104" + POSTFIX;
+  public static final String PURPLE_BRIGHT = PREFIX + "0;105" + POSTFIX;
+  public static final String CYAN_BRIGHT = PREFIX + "0;106" + POSTFIX;
+  public static final String WHITE_BRIGHT = PREFIX + "0;107" + POSTFIX;
 
     public static String getColorFromEnum(PlayerColor color){
         if(color == null) return RESET;

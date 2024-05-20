@@ -8,30 +8,39 @@ import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.Scene;
 import it.polimi.ingsw.view.tui.printers.PrintCard;
 
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_BRIGHT_TEXT;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
 public class PrintBoardUI implements Scene {
     static final int cardSpacing = 4;
     PrintCard printCard;
     ViewBoard board;
+    PrintWriter out;
 
     public PrintBoardUI(ViewBoard board){
         this.board = board;
         this.printCard = new PrintCard();
+        out = new PrintWriter(System.out, true);
     }
 
     @Override
+    public void displayError(String msg) {
+        out.println(RED_TEXT + msg + RESET);
+    }
+    @Override
     public void display(){
-        System.out.print("Scoreboard:\t");
+        out.print("Scoreboard:\t");
         if(board.isEndgame())
-            System.out.print(YELLOW_BRIGHT_TEXT + "[ENDGAME]" + RESET);
-        System.out.println("\n");
+            out.print(YELLOW_BRIGHT_TEXT + "[ENDGAME]" + RESET);
+        out.println("\n");
         for (int i = 0; i <= 29; i++) {
             StringBuilder playersOnI = new StringBuilder();
             List<ViewHand> hands = board.getAllPlayerHands();
@@ -42,12 +51,12 @@ public class PrintBoardUI implements Scene {
                 }
             }
 
-            if(i == ViewBoard.ENDGAME_SCORE) System.out.print(YELLOW_BRIGHT_TEXT + i + RESET);
-            else System.out.print(i);
-            System.out.print(" " + playersOnI + RESET);
+            if(i == ViewBoard.ENDGAME_SCORE) out.print(YELLOW_BRIGHT_TEXT + i + RESET);
+            else out.print(i);
+            out.print(" " + playersOnI + RESET);
         }
 
-        System.out.println("\n\nCentral Board: \n");
+        out.println("\n\nCentral Board: \n");
 
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard()));
@@ -78,11 +87,13 @@ public class PrintBoardUI implements Scene {
         printCard.printCardsSideBySide(deckSecondRevealed, cardSpacing);
 
         String myColor = getColorFromEnum(board.getPlayerHand().getColor());
-        System.out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
+        out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
         for(ViewOpponentHand opponent : board.getOpponents()){
-            System.out.print("\t\t" + getColorFromEnum(opponent.getColor()) + " " + opponent.getNickname() + " " + RESET);
+            String colorBG = getColorFromEnum(opponent.getColor());
+            String connectionFG = opponent.isConnected() ? GREEN_BRIGHT_TEXT : RED_BRIGHT_TEXT;
+            out.print("\t\t" +  combine(connectionFG, colorBG) + " " + opponent.getNickname() + " " + RESET);
         }
-        System.out.println();
+        out.println();
     }
 
     @Override
