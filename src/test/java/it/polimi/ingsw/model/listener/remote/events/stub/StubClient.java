@@ -100,16 +100,16 @@ public class StubClient implements VirtualClient {
     public void setDeckState(char deck, String revealedId, int cardPosition) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof deck revealation with:\n" +
                 "[DECK TYPE] " + deck + "\n" +
-                "[TOP CARD] " + revealedId + "\n" +
+                "[CARD] " + revealedId + "\n" +
                 "[CARD POSITION] " + cardPosition, Attribute.BLUE_TEXT()));
     }
 
     @Override
-    public void setDeckState(char deck, String firstId, String secondId) throws RemoteException {
+    public void setDeckState(char deck, String firstCardId, String secondCardId) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof deck creation with:\n" +
                 "[DECK TYPE] " + deck + "\n" +
-                "[FIRST CARD] " + firstId + "\n" +
-                "[SECOND CARD] " + secondId, Attribute.BLUE_TEXT()));
+                "[FIRST CARD] " + firstCardId + "\n"
+                + "[SECOND CARD] " + secondCardId  , Attribute.BLUE_TEXT()));
     }
 
 
@@ -161,10 +161,10 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void playerHandDrawUpdate(String nickname, String drawnCardId) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof drawn card with:\n" +
+    public void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException {
+        System.out.println(colorize("Notified " + this.nickname + "\nof added card with:\n" +
                 "[PLAYER] " + nickname + "\n" +
-                "[DRAWN CARD] " + drawnCardId, Attribute.YELLOW_TEXT()));
+                "[ADDED CARD] " + drawnCardId, Attribute.YELLOW_TEXT()));
     }
 
     @Override
@@ -176,23 +176,23 @@ public class StubClient implements VirtualClient {
 
     @Override
     public void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException {
-        System.out.println(colorize("Notified by " + this.nickname + "\nof chosen objective with:\n" +
+        System.out.println(colorize("Notified by " + this.nickname + "\nof added objective with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[ADDED OBJECTIVE CARD] " + objectiveCard, Attribute.YELLOW_TEXT()));
     }
 
     @Override
     public void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof chosen objective with:\n" +
                 "[PLAYER] " + nickname + "\n" +
-                "[CHOSEN OBJECTIVE CARD] " + chosenObjectiveId, Attribute.MAGENTA_TEXT()));
+                "[CHOSEN OBJECTIVE CARD] " + chosenObjectiveId, Attribute.YELLOW_TEXT()));
     }
 
     @Override
     public void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof added starting card with:\n" +
                 "[PLAYER] " + nickname + "\n" +
-                "[STARTING CARD] " + startingCardId , Attribute.MAGENTA_TEXT()));
+                "[STARTING CARD] " + startingCardId , Attribute.YELLOW_TEXT()));
     }
 
     @Override

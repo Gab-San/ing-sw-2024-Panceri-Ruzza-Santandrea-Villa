@@ -177,7 +177,7 @@ public boolean isClosed(){
     }
 
     @Override
-    public void setDeckState(char deck, String firstId, String secondId) throws RemoteException {
+    public void setDeckState(char deck, String firstCardId, String secondCardId) throws RemoteException {
 
     }
 
@@ -218,7 +218,7 @@ public boolean isClosed(){
     }
 
     @Override
-    public void playerHandDrawUpdate(String nickname, String drawnCardId) throws RemoteException {
+    public void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException {
 
     }
 

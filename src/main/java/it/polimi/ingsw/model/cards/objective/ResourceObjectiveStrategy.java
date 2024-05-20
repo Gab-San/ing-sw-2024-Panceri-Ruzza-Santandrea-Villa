@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.enums.GameResource;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -13,7 +14,8 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
     private final Map<GameResource, Integer> resourceForCompletion;
 
     public ResourceObjectiveStrategy(Map<GameResource, Integer> resourceForCompletion) {
-        this.resourceForCompletion = resourceForCompletion;
+        this.resourceForCompletion = new Hashtable<>();
+        this.resourceForCompletion.putAll(resourceForCompletion);
     }
 
     public int calculateSolves(@NotNull PlayArea p){

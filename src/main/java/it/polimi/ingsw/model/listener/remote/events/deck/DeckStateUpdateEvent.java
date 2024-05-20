@@ -27,16 +27,17 @@ public class DeckStateUpdateEvent extends DeckEvent{
             virtualClient.createEmptyDeck(deck);
             return;
         }
-
         if(topId == null && firstId == null){
             virtualClient.setDeckState(deck, secondId, PlayableDeck.SECOND_POSITION);
             return;
         }
         if(topId == null && secondId == null){
             virtualClient.setDeckState(deck ,firstId, PlayableDeck.FIRST_POSITION);
+            return;
         }
         if(topId == null){
             virtualClient.setDeckState(deck, firstId, secondId);
+            return;
         }
         virtualClient.setDeckState(deck, topId, firstId, secondId);
     }

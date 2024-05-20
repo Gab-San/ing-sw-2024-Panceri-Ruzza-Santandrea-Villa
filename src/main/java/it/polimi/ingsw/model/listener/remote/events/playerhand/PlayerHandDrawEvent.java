@@ -15,6 +15,6 @@ public class PlayerHandDrawEvent extends PlayerEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.playerHandDrawUpdate(nickname, drawnCardId);
+        virtualClient.playerHandAddedCardUpdate(nickname, drawnCardId);
     }
 }

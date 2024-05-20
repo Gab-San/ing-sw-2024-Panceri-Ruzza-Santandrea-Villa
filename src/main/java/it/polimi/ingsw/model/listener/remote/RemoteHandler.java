@@ -41,6 +41,7 @@ public class RemoteHandler implements GameListener{
         submitUpdates(nickname);
     }
     public void removeClient(String nickname){
+        if(!playerClients.containsKey(nickname)) return;
         VirtualClient virtualClient = playerClients.get(nickname);
         eventRecord.forceRemoveTask(virtualClient);
         eventRecord.unlistClient(virtualClient);

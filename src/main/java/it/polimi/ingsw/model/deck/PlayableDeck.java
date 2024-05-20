@@ -1,16 +1,15 @@
 package it.polimi.ingsw.model.deck;
 
-import it.polimi.ingsw.model.listener.GameEvent;
-import it.polimi.ingsw.model.listener.GameListener;
-import it.polimi.ingsw.model.listener.GameSubject;
-import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
-import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
+import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
 
 import java.util.ArrayDeque;
@@ -52,7 +51,7 @@ public class PlayableDeck implements GameSubject {
 
     public synchronized PlayCard getTopCard(){
         PlayCard returnCard;
-        returnCard = cardDeck.remove();
+        returnCard = cardDeck.poll();
         try {
             cardDeck.add(cardFactory.addCardToDeck());
         } catch (DeckException ignored){
@@ -78,20 +77,10 @@ public class PlayableDeck implements GameSubject {
     private void reveal(int position){
         switch(position){
             case FIRST_POSITION:
-                if(cardDeck.isEmpty()) {
-                    firstRevealedCard = null;
-                    notifyAllListeners(new DeckRevealEvent(deckType, null, FIRST_POSITION));
-                    break;
-                }
                 firstRevealedCard = getTopCard();
                 notifyAllListeners(new DeckRevealEvent(deckType, firstRevealedCard, FIRST_POSITION));
                 break;
             case SECOND_POSITION:
-                if(cardDeck.isEmpty()) {
-                    secondRevealedCard = null;
-                    notifyAllListeners(new DeckRevealEvent(deckType, null, FIRST_POSITION));
-                    break;
-                }
                 secondRevealedCard = getTopCard();
                 notifyAllListeners(new DeckRevealEvent(deckType, firstRevealedCard, FIRST_POSITION));
                 break;

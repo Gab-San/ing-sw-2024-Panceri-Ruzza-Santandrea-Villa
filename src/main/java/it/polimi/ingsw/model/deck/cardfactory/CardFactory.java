@@ -16,7 +16,7 @@ import java.util.Random;
 public abstract class CardFactory{
     protected final List<String> remainingCards;
 
-    CardFactory(String idFile){
+    protected CardFactory(String idFile){
         Charset chrset = Charset.forName(System.getProperty("file.encoding"));
         remainingCards = loadCardsIDs(Path.of(idFile), chrset);
     }

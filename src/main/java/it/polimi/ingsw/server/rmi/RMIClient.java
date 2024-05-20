@@ -80,9 +80,10 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void setDeckState(char deck, String firstId, String secondId) throws RemoteException {
+    public void setDeckState(char deck, String firstCardId, String secondCardId) throws RemoteException {
 
     }
+
 
     @Override
     public void emptyDeck(char deck) throws RemoteException {
@@ -120,7 +121,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void playerHandDrawUpdate(String nickname, String drawnCardId) throws RemoteException {
+    public void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException {
 
     }
 
