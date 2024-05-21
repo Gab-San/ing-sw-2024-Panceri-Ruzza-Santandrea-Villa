@@ -34,6 +34,7 @@ public class PrintBoardUI implements Scene {
 
     @Override
     public void displayError(String msg) {
+        display();
         out.println(RED_TEXT + msg + RESET);
     }
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.view.gui.GUIStarter;
 import it.polimi.ingsw.view.tui.scenes.PrintConnectTechUI;
 
 import java.util.Scanner;

@@ -105,23 +105,17 @@ public class PrintFullGameUITest {
                     case "center": printUI.setCenter(0,0); break;
                     default: error = "Invalid move direction."; break;
                 }
+                if(error.isEmpty())
+                    continue; //avoids printing twice (in moveView/setCenter) and at the end of loop
             }
             else if(input.matches("[fF]lip [1-3]")){
                 int index = Integer.parseInt(input.substring("flip ".length()));
                 try{ test.board.getPlayerHand().flipCard(index); }
                 catch (IndexOutOfBoundsException e){ error = "Index too high!"; }
-                if(error.isEmpty()) {
-                    cls();
-                    printUI.display();
-                }
             }
             else if(input.matches("[fF]lip [rRgGsS][0-9]?[0-9]|[fF]lip [sS]tarting")){
                 try{ test.board.getPlayerHand().flipCard(input.substring("flip ".length()).toUpperCase()); }
                 catch (IllegalArgumentException e){ error = e.getMessage(); }
-                if(error.isEmpty()) {
-                    cls();
-                    printUI.display();
-                }
             }
 //            else if(input.matches("[lL]egend")){
 //                printCommandLegend();
@@ -133,10 +127,6 @@ public class PrintFullGameUITest {
                     case "objective": test.board.getPlayerHand().setSecretObjectiveCards(new LinkedList<>()); break;
                     case "starting": test.board.getPlayerHand().clearStartCard(); break;
                     default: error = "Invalid flush argument"; break;
-                }
-                if(error.isEmpty()) {
-                    cls();
-                    printUI.display();
                 }
             }
             else if(input.matches("[vV]iew [a-zA-Z0-9]+")){
@@ -151,19 +141,15 @@ public class PrintFullGameUITest {
                         else error = "Invalid view argument";
                         break;
                 }
-                if(error.isEmpty()) {
-                    cls();
-                    printUI.display();
-                }
             }
             else error = "Invalid command.";
 
+            cls();
             if(!error.isEmpty()) {
-                cls();
-                printUI.display();
-                System.out.println(RED_TEXT + error + RESET);
+                printUI.displayError(error);
                 error = "";
             }
+            else printUI.display();
         }
     }
 }

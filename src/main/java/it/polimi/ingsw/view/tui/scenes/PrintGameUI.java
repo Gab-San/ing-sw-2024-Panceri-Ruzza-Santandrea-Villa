@@ -10,6 +10,9 @@ import it.polimi.ingsw.view.tui.printers.PrintPlayArea;
 
 import java.io.PrintWriter;
 
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+
 public abstract class PrintGameUI implements Scene {
     protected final PrintPlayArea printPlayArea;
     protected Point printCenter;
@@ -26,6 +29,12 @@ public abstract class PrintGameUI implements Scene {
     }
     @Override
     abstract public void display();
+
+    @Override
+    public void displayError(String msg){
+        display();
+        out.println(RED_TEXT + msg + RESET);
+    }
 
     @Override
     public void moveView(CornerDirection...directions){

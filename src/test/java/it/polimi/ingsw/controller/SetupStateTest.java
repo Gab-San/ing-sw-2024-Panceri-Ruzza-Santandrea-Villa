@@ -14,8 +14,6 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO QUESTO TEST VA COMPLETATO!!!
-
 public class SetupStateTest {
     private BoardController controller;
     private Board board;

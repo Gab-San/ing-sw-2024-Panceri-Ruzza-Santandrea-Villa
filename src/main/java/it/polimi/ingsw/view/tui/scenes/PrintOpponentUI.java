@@ -13,10 +13,7 @@ public class PrintOpponentUI extends PrintGameUI {
         super(hand, playArea);
         this.hand = hand;
     }
-    @Override
-    public void displayError(String msg) {
-        out.println(RED_TEXT + msg + RESET);
-    }
+
     @Override
     public void display(){
         out.println(nickname + "'s playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
