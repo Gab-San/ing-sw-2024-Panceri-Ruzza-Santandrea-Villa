@@ -92,7 +92,6 @@ public class ClientHandler implements Runnable, VirtualServer {
                         }
 
 
-
                         try {
                             command.execute(this, proxy);
                         } catch (IllegalStateException stateException) {

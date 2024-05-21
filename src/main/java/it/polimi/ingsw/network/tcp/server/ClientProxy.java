@@ -32,6 +32,7 @@ public class ClientProxy implements VirtualClient {
         try{
             outputStream.writeObject(new SendMessage(nickname, msg));
             outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             clientHandler.closeSocket();
             throw new RemoteException("Connection Lost " + e.getMessage());
@@ -188,6 +189,7 @@ public class ClientProxy implements VirtualClient {
             ping();
             outputStream.writeObject(message);
             outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             clientHandler.closeSocket();
         }

@@ -205,7 +205,7 @@ public class PlayState extends GameState {
 
     private void postDrawChecks(){
         int lastPlayerTurn = board.getPlayerAreas().keySet().stream()
-                // only look at players that are connected and NOT deadlocked
+        // only look at players that are connected and NOT deadlocked
                 .filter(p -> p.isConnected() && !board.getPlayerDeadlocks().get(p))
                 .mapToInt(Player::getTurn)
                 .max()

@@ -146,7 +146,7 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
 
         this.secretObjective.add(secretObjective);
-        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), secretObjective));
+//        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), secretObjective));
     } 
     
     /**
@@ -159,7 +159,7 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
         ObjectiveCard objectiveCard = drawCard.get();
         this.secretObjective.add(objectiveCard);
-        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
+//        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
     }
     
     

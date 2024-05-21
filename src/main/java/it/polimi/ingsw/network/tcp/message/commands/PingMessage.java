@@ -22,13 +22,11 @@ public class PingMessage implements TCPClientMessage, TCPServerMessage {
 
     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
-        System.out.println(colorize("Pinging server...", Attribute.MAGENTA_TEXT()));
         virtualServer.ping();
     }
 
     @Override
     public void execute(VirtualClient virtualClient) throws RemoteException {
-        System.out.println(colorize("Pinging client...", Attribute.BLUE_TEXT()));
         virtualClient.ping();
     }
 }

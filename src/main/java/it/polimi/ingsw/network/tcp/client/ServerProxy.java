@@ -61,6 +61,7 @@ public class ServerProxy implements CommandPassthrough {
         try{
             outputStream.writeObject(command);
             outputStream.flush();
+            outputStream.reset();
         } catch (IOException exception){
             closeProxy();
             throw new RemoteException("Connection Lost: " + exception.getMessage());
@@ -91,6 +92,7 @@ public class ServerProxy implements CommandPassthrough {
         try{
             outputStream.writeObject(new PingMessage());
             outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RemoteException("Can't ping server", e);
         }
@@ -101,6 +103,7 @@ public class ServerProxy implements CommandPassthrough {
         try{
             outputStream.writeObject(new ConnectMessage(nickname));
             outputStream.flush();
+            outputStream.reset();
             waitForCheck();
             this.nickname = nickname;
         } catch (IOException e) {
