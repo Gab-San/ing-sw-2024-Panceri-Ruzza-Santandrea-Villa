@@ -49,6 +49,7 @@ public class PlayState extends GameState {
 
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+        disconnectingPlayers.remove(nickname);
         if(board.getPlayerAreas().keySet().stream()
                 .map(Player::getNickname).filter((s)-> s.equals(nickname)).findAny().isEmpty())
             //se non esiste un giocatore con quel nickname

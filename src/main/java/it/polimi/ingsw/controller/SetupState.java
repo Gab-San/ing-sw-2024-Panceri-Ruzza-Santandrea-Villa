@@ -55,8 +55,11 @@ public class SetupState extends GameState{
     public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException {
 
+        disconnectingPlayers.remove(nickname);
+
         if(!board.getPlayerAreas().keySet().stream().map(Player::getNickname).toList().contains(nickname))
             throw  new IllegalArgumentException(nickname+" non fa parte della partita");
+
 
         board.disconnectPlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);

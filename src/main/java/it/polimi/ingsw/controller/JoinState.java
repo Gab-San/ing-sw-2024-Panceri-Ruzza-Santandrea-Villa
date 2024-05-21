@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
 import it.polimi.ingsw.network.VirtualClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JoinState extends GameState {
@@ -35,6 +36,9 @@ public class JoinState extends GameState {
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         board.unsubscribeClientFromUpdates(nickname);
         board.removePlayer(nickname);
+
+        if(board.getPlayerAreas().isEmpty())
+            transition(new CreationState(board, controller, new ArrayList<>()));
     }
 
     @Override
