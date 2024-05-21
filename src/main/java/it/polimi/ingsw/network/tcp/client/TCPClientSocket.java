@@ -272,5 +272,10 @@ public class TCPClientSocket implements VirtualClient{
 
     }
 
+    @Override
+    public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
 //endregion
 }

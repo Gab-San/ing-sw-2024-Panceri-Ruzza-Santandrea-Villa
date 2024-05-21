@@ -175,6 +175,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     }
 
+    @Override
+    public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
     public RMIServerProxy getProxy(){
         return proxy;
     }

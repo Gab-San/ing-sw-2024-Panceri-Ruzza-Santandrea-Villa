@@ -38,6 +38,7 @@ public class RemoteErrorHandler implements GameListener {
         }
 
         VirtualClient client =  playerClients.get(addressee);
+        if(client == null) return;
         try {
             error.executeEvent(client);
         } catch (RemoteException e) {

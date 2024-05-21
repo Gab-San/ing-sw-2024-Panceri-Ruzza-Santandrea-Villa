@@ -154,4 +154,9 @@ public class PuppetClient implements VirtualClient {
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
 
     }
+
+    @Override
+    public void reportError(String errorMessage) throws RemoteException {
+
+    }
 }

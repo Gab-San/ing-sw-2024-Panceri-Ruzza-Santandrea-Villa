@@ -174,6 +174,11 @@ public class ClientProxy implements VirtualClient {
 
     }
 
+    @Override
+    public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
     void setUsername(String nickname){
         this.nickname = nickname;
     }

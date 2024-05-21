@@ -240,4 +240,9 @@ public class StubClient implements VirtualClient {
                 "[DEADLOCK] " + isDeadLocked, Attribute.MAGENTA_TEXT()));
     }
 
+    @Override
+    public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
 }
