@@ -403,14 +403,21 @@ public class PlayStateTest {
             assertEquals(board.getCurrentPlayer(), currPlayer, "currPlayer is " + currPlayer.getNickname() + " instead of " + board.getCurrentPlayer().getNickname());
 
             //disconnect part
-            if ((i == disconnectTurn)  && new Random().nextBoolean())
+            if ((i == disconnectTurn)  && new Random().nextBoolean()){
                 controller.disconnect(currPlayer.getNickname());
+                if(board.getGamePhase()==GamePhase.SHOWWIN)
+                    break;
+            }
             else {
                 isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
 
                 placeRandomCard(currPlayer);
-                if ((i == disconnectTurn) && new Random().nextBoolean())
+                if ((i == disconnectTurn) && new Random().nextBoolean()){
                     controller.disconnect(currPlayer.getNickname());
+                    if(board.getGamePhase()==GamePhase.SHOWWIN)
+                        break;
+                }
+
                 else {
                     isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
                     System.err.println("isLastTurn=" + isLastTurn);
@@ -435,7 +442,9 @@ public class PlayStateTest {
 
                         drawRandomCard(currPlayer);
                         if ((i == disconnectTurn) && new Random().nextBoolean()) {
-                            controller.disconnect(currPlayer.getNickname());
+                                controller.disconnect(currPlayer.getNickname());
+                                if(board.getGamePhase()==GamePhase.SHOWWIN)
+                                    break;
                         } else {
                             isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
                             //se sono all'ultimo turno dell'ultimo round

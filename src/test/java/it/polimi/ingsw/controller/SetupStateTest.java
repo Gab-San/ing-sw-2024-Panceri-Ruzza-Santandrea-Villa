@@ -279,27 +279,42 @@ public class SetupStateTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
-    public void testWithDisconnect(int numOfPlayers){
-        setUp(numOfPlayers);
-        assertEquals(GamePhase.PLACESTARTING, board.getGamePhase());
-        Player discPlayer=board.getPlayerAreas().keySet().stream().findAny().stream().toList().get(0);
+    public void testWithDisconnect(int numOfPlayers) {
+        for (int i = 0; i < 3; i++) {
+            setUp(numOfPlayers);
+            assertEquals(GamePhase.PLACESTARTING, board.getGamePhase());
+            Player discPlayer = board.getPlayerAreas().keySet().stream().findAny().stream().toList().get(0);
+            System.err.println(discPlayer.getNickname() + ", ciclo=" + i);
+            System.err.println(discPlayer.getNickname() + " is connected " + discPlayer.isConnected());
 
-        controller.disconnect(discPlayer.getNickname());
+            if (i == 0) {
+                controller.disconnect(discPlayer.getNickname());
+                System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
+            }
 
-        System.err.println(discPlayer.getNickname());
 
-        for(Player p: board.getPlayerAreas().keySet())
-            if(!p.equals(discPlayer))
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
                 controller.placeStartingCard(p.getNickname(), true);
-        for(Player p: board.getPlayerAreas().keySet())
-            if(!p.equals(discPlayer))
+
+            if (i == 1) {
+                controller.disconnect(discPlayer.getNickname());
+                System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
+            }
+
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
                 controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
-        for(Player p: board.getPlayerAreas().keySet())
-            if(!p.equals(discPlayer))
+
+            if (i == 2) {
+                controller.disconnect(discPlayer.getNickname());
+                System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
+            }
+
+
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
                 controller.chooseSecretObjective(p.getNickname(), 1);
 
-        assertEquals(GamePhase.PLACECARD, board.getGamePhase());
-        assertEquals(PlayState.class ,controller.getGameState().getClass());
+            assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+            assertEquals(PlayState.class, controller.getGameState().getClass());
+        }
     }
-
 }
