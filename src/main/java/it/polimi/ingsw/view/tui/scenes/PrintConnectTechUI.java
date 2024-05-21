@@ -14,12 +14,14 @@ import java.util.Scanner;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class PrintConnectTechUI implements Scene {
-    PrintWriter out;
-    Scanner scanner;
+    final PrintWriter out;
+    final Scanner scanner;
+    final String serverIP;
 
-    public PrintConnectTechUI(){
+    public PrintConnectTechUI(String serverIP){
         scanner = new Scanner(System.in);
         out = new PrintWriter(System.out, true);
+        this.serverIP = serverIP;
     }
     @Override
     public void displayError(String msg){
@@ -28,27 +30,27 @@ public class PrintConnectTechUI implements Scene {
 
     @Override
     public void display() {
-
         String connectionType;
         VirtualClient client;
         do {
             out.print("Enter connection type (TCP o RMI): ");
             connectionType = scanner.nextLine();
-            if(connectionType.matches("tcp|TCP")){
+            if(connectionType.matches("tcp|TCP \\d")){
                 //TODO: instantiate TCP client
                 displayError("TCP still WIP.");
                 connectionType = "";
-            } else if (connectionType.matches("rmi|RMI")) {
+            } else if (connectionType.matches("rmi|RMI \\d")) {
                 //TODO: instantiate RMI client
                 try {
                     // FIXME: [Ale] properly set the registryPort here
-                    client = new RMIClient(0);
-                }catch (RemoteException | NotBoundException e){
+                    int port = Integer.parseInt(connectionType.substring("rmi ".length()));
+                    client = new RMIClient(port);
+                }catch (RemoteException | NotBoundException | NumberFormatException e){
                     displayError("Error while trying to create the RMI client.");
                 }
             }
             else displayError("Invalid input.");
-        }while (!connectionType.matches("tcp|TCP|RMI|rmi"));
+        }while (!connectionType.matches("tcp|TCP|RMI|rmi \\d"));
 
         scanner.close();
         new PrintNicknameSelectUI().display();

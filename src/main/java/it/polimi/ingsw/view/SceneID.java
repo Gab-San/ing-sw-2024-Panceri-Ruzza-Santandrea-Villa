@@ -15,6 +15,13 @@ public class SceneID {
         else return false;
     }
 
+    public static SceneID getConnectTechSceneID(){
+        return new SceneID("CONNECT_TECH");
+    }
+    public static SceneID getNicknameSelectSceneID(){
+        return new SceneID("NICKNAME_SELECT");
+    }
+
     public static SceneID getBoardSceneID(){
         return new SceneID("BOARD");
     }
