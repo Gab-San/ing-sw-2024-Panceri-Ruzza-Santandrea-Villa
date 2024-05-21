@@ -13,6 +13,6 @@ public class IllegalParameterError extends RemoteErrorEvent{
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-
+        virtualClient.reportError(errorMsg);
     }
 }

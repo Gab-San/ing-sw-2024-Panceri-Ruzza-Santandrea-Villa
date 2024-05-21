@@ -62,4 +62,6 @@ public interface VirtualClient extends Remote{
     void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException;
 
     void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;
+
+    void reportError(String errorMessage) throws RemoteException;
 }

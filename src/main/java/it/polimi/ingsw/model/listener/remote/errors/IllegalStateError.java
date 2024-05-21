@@ -13,6 +13,6 @@ public class IllegalStateError extends RemoteErrorEvent{
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-
+        virtualClient.reportError(errorMessage);
     }
 }
