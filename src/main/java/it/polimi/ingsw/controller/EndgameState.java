@@ -128,7 +128,7 @@ public class EndgameState extends GameState{
             try {
                 objCard = player.getHand().getSecretObjective();
             } catch (PlayerHandException e){
-                //TODO if at this point in the game the secret objective has to be set
+                //FIXME if at this point in the game the secret objective has to be set
                 // if this error occurs than the application should crash
                 throw new IllegalStateException(e);
             }

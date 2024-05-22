@@ -117,7 +117,6 @@ public class PlayState extends GameState {
         PlayArea playerPlayArea = board.getPlayerAreas().get(player);
         Corner corner;
         try {
-            //TODO CHECK THIS IF ALSO IN PLACECARD METHOD
              corner = playerPlayArea.getCardMatrix().get(cardPos).getCorner(cornerDir);
         } catch (NullPointerException pointerException){
             board.notifyAllListeners(new IllegalParameterError(nickname, "TRYING TO PLACE ON A NON EXISTENT CORNER"));

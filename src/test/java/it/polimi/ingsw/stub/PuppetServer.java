@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.testingStub;
+package it.polimi.ingsw.stub;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -22,7 +22,6 @@ public class DisconnectMessage implements TCPClientMessage {
         virtualServer.disconnect(nickname, virtualClient);
     }
 
-
     @Override
     public boolean isCheck() {
         return false;

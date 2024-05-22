@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.stub;
+package it.polimi.ingsw.stub;
 
 
 import com.diogonunes.jcolor.Attribute;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.rmi.RMIServer;
-import it.polimi.ingsw.network.testingStub.PuppetClient;
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

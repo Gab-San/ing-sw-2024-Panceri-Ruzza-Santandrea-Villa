@@ -13,7 +13,7 @@ import it.polimi.ingsw.network.tcp.message.*;
 import it.polimi.ingsw.network.tcp.message.commands.PingMessage;
 
 import it.polimi.ingsw.network.tcp.message.TCPClientCheckMessage;
-import it.polimi.ingsw.network.tcp.message.checkMessages.CheckMessage;
+import it.polimi.ingsw.network.tcp.message.check.CheckMessage;
 
 
 import java.io.IOException;

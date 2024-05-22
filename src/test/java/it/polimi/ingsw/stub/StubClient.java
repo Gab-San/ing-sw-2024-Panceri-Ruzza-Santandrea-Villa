@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.listener.remote.events.stub;
+package it.polimi.ingsw.stub;
 
 
 import com.diogonunes.jcolor.Attribute;
@@ -19,7 +19,6 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class StubClient implements VirtualClient {
     private final StubView view;
     private final String nickname;
-    public boolean notificationReceived;
 
     public StubClient(String nickname, StubView view) {
         this.view = view;
@@ -123,6 +122,7 @@ public class StubClient implements VirtualClient {
     public void updatePhase(GamePhase gamePhase) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof game phase update with:\n" +
                 "[GAME PHASE] " + gamePhase, Attribute.RED_TEXT()));
+        view.setPhase(gamePhase);
     }
 
     @Override
@@ -130,12 +130,14 @@ public class StubClient implements VirtualClient {
         System.out.println(colorize("Notified " + this.nickname + "\nof score update with:\n" +
                 "[PLAYER] " + nickname+ "\n" +
                 "[SCORE] " + score, Attribute.RED_TEXT()));
+        view.setScoreboard(nickname, score);
     }
 
     @Override
     public void updateTurn(int currentTurn) throws RemoteException {
         System.out.println(colorize("Notified " + this.nickname + "\nof turn change update with:\n" +
                 "[CURRENT TURN] " + currentTurn, Attribute.RED_TEXT()));
+        view.setTurn(currentTurn);
     }
 
     @Override
@@ -206,7 +208,7 @@ public class StubClient implements VirtualClient {
 
     @Override
     public void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof card placement with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[PLACED CARD] " + placedCardId + "\n" +
                 "[POINT] " + new Point(row ,col), Attribute.MAGENTA_TEXT()));
@@ -214,16 +216,18 @@ public class StubClient implements VirtualClient {
 
     @Override
     public void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof visible resources with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[VISIBLE RESOURCES] " + visibleResources , Attribute.MAGENTA_TEXT()));
+        view.setVisibleResources(visibleResources);
     }
 
     @Override
     public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof free corners update with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[FREE CORNERS] " + freeSerialableCorners, Attribute.MAGENTA_TEXT()));
+        view.setFreeCorners(freeSerialableCorners);
     }
 
     @Override
@@ -247,17 +251,19 @@ public class StubClient implements VirtualClient {
 
     @Override
     public void notifyEndgame() throws RemoteException {
-
+        view.setEndgame(true);
     }
 
     @Override
     public void notifyEndgame(String nickname, int score) throws RemoteException {
-
+        view.setEndgame(true);
     }
 
     @Override
     public void removePlayer(String nickname) throws RemoteException {
-
+        System.out.println(colorize("Notifying " + this.nickname + "\nof player removal with:\n" +
+                "[PLAYER] " + nickname, Attribute.MAGENTA_TEXT()));
+        view.removePlayer(nickname);
     }
 
 }

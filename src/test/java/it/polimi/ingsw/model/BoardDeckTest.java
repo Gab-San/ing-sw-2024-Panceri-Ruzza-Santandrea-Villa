@@ -49,7 +49,7 @@ public class BoardDeckTest extends BaseBoardTest{
                 assertThrows(IndexOutOfBoundsException.class, ()->player.getHand().getCard(3));
 
                 // the next draw throws exception due to playerHand being full
-                assertThrows(IllegalStateException.class, ()->board.drawTop(deck, player.getHand()));
+                assertThrows(PlayerHandException.class, ()->board.drawTop(deck, player.getHand()));
 
                 player.getHand().popCard(2);
                 assertDoesNotThrow(()->board.drawFirst(deck, player.getHand()));

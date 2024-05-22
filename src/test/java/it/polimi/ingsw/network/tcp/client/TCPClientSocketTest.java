@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.tcp.client;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
-import it.polimi.ingsw.network.testingStub.PuppetServer;
+import it.polimi.ingsw.stub.PuppetServer;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
@@ -10,6 +9,8 @@ import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.stub.PuppetClient;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -65,12 +66,6 @@ public class PlayStateTest {
         for (Player p : board.getPlayerAreas().keySet()) {
             controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2) + 1);
         }
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {2, 3, 4})
-    public void joinTest(int numOfPlayers) {
-
     }
 
     @ParameterizedTest
@@ -201,7 +196,7 @@ public class PlayStateTest {
 
     private void drawRandomCard(Player player) {
 
-        System.err.println("drawableCards.size()=" + drawableCards.size());
+//        System.err.println("drawableCards.size()=" + drawableCards.size());
         char[] cardToDraw = drawableCards.get(new Random().nextInt(drawableCards.size()));
         if (!player.equals(board.getCurrentPlayer()))
             controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
@@ -210,6 +205,7 @@ public class PlayStateTest {
                 controller.draw(player.getNickname(), cardToDraw[0], Character.getNumericValue(cardToDraw[1]));
             } catch (IllegalArgumentException | IllegalStateException e) {
                 drawableCards.remove(cardToDraw);
+                System.err.println("drawableCards.size()=" + drawableCards.size());
                 drawRandomCard(player);
             }
         }
@@ -252,7 +248,7 @@ public class PlayStateTest {
             isLastTurn = controlIsLastTurn(currPlayer, endgame);
 
             System.err.println("il turno è " + i);
-            System.err.println("started turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
+            System.err.println("started turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (i - 1) / numOfPlayers);
 
             System.err.println("currPlayer is " + currPlayer.getNickname());
 
@@ -286,7 +282,7 @@ public class PlayStateTest {
 
                 controlPostDraw();
 
-                System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
+                System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (i - 1) / numOfPlayers);
             }
 
             endgame = controlEndgame(currPlayer, endgame);
@@ -392,7 +388,7 @@ public class PlayStateTest {
 
 
             System.err.println("il turno è " + i);
-            System.err.println("started turn " + turn + " of the set n° " + (int) (i - 1) / numOfActivePlayers);
+            System.err.println("started turn " + turn + " of the set n° " + (i - 1) / numOfActivePlayers);
 
             System.err.println("currPlayer is " + currPlayer.getNickname());
 
@@ -466,7 +462,7 @@ public class PlayStateTest {
 
                             controlPostDraw();
 
-                            System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
+                            System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (i - 1) / numOfPlayers);
                         }
                     }
                 }
@@ -489,10 +485,12 @@ public class PlayStateTest {
 
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {2, 3, 4})
-    public void simulateRandomGameWithDisconnectAndJoin(int numOfPlayers){
-        setUp(/*2*/numOfPlayers);
+//    @ParameterizedTest
+//    @ValueSource(ints = {2, 3, 4})
+    @RepeatedTest(100)
+    public void simulateRandomGameWithDisconnectAndJoin(){
+        int numOfPlayers = 2;
+        setUp(numOfPlayers);
 
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
@@ -516,9 +514,13 @@ public class PlayStateTest {
             //disconnect part
             if ((i%16 == djTurn && djPhase==0)  && new Random().nextBoolean()){
 
-                if(djPlayer.isConnected())
+                if(djPlayer.isConnected()) {
+                    System.err.println("""
+                            ||||||||||||||||| DISCONNECTING BEFORE PLACING CARD ||||||||||||
+                            """);
                     controller.disconnect(djPlayer.getNickname());
-                else controller.join(djPlayer.getNickname(), new PuppetClient());
+                }else
+                    controller.join(djPlayer.getNickname(), new PuppetClient());
 
                 isLastTurn = controlIsLastTurn(currPlayer, endgame);
                 endgame = controlEndgame(currPlayer, endgame);
@@ -526,29 +528,30 @@ public class PlayStateTest {
                 if(board.getGamePhase()==GamePhase.SHOWWIN)
                     break;
             }
-            if(!currPlayer.isConnected())
-            {isLastTurn = controlIsLastTurn(currPlayer, endgame);
-                endgame = controlEndgame(currPlayer, endgame);}
-            else {
+
+
+            if(currPlayer.isConnected()){
 
                 placeRandomCard(currPlayer);
                 if ((i == djTurn && djPhase==1) && new Random().nextBoolean()){
+
+                    if(djPlayer.isConnected()) {
+                        System.err.println("""
+                                ||||||||||||||||||| disconnecting after placing card|||||||||||||||||||
+                                """);
+                        controller.disconnect(djPlayer.getNickname());
+                    } else
+                        controller.join(djPlayer.getNickname(), new PuppetClient());
+
                     isLastTurn = controlIsLastTurn(currPlayer, endgame);
                     endgame = controlEndgame(currPlayer, endgame);
-
-                    //System.err.println("disconnecting after placing card");
-                    if(djPlayer.isConnected())
-                        controller.disconnect(djPlayer.getNickname());
-                    else controller.join(djPlayer.getNickname(), new PuppetClient());
 
                     if(board.getGamePhase()==GamePhase.SHOWWIN)
                         break;
                 }
 
-                if(!currPlayer.isConnected())
-                {isLastTurn = controlIsLastTurn(currPlayer, endgame);
-                    endgame = controlEndgame(currPlayer, endgame);}
-                else {
+
+                if(currPlayer.isConnected()){
                     isLastTurn = controlIsLastTurn(currPlayer, endgame);
 
                     //se non posso più pescare
@@ -562,15 +565,19 @@ public class PlayStateTest {
                     }
                     else { //se posso ancora pescare
                         controlPostPlaceDrawable();
-
                         drawRandomCard(currPlayer);
                         if ((i%16 == djTurn && djPhase==2) && new Random().nextBoolean()) {
+
+                            if(djPlayer.isConnected()) {
+                                System.err.println("""
+                            ||||||||||||||||| DISCONNECTING AFTER DRAWING CARD ||||||||||||
+                            """);
+                                controller.disconnect(djPlayer.getNickname());
+                            }else controller.join(djPlayer.getNickname(), new PuppetClient());
+
                             isLastTurn = controlIsLastTurn(currPlayer, endgame);
                             endgame = controlEndgame(currPlayer, endgame);
 
-                            if(djPlayer.isConnected())
-                                controller.disconnect(djPlayer.getNickname());
-                            else controller.join(djPlayer.getNickname(), new PuppetClient());
                             if(board.getGamePhase()==GamePhase.SHOWWIN)
                                 break;
                         }

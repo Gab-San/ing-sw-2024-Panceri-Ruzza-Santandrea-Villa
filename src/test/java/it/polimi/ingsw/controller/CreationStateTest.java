@@ -1,13 +1,13 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -127,11 +127,6 @@ public class CreationStateTest {
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 2), "StartGame doesn't throw IllegalStateException with numOfPlayers==2");
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 3),"StartGame doesn't throw IllegalStateException with numOfPlayers==3");
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
-    }
-
-    @Test
-    public void connectDisconnectTest(){
-        //TODO test disconnect
     }
 }
 

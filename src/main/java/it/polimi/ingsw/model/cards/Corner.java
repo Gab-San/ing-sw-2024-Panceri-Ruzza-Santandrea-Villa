@@ -179,7 +179,7 @@ public class Corner {
                 (cardRef == null || other.cardRef == null || cardRef.compareCard(other.cardRef))&&
                 direction == other.direction &&
                 occupied == other.occupied &&
-                visible == other. visible;
+                visible == other.visible;
     }
 
 

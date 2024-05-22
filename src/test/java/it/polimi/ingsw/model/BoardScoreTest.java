@@ -47,4 +47,14 @@ public class BoardScoreTest extends BaseBoardTest{
         assertEquals(20, scoreboard.get(players[0]));
         printAll.run();
     }
+
+    @Test
+    void addScoreToNonExistentPlayer(){
+        joinPlayers(4);
+        Player notInGamePlayer =  new Player("PIPPO");
+        assertThrows(
+                IllegalArgumentException.class,
+                ()->board.addScore(notInGamePlayer, 2)
+        );
+    }
 }

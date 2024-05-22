@@ -158,7 +158,7 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Trying to add duplicate secret objective", playerRef, ObjectiveCard.class);
 
         this.secretObjective.add(secretObjective);
-//        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), secretObjective));
+        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), secretObjective));
     } 
     
     /**

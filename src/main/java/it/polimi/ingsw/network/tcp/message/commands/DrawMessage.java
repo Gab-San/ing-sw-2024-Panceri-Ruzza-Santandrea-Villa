@@ -27,7 +27,6 @@ public class DrawMessage implements TCPClientMessage {
         virtualServer.draw(nickname, virtualClient, deck, card);
     }
 
-
     @Override
     public boolean isCheck() {
         return false;

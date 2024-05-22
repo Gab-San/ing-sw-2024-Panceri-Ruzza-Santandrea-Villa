@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.tcp.message.checkMessages;
+package it.polimi.ingsw.network.tcp.message.check;
 
 import it.polimi.ingsw.network.tcp.client.ServerProxy;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
@@ -23,10 +23,6 @@ public class CheckMessage implements TCPServerCheckMessage {
         this.argumentException = argumentException;
         stateException = null;
     }
-    @Override
-    public boolean isCheck() {
-        return true;
-    }
 
     @Override
     public void handle(ServerProxy client) throws IllegalStateException, IllegalArgumentException{
@@ -37,5 +33,10 @@ public class CheckMessage implements TCPServerCheckMessage {
         if(argumentException != null){
             throw argumentException;
         }
+    }
+
+    @Override
+    public boolean isCheck() {
+        return true;
     }
 }

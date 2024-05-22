@@ -1,20 +1,18 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-//TODO QUESTO TEST VA COMPLETATO!!!
 
 public class SetupStateTest {
     private BoardController controller;

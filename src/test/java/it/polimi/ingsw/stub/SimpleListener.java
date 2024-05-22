@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.listener.remote.events.stub;
+package it.polimi.ingsw.stub;
 
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;

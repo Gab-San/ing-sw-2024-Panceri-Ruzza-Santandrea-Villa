@@ -199,10 +199,6 @@ public class Board implements GameSubject{
      * @throws IllegalArgumentException if the player isn't in game
      */
     public void addScore(Player player, int amount) throws IllegalArgumentException{
-        //FIXME this is the same as for placeCard:
-        // how can exist a player not contained in playerAreas? It would always throw null pointer exception
-        // since afterwards a playerAreas.get() is done the existence of the player could be checked there
-        // with a null pointer exception (HASHTABLE SHOULD NOT PERMIT NULL KEYS)
         if(!scoreboard.containsKey(player)){
             notifyAllListeners(new IllegalGameAccessError(player.getNickname(), "Player not in game!".toUpperCase()));
             throw new IllegalArgumentException("Player not in game!");
@@ -273,11 +269,8 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if the placement is invalid (as per PlayArea.placeCard())
      */
     public void placeCard(Player player, PlayCard card, Corner corner) throws IllegalArgumentException, IllegalStateException{
-        //FIXME check if this is useful or even correct.
-        // how can exist a player not contained in playerAreas? It would always throw null pointer exception
-        // since afterwards a playerAreas.get() is done the existence of the player could be checked there
-        // with a null pointer exception (HASHTABLE SHOULD NOT PERMIT NULL KEYS)
         if(!playerAreas.containsKey(player)){
+            notifyAllListeners(new IllegalGameAccessError(player.getNickname(),"Player not in this game!".toUpperCase()));
             throw new IllegalArgumentException("Player not in this game!");
         }
         if(!player.getHand().containsCard(card)){
@@ -381,9 +374,6 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
-        //FIXME Isn't the same check done into addCard?
-        if(playerHand.isHandFull()) throw new IllegalStateException("Player hand is full. Can't draw");
-
 
         switch (deck){
             case RESOURCE_DECK:
@@ -417,9 +407,6 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
-        //FIXME Isn't the same check done into addCard?
-        if(playerHand.isHandFull())
-            throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
@@ -453,9 +440,6 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
-        //FIXME Isn't the same check done into addCard?
-        if(playerHand.isHandFull())
-            throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:

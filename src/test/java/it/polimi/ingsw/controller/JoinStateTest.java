@@ -1,12 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -148,11 +148,5 @@ public class JoinStateTest {
             assertEquals(SetupState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ SetupState.class +".");
             assertEquals(board.getPlayerAreas().size(), numOfPlayers, "PlayerAreas ain't empty");
         }
-    }
-
-
-    @Test
-    public void disconnectTest(){
-        //TODO Test disconnect
     }
 }

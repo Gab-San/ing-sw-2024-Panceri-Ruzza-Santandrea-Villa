@@ -68,6 +68,7 @@ public class PlayArea implements GameSubject {
     public void placeStartingCard(@NotNull StartingCard startCard) throws IllegalStateException{
         // check cardMatrix is empty
         if(!cardMatrix.keySet().isEmpty())
+            //TODO add illegal state errror notification
             throw new IllegalStateException("Attempting to place starting card on non-empty cardMatrix");
 
         // place card

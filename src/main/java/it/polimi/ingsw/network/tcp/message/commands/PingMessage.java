@@ -15,12 +15,7 @@ public class PingMessage implements TCPClientMessage, TCPServerMessage {
     @Serial
     private static final long serialVersionUID = 0000L;
 
-    @Override
-    public boolean isCheck() {
-        return false;
-    }
-
-    @Override
+     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.ping();
     }
@@ -28,5 +23,10 @@ public class PingMessage implements TCPClientMessage, TCPServerMessage {
     @Override
     public void execute(VirtualClient virtualClient) throws RemoteException {
         virtualClient.ping();
+    }
+
+    @Override
+    public boolean isCheck() {
+        return false;
     }
 }
