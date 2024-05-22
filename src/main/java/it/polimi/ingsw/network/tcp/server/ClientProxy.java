@@ -166,7 +166,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException {
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
 
     }
 
@@ -177,6 +177,21 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame(String nickname, int score) throws RemoteException {
+
+    }
+
+    @Override
+    public void removePlayer(String nickname) throws RemoteException {
 
     }
 

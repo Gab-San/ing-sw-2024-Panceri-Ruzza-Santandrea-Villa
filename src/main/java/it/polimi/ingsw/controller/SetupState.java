@@ -10,9 +10,6 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.*;
@@ -116,18 +113,9 @@ public class SetupState extends GameState{
             throw new IllegalStateException(nickname + " has already placed their starting card.");
         }
         Player player;
-        try {
-             player = board.getPlayerByNickname(nickname);
-        } catch (IllegalArgumentException argumentException){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
-            throw argumentException;
-        }
-        try {
-            board.placeStartingCard(player, placeOnFront);
-        } catch (IllegalStateException e){
-            board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage().toUpperCase()));
-            throw e;
-        }
+        player = board.getPlayerByNickname(nickname);
+
+        board.placeStartingCard(player, placeOnFront);
 
         timers.stopTimer(player);
         playersWhoPlacedStartingCard.add(nickname);
@@ -144,7 +132,6 @@ public class SetupState extends GameState{
 
         if(board.getGamePhase() != GamePhase.CHOOSECOLOR) {
             switch (board.getGamePhase()) {
-
                 case SETUP, PLACESTARTING:
                     board.notifyAllListeners(new IllegalActionError(nickname, "Must wait for all players to place their starting card".toUpperCase()));
                     throw new IllegalStateException("Must wait for all players to place their starting card");
@@ -161,36 +148,31 @@ public class SetupState extends GameState{
             board.notifyAllListeners(new IllegalActionError(nickname,(nickname + " has already chosen his color").toUpperCase() ));
             throw new IllegalStateException(nickname + " has already chosen his color.");
         }
+
         if(!board.getAvailableColors().contains(color)) {
             board.notifyAllListeners(new IllegalActionError(nickname, (color + " not available").toUpperCase()));
             throw new IllegalStateException(color + " not available.");
         }
-        Player player;
-        try {
-             player = board.getPlayerByNickname(nickname);
-        } catch (IllegalArgumentException argumentException){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
-            throw argumentException;
-        }
 
+        Player player;
+        player = board.getPlayerByNickname(nickname);
         player.setColor(color);
         timers.stopTimer(player);
-
         playersWhoChoseColor.add(nickname);
+
         if(playersWhoChoseColor.size()==board.getPlayerAreas().size()) {
             board.setGamePhase(GamePhase.DEALCARDS);
             try {
                 drawFirstHand();
             } catch ( DeckException e ) {
                 //TODO: add crash event
-                board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage().toUpperCase()));
                 throw new IllegalStateException(e);
             } catch (PlayerHandException | IllegalStateException exc){
-                board.notifyAllListeners(new IllegalActionError(nickname, exc.getMessage().toUpperCase()));
                 throw new IllegalStateException(exc);
             }
 
             board.revealObjectives();
+
             try {
                 giveSecretObjectives();
             } catch (IllegalStateException e){
@@ -226,21 +208,13 @@ public class SetupState extends GameState{
         }
 
         Player player;
-        try {
-            player = board.getPlayerByNickname(nickname);
-        } catch (IllegalArgumentException argumentException){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
-            throw new IllegalArgumentException(argumentException.getMessage());
-        }
+        player = board.getPlayerByNickname(nickname);
 
         try{
             player.getHand().chooseObjective(choice);
         }catch (PlayerHandException e){
-            //TODO check if add crash event
-            board.notifyAllListeners(new IllegalStateError(nickname, e.getMessage()));
             throw new IllegalStateException(e.getMessage());
         }catch (IndexOutOfBoundsException e){
-            board.notifyAllListeners(new IllegalParameterError(nickname, e.getMessage()));
             throw new IllegalArgumentException("Invalid choice. Must be 1 or 2, entered " + choice + " instead.");
         }
         timers.stopTimer(player);

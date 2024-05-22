@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller.stub;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -12,8 +11,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 public class PuppetClient implements VirtualClient {
     @Override
     public void update(String msg) throws RemoteException {
@@ -22,7 +19,6 @@ public class PuppetClient implements VirtualClient {
 
     @Override
     public void ping() throws RemoteException {
-        System.out.println(colorize("Pinging client...", Attribute.BLACK_TEXT(), Attribute.WHITE_BACK()));
     }
 
     @Override
@@ -146,9 +142,10 @@ public class PuppetClient implements VirtualClient {
     }
 
     @Override
-    public void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException {
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
 
     }
+
 
     @Override
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
@@ -157,6 +154,21 @@ public class PuppetClient implements VirtualClient {
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame(String nickname, int score) throws RemoteException {
+
+    }
+
+    @Override
+    public void removePlayer(String nickname) throws RemoteException {
 
     }
 }

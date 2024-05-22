@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.listener.GameEvent;
-import it.polimi.ingsw.model.listener.GameListener;
-import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -11,11 +8,15 @@ import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
 import it.polimi.ingsw.model.listener.remote.events.playarea.FreeCornersUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaPlacedCardEvent;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.VisibleResourcesUpdateEvent;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -79,11 +80,13 @@ public class PlayArea implements GameSubject {
         for(GameResource r : cardResources.keySet()){
             visibleResources.put(r, cardResources.get(r));
         }
+
         notifyAllListeners(new VisibleResourcesUpdateEvent(owner, visibleResources));
         // add corners to freeCorners
         freeCorners.addAll(card.getFreeCorners());
         notifyAllListeners(new FreeCornersUpdate(owner, freeCorners));
     }
+
     /**
      * Places a card in cardMatrix and occupies corners, updates visibleResources and freeCorners
      * @author Ruzza
@@ -96,19 +99,27 @@ public class PlayArea implements GameSubject {
         Map<GameResource, Integer> placeCost = playCard.getPlacementCost();
         for (GameResource r : placeCost.keySet()){
             if (visibleResources.get(r) == null || visibleResources.get(r) < placeCost.get(r)){
+                notifyAllListeners(new IllegalActionError(owner, "Card can't be placed as placement cost condition isn't satisfied".toUpperCase()));
                 throw new IllegalStateException("Card can't be placed as placement cost condition isn't satisfied");
             }
         }
+
         Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
 
         //checks valid placement, throw IllegalStateException on failure
-        if(cardMatrix.get(cardPos) != null) throw new IllegalStateException("Placing on existing Card");
+        if(cardMatrix.get(cardPos) != null){
+            notifyAllListeners(new IllegalActionError(owner,"Placing on existing Card".toUpperCase()));
+            throw new IllegalStateException("Placing on existing Card");
+        }
+
         for (CornerDirection dir : CornerDirection.values()){
             PlaceableCard dirCard = cardMatrix.get(cardPos.move(dir));
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite());
-                if (dirCorner.isOccupied())
+                if (dirCorner.isOccupied()) {
+                    notifyAllListeners(new IllegalActionError(owner, "Should not place here, corner " + dir + " is filled".toUpperCase()));
                     throw new IllegalStateException("Should not place here, corner " + dir + " is occupied");
+                }
             }
         }
 

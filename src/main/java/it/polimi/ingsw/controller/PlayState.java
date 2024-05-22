@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.network.VirtualClient;
 
@@ -40,11 +39,11 @@ public class PlayState extends GameState {
     public void join(String nickname, VirtualClient client) throws IllegalStateException {
         try{
             board.reconnectPlayer(nickname);
-            board.subscribeClientToUpdates(nickname, client);
         }catch (IllegalStateException e){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, e.getMessage().toUpperCase()));
-            throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE", e);
+            throw new IllegalStateException(e.getMessage());
         }
+
+        board.subscribeClientToUpdates(nickname, client);
     }
 
     @Override
@@ -100,12 +99,7 @@ public class PlayState extends GameState {
             throws IllegalStateException, IllegalArgumentException {
 
         Player player;
-        try {
-            player = board.getPlayerByNickname(nickname); // throws if player isn't in game
-        } catch (IllegalArgumentException e){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, e.getMessage()));
-            throw new IllegalArgumentException(e.getMessage());
-        }
+        player = board.getPlayerByNickname(nickname); // throws if player isn't in game
 
         if(board.getGamePhase() != GamePhase.PLACECARD) {
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE A CARD IN THIS PHASE"));
@@ -130,23 +124,12 @@ public class PlayState extends GameState {
             throw new IllegalArgumentException("THE DESIRED CORNER WAS NOT FOUND");
         }
 
-        PlayCard cardToPlace;
-        try {
-            cardToPlace = player.getHand().getCardByID(cardID);
-        } catch (IllegalArgumentException exception){
-            board.notifyAllListeners(new IllegalParameterError(nickname, "REQUESTED CARD IS NOT IN YOUR HAND"));
-            throw exception;
-        }
+        PlayCard cardToPlace = player.getHand().getCardByID(cardID);
 
         if(placeOnFront) cardToPlace.turnFaceUp();
         else cardToPlace.turnFaceDown();
-        try {
-            //TODO CHECK IF ALL THESE CHECKS ARE NEEDED FOR ILLEGAL ARGUMENT
-            board.placeCard(player, cardToPlace, corner);
-        } catch (IllegalArgumentException exception){
-            board.notifyAllListeners(new IllegalParameterError(nickname, exception.getMessage().toUpperCase()));
-            throw exception;
-        }
+
+        board.placeCard(player, cardToPlace, corner);
 
         if(board.canDraw()){
             currentPlayerHasPlacedCard = true;
@@ -167,19 +150,13 @@ public class PlayState extends GameState {
             throw new IllegalStateException("Player has not placed a card yet!");
         }
 
-        Player player;
-        try {
-            player = board.getPlayerByNickname(nickname);
-        } catch (IllegalArgumentException exception){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, exception.getMessage().toUpperCase()));
-            throw exception;
-        }
+        Player player = board.getPlayerByNickname(nickname);
+
         if(!board.getCurrentPlayer().equals(player)) {
             board.notifyAllListeners(new IllegalActionError(nickname, "It's not your turn to draw yet".toUpperCase()));
             throw new IllegalStateException("It's not your turn to draw yet");
         }
 
-        //TODO handle PlayerHandException
 
         try {
             switch (cardPos) {
@@ -197,9 +174,9 @@ public class PlayState extends GameState {
                     throw new IllegalArgumentException("Invalid card position for this draw command.");
             }
         }catch (DeckException |PlayerHandException | IllegalStateException e){
-            board.notifyAllListeners(new IllegalActionError(nickname, e.getMessage()));
             throw new IllegalArgumentException(e.getMessage() + "Can't draw from position " + cardPos);
         }
+
         timerCurrPlayer.stopTimer(player);
         postDrawChecks();
     }
@@ -210,8 +187,6 @@ public class PlayState extends GameState {
                 .filter(p -> p.isConnected() && !board.getPlayerDeadlocks().get(p))
                 .mapToInt(Player::getTurn)
                 .max()
-                //TODO CHECK THIS AND DISCONNECT:
-                // WHAT IF PLAYERS ARE CONNECTED BUT DEADLOCKED?
                 .orElse(0); // if all players are deadlocked/disconnected, this doesn't matter
 
         boolean isLastPlayerTurn = board.getCurrentTurn() >= lastPlayerTurn;
@@ -235,7 +210,6 @@ public class PlayState extends GameState {
         else nextState();
     }
     private void nextState() throws IllegalStateException {
-        //TODO CHECK ILLEGAL STATE EXCEPTION IN STATE CONSTRUCTOR
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }
 

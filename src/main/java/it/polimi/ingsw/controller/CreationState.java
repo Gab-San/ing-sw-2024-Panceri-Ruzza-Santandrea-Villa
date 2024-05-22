@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.network.VirtualClient;
 
@@ -45,12 +44,8 @@ public class CreationState extends GameState{
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE"));
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
         }
-        try {
-            board.getPlayerByNickname(nickname); // throws on player not in game
-        } catch (IllegalArgumentException argumentException){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, argumentException.getMessage()));
-            throw argumentException;
-        }
+
+        board.getPlayerByNickname(nickname); // throws on player not in game
 
         if(num<2 || num>4) {
             board.notifyAllListeners(new IllegalParameterError(nickname, "NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + " PLAYERS" ));

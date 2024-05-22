@@ -30,6 +30,6 @@ public class BoardStateUpdateEvent implements NetworkEvent{
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.setBoardState(currentTurn, gamePhase);
+        virtualClient.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
     }
 }

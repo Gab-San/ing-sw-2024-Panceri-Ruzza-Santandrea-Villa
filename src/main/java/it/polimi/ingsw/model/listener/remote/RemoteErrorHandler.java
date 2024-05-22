@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.listener.remote;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.errors.RemoteErrorEvent;
 import it.polimi.ingsw.network.VirtualClient;
 

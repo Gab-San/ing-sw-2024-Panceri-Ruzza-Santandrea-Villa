@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.listener.*;
-import it.polimi.ingsw.model.listener.remote.RemoteErrorHandler;
-import it.polimi.ingsw.model.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -18,7 +15,13 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
+import it.polimi.ingsw.model.listener.GameEvent;
+import it.polimi.ingsw.model.listener.GameListener;
+import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.RemoteErrorHandler;
+import it.polimi.ingsw.model.listener.remote.RemoteHandler;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
@@ -196,6 +199,10 @@ public class Board implements GameSubject{
      * @throws IllegalArgumentException if the player isn't in game
      */
     public void addScore(Player player, int amount) throws IllegalArgumentException{
+        //FIXME this is the same as for placeCard:
+        // how can exist a player not contained in playerAreas? It would always throw null pointer exception
+        // since afterwards a playerAreas.get() is done the existence of the player could be checked there
+        // with a null pointer exception (HASHTABLE SHOULD NOT PERMIT NULL KEYS)
         if(!scoreboard.containsKey(player)){
             notifyAllListeners(new IllegalGameAccessError(player.getNickname(), "Player not in game!".toUpperCase()));
             throw new IllegalArgumentException("Player not in game!");
@@ -266,9 +273,17 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if the placement is invalid (as per PlayArea.placeCard())
      */
     public void placeCard(Player player, PlayCard card, Corner corner) throws IllegalArgumentException, IllegalStateException{
-        //checks
-        if(!playerAreas.containsKey(player)) throw new IllegalArgumentException("Player not in this game!");
-        if(!player.getHand().containsCard(card)) throw new IllegalArgumentException("Card not in player's hand!");
+        //FIXME check if this is useful or even correct.
+        // how can exist a player not contained in playerAreas? It would always throw null pointer exception
+        // since afterwards a playerAreas.get() is done the existence of the player could be checked there
+        // with a null pointer exception (HASHTABLE SHOULD NOT PERMIT NULL KEYS)
+        if(!playerAreas.containsKey(player)){
+            throw new IllegalArgumentException("Player not in this game!");
+        }
+        if(!player.getHand().containsCard(card)){
+            notifyAllListeners(new IllegalParameterError(player.getNickname(),"Card not in player's hand!".toUpperCase()));
+            throw new IllegalArgumentException("Card not in player's hand!");
+        }
 
         //placement
         PlayArea playArea = playerAreas.get(player);
@@ -289,7 +304,9 @@ public class Board implements GameSubject{
         try{
             startingCard = player.getHand().getStartingCard();
         }
+
         catch(PlayerHandException e){
+            notifyAllListeners(new IllegalStateError(player.getNickname(), e.getMessage().toUpperCase()));
             throw new IllegalStateException("Player doesn't have a starting card yet!");
         }
 
@@ -298,8 +315,14 @@ public class Board implements GameSubject{
         else
             startingCard.turnFaceDown();
 
-        playerAreas.get(player).placeStartingCard(startingCard);
+        try {
+            playerAreas.get(player).placeStartingCard(startingCard);
+        } catch (IllegalStateException stateException){
+            notifyAllListeners(new IllegalStateError(player.getNickname(), stateException.getMessage().toUpperCase()));
+            throw stateException;
+        }
     }
+
 
     /**
      * Deals cards from the specified deck to player's hand <br>
@@ -358,23 +381,29 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawTop(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
-        if(playerHand.isHandFull())
-            throw new IllegalStateException("Player hand is full. Can't draw");
+        //FIXME Isn't the same check done into addCard?
+        if(playerHand.isHandFull()) throw new IllegalStateException("Player hand is full. Can't draw");
+
 
         switch (deck){
             case RESOURCE_DECK:
                 if(resourceDeck.isEmpty()){
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "Deck is empty!".toUpperCase()));
                     throw new DeckException("Deck is empty!", PlayableDeck.class);
                 }
                 playerHand.addCard(resourceDeck::getTopCard);
                 break;
             case GOLD_DECK:
                 if(goldDeck.isEmpty()){
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "Deck is empty!".toUpperCase()));
                     throw new DeckException("Deck is empty!", PlayableDeck.class);
                 }
                 playerHand.addCard(goldDeck::getTopCard);
                 break;
             default:
+                notifyAllListeners(new IllegalParameterError(playerHand.getPlayerRef().getNickname(), "Choosing a non-drawable deck".toUpperCase()));
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
@@ -388,23 +417,29 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawFirst(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        //FIXME Isn't the same check done into addCard?
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
                 if(resourceDeck.isFirstRevealedEmpty()) {
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "There is no first card!".toUpperCase()));
                     throw new DeckException("There is no first card!", PlayableDeck.class);
                 }
                 playerHand.addCard(resourceDeck::getFirstRevealedCard);
                 break;
             case GOLD_DECK:
                 if(goldDeck.isFirstRevealedEmpty()){
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "There is no first card!".toUpperCase()));
                     throw new DeckException("There is no first card!", PlayableDeck.class);
                 }
                 playerHand.addCard(goldDeck::getFirstRevealedCard);
                 break;
             default:
+                notifyAllListeners(new IllegalParameterError(playerHand.getPlayerRef().getNickname(), "Choosing a non-drawable deck".toUpperCase()));
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
@@ -418,23 +453,29 @@ public class Board implements GameSubject{
      * @throws PlayerHandException if the card drawn is (for some error/bug) already in playerHand
      */
     public void drawSecond(char deck, PlayerHand playerHand) throws IllegalStateException, DeckException, PlayerHandException {
+        //FIXME Isn't the same check done into addCard?
         if(playerHand.isHandFull())
             throw new IllegalStateException("Player hand is full. Can't draw");
 
         switch (deck){
             case RESOURCE_DECK:
                 if(resourceDeck.isSecondRevealedEmpty()) {
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "There is no second card!".toUpperCase()));
                     throw new DeckException("There is no second card!", PlayableDeck.class);
                 }
                 playerHand.addCard(resourceDeck::getSecondRevealedCard);
                 break;
             case GOLD_DECK:
                 if(goldDeck.isSecondRevealedEmpty()){
+                    notifyAllListeners(new IllegalStateError(playerHand.getPlayerRef().getNickname()
+                            , "There is no second card!".toUpperCase()));
                     throw new DeckException("There is no second card!", PlayableDeck.class);
                 }
                 playerHand.addCard(goldDeck::getSecondRevealedCard);
                 break;
             default:
+                notifyAllListeners(new IllegalParameterError(playerHand.getPlayerRef().getNickname(), "Choosing a non-drawable deck".toUpperCase()));
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
@@ -484,8 +525,11 @@ public class Board implements GameSubject{
     public Player getPlayerByNickname(String nickname) throws IllegalArgumentException{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getNickname().equals(nickname))
-                .findFirst().orElseThrow(()-> new IllegalArgumentException("Cannot find a player with given nickname in this game".toUpperCase()) );
-    }
+                .findFirst().orElseThrow(()->{
+                    notifyAllListeners(new IllegalGameAccessError(nickname,"Cannot find a player with given nickname in this game".toUpperCase()) );
+                    return new IllegalArgumentException("Cannot find a player with given nickname in this game");
+                });
+        }
 
     //endregion
     /**
@@ -514,9 +558,6 @@ public class Board implements GameSubject{
 
         setPlayerDeadLock(player, false);
     }
-
-
-
 
     /**
      * Removes the player with given nickname from the game (deleting all his information)
@@ -559,8 +600,8 @@ public class Board implements GameSubject{
         Player player = getPlayerByNickname(nickname);
         if(player.isConnected())
             throw new IllegalStateException("Player " + nickname + " is already connected.");
-        else
-            player.setConnected(true);
+
+        player.setConnected(true);
     }
 //endregion
 

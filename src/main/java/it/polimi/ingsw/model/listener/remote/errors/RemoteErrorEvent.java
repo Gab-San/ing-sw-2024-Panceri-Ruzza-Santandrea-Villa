@@ -10,5 +10,5 @@ abstract public class RemoteErrorEvent implements NetworkEvent {
     }
     public String getUser(){
         return userNickname;
-    };
+    }
 }

@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.playerhand.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +80,10 @@ public class PlayerHand implements GameSubject {
     public PlayCard getCardByID(String cardID) throws IllegalArgumentException{
         return cards.stream()
                 .filter(card -> card != null && cardID.equals(card.getCardID()))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("Player hand does not contain a card with ID " + cardID));
+                .findFirst().orElseThrow(()->{
+                    notifyAllListeners(new IllegalParameterError(playerRef.getNickname(), "REQUESTED CARD IS NOT IN YOUR HAND"));
+                    return new IllegalArgumentException("Player hand does not contain a card with ID " + cardID);
+                });
     }
     /**
      * @param pos index (0-2)
@@ -99,7 +105,10 @@ public class PlayerHand implements GameSubject {
      * @throws PlayerHandException if the hand is full or already contains the given card
      */
     public void addCard(@NotNull Supplier<PlayCard> drawCard) throws PlayerHandException{
-        if(isHandFull()) throw new PlayerHandException("Too many cards in hand!", playerRef);
+        if(isHandFull()){
+            notifyAllListeners(new IllegalActionError(playerRef.getNickname(), "Player hand is full. Can't draw".toUpperCase()));
+            throw new PlayerHandException("PLAYER HAND IS FULL!", playerRef);
+        }
         PlayCard drawnCard = drawCard.get();
         notifyAllListeners(new PlayerHandDrawEvent(playerRef.getNickname(), drawnCard));
         cards.add(drawnCard);
@@ -129,7 +138,10 @@ public class PlayerHand implements GameSubject {
      * @throws PlayerHandException if the secret objective wasn't chosen yet
      */
     public ObjectiveCard getSecretObjective() throws PlayerHandException {
-        if(MAX_OBJECTIVES == 2) throw new PlayerHandException("Secret objective was not chosen yet.", playerRef, ObjectiveCard.class);
+        if(MAX_OBJECTIVES == 2){
+            notifyAllListeners(new IllegalStateError(playerRef.getNickname(), "Secret objective was not chosen yet.".toUpperCase()));
+            throw new PlayerHandException("Secret objective was not chosen yet.", playerRef, ObjectiveCard.class);
+        }
         return secretObjective.get(0); //.getFirst(); doesn't compile
     }
 
@@ -173,9 +185,22 @@ public class PlayerHand implements GameSubject {
      * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
      */
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
-        if(secretObjective.isEmpty()) throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
-        if(MAX_OBJECTIVES == 1) throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
-        secretObjective.remove(2-choice); // 2-choice == the index that was not chosen
+        if(secretObjective.isEmpty()){
+            //TODO check if add crash event
+            notifyAllListeners(new IllegalStateError(playerRef.getNickname(),"Objective choices not initialized.".toUpperCase()));
+            throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
+        }
+        if(MAX_OBJECTIVES == 1){
+            notifyAllListeners(new IllegalStateError(playerRef.getNickname(),"Secret objective was already chosen.".toUpperCase()));
+            throw new PlayerHandException("Secret objective was already chosen.", playerRef, ObjectiveCard.class);
+        }
+
+        try {
+            secretObjective.remove(2 - choice); // 2-choice == the index that was not chosen
+        } catch (IndexOutOfBoundsException e){
+            notifyAllListeners(new IllegalParameterError(playerRef.getNickname(), "Invalid choice. Must be 1 or 2, entered " + choice + " instead.".toUpperCase()));
+            throw e;
+        }
         MAX_OBJECTIVES = 1;
         notifyAllListeners(new PlayerHandChooseObjectiveCardEvent(playerRef.getNickname(), getSecretObjective()));
     }

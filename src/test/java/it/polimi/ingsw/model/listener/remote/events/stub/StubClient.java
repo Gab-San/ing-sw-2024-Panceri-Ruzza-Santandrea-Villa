@@ -227,7 +227,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException {
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard,  GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
         System.out.println(colorize("Notified " + this.nickname + "\nof board state update with:\n" +
                 "[TURN] " + currentTurn + "\n" +
                 "[GAME PHASE] " + gamePhase, Attribute.RED_TEXT()));
@@ -242,6 +242,21 @@ public class StubClient implements VirtualClient {
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame(String nickname, int score) throws RemoteException {
+
+    }
+
+    @Override
+    public void removePlayer(String nickname) throws RemoteException {
 
     }
 

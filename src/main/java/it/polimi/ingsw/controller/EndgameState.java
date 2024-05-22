@@ -9,7 +9,6 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
-import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.network.VirtualClient;
@@ -90,12 +89,8 @@ public class EndgameState extends GameState{
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START A NEW GAME IN THIS PHASE"));
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         }
-        try {
-            board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
-        } catch (IllegalArgumentException e){
-            board.notifyAllListeners(new IllegalGameAccessError(nickname, e.getMessage()));
-            throw e;
-        }
+
+        board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
 
         if(numOfPlayers < board.getPlayerAreas().size()){
             board.notifyAllListeners(new IllegalParameterError(nickname,"Can't reduce number of players on game restart.".toUpperCase()));
@@ -134,6 +129,7 @@ public class EndgameState extends GameState{
                 objCard = player.getHand().getSecretObjective();
             } catch (PlayerHandException e){
                 //TODO if at this point in the game the secret objective has to be set
+                // if this error occurs than the application should crash
                 throw new IllegalStateException(e);
             }
             objCard.turnFaceUp(); // reveal secret objective

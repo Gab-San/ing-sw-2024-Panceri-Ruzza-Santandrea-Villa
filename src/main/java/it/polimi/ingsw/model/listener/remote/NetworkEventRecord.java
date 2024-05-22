@@ -3,7 +3,10 @@ package it.polimi.ingsw.model.listener.remote;
 
 import it.polimi.ingsw.network.VirtualClient;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 public class NetworkEventRecord {
@@ -73,6 +76,4 @@ public class NetworkEventRecord {
             }
         }
     }
-
-
 }

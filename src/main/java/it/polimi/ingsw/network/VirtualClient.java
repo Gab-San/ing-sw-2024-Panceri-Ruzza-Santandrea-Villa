@@ -59,7 +59,7 @@ public interface VirtualClient extends Remote{
 
     void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException;
 
-    void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException;
+    void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException;
 
     void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;
 
