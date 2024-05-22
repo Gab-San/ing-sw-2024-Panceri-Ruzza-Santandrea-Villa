@@ -101,6 +101,15 @@ public class ViewPlayArea {
 
         return true;
     }
+    public Point getPositionByID(String cardID) throws IllegalArgumentException{
+        synchronized (cardMatrix){
+            return cardMatrix.values().stream()
+                    .filter(c->c.getCardID().equals(cardID))
+                    .findFirst()
+                    .orElseThrow(()->new IllegalArgumentException("Your playArea does not contain card "+ cardID))
+                    .getPosition();
+        }
+    }
 
     public ViewPlaceableCard getCardAt(Point position){
         return cardMatrix.get(position);

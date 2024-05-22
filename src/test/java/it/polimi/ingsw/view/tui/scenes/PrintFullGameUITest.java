@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.scenes;
 
-import it.polimi.ingsw.view.Scene;
+import it.polimi.ingsw.view.Client;
+import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
@@ -8,7 +9,6 @@ import java.util.*;
 
 import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.ViewBoardGenerator.*;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class PrintFullGameUITest {
     final PrintPlayerUI printPlayerUI;
@@ -46,25 +46,7 @@ public class PrintFullGameUITest {
 
 
     static void cls(){
-        //TODO: delete \n screen before release (needed for IDE console cls)
-//         // cls for IDE
-        boolean runningIntelliJ = false;
-        try {
-            runningIntelliJ = PrintFullGameUITest.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
-        } catch (ClassNotFoundException ignored) {}
-
-        if(runningIntelliJ) System.out.print("\n".repeat(50));
-        else{
-            System.out.print("\033[H\033[2J");
-            //FIXME: [Ale] choose which cls to use
-            //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
-            try {
-                if (System.getProperty("os.name").contains("Windows"))
-                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                else Runtime.getRuntime().exec("clear");
-            } catch (Exception ignored) {}
-        }
-        System.out.flush();
+        Client.cls();
     }
     static void printCommandLegend(){
         System.out.println("Valid commands: ");
@@ -81,7 +63,7 @@ public class PrintFullGameUITest {
         Scanner scanner = new Scanner(System.in);
 
         String input = ""; String error = "";
-        Scene printUI = test.printPlayerUI;
+        TUI_Scene printUI = test.printPlayerUI;
         printUI.display();
         while (!input.matches("[qQ]|[qQ]uit")){
             printCommandLegend();

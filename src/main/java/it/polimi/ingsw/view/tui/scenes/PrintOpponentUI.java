@@ -15,7 +15,7 @@ public class PrintOpponentUI extends PrintGameUI {
     }
 
     @Override
-    public void display(){
+    public void print(){
         out.println(nickname + "'s playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 

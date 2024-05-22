@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.testingStub.PuppetClient;
+import it.polimi.ingsw.view.model.ViewBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +17,10 @@ class ParserTest {
     private Parser parser;
     @BeforeEach
     void setup() {
-        parser = new Parser(new PuppetClient(), new ModelView());
+        parser = new Parser(new PuppetClient(), new ViewBoard("Test_Player"));
     }
 
+    //TODO: Fix this test according with the checks on ViewBoard
 
     @Test
     void patternTest(){

@@ -33,6 +33,12 @@ public abstract class ViewHand {
     public List<ViewPlayCard> getCards(){
         return Collections.unmodifiableList(cards);
     }
+    public ViewPlayCard getCardByID(String cardID) throws IllegalArgumentException{
+        synchronized (cards){
+            return cards.stream().filter(c->c.getCardID().equals(cardID))
+                    .findFirst().orElseThrow(()->new IllegalArgumentException("Card isn't in your hand!"));
+        }
+    }
     public List<ViewObjectiveCard> getSecretObjectives(){
         return Collections.unmodifiableList(secretObjectiveCards);
     }

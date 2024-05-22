@@ -12,16 +12,11 @@ public class PrintPlayerUI extends PrintGameUI {
     }
 
     @Override
-    public void display(){
+    public void print(){
         out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 
         out.println("\nYour hand: ");
         printHand.printHand();
-    }
-
-    @Override
-    public void displayError(String msg) {
-        out.println(RED_TEXT + msg + RESET);
     }
 }

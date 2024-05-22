@@ -5,13 +5,12 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
-import it.polimi.ingsw.view.Scene;
+import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.tui.printers.PrintCard;
 
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,25 +19,19 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
-public class PrintBoardUI implements Scene {
+public class PrintBoardUI extends TUI_Scene {
     static final int cardSpacing = 4;
     PrintCard printCard;
     ViewBoard board;
-    PrintWriter out;
 
     public PrintBoardUI(ViewBoard board){
+        super();
         this.board = board;
         this.printCard = new PrintCard();
-        out = new PrintWriter(System.out, true);
     }
 
     @Override
-    public void displayError(String msg) {
-        display();
-        out.println(RED_TEXT + msg + RESET);
-    }
-    @Override
-    public void display(){
+    public void print(){
         out.print("Scoreboard:\t");
         if(board.isEndgame())
             out.print(YELLOW_BRIGHT_TEXT + "[ENDGAME]" + RESET);
@@ -98,12 +91,4 @@ public class PrintBoardUI implements Scene {
         }
         out.println();
     }
-
-    @Override
-    public void moveView(CornerDirection... cornerDirections) { display(); }
-    @Override
-    public void setCenter(int row, int col) { display(); }
-    @Override
-    public void setCenter(Point center) { display(); }
-
 }

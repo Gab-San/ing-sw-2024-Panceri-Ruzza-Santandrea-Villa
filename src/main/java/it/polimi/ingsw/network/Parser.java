@@ -3,6 +3,11 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
+import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
+import it.polimi.ingsw.view.model.cards.ViewPlayCard;
+import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -15,11 +20,11 @@ import java.util.regex.Pattern;
 public class Parser {
 
     private CommandPassthrough virtualServer;
-    // TODO: DELETE MODEL VIEW
-    private final ModelView view;
-    public Parser(CommandPassthrough virtualServer, ModelView view){
+    private final ViewBoard board;
+    //TODO: add local checks to commands
+    public Parser(CommandPassthrough virtualServer, ViewBoard board){
         this.virtualServer = virtualServer;
-        this.view = view;
+        this.board = board;
     }
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
@@ -219,7 +224,6 @@ public class Parser {
         }
     }
 
-
     private void parseDrawCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("""
                 Draw must only provide a deck choice and the card position
@@ -283,14 +287,15 @@ public class Parser {
         if(cardMatcher.find()){
             cardToPlace = cardMatcher.group();
         } else {
-            throw new IllegalArgumentException("missing placed card or on which to place");
+            throw new IllegalArgumentException("missing card to place");
         }
 
         if(cardMatcher.find()){
             String cardID = cardMatcher.group();
-            placementPos = view.getPosition(cardID);
+            ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
+            placementPos = playArea.getPositionByID(cardID); // throws IllegalArgument if card isn't in playArea
         } else{
-            throw new IllegalArgumentException("missing card to place or on which to place");
+            throw new IllegalArgumentException("missing on which to place");
         }
 
         Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);
@@ -299,17 +304,17 @@ public class Parser {
         } else {
             throw new IllegalArgumentException("missing direction");
         }
-        //TODO get player card flip state
-        virtualServer.placeCard(cardToPlace, placementPos, cornDir, view.getPlayerHand().isFaceUp(cardToPlace));
+        virtualServer.placeCard(cardToPlace, placementPos, cornDir, board.getPlayerHand().getCardByID(cardToPlace).isFaceUp());
     }
 
 
-    private void parsePlaceStartingCard(List<String> cmdArgs) throws RemoteException, IllegalStateException {
+    private void parsePlaceStartingCard(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         if(cmdArgs.size() > 2) throw new IllegalArgumentException("""
                 Maybe you meant: Place starting card
                 """);
-        //TODO Add getting the player card flip state
-        virtualServer.placeStartCard(view.getPlayerStartingCard().isFaceUp());
+        ViewStartCard startCard = board.getPlayerHand().getStartCard();
+        if(startCard == null) throw new IllegalStateException("You do not have a starting card in hand!");
+        else virtualServer.placeStartCard(startCard.isFaceUp());
     }
 
 }
