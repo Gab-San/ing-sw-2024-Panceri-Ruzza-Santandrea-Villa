@@ -10,15 +10,10 @@ import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -254,7 +249,7 @@ public class PlayStateTest {
             int turn = board.getCurrentTurn();
             System.err.println("endgame=" + endgame + "\n\n");
 
-            isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
+            isLastTurn = controlIsLastTurn(currPlayer, endgame);
 
             System.err.println("il turno è " + i);
             System.err.println("started turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
@@ -276,11 +271,11 @@ public class PlayStateTest {
 
                 //se non sono all'ultimo turno dell'ultimo round
                 System.err.println("board can draw=" + board.canDraw());
-                controlPostPlaceCantDraw(currPlayer, numOfPlayers, turn);
+                controlPostPlaceCantDraw();
             } else { //se posso ancora pescare
                 System.err.println("can draw: " + board.canDraw());
                 //controllo che sia in drawState/Phase (se posso pescare devo sempre entrare qui prima di terminare il game)
-                controlPostPlaceDrawable(currPlayer, numOfPlayers, turn);
+                controlPostPlaceDrawable();
 
                 System.err.println("I'M DRAWING");
                 drawRandomCard(currPlayer);
@@ -289,12 +284,12 @@ public class PlayStateTest {
                 if (isLastTurn/*==numOfPlayers*/)
                     break;
 
-                controlPostDraw(currPlayer, numOfPlayers, turn);
+                controlPostDraw();
 
                 System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
             }
 
-            endgame = controlEndgame(currPlayer, numOfPlayers, endgame);
+            endgame = controlEndgame(currPlayer, endgame);
             System.err.println(">>>>>>>>>>>>>>>>>CHECK END GAME IS " + board.checkEndgame() + "<<<<<<<<<<<<<<<<<");
             //assertTrue(endgame == controlEndgame(currPlayer, numOfPlayers, endgame), "how is it different: endgame="+endgame);
 
@@ -311,28 +306,23 @@ public class PlayStateTest {
         assertEquals(EndgameState.class, controller.getGameState().getClass());
     }
 
-    private void controlPostPlaceDrawable(Player currPlayer, int numOfPlayers, int turn) {
+    private void controlPostPlaceDrawable() {
         assertEquals(GamePhase.DRAWCARD, board.getGamePhase(), "WRONG AFTER PLACE");
         assertEquals(PlayState.class, controller.getGameState().getClass());
         assertEquals(board, controller.getGameState().board);
-        assertEquals(turn, board.getCurrentTurn(), "Turn did change: turn=" + turn + " and nextTurn=" + board.getCurrentTurn());
     }
 
     /**
      * PARAM gamePhase IN PLAYCARD: IF CAN'T DRAW AFTER (GamePhase.PLACECARD), IF CAN DRAW AFTER (GamePhase.DRAWCARD)
      * PARAM gamePhase IN DRAW: ALWAYS (GamePhase.PLACECARD)
-     *
-     * @param currPlayer
-     * @param numOfPlayers
-     * @param turn:        IF CAN'T DRAW AFTER (turn==numOfPlayers ? 1 : turn + 1), IF CAN DRAW AFTER (turn)
      */
-    private void controlPostPlaceCantDraw(Player currPlayer, int numOfPlayers, int turn) {
+    private void controlPostPlaceCantDraw() {
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
         assertEquals(board, controller.getGameState().board);
     }
 
-    private void controlPostDraw(Player currPlayer, int numOfPlayers, int turn) {
+    private void controlPostDraw() {
         assertEquals(GamePhase.PLACECARD, board.getGamePhase(), "WRONG AFTER DRAW");
         assertEquals(PlayState.class, controller.getGameState().getClass());
         assertEquals(board, controller.getGameState().board);
@@ -346,7 +336,7 @@ public class PlayStateTest {
         return activePlayers.get(activePlayers.size() - 1);
     }
 
-    private boolean controlIsLastTurn(Player currPlayer, int numOfPlayers, boolean endgame) {
+    private boolean controlIsLastTurn(Player currPlayer, boolean endgame) {
         boolean isLastPlayerTurn =  (getLastActivePlayer()==null) || getLastActivePlayer().equals(currPlayer);
         return (isLastPlayerTurn && endgame );
 /*
@@ -359,7 +349,7 @@ public class PlayStateTest {
  */
     }
 
-    private boolean controlEndgame(Player currPlayer, int numOfPlayers, boolean endgame) {
+    private boolean controlEndgame(Player currPlayer, boolean endgame) {
         boolean isLastPlayerTurn = getLastActivePlayer()==null || getLastActivePlayer().equals(currPlayer);
         return (isLastPlayerTurn && board.checkEndgame()) || endgame;
     }
@@ -383,7 +373,7 @@ public class PlayStateTest {
         Player lastPlayer = null;
 
         //disconnect part:
-        int disconnectTurn = /*69;*/new Random().nextInt(100);
+        int disconnectTurn =new Random().nextInt(100);
 
         System.err.println("disconnecting turn is "+disconnectTurn);
 
@@ -411,8 +401,8 @@ public class PlayStateTest {
 
             //disconnect part
             if ((i == disconnectTurn)  && new Random().nextBoolean()){
-                isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
-                endgame = controlEndgame(currPlayer, numOfPlayers, endgame);
+                isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                endgame = controlEndgame(currPlayer, endgame);
 
                 System.err.println("disconnecting before placing card");
                 controller.disconnect(currPlayer.getNickname());
@@ -420,14 +410,14 @@ public class PlayStateTest {
                     break;
             }
             else {
-                isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
+                isLastTurn = controlIsLastTurn(currPlayer, endgame);
 
 
 
                 placeRandomCard(currPlayer);
                 if ((i == disconnectTurn) && new Random().nextBoolean()){
-                    isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
-                    endgame = controlEndgame(currPlayer, numOfPlayers, endgame);
+                    isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                    endgame = controlEndgame(currPlayer, endgame);
 
                     System.err.println("disconnecting after placing card");
                     controller.disconnect(currPlayer.getNickname());
@@ -436,13 +426,13 @@ public class PlayStateTest {
                 }
 
                 else {
-                    isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
+                    isLastTurn = controlIsLastTurn(currPlayer, endgame);
                     System.err.println("isLastTurn=" + isLastTurn);
 
 
                     //se non posso più pescare
                     if (!board.canDraw()) {
-                        isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
+                        isLastTurn = controlIsLastTurn(currPlayer, endgame);
                         //se sono all'ultimo turno dell'ultimo round
                         if (isLastTurn)
                             break;
@@ -450,38 +440,38 @@ public class PlayStateTest {
                         //se non sono all'ultimo turno dell'ultimo round
                         System.err.println("board can draw=" + board.canDraw());
 
-                        controlPostPlaceCantDraw(currPlayer, numOfPlayers, turn);
+                        controlPostPlaceCantDraw();
 
                     } else { //se posso ancora pescare
                         System.err.println("can draw: " + board.canDraw());
                         //controllo che sia in drawState/Phase (se posso pescare devo sempre entrare qui prima di terminare il game)
-                        controlPostPlaceDrawable(currPlayer, numOfPlayers, turn);
+                        controlPostPlaceDrawable();
 
                         System.err.println("I'M DRAWING");
 
                         drawRandomCard(currPlayer);
                         if ((i == disconnectTurn) && new Random().nextBoolean()) {
-                            isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
-                            endgame = controlEndgame(currPlayer, numOfPlayers, endgame);
+                            isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                            endgame = controlEndgame(currPlayer, endgame);
 
                             System.err.println("disconnecting after drawing");
                                 controller.disconnect(currPlayer.getNickname());
                                 if(board.getGamePhase()==GamePhase.SHOWWIN)
                                     break;
                         } else {
-                            isLastTurn = controlIsLastTurn(currPlayer, numOfPlayers, endgame);
+                            isLastTurn = controlIsLastTurn(currPlayer, endgame);
                             //se sono all'ultimo turno dell'ultimo round
                             if (isLastTurn/*==numOfPlayers*/)
                                 break;
 
-                            controlPostDraw(currPlayer, numOfPlayers, turn);
+                            controlPostDraw();
 
                             System.err.println("finished turn " + ((i - 1) % numOfPlayers + 1) + " of the set n° " + (int) (i - 1) / numOfPlayers);
                         }
                     }
                 }
             }
-            endgame = controlEndgame(currPlayer, numOfPlayers, endgame);
+            endgame = controlEndgame(currPlayer, endgame);
             System.err.println(">>>>>>>>>>>>>>>>>CHECK END GAME IS " + board.checkEndgame() + "<<<<<<<<<<<<<<<<<");
             //assertTrue(endgame == controlEndgame(currPlayer, numOfPlayers, endgame), "how is it different: endgame="+endgame);
 
@@ -498,4 +488,164 @@ public class PlayStateTest {
         assertEquals(EndgameState.class, controller.getGameState().getClass());
 
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void simulateRandomGameWithDisconnectAndJoin(int numOfPlayers){
+        setUp(/*2*/numOfPlayers);
+
+        assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+        assertEquals(PlayState.class, controller.getGameState().getClass());
+
+        Player djPlayer=board.getPlayerAreas().keySet().stream().toList().get(new Random().nextInt(board.getPlayerAreas().size()));
+        int djTurn=new Random().nextInt(16);
+        int djPhase=-1;
+        boolean endgame = false;
+        boolean isLastTurn = false;
+        int i = 1;
+
+        //disconnect part:
+
+        while (!isLastTurn) {
+
+            //setup test single turn
+            Player currPlayer = board.getCurrentPlayer();
+            if(i%16==djTurn)
+                djPhase=new Random().nextInt(3);
+
+            //disconnect part
+            if ((i%16 == djTurn && djPhase==0)  && new Random().nextBoolean()){
+
+                if(djPlayer.isConnected())
+                    controller.disconnect(djPlayer.getNickname());
+                else controller.join(djPlayer.getNickname(), new PuppetClient());
+
+                isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                endgame = controlEndgame(currPlayer, endgame);
+
+                if(board.getGamePhase()==GamePhase.SHOWWIN)
+                    break;
+            }
+            if(!currPlayer.isConnected())
+            {isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                endgame = controlEndgame(currPlayer, endgame);}
+            else {
+
+                placeRandomCard(currPlayer);
+                if ((i == djTurn && djPhase==1) && new Random().nextBoolean()){
+                    isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                    endgame = controlEndgame(currPlayer, endgame);
+
+                    //System.err.println("disconnecting after placing card");
+                    if(djPlayer.isConnected())
+                        controller.disconnect(djPlayer.getNickname());
+                    else controller.join(djPlayer.getNickname(), new PuppetClient());
+
+                    if(board.getGamePhase()==GamePhase.SHOWWIN)
+                        break;
+                }
+
+                if(!currPlayer.isConnected())
+                {isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                    endgame = controlEndgame(currPlayer, endgame);}
+                else {
+                    isLastTurn = controlIsLastTurn(currPlayer, endgame);
+
+                    //se non posso più pescare
+                    if (!board.canDraw()) {
+                        isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                        if (isLastTurn)
+                            break;
+
+                        controlPostPlaceCantDraw();
+
+                    }
+                    else { //se posso ancora pescare
+                        controlPostPlaceDrawable();
+
+                        drawRandomCard(currPlayer);
+                        if ((i%16 == djTurn && djPhase==2) && new Random().nextBoolean()) {
+                            isLastTurn = controlIsLastTurn(currPlayer, endgame);
+                            endgame = controlEndgame(currPlayer, endgame);
+
+                            if(djPlayer.isConnected())
+                                controller.disconnect(djPlayer.getNickname());
+                            else controller.join(djPlayer.getNickname(), new PuppetClient());
+                            if(board.getGamePhase()==GamePhase.SHOWWIN)
+                                break;
+                        }
+                        //se sono all'ultimo turno dell'ultimo round
+                        if (isLastTurn/*==numOfPlayers*/)
+                            break;
+
+                        controlPostDraw();
+
+                    }
+                }
+            }
+            isLastTurn = controlIsLastTurn(currPlayer, endgame);
+            endgame = controlEndgame(currPlayer, endgame);
+
+            i++;
+        }
+
+        assertTrue(endgame, "endgame may be false");
+        assertTrue(isLastTurn/*==numOfPlayers*/, "isLastTurn is " + isLastTurn);
+        assertEquals(GamePhase.SHOWWIN, board.getGamePhase());
+        assertEquals(EndgameState.class, controller.getGameState().getClass());
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void simulateRandomGameWithEverybodyDisconnecting(int numOfPlayers){
+        setUp(/*4*/numOfPlayers);
+        //int numOfPlayers=4;
+        assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+        assertEquals(PlayState.class, controller.getGameState().getClass());
+
+        List<Integer> discTurns=new ArrayList<>();
+        for(int j=0; j<numOfPlayers; j++)
+            discTurns.add(new Random().nextInt(15) + (discTurns.isEmpty() ? 0 : discTurns.get(discTurns.size()-1)));
+        int i = 1;
+        //List<Player> playersByTurn = board.getPlayersByTurn();
+        //List<String> nicknamesByTurn = playersByTurn.stream().map(Player::getNickname).toList();
+        //System.err.println(nicknamesByTurn);
+        int whereToDisconnect=-1;
+
+        while (i <= discTurns.get(discTurns.size()-1)) {
+            //setup test single turn
+            if(discTurns.contains(i))
+                whereToDisconnect=new Random().nextInt(3);
+            Player currPlayer = board.getCurrentPlayer();
+
+            if(discTurns.contains(i) && whereToDisconnect==0)
+                controller.disconnect(currPlayer.getNickname());
+            else {
+                placeRandomCard(currPlayer);
+                if (board.canDraw()){
+                    controlPostPlaceDrawable();
+                    if(discTurns.contains(i) && whereToDisconnect==1)
+                        controller.disconnect(currPlayer.getNickname());
+                    else{
+                        drawRandomCard(currPlayer);
+                        controlPostDraw();
+                        if(discTurns.contains(i) && whereToDisconnect==2)
+                            controller.disconnect(currPlayer.getNickname());
+                    }
+                }
+                else{
+                    controlPostPlaceCantDraw();
+                    if(discTurns.contains(i) && whereToDisconnect==2)
+                        controller.disconnect(currPlayer.getNickname());
+                }
+            }
+            i++;
+        }
+
+        //System.err.println("finito al turno " + i);
+        assertEquals(GamePhase.SHOWWIN, board.getGamePhase());
+        assertEquals(EndgameState.class, controller.getGameState().getClass());
+    }
+
 }

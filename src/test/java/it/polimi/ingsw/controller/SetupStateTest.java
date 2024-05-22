@@ -279,7 +279,7 @@ public class SetupStateTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
-    public void testWithDisconnect(int numOfPlayers) {
+    public void testWithDisconnectAndJoin(int numOfPlayers) {
         for (int i = 0; i < 9; i++) {
             setUp(numOfPlayers);
             assertEquals(GamePhase.PLACESTARTING, board.getGamePhase());
@@ -347,6 +347,14 @@ public class SetupStateTest {
             assertEquals(GamePhase.PLACECARD, board.getGamePhase());
             assertEquals(PlayState.class, controller.getGameState().getClass());
         }
+
+        setUp(numOfPlayers);
+        for(Player p : board.getPlayerAreas().keySet())
+            controller.disconnect(p.getNickname());
+        assertEquals(GamePhase.CREATE, board.getGamePhase(), "wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.CREATE +"\".");
+        assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
+        assertTrue(board.getPlayerAreas().isEmpty(), "PlayerAreas ain't empty");
+
     }
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})

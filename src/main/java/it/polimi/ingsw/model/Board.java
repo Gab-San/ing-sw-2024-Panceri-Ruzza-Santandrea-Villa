@@ -511,7 +511,7 @@ public class Board implements GameSubject{
      * Removes the player with given nickname from the game (deleting all his information)
      * Should only be called during Creation or Join states.
      * @param nickname player's nickname
-     * @throws IllegalStateException if there is no player in this game with the given nickname
+     * @throws IllegalArgumentException if there is no player in this game with the given nickname
      */
     public void removePlayer(String nickname) throws IllegalStateException, IllegalArgumentException {
         Player player = getPlayerByNickname(nickname);

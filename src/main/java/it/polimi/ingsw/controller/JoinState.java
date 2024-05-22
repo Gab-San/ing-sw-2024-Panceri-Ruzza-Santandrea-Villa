@@ -34,6 +34,8 @@ public class JoinState extends GameState {
 
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+        disconnectingPlayers.remove(nickname);
+
         board.unsubscribeClientFromUpdates(nickname);
         board.removePlayer(nickname);
 

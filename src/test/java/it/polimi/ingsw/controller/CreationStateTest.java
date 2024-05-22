@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreationStateTest {
@@ -20,7 +23,7 @@ public class CreationStateTest {
     private Board board;
     private final String playerNickname = "Flavio";
     @BeforeEach
-    public void setUpcontroller(){
+    public void setUpController(){
         controller = new BoardController();
         nextStateClass = JoinState.class;
         board = controller.getGameState().board;
@@ -29,8 +32,30 @@ public class CreationStateTest {
     }
 
     @Test
-    public void joinTest() {
+    public void joinAndDisconnectTest() {
+        Player connPlayer = board.getPlayerAreas().keySet().stream().findAny().orElse(null);
+        if(connPlayer==null)
+            fail("Nobody is connected");
+        assertEquals(GamePhase.SETNUMPLAYERS, board.getGamePhase(), "Wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.SETNUMPLAYERS +"\".");
+        assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
+
+        controller.disconnect(connPlayer.getNickname());
+
+        assertEquals(GamePhase.CREATE, board.getGamePhase(), "wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.CREATE +"\".");
+        assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
+
+        assertThrows(IllegalArgumentException.class, ()->controller.disconnect("fsdfa"));
+
+        String name="Roberto Bolle";
+        controller.join(name, new PuppetClient());
+        assertEquals(GamePhase.SETNUMPLAYERS, board.getGamePhase(), "Wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.SETNUMPLAYERS +"\".");
+        assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
+
         assertThrows(IllegalStateException.class, () -> controller.join("Giovanni", new PuppetClient()), "Join doesn't throw IllegalStateException with client==null");
+
+        controller.setNumOfPlayers(name, new Random().nextInt(3)+2);
+        assertEquals(GamePhase.JOIN, board.getGamePhase(), "How is this wrong?");
+
     }
 
     @ParameterizedTest

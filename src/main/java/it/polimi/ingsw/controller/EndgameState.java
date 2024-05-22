@@ -34,8 +34,9 @@ public class EndgameState extends GameState{
 
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
-        board.disconnectPlayer(nickname);
         disconnectingPlayers.remove(nickname);
+
+        board.disconnectPlayer(nickname);
 
         int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
                 .filter(Player::isConnected)
