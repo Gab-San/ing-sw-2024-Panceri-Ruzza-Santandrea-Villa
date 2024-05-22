@@ -22,6 +22,7 @@ import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.PlayerRemovalEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.security.InvalidParameterException;
@@ -32,6 +33,7 @@ public class Board implements GameSubject{
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAY_SCORE = 29;
     public static final int MAX_PLAYERS = 4;
+    private boolean hasGoneToEndgame;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
     private final PlayableDeck resourceDeck, goldDeck;
@@ -61,7 +63,7 @@ public class Board implements GameSubject{
     public Board() throws DeckInstantiationException {
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
-
+        hasGoneToEndgame = false;
         // Controlled in Board
         setCurrentTurn(1);
         // Controlled in Board
@@ -205,7 +207,6 @@ public class Board implements GameSubject{
         if(gamePhase != GamePhase.EVALOBJ && score > MAX_PLAY_SCORE){
             score = 29;
         }
-        //TODO in case add endgame notification
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
@@ -220,12 +221,22 @@ public class Board implements GameSubject{
      * @return true if any player has a score >= ENDGAME_SCORE or if both decks are empty <br>
      */
     public boolean checkEndgame(){
-        if(scoreboard.values().stream()
-                .anyMatch(
-                        score -> score >= ENDGAME_SCORE
-                        || (resourceDeck.isEmpty() && goldDeck.isEmpty())
-                )){
-            notifyAllListeners(new EndgameCheckEvent());
+        if(scoreboard.values().stream().anyMatch(score -> score >= ENDGAME_SCORE)){
+            List<Player> playersByScore = getPlayersByScore();
+            Player highestScorePlayer = playersByScore.get(0);
+            if(!hasGoneToEndgame) {
+                hasGoneToEndgame = true;
+                notifyAllListeners(new EndgameCheckEvent(highestScorePlayer.getNickname()
+                        , scoreboard.get(highestScorePlayer)));
+            }
+            return true;
+        }
+
+        if(resourceDeck.isEmpty() && goldDeck.isEmpty()){
+            if(!hasGoneToEndgame) {
+                hasGoneToEndgame = true;
+                notifyAllListeners(new EndgameCheckEvent());
+            }
             return true;
         }
         return false;
@@ -519,13 +530,15 @@ public class Board implements GameSubject{
         playerAreas.remove(player);
         // Probably should notify
         scoreboard.remove(player);
-        // TODO ADD SCOREBOARD EVENT
-        // TODO NOTIFY PLAYER REMOVAL
         //decrement turn of each player that followed the removed player in turn order
         playerAreas.keySet().stream()
                 .filter(p -> p.getTurn() > player.getTurn())
                 .forEach(p -> p.setTurn(p.getTurn()-1));
 
+        notifyAllListeners(new PlayerRemovalEvent(nickname));
+
+        player.removeListener(remoteHandler);
+        player.removeListener(errorHandler);
         observableObjects.remove(player);
     }
 

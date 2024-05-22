@@ -220,7 +220,7 @@ public class PlayState extends GameState {
             return;
         }
 
-        if(isLastPlayerTurn && board.checkEndgame())
+        if(board.checkEndgame() && isLastPlayerTurn)
             lastRound=true;
         // if a player disconnected after place card but before draw:
         //      that player skips the placeCard step (if he can draw)

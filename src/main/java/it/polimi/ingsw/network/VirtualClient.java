@@ -64,4 +64,9 @@ public interface VirtualClient extends Remote{
     void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;
 
     void reportError(String errorMessage) throws RemoteException;
+
+    void notifyEndgame() throws RemoteException;
+    void notifyEndgame(String nickname, int score) throws RemoteException;
+
+    void removePlayer(String nickname) throws RemoteException;
 }
