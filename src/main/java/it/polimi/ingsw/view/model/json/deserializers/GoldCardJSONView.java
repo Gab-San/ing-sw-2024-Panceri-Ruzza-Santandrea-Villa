@@ -1,7 +1,8 @@
 package it.polimi.ingsw.view.model.json.deserializers;
 
 import it.polimi.ingsw.GameResource;
-
+import it.polimi.ingsw.view.model.cards.ViewCorner;
+import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 import java.util.List;
 
 public class GoldCardJSONView {
@@ -60,5 +61,30 @@ public class GoldCardJSONView {
     }
     public void setImgBack(String imgBack) {
         this.imgBack = imgBack;
+    }
+
+    public ViewGoldCard toViewGoldCard() {
+        String cardId = this.getCardId();
+        String imgFront = this.getImgFront();
+        String imgBack = this.getImgBack();
+        int pointsOnPlace = Integer.parseInt(this.getPointsOnPlace());
+        List<ViewCorner> corners = convertCorners(this.getCornersJS());
+        GameResource backResource = this.getBackResource();
+        List<GameResource> placementCostList = parsePlacementCost(this.getPlacementCost());
+        String strategyAsString = ""; // TODO
+
+        return new ViewGoldCard(cardId, imgFront, imgBack, corners, pointsOnPlace, backResource, placementCostList, strategyAsString);
+    }
+
+    private List<ViewCorner> convertCorners(List<CornerJView> cornersJS) {
+        if (cornersJS == null) {
+            return null;
+        }
+        return List.of(); //TODO
+    }
+
+    private List<GameResource> parsePlacementCost(String placementCost) {
+        // TODO
+        return null;
     }
 }

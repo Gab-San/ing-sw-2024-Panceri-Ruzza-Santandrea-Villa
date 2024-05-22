@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.model.json.deserializers;
 
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.json.deserializers.CornerJ;
+import it.polimi.ingsw.view.model.cards.ViewCorner;
+import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 
 import java.util.List;
 
@@ -54,5 +56,23 @@ public class ResourceCardJSONView {
     }
     public void setImgBack(String imgBack) {
         this.imgBack = imgBack;
+    }
+
+    public ViewResourceCard toViewResourceCard() {
+        String cardId = this.getCardId();
+        String imgFront = this.getImgFront();
+        String imgBack = this.getImgBack();
+        int pointsOnPlace = this.getPointsOnPlace();
+        List<ViewCorner> corners = convertCorners(this.getCornerJS());
+        GameResource backResource = this.getBackResource();
+
+        return new ViewResourceCard(cardId, imgFront, imgBack, corners, pointsOnPlace, backResource);
+    }
+
+    private List<ViewCorner> convertCorners(List<CornerJView> cornerJS) {
+        if (cornerJS == null) {
+            return null;
+        }
+        return List.of(); //TODO
     }
 }
