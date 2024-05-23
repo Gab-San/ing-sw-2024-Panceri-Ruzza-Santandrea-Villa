@@ -86,6 +86,7 @@ public class Client {
                     System.err.println("Couldn't locate server. Wrong IP or port");
                     System.exit(-1);
                 }
+
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
                 System.out.println("If the above text is not green, TUI may not be supported on the current console.");
                 while (view == null) {

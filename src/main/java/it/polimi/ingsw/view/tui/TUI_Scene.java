@@ -36,7 +36,10 @@ public abstract class TUI_Scene implements Scene {
     }
     @Override
     public final void displayNotification(String msg){
-        display();
+        synchronized (System.out) {
+            display();
+            out.println(msg);
+        }
     }
     @Override
     public void moveView(CornerDirection... cornerDirections){

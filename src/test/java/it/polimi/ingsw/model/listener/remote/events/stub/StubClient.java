@@ -62,7 +62,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof player creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[CONNECTION] " + isConnected + "\n" +
@@ -220,10 +220,10 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
+    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
-                "[FREE CORNERS] " + freeSerialableCorners, Attribute.MAGENTA_TEXT()));
+                "[FREE CORNERS] " + freeSerializableCorners, Attribute.MAGENTA_TEXT()));
     }
 
     @Override

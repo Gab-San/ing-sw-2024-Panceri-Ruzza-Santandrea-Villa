@@ -24,6 +24,10 @@ public class SceneID {
             return this.sceneName.equals(otherID.sceneName);
         else return false;
     }
+    @Override
+    public int hashCode(){
+        return sceneName.hashCode();
+    }
 
 //    public static SceneID getConnectTechSceneID(){
 //        return new SceneID("CONNECT_TECH");

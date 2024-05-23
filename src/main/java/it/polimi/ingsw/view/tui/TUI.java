@@ -41,6 +41,7 @@ public class TUI extends View{
             nickname = scanner.nextLine();
             if(nickname.matches(regex)){
                 try{
+                    //TODO: instantiate and pass ModelUpdater to the VirtualClient
                     board = new ViewBoard(nickname);
                     ViewPlayerHand myHand = board.getPlayerHand();
                     ViewPlayArea myArea = board.getPlayerArea(myHand.getNickname());

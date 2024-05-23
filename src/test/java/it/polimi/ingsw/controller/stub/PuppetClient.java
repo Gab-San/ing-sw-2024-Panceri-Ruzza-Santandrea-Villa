@@ -41,7 +41,7 @@ public class PuppetClient implements VirtualClient {
     }
 
     @Override
-    public void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 
@@ -141,7 +141,7 @@ public class PuppetClient implements VirtualClient {
     }
 
     @Override
-    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
+    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
 
     }
 

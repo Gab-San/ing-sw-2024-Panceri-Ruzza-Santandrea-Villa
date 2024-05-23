@@ -18,6 +18,6 @@ public class PlayerStateUpdateEvent extends PlayerEvent {
     }
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.setDeckState(nickname, isConnected, turn, colour);
+        virtualClient.setPlayerState(nickname, isConnected, turn, colour);
     }
 }

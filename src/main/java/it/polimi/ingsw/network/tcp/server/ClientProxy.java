@@ -59,7 +59,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 
@@ -160,7 +160,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
+    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
 
     }
 
