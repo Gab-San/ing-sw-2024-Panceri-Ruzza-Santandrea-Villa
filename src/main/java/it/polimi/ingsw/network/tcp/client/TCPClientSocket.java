@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.*;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
+import it.polimi.ingsw.view.ModelUpdater;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,6 +25,8 @@ public class TCPClientSocket implements VirtualClient{
     private final ObjectInputStream inputStream;
     private final Queue<TCPServerMessage> updateQueue;
     private final ServerProxy proxy;
+    private ModelUpdater modelUpdater;
+
     public TCPClientSocket(int port) throws IOException {
         this("localhost", port);
     }
@@ -128,6 +131,10 @@ public class TCPClientSocket implements VirtualClient{
         return proxy;
     }
 //endregion
+
+    public void setModelUpdater(ModelUpdater modelUpdater) {
+        this.modelUpdater = modelUpdater;
+    }
 
 //region VIRTUAL CLIENT INTERFACE
     @Override

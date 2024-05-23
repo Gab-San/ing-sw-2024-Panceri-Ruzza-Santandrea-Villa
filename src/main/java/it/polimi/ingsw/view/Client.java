@@ -10,11 +10,17 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Client {
     public static View view = null;
+    public static String serverIP;
+    public static int port;
+    public static String connectionTech;
 
     public static void cls(){
         synchronized (System.out) {
@@ -44,8 +50,6 @@ public class Client {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String serverIP = "", connectionTech = "";
-        int port = -1;
         try {
             if (args.length > 2) {
                 //first arg is the server IP
@@ -66,18 +70,23 @@ public class Client {
             System.exit(-1);
         }
 
-        if (!serverIP.matches("\\d.\\d.\\d.\\d")) {
-            System.err.println("Server IP parameter must be an IP address: x.y.z.w");
+        if (!serverIP.matches("\\d.\\d.\\d.\\d|localhost")) {
+            System.err.println("Server IP parameter must be an IP address: x.y.z.w or 'localhost'");
             System.exit(-1);
         }
         while(true) {
             try {
                 CommandPassthrough proxy = null;
+                Consumer<ModelUpdater> setClientModelUpdater;
                 try {
                     if (connectionTech.equalsIgnoreCase("tcp")) {
-                        proxy = new TCPClientSocket(serverIP, port).getProxy();
+                        TCPClientSocket tcpClient = new TCPClientSocket(serverIP, port);
+                        proxy = tcpClient.getProxy();
+                        setClientModelUpdater = tcpClient::setModelUpdater;
                     } else if (connectionTech.equalsIgnoreCase("rmi")) {
-                        proxy = new RMIClient(serverIP, port).getProxy();
+                        RMIClient rmiClient = new RMIClient(serverIP, port);
+                        proxy = rmiClient.getProxy();
+                        setClientModelUpdater = rmiClient::setModelUpdater;
                     } else {
                         System.err.println("Wrong connection technology passed as parameter. Must be TCP/RMI");
                         System.exit(-1);
@@ -95,11 +104,11 @@ public class Client {
                     String gameMode = scanner.nextLine();
                     if (gameMode.equalsIgnoreCase("GUI")) {
                         scanner.close();
-                        view = new GUI(proxy); // proxy always not null at this point
+                        view = new GUI(proxy, setClientModelUpdater); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         scanner.close();
-                        view = new TUI(proxy); // proxy always not null at this point
+                        view = new TUI(proxy, setClientModelUpdater); // proxy always not null at this point
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
                         view = null;

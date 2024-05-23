@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
+import it.polimi.ingsw.view.ModelUpdater;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     private final RMIServerProxy proxy;
+    private ModelUpdater modelUpdater;
 
     public RMIClient(int registryPort) throws RemoteException, NotBoundException{
         this("localhost", registryPort);
@@ -28,6 +30,10 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         Registry registry = LocateRegistry.getRegistry(registryIP, registryPort);
         VirtualServer server = (VirtualServer) registry.lookup(RMIServer.CANONICAL_NAME);
         this.proxy = new RMIServerProxy(this, server);
+    }
+
+    public void setModelUpdater(ModelUpdater modelUpdater){
+        this.modelUpdater = modelUpdater;
     }
 
     @Override

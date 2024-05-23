@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.Parser;
 import it.polimi.ingsw.view.Client;
+import it.polimi.ingsw.view.ModelUpdater;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -15,16 +16,18 @@ import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class TUI extends View{
     Parser parser;
     ViewBoard board;
     Scanner scanner;
 
-    public TUI(CommandPassthrough serverProxy) throws RemoteException {
+    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         runNicknameSelectScene();
+        setClientModelUpdater.accept(new ModelUpdater(board, this));
 
         // at this point, connection has concluded successfully.
         currentScene = sceneIDMap.get(SceneID.getMyAreaSceneID());
@@ -40,7 +43,6 @@ public class TUI extends View{
             nickname = scanner.nextLine();
             if(nickname.matches(regex)){
                 try{
-                    //TODO: instantiate and pass ModelUpdater to the VirtualClient
                     board = new ViewBoard(nickname);
                     ViewPlayerHand myHand = board.getPlayerHand();
                     ViewPlayArea myArea = board.getPlayerArea(myHand.getNickname());
