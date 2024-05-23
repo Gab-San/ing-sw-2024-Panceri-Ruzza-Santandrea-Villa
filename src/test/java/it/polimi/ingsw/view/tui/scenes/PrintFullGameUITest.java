@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui.scenes;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.model.*;
@@ -77,18 +78,33 @@ public class PrintFullGameUITest {
                 error = "You must be on your UI to flush or flip cards";
             }
             else if(input.matches("[mM]ove [a-zA-Z]+")){
-                String direction = input.substring("move ".length());
+                String direction = input.substring("move ".length()).toLowerCase();
                 cls();
-                switch (direction.toLowerCase()){
-                    case "up": printUI.moveView(TL,TR); break;
-                    case "right": printUI.moveView(BR,TR); break;
-                    case "left": printUI.moveView(TL,BL); break;
-                    case "down": printUI.moveView(BL,BR); break;
-                    case "center": printUI.setCenter(0,0); break;
-                    default: error = "Invalid move direction."; break;
+                List<CornerDirection> directions = new LinkedList<>();
+                switch (direction){
+                    case "top", "up", "north", "above":
+                        directions.add(TL);
+                        directions.add(TR);
+                        break;
+                    case "bottom", "down", "south", "below":
+                        directions.add(BL);
+                        directions.add(BR);
+                        break;
+                    case "left", "leftward", "west":
+                        directions.add(TL);
+                        directions.add(BL);
+                        break;
+                    case "right", "rightward", "east":
+                        directions.add(TR);
+                        directions.add(BR);
+                        break;
+                    case "center", "zero":
+                        printUI.setCenter(0,0);
+                        break;
+                    default: error = "Invalid direction!";
                 }
-                if(error.isEmpty())
-                    continue; //avoids printing twice (in moveView/setCenter) and at the end of loop
+                if(error.isEmpty() && !direction.matches("center|zero"))
+                    printUI.moveView(directions); //avoids printing twice (in moveView/setCenter) and at the end of loop
             }
             else if(input.matches("[fF]lip [1-3]")){
                 int index = Integer.parseInt(input.substring("flip ".length()));

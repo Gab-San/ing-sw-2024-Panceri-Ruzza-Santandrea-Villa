@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.Scene;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
@@ -26,7 +27,7 @@ public abstract class TUI_Scene implements Scene {
             print();
         }
     }
-    public abstract void print();
+    protected abstract void print();
     @Override
     public final void displayError(String msg){
         synchronized (System.out){
@@ -42,7 +43,7 @@ public abstract class TUI_Scene implements Scene {
         }
     }
     @Override
-    public void moveView(CornerDirection... cornerDirections){
+    public void moveView(List<CornerDirection> cornerDirections){
         display();
     }
     @Override

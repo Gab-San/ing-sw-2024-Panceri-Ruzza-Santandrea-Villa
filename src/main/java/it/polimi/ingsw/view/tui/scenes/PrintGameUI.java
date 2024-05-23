@@ -8,10 +8,7 @@ import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.tui.printers.PrintHand;
 import it.polimi.ingsw.view.tui.printers.PrintPlayArea;
 
-import java.io.PrintWriter;
-
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+import java.util.List;
 
 public abstract class PrintGameUI extends TUI_Scene {
     protected final PrintPlayArea printPlayArea;
@@ -30,7 +27,7 @@ public abstract class PrintGameUI extends TUI_Scene {
     abstract public void print();
 
     @Override
-    public void moveView(CornerDirection...directions){
+    public void moveView(List<CornerDirection> directions){
         printCenter = printCenter.move(directions);
         display();
     }

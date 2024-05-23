@@ -17,6 +17,11 @@ public class GUI extends View {
     }
 
     @Override
+    public void setScene(SceneID sceneID) throws IllegalArgumentException {
+
+    }
+
+    @Override
     public void update(SceneID sceneID, String description) {
 
     }

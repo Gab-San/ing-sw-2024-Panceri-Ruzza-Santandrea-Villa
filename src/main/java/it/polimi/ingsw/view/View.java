@@ -19,6 +19,7 @@ public abstract class View {
         this.serverProxy = serverProxy;
     }
 
+    public abstract void setScene(SceneID sceneID) throws IllegalArgumentException;
     public abstract void update(SceneID sceneID, String description);
     public abstract void showError(String errorMsg);
     public abstract void showNotification(String notification);
