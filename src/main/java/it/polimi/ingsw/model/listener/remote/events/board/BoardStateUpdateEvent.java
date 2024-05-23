@@ -3,13 +3,14 @@ package it.polimi.ingsw.model.listener.remote.events.board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoardStateUpdateEvent implements NetworkEvent{
+public class BoardStateUpdateEvent implements UpdateEvent {
     private final int currentTurn;
     private final Map<String, Integer> scoreboard;
     private final GamePhase gamePhase;

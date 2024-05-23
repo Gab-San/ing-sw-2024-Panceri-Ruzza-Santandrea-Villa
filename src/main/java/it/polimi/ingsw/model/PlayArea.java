@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
+import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.playarea.FreeCornersUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaPlacedCardEvent;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
@@ -67,10 +68,10 @@ public class PlayArea implements GameSubject {
      */
     public void placeStartingCard(@NotNull StartingCard startCard) throws IllegalStateException{
         // check cardMatrix is empty
-        if(!cardMatrix.keySet().isEmpty())
-            //TODO add illegal state errror notification
+        if(!cardMatrix.keySet().isEmpty()) {
+            notifyAllListeners(new IllegalStateError(owner, "Attempting to place starting card on non-empty cardMatrix"));
             throw new IllegalStateException("Attempting to place starting card on non-empty cardMatrix");
-
+        }
         // place card
         Point cardPos = new Point(0,0);
         PlaceableCard card = startCard.setPosition(cardPos);

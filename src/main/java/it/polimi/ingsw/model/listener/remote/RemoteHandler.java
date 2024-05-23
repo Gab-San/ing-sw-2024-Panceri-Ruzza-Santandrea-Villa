@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.Hashtable;
@@ -48,7 +49,7 @@ public class RemoteHandler implements GameListener{
     }
     @Override
     public synchronized void listen(GameEvent event) throws ListenException {
-        if(!(event instanceof NetworkEvent)){
+        if(!(event instanceof UpdateEvent)){
             return;
         }
         eventRecord.addEvent((NetworkEvent) event);

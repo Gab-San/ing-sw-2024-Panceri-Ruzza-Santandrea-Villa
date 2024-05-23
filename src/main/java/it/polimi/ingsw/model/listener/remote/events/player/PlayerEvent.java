@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model.listener.remote.events.player;
 
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
-abstract public class PlayerEvent implements NetworkEvent {
+abstract public class PlayerEvent implements UpdateEvent {
     protected final String nickname;
 
     protected PlayerEvent(String nickname) {

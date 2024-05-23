@@ -3,12 +3,12 @@ package it.polimi.ingsw.model.listener.remote.errors;
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
 
 abstract public class RemoteErrorEvent implements NetworkEvent {
-    protected final String userNickname;
-    protected RemoteErrorEvent(String userNickname){
+    protected final String notifiedClient;
+    protected RemoteErrorEvent(String notifiedClient){
 
-        this.userNickname = userNickname;
+        this.notifiedClient = notifiedClient;
     }
     public String getUser(){
-        return userNickname;
+        return notifiedClient;
     }
 }

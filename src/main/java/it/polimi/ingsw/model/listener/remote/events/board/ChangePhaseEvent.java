@@ -2,11 +2,12 @@ package it.polimi.ingsw.model.listener.remote.events.board;
 
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
-public class ChangePhaseEvent implements NetworkEvent {
+public class ChangePhaseEvent implements UpdateEvent {
     private final GamePhase gamePhase;
 
     public ChangePhaseEvent(GamePhase gamePhase) {

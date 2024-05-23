@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model.listener.remote.events.board;
 
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
-public class EndgameCheckEvent implements NetworkEvent {
+public class EndgameCheckEvent implements UpdateEvent {
     private final String nickname;
     private final int score;
     private final boolean emptyDecks;
