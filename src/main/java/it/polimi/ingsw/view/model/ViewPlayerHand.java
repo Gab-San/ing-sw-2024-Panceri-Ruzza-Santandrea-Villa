@@ -20,6 +20,12 @@ public class ViewPlayerHand extends ViewHand {
         super.setSecretObjectiveCards(secretObjectiveCards);
     }
     @Override
+    public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
+        if(objectiveCard != null)
+            objectiveCard.turnFaceUp();
+        super.addSecretObjectiveCard(objectiveCard);
+    }
+    @Override
     public void setStartCard(ViewStartCard startCard){
         if(startCard != null) startCard.turnFaceUp();
         super.setStartCard(startCard);

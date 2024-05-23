@@ -58,10 +58,33 @@ public abstract class ViewHand {
         if(cards == null) return;
         this.cards.addAll(cards);
     }
+    public synchronized void addCard(ViewPlayCard card){
+        if(card == null) return;
+        this.cards.add(card);
+    }
+    public synchronized void removeCard(ViewPlayCard card){
+        if(card == null) return;
+        this.cards.remove(card);
+    }
     protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         this.secretObjectiveCards.clear();
         if(secretObjectiveCards == null) return;
         this.secretObjectiveCards.addAll(secretObjectiveCards);
+    }
+    protected synchronized void addSecretObjectiveCard(ViewObjectiveCard secretObjectiveCard){
+        if(secretObjectiveCard == null) return;
+        this.secretObjectiveCards.add(secretObjectiveCard);
+    }
+    public synchronized void chooseObjective(String choiceID){
+        ViewObjectiveCard choice = null;
+        for(ViewObjectiveCard obj : secretObjectiveCards){
+            if(obj.getCardID().equals(choiceID))
+                choice = obj;
+        }
+        if(choice != null){
+            secretObjectiveCards.clear();
+            addSecretObjectiveCard(choice);
+        }
     }
 
     public synchronized PlayerColor getColor() {

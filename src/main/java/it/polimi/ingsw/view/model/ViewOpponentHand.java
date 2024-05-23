@@ -30,10 +30,28 @@ public class ViewOpponentHand extends ViewHand{
         super.setCards(cards);
     }
     @Override
+    public void addCard(ViewPlayCard card){
+        if(card != null)
+            card.turnFaceDown();
+        super.addCard(card);
+    }
+    @Override
+    public void removeCard(ViewPlayCard card){
+        if(card != null)
+            card.turnFaceDown();
+        super.removeCard(card);
+    }
+    @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         if(secretObjectiveCards != null)
             secretObjectiveCards.forEach(ViewCard::turnFaceDown);
         super.setSecretObjectiveCards(secretObjectiveCards);
+    }
+    @Override
+    public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
+        if(objectiveCard != null)
+            objectiveCard.turnFaceDown();
+        super.addSecretObjectiveCard(objectiveCard);
     }
     @Override
     public void setStartCard(ViewStartCard startCard){

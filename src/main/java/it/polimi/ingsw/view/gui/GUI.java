@@ -18,6 +18,16 @@ public class GUI extends View {
     }
 
     @Override
+    public void showError(String errorMsg) {
+
+    }
+
+    @Override
+    public void showNotification(String notification) {
+
+    }
+
+    @Override
     public void run() {
         // Avvia la schermata grafica
         System.out.println("Schermata grafica avviata...");

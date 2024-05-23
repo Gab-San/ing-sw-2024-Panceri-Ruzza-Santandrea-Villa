@@ -42,8 +42,7 @@ public class ViewPlayArea {
      * @param card card to place
      */
     public void placeCard(Point position, ViewPlaceableCard card){
-        cardMatrix.put(position, card);
-        card.setPosition(position);
+        setCard(position, card);
         for(CornerDirection dir : CornerDirection.values()){
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
             if(dirCard != null){
@@ -134,5 +133,17 @@ public class ViewPlayArea {
     }
     public synchronized void setColor(GameResource color) {
         this.color = color;
+    }
+
+    public void setCard(Point position, ViewPlaceableCard card) {
+        cardMatrix.put(position, card);
+        card.setPosition(position);
+    }
+
+    public void clearFreeCorners(){
+        freeCorners.clear();
+    }
+    public void addFreeCorners(List<ViewCorner> cardFreeCorners) {
+        freeCorners.addAll(cardFreeCorners);
     }
 }

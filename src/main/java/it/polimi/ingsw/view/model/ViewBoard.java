@@ -117,4 +117,7 @@ public class ViewBoard {
     public void reconnectPlayer(String nickname){
         getOpponentHand(nickname).setConnected(true);
     }
+    public synchronized void setPlayerDeadlock(String nickname, boolean isDeadLocked) {
+        isPlayerDeadlocked.put(nickname, isDeadLocked);
+    }
 }

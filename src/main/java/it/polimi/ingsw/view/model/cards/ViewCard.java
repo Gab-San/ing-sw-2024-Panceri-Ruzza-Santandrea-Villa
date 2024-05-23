@@ -13,6 +13,18 @@ public abstract class ViewCard {
         this.isFaceUp = false;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(other == this) return true;
+        else if(other instanceof ViewCard otherCard){
+            return this.cardID.equals(otherCard.cardID);
+        }else return false;
+    }
+    @Override
+    public int hashCode(){
+        return cardID.hashCode();
+    }
+
     public String getCardID(){
         return cardID;
     }

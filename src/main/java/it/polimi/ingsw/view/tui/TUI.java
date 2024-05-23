@@ -36,7 +36,6 @@ public class TUI extends View{
         currentScene.display();
         String nickname;
         String regex = "[a-zA-Z0-9_]+";
-        currentScene.display();
         do {
             nickname = scanner.nextLine();
             if(nickname.matches(regex)){
@@ -66,13 +65,14 @@ public class TUI extends View{
 
     @Override
     public void update(SceneID sceneID, String description) {
-        TUI_Scene scene = sceneIDMap.get(sceneID);
+        TUI_Scene scene = (TUI_Scene) sceneIDMap.get(sceneID);
         if(scene != null){
             if(currentScene.equals(scene)){
                 currentScene.display();
             }
             else{
-                currentScene.displayNotification(description);
+                if(description != null && !description.isEmpty())
+                    showNotification(description);
             }
         }
         else if(sceneID.isOpponentAreaScene()){
@@ -80,5 +80,15 @@ public class TUI extends View{
             sceneIDMap.put(sceneID, new PrintOpponentUI(board.getOpponentHand(nick), board.getPlayerArea(nick)));
             update(sceneID, description); // won't loop indefinitely as next iteration will have scene != null
         }
+    }
+
+    @Override
+    public void showError(String errorMsg) {
+        currentScene.displayError(errorMsg);
+    }
+
+    @Override
+    public void showNotification(String notification) {
+        currentScene.displayNotification(notification);
     }
 }
