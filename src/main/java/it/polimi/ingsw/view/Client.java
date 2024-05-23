@@ -47,20 +47,24 @@ public class Client {
         }
     }
 
+    /**
+     * @param args args[0] is (optionally) the serverIP <br>
+     *             args[1] is the server port <br>
+     *             args[2] is the connection tech to be used (TCP/RMI) <br>
+     *             If the serverIP is omitted, then other indexes are reduced by one
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         try {
             if (args.length > 2) {
-                //first arg is the server IP
                 serverIP = args[0];
-                //second arg is the connection tech
-                connectionTech = args[1];
-                port = Integer.parseInt(args[2]);
-            } else { //if running server on local machine, the only parameter is TCP/RMI
-                serverIP = "localhost";
-                connectionTech = args[0];
                 port = Integer.parseInt(args[1]);
+                connectionTech = args[2];
+            } else {
+                serverIP = "localhost";
+                port = Integer.parseInt(args[0]);
+                connectionTech = args[1];
             }
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Please pass valid parameters: <serverIP> <connection technology [TCP/RMI]> <serverPort>");
@@ -77,7 +81,7 @@ public class Client {
         while(true) {
             try {
                 CommandPassthrough proxy = null;
-                Consumer<ModelUpdater> setClientModelUpdater;
+                Consumer<ModelUpdater> setClientModelUpdater = null;
                 try {
                     if (connectionTech.equalsIgnoreCase("tcp")) {
                         TCPClientSocket tcpClient = new TCPClientSocket(serverIP, port);
@@ -97,7 +101,7 @@ public class Client {
                 }
 
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
-                System.out.println("If the above text is not green, TUI may not be supported on the current console.");
+                System.out.println("If the above text is not green, TUI is not supported on the current console.");
                 while (view == null) {
                     System.out.println("Enter the game mode (TUI or GUI). Please use fullscreen (Alt+Enter) if selecting TUI.");
                     System.out.print("> ");

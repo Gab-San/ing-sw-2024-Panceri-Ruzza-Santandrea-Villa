@@ -52,17 +52,17 @@ public interface VirtualClient extends Remote{
     /**
      * Notifies a change in the specified deck.
      *<p>
-     * A deck has three position the model the three visible cards of a deck: <br>
-     * - the top card 0; <br>
-     * - the first revealed card 1 <br>
-     * - the second revealed card 2. <br>
+     * A deck has three positions to model the three visible cards of a deck: <br>
+     * 0 - the top card <br>
+     * 1 - the first revealed card <br>
+     * 2 - the second revealed card <br>
      *<br>
      * A revealed card is one of the previous, as once a card is drawn another one must be revealed.
      * </p>
      * @param deck the changed deck identifier
      * @param revealedId the identifier of the revealed card
      * @param cardPosition the card which was changed (top = 0, first = 1, second = 2)
-     * @throws RemoteException if an error during this method call occurs
+     * @throws RemoteException if a connection error occurs
      */
     void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException;
 
@@ -191,7 +191,7 @@ public interface VirtualClient extends Remote{
      * Updates the current player's hand status after an objective card was drawn
      * @param nickname the unique player's identifier
      * @param objectiveCard the added objective card's id
-     * @throws RemoteException if connection aws lost
+     * @throws RemoteException if connection was lost
      */
     void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException;
 
@@ -261,15 +261,16 @@ public interface VirtualClient extends Remote{
      * @param gamePhase the game phase at initialization
      * @throws RemoteException if a connection error is detected
      */
+    //TODO: [Ale][Gamba] add player deadlock status?
     void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException;
 
     /**
-     * Updates the player's dead lock status
+     * Updates the player's deadlock status
      * <p>
      *     Complete with dead lock description
      * </p>
      * @param nickname the player unique id
-     * @param isDeadLocked the player dead lock value
+     * @param isDeadLocked the player deadlock value
      * @throws RemoteException if a connection error occurs
      */
     void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;

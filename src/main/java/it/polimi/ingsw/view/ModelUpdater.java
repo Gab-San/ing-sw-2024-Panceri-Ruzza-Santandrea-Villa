@@ -131,16 +131,14 @@ public class ModelUpdater implements VirtualClient {
                     break;
                 default: return;
             }
-            notifyBoardUpdate(getDeckName(deck) + " was updated.");
+            if(topCard != null) // only false if the call comes from setDeckState(deck, firstCardId, secondCardId)
+                notifyBoardUpdate(getDeckName(deck) + " was updated.");
         }catch (ClassCastException e){
             //FIXME: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
         }
     }
     public void deckUpdate(char deck, String revealedId, int cardPosition) {
-        setDeckState(deck, revealedId, cardPosition);
-    }
-    public void setDeckState(char deck, String revealedId, int cardPosition){
         if(!Character.toString(deck).matches("[RGO]")) return;
 
         ViewCard topCard = switch (deck){
@@ -149,7 +147,7 @@ public class ModelUpdater implements VirtualClient {
             case ViewBoard.OBJECTIVE_DECK -> board.getObjectiveCardDeck().getTopCard();
             default -> null; // never triggered
         };
-        if(revealedId == null || cardPosition > 2 || cardPosition < 1) illegalArgument();
+        if(revealedId == null || cardPosition > 2 || cardPosition < 0) illegalArgument();
 
         if(topCard == null || !revealedId.equals(topCard.getCardID())){
             //TODO: import from JSON here
@@ -157,54 +155,65 @@ public class ModelUpdater implements VirtualClient {
             topCard = cardFromJSON;
         }
         try {
-            boolean first = cardPosition == 1;
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
-                    if (first) board.getResourceCardDeck().setFirstRevealed((ViewResourceCard) topCard);
-                    else board.getResourceCardDeck().setSecondRevealed((ViewResourceCard) topCard);
+                    switch (cardPosition){
+                        case 0:
+                            board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
+                            break;
+                        case 1:
+                            board.getResourceCardDeck().setFirstRevealed((ViewResourceCard) topCard);
+                            break;
+                        case 2:
+                            board.getResourceCardDeck().setSecondRevealed((ViewResourceCard) topCard);
+                            break;
+                    }
                     break;
                 case ViewBoard.GOLD_DECK:
-                    if (first) board.getGoldCardDeck().setFirstRevealed((ViewGoldCard) topCard);
-                    else board.getGoldCardDeck().setSecondRevealed((ViewGoldCard) topCard);
+                    switch (cardPosition){
+                        case 0:
+                            board.getGoldCardDeck().setTopCard((ViewGoldCard) topCard);
+                            break;
+                        case 1:
+                            board.getGoldCardDeck().setFirstRevealed((ViewGoldCard) topCard);
+                            break;
+                        case 2:
+                            board.getGoldCardDeck().setSecondRevealed((ViewGoldCard) topCard);
+                            break;
+                    }
                     break;
                 case ViewBoard.OBJECTIVE_DECK:
-                    if (first) board.getObjectiveCardDeck().setFirstRevealed((ViewObjectiveCard) topCard);
-                    else board.getObjectiveCardDeck().setSecondRevealed((ViewObjectiveCard) topCard);
+                    switch (cardPosition){
+                        case 0:
+                            board.getObjectiveCardDeck().setTopCard((ViewObjectiveCard) topCard);
+                            break;
+                        case 1:
+                            board.getObjectiveCardDeck().setFirstRevealed((ViewObjectiveCard) topCard);
+                            break;
+                        case 2:
+                            board.getObjectiveCardDeck().setSecondRevealed((ViewObjectiveCard) topCard);
+                            break;
+                    }
                     break;
-                default: return;
             }
-            String cardPos = first ? "First" : "Second";
-            notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn");
+            if(cardPosition == 0){
+                notifyBoardUpdate("The top card of " + getDeckName(deck) + " was drawn");
+            }
+            else{
+                String cardPos = cardPosition == 1 ? "First" : "Second";
+                notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn");
+            }
         }catch (ClassCastException e){
             //TODO: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
         }
+    }
+    public void setDeckState(char deck, String revealedId, int cardPosition){
+        deckUpdate(deck, revealedId, cardPosition);
     }
     public void setDeckState(char deck, String firstCardId, String secondCardId) {
         setDeckState(deck, null, firstCardId, secondCardId);
-    }
-//FIXME: this is not used??
-    void deckUpdate(char deck, String topCardId){
-        try {
-            //TODO: import from json
-            ViewCard topCard = null;
-            switch (deck) {
-                case ViewBoard.RESOURCE_DECK:
-                    board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
-                    break;
-                case ViewBoard.GOLD_DECK:
-                    board.getGoldCardDeck().setTopCard((ViewGoldCard) topCard);
-                    break;
-                case ViewBoard.OBJECTIVE_DECK:
-                    board.getObjectiveCardDeck().setTopCard((ViewObjectiveCard) topCard);
-                    break;
-                default: return;
-            }
-            notifyBoardUpdate("Top card was drawn from " + getDeckName(deck));
-        }catch (ClassCastException e){
-            //TODO: handle argument error, maybe just return (ignore wrong update?)
-            deckCardTypeMismatch();
-        }
+        notifyBoardUpdate(getDeckName(deck) + " is now empty! Only the 2 revealed cards remain.");
     }
     public void emptyDeck(char deck){
         switch (deck) {

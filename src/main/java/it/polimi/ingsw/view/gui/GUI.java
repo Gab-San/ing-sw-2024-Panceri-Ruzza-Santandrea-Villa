@@ -1,14 +1,18 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.network.CommandPassthrough;
+import it.polimi.ingsw.view.ModelUpdater;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
 
+import java.rmi.RemoteException;
+import java.util.function.Consumer;
+
 public class GUI extends View {
 
-    public GUI(CommandPassthrough serverProxy){
-        super(serverProxy, new PrintNicknameSelectUI()); // (change this scene to GUI scene)
+    public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater){
+        super(serverProxy, new PrintNicknameSelectUI()); // change this scene to GUI scene
         //TODO: make GUI
     }
 
@@ -28,7 +32,7 @@ public class GUI extends View {
     }
 
     @Override
-    public void run() {
+    public void run() throws RemoteException {
         // Avvia la schermata grafica
         System.out.println("Schermata grafica avviata...");
         // Esegui il codice per avviare l'interfaccia grafica
