@@ -242,7 +242,7 @@ public class ModelUpdater implements VirtualClient {
         String cardPos = first ? "First" : "Second";
         notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn. Deck is empty so no card has replaced it.");
     }
-    public void createEmptyDeck(char deck) {
+    public void setEmptyDeckState(char deck) {
         //FIXME: this isn't needed as decks are initialised empty
         setDeckState(deck, null,null,null);
     }

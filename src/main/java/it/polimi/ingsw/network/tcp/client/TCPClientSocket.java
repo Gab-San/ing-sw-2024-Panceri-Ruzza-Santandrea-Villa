@@ -208,7 +208,7 @@ public class TCPClientSocket implements VirtualClient{
     }
 
     @Override
-    public void createEmptyDeck(char deck) throws RemoteException {
+    public void setEmptyDeckState(char deck) throws RemoteException {
 
     }
 
@@ -258,7 +258,7 @@ public class TCPClientSocket implements VirtualClient{
     }
 
     @Override
-    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
 
     }
 

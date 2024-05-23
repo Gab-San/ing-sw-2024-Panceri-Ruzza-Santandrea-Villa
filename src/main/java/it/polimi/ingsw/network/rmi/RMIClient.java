@@ -111,7 +111,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public synchronized void createEmptyDeck(char deck) throws RemoteException {
+    public synchronized void setEmptyDeckState(char deck) throws RemoteException {
 
     }
 

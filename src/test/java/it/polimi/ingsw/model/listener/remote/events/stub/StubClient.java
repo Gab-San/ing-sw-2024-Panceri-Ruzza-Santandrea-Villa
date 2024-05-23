@@ -146,7 +146,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void createEmptyDeck(char deck) throws RemoteException {
+    public void setEmptyDeckState(char deck) throws RemoteException {
         System.out.println(colorize("Notified " + this.nickname + "\nof empty deck creation with:\n" +
                 "[DECK TYPE] " + deck + "\n", Attribute.BLUE_TEXT()));
     }
@@ -220,10 +220,10 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof deck creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
-                "[FREE CORNERS] " + freeSerializableCorners, Attribute.MAGENTA_TEXT()));
+                "[FREE CORNERS] " + freeSerialableCorners, Attribute.MAGENTA_TEXT()));
     }
 
     @Override

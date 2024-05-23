@@ -110,7 +110,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void createEmptyDeck(char deck) throws RemoteException {
+    public synchronized void setEmptyDeckState(char deck) throws RemoteException {
 
     }
 
@@ -160,7 +160,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
 
     }
 
