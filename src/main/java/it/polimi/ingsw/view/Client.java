@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Client {
+    public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
     public static Scanner scanner;
@@ -140,7 +141,8 @@ public class Client {
             } catch (RemoteException e) {
                 cls();
                 view = null;
-                System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
+                if(!e.getMessage().equals("DISCONNECTED"))
+                    System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
             }
         }
 

@@ -13,7 +13,6 @@ import it.polimi.ingsw.view.model.cards.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 // synchronization is done inside ViewModel already
 //FIXME: remove "implements VirtualClient" (it's useful while implementing)

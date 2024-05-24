@@ -283,15 +283,15 @@ public class Parser {
         String cornDir;
 
         String argsString =  argsStr.toString().trim();
-        Matcher cardMatcher = Pattern.compile("[RGrg][0-39]").matcher(argsString);
+        Matcher cardMatcher = Pattern.compile("[RGrg][1-3]?[0-9]").matcher(argsString);
         if(cardMatcher.find()){
-            cardToPlace = cardMatcher.group();
+            cardToPlace = cardMatcher.group().trim();
         } else {
             throw new IllegalArgumentException("missing card to place");
         }
 
         if(cardMatcher.find()){
-            String cardID = cardMatcher.group();
+            String cardID = cardMatcher.group().trim();
             ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
             placementPos = playArea.getPositionByID(cardID); // throws IllegalArgument if card isn't in playArea
         } else{

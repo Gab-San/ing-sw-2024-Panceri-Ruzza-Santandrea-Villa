@@ -69,10 +69,10 @@ public class ViewBoard {
         return list;
     }
     public synchronized List<ViewHand> getAllPlayerHands(){
-        List<ViewHand> nicknames = new LinkedList<>();
-        nicknames.add(playerHand);
-        nicknames.addAll(getOpponents());
-        return nicknames;
+        List<ViewHand> hands = new LinkedList<>();
+        hands.add(playerHand);
+        hands.addAll(getOpponents());
+        return hands;
     }
 
     public synchronized int getScore(String nickname){
@@ -104,7 +104,7 @@ public class ViewBoard {
         playerAreas.put(nickname, new ViewPlayArea());
         opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
-        scoreboard.put(nickname, 0);
+        scoreboard.put(nickname, -1);
     }
     public synchronized void removePlayer(String nickname){
         playerAreas.remove(nickname);

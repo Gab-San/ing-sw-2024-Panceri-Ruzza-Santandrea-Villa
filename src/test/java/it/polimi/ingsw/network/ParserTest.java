@@ -1,12 +1,20 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.testingStub.PuppetClient;
+import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.model.cards.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,9 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {
     private Parser parser;
+    private ViewBoard board;
     @BeforeEach
     void setup() {
-        parser = new Parser(new PuppetClient(), new ViewBoard("Test_Player"));
+        board = new ViewBoard("Test_Player");
+        parser = new Parser(new PuppetClient(), board);
     }
 
     //TODO: Fix this test according with the checks on ViewBoard
@@ -36,6 +46,20 @@ class ParserTest {
                 () -> assertFalse(Pattern.matches("[RGrg][0-2]", "0")),
                 () -> assertFalse(Pattern.matches("[RGrg][0-2]", "G")),
                 () -> assertFalse(Pattern.matches("[RGrg][0-2]", "2g")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R31")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r29")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R15")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R5")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r1")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "g0")),
+                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "G9")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R41")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r40")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "G49")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "g")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R100")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R528")),
+                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R369")),
                 () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","Blue")),
                 () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","Green")),
                 () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","yellow")),
@@ -294,8 +318,9 @@ class ParserTest {
                 IllegalArgumentException.class,
                 () -> parser.parseCommand("Place starting card S0")
         );
-
+        board.getPlayerHand().setStartCard(ViewCardGenerator.getRandomStartingCard());
         parser.parseCommand("Place starting");
+        board.getPlayerHand().setStartCard(ViewCardGenerator.getRandomStartingCard());
         parser.parseCommand("Place starting card");
     }
 
@@ -304,6 +329,10 @@ class ParserTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> parser.parseCommand("play G0")
+        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand("play G255 on G29 TL")
         );
 
         assertThrows(
@@ -316,7 +345,31 @@ class ParserTest {
                 () -> parser.parseCommand("play G0 TL")
         );
 
-        parser.parseCommand("play G0 on G1 BR");
+        List<ViewCorner> emptyCorners = new LinkedList<>();
+        emptyCorners.add(new ViewCorner(null, null, CornerDirection.TR));
+        emptyCorners.add(new ViewCorner(null, null, CornerDirection.TL));
+        emptyCorners.add(new ViewCorner(null, null, CornerDirection.BR));
+        emptyCorners.add(new ViewCorner(null, null, CornerDirection.BL));
+
+        List<ViewCorner> otherCorners = new LinkedList<>();
+        emptyCorners.forEach(c->otherCorners.add(new ViewCorner(c)));
+
+        ViewStartCard startCard = new ViewStartCard("S0", "", "",
+                emptyCorners, new LinkedList<>());
+        ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
+        playArea.placeStarting(startCard);
+
+        ViewGoldCard cardInHand = ViewCardGenerator.getRandomGoldCard();
+        board.getPlayerHand().addCard(cardInHand);
+
+        ViewPlayCard cardInPlay = new ViewResourceCard("R21", "", "",
+                otherCorners, 1, GameResource.LEAF);
+        playArea.placeCard(new Point(1,1) , cardInPlay);
+
+        assertEquals("R21", playArea.getCardAt(new Point(1,1)).getCardID());
+
+        System.out.println("Placed card ID: " + cardInPlay.getCardID());
+        parser.parseCommand("play "+ cardInHand.getCardID() +" on "+ cardInPlay.getCardID() +" TR");
     }
 
 }

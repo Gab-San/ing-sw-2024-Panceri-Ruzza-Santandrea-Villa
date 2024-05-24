@@ -35,13 +35,14 @@ public class TUI extends View{
     }
 
     /**
-     * Nickname must contain at least one letter or '_'
+     * Nickname must contain at least one letter and not start with a space <br>
+     * It can contain any character
      * @param nickname nickname to validate
-     * @return true if the nickname is valid, <br> false if not valid (contains only numbers)
+     * @return true if the nickname is valid, <br> false if not valid
      */
     private boolean validateNickname(String nickname){
-        return nickname.matches("[a-zA-Z0-9_]+")
-                && !nickname.replaceAll("\\d", "").isEmpty();
+        return nickname.matches("[^ ].*[a-zA-Z].*")
+                && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
     private void runNicknameSelectScene() throws RemoteException{
         currentScene.display();

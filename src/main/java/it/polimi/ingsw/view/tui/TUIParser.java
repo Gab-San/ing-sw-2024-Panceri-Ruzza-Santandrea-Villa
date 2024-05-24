@@ -46,11 +46,11 @@ public class TUIParser {
             case "turnover":
                 parseFlipCommand(cmdArgs);
                 break;
-            case "quit":
-                serverParser.parseCommand("disconnect");
-                System.exit(0);
             default:
                 serverParser.parseCommand(command);
+        }
+        if(command.toLowerCase().matches("quit|disconnect")){
+            throw new RemoteException("DISCONNECTED");
         }
         //TODO: handle disconnect returning to nickname selection.
     }
