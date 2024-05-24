@@ -113,12 +113,6 @@ public class ViewBoard {
         isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
     }
-    public void disconnectPlayer(String nickname){
-        getOpponentHand(nickname).setConnected(false);
-    }
-    public void reconnectPlayer(String nickname){
-        getOpponentHand(nickname).setConnected(true);
-    }
     public synchronized void setPlayerDeadlock(String nickname, boolean isDeadLocked) {
         isPlayerDeadlocked.put(nickname, isDeadLocked);
     }

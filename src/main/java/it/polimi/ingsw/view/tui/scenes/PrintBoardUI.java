@@ -52,7 +52,7 @@ public class PrintBoardUI extends TUI_Scene {
             out.print(" " + playersOnI + RESET);
         }
 
-        out.println("\n\nCentral Board.  Current game phase is: " + board.getGamePhase() + "\n");
+        out.println("\n\nCentral Board.    " + board.getGamePhase() + "\n");
 
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard())));

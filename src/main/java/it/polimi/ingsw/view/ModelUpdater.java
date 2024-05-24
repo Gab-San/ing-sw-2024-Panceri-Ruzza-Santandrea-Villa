@@ -19,10 +19,17 @@ import java.util.Map;
 public class ModelUpdater implements VirtualClient {
     private final ViewBoard board;
     private final View view;
+    private final boolean verbose;
 
     public ModelUpdater(ViewBoard board, View view) {
         this.board = board;
         this.view = view;
+        verbose = false;
+    }
+    public ModelUpdater(ViewBoard board, View view, boolean verbose) {
+        this.board = board;
+        this.view = view;
+        this.verbose = verbose;
     }
     public void update(String msg) {
         view.showNotification(msg);
@@ -30,15 +37,26 @@ public class ModelUpdater implements VirtualClient {
     public void ping() { } //TODO: remove ping()
 
     private void notifyMyAreaUpdate(String msg){
-        view.update(SceneID.getMyAreaSceneID(), msg);
+        if(verbose)
+            notifyView(msg);
+        else
+            view.update(SceneID.getMyAreaSceneID(), msg);
     }
     private void notifyOpponentUpdate(String nickname, String msg){
-        view.update(SceneID.getOpponentAreaSceneID(nickname), msg);
+        if(verbose)
+            notifyView(msg);
+        else
+            view.update(SceneID.getOpponentAreaSceneID(nickname), msg);
     }
     private void notifyBoardUpdate(String msg){
-        view.update(SceneID.getMyAreaSceneID(), msg);
+        if(verbose)
+            notifyView(msg);
+        else
+            view.update(SceneID.getMyAreaSceneID(), msg);
     }
-
+    private void notifyView(String msg){
+        view.showNotification(msg);
+    }
     public void reportError(String errorMessage) {
         view.showError(errorMessage);
     }
@@ -47,10 +65,11 @@ public class ModelUpdater implements VirtualClient {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);
             board.getPlayerHand().setColor(color);
-            notifyMyAreaUpdate("Your turn and color were set");
+            if(turn != 0 || color != null)
+                notifyMyAreaUpdate("Your turn and color were set");
         }
         else{
-            board.addPlayer(nickname);
+            //getOpponentHand will also run addPlayer if it wasn't run before.
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.setConnected(isConnected);
             hand.setTurn(turn);
@@ -60,22 +79,22 @@ public class ModelUpdater implements VirtualClient {
     }
     public void updatePlayer(String nickname, PlayerColor color){
         if(board.getPlayerHand().getNickname().equals(nickname)) {
-            board.getPlayerHand().setColor(color);
-            notifyMyAreaUpdate("Your color was set");
+            if(board.getPlayerHand().setColor(color))
+                notifyMyAreaUpdate("Your color was set");
         }
         else {
-            board.getOpponentHand(nickname).setColor(color);
-            notifyOpponentUpdate(nickname, nickname + "'s color was set");
+            if(board.getOpponentHand(nickname).setColor(color))
+                notifyOpponentUpdate(nickname, nickname + "'s color was set");
         }
     }
     public void updatePlayer(String nickname, int playerTurn){
         if(board.getPlayerHand().getNickname().equals(nickname)){
-            board.getPlayerHand().setTurn(playerTurn);
-            notifyMyAreaUpdate("Your turn was set");
+            if(board.getPlayerHand().setTurn(playerTurn))
+                notifyMyAreaUpdate("Your turn was set");
         }
         else{
-            board.getOpponentHand(nickname).setTurn(playerTurn);
-            notifyOpponentUpdate(nickname, nickname + "'s turn was set");
+            if(board.getOpponentHand(nickname).setTurn(playerTurn))
+                notifyOpponentUpdate(nickname, nickname + "'s turn was set");
         }
     }
     public void updatePlayer(String nickname, boolean isConnected){
@@ -254,27 +273,27 @@ public class ModelUpdater implements VirtualClient {
         notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn. Deck is empty so no card has replaced it.");
     }
     public void setEmptyDeckState(char deck) {
+        return;
         //FIXME: this isn't needed as decks are initialised empty
-        setDeckState(deck, null,null,null);
+//        setDeckState(deck, null,null,null);
     }
 
 
     public void setBoardState(int currentTurn, GamePhase gamePhase) {
-        board.setGamePhase(gamePhase);
-        board.setCurrentTurn(currentTurn);
-        notifyBoardUpdate("Game phase and turn updated.");
+        if(board.setGamePhase(gamePhase) || board.setCurrentTurn(currentTurn))
+            notifyBoardUpdate("Game phase and turn updated.");
     }
     public void updatePhase(GamePhase gamePhase) {
-        board.setGamePhase(gamePhase);
-        view.showNotification("Game phase updated to " + gamePhase);
+        if(board.setGamePhase(gamePhase))
+            view.showNotification("Game phase updated to " + gamePhase);
+    }
+    public void updateTurn(int currentTurn) {
+        if(board.setCurrentTurn(currentTurn))
+            view.showNotification("Turn advanced to " + currentTurn);
     }
     public void updateScore(String nickname, int score) {
         board.setScore(nickname, score);
         notifyBoardUpdate(nickname + "'s score is now " + score);
-    }
-    public void updateTurn(int currentTurn) {
-        board.setCurrentTurn(currentTurn);
-        view.showNotification("Turn advanced to " + currentTurn);
     }
 
     public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) {

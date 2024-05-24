@@ -51,6 +51,10 @@ public class Client {
         }
     }
 
+    private static void duplicateArgument(){
+        System.err.println("Duplicate argument detected. Closing.");
+        quitError();
+    }
     private static void quitError(){
         scanner.close();
         System.exit(-1);
@@ -64,29 +68,65 @@ public class Client {
      */
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
+        serverIP = null; connectionTech = null; port = -1;
+        boolean verbose = false;
 
-        try {
-            if (args.length > 2) {
-                serverIP = args[0];
-                port = Integer.parseInt(args[1]);
-                connectionTech = args[2];
-            } else {
-                serverIP = "localhost";
-                port = Integer.parseInt(args[0]);
-                connectionTech = args[1];
+//region OLD FIXED-POSITION METHOD
+//        try {
+//            if (args.length > 2) {
+//                serverIP = args[0];
+//                port = Integer.parseInt(args[1]);
+//                connectionTech = args[2];
+//            } else {
+//                serverIP = "localhost";
+//                port = Integer.parseInt(args[0]);
+//                connectionTech = args[1];
+//            }
+//            verbose = args[args.length-1].equalsIgnoreCase("-v");
+//        }
+//        catch (IndexOutOfBoundsException e) {
+//            System.err.println("Please pass valid parameters: <serverIP> <connection technology [TCP/RMI]> <serverPort>");
+//            quitError();
+//        }
+//        catch (NumberFormatException e) {
+//            System.err.println("Server port parameter must be a number.");
+//            quitError();
+//        }
+//
+//        if (!serverIP.matches("\\d.\\d.\\d.\\d|localhost")) {
+//            System.err.println("Server IP parameter must be an IP address: x.y.z.w or 'localhost'");
+//            quitError();
+//        }
+//endregion
+
+        for(String arg : args){
+            if(arg.matches("\\d.\\d.\\d.\\d|localhost")){
+                if(serverIP != null)
+                    duplicateArgument();
+                serverIP = arg;
             }
-        } catch (IndexOutOfBoundsException e) {
-            System.err.println("Please pass valid parameters: <serverIP> <connection technology [TCP/RMI]> <serverPort>");
-            quitError();
-        } catch (NumberFormatException e) {
-            System.err.println("Server port parameter must be a number.");
+            else if(arg.toLowerCase().matches("rmi|tcp")) {
+                if(connectionTech != null)
+                    duplicateArgument();
+                connectionTech = arg;
+            }
+            else if(arg.matches("\\d+")) {
+                if(port >= 0)
+                    duplicateArgument();
+                port = Integer.parseInt(arg);
+            }
+            else if(arg.equalsIgnoreCase("-v")) {
+                if(verbose)
+                    duplicateArgument();
+                verbose = true;
+            }
+        }
+        if(connectionTech == null || port <= -1){
+            System.err.println("Missing server port or RMI/TCP");
             quitError();
         }
+        if(serverIP == null) serverIP = "localhost";
 
-        if (!serverIP.matches("\\d.\\d.\\d.\\d|localhost")) {
-            System.err.println("Server IP parameter must be an IP address: x.y.z.w or 'localhost'");
-            quitError();
-        }
         while(true) {
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;
@@ -133,7 +173,7 @@ public class Client {
                         view = new GUI(proxy, setClientModelUpdater); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
-                        view = new TUI(proxy, setClientModelUpdater, scanner); // proxy always not null at this point
+                        view = new TUI(proxy, setClientModelUpdater, scanner, verbose); // proxy always not null at this point
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
                         view = null;

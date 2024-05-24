@@ -24,13 +24,13 @@ public class TUI extends View{
     ViewBoard board;
     List<String> notificationBacklog;
 
-    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner) throws RemoteException {
+    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.scanner = scanner;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
-        setClientModelUpdater.accept(new ModelUpdater(board, this));
+        setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
 
         // at this point, connection has concluded successfully.
         sceneIDMap.put(SceneID.getBoardSceneID(), new PrintBoardUI(board));
