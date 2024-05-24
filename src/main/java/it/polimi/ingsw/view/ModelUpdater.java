@@ -24,7 +24,9 @@ public class ModelUpdater implements VirtualClient {
         this.board = board;
         this.view = view;
     }
-    public void update(String msg) { } //TODO: remove this or use it as updateChat
+    public void update(String msg) {
+        view.showNotification(msg);
+    } //TODO: remove this or use it as updateChat / generic notification
     public void ping() { } //TODO: remove ping()
 
     private void notifyMyAreaUpdate(String msg){
@@ -53,7 +55,7 @@ public class ModelUpdater implements VirtualClient {
             hand.setConnected(isConnected);
             hand.setTurn(turn);
             hand.setColor(color);
-            notifyOpponentUpdate(nickname, nickname + "joined the game!");
+            notifyOpponentUpdate(nickname, nickname + " joined the game!");
         }
     }
     public void updatePlayer(String nickname, PlayerColor color){
@@ -79,16 +81,17 @@ public class ModelUpdater implements VirtualClient {
     public void updatePlayer(String nickname, boolean isConnected){
         if(!board.getPlayerHand().getNickname().equals(nickname)){
             board.getOpponentHand(nickname).setConnected(isConnected);
-            String connectionString = isConnected ? "disconnected" : "reconnected";
+            String connectionString = isConnected ? "reconnected" : "disconnected";
             notifyOpponentUpdate(nickname, nickname + " " + connectionString);
         }
     }
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         board.setPlayerDeadlock(nickname, isDeadLocked);
-        if(board.getPlayerHand().getNickname().equals(nickname))
-            notifyMyAreaUpdate("You are deadlocked!");
-        else
-            notifyOpponentUpdate(nickname, nickname + " is deadlocked!");
+        if(isDeadLocked)
+            if(board.getPlayerHand().getNickname().equals(nickname))
+                notifyMyAreaUpdate("You are deadlocked!");
+            else
+                notifyOpponentUpdate(nickname, nickname + " is deadlocked!");
     }
 
 

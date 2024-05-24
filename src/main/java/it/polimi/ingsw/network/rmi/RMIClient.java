@@ -38,7 +38,10 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public synchronized void update(String msg) throws RemoteException {
-        System.out.println(msg); // temp function
+        if(modelUpdater != null)
+            modelUpdater.update(msg);
+        else
+            System.out.println(msg);
     }
 
     /**
@@ -134,67 +137,56 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public synchronized void playerHandRemoveCard(String nickname, String playCardId) throws RemoteException {
         modelUpdater.playerHandRemoveCard(nickname, playCardId);
-
     }
 
     @Override
     public synchronized void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException {
         modelUpdater.playerHandAddObjective(nickname, objectiveCard);
-
     }
 
     @Override
     public synchronized void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException {
         modelUpdater.playerHandChooseObject(nickname, chosenObjectiveId);
-
     }
 
     @Override
     public synchronized void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException {
         modelUpdater.playerHandSetStartingCard(nickname, startingCardId);
-
     }
 
     @Override
     public synchronized void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
         modelUpdater.createPlayArea(nickname, cardPositions, visibleResources, freeSerializableCorners);
-
     }
 
     @Override
     public synchronized void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
         modelUpdater.placeCard(nickname, placedCardId, row, col);
-
     }
 
     @Override
     public synchronized void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
         modelUpdater.visibleResourcesUpdate(nickname, visibleResources);
-
     }
 
     @Override
     public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
         modelUpdater.freeCornersUpdate(nickname, freeSerializableCorners);
-
     }
 
     @Override
     public synchronized void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException {
         modelUpdater.setBoardState(currentTurn, gamePhase);
-
     }
 
     @Override
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
         modelUpdater.playerDeadLockUpdate(nickname, isDeadLocked);
-
     }
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
         modelUpdater.reportError(errorMessage);
-
     }
 
     public RMIServerProxy getProxy(){

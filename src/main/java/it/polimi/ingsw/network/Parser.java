@@ -74,6 +74,7 @@ public class Parser {
 
     }
 
+    //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
     private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
         if (cmdArgs.size() < 3) {
             throw new IllegalArgumentException("Too few arguments.\n" +
@@ -287,7 +288,7 @@ public class Parser {
         if(cardMatcher.find()){
             cardToPlace = cardMatcher.group().trim();
         } else {
-            throw new IllegalArgumentException("missing card to place");
+            throw new IllegalArgumentException("missing ID of card to place or given ID is invalid");
         }
 
         if(cardMatcher.find()){
@@ -295,7 +296,7 @@ public class Parser {
             ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
             placementPos = playArea.getPositionByID(cardID); // throws IllegalArgument if card isn't in playArea
         } else{
-            throw new IllegalArgumentException("missing on which to place");
+            throw new IllegalArgumentException("missing ID of card on which to place or given ID is invalid");
         }
 
         Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);

@@ -41,7 +41,7 @@ public class PrintBoardUI extends TUI_Scene {
             StringBuilder playersOnI = new StringBuilder();
             List<ViewHand> hands = board.getAllPlayerHands();
             for(ViewHand hand : hands){
-                if(board.getScore(hand.getNickname()) == i){
+                if(hand.getColor() != null && board.getScore(hand.getNickname()) == i){
                     String playerMarker = getColorFromEnum(hand.getColor()) + " " + RESET;
                     playersOnI.append(playerMarker).append(" ");
                 }
@@ -52,7 +52,7 @@ public class PrintBoardUI extends TUI_Scene {
             out.print(" " + playersOnI + RESET);
         }
 
-        out.println("\n\nCentral Board: \n");
+        out.println("\n\nCentral Board.  Current game phase is: " + board.getGamePhase() + "\n");
 
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard())));

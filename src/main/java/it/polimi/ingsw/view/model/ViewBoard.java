@@ -36,6 +36,7 @@ public class ViewBoard {
         playerHand = new ViewPlayerHand(nickname);
         isPlayerDeadlocked = new Hashtable<>();
         scoreboard = new Hashtable<>();
+        scoreboard.put(nickname, 0);
 
         playerAreas.put(nickname, new ViewPlayArea());
         isPlayerDeadlocked.put(nickname, false);
@@ -104,12 +105,13 @@ public class ViewBoard {
         playerAreas.put(nickname, new ViewPlayArea());
         opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
-        scoreboard.put(nickname, -1);
+        scoreboard.put(nickname, 0);
     }
     public synchronized void removePlayer(String nickname){
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
+        scoreboard.remove(nickname);
     }
     public void disconnectPlayer(String nickname){
         getOpponentHand(nickname).setConnected(false);

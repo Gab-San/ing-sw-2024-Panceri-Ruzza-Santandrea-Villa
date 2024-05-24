@@ -18,21 +18,17 @@ public class PrintNicknameSelectUI extends TUI_Scene {
 
     @Override
     public void print() {
+        if(notificationBacklog != null)
+            notificationBacklog.forEach(out::println);
         out.print("Choose your nickname: ");
         out.flush();
     }
     @Override
     public void displayError(String msg){
         synchronized (System.out){
-            display(); out.println();
+            cls();
             out.println(RED_TEXT + msg + RESET);
-        }
-    }
-    @Override
-    public void displayNotification(String msg){
-        synchronized (System.out) {
-            display(); out.println();
-            out.println(msg);
+            print();
         }
     }
 }

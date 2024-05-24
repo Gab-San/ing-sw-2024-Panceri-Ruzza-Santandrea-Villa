@@ -13,6 +13,7 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 public abstract class TUI_Scene implements Scene {
     protected final PrintWriter out;
+    protected List<String> notificationBacklog;
 
     protected TUI_Scene() {
         this.out = new PrintWriter(System.out, true);
@@ -26,21 +27,23 @@ public abstract class TUI_Scene implements Scene {
         synchronized (System.out){
             cls();
             print();
+            if(notificationBacklog != null)
+                notificationBacklog.forEach(out::println);
         }
     }
     protected abstract void print();
     @Override
-    public void displayError(String msg){
+    public void displayError(String error){
         synchronized (System.out){
             display();
-            out.println(RED_TEXT + msg + RESET);
+            out.println(RED_TEXT + error + RESET);
         }
     }
     @Override
-    public void displayNotification(String msg){
+    public final void displayNotification(List<String> backlog){
         synchronized (System.out) {
+            this.notificationBacklog = backlog;
             display();
-            out.println(msg);
         }
     }
     @Override

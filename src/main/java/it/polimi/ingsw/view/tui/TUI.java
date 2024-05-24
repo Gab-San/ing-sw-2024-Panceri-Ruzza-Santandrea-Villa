@@ -14,23 +14,27 @@ import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
 import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
 import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class TUI extends View{
+    private static final int NOTIFICATION_BACKLOG_SIZE = 30;
     Scanner scanner;
     TUIParser parser;
     ViewBoard board;
+    List<String> notificationBacklog;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.scanner = scanner;
+        this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this));
 
         // at this point, connection has concluded successfully.
+        sceneIDMap.put(SceneID.getBoardSceneID(), new PrintBoardUI(board));
+        sceneIDMap.put(SceneID.getMyAreaSceneID(), new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname())));
         currentScene = sceneIDMap.get(SceneID.getMyAreaSceneID());
     }
 
@@ -52,11 +56,6 @@ public class TUI extends View{
             if(validateNickname(nickname)){
                 try{
                     board = new ViewBoard(nickname);
-                    ViewPlayerHand myHand = board.getPlayerHand();
-                    ViewPlayArea myArea = board.getPlayerArea(myHand.getNickname());
-                    sceneIDMap.put(SceneID.getBoardSceneID(), new PrintBoardUI(board));
-                    sceneIDMap.put(SceneID.getMyAreaSceneID(), new PrintPlayerUI(myHand, myArea));
-
                     parser = new TUIParser(serverProxy, this, board);
                     parser.parseCommand("connect " + nickname);
                 }catch (IllegalStateException e){
@@ -75,8 +74,7 @@ public class TUI extends View{
     }
 
     public void run() throws RemoteException{
-        currentScene.display();
-        printCommandPrompt();
+        refreshScene();
         while(true){ //exits only on System.quit() or RemoteException
             try {
                 parser.parseCommand(scanner.nextLine());
@@ -85,6 +83,11 @@ public class TUI extends View{
             }
         }
         //TODO: get command input and send to parser
+    }
+
+    private void refreshScene(){
+        currentScene.display();
+        printCommandPrompt();
     }
 
     void moveView(List<CornerDirection> directions){
@@ -104,7 +107,7 @@ public class TUI extends View{
         }
 
         currentScene = newScene;
-        currentScene.display();
+        refreshScene();
     }
 
     @Override
@@ -112,8 +115,7 @@ public class TUI extends View{
         Scene scene = sceneIDMap.get(sceneID);
         if(scene != null){
             if(currentScene.equals(scene)){
-                currentScene.display();
-                printCommandPrompt();
+                refreshScene();
             }
             else{
                 if(description != null && !description.isEmpty())
@@ -133,7 +135,11 @@ public class TUI extends View{
     }
     @Override
     public void showNotification(String notification) {
-        currentScene.displayNotification(notification);
+        if(notificationBacklog.size() >= NOTIFICATION_BACKLOG_SIZE){
+            notificationBacklog.remove(0);
+        }
+        notificationBacklog.add(notification);
+        currentScene.displayNotification(notificationBacklog);
         printCommandPrompt();
     }
 

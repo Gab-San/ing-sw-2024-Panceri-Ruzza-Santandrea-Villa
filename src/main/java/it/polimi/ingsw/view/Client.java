@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
@@ -20,10 +21,10 @@ public class Client {
     public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
-    public static Scanner scanner;
-    public static String serverIP;
-    public static int port;
-    public static String connectionTech;
+    private static Scanner scanner;
+    private static String serverIP;
+    private static int port;
+    private static String connectionTech;
 
     public static void cls(){
         synchronized (System.out) {
@@ -108,9 +109,6 @@ public class Client {
                 } catch (IOException | NotBoundException e) {
                     if(i < MAX_CONNECTION_ATTEMPTS){
                         System.err.println("Couldn't locate server. Trying again... #"+i);
-                    }else {
-                        System.err.println("Couldn't locate server. Closing client.");
-                        quitError();
                     }
                 }
                 try{
@@ -119,6 +117,10 @@ public class Client {
                     System.err.println("Couldn't locate server. Closing client.");
                     quitError();
                 }
+            }
+            if(proxy == null){
+                System.err.println("Couldn't locate server. Closing client.");
+                quitError();
             }
             try {
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
@@ -143,6 +145,8 @@ public class Client {
                 view = null;
                 if(!e.getMessage().equals("DISCONNECTED"))
                     System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
+                else
+                    System.out.println(GREEN_TEXT + "Disconnection succeeded. Returning to main menu." + RESET);
             }
         }
 
