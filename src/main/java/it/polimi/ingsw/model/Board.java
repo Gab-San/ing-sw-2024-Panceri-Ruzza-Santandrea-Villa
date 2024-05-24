@@ -20,6 +20,7 @@ import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.RemoteErrorHandler;
 import it.polimi.ingsw.model.listener.remote.RemoteHandler;
+import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
@@ -63,7 +64,7 @@ public class Board implements GameSubject{
      * Constructs the Board (as in initializing the game)
      * @throws DeckInstantiationException if the decks can't be initialized
      */
-    public Board() throws DeckInstantiationException {
+    public Board() throws IllegalStateException{
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
         hasGoneToEndgame = false;
@@ -75,15 +76,35 @@ public class Board implements GameSubject{
         playerAreas = new Hashtable<>();
         // Controlled in Board
         setGamePhase(GamePhase.CREATE);
+        try {
+            resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
 
-        resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
-        goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
+        } catch (IllegalStateException exception){
+            notifyAllListeners(new CrashStateError("all", "An error occured while initializing the resource deck".toUpperCase()));
+            System.exit(-1);
+            throw new IllegalStateException(exception.getMessage());
+        }
+
+        try {
+            goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
+        } catch (IllegalStateException exception){
+            notifyAllListeners(new CrashStateError("all", "An error occured while initializing the gold deck".toUpperCase()));
+            System.exit(-1);
+            throw new IllegalStateException(exception.getMessage());
+        }
+
         observableObjects.add(resourceDeck);
         observableObjects.add(goldDeck);
         objectiveDeck = new ObjectiveDeck();
         observableObjects.add(objectiveDeck);
-        startingDeck = new StartingCardDeck();
 
+        try {
+            startingDeck = new StartingCardDeck();
+        } catch (IllegalStateException e){
+            notifyAllListeners(new CrashStateError("all", "An error occured while initializing the starting deck".toUpperCase()));
+            System.exit(-1);
+            throw e;
+        }
         // Controlled in Board
         isPlayerDeadlocked = new Hashtable<>();
         observableObjects.add(this);

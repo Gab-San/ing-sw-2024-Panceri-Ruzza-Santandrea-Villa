@@ -8,14 +8,9 @@ public class PlayerException extends RuntimeException{
         super(msg);
         this.player = player;
     }
-    public PlayerException(String msg, Throwable cause, Player player){
-        super(msg, cause);
-        this.player = player;
-    }
 
-    public PlayerException(Player player){
-        super();
-        this.player = player;
+    @Override
+    public String toString() {
+        return super.toString() + "player= " + player;
     }
-
 }

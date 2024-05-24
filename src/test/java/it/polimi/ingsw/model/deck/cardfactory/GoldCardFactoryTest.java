@@ -16,7 +16,7 @@ class GoldCardFactoryTest {
     public static void setup(){
         try {
             gFactory = new GoldCardFactory("src/main/java/it/polimi/ingsw/model/resources/GoldCard_Id");
-        } catch (DeckInstantiationException deckExc){
+        } catch (IllegalStateException deckExc){
             deckExc.printStackTrace(System.err);
         }
     }

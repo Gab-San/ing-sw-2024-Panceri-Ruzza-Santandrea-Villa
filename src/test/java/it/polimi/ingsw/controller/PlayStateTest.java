@@ -487,11 +487,9 @@ public class PlayStateTest {
 
     }
 
-    //@ParameterizedTest
-    //@ValueSource(ints = {2, 3, 4})
-    @RepeatedTest(1000)
-    public void simulateRandomGameWithDisconnectAndJoin(/*int numOfPlayers*/){
-        int numOfPlayers=4;
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void simulateRandomGameWithDisconnectAndJoin(int numOfPlayers){
         setUp(/*2*/numOfPlayers);
 
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());

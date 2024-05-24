@@ -29,23 +29,21 @@ public class PlayableDeck implements GameSubject {
     private final List<GameListener> gameListenerList;
 
 
-    public PlayableDeck(char deckType, CardFactory cardFactory, int initialCapacity) throws DeckInstantiationException {
+    public PlayableDeck(char deckType, CardFactory cardFactory, int initialCapacity) {
         this.deckType = deckType;
         cardDeck = new ArrayDeque<>(initialCapacity);
         gameListenerList = new LinkedList<>();
         this.cardFactory = cardFactory;
-        try {
-            fillDeck(initialCapacity);
-        } catch (DeckException e) {
-            throw new DeckInstantiationException("Error while filling deck");
-        }
+        fillDeck(initialCapacity);
         reveal(FIRST_POSITION);
         reveal(SECOND_POSITION);
     }
 
-    private void fillDeck(int initialCapacity) throws DeckException {
+    private void fillDeck(int initialCapacity){
         for(int i = 0; i < initialCapacity; i++ ){
-            cardDeck.add(cardFactory.addCardToDeck());
+            try {
+                cardDeck.add(cardFactory.addCardToDeck());
+            } catch (DeckException ignore){}
         }
     }
 

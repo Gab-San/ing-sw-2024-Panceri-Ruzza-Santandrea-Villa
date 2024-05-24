@@ -18,24 +18,21 @@ import java.util.NoSuchElementException;
 public class ResourceCardFactory extends CardFactory {
     private final List<ResourceCardJSON> jsonCards;
 
-    public ResourceCardFactory() throws DeckInstantiationException{
+    public ResourceCardFactory() throws IllegalStateException{
         super("src/main/java/it/polimi/ingsw/model/resources/ResourceCard_Id");
-
-        try {
+        try{
             jsonCards = importFromJson();
         } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
+            throw new IllegalStateException(deckException.getMessage());
         }
     }
 
-    public ResourceCardFactory(String idFile) throws DeckInstantiationException{
+    public ResourceCardFactory(String idFile) throws IllegalStateException{
         super(idFile);
         try{
             jsonCards = importFromJson();
         } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
+            throw new IllegalStateException(deckException.getMessage());
         }
     }
 
@@ -46,11 +43,7 @@ public class ResourceCardFactory extends CardFactory {
         }
         String cardId = remainingCards.remove(getRandomCard());
         PlayCard resCard;
-        try {
-            resCard = instantiateCard(cardId);
-        } catch(NoSuchElementException exception){
-            throw new DeckException("Requested card was not found", exception, ResourceCardFactory.class);
-        }
+        resCard = instantiateCard(cardId);
         return resCard;
     }
 

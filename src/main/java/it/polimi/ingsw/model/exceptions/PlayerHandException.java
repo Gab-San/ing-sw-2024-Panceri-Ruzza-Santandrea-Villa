@@ -4,10 +4,6 @@ import it.polimi.ingsw.model.Player;
 
 public class PlayerHandException extends PlayerException{
     private final Class<?> cardClass;
-    public PlayerHandException(Player player,Class<?> cardClass){
-        super(player);
-        this.cardClass = cardClass;
-    }
 
     public PlayerHandException(String msg, Player player, Class<?> cardClass){
         super(msg, player);
@@ -18,9 +14,8 @@ public class PlayerHandException extends PlayerException{
         this(msg,player,null);
     }
 
-    public PlayerHandException(String msg, Throwable cause, Player player, Class<?> cardClass){
-        super(msg, cause, player);
-        this.cardClass = cardClass;
+    @Override
+    public String toString() {
+        return super.toString() + "cardClass= " + cardClass;
     }
-
 }

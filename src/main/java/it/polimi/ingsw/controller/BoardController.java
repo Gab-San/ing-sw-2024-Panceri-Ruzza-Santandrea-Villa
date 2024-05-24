@@ -4,14 +4,13 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.ArrayList;
 
 public class BoardController {
     private GameState gameState;
-    public BoardController () throws DeckInstantiationException {
+    public BoardController () throws IllegalStateException{
         this.gameState = new CreationState(new Board(), this, new ArrayList<>());
     }
 
