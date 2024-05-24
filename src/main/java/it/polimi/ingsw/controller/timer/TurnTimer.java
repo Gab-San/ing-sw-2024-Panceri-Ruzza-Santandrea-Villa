@@ -9,29 +9,24 @@ public class TurnTimer implements Runnable{
 
     private final Player player;
     private final BoardController controller;
-    private boolean reset;
-    private final int turnTime;
+    private final int pingTimeSeconds = 20;
     private int secondsElapsed;
     public TurnTimer(BoardController controller, Player player, int turnTime){
         this.player = player;
-        this.turnTime = turnTime;
         secondsElapsed = turnTime;
-        reset = false;
         this.controller = controller;
     }
 
     @Override
     public void run() {
         while(secondsElapsed > 0){
-            if(reset){
-                secondsElapsed = turnTime;
-                reset = false;
-            }
             try {
-                try {
-                    player.notifyAllListeners(new PingEvent(player.getNickname()));
-                } catch (ListenException connectionException){
-                    controller.disconnect(player.getNickname());
+                if(secondsElapsed % pingTimeSeconds == 0) {
+                    try {
+                        player.notifyAllListeners(new PingEvent(player.getNickname()));
+                    } catch (ListenException connectionException) {
+                        controller.disconnect(player.getNickname());
+                    }
                 }
 
                 Thread.sleep(1000);
@@ -45,7 +40,4 @@ public class TurnTimer implements Runnable{
         controller.disconnect(player.getNickname());
     }
 
-    public void reset(){
-        reset = true;
-    }
 }

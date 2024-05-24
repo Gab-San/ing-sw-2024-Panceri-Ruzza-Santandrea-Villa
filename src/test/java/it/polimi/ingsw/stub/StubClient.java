@@ -33,7 +33,7 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void ping() throws RemoteException {
-
+        System.out.println(colorize("PINGED " + nickname, Attribute.BLACK_TEXT(), Attribute.YELLOW_BACK()));
     }
 
 

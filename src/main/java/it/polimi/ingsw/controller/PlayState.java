@@ -53,7 +53,7 @@ public class PlayState extends GameState {
         if(board.getPlayerAreas().keySet().stream()
                 .map(Player::getNickname).filter((s)-> s.equals(nickname)).findAny().isEmpty())
             //se non esiste un giocatore con quel nickname
-            throw new IllegalArgumentException(nickname+" non fa parte della fartita, non può disconnettersi");
+            throw new IllegalArgumentException(nickname+" non fa parte della partita, non può disconnettersi");
         board.disconnectPlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);
         Player player = board.getCurrentPlayer();
@@ -84,7 +84,7 @@ public class PlayState extends GameState {
         throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE");
     }
     public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
-        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE"));
+        board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHOOSE OR CHANGE YOUR COLOR DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE OR CHANGE YOUR COLOR DURING PLAY STATE");
     }
 
@@ -105,10 +105,12 @@ public class PlayState extends GameState {
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE A CARD IN THIS PHASE"));
             throw new IllegalStateException("IMPOSSIBLE TO PLACE A CARD IN THIS PHASE");
         }
+        // In theory this if should never be called
         if (currentPlayerHasPlacedCard) {
             board.notifyAllListeners(new IllegalActionError(nickname, "Player had already placed a card!".toUpperCase()));
             throw new IllegalStateException("Player had already placed a card!");
         }
+
         if(!board.getCurrentPlayer().equals(player)) {
             board.notifyAllListeners(new IllegalActionError(nickname, "It's not your turn to place the card yet".toUpperCase() ));
             throw new IllegalStateException("It's not your turn to place the card yet");
@@ -173,7 +175,7 @@ public class PlayState extends GameState {
                     throw new IllegalArgumentException("Invalid card position for this draw command.");
             }
         }catch (DeckException |PlayerHandException | IllegalStateException e){
-            throw new IllegalArgumentException(e.getMessage() + "Can't draw from position " + cardPos);
+            throw new IllegalArgumentException("Can't draw from position " + cardPos, e);
         }
 
         timerCurrPlayer.stopTimer(player);
