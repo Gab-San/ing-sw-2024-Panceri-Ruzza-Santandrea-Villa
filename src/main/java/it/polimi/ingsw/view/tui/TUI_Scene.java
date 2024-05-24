@@ -24,19 +24,20 @@ public abstract class TUI_Scene implements Scene {
     @Override
     public final void display(){
         synchronized (System.out){
+            cls();
             print();
         }
     }
     protected abstract void print();
     @Override
-    public final void displayError(String msg){
+    public void displayError(String msg){
         synchronized (System.out){
             display();
             out.println(RED_TEXT + msg + RESET);
         }
     }
     @Override
-    public final void displayNotification(String msg){
+    public void displayNotification(String msg){
         synchronized (System.out) {
             display();
             out.println(msg);

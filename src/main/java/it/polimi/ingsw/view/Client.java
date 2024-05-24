@@ -18,6 +18,8 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Client {
     public static View view = null;
+    public static final int MAX_CONNECTION_ATTEMPTS = 5;
+    public static Scanner scanner;
     public static String serverIP;
     public static int port;
     public static String connectionTech;
@@ -47,6 +49,11 @@ public class Client {
         }
     }
 
+    private static void quitError(){
+        scanner.close();
+        System.exit(-1);
+    }
+
     /**
      * @param args args[0] is (optionally) the serverIP <br>
      *             args[1] is the server port <br>
@@ -54,7 +61,7 @@ public class Client {
      *             If the serverIP is omitted, then other indexes are reduced by one
      */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
 
         try {
             if (args.length > 2) {
@@ -68,38 +75,51 @@ public class Client {
             }
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Please pass valid parameters: <serverIP> <connection technology [TCP/RMI]> <serverPort>");
-            System.exit(-1);
+            quitError();
         } catch (NumberFormatException e) {
             System.err.println("Server port parameter must be a number.");
-            System.exit(-1);
+            quitError();
         }
 
         if (!serverIP.matches("\\d.\\d.\\d.\\d|localhost")) {
             System.err.println("Server IP parameter must be an IP address: x.y.z.w or 'localhost'");
-            System.exit(-1);
+            quitError();
         }
         while(true) {
-            try {
-                CommandPassthrough proxy = null;
-                Consumer<ModelUpdater> setClientModelUpdater = null;
+            CommandPassthrough proxy = null;
+            Consumer<ModelUpdater> setClientModelUpdater = null;
+            for (int i = 1; i <= MAX_CONNECTION_ATTEMPTS; i++) {
                 try {
                     if (connectionTech.equalsIgnoreCase("tcp")) {
                         TCPClientSocket tcpClient = new TCPClientSocket(serverIP, port);
                         proxy = tcpClient.getProxy();
                         setClientModelUpdater = tcpClient::setModelUpdater;
+                        break;
                     } else if (connectionTech.equalsIgnoreCase("rmi")) {
                         RMIClient rmiClient = new RMIClient(serverIP, port);
                         proxy = rmiClient.getProxy();
                         setClientModelUpdater = rmiClient::setModelUpdater;
+                        break;
                     } else {
                         System.err.println("Wrong connection technology passed as parameter. Must be TCP/RMI");
-                        System.exit(-1);
+                        quitError();
                     }
                 } catch (IOException | NotBoundException e) {
-                    System.err.println("Couldn't locate server. Wrong IP or port");
-                    System.exit(-1);
+                    if(i < MAX_CONNECTION_ATTEMPTS){
+                        System.err.println("Couldn't locate server. Trying again... #"+i);
+                    }else {
+                        System.err.println("Couldn't locate server. Closing client.");
+                        quitError();
+                    }
                 }
-
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    System.err.println("Couldn't locate server. Closing client.");
+                    quitError();
+                }
+            }
+            try {
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
                 System.out.println("If the above text is not green, TUI is not supported on the current console.");
                 while (view == null) {
@@ -107,12 +127,10 @@ public class Client {
                     System.out.print("> ");
                     String gameMode = scanner.nextLine();
                     if (gameMode.equalsIgnoreCase("GUI")) {
-                        scanner.close();
                         view = new GUI(proxy, setClientModelUpdater); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
-                        scanner.close();
-                        view = new TUI(proxy, setClientModelUpdater); // proxy always not null at this point
+                        view = new TUI(proxy, setClientModelUpdater, scanner); // proxy always not null at this point
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
                         view = null;
@@ -122,7 +140,7 @@ public class Client {
             } catch (RemoteException e) {
                 cls();
                 view = null;
-                System.out.println(RED_TEXT + "Server connection lost. Trying to recover." + RESET);
+                System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
             }
         }
 

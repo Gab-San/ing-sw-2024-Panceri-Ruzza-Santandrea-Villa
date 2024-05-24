@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 public record Point(int row, int col) {
     /**
      * Constructs a Point as a copy of another point
@@ -35,6 +37,13 @@ public record Point(int row, int col) {
      * @return the destination point obtained by applying successive moves
      */
     public Point move(CornerDirection...directions){
+        Point p = this;
+        for (CornerDirection c : directions){
+            p = p.move(c);
+        }
+        return p;
+    }
+    public Point move(List<CornerDirection> directions){
         Point p = this;
         for (CornerDirection c : directions){
             p = p.move(c);

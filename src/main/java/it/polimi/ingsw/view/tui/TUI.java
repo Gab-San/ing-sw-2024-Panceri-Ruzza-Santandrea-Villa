@@ -23,10 +23,10 @@ public class TUI extends View{
     TUIParser parser;
     ViewBoard board;
 
-    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater) throws RemoteException {
+    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
-        scanner = new Scanner(System.in);
+        this.scanner = scanner;
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this));
 
@@ -67,9 +67,15 @@ public class TUI extends View{
         }while (!validateNickname(nickname));
     }
 
+    private void printCommandPrompt(){
+        synchronized(System.out){
+            System.out.print("Command > ");
+        }
+    }
+
     public void run() throws RemoteException{
-        TUI_Scene.cls();
         currentScene.display();
+        printCommandPrompt();
         while(true){ //exits only on System.quit() or RemoteException
             try {
                 parser.parseCommand(scanner.nextLine());
@@ -106,6 +112,7 @@ public class TUI extends View{
         if(scene != null){
             if(currentScene.equals(scene)){
                 currentScene.display();
+                printCommandPrompt();
             }
             else{
                 if(description != null && !description.isEmpty())
@@ -118,15 +125,15 @@ public class TUI extends View{
             update(sceneID, description); // won't loop indefinitely as next iteration will have scene != null
         }
     }
-
     @Override
     public void showError(String errorMsg) {
         currentScene.displayError(errorMsg);
+        printCommandPrompt();
     }
-
     @Override
     public void showNotification(String notification) {
         currentScene.displayNotification(notification);
+        printCommandPrompt();
     }
 
 }

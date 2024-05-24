@@ -72,7 +72,7 @@ public class TCPClientSocket implements VirtualClient{
     public void startReader() {
         new Thread(
                 () -> {
-                    System.out.println("Socket connection started!");
+                    //System.out.println("Socket connection started!");
                     try {
                         while (!clientSocket.isClosed()) {
                             TCPMessage commandFromServer;
