@@ -4,7 +4,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
-import it.polimi.ingsw.network.Commands.*;
+import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
 import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
@@ -14,6 +14,7 @@ import it.polimi.ingsw.network.tcp.message.commands.PingMessage;
 
 import it.polimi.ingsw.network.tcp.message.TCPClientCheckMessage;
 import it.polimi.ingsw.network.tcp.message.check.CheckMessage;
+import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
 
 
 import java.io.IOException;
@@ -137,11 +138,9 @@ public class ClientHandler implements Runnable, VirtualServer {
 //endregion
 
 //region AUXILIARY FUNCTIONS
-    private void validateClient(String nickname, VirtualClient client) {
-        //TODO reimplement this
+    private void validateClient(String nickname, VirtualClient client) throws RemoteException {
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
-//            proxy.sendCheck(new ErrorMessage("Illegal request, wrong client!"));
-            return;
+            proxy.sendNotification(new ErrorMessage("Illegal request, wrong client!"));
     }
 
 
@@ -152,52 +151,72 @@ public class ClientHandler implements Runnable, VirtualServer {
     public void connect(String nickname, VirtualClient client) throws IllegalStateException{
         serverRef.connect(nickname, client);
         proxy.setUsername(nickname);
-        serverRef.updateMsg(nickname + " has connected");
         proxy.sendCheck(new CheckMessage());
     }
 
 
     @Override
-    public void sendMsg(String nickname, VirtualClient client, String message) {
-        validateClient(nickname, client);
-        String fullMessage = nickname + ": " + message;
-        System.out.println(fullMessage);
-        serverRef.updateMsg(fullMessage);
+    public void sendMsg(String nickname, VirtualClient client, String addressee, String message) {
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
+        serverRef.sendMessage(nickname, addressee, message);
     }
 
     @Override
     public void setNumOfPlayers(String nickname, VirtualClient client, int num)  {
-        validateClient(nickname, client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.issueGameCommand(new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num));
     }
 
     @Override
     public void disconnect(String nickname, VirtualClient client)
             throws IllegalStateException, IllegalArgumentException, RemoteException {
-        validateClient(nickname,client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.disconnect(nickname, client);
-        serverRef.updateMsg(nickname + " has disconnected");
         proxy.sendCheck(new CheckMessage());
         closeSocket();
     }
 
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour)  {
-        validateClient(nickname, client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.issueGameCommand(new ChooseColorCmd(serverRef.getGameRef(), nickname,
                 PlayerColor.parseColour(colour)));
     }
 
     @Override
     public void chooseObjective(String nickname, VirtualClient client, int choice) {
-        validateClient(nickname, client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.issueGameCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
     }
 
 
     @Override
     public void draw(String nickname, VirtualClient client, char deck, int card) {
-        validateClient(nickname, client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.issueGameCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
     }
 
@@ -215,7 +234,11 @@ public class ClientHandler implements Runnable, VirtualServer {
 
     @Override
     public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront)  {
-        validateClient(nickname, client);
+        try {
+            validateClient(nickname, client);
+        } catch (IOException ioException){
+            closeSocket();
+        }
         serverRef.issueGameCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
     }
 

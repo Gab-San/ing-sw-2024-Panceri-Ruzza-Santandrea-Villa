@@ -15,6 +15,6 @@ public interface VirtualServer extends Remote {
                    int row, int col, String cornerDir, boolean placeOnFront) throws RemoteException;
     void draw(String nickname, VirtualClient client, char deck, int card) throws RemoteException;
     void restartGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException;
-    void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException;
+    void sendMsg(String nickname, VirtualClient client, String addressee, String message) throws RemoteException;
     void ping() throws RemoteException;
 }

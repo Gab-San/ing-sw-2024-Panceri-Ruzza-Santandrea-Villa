@@ -31,8 +31,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public synchronized void update(String msg) throws RemoteException {
-        System.out.println(msg); // temp function
+    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
+        System.out.println(messenger.toUpperCase() + ": " + msg); // temp function
+        System.out.flush();
     }
 
     /**
@@ -50,7 +51,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * @param currentTurn    the board current turn at initialization
      * @param scoreboard     current scoreboard state
      * @param gamePhase      the game phase at initialization
-     * @param playerDeadLock current player dead locks
+     * @param playerDeadLock current player deadlocks
      * @throws RemoteException if a connection error is detected
      */
     @Override
@@ -113,7 +114,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * Notifies about the current state of the player.
      *
      * @param nickname    the unique nickname identifier of the player
-     * @param isConnected the connection status as for the moment of the update
+     * @param isConnected the connection status as for the moment of the displayMessage
      * @param turn        the given player's turn
      * @param colour      the colour the player has chosen for the match
      * @throws RemoteException if a connection error occurs
@@ -167,7 +168,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     /**
      * Notifies about the current state of the deck.
      * <p>
-     * This update can be triggered iff in the deck remained just one card.
+     * This displayMessage can be triggered iff in the deck remained just one card.
      * <br>
      * The card can be only one of the revealed ones, due to the decks' rule that obliges
      * to reveal a card after a revealed card has been drawn. This implies that cardPosition will
@@ -187,7 +188,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     /**
      * Notifies about the current state of the identified deck.
      * <p>
-     * This update can be triggered iff the deck's face-down card pile is empty
+     * This displayMessage can be triggered iff the deck's face-down card pile is empty
      * thus displaying only the two revealed cards.
      * </p>
      *
@@ -228,7 +229,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     /**
      * Updates the current state of a deck.
      * <p>
-     * This update can be triggered iff a deck is empty during initialization.
+     * This displayMessage can be triggered iff a deck is empty during initialization.
      * </p>
      *
      * @param deck the deck identifier
@@ -357,7 +358,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * @throws RemoteException if a connection error occurs
      */
     @Override
-    public void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
 
     }
 
@@ -376,7 +377,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * @throws RemoteException if a connection error occurs
      */
     @Override
-    public void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
 
     }
 

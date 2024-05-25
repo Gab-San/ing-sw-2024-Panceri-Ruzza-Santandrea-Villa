@@ -6,9 +6,9 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
-public class PlayerHandDrawEvent extends PlayerEvent {
+public class PlayerHandAddCardEvent extends PlayerEvent {
     private final String drawnCardId;
-    public PlayerHandDrawEvent(String nickname, PlayCard drawnCard) {
+    public PlayerHandAddCardEvent(String nickname, PlayCard drawnCard) {
         super(nickname);
         this.drawnCardId = drawnCard.getCardID();
     }

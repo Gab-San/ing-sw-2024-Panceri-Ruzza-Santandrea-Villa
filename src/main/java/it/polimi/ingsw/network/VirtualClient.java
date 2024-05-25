@@ -12,7 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface VirtualClient extends Remote{
-    void update(String msg) throws RemoteException;
+    /**
+     * Displays chat messages.
+     *
+     * @param messenger message messenger
+     * @param msg       message to display
+     * @throws RemoteException if an error occurs during connection
+     */
+    void displayMessage(String messenger, String msg) throws RemoteException;
     void ping() throws RemoteException;
 
     /**
@@ -77,7 +84,7 @@ public interface VirtualClient extends Remote{
     /**
      * Notifies about the current state of the player.
      * @param nickname the unique nickname identifier of the player
-     * @param isConnected the connection status as for the moment of the update
+     * @param isConnected the connection status as for the moment of the displayMessage
      * @param turn the given player's turn
      * @param colour the colour the player has chosen for the match
      * @throws RemoteException if a connection error occurs
@@ -138,7 +145,7 @@ public interface VirtualClient extends Remote{
     /**
      * Notifies about the current state of the deck.
      * <p>
-     * This update can be triggered iff in the deck remained just one card.
+     * This displayMessage can be triggered iff in the deck remained just one card.
      * <br>
      * The card can be only one of the revealed ones, due to the decks' rule that obliges
      * to reveal a card after a revealed card has been drawn. This implies that cardPosition will
@@ -155,7 +162,7 @@ public interface VirtualClient extends Remote{
     /**
      * Notifies about the current state of the identified deck.
      * <p>
-     *     This update can be triggered iff the deck's face-down card pile is empty
+     *     This displayMessage can be triggered iff the deck's face-down card pile is empty
      *     thus displaying only the two revealed cards.
      * </p>
      * @param deck the deck identifier
@@ -169,7 +176,7 @@ public interface VirtualClient extends Remote{
     /**
      * Updates the current state of a deck.
      * <p>
-     *     This update can be triggered iff a deck is empty during initialization.
+     *     This displayMessage can be triggered iff a deck is empty during initialization.
      * </p>
      * @param deck the deck identifier
      * @throws RemoteException if a connection error is detected
@@ -267,7 +274,7 @@ public interface VirtualClient extends Remote{
      * @param freeSerializableCorners a representation of the free corners in the player's play area (can be empty)
      * @throws RemoteException if a connection error occurs
      */
-    void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException;
+    void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException;
 
     /**
      * Notifies about card's placement.
@@ -282,7 +289,7 @@ public interface VirtualClient extends Remote{
      * @param col the column in which the card was placed
      * @throws RemoteException if a connection error occurs
      */
-    void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException;
+    void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException;
 
     /**
      * Updates the visible resources map

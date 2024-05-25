@@ -287,7 +287,7 @@ public class Board implements GameSubject{
      * @param card the card to be placed
      * @param corner the corner on which to place card
      * @throws IllegalArgumentException if player isn't in game, card isn't in player's hand or corner is occupied
-     * @throws IllegalStateException if the placement is invalid (as per PlayArea.placeCard())
+     * @throws IllegalStateException if the placement is invalid (as per PlayArea.updatePlaceCard())
      */
     public void placeCard(Player player, PlayCard card, Corner corner) throws IllegalArgumentException, IllegalStateException{
         if(!playerAreas.containsKey(player)){
@@ -304,7 +304,7 @@ public class Board implements GameSubject{
         PlayCard placedCard = playArea.placeCard(card, corner); // throws IllegalStateException if the placement is invalid
         player.getHand().removeCard(card);
 
-        //scoreboard update
+        //scoreboard displayMessage
         addScore(player, placedCard.calculatePointsOnPlace(playArea));
     }
     /**

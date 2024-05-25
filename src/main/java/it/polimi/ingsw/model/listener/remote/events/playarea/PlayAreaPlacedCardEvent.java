@@ -21,6 +21,6 @@ public class PlayAreaPlacedCardEvent extends PlayerEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.placeCard(nickname, placedCardId, row, col);
+        virtualClient.updatePlaceCard(nickname, placedCardId, row, col);
     }
 }

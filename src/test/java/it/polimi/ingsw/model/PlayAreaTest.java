@@ -133,7 +133,7 @@ class PlayAreaTest {
         assertEquals(3, cardPlaced.getFreeCorners().size());
         assertFalse(cardPlaced.getFreeCorners().contains(placedCard_corner));
 
-        // assert visibleResources update
+        // assert visibleResources displayMessage
         Map<GameResource, Integer> placedCardRes = cardPlaced.getCardResources();
         for(GameResource res : placedCardRes.keySet()){
             oldVisibleRes.replace(
@@ -143,7 +143,7 @@ class PlayAreaTest {
         }
         assertEquals(oldVisibleRes, playArea.getVisibleResources());
 
-        // assert freeCorners update
+        // assert freeCorners displayMessage
         assertFalse(playArea.getFreeCorners().contains(coveredCorner));
         oldFreeCorners.remove(coveredCorner);
         oldFreeCorners.addAll(cardPlaced.getFreeCorners());
@@ -152,7 +152,7 @@ class PlayAreaTest {
     }
 
     private Map<Point, PlaceableCard> duplicateCardMatrix(){
-        //duplicate playArea to check for invariance after failed placeCard attempts
+        //duplicate playArea to check for invariance after failed updatePlaceCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = new Hashtable<>();
         Map<Point, PlaceableCard> cardMatrix = playArea.getCardMatrix();
         for(Point p : cardMatrix.keySet()){
@@ -175,7 +175,7 @@ class PlayAreaTest {
         assertEquals(startingCard.getFreeCorners(), playArea.getFreeCorners());
         assertEquals(3, playArea.getFreeCorners().size());
 
-        //duplicate playArea to check for invariance after failed placeCard attempts
+        //duplicate playArea to check for invariance after failed updatePlaceCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard cardToPlace = new ResourceCard();
@@ -203,7 +203,7 @@ class PlayAreaTest {
         Corner startCardCorner = playArea.getFreeCorners().get(0);
         playArea.placeCard(card, startCardCorner);
 
-        //duplicate playArea to check for invariance after failed placeCard attempts
+        //duplicate playArea to check for invariance after failed updatePlaceCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard otherCard = new ResourceCard();
@@ -275,7 +275,7 @@ class PlayAreaTest {
         );
         goldCard.turnFaceUp();
 
-        //duplicate playArea to check for invariance after failed placeCard attempts
+        //duplicate playArea to check for invariance after failed updatePlaceCard attempts
         Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         assertThrows(IllegalStateException.class, ()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));

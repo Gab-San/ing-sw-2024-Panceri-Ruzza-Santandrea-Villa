@@ -9,9 +9,16 @@ import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
 import it.polimi.ingsw.network.tcp.message.commands.SendMessage;
+import it.polimi.ingsw.network.tcp.message.error.DisconnectErrorMessage;
+import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
 import it.polimi.ingsw.network.tcp.message.notifications.board.*;
 import it.polimi.ingsw.network.tcp.message.notifications.deck.*;
+import it.polimi.ingsw.network.tcp.message.notifications.playarea.PlayAreaFreeCornUpdateMessage;
+import it.polimi.ingsw.network.tcp.message.notifications.playarea.PlayAreaPlaceCardMessage;
+import it.polimi.ingsw.network.tcp.message.notifications.playarea.PlayAreaStateMessage;
+import it.polimi.ingsw.network.tcp.message.notifications.playarea.PlayAreaVResUpdateMessage;
 import it.polimi.ingsw.network.tcp.message.notifications.player.*;
+import it.polimi.ingsw.network.tcp.message.notifications.playerhand.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -29,7 +36,7 @@ public class ClientProxy implements VirtualClient {
         this.outputStream = outputStream;
     }
 
-    private void sendNotification(TCPServerMessage notification) throws RemoteException {
+    void sendNotification(TCPServerMessage notification) throws RemoteException {
         try{
             outputStream.writeObject(notification);
             outputStream.flush();
@@ -42,7 +49,7 @@ public class ClientProxy implements VirtualClient {
 
 //region VIRTUAL CLIENT IMPLEMENTATION
     @Override
-    public synchronized void update(String msg) throws RemoteException {
+    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
         ping();
         sendNotification(new SendMessage(nickname, msg));
     }
@@ -149,62 +156,62 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public synchronized void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
-
+        sendNotification(new PlayerHandStateMessage(nickname, playCards, objectiveCards, startingCard));
     }
 
     @Override
     public synchronized void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException {
-
+        sendNotification(new PlayerHandAddCardMessage(nickname, drawnCardId));
     }
 
     @Override
     public synchronized void playerHandRemoveCard(String nickname, String playCardId) throws RemoteException {
-
+        sendNotification(new PlayerHandRemoveCardMessage(nickname, playCardId));
     }
 
     @Override
     public synchronized void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException {
-
+        sendNotification(new PlayerHandAddObjectiveMessage(nickname, objectiveCard));
     }
 
     @Override
     public synchronized void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException {
-
+        sendNotification(new PlayerHandChooseObjectiveMessage(nickname, chosenObjectiveId));
     }
 
     @Override
     public synchronized void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException {
-
+        sendNotification(new PlayerHandSetStartingCardMessage(nickname, startingCardId));
     }
 
     @Override
-    public synchronized void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-
+    public synchronized void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+        sendNotification(new PlayAreaStateMessage(nickname, cardPositions, visibleResources, freeSerializableCorners));
     }
 
     @Override
-    public synchronized void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+        sendNotification(new PlayAreaPlaceCardMessage(nickname, placedCardId, row, col));
     }
 
     @Override
     public synchronized void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
-
+        sendNotification(new PlayAreaVResUpdateMessage(nickname, visibleResources));
     }
 
     @Override
     public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-
+        sendNotification(new PlayAreaFreeCornUpdateMessage(nickname, freeSerializableCorners));
     }
 
     @Override
     public synchronized void reportError(String errorMessage) throws RemoteException {
-
+        sendNotification(new ErrorMessage(errorMessage));
     }
 
     @Override
     public synchronized void notifyTimeoutDisconnect() throws RemoteException {
-
+        sendNotification(new DisconnectErrorMessage());
     }
 
 

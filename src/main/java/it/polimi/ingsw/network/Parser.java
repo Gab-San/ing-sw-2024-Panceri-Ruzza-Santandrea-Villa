@@ -128,14 +128,43 @@ public class Parser {
         throw new IndexOutOfBoundsException("The number of players selected must be between: ");
     }
 
-    private void parseSendCmd(List<String> cmdArgs) throws RemoteException {
+    private void parseSendCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException {
+        if(cmdArgs.size() < 2) throw new IllegalArgumentException("""
+                Command wrongly formatted: missing either message or addressee.
+                For example: "all" hi or "Player 2" hi
+                """);
 
+        String addresseeNickExtract = parseAddressee(cmdArgs);
+        List<String> partsToRemove = Arrays.stream(addresseeNickExtract.split("\\s+")).toList();
+        System.out.println(partsToRemove);
+        System.out.println(cmdArgs);
         StringBuilder msg = new StringBuilder();
         cmdArgs.forEach(
-                (cmp) -> msg.append(cmp).append(" ")
+                (cmp) ->{
+                            if(partsToRemove.contains(cmp)) return;
+                            msg.append(cmp).append(" ");
+                        }
         );
 
-        virtualServer.sendMsg(msg.toString().trim());
+        //removing quotes
+        String addressee = addresseeNickExtract.substring(1, addresseeNickExtract.length() - 1);
+
+        virtualServer.sendMsg(addressee, msg.toString().trim());
+    }
+
+    private String parseAddressee(List<String> cmdArgs){
+        StringBuilder command = new StringBuilder();
+        cmdArgs.forEach(
+                (arg) -> command.append(arg).append(" ")
+        );
+
+        Matcher matcher = Pattern.compile("\"(([A-Z]|[a-z])+)*\s*([A-Z]|[a-z])+\"").matcher(command.toString().trim());
+
+        if(matcher.find()){
+            return matcher.group();
+        }
+
+        throw new IllegalArgumentException("Missing addressee nick");
     }
 
     private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalStateException {

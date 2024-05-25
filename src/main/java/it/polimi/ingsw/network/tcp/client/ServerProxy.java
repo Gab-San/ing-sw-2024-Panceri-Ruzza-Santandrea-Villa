@@ -120,8 +120,8 @@ public class ServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void sendMsg(String msg) throws RemoteException {
-        sendCommand(new SendMessage(nickname, msg));
+    public void sendMsg(String addressee, String msg) throws RemoteException {
+        sendCommand(new SendMessage(nickname, addressee, msg));
     }
 
     @Override

@@ -4,7 +4,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
-import it.polimi.ingsw.network.Commands.*;
+import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
 
@@ -42,7 +42,6 @@ public class RMIServer implements VirtualServer {
     @Override
     public void connect(String nickname, VirtualClient client) throws IllegalStateException, RemoteException{
         serverRef.connect(nickname, client);
-        serverRef.updateMsg(nickname + " has connected");
     }
 
     @Override
@@ -55,7 +54,6 @@ public class RMIServer implements VirtualServer {
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException, RemoteException {
         serverRef.disconnect(nickname, client);
-        serverRef.updateMsg(nickname + " has disconnected");
     }
 
     @Override
@@ -102,11 +100,9 @@ public class RMIServer implements VirtualServer {
 
 
     @Override
-    public void sendMsg(String nickname, VirtualClient client, String message) throws RemoteException{
+    public void sendMsg(String nickname, VirtualClient client, String addressee, String message) throws RemoteException{
         validateClient(nickname, client);
-        String fullMessage = nickname + ": " + message;
-        System.out.println(fullMessage);
-        serverRef.updateMsg(fullMessage);
+        serverRef.sendMessage(nickname, addressee, message);
     }
 
     @Override

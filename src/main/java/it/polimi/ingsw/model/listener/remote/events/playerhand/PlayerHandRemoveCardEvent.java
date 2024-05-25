@@ -7,7 +7,7 @@ import it.polimi.ingsw.network.VirtualClient;
 import java.rmi.RemoteException;
 
 public class PlayerHandRemoveCardEvent extends PlayerEvent {
-    public final String playCardId;
+    private final String playCardId;
     public PlayerHandRemoveCardEvent(String nickname, PlayCard playCard) {
         super(nickname);
         playCardId = playCard.getCardID();

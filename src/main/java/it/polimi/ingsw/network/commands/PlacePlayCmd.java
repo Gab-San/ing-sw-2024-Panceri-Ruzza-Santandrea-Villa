@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.Commands;
+package it.polimi.ingsw.network.commands;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.controller.BoardController;

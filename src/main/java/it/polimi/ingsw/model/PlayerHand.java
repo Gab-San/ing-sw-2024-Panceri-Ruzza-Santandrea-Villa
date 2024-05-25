@@ -110,7 +110,7 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("PLAYER HAND IS FULL!", playerRef);
         }
         PlayCard drawnCard = drawCard.get();
-        notifyAllListeners(new PlayerHandDrawEvent(playerRef.getNickname(), drawnCard));
+        notifyAllListeners(new PlayerHandAddCardEvent(playerRef.getNickname(), drawnCard));
         cards.add(drawnCard);
     }
     public boolean isHandFull() {

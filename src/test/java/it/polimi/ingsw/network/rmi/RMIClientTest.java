@@ -34,14 +34,14 @@ class RMIClientTest {
     @Test
     void update() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
-        client.update("Si va a letto!");
+        client.displayMessage("Giovanni", "Si va a letto!");
     }
 
     @Test
     void sendMsg() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Ale");
-        client.getProxy().sendMsg("Sono Ale sto mandando un messaggio");
+        client.getProxy().sendMsg( "Ale" , "Sono Ale sto mandando un messaggio");
     }
 
     @Test

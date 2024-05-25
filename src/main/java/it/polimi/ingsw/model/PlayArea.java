@@ -130,9 +130,9 @@ public class PlayArea implements GameSubject {
         cardMatrix.put(cardPos, card);
         notifyAllListeners(new PlayAreaPlacedCardEvent(owner, card, cardPos));
 
-        // update adjacent cards,
+        // displayMessage adjacent cards,
         // subtract covered corners' resources from visibleResources,
-        // update freeCorners (remove covered corners or add placed card's corner)
+        // displayMessage freeCorners (remove covered corners or add placed card's corner)
         for (CornerDirection dir : CornerDirection.values()){
             PlaceableCard dirCard = cardMatrix.get(cardPos.move(dir));
             if(dirCard != null) {

@@ -41,7 +41,7 @@ public class BoardTurnSkipTest extends BaseBoardTest {
         assertEquals(2, board.getCurrentTurn()); // player2 can play
 
         assertTrue(board.nextTurn()); // player2 is still not deadlocked, so game can continue
-        assertTrue(board.getPlayerDeadlocks().get(players[0]));  // after nextTurn() skipping player1 the deadlock status should update
+        assertTrue(board.getPlayerDeadlocks().get(players[0]));  // after nextTurn() skipping player1 the deadlock status should displayMessage
         assertFalse(board.getPlayerDeadlocks().get(players[1])); // player2 not deadlocked
         assertEquals(2, board.getCurrentTurn()); // player1 is deadlocked so his turn is skipped
 
