@@ -123,7 +123,7 @@ public class StubClient implements VirtualClient {
 
 
     @Override
-    public synchronized void emptyDeck(char deck) throws RemoteException {
+    public synchronized void emptyFaceDownPile(char deck) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof an empty deck:\n" +
                 "[DECK TYPE] " + deck, Attribute.BLUE_TEXT()));
     }

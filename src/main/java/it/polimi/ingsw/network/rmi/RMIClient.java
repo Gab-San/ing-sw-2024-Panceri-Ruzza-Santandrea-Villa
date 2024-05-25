@@ -213,6 +213,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     }
 
+
     /**
      * Updates the current deck's face-down pile to empty
      *
@@ -220,7 +221,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * @throws RemoteException if a connection error occurs
      */
     @Override
-    public void emptyDeck(char deck) throws RemoteException {
+    public void emptyFaceDownPile(char deck) throws RemoteException {
 
     }
 

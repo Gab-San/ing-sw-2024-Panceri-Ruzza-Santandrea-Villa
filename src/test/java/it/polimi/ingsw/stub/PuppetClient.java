@@ -141,7 +141,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void emptyDeck(char deck) throws RemoteException {
+    public void emptyFaceDownPile(char deck) throws RemoteException {
 
     }
 

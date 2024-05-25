@@ -10,6 +10,8 @@ import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
 import it.polimi.ingsw.network.tcp.message.commands.SendMessage;
 import it.polimi.ingsw.network.tcp.message.notifications.board.*;
+import it.polimi.ingsw.network.tcp.message.notifications.deck.*;
+import it.polimi.ingsw.network.tcp.message.notifications.player.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -87,62 +89,62 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
-
+        sendNotification(new PlayerStateMessage(nickname, isConnected, turn, colour));
     }
 
     @Override
     public synchronized void updatePlayer(String nickname, PlayerColor colour) throws RemoteException {
-
+        sendNotification(new SetColorMessage(nickname, colour));
     }
 
     @Override
     public synchronized void updatePlayer(String nickname, int playerTurn) throws RemoteException {
-
+        sendNotification(new SetTurnMessage(nickname, playerTurn));
     }
 
     @Override
     public synchronized void updatePlayer(String nickname, boolean isConnected) throws RemoteException {
-
+        sendNotification(new SetConnectionMessage(nickname, isConnected));
     }
 
     @Override
     public synchronized void removePlayer(String nickname) throws RemoteException {
-
+        sendNotification(new PlayerRemovalMessage(nickname));
     }
 
     @Override
     public synchronized void setDeckState(char deck, String topId, String firstId, String secondId) throws RemoteException {
-
+        sendNotification(new DeckStateFullDrawableMessage(deck, topId, firstId, secondId));
     }
 
     @Override
     public synchronized void setDeckState(char deck, String revealedId, int cardPosition) throws RemoteException {
-
+        sendNotification(new DeckStateMessage(deck, revealedId, cardPosition));
     }
 
     @Override
     public synchronized void setDeckState(char deck, String firstCardId, String secondCardId) throws RemoteException {
-
+        sendNotification(new DeckStateOnlyRevealedMessage(deck, firstCardId, secondCardId));
     }
 
     @Override
     public synchronized void setEmptyDeckState(char deck) throws RemoteException {
-
+        sendNotification(new DeckStateMessage(deck));
     }
 
     @Override
     public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException {
-
+        sendNotification(new DeckCardUpdateMessage(deck, revealedId, cardPosition));
     }
 
     @Override
-    public synchronized void emptyReveal(char deck, int cardPosition) throws RemoteException {
-
+    public void emptyReveal(char deck, int cardPosition) throws RemoteException {
+        sendNotification(new DeckEmptyMessage(deck, cardPosition));
     }
 
     @Override
-    public synchronized void emptyDeck(char deck) throws RemoteException {
-
+    public synchronized void emptyFaceDownPile(char deck) throws RemoteException {
+        sendNotification(new DeckEmptyMessage(deck));
     }
 
     @Override

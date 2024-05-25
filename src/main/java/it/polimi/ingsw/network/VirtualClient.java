@@ -207,8 +207,7 @@ public interface VirtualClient extends Remote{
      * @param deck the deck identifier
      * @throws RemoteException if a connection error occurs
      */
-    void emptyDeck(char deck) throws RemoteException;
-
+    void emptyFaceDownPile(char deck) throws RemoteException;
 
     /**
      * Notifies about the current player's hand status
