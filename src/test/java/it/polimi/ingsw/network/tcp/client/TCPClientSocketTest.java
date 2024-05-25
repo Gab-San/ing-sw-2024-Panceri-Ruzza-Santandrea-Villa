@@ -43,6 +43,7 @@ class TCPClientSocketTest {
                         throw new RuntimeException(e);
                     }
                     try {
+                        System.err.println("DISCONNECTING CLIENT");
                         client.getProxy().disconnect();
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);

@@ -667,5 +667,135 @@ public class EventControllerIntegrationTest {
         }
     }
 
+    @Test
+    void joinDisconnectJoinTest() throws InterruptedException {
+        controller.join("Gamba", new StubClient("TEST", view ));
+        CountDownLatch latch1 = new CountDownLatch(5);
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch1.countDown();
+            }
+        }, 500, 500);
+        latch1.await();
+        timer1.cancel();
+
+        System.err.println("||||||||| Disconnecting player... |||||||||");
+        controller.disconnect("Gamba");
+
+        CountDownLatch latch2 = new CountDownLatch(5);
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch2.countDown();
+            }
+        }, 500, 500);
+        latch2.await();
+        timer2.cancel();
+        controller.join("Gamba", new StubClient("TEST", view));
+
+        CountDownLatch latch3 = new CountDownLatch(5);
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch3.countDown();
+            }
+        }, 500, 500);
+        latch3.await();
+        timer3.cancel();
+
+
+        controller.setNumOfPlayers("Gamba", 3);
+
+        controller.join("JOJO", new StubClient("LULZ", view ));
+        CountDownLatch latch4 = new CountDownLatch(5);
+        Timer timer4 = new Timer();
+        timer4.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch4.countDown();
+            }
+        }, 500, 500);
+        latch4.await();
+        timer4.cancel();
+
+        System.err.println("||||||||| Disconnecting player... |||||||||");
+        controller.disconnect("JOJO");
+
+        CountDownLatch latch5 = new CountDownLatch(5);
+        Timer timer5 = new Timer();
+        timer5.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch5.countDown();
+            }
+        }, 500, 500);
+        latch5.await();
+        timer5.cancel();
+        controller.join("JOJO", new StubClient("LULZ", view));
+
+        CountDownLatch latch6 = new CountDownLatch(5);
+        Timer timer6 = new Timer();
+        timer6.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch6.countDown();
+            }
+        }, 500, 500);
+        latch6.await();
+        timer6.cancel();
+
+    }
+
+
+    @Test
+    void joinDisconnectJoinTest2() throws InterruptedException {
+        StubClient client = new StubClient("TEST", view);
+        controller.join("Gamba", client);
+
+        CountDownLatch latch1 = new CountDownLatch(5);
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch1.countDown();
+            }
+        }, 500, 500);
+        latch1.await();
+        timer1.cancel();
+
+        System.err.println("||||||||| Disconnecting player... |||||||||");
+        controller.disconnect("Gamba");
+
+        CountDownLatch latch2 = new CountDownLatch(5);
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch2.countDown();
+            }
+        }, 500, 500);
+        latch2.await();
+        timer2.cancel();
+
+        controller.join("Gamba", client);
+
+        CountDownLatch latch3 = new CountDownLatch(5);
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch3.countDown();
+            }
+        }, 500, 500);
+        latch3.await();
+        timer3.cancel();
+
+    }
+
+
 
 }

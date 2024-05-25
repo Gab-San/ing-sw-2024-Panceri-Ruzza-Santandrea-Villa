@@ -316,5 +316,4 @@ class ParserTest {
 
         parser.parseCommand("play G0 on G1 BR");
     }
-
 }

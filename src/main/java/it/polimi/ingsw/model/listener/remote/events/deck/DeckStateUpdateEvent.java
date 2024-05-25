@@ -24,7 +24,7 @@ public class DeckStateUpdateEvent extends DeckEvent{
         String firstId = (firstRevealedCard == null) ? null : firstRevealedCard.getCardID();
         String secondId = (secondRevealedCard == null) ? null : secondRevealedCard.getCardID();
         if(topId == null && firstId == null && secondId == null){
-            virtualClient.createEmptyDeck(deck);
+            virtualClient.setEmptyDeckState(deck);
             return;
         }
         if(topId == null && firstId == null){

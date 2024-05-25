@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.remote.errors.PingEvent;
+import it.polimi.ingsw.model.listener.remote.errors.TimeoutDisconnectEvent;
 
 public class TurnTimer implements Runnable{
 
@@ -37,6 +38,7 @@ public class TurnTimer implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+        player.notifyAllListeners(new TimeoutDisconnectEvent(player.getNickname()));
         controller.disconnect(player.getNickname());
     }
 

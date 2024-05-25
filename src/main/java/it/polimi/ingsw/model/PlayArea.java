@@ -119,8 +119,8 @@ public class PlayArea implements GameSubject {
             if(dirCard != null) {
                 Corner dirCorner = dirCard.getCorner(dir.opposite());
                 if (dirCorner.isOccupied()) {
-                    notifyAllListeners(new IllegalActionError(owner, "Should not place here, corner " + dir + " is filled".toUpperCase()));
-                    throw new IllegalStateException("Should not place here, corner " + dir + " is occupied");
+                    notifyAllListeners(new IllegalActionError(owner, ("Should not place here, corner " + dir + " is filled").toUpperCase()));
+                    throw new IllegalStateException("Should not place here, corner " + dir + " is filled");
                 }
             }
         }

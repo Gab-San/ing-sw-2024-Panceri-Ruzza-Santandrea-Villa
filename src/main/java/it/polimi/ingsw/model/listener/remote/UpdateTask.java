@@ -33,8 +33,7 @@ public class UpdateTask implements Runnable{
                 if (!iterator.hasNext()){
                     try {
                         eventRecord.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Update task was interrupted");
+                    } catch (InterruptedException ignore) {
                     }
                 }
             }

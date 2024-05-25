@@ -206,6 +206,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         try{
             outputStream.writeObject(new PingMessage());
             outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             closeSocket();
         }

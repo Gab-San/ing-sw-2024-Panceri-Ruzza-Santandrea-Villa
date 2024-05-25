@@ -6,8 +6,10 @@ import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
-import it.polimi.ingsw.network.tcp.message.commands.SendMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
+import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
+import it.polimi.ingsw.network.tcp.message.commands.SendMessage;
+import it.polimi.ingsw.network.tcp.message.notifications.board.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -25,12 +27,9 @@ public class ClientProxy implements VirtualClient {
         this.outputStream = outputStream;
     }
 
-
-    @Override
-    public synchronized void update(String msg) throws RemoteException {
-        ping();
+    private void sendNotification(TCPServerMessage notification) throws RemoteException {
         try{
-            outputStream.writeObject(new SendMessage(nickname, msg));
+            outputStream.writeObject(notification);
             outputStream.flush();
             outputStream.reset();
         } catch (IOException e) {
@@ -39,9 +38,56 @@ public class ClientProxy implements VirtualClient {
         }
     }
 
+//region VIRTUAL CLIENT IMPLEMENTATION
+    @Override
+    public synchronized void update(String msg) throws RemoteException {
+        ping();
+        sendNotification(new SendMessage(nickname, msg));
+    }
+
     @Override
     public synchronized void ping() throws RemoteException {
         clientHandler.ping();
+    }
+
+    @Override
+    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+        sendNotification( new BoardStateMessage(currentTurn, scoreboard, gamePhase, playerDeadLock));
+    }
+
+    @Override
+    public synchronized void updatePhase(GamePhase gamePhase) throws RemoteException {
+        sendNotification( new UpdatePhaseMessage(gamePhase));
+    }
+
+    @Override
+    public synchronized void updateScore(String nickname, int score) throws RemoteException {
+        sendNotification( new UpdateScoreMessage(nickname, score));
+    }
+
+    @Override
+    public synchronized void updateTurn(int currentTurn) throws RemoteException {
+        sendNotification(new UpdateTurnMessage(currentTurn));
+    }
+
+    @Override
+    public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
+        sendNotification(new PlayerDeadLockMessage(nickname, isDeadLocked));
+    }
+
+    @Override
+    public synchronized void notifyEndgame() throws RemoteException {
+        sendNotification(new EndgameMessage());
+    }
+
+    @Override
+    public synchronized void notifyEndgame(String nickname, int score) throws RemoteException {
+        sendNotification(new EndgameMessage(nickname, score));
+    }
+
+    @Override
+    public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+
     }
 
     @Override
@@ -60,12 +106,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
-
-    }
-
-    @Override
-    public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException {
+    public synchronized void removePlayer(String nickname) throws RemoteException {
 
     }
 
@@ -84,24 +125,13 @@ public class ClientProxy implements VirtualClient {
 
     }
 
-
     @Override
-    public synchronized void emptyDeck(char deck) throws RemoteException {
+    public synchronized void setEmptyDeckState(char deck) throws RemoteException {
 
     }
 
     @Override
-    public synchronized void updatePhase(GamePhase gamePhase) throws RemoteException {
-
-    }
-
-    @Override
-    public synchronized void updateScore(String nickname, int score) throws RemoteException {
-
-    }
-
-    @Override
-    public synchronized void updateTurn(int currentTurn) throws RemoteException {
+    public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException {
 
     }
 
@@ -111,7 +141,7 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void createEmptyDeck(char deck) throws RemoteException {
+    public synchronized void emptyDeck(char deck) throws RemoteException {
 
     }
 
@@ -161,45 +191,28 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
+    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
 
     }
 
     @Override
-    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+    public synchronized void reportError(String errorMessage) throws RemoteException {
 
     }
 
     @Override
-    public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
+    public synchronized void notifyTimeoutDisconnect() throws RemoteException {
 
     }
 
-    @Override
-    public void reportError(String errorMessage) throws RemoteException {
 
-    }
-
-    @Override
-    public void notifyEndgame() throws RemoteException {
-
-    }
-
-    @Override
-    public void notifyEndgame(String nickname, int score) throws RemoteException {
-
-    }
-
-    @Override
-    public void removePlayer(String nickname) throws RemoteException {
-
-    }
+//endregion
 
     void setUsername(String nickname){
         this.nickname = nickname;
     }
 
-    public void sendCheck(TCPServerCheckMessage message){
+    public synchronized void sendCheck(TCPServerCheckMessage message){
         try{
             ping();
             outputStream.writeObject(message);

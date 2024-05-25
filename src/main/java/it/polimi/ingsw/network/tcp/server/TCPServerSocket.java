@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 public class TCPServerSocket {
     private final ServerSocket serverSocket;
@@ -28,7 +29,7 @@ public class TCPServerSocket {
                             ClientHandler handler = new ClientHandler(connectionSocket);
                             handlerPool.execute(handler);
                         }
-                    } catch (IOException exception) {
+                    } catch (RejectedExecutionException ignore){} catch (IOException exception) {
                         System.err.println("Closing server: " + exception.getMessage());
                         closeServer();
                     }

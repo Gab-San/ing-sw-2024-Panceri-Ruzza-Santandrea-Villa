@@ -106,8 +106,17 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     }
 
+    /**
+     * Notifies about the current state of the player.
+     *
+     * @param nickname    the unique nickname identifier of the player
+     * @param isConnected the connection status as for the moment of the update
+     * @param turn        the given player's turn
+     * @param colour      the colour the player has chosen for the match
+     * @throws RemoteException if a connection error occurs
+     */
     @Override
-    public void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 
@@ -136,6 +145,20 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     }
 
+    /**
+     * Updates the current state of a deck.
+     * <p>
+     * This update can be triggered iff a deck is empty during initialization.
+     * </p>
+     *
+     * @param deck the deck identifier
+     * @throws RemoteException if a connection error is detected
+     */
+    @Override
+    public void setEmptyDeckState(char deck) throws RemoteException {
+
+    }
+
     @Override
     public void updatePhase(GamePhase gamePhase) throws RemoteException {
 
@@ -153,11 +176,6 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     @Override
     public void emptyReveal(char deck, int cardPosition) throws RemoteException {
-
-    }
-
-    @Override
-    public void createEmptyDeck(char deck) throws RemoteException {
 
     }
 
@@ -223,6 +241,11 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyTimeoutDisconnect() {
 
     }
 

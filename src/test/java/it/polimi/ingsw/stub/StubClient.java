@@ -61,8 +61,17 @@ public class StubClient implements VirtualClient {
         view.getPlayer(nickname).setConnected(isConnected);
     }
 
+    /**
+     * Notifies about the current state of the player.
+     *
+     * @param nickname    the unique nickname identifier of the player
+     * @param isConnected the connection status as for the moment of the update
+     * @param turn        the given player's turn
+     * @param colour      the colour the player has chosen for the match
+     * @throws RemoteException if a connection error occurs
+     */
     @Override
-    public synchronized void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof player creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[CONNECTION] " + isConnected + "\n" +
@@ -119,6 +128,21 @@ public class StubClient implements VirtualClient {
                 "[DECK TYPE] " + deck, Attribute.BLUE_TEXT()));
     }
 
+    /**
+     * Updates the current state of a deck.
+     * <p>
+     * This update can be triggered iff a deck is empty during initialization.
+     * </p>
+     *
+     * @param deck the deck identifier
+     * @throws RemoteException if a connection error is detected
+     */
+    @Override
+    public void setEmptyDeckState(char deck) throws RemoteException {
+        System.out.println(colorize("Notified " + this.nickname + "\nof empty deck creation with:\n" +
+                "[DECK TYPE] " + deck + "\n", Attribute.BLUE_TEXT()));
+    }
+
     @Override
     public synchronized void updatePhase(GamePhase gamePhase) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof game phase update with:\n" +
@@ -148,11 +172,6 @@ public class StubClient implements VirtualClient {
                 "[CARD POSITION] " + cardPosition, Attribute.BLUE_TEXT()));
     }
 
-    @Override
-    public synchronized void createEmptyDeck(char deck) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof empty deck creation with:\n" +
-                "[DECK TYPE] " + deck + "\n", Attribute.BLUE_TEXT()));
-    }
 
     @Override
     public synchronized void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
@@ -250,6 +269,11 @@ public class StubClient implements VirtualClient {
         reportedError = errorMessage;
         System.out.println(colorize("Notifying " + nickname + " of error", Attribute.BLACK_TEXT(), Attribute.BRIGHT_CYAN_BACK()));
         System.out.println(colorize(errorMessage, Attribute.BLACK_TEXT(), Attribute.RED_BACK()));
+    }
+
+    @Override
+    public void notifyTimeoutDisconnect() {
+
     }
 
     @Override

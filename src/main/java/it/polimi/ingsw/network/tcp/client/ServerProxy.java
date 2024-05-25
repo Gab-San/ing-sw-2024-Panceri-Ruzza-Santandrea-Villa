@@ -103,8 +103,8 @@ public class ServerProxy implements CommandPassthrough {
         try{
             outputStream.writeObject(new ConnectMessage(nickname));
             outputStream.flush();
-            outputStream.reset();
             waitForCheck();
+            outputStream.reset();
             this.nickname = nickname;
         } catch (IOException e) {
             closeProxy();
