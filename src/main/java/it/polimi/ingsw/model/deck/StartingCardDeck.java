@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.StartingCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.json.deserializers.StartingCardDeserializer;
+import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +18,8 @@ public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;
 
-    public StartingCardDeck() throws DeckInstantiationException {
-        try {
-            cardDeck = importFromJson();
-        } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
-        }
+    public StartingCardDeck() throws IllegalStateException{
+        cardDeck = importFromJson();
     }
 
     public StartingCard getCard(){
@@ -31,7 +27,9 @@ public class StartingCardDeck{
         return cardDeck.remove(cardIdx);
     }
 
-    private List<StartingCard> importFromJson() throws DeckException {
+    private List<StartingCard> importFromJson() throws IllegalStateException{
+        List<StartingCard> startingCardsList;
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             SimpleModule simpleModule = new SimpleModule();
@@ -39,10 +37,12 @@ public class StartingCardDeck{
             objectMapper.registerModule(simpleModule);
 
             File json = new File("src/main/java/it/polimi/ingsw/model/json/StartingCard.json");
-            return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, StartingCard.class));
+            startingCardsList = objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, StartingCard.class));
         } catch (IOException e) {
-            throw new DeckException("Error reading file JSON", StartingCard.class);
+            throw new IllegalStateException("SYSTEM SHUT DOWN: An error occured while initializing the starting deck");
         }
+
+        return startingCardsList;
     }
 
     protected int getRandomCard() {

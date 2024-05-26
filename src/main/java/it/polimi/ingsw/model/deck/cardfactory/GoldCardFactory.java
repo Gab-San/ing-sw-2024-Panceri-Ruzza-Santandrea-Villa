@@ -18,24 +18,22 @@ import java.util.NoSuchElementException;
 public class GoldCardFactory extends CardFactory {
     List<GoldCardJSON> jsonCards;
 
-    public GoldCardFactory() throws DeckInstantiationException{
+    public GoldCardFactory() throws IllegalStateException{
         super("src/main/java/it/polimi/ingsw/model/resources/GoldCard_Id");
 
         try {
             jsonCards = importFromJson();
         } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
+            throw new IllegalStateException(deckException.getMessage());
         }
     }
 
-    public GoldCardFactory(String idFile) throws DeckInstantiationException {
+    public GoldCardFactory(String idFile) throws IllegalStateException {
         super(idFile);
         try {
             jsonCards = importFromJson();
         } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
+            throw new IllegalStateException(deckException.getMessage());
         }
     }
 

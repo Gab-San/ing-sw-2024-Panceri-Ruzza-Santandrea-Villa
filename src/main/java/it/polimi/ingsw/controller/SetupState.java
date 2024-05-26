@@ -109,8 +109,8 @@ public class SetupState extends GameState{
         }
 
         if(playersWhoPlacedStartingCard.contains(nickname)) {
-            board.notifyAllListeners(new IllegalActionError(nickname, nickname + " HAS ALREADY PLACED THEIR STARTING CARD") );
-            throw new IllegalStateException(nickname + " has already placed their starting card.");
+            board.notifyAllListeners(new IllegalActionError(nickname, "YOU HAVE ALREADY PLACED YOUR STARTING CARD"));
+            throw new IllegalStateException(nickname + " has already placed their starting card");
         }
         Player player;
         player = board.getPlayerByNickname(nickname);
@@ -145,13 +145,13 @@ public class SetupState extends GameState{
         }
 
         if(playersWhoChoseColor.contains(nickname)) {
-            board.notifyAllListeners(new IllegalActionError(nickname,(nickname + " has already chosen his color").toUpperCase() ));
+            board.notifyAllListeners(new IllegalActionError(nickname,("You have already chosen your color").toUpperCase() ));
             throw new IllegalStateException(nickname + " has already chosen his color.");
         }
 
         if(!board.getAvailableColors().contains(color)) {
             board.notifyAllListeners(new IllegalActionError(nickname, (color + " not available").toUpperCase()));
-            throw new IllegalStateException(color + " not available.");
+            throw new IllegalStateException(color + " not available");
         }
 
         Player player;
@@ -203,7 +203,7 @@ public class SetupState extends GameState{
         }
 
         if(playersWhoChoseSecretObjective.contains(nickname)) {
-            board.notifyAllListeners(new IllegalActionError(nickname, (nickname + " has already chosen his secret objective card.").toUpperCase()));
+            board.notifyAllListeners(new IllegalActionError(nickname, ("You have already chosen your secret objective card.").toUpperCase()));
             throw new IllegalStateException(nickname + " has already chosen his secret objective card.");
         }
 

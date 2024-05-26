@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
+import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
-import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.json.deserializers.ObjectiveCardDeserializer;
 
@@ -35,15 +34,10 @@ public class ObjectiveDeck implements GameSubject {
     private ObjectiveCard topCard;
     private final List<GameListener> gameListenersList;
 
-    public ObjectiveDeck() throws DeckInstantiationException {
+    public ObjectiveDeck() throws IllegalStateException {
         gameListenersList = new LinkedList<>();
         // Populating the array
-        try {
-            cardDeck = importFromJson();
-        } catch (DeckException deckException){
-            throw new DeckInstantiationException(deckException.getMessage(), deckException.getCause(),
-                    deckException.getDeck());
-        }
+        cardDeck = importFromJson();
 
         topCard = cardDeck.remove(getRandomCard());
         firstRevealed = null;
@@ -102,7 +96,9 @@ public class ObjectiveDeck implements GameSubject {
 
 
 
-    private List<ObjectiveCard> importFromJson() throws DeckException {
+    private List<ObjectiveCard> importFromJson() throws IllegalStateException{
+        List<ObjectiveCard> objectiveCardList;
+
         try{
             ObjectMapper mapper = new ObjectMapper();
             SimpleModule module = new SimpleModule();
@@ -110,10 +106,14 @@ public class ObjectiveDeck implements GameSubject {
             mapper.registerModule(module);
 
             File json = new File("src/main/java/it/polimi/ingsw/model/json/ObjectiveCard.json");
-            return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(ArrayList.class, ObjectiveCard.class));
+            objectiveCardList = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(ArrayList.class, ObjectiveCard.class));
         } catch (IOException exc){
-            throw new DeckException("Error reading file JSON", exc, ObjectiveDeck.class);
+            notifyAllListeners(new CrashStateError("all", "An error occured while initializing the objective deck".toUpperCase()));
+            System.exit(-1);
+            throw new IllegalStateException("SYSTEM SHUT DOWN: An error occured while initializing the objective deck");
         }
+
+        return objectiveCardList;
     }
 
     public boolean isEmpty(){

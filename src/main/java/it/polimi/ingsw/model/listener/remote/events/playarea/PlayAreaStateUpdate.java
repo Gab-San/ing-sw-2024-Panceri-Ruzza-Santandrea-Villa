@@ -37,6 +37,6 @@ public class PlayAreaStateUpdate extends PlayerEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.createPlayArea(nickname, cardPositions, visibleResources, freeSerializableCorners);
+        virtualClient.setPlayAreaState(nickname, cardPositions, visibleResources, freeSerializableCorners);
     }
 }

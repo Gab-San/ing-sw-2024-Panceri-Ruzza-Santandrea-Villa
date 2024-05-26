@@ -21,8 +21,8 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     private final Attribute textColorFormat = Attribute.BRIGHT_CYAN_TEXT();
 
     @Override
-    public void sendMsg(String msg) {
-        System.out.println(colorize("SEND COMMAND CALLED", textColorFormat));
+    public void sendMsg(String addressee, String msg) {
+        System.out.println(colorize(msg.toUpperCase() + " SENT TO " + addressee.toUpperCase(), textColorFormat));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void update(String msg) throws RemoteException {
+    public void displayMessage(String messenger, String msg) throws RemoteException {
 
     }
 
@@ -106,8 +106,17 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     }
 
+    /**
+     * Notifies about the current state of the player.
+     *
+     * @param nickname    the unique nickname identifier of the player
+     * @param isConnected the connection status as for the moment of the displayMessage
+     * @param turn        the given player's turn
+     * @param colour      the colour the player has chosen for the match
+     * @throws RemoteException if a connection error occurs
+     */
     @Override
-    public void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
 
     }
 
@@ -132,7 +141,21 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void emptyDeck(char deck) throws RemoteException {
+    public void emptyFaceDownPile(char deck) throws RemoteException {
+
+    }
+
+    /**
+     * Updates the current state of a deck.
+     * <p>
+     * This displayMessage can be triggered iff a deck is empty during initialization.
+     * </p>
+     *
+     * @param deck the deck identifier
+     * @throws RemoteException if a connection error is detected
+     */
+    @Override
+    public void setEmptyDeckState(char deck) throws RemoteException {
 
     }
 
@@ -153,11 +176,6 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     @Override
     public void emptyReveal(char deck, int cardPosition) throws RemoteException {
-
-    }
-
-    @Override
-    public void createEmptyDeck(char deck) throws RemoteException {
 
     }
 
@@ -192,12 +210,12 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
 
     }
 
     @Override
-    public void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
 
     }
 
@@ -223,6 +241,11 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     @Override
     public void reportError(String errorMessage) throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyTimeoutDisconnect() {
 
     }
 

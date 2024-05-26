@@ -103,8 +103,8 @@ public class ServerProxy implements CommandPassthrough {
         try{
             outputStream.writeObject(new ConnectMessage(nickname));
             outputStream.flush();
-            outputStream.reset();
             waitForCheck();
+            outputStream.reset();
             this.nickname = nickname;
         } catch (IOException e) {
             closeProxy();
@@ -120,8 +120,8 @@ public class ServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void sendMsg(String msg) throws RemoteException {
-        sendCommand(new SendMessage(nickname, msg));
+    public void sendMsg(String addressee, String msg) throws RemoteException {
+        sendCommand(new SendMessage(nickname, addressee, msg));
     }
 
     @Override

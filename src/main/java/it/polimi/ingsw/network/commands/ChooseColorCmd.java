@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.Commands;
+package it.polimi.ingsw.network.commands;
 
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.enums.PlayerColor;

@@ -27,19 +27,19 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public synchronized void update(String msg) throws RemoteException {
+    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
 
     }
 
     @Override
     public synchronized void ping() throws RemoteException {
-
+        System.out.println(colorize("PINGED " + nickname, Attribute.BLACK_TEXT(), Attribute.YELLOW_BACK()));
     }
 
 
     @Override
     public synchronized void updatePlayer(String nickname, PlayerColor colour) throws RemoteException {
-        System.out.println(colorize("Notifying " + this.nickname + "\nof player update with:\n" +
+        System.out.println(colorize("Notifying " + this.nickname + "\nof player displayMessage with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[PLAYER COLOUR] " + colour, Attribute.MAGENTA_TEXT()));
         view.getPlayer(nickname).setColor(colour);
@@ -47,7 +47,7 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void updatePlayer(String nickname, int playerTurn) throws RemoteException {
-        System.out.println(colorize("Notifying " + this.nickname + "\nof player update with:\n" +
+        System.out.println(colorize("Notifying " + this.nickname + "\nof player displayMessage with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[PLAYER TURN] " + playerTurn, Attribute.MAGENTA_TEXT()));
         view.getPlayer(nickname).setTurn(playerTurn);
@@ -55,14 +55,23 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void updatePlayer(String nickname, boolean isConnected) throws RemoteException {
-        System.out.println(colorize("Notifying " + this.nickname + "\nof player update with:\n" +
+        System.out.println(colorize("Notifying " + this.nickname + "\nof player displayMessage with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[CONNECTION] " + isConnected, Attribute.MAGENTA_TEXT()));
         view.getPlayer(nickname).setConnected(isConnected);
     }
 
+    /**
+     * Notifies about the current state of the player.
+     *
+     * @param nickname    the unique nickname identifier of the player
+     * @param isConnected the connection status as for the moment of the displayMessage
+     * @param turn        the given player's turn
+     * @param colour      the colour the player has chosen for the match
+     * @throws RemoteException if a connection error occurs
+     */
     @Override
-    public synchronized void setDeckState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
+    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof player creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[CONNECTION] " + isConnected + "\n" +
@@ -114,21 +123,36 @@ public class StubClient implements VirtualClient {
 
 
     @Override
-    public synchronized void emptyDeck(char deck) throws RemoteException {
+    public synchronized void emptyFaceDownPile(char deck) throws RemoteException {
         System.out.println(colorize("Notifying " + this.nickname + "\nof an empty deck:\n" +
                 "[DECK TYPE] " + deck, Attribute.BLUE_TEXT()));
     }
 
+    /**
+     * Updates the current state of a deck.
+     * <p>
+     * This displayMessage can be triggered iff a deck is empty during initialization.
+     * </p>
+     *
+     * @param deck the deck identifier
+     * @throws RemoteException if a connection error is detected
+     */
+    @Override
+    public void setEmptyDeckState(char deck) throws RemoteException {
+        System.out.println(colorize("Notified " + this.nickname + "\nof empty deck creation with:\n" +
+                "[DECK TYPE] " + deck + "\n", Attribute.BLUE_TEXT()));
+    }
+
     @Override
     public synchronized void updatePhase(GamePhase gamePhase) throws RemoteException {
-        System.out.println(colorize("Notifying " + this.nickname + "\nof game phase update with:\n" +
+        System.out.println(colorize("Notifying " + this.nickname + "\nof game phase displayMessage with:\n" +
                 "[GAME PHASE] " + gamePhase, Attribute.RED_TEXT()));
         view.setPhase(gamePhase);
     }
 
     @Override
     public synchronized void updateScore(String nickname, int score) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof score update with:\n" +
+        System.out.println(colorize("Notified " + this.nickname + "\nof score displayMessage with:\n" +
                 "[PLAYER] " + nickname+ "\n" +
                 "[SCORE] " + score, Attribute.RED_TEXT()));
         view.setScoreboard(nickname, score);
@@ -136,7 +160,7 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void updateTurn(int currentTurn) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof turn change update with:\n" +
+        System.out.println(colorize("Notified " + this.nickname + "\nof turn change displayMessage with:\n" +
                 "[CURRENT TURN] " + currentTurn, Attribute.RED_TEXT()));
         view.setTurn(currentTurn);
     }
@@ -148,11 +172,6 @@ public class StubClient implements VirtualClient {
                 "[CARD POSITION] " + cardPosition, Attribute.BLUE_TEXT()));
     }
 
-    @Override
-    public synchronized void createEmptyDeck(char deck) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof empty deck creation with:\n" +
-                "[DECK TYPE] " + deck + "\n", Attribute.BLUE_TEXT()));
-    }
 
     @Override
     public synchronized void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
@@ -199,7 +218,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public synchronized void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public synchronized void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof play area creation with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[CARD POSITIONS] " + cardPositions + "\n" +
@@ -208,7 +227,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public synchronized void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof card placement with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[PLACED CARD] " + placedCardId + "\n" +
@@ -225,7 +244,7 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerialableCorners) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof free corners update with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof free corners displayMessage with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[FREE CORNERS] " + freeSerialableCorners, Attribute.MAGENTA_TEXT()));
         view.setFreeCorners(freeSerialableCorners);
@@ -233,14 +252,14 @@ public class StubClient implements VirtualClient {
 
     @Override
     public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard,  GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
-        System.out.println(colorize("Notified " + this.nickname + "\nof board state update with:\n" +
+        System.out.println(colorize("Notified " + this.nickname + "\nof board state displayMessage with:\n" +
                 "[TURN] " + currentTurn + "\n" +
                 "[GAME PHASE] " + gamePhase, Attribute.RED_TEXT()));
     }
 
     @Override
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
-        System.out.println(colorize("Being notified by " + this.nickname + "\nof player update with:\n" +
+        System.out.println(colorize("Being notified by " + this.nickname + "\nof player displayMessage with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[DEADLOCK] " + isDeadLocked, Attribute.MAGENTA_TEXT()));
     }
@@ -250,6 +269,11 @@ public class StubClient implements VirtualClient {
         reportedError = errorMessage;
         System.out.println(colorize("Notifying " + nickname + " of error", Attribute.BLACK_TEXT(), Attribute.BRIGHT_CYAN_BACK()));
         System.out.println(colorize(errorMessage, Attribute.BLACK_TEXT(), Attribute.RED_BACK()));
+    }
+
+    @Override
+    public void notifyTimeoutDisconnect() {
+
     }
 
     @Override

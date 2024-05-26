@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
+
 class ResourceCardFactoryTest {
 
     @Test
@@ -20,11 +22,12 @@ class ResourceCardFactoryTest {
         try {
             assert resourceCardFactory != null;
             resourceCardFactory.addCardToDeck();
-        } catch (DeckException exception){
+        } catch (NoSuchElementException exception){
             exception.printStackTrace(System.err);
             if ( exception.getCause() != null){
                 System.out.println("This exc was caught by something else");
             }
+        } catch (DeckException ignore) {
         }
 
 

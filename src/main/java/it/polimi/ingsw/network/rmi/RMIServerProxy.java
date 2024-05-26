@@ -19,10 +19,10 @@ public class RMIServerProxy implements CommandPassthrough {
 
 
     @Override
-    public void sendMsg(String msg) throws RemoteException {
+    public void sendMsg(String addressee, String msg) throws RemoteException {
         //System.out.println("Sending Message: " + msg);
         validateConnection();
-        server.sendMsg(nickname, client, msg);
+        server.sendMsg(nickname, client, addressee, msg);
     }
 
     private void validateConnection() throws IllegalStateException, RemoteException{

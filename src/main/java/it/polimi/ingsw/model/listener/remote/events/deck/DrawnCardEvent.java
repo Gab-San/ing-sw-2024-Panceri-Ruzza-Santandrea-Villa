@@ -16,9 +16,10 @@ public class DrawnCardEvent extends DeckEvent{
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         if(topCard == null){
-            virtualClient.emptyDeck(deck);
+            virtualClient.emptyFaceDownPile(deck);
             return;
         }
+
         virtualClient.deckUpdate(deck, topCard.getCardID(), PlayableDeck.TOP_POSITION);
     }
 }

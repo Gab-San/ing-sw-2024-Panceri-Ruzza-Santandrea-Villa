@@ -10,7 +10,9 @@ import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.stub.PuppetClient;
+import it.polimi.ingsw.stub.StubClient;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -485,11 +487,9 @@ public class PlayStateTest {
 
     }
 
-    //@ParameterizedTest
-    //@ValueSource(ints = {2, 3, 4})
-    @RepeatedTest(1000)
-    public void simulateRandomGameWithDisconnectAndJoin(/*int numOfPlayers*/){
-        int numOfPlayers=4;
+    @ParameterizedTest
+    @ValueSource(ints = {2, 3, 4})
+    public void simulateRandomGameWithDisconnectAndJoin(int numOfPlayers){
         setUp(/*2*/numOfPlayers);
 
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
@@ -723,4 +723,24 @@ public class PlayStateTest {
         assertEquals(EndgameState.class, controller.getGameState().getClass());
     }
 
+    @Test
+    void doubleJoin(){
+        setUp(2);
+        controller.disconnect(playerNickname);
+        controller.join(playerNickname, new PuppetClient());
+        assertThrows(
+                IllegalStateException.class,
+                () -> controller.join(playerNickname, new PuppetClient())
+        );
+    }
+
+    @Test
+    void doubleDisconnect(){
+        setUp(2);
+        controller.disconnect(playerNickname);
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> controller.disconnect("Player 5")
+        );
+    }
 }

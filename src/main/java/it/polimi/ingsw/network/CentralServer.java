@@ -1,26 +1,27 @@
 package it.polimi.ingsw.network;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.network.Commands.GameCommand;
+import it.polimi.ingsw.network.commands.GameCommand;
 
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
-
-import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final Queue<GameCommand> commandQueue;
     private final BoardController gameRef;
+    private final ChatHandler chat;
 
     private CentralServer() throws IllegalStateException{
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
         gameRef = new BoardController();
+        chat = new ChatHandler(this);
         startCommandExecutor();
     }
 
@@ -89,6 +90,7 @@ public class CentralServer {
                 throw new IllegalStateException("Player with nickname "+nickname+" already connected!");
             }catch (RemoteException clientLostConnection){
                 playerClients.put(nickname, client);
+                chat.addClient(nickname, client);
             }
             // if client actually lost connection / disconnected
             if(gameRef != null){
@@ -106,6 +108,7 @@ public class CentralServer {
                     throw new IllegalStateException(exception.getMessage());
                 }
                 playerClients.put(nickname, client);
+                chat.addClient(nickname, client);
             }catch (IllegalStateException e) {
                 throw new IllegalStateException("Player can't connect to game\n" +
                     "Error message: " + e.getMessage());
@@ -124,26 +127,13 @@ public class CentralServer {
                     commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
             );
         }
+        chat.removeClient(nickname);
     }
 
-    public synchronized void updateMsg(String fullMessage) {
-        List<String> disconnectedClients = new ArrayList<>();
-        for(String nickname : playerClients.keySet()){
-            try{
-                playerClients.get(nickname).update(colorize(fullMessage, Attribute.GREEN_TEXT()));
-            }catch (RemoteException e) {
-                disconnectedClients.add(nickname);
-            }
+    public synchronized void sendMessage(String messenger, String addressee, String message) {
+        if(!playerClients.containsKey(messenger)){
+            throw new IllegalArgumentException("Client not connected to chat!");
         }
-        disconnectConnectionLossClients(disconnectedClients);
-    }
-
-    private void disconnectConnectionLossClients(List<String> disconnectedClients) {
-        for(String nickname: disconnectedClients){
-            disconnect(nickname, playerClients.get(nickname));
-        }
-        for(String nickname: disconnectedClients){
-            updateMsg("Disconnected " + nickname + " for connection loss");
-        }
+        chat.addMessage(message, addressee, message);
     }
 }

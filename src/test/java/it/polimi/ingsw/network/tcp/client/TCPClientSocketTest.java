@@ -43,6 +43,7 @@ class TCPClientSocketTest {
                         throw new RuntimeException(e);
                     }
                     try {
+                        System.err.println("DISCONNECTING CLIENT");
                         client.getProxy().disconnect();
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -172,7 +173,7 @@ class TCPClientSocketTest {
         client.closeSocket();
         assertThrows(
                 RemoteException.class,
-                () ->client.getProxy().sendMsg("Test fail")
+                () ->client.getProxy().sendMsg("all", "Test fail")
         );
     }
 
@@ -180,8 +181,8 @@ class TCPClientSocketTest {
     void testSendMsg() throws IOException {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
-        client.getProxy().sendMsg("Ciao ragazzi");
-        client.getProxy().sendMsg("Come va?");
+        client.getProxy().sendMsg("all", "Ciao ragazzi");
+        client.getProxy().sendMsg("all", "Come va?");
         client.getProxy().disconnect();
     }
 
