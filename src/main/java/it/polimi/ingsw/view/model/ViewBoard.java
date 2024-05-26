@@ -53,6 +53,8 @@ public class ViewBoard {
     }
 
     public synchronized ViewPlayArea getPlayerArea(String nickname) {
+        if(!playerAreas.containsKey(nickname))
+            addPlayer(nickname);
         return playerAreas.get(nickname);
     }
     public synchronized boolean isPlayerDeadlocked(String nickname) {
@@ -62,6 +64,8 @@ public class ViewBoard {
         return playerHand;
     }
     public synchronized ViewOpponentHand getOpponentHand(String nickname){
+        if(!opponentHands.containsKey(nickname))
+            addPlayer(nickname);
         return opponentHands.get(nickname);
     }
     public synchronized List<ViewOpponentHand> getOpponents(){
@@ -90,15 +94,19 @@ public class ViewBoard {
     public synchronized int getCurrentTurn() {
         return currentTurn;
     }
-    public synchronized void setCurrentTurn(int currentTurn) {
+    public synchronized boolean setCurrentTurn(int currentTurn) {
+        boolean changed = this.currentTurn != currentTurn;
         this.currentTurn = currentTurn;
+        return changed;
     }
 
     public synchronized GamePhase getGamePhase() {
         return gamePhase;
     }
-    public synchronized void setGamePhase(GamePhase gamePhase) {
+    public synchronized boolean setGamePhase(GamePhase gamePhase) {
+        boolean changed = this.gamePhase != gamePhase;
         this.gamePhase = gamePhase;
+        return changed;
     }
 
     public synchronized void addPlayer(String nickname){

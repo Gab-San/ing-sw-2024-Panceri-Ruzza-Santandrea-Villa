@@ -13,6 +13,7 @@ import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
 import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
 import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -23,11 +24,13 @@ public class TUI extends View{
     TUIParser parser;
     ViewBoard board;
     List<String> notificationBacklog;
+    Boolean timeouted;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.scanner = scanner;
+        timeouted = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
@@ -39,13 +42,13 @@ public class TUI extends View{
     }
 
     /**
-     * Nickname must contain at least one letter and not start with a space <br>
-     * It can contain any character
+     * Nickname must contain at least one letter and neither start nor end with a space <br>
+     * It can contain any character, minimum length of 3 characters
      * @param nickname nickname to validate
      * @return true if the nickname is valid, <br> false if not valid
      */
     private boolean validateNickname(String nickname){
-        return nickname.matches("[^ ].*[a-zA-Z].*")
+        return nickname.matches("[^\n ].*[a-zA-Z].*[^\n ]")
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
     private void runNicknameSelectScene() throws RemoteException{
@@ -59,7 +62,7 @@ public class TUI extends View{
                     parser = new TUIParser(serverProxy, this, board);
                     parser.parseCommand("connect " + nickname);
                 }catch (IllegalStateException e){
-                    currentScene.displayError("Join failed. Server can't accomodate you now.\n" + e.getMessage());
+                    currentScene.displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
                     nickname = "";
                 }
             }
@@ -77,12 +80,17 @@ public class TUI extends View{
         refreshScene();
         while(true){ //exits only on System.quit() or RemoteException
             try {
-                parser.parseCommand(scanner.nextLine());
+                String input = scanner.nextLine();
+                synchronized (this) {
+                    if (timeouted) {
+                        throw new RemoteException("DISCONNECTED");
+                    }
+                }
+                parser.parseCommand(input);
             }catch (IllegalArgumentException | IllegalStateException e){
                 showError(e.getMessage());
             }
         }
-        //TODO: get command input and send to parser
     }
 
     private void refreshScene(){
@@ -107,7 +115,8 @@ public class TUI extends View{
         }
 
         currentScene = newScene;
-        refreshScene();
+        newScene.displayNotification(notificationBacklog);
+        printCommandPrompt();
     }
 
     @Override
@@ -141,6 +150,10 @@ public class TUI extends View{
         notificationBacklog.add(notification);
         currentScene.displayNotification(notificationBacklog);
         printCommandPrompt();
+    }
+    public synchronized void notifyTimeout(){
+        timeouted = true;
+        showError("You have been disconnected for timeout!");
     }
 
 }

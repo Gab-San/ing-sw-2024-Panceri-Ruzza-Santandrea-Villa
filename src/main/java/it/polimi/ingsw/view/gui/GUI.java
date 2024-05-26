@@ -37,6 +37,11 @@ public class GUI extends View {
     }
 
     @Override
+    public void notifyTimeout() {
+
+    }
+
+    @Override
     public void run() throws RemoteException {
         // Avvia la schermata grafica
         System.out.println("Schermata grafica avviata...");

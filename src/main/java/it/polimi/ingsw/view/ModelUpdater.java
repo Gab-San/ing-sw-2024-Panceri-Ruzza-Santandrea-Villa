@@ -10,6 +10,7 @@ import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
 
+import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,9 @@ public class ModelUpdater implements VirtualClient {
     } //TODO: remove this or use it as updateChat / generic notification
     public void ping() { } //TODO: remove ping()
 
+    public void notifyTimeoutDisconnect(){
+        view.notifyTimeout();
+    }
     private void notifyMyAreaUpdate(String msg){
         if(verbose)
             notifyView(msg);

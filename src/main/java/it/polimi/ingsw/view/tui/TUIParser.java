@@ -52,7 +52,6 @@ public class TUIParser {
         if(command.toLowerCase().matches("quit|disconnect")){
             throw new RemoteException("DISCONNECTED");
         }
-        //TODO: handle disconnect returning to nickname selection.
     }
 
     private void parseMoveCommand(List<String> cmdArgs) throws IllegalArgumentException {

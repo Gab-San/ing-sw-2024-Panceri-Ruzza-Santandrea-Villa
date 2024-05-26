@@ -90,14 +90,18 @@ public abstract class ViewHand {
     public synchronized PlayerColor getColor() {
         return color;
     }
-    public synchronized void setColor(PlayerColor color) {
+    public synchronized boolean setColor(PlayerColor color) {
+        boolean changed = this.color != color;
         this.color = color;
+        return changed;
     }
 
     public synchronized int getTurn() {
         return turn;
     }
-    public synchronized void setTurn(int turn) {
+    public synchronized boolean setTurn(int turn) {
+        boolean changed = this.turn != turn;
         this.turn = turn;
+        return changed;
     }
 }
