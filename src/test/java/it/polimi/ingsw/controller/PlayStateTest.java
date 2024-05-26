@@ -668,17 +668,20 @@ public class PlayStateTest {
 
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {2, 3, 4})
-    public void simulateRandomGameWithEverybodyDisconnecting(int numOfPlayers){
+    //@ParameterizedTest
+    //@ValueSource(ints = {2, 3, 4})
+
+    @RepeatedTest(100)
+    public void simulateRandomGameWithEverybodyDisconnecting(/*int numOfPlayers*/){
+        int numOfPlayers=4;
         setUp(/*4*/numOfPlayers);
-        //int numOfPlayers=4;
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
 
         List<Integer> discTurns=new ArrayList<>();
         for(int j=0; j<numOfPlayers; j++)
-            discTurns.add(new Random().nextInt(15) + (discTurns.isEmpty() ? 0 : discTurns.get(discTurns.size()-1)));
+            discTurns.add(new Random().nextInt(15) + (discTurns.isEmpty() ? 0 : discTurns.get(discTurns.size()-1))+1);
+        System.out.println(discTurns);
         int i = 1;
         //List<Player> playersByTurn = board.getPlayersByTurn();
         //List<String> nicknamesByTurn = playersByTurn.stream().map(Player::getNickname).toList();
