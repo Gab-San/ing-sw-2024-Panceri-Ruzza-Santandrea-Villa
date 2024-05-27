@@ -134,6 +134,6 @@ public class CentralServer {
         if(!playerClients.containsKey(messenger)){
             throw new IllegalArgumentException("Client not connected to chat!");
         }
-        chat.addMessage(message, addressee, message);
+        chat.addMessage(messenger, addressee, message);
     }
 }

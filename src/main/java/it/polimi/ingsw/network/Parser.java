@@ -136,8 +136,6 @@ public class Parser {
 
         String addresseeNickExtract = parseAddressee(cmdArgs);
         List<String> partsToRemove = Arrays.stream(addresseeNickExtract.split("\\s+")).toList();
-        System.out.println(partsToRemove);
-        System.out.println(cmdArgs);
         StringBuilder msg = new StringBuilder();
         cmdArgs.forEach(
                 (cmp) ->{
@@ -158,7 +156,7 @@ public class Parser {
                 (arg) -> command.append(arg).append(" ")
         );
 
-        Matcher matcher = Pattern.compile("\"(([A-Z]|[a-z])+)*\s*([A-Z]|[a-z])+\"").matcher(command.toString().trim());
+        Matcher matcher = Pattern.compile("\"\\b.*([A-Za-z])+.*\\b\"").matcher(command.toString().trim());
 
         if(matcher.find()){
             return matcher.group();

@@ -210,8 +210,25 @@ public class EventControllerIntegrationTest {
 
         try{
             controller.setNumOfPlayers(notConnectedNick, 2);
-        } catch (IllegalArgumentException e){
-            assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
+        } catch (IllegalArgumentException argumentException){
+            CountDownLatch latch = new CountDownLatch(2);
+
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    latch.countDown();
+                }
+            }, 500, 500);
+
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            timer.cancel();
+            assertEquals(argumentException.getMessage().toUpperCase(), clients[0].reportedError.split(":")[1].trim());
         }
     }
 
@@ -477,8 +494,25 @@ public class EventControllerIntegrationTest {
 
         try{
             controller.placeCard(notConnectedNick, "A0", new Point(0,0), CornerDirection.BL, false);
-        } catch (IllegalArgumentException e){
-            assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
+        } catch (IllegalArgumentException argumentException){
+            CountDownLatch latch4 = new CountDownLatch(2);
+
+            Timer timer4 = new Timer();
+            timer4.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    latch4.countDown();
+                }
+            }, 500, 500);
+
+            try {
+                latch4.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            timer4.cancel();
+            assertEquals(clients[0].reportedError.split(":")[1].trim(), argumentException.getMessage().toUpperCase());
         }
         boolean hasPlaced = false;
         boolean worthy1 = true;
@@ -648,8 +682,25 @@ public class EventControllerIntegrationTest {
 
         try{
             controller.restartGame(notConnectedNick, 3);
-        } catch (IllegalArgumentException e){
-            assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
+        } catch (IllegalArgumentException argumentException){
+            CountDownLatch latch = new CountDownLatch(2);
+
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    latch.countDown();
+                }
+            }, 500, 500);
+
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            timer.cancel();
+            assertEquals(clients[0].reportedError.split(":")[1].trim(), argumentException.getMessage().toUpperCase());
         }
 
         try{

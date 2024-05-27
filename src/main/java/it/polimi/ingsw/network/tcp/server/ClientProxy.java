@@ -52,7 +52,7 @@ public class ClientProxy implements VirtualClient {
     @Override
     public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
         ping();
-        sendNotification(new SendMessage(nickname, msg));
+        sendNotification(new SendMessage(messenger, msg));
     }
 
     @Override

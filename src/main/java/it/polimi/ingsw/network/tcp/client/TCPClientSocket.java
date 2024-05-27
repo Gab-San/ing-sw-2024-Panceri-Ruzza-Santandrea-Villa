@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.tcp.client;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.model.enums.GamePhase;
 import it.polimi.ingsw.model.enums.GameResource;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -18,6 +19,8 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.*;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class TCPClientSocket implements VirtualClient{
 
@@ -526,11 +529,11 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void reportError(String errorMessage) throws RemoteException {
-
+        System.out.println(colorize("ERROR FOUND: " + errorMessage, Attribute.BLACK_TEXT(), Attribute.BRIGHT_BLUE_BACK()));
     }
 
     @Override
-    public void notifyTimeoutDisconnect() {
+    public void notifyTimeoutDisconnect() throws RemoteException {
 
     }
 

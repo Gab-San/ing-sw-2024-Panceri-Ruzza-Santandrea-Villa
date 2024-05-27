@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.cards.ResourceCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardJSON;

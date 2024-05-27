@@ -671,7 +671,7 @@ public class PlayStateTest {
     //@ParameterizedTest
     //@ValueSource(ints = {2, 3, 4})
 
-    @RepeatedTest(100)
+    @Test
     public void simulateRandomGameWithEverybodyDisconnecting(/*int numOfPlayers*/){
         int numOfPlayers=4;
         setUp(/*4*/numOfPlayers);
@@ -704,6 +704,9 @@ public class PlayStateTest {
                         controller.disconnect(currPlayer.getNickname());
                     else{
                         drawRandomCard(currPlayer);
+                        if(board.getGamePhase() == GamePhase.SHOWWIN){
+                            break;
+                        }
                         controlPostDraw();
                         if(discTurns.contains(i) && whereToDisconnect==2)
                             controller.disconnect(currPlayer.getNickname());

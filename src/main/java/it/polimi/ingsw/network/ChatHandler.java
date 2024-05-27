@@ -74,23 +74,25 @@ public class ChatHandler{
          Thread dmThread = new Thread(
                 () -> {
                     while (isOpen){
-                        synchronized (directMessageQueue){
-                            while (directMessageQueue.isEmpty()){
+                        DirectMessage directMessage;
+                        synchronized (directMessageQueue) {
+                            while (directMessageQueue.isEmpty()) {
                                 try {
                                     directMessageQueue.wait();
                                 } catch (InterruptedException e) {
                                     System.err.println("ERROR IN DIRECT CHAT: " + e.getMessage());
                                 }
                             }
-
-                            DirectMessage directMessage = directMessageQueue.poll();
-                            VirtualClient addressee = directMessage.getAddresseeClient(connectedClients);
-                            try {
-                                addressee.displayMessage(directMessage.messenger(), directMessage.message());
-                            } catch (RemoteException e){
-                                String messenger = directMessage.messenger();
-                                centralServer.disconnect(messenger, connectedClients.get(messenger));
-                            }
+                            directMessage = directMessageQueue.poll();
+                        }
+                        VirtualClient addressee;
+                        synchronized (connectedClients) {
+                             addressee = directMessage.getAddresseeClient(connectedClients);
+                        }
+                        try {
+                            addressee.displayMessage(directMessage.messenger(), directMessage.message());
+                        } catch (RemoteException e){
+                            centralServer.disconnect(directMessage.addressee() , addressee);
                         }
                     }
                 }
@@ -108,29 +110,32 @@ public class ChatHandler{
         Thread bmThread = new Thread(
                 () -> {
                     List<String> disconnectingClients = new ArrayList<>(4);
+                    BroadcastMessage broadcastMessage;
                     while (isOpen){
-                        synchronized (broadcastMessageQueue){
-                            while (broadcastMessageQueue.isEmpty()){
+                        synchronized (broadcastMessageQueue) {
+                            while (broadcastMessageQueue.isEmpty()) {
                                 try {
                                     broadcastMessageQueue.wait();
                                 } catch (InterruptedException e) {
                                     System.err.println("ERROR IN BROADCAST CHAT: " + e.getMessage());
                                 }
                             }
-
-                            BroadcastMessage broadcastMessage = broadcastMessageQueue.poll();
-                            synchronized (connectedClients){
-                                for(String user : connectedClients.keySet()){
-                                    try {
-                                        VirtualClient addressee = connectedClients.get(user);
-                                        addressee.displayMessage(broadcastMessage.messenger(), broadcastMessage.message());
-                                    } catch (RemoteException e){
-                                        disconnectingClients.add(broadcastMessage.messenger());
+                             broadcastMessage = broadcastMessageQueue.poll();
+                        }
+                        synchronized (connectedClients){
+                            for(String user : connectedClients.keySet()){
+                                try {
+                                    VirtualClient addressee;
+                                    synchronized(connectedClients) {
+                                        addressee = connectedClients.get(user);
                                     }
+                                    addressee.displayMessage(broadcastMessage.messenger(), broadcastMessage.message());
+                                } catch (RemoteException e){
+                                    disconnectingClients.add(broadcastMessage.messenger());
                                 }
                             }
-                            disconnectConnectionLossClients(disconnectingClients);
                         }
+                        disconnectConnectionLossClients(disconnectingClients);
                     }
                 }
         );
@@ -145,7 +150,13 @@ public class ChatHandler{
 //endregion
     private void disconnectConnectionLossClients(List<String> disconnectedClients) {
         for(String nickname: disconnectedClients){
-            centralServer.disconnect(nickname, connectedClients.get(nickname));
+            VirtualClient client;
+            synchronized (connectedClients){
+                client = connectedClients.get(nickname);
+            }
+            try {
+                centralServer.disconnect(nickname, client);
+            } catch (IllegalStateException ignore){}
         }
         disconnectedClients.clear();
     }

@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,22 +38,28 @@ class TCPClientSocketTest {
     }
 
     private void waitExecution(TCPClientSocket client, int time){
-        pool.execute(
-                ()->{
-                    try {
-                        Thread.sleep(time);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        System.err.println("DISCONNECTING CLIENT");
-                        client.getProxy().disconnect();
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-        );
-        while (!client.isClosed());
+        CountDownLatch latch = new CountDownLatch(2);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch.countDown();
+            }
+        }, time/2, time/2);
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        timer.cancel();
+        try {
+            client.getProxy().disconnect();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

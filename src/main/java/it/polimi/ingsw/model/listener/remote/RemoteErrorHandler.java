@@ -3,19 +3,22 @@ package it.polimi.ingsw.model.listener.remote;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
-import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.errors.RemoteErrorEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RemoteErrorHandler implements GameListener {
     private final Map<String, VirtualClient> playerClients;
+    private final ExecutorService errorThreadPool;
 
     public RemoteErrorHandler() {
         this.playerClients = new Hashtable<>();
+        errorThreadPool = Executors.newCachedThreadPool();
     }
 
 
@@ -43,18 +46,20 @@ public class RemoteErrorHandler implements GameListener {
         try {
             error.executeEvent(client);
         } catch (RemoteException e) {
-            throw new ListenException(e);
+            System.err.println("ERROR WHILE TRYING TO REPORT TO " + addressee);
         }
     }
 
     private void broadcastError(RemoteErrorEvent errorEvent) throws ListenException {
         for(String username : playerClients.keySet()){
             VirtualClient client = playerClients.get(username);
-            try{
-                errorEvent.executeEvent(client);
-            } catch (RemoteException e){
-                throw new ListenException(e);
-            }
+            errorThreadPool.execute(() ->{
+                try{
+                    errorEvent.executeEvent(client);
+                } catch (RemoteException e){
+                    System.err.println("ERROR WHILE TRYING TO REPORT TO " + username);
+                }
+            });
         }
     }
 }
