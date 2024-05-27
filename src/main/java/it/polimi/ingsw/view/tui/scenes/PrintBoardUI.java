@@ -21,8 +21,8 @@ import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
 public class PrintBoardUI extends TUI_Scene {
     static final int cardSpacing = 4;
-    PrintCard printCard;
-    ViewBoard board;
+    private final PrintCard printCard;
+    private final ViewBoard board;
 
     public PrintBoardUI(ViewBoard board){
         super();
@@ -52,7 +52,7 @@ public class PrintBoardUI extends TUI_Scene {
             out.print(" " + playersOnI + RESET);
         }
 
-        out.println("\n\nCentral Board.    " + board.getGamePhase() + "\n");
+        out.println("\n\nCentral Board.    " + board.getGamePhase() + "    Turn "+ board.getCurrentTurn() +"\n");
 
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard())));

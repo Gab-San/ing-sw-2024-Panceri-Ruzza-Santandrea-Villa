@@ -37,6 +37,7 @@ public class ViewBoard {
         isPlayerDeadlocked = new Hashtable<>();
         scoreboard = new Hashtable<>();
         scoreboard.put(nickname, 0);
+        currentTurn = 0;
 
         playerAreas.put(nickname, new ViewPlayArea());
         isPlayerDeadlocked.put(nickname, false);
@@ -58,7 +59,7 @@ public class ViewBoard {
         return playerAreas.get(nickname);
     }
     public synchronized boolean isPlayerDeadlocked(String nickname) {
-        return isPlayerDeadlocked.get(nickname);
+        return isPlayerDeadlocked.getOrDefault(nickname, false);
     }
     public ViewPlayerHand getPlayerHand() {
         return playerHand;

@@ -3,17 +3,13 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CommandPassthrough;
-import it.polimi.ingsw.network.Parser;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.model.ViewPlayArea;
-import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.tui.scenes.PrintBoardUI;
 import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
 import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
 import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,13 +20,13 @@ public class TUI extends View{
     TUIParser parser;
     ViewBoard board;
     List<String> notificationBacklog;
-    Boolean timeouted;
+    Boolean hasServerTimeoutDisconnected;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.scanner = scanner;
-        timeouted = false;
+        hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
@@ -82,8 +78,8 @@ public class TUI extends View{
             try {
                 String input = scanner.nextLine();
                 synchronized (this) {
-                    if (timeouted) {
-                        throw new RemoteException("DISCONNECTED");
+                    if (hasServerTimeoutDisconnected) {
+                        throw new RemoteException("TIMEOUT");
                     }
                 }
                 parser.parseCommand(input);
@@ -152,7 +148,7 @@ public class TUI extends View{
         printCommandPrompt();
     }
     public synchronized void notifyTimeout(){
-        timeouted = true;
+        hasServerTimeoutDisconnected = true;
         showError("You have been disconnected for timeout!");
     }
 

@@ -183,10 +183,12 @@ public class Client {
             } catch (RemoteException e) {
                 cls();
                 view = null;
-                if(!e.getMessage().equals("DISCONNECTED"))
-                    System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
-                else
+                if(e.getMessage().equals("DISCONNECTED"))
                     System.out.println(GREEN_TEXT + "Disconnection succeeded. Returning to main menu." + RESET);
+                else if(e.getMessage().equals("TIMEOUT"))
+                    System.out.println(RED_TEXT + "Server disconnected you for inactivity. Returning to main menu." + RESET);
+                else
+                    System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
             }
         }
 
