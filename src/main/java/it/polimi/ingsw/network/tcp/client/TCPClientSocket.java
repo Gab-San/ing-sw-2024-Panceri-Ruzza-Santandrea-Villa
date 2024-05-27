@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.tcp.message.*;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -83,6 +84,8 @@ public class TCPClientSocket implements VirtualClient{
                                 proxy.addCheck((TCPServerCheckMessage) commandFromServer);
                             }
                         }
+                    } catch(EOFException eofException) {
+                        System.err.println("REACHED EOS!");
                     } catch (IOException e) {
                         closeSocket();
                     } catch (ClassNotFoundException e) {

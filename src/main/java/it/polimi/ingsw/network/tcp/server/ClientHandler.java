@@ -4,19 +4,16 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
-import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
-import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
-import it.polimi.ingsw.network.tcp.message.*;
-
-import it.polimi.ingsw.network.tcp.message.commands.PingMessage;
-
+import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.tcp.message.TCPClientCheckMessage;
+import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
+import it.polimi.ingsw.network.tcp.message.TCPMessage;
 import it.polimi.ingsw.network.tcp.message.check.CheckMessage;
 import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
 
-
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -47,33 +44,8 @@ public class ClientHandler implements Runnable, VirtualServer {
         serverRef = CentralServer.getSingleton();
         proxy = new ClientProxy(this, outputStream);
         startCommandExecutor();
-//        startErrorExecutor();
     }
 //region SOCKET THREADS
-
-//TODO check if the startErrorExecutor is needed
-
-//    private void startErrorExecutor() {
-//        new Thread(
-//                () -> {
-//                    while(!connectionSocket.isClosed()){
-//                        TCPClientCheckMessage errorMessage;
-//                        synchronized (errorQueue){
-//                            while(errorQueue.isEmpty()){
-//                                try{
-//                                    errorQueue.wait();
-//                                } catch (InterruptedException e){
-//                                    throw new RuntimeException(e);
-//                                }
-//                            }
-//
-//                            errorMessage = errorQueue.remove();
-//                        }
-//                        errorMessage.handle(this);
-//                    }
-//                }
-//        ).start();
-//    }
 
     private void startCommandExecutor(){
         new Thread(
@@ -129,7 +101,9 @@ public class ClientHandler implements Runnable, VirtualServer {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch(EOFException eofException) {
+            System.err.println("REACHED EOS!");
+        }catch (IOException e) {
             closeSocket();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -222,13 +196,7 @@ public class ClientHandler implements Runnable, VirtualServer {
 
     @Override
     public void ping() throws RemoteException {
-        try{
-            outputStream.writeObject(new PingMessage());
-            outputStream.flush();
-            outputStream.reset();
-        } catch (IOException e) {
-            closeSocket();
-        }
+        return;
     }
 
 
@@ -272,15 +240,9 @@ public class ClientHandler implements Runnable, VirtualServer {
 //region SOCKET FUNCTIONS
     void closeSocket(){
         try {
-            if(inputStream != null){
-                inputStream.close();
-            }
-
-            if(outputStream != null){
-                outputStream.close();
-            }
-
             if(!connectionSocket.isClosed()) {
+                inputStream.close();
+                outputStream.close();
                 connectionSocket.close();
             }
         } catch (IOException ignore) {

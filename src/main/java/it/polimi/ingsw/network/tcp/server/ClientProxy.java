@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
+import it.polimi.ingsw.network.tcp.message.commands.PingMessage;
 import it.polimi.ingsw.network.tcp.message.commands.SendMessage;
 import it.polimi.ingsw.network.tcp.message.error.DisconnectErrorMessage;
 import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
@@ -56,7 +57,13 @@ public class ClientProxy implements VirtualClient {
 
     @Override
     public synchronized void ping() throws RemoteException {
-        clientHandler.ping();
+        try{
+            outputStream.writeObject(new PingMessage());
+            outputStream.flush();
+            outputStream.reset();
+        } catch (IOException e) {
+            clientHandler.closeSocket();
+        }
     }
 
     @Override

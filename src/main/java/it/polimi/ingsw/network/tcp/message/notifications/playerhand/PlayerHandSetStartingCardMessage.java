@@ -3,9 +3,12 @@ package it.polimi.ingsw.network.tcp.message.notifications.playerhand;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.notifications.player.PlayerMessage;
 
+import java.io.Serial;
 import java.rmi.RemoteException;
 
 public class PlayerHandSetStartingCardMessage extends PlayerMessage {
+    @Serial
+    private static final long serialVersionUID = -84684359874354L;
     private final String startingCardId;
     public PlayerHandSetStartingCardMessage(String nickname, String startingCardId) {
         super(nickname);
