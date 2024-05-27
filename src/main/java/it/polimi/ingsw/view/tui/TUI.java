@@ -15,11 +15,12 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class TUI extends View{
-    private static final int NOTIFICATION_BACKLOG_SIZE = 30;
-    Scanner scanner;
-    TUIParser parser;
-    ViewBoard board;
-    List<String> notificationBacklog;
+    private static final int BACKLOG_SIZE = 30;
+    private final Scanner scanner;
+    private TUIParser parser;
+    private ViewBoard board;
+    private final List<String> notificationBacklog;
+    private final List<String> chatBacklog;
     Boolean hasServerTimeoutDisconnected;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
@@ -28,6 +29,7 @@ public class TUI extends View{
         this.scanner = scanner;
         hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
+        this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
 
@@ -140,11 +142,20 @@ public class TUI extends View{
     }
     @Override
     public void showNotification(String notification) {
-        if(notificationBacklog.size() >= NOTIFICATION_BACKLOG_SIZE){
+        if(notificationBacklog.size() >= BACKLOG_SIZE){
             notificationBacklog.remove(0);
         }
         notificationBacklog.add(notification);
         currentScene.displayNotification(notificationBacklog);
+        printCommandPrompt();
+    }
+    @Override
+    public void showChatMessage(String msg){
+        if(chatBacklog.size() >= BACKLOG_SIZE){
+            chatBacklog.remove(0);
+        }
+        chatBacklog.add(msg);
+        currentScene.displayChatMessage(chatBacklog);
         printCommandPrompt();
     }
     public synchronized void notifyTimeout(){

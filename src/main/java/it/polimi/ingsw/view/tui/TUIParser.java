@@ -37,13 +37,10 @@ public class TUIParser {
             case "move":
                 parseMoveCommand(cmdArgs);
                 break;
-            case "view":
-            case "goto":
+            case "view", "goto":
                 parseViewCommand(cmdArgs);
                 break;
-            case "flip":
-            case "turn":
-            case "turnover":
+            case "flip", "turn", "turnover":
                 parseFlipCommand(cmdArgs);
                 break;
             default:

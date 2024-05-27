@@ -33,7 +33,7 @@ public class ModelUpdater implements VirtualClient {
         this.verbose = verbose;
     }
     public void update(String msg) {
-        view.showNotification(msg);
+        view.showChatMessage(msg);
     } //TODO: remove this or use it as updateChat / generic notification
     public void ping() { } //TODO: remove ping()
 
@@ -64,7 +64,9 @@ public class ModelUpdater implements VirtualClient {
     public void reportError(String errorMessage) {
         view.showError(errorMessage);
     }
-
+    public void showChatMessage(String message){
+        view.showChatMessage(message);
+    }
     public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);

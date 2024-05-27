@@ -37,6 +37,11 @@ public class GUI extends View {
     }
 
     @Override
+    public void showChatMessage(String msg) {
+
+    }
+
+    @Override
     public void notifyTimeout() {
 
     }

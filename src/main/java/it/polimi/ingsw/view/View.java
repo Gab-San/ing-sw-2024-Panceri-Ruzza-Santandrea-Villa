@@ -23,6 +23,7 @@ public abstract class View {
     public abstract void update(SceneID sceneID, String description);
     public abstract void showError(String errorMsg);
     public abstract void showNotification(String notification);
+    public abstract void showChatMessage(String msg);
     public abstract void notifyTimeout();
     public abstract void run() throws RemoteException;
 }
