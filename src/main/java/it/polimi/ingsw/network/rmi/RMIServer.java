@@ -30,7 +30,7 @@ public class RMIServer implements VirtualServer {
         VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         this.registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
-        System.out.println("RMI server waiting for client...");
+        System.out.println("RMI server waiting for client on port "+ connectionPort +"...");
     }
 
 

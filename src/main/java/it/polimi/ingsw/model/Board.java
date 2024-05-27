@@ -69,7 +69,7 @@ public class Board implements GameSubject{
         // Probably should notify
         playerAreas = new Hashtable<>();
         // Controlled in Board
-        setGamePhase(GamePhase.CREATE);
+        gamePhase = GamePhase.CREATE;
 
         resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
         goldDeck = new PlayableDeck(Board.GOLD_DECK, new GoldCardFactory(), 5);
@@ -212,6 +212,7 @@ public class Board implements GameSubject{
 
     public void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
+        System.out.println("GamePhase update: " + gamePhase);
         notifyAllListeners(new ChangePhaseEvent(gamePhase));
     }
 //endregion
@@ -540,9 +541,10 @@ public class Board implements GameSubject{
     /**
      * Reconnects player with given nickname
      * @param nickname player's nickname
-     * @throws IllegalStateException if there is no player with given nickname or if player is already connected
+     * @throws IllegalStateException if player is already connected
+     * @throws IllegalArgumentException if there is no player with given nickname
      */
-    public void reconnectPlayer(String nickname) throws IllegalStateException{
+    public void reconnectPlayer(String nickname) throws IllegalStateException, IllegalArgumentException{
         Player player = getPlayerByNickname(nickname);
         if(player.isConnected())
             throw new IllegalStateException("Player " + nickname + " is already connected.");

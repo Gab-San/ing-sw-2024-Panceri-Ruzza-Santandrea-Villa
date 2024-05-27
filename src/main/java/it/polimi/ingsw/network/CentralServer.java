@@ -83,6 +83,8 @@ public class CentralServer {
         if(playerClients.containsValue(client))
             throw new IllegalStateException("Client already connected!");
 
+        String clientName = client.toString(); //TODO: remove this
+
         if(playerClients.containsKey(nickname)){
             try{
                 playerClients.get(nickname).ping();
@@ -100,17 +102,16 @@ public class CentralServer {
             }
         } else {
             try{
-                try {
-                    gameRef.join(nickname, client);
-                } catch (IllegalArgumentException exception){
-                    throw new IllegalStateException(exception.getMessage());
-                }
+                gameRef.join(nickname, client);
                 playerClients.put(nickname, client);
-            }catch (IllegalStateException e) {
+            }catch (IllegalStateException | IllegalArgumentException e) {
                 throw new IllegalStateException("Player can't connect to game\n" +
                     "Error message: " + e.getMessage());
             }
         }
+
+        //FIXME: curious thing: adding a print here of client.toString() blocks updates
+        System.out.println(colorize(nickname + " has connected! Client instance: " + clientName, Attribute.GREEN_TEXT()));
     }
 
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
@@ -124,6 +125,7 @@ public class CentralServer {
                     commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
             );
         }
+        System.out.println(colorize(nickname + " has disconnected!", Attribute.MAGENTA_TEXT()));
     }
 
     public synchronized void updateMsg(String fullMessage) {
