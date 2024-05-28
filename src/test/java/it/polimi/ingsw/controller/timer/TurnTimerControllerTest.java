@@ -18,6 +18,14 @@ class TurnTimerControllerTest {
     }
 
     @Test
+    void timerTest2() throws InterruptedException {
+        PuppetController2 controller = new PuppetController2();
+        controller.join("Gamba", new PuppetClient());
+        Thread.sleep(5000);
+        while(controller.contains("Fibonacci"));
+    }
+
+    @Test
     void timerTestStop() throws InterruptedException {
         PuppetController2 controller = new PuppetController2();
         controller.join("Giacomo", new PuppetClient());

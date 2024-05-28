@@ -57,9 +57,13 @@ public class PlayState extends GameState {
         board.disconnectPlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);
         Player player = board.getCurrentPlayer();
+
+        timerCurrPlayer.stopTimer(player);
+
         if(player.getNickname().equals(nickname)){
             postDrawChecks();
         }
+
         if(board.getPlayerAreas().keySet().stream()
                 // only look at players that are connected
                 .filter(Player:: isConnected)

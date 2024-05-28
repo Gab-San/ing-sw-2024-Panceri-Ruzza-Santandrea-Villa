@@ -531,9 +531,6 @@ public class Board implements GameSubject{
         return playerAreas.keySet().stream()
                 .filter(p -> p.getNickname().equals(nickname))
                 .findFirst().orElseThrow(()->{
-                    // FIXME a client cannot connect to the game without calling connect,
-                    //  if this client cannot connect than a notification cannot be sent to it
-                    //  how does this error is notified to the malevolous client?
                     notifyAllListeners(new IllegalGameAccessError("all", ("Cannot find a player with given nickname " + "'" + nickname + "'" + " in this game").toUpperCase()) );
                     return new IllegalArgumentException("Cannot find a player with given nickname " + "'" + nickname + "'" + " in this game");
                 });
@@ -632,7 +629,7 @@ public class Board implements GameSubject{
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) {
+    public void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListeners){
             listener.listen(event);
         }

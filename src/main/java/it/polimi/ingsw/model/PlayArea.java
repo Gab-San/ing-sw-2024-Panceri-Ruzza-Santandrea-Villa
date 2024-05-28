@@ -201,7 +201,7 @@ public class PlayArea implements GameSubject {
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) {
+    public void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListeners){
             listener.listen(event);
         }

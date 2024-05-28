@@ -34,7 +34,7 @@ public class TurnTimerController {
      * @param currPlayer player whose turn is starting
      * @param turnTimeSeconds time of each turn in seconds
      */
-    public void startTimer(Player currPlayer, int turnTimeSeconds){
+    public synchronized void startTimer(Player currPlayer, int turnTimeSeconds){
         //System.out.println(colorize("Starting Timer for " + currPlayer.getNickname(), Attribute.BRIGHT_BLUE_TEXT()));
         TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds);
         Future<?> timerFuture = timersPool.submit(timer);
@@ -45,21 +45,23 @@ public class TurnTimerController {
      * Stops the player timer if running
      * @param currPlayer the player whose turn has finished
      */
-    public void stopTimer(Player currPlayer){
+    public synchronized void stopTimer(Player currPlayer){
         Future<?> task = tasks.get(currPlayer);
-        task.cancel(true);
-        tasks.remove(currPlayer);
+        if(task != null) {
+            task.cancel(true);
+            tasks.remove(currPlayer);
+        }
     }
 
 
 
-    public void startAll(List<Player> playerList, int turnTime){
+    public synchronized void startAll(List<Player> playerList, int turnTime){
         for(Player player: playerList){
             startTimer(player, turnTime);
         }
     }
 
-    public void stopAll(){
+    public synchronized void stopAll(){
         List<Player> stoppingTimers = new ArrayList<>(tasks.keySet());
 
         for(Player player: stoppingTimers){

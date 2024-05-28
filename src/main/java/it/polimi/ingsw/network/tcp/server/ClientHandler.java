@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.tcp.server;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -21,6 +22,8 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class ClientHandler implements Runnable, VirtualServer {
 
@@ -159,6 +162,12 @@ public class ClientHandler implements Runnable, VirtualServer {
         }
         serverRef.disconnect(nickname, client);
         proxy.sendCheck(new CheckMessage());
+        closeSocket();
+    }
+
+    public void forceDisconnect(String nickname, VirtualClient client){
+        System.out.println(colorize("DISCONNECTING CLIENT " + nickname, Attribute.BLUE_TEXT()));
+        serverRef.disconnect(nickname, client);
         closeSocket();
     }
 

@@ -35,7 +35,7 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
-        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 10);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SetupState extends GameState{
         disconnectingPlayers.remove(nickname);
 
         if(!board.getPlayerAreas().keySet().stream().map(Player::getNickname).toList().contains(nickname))
-            throw  new IllegalArgumentException(nickname+" non fa parte della partita");
+            throw new IllegalArgumentException(nickname+" non fa parte della partita");
 
 
         board.disconnectPlayer(nickname);
@@ -65,6 +65,9 @@ public class SetupState extends GameState{
                 .filter(Player:: isConnected)
                 .collect(Collectors.toSet());
         System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
+
+//        timers.stopTimer(board.getPlayerByNickname(nickname));
+
         if(connectedPlayers .isEmpty()) {
             //se si sono disconnessi tutti i giocatori => torno a creation state
             for(Player p : new HashSet<>(board.getPlayerAreas().keySet()))

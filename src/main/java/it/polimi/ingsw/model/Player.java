@@ -86,7 +86,7 @@ public class Player implements GameSubject {
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) {
+    public void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListenerList){
             listener.listen(event);
         }

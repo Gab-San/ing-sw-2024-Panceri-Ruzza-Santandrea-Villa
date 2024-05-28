@@ -16,6 +16,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 
+import static com.diogonunes.jcolor.Ansi.colorize;
+
 public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     private final RMIServerProxy proxy;
@@ -428,12 +430,19 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      */
     @Override
     public void reportError(String errorMessage) throws RemoteException {
-
+        System.out.println(colorize(errorMessage));
     }
 
     @Override
     public void notifyTimeoutDisconnect() throws RemoteException{
-        proxy.disconnect();
+        System.err.println("TRYING TO DISCONNECT");
+        try {
+            proxy.disconnect();
+        } catch (RuntimeException e){
+            System.err.println(e.getMessage());
+        } catch (RemoteException e){
+            System.err.println(e.getMessage());
+        }
         System.err.println("YOU WERE DISCONNECTED FOR BEING IDLE");
     }
 

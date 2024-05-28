@@ -1,45 +1,69 @@
 package it.polimi.ingsw.controller.timer;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.remote.errors.PingEvent;
 import it.polimi.ingsw.model.listener.remote.errors.TimeoutDisconnectEvent;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
+
 public class TurnTimer implements Runnable{
 
     private final Player player;
     private final BoardController controller;
-    private final int pingTimeSeconds = 20;
-    private int secondsElapsed;
+    private final int turnTime;
+
     public TurnTimer(BoardController controller, Player player, int turnTime){
         this.player = player;
-        secondsElapsed = turnTime;
+        this.turnTime = turnTime;
         this.controller = controller;
     }
 
     @Override
     public void run() {
-        while(secondsElapsed > 0){
-            try {
-                if(secondsElapsed % pingTimeSeconds == 0) {
-                    try {
-                        player.notifyAllListeners(new PingEvent(player.getNickname()));
-                    } catch (ListenException connectionException) {
-                        controller.disconnect(player.getNickname());
-                    }
-                }
+        System.out.println(colorize("STARTING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
+        long pingTimeMillis = 20000;
 
-                Thread.sleep(1000);
-                secondsElapsed--;
+        CountDownLatch latch = new CountDownLatch(turnTime);
+        Timer timer = new Timer();
+        Timer pingTimer = new Timer();
 
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch.countDown();
             }
+        }, 1000, 1000);
+
+        pingTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    player.notifyAllListeners(new PingEvent(player.getNickname()));
+                } catch (ListenException connectionException) {
+                    System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
+                    player.notifyAllListeners(new TimeoutDisconnectEvent(player.getNickname()));
+                }
+            }
+        }, pingTimeMillis, pingTimeMillis);
+
+        try {
+            latch.await();
+            timer.cancel();
+            pingTimer.cancel();
+        } catch (InterruptedException e) {
+            System.err.println("TIMER INTERRUPTED");
+            return;
         }
+        
+        System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
         player.notifyAllListeners(new TimeoutDisconnectEvent(player.getNickname()));
-        controller.disconnect(player.getNickname());
     }
 
 }

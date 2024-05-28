@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
+import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.enums.CornerDirection;
 import it.polimi.ingsw.model.enums.PlayerColor;
@@ -13,6 +14,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class RMIServer implements VirtualServer {
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
@@ -53,6 +56,7 @@ public class RMIServer implements VirtualServer {
 
     @Override
     public void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException, RemoteException {
+        System.out.println(colorize("DISCONNECTING CLIENT " + nickname, Attribute.BLUE_TEXT()));
         serverRef.disconnect(nickname, client);
     }
 

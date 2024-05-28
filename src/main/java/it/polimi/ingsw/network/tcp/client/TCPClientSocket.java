@@ -534,7 +534,7 @@ public class TCPClientSocket implements VirtualClient{
 
     @Override
     public void notifyTimeoutDisconnect() throws RemoteException {
-
+        System.out.println("YOU HAVE BEEN DISCONNECTED!");
     }
 
 //endregion

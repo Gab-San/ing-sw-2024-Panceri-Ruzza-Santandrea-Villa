@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.deck;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.deck.cardfactory.CardFactory;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
@@ -114,7 +113,7 @@ public class PlayableDeck implements GameSubject {
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) {
+    public void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListenerList){
             listener.listen(event);
         }
