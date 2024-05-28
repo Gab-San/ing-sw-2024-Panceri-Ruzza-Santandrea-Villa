@@ -101,6 +101,7 @@ public class PrintPlayAreaTest {
                         .filter(c -> c.getDirection() == TR || c.getDirection() == BR)
                         .toList();
             }
+            if(rightCorners.isEmpty()) continue;
             int randomCornerIdx = random.nextInt(rightCorners.size());
             ViewCorner corner = rightCorners.get(randomCornerIdx);
             Point position = corner.getCardRef().getPosition().move(corner.getDirection());

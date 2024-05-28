@@ -84,8 +84,6 @@ public class CentralServer {
         if(playerClients.containsValue(client))
             throw new IllegalStateException("Client already connected!");
 
-        String clientName = client.toString(); //TODO: remove this
-
         if(playerClients.containsKey(nickname)){
             try{
                 playerClients.get(nickname).ping();
@@ -112,7 +110,6 @@ public class CentralServer {
                     "Error message: " + e.getMessage());
             }
         }
-
     }
 
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
