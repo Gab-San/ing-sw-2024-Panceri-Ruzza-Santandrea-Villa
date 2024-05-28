@@ -434,15 +434,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void notifyTimeoutDisconnect() throws RemoteException{
-        System.err.println("TRYING TO DISCONNECT");
-        try {
-            proxy.disconnect();
-        } catch (RuntimeException e){
-            System.err.println(e.getMessage());
-        } catch (RemoteException e){
-            System.err.println(e.getMessage());
-        }
+    public void notifyIndirectDisconnect() throws RemoteException{
         System.err.println("YOU WERE DISCONNECTED FOR BEING IDLE");
     }
 

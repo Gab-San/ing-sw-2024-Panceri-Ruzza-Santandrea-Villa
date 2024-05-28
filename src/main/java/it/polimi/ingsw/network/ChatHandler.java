@@ -155,8 +155,8 @@ public class ChatHandler{
                 client = connectedClients.get(nickname);
             }
             try {
-                centralServer.disconnect(nickname, client);
-            } catch (IllegalStateException ignore){}
+                client.notifyIndirectDisconnect();
+            } catch (RemoteException ignore) {}
         }
         disconnectedClients.clear();
     }

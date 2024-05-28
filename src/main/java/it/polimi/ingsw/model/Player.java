@@ -74,26 +74,26 @@ public class Player implements GameSubject {
 
 
     @Override
-    public void addListener(GameListener listener) {
+    public synchronized void addListener(GameListener listener) {
         gameListenerList.add(listener);
         notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected, turn, color));
         hand.addListener(listener);
     }
 
     @Override
-    public void removeListener(GameListener listener) {
+    public synchronized void removeListener(GameListener listener) {
         gameListenerList.remove(listener);
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
+    public synchronized void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListenerList){
             listener.listen(event);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+    public synchronized void notifyListener(GameListener listener, GameEvent event) throws ListenException {
         listener.listen(event);
     }
 }

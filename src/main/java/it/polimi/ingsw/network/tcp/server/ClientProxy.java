@@ -217,10 +217,9 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void notifyTimeoutDisconnect() throws RemoteException {
-        System.out.println("This client is trying to disconnect: " + nickname);
+    public synchronized void notifyIndirectDisconnect() throws RemoteException {
         sendNotification(new DisconnectErrorMessage());
-        clientHandler.forceDisconnect(nickname, this);
+        clientHandler.closeSocket();
     }
 
 

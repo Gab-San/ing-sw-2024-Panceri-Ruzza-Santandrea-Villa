@@ -319,5 +319,5 @@ public interface VirtualClient extends Remote{
     /**
      * Reports the timeout notification
      */
-    void notifyTimeoutDisconnect() throws RemoteException;
+    void notifyIndirectDisconnect() throws RemoteException;
 }

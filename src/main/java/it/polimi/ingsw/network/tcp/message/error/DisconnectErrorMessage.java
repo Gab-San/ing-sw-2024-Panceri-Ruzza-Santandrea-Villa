@@ -16,6 +16,6 @@ public class DisconnectErrorMessage implements TCPServerMessage {
 
     @Override
     public void execute(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.notifyTimeoutDisconnect();
+        virtualClient.notifyIndirectDisconnect();
     }
 }

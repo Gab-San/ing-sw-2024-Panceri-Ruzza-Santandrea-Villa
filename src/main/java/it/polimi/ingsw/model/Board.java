@@ -618,25 +618,25 @@ public class Board implements GameSubject{
     }
 
     @Override
-    public void addListener(GameListener listener) {
+    public synchronized void addListener(GameListener listener) {
         gameListeners.add(listener);
         notifyListener(listener, new BoardStateUpdateEvent(currentTurn, scoreboard, gamePhase, isPlayerDeadlocked));
     }
 
     @Override
-    public void removeListener(GameListener listener) {
+    public synchronized void removeListener(GameListener listener) {
         gameListeners.remove(listener);
     }
 
     @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
+    public synchronized void notifyAllListeners(GameEvent event) throws ListenException {
         for(GameListener listener: gameListeners){
             listener.listen(event);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
+    public synchronized void notifyListener(GameListener listener, GameEvent event) throws ListenException {
         listener.listen(event);
     }
 

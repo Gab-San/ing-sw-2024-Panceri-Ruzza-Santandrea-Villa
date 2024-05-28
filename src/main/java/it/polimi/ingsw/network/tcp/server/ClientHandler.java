@@ -165,12 +165,6 @@ public class ClientHandler implements Runnable, VirtualServer {
         closeSocket();
     }
 
-    public void forceDisconnect(String nickname, VirtualClient client){
-        System.out.println(colorize("DISCONNECTING CLIENT " + nickname, Attribute.BLUE_TEXT()));
-        serverRef.disconnect(nickname, client);
-        closeSocket();
-    }
-
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour)  {
         try {

@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.remote.errors.PingEvent;
-import it.polimi.ingsw.model.listener.remote.errors.TimeoutDisconnectEvent;
+import it.polimi.ingsw.model.listener.remote.errors.IndirectDisconnectEvent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,7 +48,7 @@ public class TurnTimer implements Runnable{
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
                     System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
-                    player.notifyAllListeners(new TimeoutDisconnectEvent(player.getNickname()));
+                    player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
                 }
             }
         }, pingTimeMillis, pingTimeMillis);
@@ -63,7 +63,7 @@ public class TurnTimer implements Runnable{
         }
         
         System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
-        player.notifyAllListeners(new TimeoutDisconnectEvent(player.getNickname()));
+        player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
     }
 
 }

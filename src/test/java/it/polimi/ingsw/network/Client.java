@@ -4,7 +4,6 @@ import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 
 import java.io.IOException;
-import java.net.StandardSocketOptions;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -18,7 +17,7 @@ public class Client {
             System.out.println("RMI OR TCP?");
 
             String line = scanner.nextLine();
-            if (line.equalsIgnoreCase("rmi")) {
+            if (line.trim().equalsIgnoreCase("rmi")) {
                 try {
                     RMIClient rmiClient = new RMIClient(1234);
                     proxy = rmiClient.getProxy();

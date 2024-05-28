@@ -272,7 +272,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void notifyTimeoutDisconnect() {
+    public void notifyIndirectDisconnect() {
 
     }
 

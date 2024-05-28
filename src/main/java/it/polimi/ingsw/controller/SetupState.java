@@ -120,7 +120,7 @@ public class SetupState extends GameState{
 
         board.placeStartingCard(player, placeOnFront);
 
-        timers.stopTimer(player);
+//        timers.stopTimer(player);
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);

@@ -245,7 +245,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void notifyTimeoutDisconnect() {
+    public void notifyIndirectDisconnect() {
 
     }
 
