@@ -2,13 +2,11 @@ package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.PlaceableCard;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
-import static it.polimi.ingsw.model.enums.CornerDirection.BL;
-import static it.polimi.ingsw.model.enums.GameResource.*;
-import static it.polimi.ingsw.model.enums.GameResource.WOLF;
+import static it.polimi.ingsw.CornerDirection.*;
+import static it.polimi.ingsw.CornerDirection.BL;
+import static it.polimi.ingsw.GameResource.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PatternObjectiveCardTest extends BaseObjectiveCardTest {

@@ -2,8 +2,8 @@ package it.polimi.ingsw.network.rmi;
 
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.VirtualClient;
@@ -33,7 +33,7 @@ public class RMIServer implements VirtualServer {
         VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
         this.registry = LocateRegistry.createRegistry(REGISTRY_PORT);
         registry.rebind(CANONICAL_NAME, stub);
-        System.out.println("RMI server waiting for client...");
+        System.out.println("RMI server waiting for client on port "+ connectionPort +"...");
     }
 
 

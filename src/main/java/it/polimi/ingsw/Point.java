@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
+import java.util.List;
 
 public record Point(int row, int col) {
     /**
@@ -36,7 +36,14 @@ public record Point(int row, int col) {
      * @param directions ordered sequence of moves to apply to this point
      * @return the destination point obtained by applying successive moves
      */
-    public Point move(CornerDirection ...directions){
+    public Point move(CornerDirection...directions){
+        Point p = this;
+        for (CornerDirection c : directions){
+            p = p.move(c);
+        }
+        return p;
+    }
+    public Point move(List<CornerDirection> directions){
         Point p = this;
         for (CornerDirection c : directions){
             p = p.move(c);

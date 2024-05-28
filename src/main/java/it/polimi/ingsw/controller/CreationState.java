@@ -3,15 +3,14 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.List;
-
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.PlayerColor;
 
 public class CreationState extends GameState{
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {

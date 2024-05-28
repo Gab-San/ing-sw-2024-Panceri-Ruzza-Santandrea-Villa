@@ -3,8 +3,8 @@ package it.polimi.ingsw.model.cards.cardstrategies;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.GoldCard;
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GameResource;
 
 public class CornerCoverGoldCard implements GoldCardStrategy{
     /**

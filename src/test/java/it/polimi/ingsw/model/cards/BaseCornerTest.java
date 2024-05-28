@@ -1,13 +1,13 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.enums.CornerDirection;
+import it.polimi.ingsw.CornerDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static it.polimi.ingsw.model.enums.GameResource.BUTTERFLY;
-import static it.polimi.ingsw.model.enums.GameResource.FILLED;
+import static it.polimi.ingsw.GameResource.BUTTERFLY;
+import static it.polimi.ingsw.GameResource.FILLED;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BaseCornerTest {

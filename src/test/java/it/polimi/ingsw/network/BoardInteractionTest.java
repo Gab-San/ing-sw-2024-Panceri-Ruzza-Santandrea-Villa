@@ -4,6 +4,9 @@ import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
+import it.polimi.ingsw.network.testingStub.PuppetModelUpdater;
+import it.polimi.ingsw.view.ModelUpdater;
+import it.polimi.ingsw.view.model.ViewBoard;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -117,6 +120,7 @@ public class BoardInteractionTest {
     @DisplayName("Connecting after reaching max players")
     void testConnect() throws IOException, NotBoundException {
         RMIClient client = new RMIClient("localhost", 1234);
+        client.setModelUpdater(new PuppetModelUpdater());
 
         client.getProxy().connect("Salatino");
         client.getProxy().setNumOfPlayers(5);

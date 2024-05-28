@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.enums;
+package it.polimi.ingsw;
 
 /**
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)

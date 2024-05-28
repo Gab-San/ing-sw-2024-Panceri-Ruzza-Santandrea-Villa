@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.json.deserializers;
 
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 
 import java.util.List;
 

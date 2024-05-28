@@ -3,15 +3,15 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static it.polimi.ingsw.model.enums.GameResource.*;
-import static it.polimi.ingsw.model.enums.CornerDirection.*;
+import static it.polimi.ingsw.GameResource.*;
+import static it.polimi.ingsw.CornerDirection.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayAreaTest {

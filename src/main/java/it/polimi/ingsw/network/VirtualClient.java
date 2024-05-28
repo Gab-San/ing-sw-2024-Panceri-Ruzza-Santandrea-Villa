@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.GameResource;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 
@@ -123,9 +123,6 @@ public interface VirtualClient extends Remote{
      */
     void removePlayer(String nickname) throws RemoteException;
 
-
-
-
     /**
      * Notifies about the current state of the deck.
      *<p>
@@ -215,6 +212,8 @@ public interface VirtualClient extends Remote{
      * @throws RemoteException if a connection error occurs
      */
     void emptyFaceDownPile(char deck) throws RemoteException;
+
+
 
     /**
      * Notifies about the current player's hand status
@@ -306,8 +305,6 @@ public interface VirtualClient extends Remote{
      * @throws RemoteException if an error during connection occurs
      */
     void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException;
-
-
 
     /**
      * Reports an error occurred while evaluating player action.

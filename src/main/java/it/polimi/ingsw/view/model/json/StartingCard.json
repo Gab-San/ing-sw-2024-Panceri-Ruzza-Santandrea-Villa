@@ -1,0 +1,74 @@
+[
+    {
+      "cardId": "S0",
+      "centralFrontResources": ["B"],
+      "corners": [
+        {"direction": "TL", "frontResource": "N","backResource": "M"},
+        {"direction": "TR", "frontResource": "L","backResource": "L"},
+        {"direction": "BL", "frontResource": "B", "backResource": "B"},
+        {"direction": "BR", "frontResource": "N", "backResource": "W"}
+      ],
+      "frontImageFileName": "img_S0_front.png",
+      "backImageFileName": "img_S0_back.png"
+    },
+    {
+      "cardId": "S1",
+      "centralFrontResources": ["M"],
+      "corners": [
+        {"direction": "TL", "frontResource": "W", "backResource": "L"},
+        {"direction": "TR", "frontResource": "N", "backResource": "W"},
+        {"direction": "BL", "frontResource": "N", "backResource": "M"},
+        {"direction": "BR", "frontResource": "M", "backResource": "B"}
+      ],
+      "frontImageFileName": "img_S1_front.png",
+      "backImageFileName": "img_S1_back.png"
+    },
+    {
+      "cardId": "S2",
+      "centralFrontResources": ["L", "M"],
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "B"},
+        {"direction": "TR", "frontResource": "N", "backResource": "W"},
+        {"direction": "BL", "frontResource": "N", "backResource": "M"},
+        {"direction": "BR", "frontResource": "N", "backResource": "L"}
+      ],
+      "frontImageFileName": "img_S2_front.png",
+      "backImageFileName": "img_S2_back.png"
+    },
+    {
+      "cardId": "S3",
+      "centralFrontResources": ["W", "B"],
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "L"},
+        {"direction": "TR", "frontResource": "N", "backResource": "B"},
+        {"direction": "BL", "frontResource": "N", "backResource": "W"},
+        {"direction": "BR", "frontResource": "N", "backResource": "M"}
+      ],
+      "frontImageFileName": "img_S3_front.png",
+      "backImageFileName": "img_S3_back.png"
+    },
+    {
+      "cardId": "S4",
+      "centralFrontResources": ["W", "B", "L"],
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "B"},
+        {"direction": "TR", "frontResource": "N", "backResource": "M"},
+        {"direction": "BL", "frontResource": "F", "backResource": "L"},
+        {"direction": "BR", "frontResource": "F", "backResource": "W"}
+      ],
+      "frontImageFileName": "img_S4_front.png",
+      "backImageFileName": "img_S4_back.png"
+    },
+    {
+      "cardId": "S5",
+      "centralFrontResources": ["L", "W", "M"],
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "M"},
+        {"direction": "TR", "frontResource": "N", "backResource": "W"},
+        {"direction": "BL", "frontResource": "F", "backResource": "L"},
+        {"direction": "BR", "frontResource": "F", "backResource": "B"}
+      ],
+      "frontImageFileName": "img_S5_front.png",
+      "backImageFileName": "img_S5_back.png"
+    }
+]

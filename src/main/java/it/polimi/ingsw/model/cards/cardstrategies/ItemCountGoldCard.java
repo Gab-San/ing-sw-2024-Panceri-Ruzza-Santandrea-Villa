@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.cardstrategies;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.GoldCard;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 
 public class ItemCountGoldCard implements GoldCardStrategy{
     private final GameResource item;

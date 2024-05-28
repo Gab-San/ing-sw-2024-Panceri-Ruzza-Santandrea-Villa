@@ -12,4 +12,9 @@ public interface ObjectiveStrategy {
      * @return number of times this objective is satisfied on the given playArea
      */
     int calculateSolves(@NotNull PlayArea playArea);
+
+    /**
+     * @return the name of this strategy
+     */
+    String toString();
 }

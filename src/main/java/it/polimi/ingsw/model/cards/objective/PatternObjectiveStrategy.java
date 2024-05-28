@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.cards.objective;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.PlaceableCard;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -59,7 +59,6 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
         }
         return numOfSolves;
     }
-
 
     @Override
     public String toString() {

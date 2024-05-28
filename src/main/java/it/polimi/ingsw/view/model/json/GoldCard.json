@@ -1,0 +1,564 @@
+[
+    {
+      "cardId": "G0",
+      "placementCost": "2-M, 1-W",
+      "pointsOnPlace": "1-Q",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "Q", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G0_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G1",
+      "placementCost": "2-M, 1-L",
+      "pointsOnPlace": "1-P",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "P", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G1_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G2",
+      "placementCost": "2-M, 1-B",
+      "pointsOnPlace": "1-S",
+      "corners": [
+        {"direction": "TL", "frontResource": "S", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G2_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G3",
+      "placementCost": "3-M, 1-W",
+      "pointsOnPlace": "2-CC",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G3_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G4",
+      "placementCost": "3-M, 1-L",
+      "pointsOnPlace": "2-CC",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G4_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G5",
+      "placementCost": "3-M, 1-B",
+      "pointsOnPlace": "2-CC",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G5_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G6",
+      "placementCost": "3-M",
+      "pointsOnPlace": "3-SP",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "P", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G6_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G7",
+      "placementCost": "3-M",
+      "pointsOnPlace": "3-SP",
+      "corners": [
+        {"direction": "TL", "frontResource": "Q", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G7_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G8",
+      "placementCost": "3-M",
+      "pointsOnPlace": "3-SP",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "S", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G8_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "type": "GoldCard",
+      "cardId": "G9",
+      "pointsOnPlace": "5-SP",
+      "placementCost": "5-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "M",
+      "frontImageFileName": "img_G9_front.png",
+      "backImageFileName": "img_G0_back.png"
+    },
+    {
+      "cardId": "G10",
+      "pointsOnPlace": "1-Q",
+      "placementCost": "2-L, 1-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "Q", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G10_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G11",
+      "pointsOnPlace": "1-S",
+      "placementCost": "2-L, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "S", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G11_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G12",
+      "pointsOnPlace": "1-P",
+      "placementCost": "2-L, 1-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "P", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G12_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G13",
+      "placementCost": "3-L, 1-B",
+      "pointsOnPlace": "2-CC",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G13_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "type": "GoldCard",
+      "cardId": "G14",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-L, 1-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G14_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G15",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-L, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G15_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G16",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "Q", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G16_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G17",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "S", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G17_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G18",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "2-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "P", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G18_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G19",
+      "pointsOnPlace": "5-SP",
+      "placementCost": "5-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "L",
+      "frontImageFileName": "img_G19_front.png",
+      "backImageFileName": "img_G10_back.png"
+    },
+    {
+      "cardId": "G20",
+      "pointsOnPlace": "1-P",
+      "placementCost": "2-W, 1-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "P", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G20_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G21",
+      "pointsOnPlace": "1-S",
+      "placementCost": "2-W, 1-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "S", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G21_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G22",
+      "pointsOnPlace": "1-Q",
+      "placementCost": "2-W, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "Q", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G22_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G23",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-W, 1-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G23_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G24",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-W, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G24_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G25",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-W, 1-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G25_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G26",
+      "pointsOnPlace":  "3-SP",
+      "placementCost": "3-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "S", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G26_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G27",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "P", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G27_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G28",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "Q", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G28_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G29",
+      "pointsOnPlace": "5-SP",
+      "placementCost": "5-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "W",
+      "frontImageFileName": "img_G29_front.png",
+      "backImageFileName": "img_G20_back.png"
+    },
+    {
+      "cardId": "G30",
+      "pointsOnPlace": "1-Q",
+      "placementCost": "2-B, 1-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "Q", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G30_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G31",
+      "pointsOnPlace": "1-S",
+      "placementCost": "2-B, 1-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "S", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G31_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G32",
+      "pointsOnPlace": "1-P",
+      "placementCost": "2-B, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "P", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G32_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G33",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-B, 1-W",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G33_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G34",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-B, 1-L",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G34_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G35",
+      "pointsOnPlace": "2-CC",
+      "placementCost": "3-B, 1-M",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G35_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G36",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "P", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "N", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G36_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G36",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "S", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G37_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G38",
+      "pointsOnPlace": "3-SP",
+      "placementCost": "3-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
+        {"direction": "TR", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "Q", "backResource": "N"},
+        {"direction": "BR", "frontResource": "N", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G38_front.png",
+      "backImageFileName": "img_G30_back.png"
+    },
+    {
+      "cardId": "G39",
+      "pointsOnPlace": "5-SP",
+      "placementCost": "5-B",
+      "corners": [
+        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TR", "frontResource": "N", "backResource": "N"},
+        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BR", "frontResource": "F", "backResource": "N"}
+      ],
+      "backResource": "B",
+      "frontImageFileName": "img_G39_front.png",
+      "backImageFileName": "img_G30_back.png"
+    }
+]

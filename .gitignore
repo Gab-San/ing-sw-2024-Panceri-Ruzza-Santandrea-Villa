@@ -13,6 +13,9 @@ target/
 *.iml
 *.ipr
 
+## Astah ##
+*.lock
+
 ### Eclipse ###
 .apt_generated
 .classpath

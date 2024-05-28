@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Hashtable;
@@ -40,7 +40,6 @@ public class ResourceObjectiveStrategy implements ObjectiveStrategy{
 
         return resourceForCompletion.equals(resObj.resourceForCompletion);
     }
-
     @Override
     public String toString() {
         return "Resources Needed: " +resourceForCompletion.toString();

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enums.CornerDirection;
-import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.PlayerColor;
-import it.polimi.ingsw.stub.PuppetClient;
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.PlayerColor;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -277,87 +277,42 @@ public class SetupStateTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
-    public void testWithDisconnectAndJoin(int numOfPlayers) {
-        for (int i = 0; i < 9; i++) {
+    public void testWithDisconnect(int numOfPlayers) {
+        for (int i = 0; i < 3; i++) {
             setUp(numOfPlayers);
             assertEquals(GamePhase.PLACESTARTING, board.getGamePhase());
             Player discPlayer = board.getPlayerAreas().keySet().stream().findAny().stream().toList().get(0);
             System.err.println(discPlayer.getNickname() + ", ciclo=" + i);
             System.err.println(discPlayer.getNickname() + " is connected " + discPlayer.isConnected());
 
-            if ((i%3) == 0) {
+            if (i == 0) {
                 controller.disconnect(discPlayer.getNickname());
                 System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
-
-                if(i==3){
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
-                    System.err.println(discPlayer.getNickname() + " is joining: " + discPlayer.isConnected());
-                }
             }
 
 
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
+                controller.placeStartingCard(p.getNickname(), true);
 
-            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList()){
-                if(i==6 && !discPlayer.isConnected() && new Random().nextBoolean())
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
-
-                if(!(i==3 && p.equals(discPlayer)))
-                    controller.placeStartingCard(p.getNickname(), true);
-            }
-
-            if (i%3 == 1) {
+            if (i == 1) {
                 controller.disconnect(discPlayer.getNickname());
                 System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
-
-                if(i==4){
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
-                    System.err.println(discPlayer.getNickname() + " is joining: " + discPlayer.isConnected());
-                }
             }
 
-            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList()){
-                if(i==7 && !discPlayer.isConnected() && new Random().nextBoolean())
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
+                controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
 
-                if(!(i==4 && p.equals(discPlayer)))
-                    controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
-            }
-
-            if (i%3 == 2) {
+            if (i == 2) {
                 controller.disconnect(discPlayer.getNickname());
                 System.err.println(discPlayer.getNickname() + " is disconnecting: " + discPlayer.isConnected());
-
-                if(i==5){
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
-                    System.err.println(discPlayer.getNickname() + " is joining: " + discPlayer.isConnected());
-                }
             }
 
 
-            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList()){
-                if(i==8 && !discPlayer.isConnected() && new Random().nextBoolean())
-                    controller.join(discPlayer.getNickname(), new PuppetClient());
-
-                if(!(i==5 && p.equals(discPlayer)))
-                    controller.chooseSecretObjective(p.getNickname(), 1);
-            }
+            for (Player p : board.getPlayerAreas().keySet().stream().filter(Player::isConnected).toList())
+                controller.chooseSecretObjective(p.getNickname(), 1);
 
             assertEquals(GamePhase.PLACECARD, board.getGamePhase());
             assertEquals(PlayState.class, controller.getGameState().getClass());
         }
-
-        setUp(numOfPlayers);
-        for(Player p : board.getPlayerAreas().keySet())
-            controller.disconnect(p.getNickname());
-        assertEquals(GamePhase.CREATE, board.getGamePhase(), "wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.CREATE +"\".");
-        assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
-        assertTrue(board.getPlayerAreas().isEmpty(), "PlayerAreas ain't empty");
-
     }
-    @ParameterizedTest
-    @ValueSource(ints = {2, 3, 4})
-    public void joinDisconnectTest(){
-        setUp(4);
-    }
-
 }

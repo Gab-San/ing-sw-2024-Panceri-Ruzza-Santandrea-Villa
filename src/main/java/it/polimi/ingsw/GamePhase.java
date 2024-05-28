@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.enums;
+package it.polimi.ingsw;
 
 /**
  * Enumeration of all phases of the game (as in particular states the game can be in at a given time)
