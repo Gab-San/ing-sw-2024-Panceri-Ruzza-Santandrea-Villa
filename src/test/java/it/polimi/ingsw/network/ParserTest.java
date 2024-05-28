@@ -112,7 +112,7 @@ class ParserTest {
 
     @Test
     void parseSendCmd() throws RemoteException {
-        parser.parseCommand("send CIAO CIAO MAMMINA");
+        parser.parseCommand("send \"all\" CIAO CIAO MAMMINA");
     }
 
     @Test

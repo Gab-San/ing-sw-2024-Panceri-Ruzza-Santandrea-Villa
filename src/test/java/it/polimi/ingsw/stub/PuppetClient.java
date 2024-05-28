@@ -5,6 +5,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.CommandPassthrough;
@@ -19,6 +20,18 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     private final Attribute textColorFormat = Attribute.BRIGHT_CYAN_TEXT();
+    private final String nickname;
+    private final PuppetController2 controller;
+    public boolean disconnected;
+    public PuppetClient(){
+        nickname = null;
+        controller = null;
+    }
+
+    public PuppetClient(String nickname, PuppetController2 controller) {
+        this.nickname = nickname;
+        this.controller = controller;
+    }
 
     @Override
     public void sendMsg(String addressee, String msg) {
@@ -246,7 +259,9 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
 
     @Override
     public void notifyIndirectDisconnect() {
-
+        assert controller != null;
+        controller.interruptTimer(nickname);
+        disconnected = true;
     }
 
     @Override

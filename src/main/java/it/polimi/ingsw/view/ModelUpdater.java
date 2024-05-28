@@ -19,8 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-// synchronization is done inside ViewModel already
-//FIXME: remove "implements VirtualClient" (it's useful while implementing)
 public class ModelUpdater implements VirtualClient {
     private final ViewBoard board;
     private final View view;

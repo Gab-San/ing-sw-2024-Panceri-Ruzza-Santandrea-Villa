@@ -34,8 +34,9 @@ public class EventControllerIntegrationTest {
         return CornerDirection.values()[new Random().nextInt(4)];
     }
 
+
     @BeforeEach
-    public void setUp() {
+    void setup(){
         controller = new BoardController();
     }
 
@@ -423,7 +424,7 @@ public class EventControllerIntegrationTest {
         latch.await();
         timer.cancel();
 
-        controller.placeStartingCard(nick1, true);
+        controller.placeStartingCard(nick1, false);
         controller.placeStartingCard(nick2, false);
 
         controller.chooseYourColor(nick2, PlayerColor.YELLOW);
@@ -560,6 +561,23 @@ public class EventControllerIntegrationTest {
         try{
             controller.draw(notConnectedNick, 'R', 2);
         } catch (IllegalArgumentException e){
+            CountDownLatch latch4 = new CountDownLatch(2);
+
+            Timer timer4 = new Timer();
+            timer4.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    latch4.countDown();
+                }
+            }, 500, 500);
+
+            try {
+                latch4.await();
+            } catch (InterruptedException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            timer4.cancel();
             assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
         }
 
@@ -584,7 +602,7 @@ public class EventControllerIntegrationTest {
             String cardId = "R"+cardId2;
             if(worthy1)
                 try {
-                    controller.placeCard(nick1, cardId, new Point(0, 0), CornerDirection.BL, false);
+                    controller.placeCard(nick1, cardId, new Point(0, 0), CornerDirection.TR, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
@@ -594,7 +612,7 @@ public class EventControllerIntegrationTest {
 
             if(worthy2)
                 try {
-                    controller.placeCard(nick2, cardId, new Point(0, 0), CornerDirection.BL, false);
+                    controller.placeCard(nick2, cardId, new Point(0, 0), CornerDirection.TR, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[1].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());

@@ -12,7 +12,9 @@ public class IndirectDisconnectEvent extends RemoteErrorEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        CentralServer.getSingleton().disconnect(notifiedClient, virtualClient);
+        try {
+            CentralServer.getSingleton().disconnect(notifiedClient, virtualClient);
+        } catch (RuntimeException ignore){}
         virtualClient.notifyIndirectDisconnect();
     }
 }

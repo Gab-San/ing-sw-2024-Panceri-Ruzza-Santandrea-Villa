@@ -115,13 +115,8 @@ public class CentralServer {
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
         if(!playerClients.containsKey(nickname)) throw new IllegalStateException("Player not connected!");
         if(!client.equals(playerClients.get(nickname))) throw new IllegalStateException("Illegal request, Client instance does not match!");
-        System.err.println("TRYING TO DISCONNECT " + nickname);
-        try {
-            gameRef.disconnect(nickname);
-        } catch (Exception e){
-            e.printStackTrace(System.err);
-        }
-        System.err.println("DISCONNECTED FROM CONTROLLER " + nickname);
+
+        gameRef.disconnect(nickname);
         playerClients.remove(nickname);
         chat.removeClient(nickname);
         synchronized (commandQueue) {

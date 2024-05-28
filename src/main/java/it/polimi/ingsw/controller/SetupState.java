@@ -35,7 +35,7 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
-        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 10);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
     }
 
     @Override

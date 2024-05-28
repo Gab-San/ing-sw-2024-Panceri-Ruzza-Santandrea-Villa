@@ -30,13 +30,17 @@ public class PuppetController2 extends BoardController {
         System.out.println(colorize("PLAYER CONNECTING...", Attribute.YELLOW_TEXT()));
         board.addPlayer(new Player(nickname));
         Player player = board.getPlayerByNickname(nickname);
-        turnTimerController.startTimer(player, 5);
+        synchronized (turnTimerController) {
+            turnTimerController.startTimer(player, 5);
+        }
         board.subscribeClientToUpdates(nickname, client);
         connectedNicks.add(nickname);
     }
 
-    public synchronized void interruptTimer(String nickname){
-        turnTimerController.stopTimer(board.getPlayerByNickname(nickname));
+    public  void interruptTimer(String nickname){
+        synchronized (turnTimerController) {
+            turnTimerController.stopTimer(board.getPlayerByNickname(nickname));
+        }
     }
 
 

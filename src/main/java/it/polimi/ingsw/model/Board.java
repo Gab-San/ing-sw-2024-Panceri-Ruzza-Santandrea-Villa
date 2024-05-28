@@ -237,7 +237,6 @@ public class Board implements GameSubject{
 
     public void setGamePhase(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
-        System.out.println("GamePhase update: " + gamePhase);
         notifyAllListeners(new ChangePhaseEvent(gamePhase));
     }
 //endregion

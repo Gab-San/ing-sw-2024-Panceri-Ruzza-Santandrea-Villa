@@ -79,8 +79,6 @@ public class PlayState extends GameState {
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE");
     }
 
-
-
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname,"IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE"));
