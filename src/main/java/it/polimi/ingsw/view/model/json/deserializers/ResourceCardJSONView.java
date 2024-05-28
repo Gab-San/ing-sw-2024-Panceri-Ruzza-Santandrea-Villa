@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view.model.json.deserializers;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.json.deserializers.CornerJ;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResourceCardJSONView {
     private String cardId;
@@ -73,6 +75,11 @@ public class ResourceCardJSONView {
         if (cornerJS == null) {
             return null;
         }
-        return List.of(); //TODO
+        return cornerJS.stream()
+                .map(cornerJView -> new ViewCorner(
+                        GameResource.getResourceFromName(cornerJView.getFrontResource()),
+                        GameResource.getResourceFromName(cornerJView.getBackResource()),
+                        CornerDirection.getDirectionFromString(cornerJView.getDirection())))
+                .collect(Collectors.toList());
     }
 }

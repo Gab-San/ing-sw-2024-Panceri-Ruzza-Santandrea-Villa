@@ -1,9 +1,13 @@
 package it.polimi.ingsw.view.model.json.deserializers;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewGoldCard;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GoldCardJSONView {
     private String cardId;
@@ -71,20 +75,53 @@ public class GoldCardJSONView {
         List<ViewCorner> corners = convertCorners(this.getCornersJS());
         GameResource backResource = this.getBackResource();
         List<GameResource> placementCostList = parsePlacementCost(this.getPlacementCost());
-        String strategyAsString = ""; // TODO
+        String strategyAsString = parseStrategyAsString(this.getPlacementCost());
 
         return new ViewGoldCard(cardId, imgFront, imgBack, corners, pointsOnPlace, backResource, placementCostList, strategyAsString);
     }
 
-    private List<ViewCorner> convertCorners(List<CornerJView> cornersJS) {
-        if (cornersJS == null) {
+    private List<ViewCorner> convertCorners(List<CornerJView> cornerJS) {
+        if (cornerJS == null) {
             return null;
         }
-        return List.of(); //TODO
+        return cornerJS.stream()
+                .map(cornerJView -> new ViewCorner(
+                        GameResource.getResourceFromName(cornerJView.getFrontResource()),
+                        GameResource.getResourceFromName(cornerJView.getBackResource()),
+                        CornerDirection.getDirectionFromString(cornerJView.getDirection())))
+                .collect(Collectors.toList());
     }
 
     private List<GameResource> parsePlacementCost(String placementCost) {
-        // TODO
-        return null;
+        if (placementCost == null || placementCost.isEmpty()) {
+            return List.of();
+        }
+        List<GameResource> resources = new ArrayList<>();
+        String[] parts = placementCost.split(", ");
+        for (String part : parts) {
+            String[] splitPart = part.split("-");
+            if (splitPart.length == 2) {
+                String resourceStr = splitPart[1].trim();
+                resources.add(GameResource.getResourceFromNameInitial(resourceStr));
+            }
+        }
+        return resources;
+    }
+
+    private String parseStrategyAsString(String placementCost) {
+        if (placementCost == null || placementCost.isEmpty()) {
+            return "";
+        }
+        StringBuilder strategy = new StringBuilder();
+        String[] parts = placementCost.split(", ");
+        for (String part : parts) {
+            String[] splitPart = part.split("-");
+            if (splitPart.length == 2) {
+                strategy.append(splitPart[1].trim());
+            } else if (splitPart.length == 1 && Character.isLetter(part.trim().charAt(0))) {
+                strategy.append(part.trim().charAt(0));
+            }
+        }
+        return strategy.toString();
     }
 }
