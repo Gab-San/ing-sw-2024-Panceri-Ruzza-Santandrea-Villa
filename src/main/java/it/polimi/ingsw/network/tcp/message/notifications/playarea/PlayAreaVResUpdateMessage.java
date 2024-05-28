@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.message.notifications.playarea;
 
-import it.polimi.ingsw.model.enums.GameResource;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.notifications.player.PlayerMessage;
 

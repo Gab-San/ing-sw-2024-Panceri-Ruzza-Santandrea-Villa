@@ -4,7 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.rmi.RMIServer;
-import it.polimi.ingsw.network.testingStub.PuppetClient;
+import it.polimi.ingsw.stub.PuppetClient;
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewPlayArea;

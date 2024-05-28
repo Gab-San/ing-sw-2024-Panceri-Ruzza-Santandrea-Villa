@@ -1,15 +1,16 @@
 package it.polimi.ingsw.network.tcp.client;
 
 import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.GameResource;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.*;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
+import it.polimi.ingsw.view.ModelUpdater;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class TCPClientSocket implements VirtualClient{
     private final ObjectInputStream inputStream;
     private final Queue<TCPServerMessage> updateQueue;
     private final ServerProxy proxy;
+    private ModelUpdater modelUpdater;
     public TCPClientSocket(int port) throws IOException {
         this("localhost", port);
     }
@@ -133,6 +135,10 @@ public class TCPClientSocket implements VirtualClient{
     public ServerProxy getProxy(){
         return proxy;
     }
+
+    public void setModelUpdater(ModelUpdater modelUpdater){
+        this.modelUpdater = modelUpdater;
+    }
 //endregion
 
 //region VIRTUAL CLIENT INTERFACE
@@ -146,6 +152,7 @@ public class TCPClientSocket implements VirtualClient{
     public void ping() throws RemoteException {
         return;
     }
+
 
     /**
      * Notifies about the board initialization status
@@ -170,6 +177,7 @@ public class TCPClientSocket implements VirtualClient{
     public void notifyEndgame(String nickname, int score) throws RemoteException {
 
     }
+
 
     @Override
     public void removePlayer(String nickname) throws RemoteException {
@@ -448,6 +456,7 @@ public class TCPClientSocket implements VirtualClient{
     public void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException {
 
     }
+
 
     /**
      * Notifies about the player's play area status

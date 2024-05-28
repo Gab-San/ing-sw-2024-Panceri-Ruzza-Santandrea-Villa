@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.message.notifications.player;
 
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.io.Serial;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.message.notifications.board;
 
-import it.polimi.ingsw.model.enums.GamePhase;
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
 

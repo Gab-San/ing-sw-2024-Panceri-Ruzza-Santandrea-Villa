@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.*;
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
@@ -37,7 +40,18 @@ public class ModelUpdater implements VirtualClient {
     public void update(String msg) {
         view.showChatMessage(msg);
     }
+
+    @Override
+    public void displayMessage(String messenger, String msg) throws RemoteException {
+
+    }
+
     public void ping() { } //TODO: remove ping()
+
+    @Override
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+
+    }
 
     public void notifyTimeoutDisconnect(){
         view.notifyTimeout();
@@ -66,6 +80,12 @@ public class ModelUpdater implements VirtualClient {
     public void reportError(String errorMessage) {
         view.showError(errorMessage);
     }
+
+    @Override
+    public void notifyIndirectDisconnect() throws RemoteException {
+
+    }
+
     public void showChatMessage(String message){
         view.showChatMessage(message);
     }
@@ -112,6 +132,12 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " " + connectionString);
         }
     }
+
+    @Override
+    public void removePlayer(String nickname) throws RemoteException {
+
+    }
+
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         board.setPlayerDeadlock(nickname, isDeadLocked);
         if(isDeadLocked)
@@ -119,6 +145,16 @@ public class ModelUpdater implements VirtualClient {
                 notifyMyAreaUpdate("You are deadlocked!");
             else
                 notifyOpponentUpdate(nickname, nickname + " is deadlocked!");
+    }
+
+    @Override
+    public void notifyEndgame() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame(String nickname, int score) throws RemoteException {
+
     }
 
 

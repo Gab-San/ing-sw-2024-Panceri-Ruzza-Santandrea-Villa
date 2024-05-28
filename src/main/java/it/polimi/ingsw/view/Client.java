@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
@@ -13,8 +12,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 

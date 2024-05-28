@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.model.json.deserializers;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.model.json.deserializers.CornerJ;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 

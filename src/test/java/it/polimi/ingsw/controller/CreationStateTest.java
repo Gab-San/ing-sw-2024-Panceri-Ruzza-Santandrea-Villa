@@ -1,12 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -37,7 +37,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public synchronized void update(String msg) throws RemoteException {
+    public void displayMessage(String messenger, String msg) throws RemoteException {
         if(modelUpdater != null)
             modelUpdater.update(msg);
         else
@@ -54,6 +54,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+
+    }
+
+    @Override
     public synchronized void updatePlayer(String nickname, PlayerColor colour) throws RemoteException {
         modelUpdater.updatePlayer(nickname,colour);
     }
@@ -66,6 +71,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public synchronized void updatePlayer(String nickname, boolean isConnected) throws RemoteException {
         modelUpdater.updatePlayer(nickname,isConnected);
+    }
+
+    @Override
+    public void removePlayer(String nickname) throws RemoteException {
+
     }
 
     @Override
@@ -95,11 +105,6 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
 
     @Override
-    public synchronized void emptyDeck(char deck) throws RemoteException {
-        modelUpdater.emptyDeck(deck);
-    }
-
-    @Override
     public synchronized void updatePhase(GamePhase gamePhase) throws RemoteException {
         modelUpdater.updatePhase(gamePhase);
     }
@@ -117,6 +122,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public synchronized void emptyReveal(char deck, int cardPosition) throws RemoteException {
         modelUpdater.emptyReveal(deck,cardPosition);
+    }
+
+    @Override
+    public void emptyFaceDownPile(char deck) throws RemoteException {
+
     }
 
     @Override
@@ -155,14 +165,15 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public synchronized void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-        modelUpdater.createPlayArea(nickname, cardPositions, visibleResources, freeSerializableCorners);
+    public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+
     }
 
     @Override
-    public synchronized void placeCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-        modelUpdater.placeCard(nickname, placedCardId, row, col);
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+
     }
+
 
     @Override
     public synchronized void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
@@ -174,10 +185,6 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         modelUpdater.freeCornersUpdate(nickname, freeSerializableCorners);
     }
 
-    @Override
-    public synchronized void setBoardState(int currentTurn, GamePhase gamePhase) throws RemoteException {
-        modelUpdater.setBoardState(currentTurn, gamePhase);
-    }
 
     @Override
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
@@ -185,8 +192,23 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
+    public void notifyEndgame() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyEndgame(String nickname, int score) throws RemoteException {
+
+    }
+
+    @Override
     public void reportError(String errorMessage) throws RemoteException {
         modelUpdater.reportError(errorMessage);
+    }
+
+    @Override
+    public void notifyIndirectDisconnect() throws RemoteException {
+
     }
 
     public RMIServerProxy getProxy(){

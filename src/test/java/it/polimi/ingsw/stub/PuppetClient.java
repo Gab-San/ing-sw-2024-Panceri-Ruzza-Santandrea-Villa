@@ -2,9 +2,9 @@ package it.polimi.ingsw.stub;
 
 import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.enums.GamePhase;
-import it.polimi.ingsw.model.enums.GameResource;
-import it.polimi.ingsw.model.enums.PlayerColor;
+import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.CommandPassthrough;

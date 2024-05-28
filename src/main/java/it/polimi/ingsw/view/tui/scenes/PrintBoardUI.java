@@ -1,14 +1,11 @@
 package it.polimi.ingsw.view.tui.scenes;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.tui.printers.PrintCard;
 
-import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;

@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.functions.UsefulFunc;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;

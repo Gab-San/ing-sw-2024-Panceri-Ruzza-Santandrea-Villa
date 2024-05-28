@@ -5,12 +5,8 @@ import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
-import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.view.ModelUpdater;
-import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.model.ViewBoard;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 

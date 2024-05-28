@@ -113,8 +113,6 @@ public class CentralServer {
             }
         }
 
-        //FIXME: curious thing: adding a print here of client.toString() blocks updates
-        System.out.println(colorize(nickname + " has connected! Client instance: " + clientName, Attribute.GREEN_TEXT()));
     }
 
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
@@ -134,7 +132,6 @@ public class CentralServer {
                     commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
             );
         }
-        System.out.println(colorize(nickname + " has disconnected!", Attribute.MAGENTA_TEXT()));
     }
 
     public synchronized void sendMessage(String messenger, String addressee, String message) {

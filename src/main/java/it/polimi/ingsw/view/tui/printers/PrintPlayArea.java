@@ -7,7 +7,6 @@ import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.tui.ConsoleBackgroundColors;
 import it.polimi.ingsw.view.tui.ConsoleColorsCombiner;
-import it.polimi.ingsw.view.tui.ConsoleTextColors;
 
 import java.util.HashSet;
 import java.util.Set;

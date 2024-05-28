@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.GameResource;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
