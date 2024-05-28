@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.testingStub;
+package it.polimi.ingsw.stub;
 
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
@@ -13,11 +13,6 @@ import java.util.Map;
 public class PuppetModelUpdater extends ModelUpdater {
     public PuppetModelUpdater() {
         super(null, null);
-    }
-
-    @Override
-    public void update(String msg){
-
     }
 
     @Override
@@ -142,11 +137,6 @@ public class PuppetModelUpdater extends ModelUpdater {
 
     @Override
     public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners){
-
-    }
-
-    @Override
-    public void setBoardState(int currentTurn, GamePhase gamePhase){
 
     }
 

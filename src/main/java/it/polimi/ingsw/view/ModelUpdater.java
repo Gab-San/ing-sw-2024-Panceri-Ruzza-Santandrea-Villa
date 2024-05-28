@@ -37,25 +37,14 @@ public class ModelUpdater implements VirtualClient {
         this.verbose = verbose;
         jsonImporter = Client.getCardJSONImporter();
     }
-    public void update(String msg) {
-        view.showChatMessage(msg);
-    }
 
     @Override
     public void displayMessage(String messenger, String msg) throws RemoteException {
-
+        view.showChatMessage(msg);
     }
-
+    @Override
     public void ping() { } //TODO: remove ping()
 
-    @Override
-    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
-
-    }
-
-    public void notifyTimeoutDisconnect(){
-        view.notifyTimeout();
-    }
     private void notifyMyAreaUpdate(String msg){
         if(verbose)
             notifyView(msg);
@@ -83,12 +72,9 @@ public class ModelUpdater implements VirtualClient {
 
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
-
+        view.notifyTimeout();
     }
 
-    public void showChatMessage(String message){
-        view.showChatMessage(message);
-    }
     public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);
@@ -135,7 +121,7 @@ public class ModelUpdater implements VirtualClient {
 
     @Override
     public void removePlayer(String nickname) throws RemoteException {
-
+        //TODO: implement
     }
 
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
@@ -149,14 +135,14 @@ public class ModelUpdater implements VirtualClient {
 
     @Override
     public void notifyEndgame() throws RemoteException {
-
+        notifyBoardUpdate("Endgame has been reached!");
     }
 
     @Override
     public void notifyEndgame(String nickname, int score) throws RemoteException {
-
+        notifyBoardUpdate("Endgame has been reached because "
+                + nickname + " has reached " + score + " (>20) points!");
     }
-
 
     private void deckCardTypeMismatch(){
         throw new IllegalArgumentException("Deck type and Card type mismatch");
@@ -319,10 +305,17 @@ public class ModelUpdater implements VirtualClient {
 //        setDeckState(deck, null,null,null);
     }
 
-
-    public void setBoardState(int currentTurn, GamePhase gamePhase) {
+    @Override
+    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+        for(String nick : playerDeadLock.keySet()){
+            boolean deadlock = playerDeadLock.get(nick);
+            board.setPlayerDeadlock(nick, deadlock);
+            if(deadlock)
+                notifyOpponentUpdate(nick, nick + " is deadlocked!");
+        }
         if(board.setGamePhase(gamePhase) || board.setCurrentTurn(currentTurn))
-            notifyBoardUpdate("Game phase and turn updated.");
+            notifyBoardUpdate("Board initialised.");
+
     }
     public void updatePhase(GamePhase gamePhase) {
         if(board.setGamePhase(gamePhase))

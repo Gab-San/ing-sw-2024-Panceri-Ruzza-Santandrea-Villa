@@ -38,10 +38,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void displayMessage(String messenger, String msg) throws RemoteException {
-        if(modelUpdater != null)
-            modelUpdater.update(msg);
-        else
-            System.out.println(msg);
+        modelUpdater.displayMessage(messenger, msg);
     }
 
     /**
@@ -55,7 +52,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
-
+        modelUpdater.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
     }
 
     @Override
@@ -75,7 +72,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void removePlayer(String nickname) throws RemoteException {
-
+        modelUpdater.removePlayer(nickname);
     }
 
     @Override
@@ -126,7 +123,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void emptyFaceDownPile(char deck) throws RemoteException {
-
+        modelUpdater.emptyFaceDownPile(deck);
     }
 
     @Override
@@ -166,14 +163,13 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-
+        modelUpdater.setPlayAreaState(nickname, cardPositions, visibleResources, freeSerializableCorners);
     }
 
     @Override
     public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-
+        modelUpdater.updatePlaceCard(nickname, placedCardId, row, col);
     }
-
 
     @Override
     public synchronized void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
@@ -193,12 +189,12 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void notifyEndgame() throws RemoteException {
-
+        modelUpdater.notifyEndgame();
     }
 
     @Override
     public void notifyEndgame(String nickname, int score) throws RemoteException {
-
+        modelUpdater.notifyEndgame(nickname, score);
     }
 
     @Override
@@ -208,7 +204,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
-
+        modelUpdater.notifyIndirectDisconnect();
     }
 
     public RMIServerProxy getProxy(){

@@ -4,9 +4,7 @@ import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
-import it.polimi.ingsw.network.testingStub.PuppetModelUpdater;
-import it.polimi.ingsw.view.ModelUpdater;
-import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.stub.PuppetModelUpdater;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
