@@ -142,7 +142,6 @@ public class PrintFullGameUITest {
             }
             else error = "Invalid command.";
 
-            cls();
             if(!error.isEmpty()) {
                 printUI.displayError(error);
                 error = "";

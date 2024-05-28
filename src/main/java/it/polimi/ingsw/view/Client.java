@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.model.json.JsonImporter;
 import it.polimi.ingsw.view.tui.TUI;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class Client {
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
     private static Scanner scanner;
+    private static JsonImporter cardJSONImporter;
     private static String serverIP;
     private static int port;
     private static String connectionTech;
@@ -51,6 +53,9 @@ public class Client {
         }
     }
 
+    public static JsonImporter getCardJSONImporter(){
+        return cardJSONImporter;
+    }
     private static void duplicateArgument(){
         System.err.println("Duplicate argument detected. Closing.");
         quitError();
@@ -127,6 +132,13 @@ public class Client {
         }
         if(serverIP == null) serverIP = "localhost";
 
+        try {
+            cardJSONImporter = new JsonImporter();
+        } catch (IOException e) {
+            System.err.println("Error while reading card JSON from disk.");
+            System.err.println(e.getMessage());
+            quitError();
+        }
         while(true) {
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;

@@ -100,7 +100,7 @@ public class PuppetModelUpdater extends ModelUpdater {
     }
 
     @Override
-    public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard){
+    public void setPlayerHandState(String nickname, List<String> playCardIDs, List<String> objectiveCardIDs, String startingCardID){
 
     }
 

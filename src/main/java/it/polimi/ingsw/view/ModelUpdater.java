@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
+import it.polimi.ingsw.view.model.json.JsonImporter;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -21,20 +22,21 @@ public class ModelUpdater implements VirtualClient {
     private final ViewBoard board;
     private final View view;
     private final boolean verbose;
+    private final JsonImporter jsonImporter;
+
 
     public ModelUpdater(ViewBoard board, View view) {
-        this.board = board;
-        this.view = view;
-        verbose = false;
+        this(board, view, false);
     }
     public ModelUpdater(ViewBoard board, View view, boolean verbose) {
         this.board = board;
         this.view = view;
         this.verbose = verbose;
+        jsonImporter = Client.getCardJSONImporter();
     }
     public void update(String msg) {
         view.showChatMessage(msg);
-    } //TODO: remove this or use it as updateChat / generic notification
+    }
     public void ping() { } //TODO: remove ping()
 
     public void notifyTimeoutDisconnect(){
@@ -136,10 +138,9 @@ public class ModelUpdater implements VirtualClient {
     }
     public void setDeckState(char deck, String topId, String firstId, String secondId) {
         try {
-            //TODO: import from json
-            ViewCard topCard = null;
-            ViewCard firstRevealed = null;
-            ViewCard secondRevealed = null;
+            ViewCard topCard = jsonImporter.getCard(topId);
+            ViewCard firstRevealed = jsonImporter.getCard(topId);
+            ViewCard secondRevealed = jsonImporter.getCard(topId);
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
                     board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
@@ -177,9 +178,7 @@ public class ModelUpdater implements VirtualClient {
         if(revealedId == null || cardPosition > 2 || cardPosition < 0) illegalArgument();
 
         if(topCard == null || !revealedId.equals(topCard.getCardID())){
-            //TODO: import from JSON here
-            ViewCard cardFromJSON = topCard;
-            topCard = cardFromJSON;
+            topCard = jsonImporter.getCard(revealedId);
         }
         try {
             switch (deck) {
@@ -302,10 +301,11 @@ public class ModelUpdater implements VirtualClient {
         notifyBoardUpdate(nickname + "'s score is now " + score);
     }
 
-    public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) {
-        List<ViewPlayCard> cardsInHand = null;  // TODO: list import playCards from json
-        List<ViewObjectiveCard> objectives = null; // TODO: import objectiveCards from json
-        ViewStartCard startCard = null; //TODO: import startCard from json
+    public void setPlayerHandState(String nickname, List<String> playCardIDs, List<String> objectiveCardIDs, String startingCardID) {
+        List<ViewPlayCard> cardsInHand = jsonImporter.getPlayCards(playCardIDs);
+        List<ViewObjectiveCard> objectives = new LinkedList<>();
+        objectiveCardIDs.forEach(id -> objectives.add(jsonImporter.getObjectiveCard(id)));
+        ViewStartCard startCard = jsonImporter.getStartCard(startingCardID);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -316,7 +316,6 @@ public class ModelUpdater implements VirtualClient {
             notifyMyAreaUpdate("Your hand was set");
         }
         else{
-            //TODO: separate addPlayer and opponentHand instantiation
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.setCards(cardsInHand);
             hand.setSecretObjectiveCards(objectives);
@@ -325,7 +324,7 @@ public class ModelUpdater implements VirtualClient {
         }
     }
     public void playerHandAddedCardUpdate(String nickname, String drawnCardId) {
-        ViewPlayCard drawnCard = null; // TODO: list import playCard from json
+        ViewPlayCard drawnCard = jsonImporter.getPlayCard(drawnCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -334,7 +333,6 @@ public class ModelUpdater implements VirtualClient {
             notifyMyAreaUpdate("Your have drawn a card");
         }
         else{
-            //TODO: separate addPlayer and opponentHand instantiation
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.addCard(drawnCard);
 
@@ -342,7 +340,7 @@ public class ModelUpdater implements VirtualClient {
         }
     }
     public void playerHandRemoveCard(String nickname, String playCardId) {
-        ViewPlayCard card = null; // TODO: list import playCard from json
+        ViewPlayCard card = jsonImporter.getPlayCard(playCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -351,7 +349,6 @@ public class ModelUpdater implements VirtualClient {
             notifyMyAreaUpdate("You have used a card in your hand");
         }
         else{
-            //TODO: separate addPlayer and opponentHand instantiation
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.removeCard(card);
 
@@ -359,7 +356,7 @@ public class ModelUpdater implements VirtualClient {
         }
     }
     public void playerHandAddObjective(String nickname, String objectiveCard) {
-        ViewObjectiveCard objective = null; // TODO: list import playCard from json
+        ViewObjectiveCard objective = jsonImporter.getObjectiveCard(objectiveCard);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -368,7 +365,6 @@ public class ModelUpdater implements VirtualClient {
             notifyMyAreaUpdate("You have received an objective");
         }
         else{
-            //TODO: separate addPlayer and opponentHand instantiation
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.addSecretObjectiveCard(objective);
 
@@ -388,7 +384,7 @@ public class ModelUpdater implements VirtualClient {
         }
     }
     public void playerHandSetStartingCard(String nickname, String startingCardId) {
-        ViewStartCard startCard = null; // TODO: list import playCard from json
+        ViewStartCard startCard = jsonImporter.getStartCard(startingCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -397,7 +393,6 @@ public class ModelUpdater implements VirtualClient {
             notifyMyAreaUpdate("You have received your starting card");
         }
         else{
-            //TODO: separate addPlayer and opponentHand instantiation
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.setStartCard(startCard);
 
@@ -406,13 +401,11 @@ public class ModelUpdater implements VirtualClient {
     }
 
     public void createPlayArea(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) {
-        //TODO: separate addPlayer and playArea creation in ViewModel
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
 
         for(CardPosition pos : cardPositions){
-            //TODO: JSON import
-            ViewPlaceableCard card = null; // importJSON(pos.cardId());
+            ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
             if(card != null) {
                 playArea.setCard(new Point(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
@@ -433,7 +426,7 @@ public class ModelUpdater implements VirtualClient {
     }
     public void placeCard(String nickname, String placedCardId, int row, int col) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
-        ViewPlaceableCard card = null; //TODO: import from JSON
+        ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(placedCardId);
         playArea.placeCard(new Point(row, col), card);
 
         if(board.getPlayerHand().getNickname().equals(nickname))
