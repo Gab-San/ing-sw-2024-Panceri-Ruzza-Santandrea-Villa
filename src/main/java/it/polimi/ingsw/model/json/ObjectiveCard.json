@@ -54,7 +54,7 @@
     "pattern": ["WOLF", "WOLF", "WOLF"]
   },
   {
-    "cardId": "09",
+    "cardId": "O9",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": ["LEAF", "LEAF", "LEAF"]

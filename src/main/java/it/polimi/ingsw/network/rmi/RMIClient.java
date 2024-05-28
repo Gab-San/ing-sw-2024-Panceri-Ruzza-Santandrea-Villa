@@ -32,13 +32,16 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         this.proxy = new RMIServerProxy(this, server);
     }
 
-    public void setModelUpdater(ModelUpdater modelUpdater){
+    public synchronized void setModelUpdater(ModelUpdater modelUpdater){
         this.modelUpdater = modelUpdater;
     }
 
     @Override
-    public void displayMessage(String messenger, String msg) throws RemoteException {
-        modelUpdater.displayMessage(messenger, msg);
+    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
+        if(modelUpdater != null)
+            modelUpdater.displayMessage(messenger, msg);
+        else
+            System.out.println(messenger + ":  " + msg);
     }
 
     /**
@@ -51,7 +54,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
         modelUpdater.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
     }
 
@@ -71,7 +74,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void removePlayer(String nickname) throws RemoteException {
+    public synchronized void removePlayer(String nickname) throws RemoteException {
         modelUpdater.removePlayer(nickname);
     }
 
@@ -122,7 +125,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void emptyFaceDownPile(char deck) throws RemoteException {
+    public synchronized void emptyFaceDownPile(char deck) throws RemoteException {
         modelUpdater.emptyFaceDownPile(deck);
     }
 
@@ -162,12 +165,12 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
+    public synchronized void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
         modelUpdater.setPlayAreaState(nickname, cardPositions, visibleResources, freeSerializableCorners);
     }
 
     @Override
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
         modelUpdater.updatePlaceCard(nickname, placedCardId, row, col);
     }
 
@@ -188,22 +191,22 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void notifyEndgame() throws RemoteException {
+    public synchronized void notifyEndgame() throws RemoteException {
         modelUpdater.notifyEndgame();
     }
 
     @Override
-    public void notifyEndgame(String nickname, int score) throws RemoteException {
+    public synchronized void notifyEndgame(String nickname, int score) throws RemoteException {
         modelUpdater.notifyEndgame(nickname, score);
     }
 
     @Override
-    public void reportError(String errorMessage) throws RemoteException {
+    public synchronized void reportError(String errorMessage) throws RemoteException {
         modelUpdater.reportError(errorMessage);
     }
 
     @Override
-    public void notifyIndirectDisconnect() throws RemoteException {
+    public synchronized void notifyIndirectDisconnect() throws RemoteException {
         modelUpdater.notifyIndirectDisconnect();
     }
 

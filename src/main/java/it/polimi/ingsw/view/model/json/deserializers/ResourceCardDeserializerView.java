@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.model.cards.ViewCorner;
+import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 
 import java.io.IOException;
+import java.util.List;
 
-public class ResourceCardDeserializerView extends StdDeserializer<ResourceCardJSONView> {
+public class ResourceCardDeserializerView extends StdDeserializer<ViewResourceCard> {
     public ResourceCardDeserializerView(){
         this(null);
     }
@@ -18,23 +21,19 @@ public class ResourceCardDeserializerView extends StdDeserializer<ResourceCardJS
     }
 
     @Override
-    public ResourceCardJSONView deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public ViewResourceCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {
+
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        ResourceCardJSONView resJS = new ResourceCardJSONView();
 
-        resJS.setCardId(node.get("cardId").asText());
+        String cardId = node.get("cardId").asText();
+        GameResource backResource = GameResource.getResourceFromNameInitial(node.get("backResource").asText());
+        String imageFront = node.get("frontImageFileName").asText();
+        String imageBack = node.get("backImageFileName").asText();
+        List<ViewCorner> corners = JsonFunctionsView.parseCorners(node);
+        int pointsOnPlace = node.get("pointsOnPlace").asInt();
 
-        resJS.setBackResource(GameResource.getResourceFromName( node.get("backResource").asText() ));
-
-        resJS.setPointsOnPlace(node.get("pointsOnPlace").asInt());
-
-        resJS.setCornerJS(JsonFunctionsView.parseJsonCorners(node));
-
-        resJS.setImgFront(node.get("frontImageFileName").asText());
-        resJS.setImgBack(node.get("backImageFileName").asText());
-
-        return resJS;
+        return new ViewResourceCard(cardId, imageFront, imageBack, corners, pointsOnPlace, backResource);
     }
 }

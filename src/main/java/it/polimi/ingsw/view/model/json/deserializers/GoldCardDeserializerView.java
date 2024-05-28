@@ -6,10 +6,15 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.model.cards.ViewCorner;
+import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-public class GoldCardDeserializerView extends StdDeserializer<GoldCardJSONView> {
+public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
 
     public GoldCardDeserializerView(){
         this(null);
@@ -20,26 +25,31 @@ public class GoldCardDeserializerView extends StdDeserializer<GoldCardJSONView> 
     }
 
     @Override
-    public GoldCardJSONView deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public ViewGoldCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {
 
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        GoldCardJSONView goldJ = new GoldCardJSONView();
+        String cardId = node.get("cardId").asText();
+        GameResource backResource = GameResource.getResourceFromNameInitial(node.get("backResource").asText());
+        String imageFront = node.get("frontImageFileName").asText();
+        String imageBack = node.get("backImageFileName").asText();
+        List<ViewCorner> corners = JsonFunctionsView.parseCorners(node);
 
-        goldJ.setCardId(node.get("cardId").asText());
+        String[] placementCosts = node.get("placementCost").asText().split(", ");
+        List<GameResource> placementCostAsResourceList = new LinkedList<>();
+        for(String cost : placementCosts){
+            int rep = Integer.parseInt(cost.substring(0, 1));
+            GameResource resource = GameResource.getResourceFromNameInitial(cost.substring(2));
+            for (int i = 0; i < rep; i++) {
+                placementCostAsResourceList.add(resource);
+            }
+        }
 
-        goldJ.setBackResource(GameResource.getResourceFromNameInitial(node.get("backResource").asText()));
+        String[] fullPointsOnPlace = node.get("pointsOnPlace").asText().split("-");
+        int pointsOnPlace = Integer.parseInt(fullPointsOnPlace[0]);
+        String strategyAsString = fullPointsOnPlace[1];
 
-        goldJ.setCornersJS(JsonFunctionsView.parseJsonCorners(node));
-
-        goldJ.setPlacementCost(node.get("placementCost").asText());
-
-        goldJ.setPointsOnPlace(node.get("pointsOnPlace").asText());
-
-        goldJ.setImgFront(node.get("frontImageFileName").asText());
-        goldJ.setImgBack(node.get("backImageFileName").asText());
-
-        return goldJ;
+        return new ViewGoldCard(cardId, imageFront, imageBack, corners, pointsOnPlace, backResource, placementCostAsResourceList, strategyAsString);
     }
 }

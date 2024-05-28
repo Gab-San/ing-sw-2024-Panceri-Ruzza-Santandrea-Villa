@@ -19,6 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
+
 public class ModelUpdater implements VirtualClient {
     private final ViewBoard board;
     private final View view;
@@ -37,11 +40,11 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public void displayMessage(String messenger, String msg) throws RemoteException {
-        view.showChatMessage(msg);
+    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
+        view.showChatMessage(messenger + "> " + msg);
     }
     @Override
-    public void ping() { } //TODO: remove ping()
+    public synchronized void ping() { } //TODO: remove ping()
 
     private void notifyMyAreaUpdate(String msg){
         if(verbose)
@@ -49,6 +52,7 @@ public class ModelUpdater implements VirtualClient {
         else
             view.update(SceneID.getMyAreaSceneID(), msg);
     }
+
     private void notifyOpponentUpdate(String nickname, String msg){
         if(verbose)
             notifyView(msg);
@@ -64,21 +68,21 @@ public class ModelUpdater implements VirtualClient {
     private void notifyView(String msg){
         view.showNotification(msg);
     }
-    public void reportError(String errorMessage) {
+    public synchronized void reportError(String errorMessage) {
         view.showError(errorMessage);
     }
 
     @Override
-    public void notifyIndirectDisconnect() throws RemoteException {
+    public synchronized void notifyIndirectDisconnect() throws RemoteException {
         view.notifyTimeout();
     }
 
-    public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
+    public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);
             board.getPlayerHand().setColor(color);
-            if(turn != 0 || color != null)
-                notifyMyAreaUpdate("Your turn and color were set");
+//            if(turn != 0 || color != null)
+            notifyMyAreaUpdate("Your turn and color were set");
         }
         else{
             //getOpponentHand will also run addPlayer if it wasn't run before.
@@ -89,7 +93,7 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " joined the game!");
         }
     }
-    public void updatePlayer(String nickname, PlayerColor color){
+    public synchronized void updatePlayer(String nickname, PlayerColor color){
         if(board.getPlayerHand().getNickname().equals(nickname)) {
             if(board.getPlayerHand().setColor(color))
                 notifyMyAreaUpdate("Your color was set");
@@ -99,7 +103,7 @@ public class ModelUpdater implements VirtualClient {
                 notifyOpponentUpdate(nickname, nickname + "'s color was set");
         }
     }
-    public void updatePlayer(String nickname, int playerTurn){
+    public synchronized void updatePlayer(String nickname, int playerTurn){
         if(board.getPlayerHand().getNickname().equals(nickname)){
             if(board.getPlayerHand().setTurn(playerTurn))
                 notifyMyAreaUpdate("Your turn was set");
@@ -109,7 +113,8 @@ public class ModelUpdater implements VirtualClient {
                 notifyOpponentUpdate(nickname, nickname + "'s turn was set");
         }
     }
-    public void updatePlayer(String nickname, boolean isConnected){
+    @Override
+    public synchronized void updatePlayer(String nickname, boolean isConnected){
         if(!board.getPlayerHand().getNickname().equals(nickname)){
             board.getOpponentHand(nickname).setConnected(isConnected);
             String connectionString = isConnected ? "reconnected" : "disconnected";
@@ -118,11 +123,12 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public void removePlayer(String nickname) throws RemoteException {
-        //TODO: implement
+    public synchronized void removePlayer(String nickname) throws RemoteException {
+        board.removePlayer(nickname);
+        notifyView(nickname + " has been removed.");
     }
-
-    public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
+    @Override
+    public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         board.setPlayerDeadlock(nickname, isDeadLocked);
         if(isDeadLocked)
             if(board.getPlayerHand().getNickname().equals(nickname))
@@ -132,20 +138,24 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public void notifyEndgame() throws RemoteException {
+    public synchronized void notifyEndgame() throws RemoteException {
         notifyBoardUpdate("Endgame has been reached!");
     }
 
     @Override
-    public void notifyEndgame(String nickname, int score) throws RemoteException {
+    public synchronized void notifyEndgame(String nickname, int score) throws RemoteException {
         notifyBoardUpdate("Endgame has been reached because "
                 + nickname + " has reached " + score + " (>20) points!");
     }
 
     private void deckCardTypeMismatch(){
+        System.out.println(YELLOW_TEXT + "CLEARLY AN ERROR." + RESET);
+        System.out.println("|".repeat(500));
         throw new IllegalArgumentException("Deck type and Card type mismatch");
     }
     private void illegalArgument(){
+        System.out.println(YELLOW_TEXT + "CLEARLY AN ARGUMENT ERROR." + RESET);
+        System.out.println("|".repeat(500));
         throw new IllegalArgumentException("Illegal argument passed.");
     }
     private String getDeckName(char deck){
@@ -156,11 +166,15 @@ public class ModelUpdater implements VirtualClient {
             default -> "";
         };
     }
-    public void setDeckState(char deck, String topId, String firstId, String secondId) {
+    public synchronized void setDeckState(char deck, String topId, String firstId, String secondId) {
         try {
             ViewCard topCard = jsonImporter.getCard(topId);
-            ViewCard firstRevealed = jsonImporter.getCard(topId);
-            ViewCard secondRevealed = jsonImporter.getCard(topId);
+            ViewCard firstRevealed = jsonImporter.getCard(firstId);
+            if(firstRevealed != null)
+                firstRevealed.turnFaceUp();
+            ViewCard secondRevealed = jsonImporter.getCard(secondId);
+            if(secondRevealed != null)
+                secondRevealed.turnFaceUp();
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
                     board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
@@ -184,84 +198,89 @@ public class ModelUpdater implements VirtualClient {
         }catch (ClassCastException e){
             //FIXME: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
+        } catch (Exception e){
+            e.printStackTrace(System.err);
         }
     }
-    public void deckUpdate(char deck, String revealedId, int cardPosition) {
-        if(!Character.toString(deck).matches("[RGO]")) return;
+    public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) {
+        if(!Character.toString(deck).toUpperCase().matches("[RGO]")) illegalArgument();
 
-        ViewCard topCard = switch (deck){
-            case ViewBoard.RESOURCE_DECK -> board.getResourceCardDeck().getTopCard();
-            case ViewBoard.GOLD_DECK -> board.getGoldCardDeck().getTopCard();
-            case ViewBoard.OBJECTIVE_DECK -> board.getObjectiveCardDeck().getTopCard();
-            default -> null; // never triggered
-        };
-        if(revealedId == null || cardPosition > 2 || cardPosition < 0) illegalArgument();
+//        ViewCard topCard = switch (deck){
+//            case ViewBoard.RESOURCE_DECK -> board.getResourceCardDeck().getTopCard();
+//            case ViewBoard.GOLD_DECK -> board.getGoldCardDeck().getTopCard();
+//            case ViewBoard.OBJECTIVE_DECK -> board.getObjectiveCardDeck().getTopCard();
+//            default -> null; // never triggered
+//        };
+//        if(revealedId == null || cardPosition > 2 || cardPosition < 0) illegalArgument();
+//
+//        if(topCard == null || !revealedId.equals(topCard.getCardID())){
+//            topCard = jsonImporter.getCard(revealedId);
+//        }
 
-        if(topCard == null || !revealedId.equals(topCard.getCardID())){
-            topCard = jsonImporter.getCard(revealedId);
-        }
+        ViewCard card = jsonImporter.getCard(revealedId);
+        if(cardPosition > 0 && card != null) card.turnFaceUp();
         try {
             switch (deck) {
                 case ViewBoard.RESOURCE_DECK:
                     switch (cardPosition){
                         case 0:
-                            board.getResourceCardDeck().setTopCard((ViewResourceCard) topCard);
+                            board.getResourceCardDeck().setTopCard((ViewResourceCard) card);
                             break;
                         case 1:
-                            board.getResourceCardDeck().setFirstRevealed((ViewResourceCard) topCard);
+                            board.getResourceCardDeck().setFirstRevealed((ViewResourceCard) card);
                             break;
                         case 2:
-                            board.getResourceCardDeck().setSecondRevealed((ViewResourceCard) topCard);
+                            board.getResourceCardDeck().setSecondRevealed((ViewResourceCard) card);
                             break;
                     }
                     break;
                 case ViewBoard.GOLD_DECK:
                     switch (cardPosition){
                         case 0:
-                            board.getGoldCardDeck().setTopCard((ViewGoldCard) topCard);
+                            board.getGoldCardDeck().setTopCard((ViewGoldCard) card);
                             break;
                         case 1:
-                            board.getGoldCardDeck().setFirstRevealed((ViewGoldCard) topCard);
+                            board.getGoldCardDeck().setFirstRevealed((ViewGoldCard) card);
                             break;
                         case 2:
-                            board.getGoldCardDeck().setSecondRevealed((ViewGoldCard) topCard);
+                            board.getGoldCardDeck().setSecondRevealed((ViewGoldCard) card);
                             break;
                     }
                     break;
                 case ViewBoard.OBJECTIVE_DECK:
                     switch (cardPosition){
                         case 0:
-                            board.getObjectiveCardDeck().setTopCard((ViewObjectiveCard) topCard);
+                            board.getObjectiveCardDeck().setTopCard((ViewObjectiveCard) card);
                             break;
                         case 1:
-                            board.getObjectiveCardDeck().setFirstRevealed((ViewObjectiveCard) topCard);
+                            board.getObjectiveCardDeck().setFirstRevealed((ViewObjectiveCard) card);
                             break;
                         case 2:
-                            board.getObjectiveCardDeck().setSecondRevealed((ViewObjectiveCard) topCard);
+                            board.getObjectiveCardDeck().setSecondRevealed((ViewObjectiveCard) card);
                             break;
                     }
                     break;
             }
             if(cardPosition == 0){
-                notifyBoardUpdate("The top card of " + getDeckName(deck) + " was drawn");
+                notifyBoardUpdate("The top card of " + getDeckName(deck) + " was replaced with " + revealedId);
             }
             else{
                 String cardPos = cardPosition == 1 ? "First" : "Second";
-                notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn");
+                notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was revealed with " + revealedId);
             }
         }catch (ClassCastException e){
             //TODO: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
         }
     }
-    public void setDeckState(char deck, String revealedId, int cardPosition){
+    public synchronized void setDeckState(char deck, String revealedId, int cardPosition){
         deckUpdate(deck, revealedId, cardPosition);
     }
-    public void setDeckState(char deck, String firstCardId, String secondCardId) {
+    public synchronized void setDeckState(char deck, String firstCardId, String secondCardId) {
         setDeckState(deck, null, firstCardId, secondCardId);
         notifyBoardUpdate(getDeckName(deck) + " is now empty! Only the 2 revealed cards remain.");
     }
-    public void emptyFaceDownPile(char deck){
+    public synchronized void emptyFaceDownPile(char deck){
         switch (deck) {
             case ViewBoard.RESOURCE_DECK:
                 board.getResourceCardDeck().setTopCard(null);
@@ -276,7 +295,7 @@ public class ModelUpdater implements VirtualClient {
         }
         notifyBoardUpdate("Last top card was drawn from " + getDeckName(deck) + ". It is now empty.");
     }
-    public void emptyReveal(char deck, int position){
+    public synchronized void emptyReveal(char deck, int position){
         if(position > 2 || position < 1) illegalArgument();
         boolean first = position == 1;
         switch (deck) {
@@ -297,41 +316,46 @@ public class ModelUpdater implements VirtualClient {
         String cardPos = first ? "First" : "Second";
         notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn. Deck is empty so no card has replaced it.");
     }
-    public void setEmptyDeckState(char deck) {
-        return;
+    public synchronized void setEmptyDeckState(char deck) {
+//        return;
         //FIXME: this isn't needed as decks are initialised empty
-//        setDeckState(deck, null,null,null);
+        setDeckState(deck, null,null,null);
     }
 
     @Override
-    public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
-        for(String nick : playerDeadLock.keySet()){
-            boolean deadlock = playerDeadLock.get(nick);
-            board.setPlayerDeadlock(nick, deadlock);
-            if(deadlock)
-                notifyOpponentUpdate(nick, nick + " is deadlocked!");
-        }
-        if(board.setGamePhase(gamePhase) || board.setCurrentTurn(currentTurn))
-            notifyBoardUpdate("Board initialised.");
+    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+        try {
+            for (String nick : playerDeadLock.keySet()) {
+                boolean deadlock = playerDeadLock.get(nick);
+                board.setPlayerDeadlock(nick, deadlock);
+                board.setScore(nick, scoreboard.getOrDefault(nick, 0));
+                //FIXME: check this player nick too (playerHand)
+                if (deadlock)
+                    notifyOpponentUpdate(nick, nick + " is deadlocked!");
+            }
+            if (board.setGamePhase(gamePhase) || board.setCurrentTurn(currentTurn))
+                notifyBoardUpdate("Board initialised.");
 
+        }catch(Exception e) {
+            notifyView("ERRORE RICEVUTO.");
+        }
     }
-    public void updatePhase(GamePhase gamePhase) {
+    public synchronized void updatePhase(GamePhase gamePhase) {
         if(board.setGamePhase(gamePhase))
             view.showNotification("Game phase updated to " + gamePhase);
     }
-    public void updateTurn(int currentTurn) {
+    public synchronized void updateTurn(int currentTurn) {
         if(board.setCurrentTurn(currentTurn))
             view.showNotification("Turn advanced to " + currentTurn);
     }
-    public void updateScore(String nickname, int score) {
+    public synchronized void updateScore(String nickname, int score) {
         board.setScore(nickname, score);
         notifyBoardUpdate(nickname + "'s score is now " + score);
     }
 
-    public void setPlayerHandState(String nickname, List<String> playCardIDs, List<String> objectiveCardIDs, String startingCardID) {
+    public synchronized void setPlayerHandState(String nickname, List<String> playCardIDs, List<String> objectiveCardIDs, String startingCardID) {
         List<ViewPlayCard> cardsInHand = jsonImporter.getPlayCards(playCardIDs);
-        List<ViewObjectiveCard> objectives = new LinkedList<>();
-        objectiveCardIDs.forEach(id -> objectives.add(jsonImporter.getObjectiveCard(id)));
+        List<ViewObjectiveCard> objectives = jsonImporter.getObjectiveCards(objectiveCardIDs);
         ViewStartCard startCard = jsonImporter.getStartCard(startingCardID);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
@@ -350,7 +374,7 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + "'s hand was set");
         }
     }
-    public void playerHandAddedCardUpdate(String nickname, String drawnCardId) {
+    public synchronized void playerHandAddedCardUpdate(String nickname, String drawnCardId) {
         ViewPlayCard drawnCard = jsonImporter.getPlayCard(drawnCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
@@ -366,7 +390,7 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " has drawn a card");
         }
     }
-    public void playerHandRemoveCard(String nickname, String playCardId) {
+    public synchronized void playerHandRemoveCard(String nickname, String playCardId) {
         ViewPlayCard card = jsonImporter.getPlayCard(playCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
@@ -382,13 +406,14 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " has used a card in their hand");
         }
     }
-    public void playerHandAddObjective(String nickname, String objectiveCard) {
+    public synchronized void playerHandAddObjective(String nickname, String objectiveCard) {
         ViewObjectiveCard objective = jsonImporter.getObjectiveCard(objectiveCard);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
             hand.addSecretObjectiveCard(objective);
 
+            //TODO: debug secret objectives in hand by getting IDs and adding to backlog (chat??)
             notifyMyAreaUpdate("You have received an objective");
         }
         else{
@@ -398,7 +423,7 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " has received an objective");
         }
     }
-    public void playerHandChooseObject(String nickname, String chosenObjectiveId) {
+    public synchronized void playerHandChooseObject(String nickname, String chosenObjectiveId) {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
             hand.chooseObjective(chosenObjectiveId);
@@ -410,7 +435,7 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " has chosen their objective");
         }
     }
-    public void playerHandSetStartingCard(String nickname, String startingCardId) {
+    public synchronized void playerHandSetStartingCard(String nickname, String startingCardId) {
         ViewStartCard startCard = jsonImporter.getStartCard(startingCardId);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
@@ -427,12 +452,13 @@ public class ModelUpdater implements VirtualClient {
         }
     }
 
-    public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) {
+    public synchronized void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
 
         for(CardPosition pos : cardPositions){
             ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
+            //TODO: add faceUp/Down and visible Corner setting
             if(card != null) {
                 playArea.setCard(new Point(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
@@ -451,7 +477,7 @@ public class ModelUpdater implements VirtualClient {
         else
             notifyOpponentUpdate(nickname, nickname + "'s playArea was initialised");
     }
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) {
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(placedCardId);
         playArea.placeCard(new Point(row, col), card);
@@ -461,7 +487,7 @@ public class ModelUpdater implements VirtualClient {
         else
             notifyOpponentUpdate(nickname, nickname + " placed a card");
     }
-    public void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) {
+    public synchronized void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.setVisibleResources(visibleResources);
         if(board.getPlayerHand().getNickname().equals(nickname))
@@ -473,7 +499,7 @@ public class ModelUpdater implements VirtualClient {
         return serCorner.cardCornerId().equals(cardCorner.getCardRef().getCardID())
                 && serCorner.getCornerDirection().equals(cardCorner.getDirection());
     }
-    public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) {
+    public synchronized void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
 
         //get cardID from SerializableCorner and then find related card in cardMatrix

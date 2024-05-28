@@ -13,14 +13,25 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 public abstract class TUI_Scene implements Scene {
+    private static final int NOTIF_CHAT_SPACING = 10;
     protected final PrintWriter out;
     protected List<String> notificationBacklog;
     protected List<String> chatBacklog;
 
-    protected TUI_Scene() {
+    protected TUI_Scene(List<String> notificationBacklog, List<String> chatBacklog) {
         this.out = new PrintWriter(System.out, true);
-        notificationBacklog = new LinkedList<>();
-        chatBacklog = new LinkedList<>();
+        this.notificationBacklog = notificationBacklog;
+        this.chatBacklog = chatBacklog;
+    }
+    protected TUI_Scene() {
+        this(new LinkedList<>(), new LinkedList<>());
+    }
+
+    public final void setNotificationBacklog(List<String> backlog){
+        this.notificationBacklog = backlog;
+    }
+    public final void setChatBacklog(List<String> backlog){
+        this.chatBacklog = backlog;
     }
 
     public static void cls(){
@@ -35,6 +46,8 @@ public abstract class TUI_Scene implements Scene {
             int notifMaxMsgLen = notificationBacklog.stream()
                     .mapToInt(String::length)
                     .max().orElse(0);
+
+            notifMaxMsgLen += NOTIF_CHAT_SPACING;
 
             int backlogSize = Math.max(notificationBacklog.size(), chatBacklog.size());
             int notifDiff = backlogSize - notificationBacklog.size();

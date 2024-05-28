@@ -3,7 +3,7 @@
     "cardId": "O0",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["**R *R* R**"],
+    "pattern": "**R *R* R**",
     "frontImageFileName": "img_B0_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -11,14 +11,14 @@
     "cardId": "O1",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["G** *G* **G"],
+    "pattern": "G** *G* **G",
     "frontImageFileName": "img_B0_front.png",
     "backImageFileName": "img_B0_back.png"
   },
   {
     "cardId": "O2",
     "type" : "PATTERNTYPE",
-    "pattern": ["**B *B* B**"],
+    "pattern": "**B *B* B**",
     "points": 2,
     "frontImageFileName": "img_B2_front.png",
     "backImageFileName": "img_B0_back.png"
@@ -27,7 +27,7 @@
     "cardId": "O3",
     "type" : "PATTERNTYPE",
     "points": 2,
-    "pattern": ["P** *P* **P"],
+    "pattern": "P** *P* **P",
     "frontImageFileName": "img_B3_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -35,7 +35,7 @@
     "cardId": "O4",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*R* *R* **G"],
+    "pattern": "*R* *R* **G",
     "frontImageFileName": "img_B4_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -43,7 +43,7 @@
     "cardId": "O5",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*G* *G* P**"],
+    "pattern": "*G* *G* P**",
     "frontImageFileName": "img_B5_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -51,7 +51,7 @@
     "cardId": "O6",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["*R* B** B**"],
+    "pattern": "*R* B** B**",
     "frontImageFileName": "img_B6_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -59,7 +59,7 @@
     "cardId": "O7",
     "type" : "PATTERNTYPE",
     "points": 3,
-    "pattern": ["B** *P* *P*"],
+    "pattern": "B** *P* *P*",
     "frontImageFileName": "img_B7_front.png",
     "backImageFileName": "img_B0_back.png"
   },
@@ -72,7 +72,7 @@
     "backImageFileName": "img_B0_back.png"
   },
   {
-    "cardId": "09",
+    "cardId": "O9",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "LLL",
@@ -80,7 +80,7 @@
     "backImageFileName": "img_B0_back.png"
   },
   {
-    "cardId": "10",
+    "cardId": "O10",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "MMM",
@@ -88,7 +88,7 @@
     "backImageFileName": "img_B0_back.png"
   },
   {
-    "cardId": "11",
+    "cardId": "O11",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "BBB",
@@ -96,7 +96,7 @@
     "backImageFileName": "img_B0_back.png"
   },
   {
-    "cardId": "12",
+    "cardId": "O12",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "QQ",
@@ -104,7 +104,7 @@
     "backImageFileName": "img_B12_back.png"
   },
   {
-    "cardId": "13",
+    "cardId": "O13",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "PP",
@@ -112,7 +112,7 @@
     "backImageFileName": "img_B12_back.png"
   },
   {
-    "cardId": "14",
+    "cardId": "O14",
     "type": "RESOURCETYPE",
     "points": 2,
     "pattern": "SS",
@@ -120,7 +120,7 @@
     "backImageFileName": "img_B12_back.png"
   },
   {
-    "cardId": "15",
+    "cardId": "O15",
     "type": "RESOURCETYPE",
     "points": 3,
     "pattern": "QSP",

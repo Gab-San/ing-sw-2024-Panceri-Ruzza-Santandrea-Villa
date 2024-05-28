@@ -38,6 +38,7 @@ public class ObjectiveCardDeserializerView extends StdDeserializer<ViewObjective
             case "PATTERNTYPE", "RESOURCETYPE":
                 return new ViewObjectiveCard(id, imgFront, imgBack, patternType, pointsPerSolve, patternValue);
             default:
+                System.err.println("ERROR WHILE READING JSON");
                 throw new IOException();
         }
     }

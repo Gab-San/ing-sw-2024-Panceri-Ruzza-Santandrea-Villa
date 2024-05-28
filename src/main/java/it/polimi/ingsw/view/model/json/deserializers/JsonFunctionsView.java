@@ -11,17 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public interface JsonFunctionsView {
-    static List<CornerJView> parseJsonCorners(@NotNull JsonNode node){
-        List<CornerJView> cornerJS = new ArrayList<>();
-        node.get("corners").forEach((e)->{
-            CornerJView toAdd = new CornerJView();
-            toAdd.setDirection(e.get("direction").asText());
-            toAdd.setFrontResource(e.get("frontResource").asText());
-            toAdd.setBackResource(e.get("backResource").asText());
-            cornerJS.add(toAdd);
-        });
-        return cornerJS;
-    }
 
     static List<ViewCorner> parseCorners(@NotNull JsonNode node){
         List<ViewCorner> corners = new ArrayList<>();
@@ -37,13 +26,5 @@ public interface JsonFunctionsView {
         );
 
         return corners;
-    }
-
-    static List<ViewCorner> parseCorners(@NotNull List<CornerJView> jCorners){
-        return jCorners.stream().map(e -> new ViewCorner(
-                GameResource.getResourceFromNameInitial(e.getFrontResource()),
-                GameResource.getResourceFromNameInitial(e.getBackResource()),
-                CornerDirection.getDirectionFromString(e.getDirection())
-        )).collect(Collectors.toList());
     }
 }

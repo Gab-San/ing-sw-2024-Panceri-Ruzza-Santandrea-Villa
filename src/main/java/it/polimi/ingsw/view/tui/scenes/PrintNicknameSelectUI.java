@@ -13,8 +13,6 @@ public class PrintNicknameSelectUI extends TUI_Scene {
 
     @Override
     public void print() {
-        if(notificationBacklog != null)
-            notificationBacklog.forEach(out::println);
         out.print("Choose your nickname (min 3 characters): ");
         out.flush();
     }

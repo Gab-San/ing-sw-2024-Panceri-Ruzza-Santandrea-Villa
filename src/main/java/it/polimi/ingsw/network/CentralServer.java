@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
+
 public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
@@ -84,6 +86,8 @@ public class CentralServer {
         if(playerClients.containsValue(client))
             throw new IllegalStateException("Client already connected!");
 
+        client.toString();
+
         if(playerClients.containsKey(nickname)){
             try{
                 playerClients.get(nickname).ping();
@@ -110,6 +114,8 @@ public class CentralServer {
                     "Error message: " + e.getMessage());
             }
         }
+
+        System.out.println(GREEN_TEXT + nickname + " has connected!" + RESET);
     }
 
     public synchronized void disconnect(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException{
@@ -124,9 +130,10 @@ public class CentralServer {
                     commandQueue.stream().filter(c -> c.getNickname().equals(nickname)).toList()
             );
         }
+        System.out.println(PURPLE_TEXT + nickname + " has disconnected!" + RESET);
     }
 
-    public synchronized void sendMessage(String messenger, String addressee, String message) {
+    public synchronized void sendMessage(String messenger, String addressee, String message) throws IllegalArgumentException {
         if(!playerClients.containsKey(messenger)){
             throw new IllegalArgumentException("Client not connected to chat!");
         }

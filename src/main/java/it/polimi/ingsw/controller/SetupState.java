@@ -66,7 +66,7 @@ public class SetupState extends GameState{
                 .collect(Collectors.toSet());
         System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
 
-//        timers.stopTimer(board.getPlayerByNickname(nickname));
+        timers.stopTimer(board.getPlayerByNickname(nickname));
 
         if(connectedPlayers .isEmpty()) {
             //se si sono disconnessi tutti i giocatori => torno a creation state
@@ -120,7 +120,7 @@ public class SetupState extends GameState{
 
         board.placeStartingCard(player, placeOnFront);
 
-//        timers.stopTimer(player);
+        timers.stopTimer(player);
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);

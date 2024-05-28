@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonImporter {
-    private final Map<String, ResourceCardJSONView> resourceCards;
-    private final Map<String, GoldCardJSONView> goldCards;
+    private final Map<String, ViewResourceCard> resourceCards;
+    private final Map<String, ViewGoldCard> goldCards;
     private final Map<String, ViewObjectiveCard> objectiveCards;
     private final Map<String, ViewStartCard> startCards;
 
@@ -25,30 +25,30 @@ public class JsonImporter {
     public JsonImporter() throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(GoldCardJSONView.class, new GoldCardDeserializerView());
+        simpleModule.addDeserializer(ViewGoldCard.class, new GoldCardDeserializerView());
         objectMapper.registerModule(simpleModule);
         String basePath = "src/main/java/it/polimi/ingsw/view/model/json/";
 
         File json = new File(basePath+"GoldCard.json"); // Path file JSON
         goldCards = new Hashtable<>();
-        List<GoldCardJSONView> goldCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
-                .constructCollectionType(List.class, GoldCardJSONView.class));
+        List<ViewGoldCard> goldCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, ViewGoldCard.class));
         goldCardImport.forEach(
-                c -> goldCards.put(c.getCardId(), c)
+                c -> goldCards.put(c.getCardID(), c)
         );
 
 
         objectMapper = new ObjectMapper();
         simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(ResourceCardJSONView.class, new ResourceCardDeserializerView());
+        simpleModule.addDeserializer(ViewResourceCard.class, new ResourceCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
         json = new File(basePath+"ResourceCard.json"); // Path file JSON
         resourceCards = new Hashtable<>();
-        List<ResourceCardJSONView> resourceCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
-                .constructCollectionType(List.class, ResourceCardJSONView.class));
+        List<ViewResourceCard> resourceCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, ViewResourceCard.class));
         resourceCardImport.forEach(
-                c -> resourceCards.put(c.getCardId(), c)
+                c -> resourceCards.put(c.getCardID(), c)
         );
 
         objectMapper = new ObjectMapper();
@@ -79,15 +79,19 @@ public class JsonImporter {
     }
 
     public ViewResourceCard getResourceCard(String ID){
-        return resourceCards.get(ID).toViewResourceCard();
+        if(ID == null) return null;
+        return resourceCards.get(ID);
     }
     public ViewGoldCard getGoldCard(String ID){
-        return goldCards.get(ID).toViewGoldCard();
+        if(ID == null) return null;
+        return goldCards.get(ID);
     }
     public ViewObjectiveCard getObjectiveCard(String ID){
+        if(ID == null) return null;
         return objectiveCards.get(ID);
     }
     public ViewStartCard getStartCard(String ID){
+        if(ID == null) return null;
         return startCards.get(ID);
     }
 
@@ -112,12 +116,33 @@ public class JsonImporter {
 
     public List<ViewCard> getCards(List<String> IDList){
         List<ViewCard> cardList = new LinkedList<>();
-        IDList.forEach(id -> cardList.add(getCard(id)));
+        if(IDList != null)
+            IDList.forEach((id) -> {
+                if(id != null ) {
+                    cardList.add(getCard(id));
+                }
+            });
         return cardList;
     }
+
     public List<ViewPlayCard> getPlayCards(List<String> IDList){
         List<ViewPlayCard> cardList = new LinkedList<>();
-        IDList.forEach(id -> cardList.add(getPlayCard(id)));
+        if(IDList != null)
+            IDList.forEach((id) -> {
+                if(id != null ) {
+                    cardList.add(getPlayCard(id));
+                }
+            });
+        return cardList;
+    }
+    public List<ViewObjectiveCard> getObjectiveCards(List<String> IDList){
+        List<ViewObjectiveCard> cardList = new LinkedList<>();
+        if(IDList != null)
+            IDList.forEach((id) -> {
+                if(id != null ) {
+                    cardList.add(getObjectiveCard(id));
+                }
+            });
         return cardList;
     }
 }

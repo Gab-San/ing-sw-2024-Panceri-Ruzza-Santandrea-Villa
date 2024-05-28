@@ -33,7 +33,7 @@ public class StartingCardDeserializerView extends StdDeserializer<ViewStartCard>
         // Getting Central Front Resources
         List<GameResource> centralFrontResources = new ArrayList<>();
         node.get("centralFrontResources")
-                .forEach((e) -> centralFrontResources.add(GameResource.getResourceFromName(e.asText())) );
+                .forEach((e) -> centralFrontResources.add(GameResource.getResourceFromNameInitial(e.asText())) );
 
         // Instantiating Corners
         List<ViewCorner> cornerList = JsonFunctionsView.parseCorners(node);

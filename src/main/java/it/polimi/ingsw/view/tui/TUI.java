@@ -5,10 +5,7 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.tui.scenes.PrintBoardUI;
-import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
-import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
-import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
+import it.polimi.ingsw.view.tui.scenes.*;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -34,9 +31,15 @@ public class TUI extends View{
         setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
 
         // at this point, connection has concluded successfully.
-        sceneIDMap.put(SceneID.getBoardSceneID(), new PrintBoardUI(board));
-        sceneIDMap.put(SceneID.getMyAreaSceneID(), new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname())));
-        currentScene = sceneIDMap.get(SceneID.getMyAreaSceneID());
+        TUI_Scene boardUI = new PrintBoardUI(board);
+        boardUI.setNotificationBacklog(notificationBacklog);
+        boardUI.setChatBacklog(chatBacklog);
+        sceneIDMap.put(SceneID.getBoardSceneID(), boardUI);
+        TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname()));
+        myAreaUI.setNotificationBacklog(notificationBacklog);
+        myAreaUI.setChatBacklog(chatBacklog);
+        sceneIDMap.put(SceneID.getMyAreaSceneID(), myAreaUI);
+        currentScene = myAreaUI;
     }
 
     /**
@@ -105,6 +108,7 @@ public class TUI extends View{
     void setCenter(Point center) {
         currentScene.setCenter(center);
     }
+
     @Override
     public void setScene(SceneID sceneID) throws IllegalArgumentException{
         Scene newScene = sceneIDMap.get(sceneID);
@@ -113,12 +117,12 @@ public class TUI extends View{
         }
 
         currentScene = newScene;
-        newScene.displayNotification(notificationBacklog);
+        currentScene.display();
         printCommandPrompt();
     }
 
     @Override
-    public void update(SceneID sceneID, String description) {
+    public synchronized void update(SceneID sceneID, String description) {
         Scene scene = sceneIDMap.get(sceneID);
         if(scene != null){
             if(currentScene.equals(scene)){
@@ -131,17 +135,20 @@ public class TUI extends View{
         }
         else if(sceneID.isOpponentAreaScene()){
             String nick = sceneID.getNickname();
-            sceneIDMap.put(sceneID, new PrintOpponentUI(board.getOpponentHand(nick), board.getPlayerArea(nick)));
+            TUI_Scene opponentUI = new PrintOpponentUI(board.getOpponentHand(nick), board.getPlayerArea(nick));
+            opponentUI.setNotificationBacklog(notificationBacklog);
+            opponentUI.setChatBacklog(chatBacklog);
+            sceneIDMap.put(sceneID, opponentUI);
             update(sceneID, description); // won't loop indefinitely as next iteration will have scene != null
         }
     }
     @Override
-    public void showError(String errorMsg) {
+    public synchronized void showError(String errorMsg) {
         currentScene.displayError(errorMsg);
         printCommandPrompt();
     }
     @Override
-    public void showNotification(String notification) {
+    public synchronized void showNotification(String notification) {
         if(notificationBacklog.size() >= BACKLOG_SIZE){
             notificationBacklog.remove(0);
         }
@@ -150,7 +157,7 @@ public class TUI extends View{
         printCommandPrompt();
     }
     @Override
-    public void showChatMessage(String msg){
+    public synchronized void showChatMessage(String msg){
         if(chatBacklog.size() >= BACKLOG_SIZE){
             chatBacklog.remove(0);
         }
