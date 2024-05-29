@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.Parser;
 import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
 
 import java.rmi.RemoteException;
@@ -24,7 +25,7 @@ public class TUIParser {
         this.board = board;
     }
 
-    public void parseCommand(String command) throws IllegalArgumentException, IllegalStateException, RemoteException {
+    public void parseCommand(String command) throws IllegalArgumentException, IllegalStateException, RemoteException, DisconnectException {
         List<String> commandComponents = Arrays.stream(command.trim().split("\\s+")).distinct().toList();
         String keyCommand = "";
         if(!commandComponents.isEmpty())
@@ -46,7 +47,7 @@ public class TUIParser {
                 serverParser.parseCommand(command);
         }
         if(command.toLowerCase().matches("quit|disconnect")){
-            throw new RemoteException("DISCONNECTED");
+            throw new DisconnectException();
         }
     }
 

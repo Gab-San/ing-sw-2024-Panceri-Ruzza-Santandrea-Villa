@@ -4,6 +4,8 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
+import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.tui.scenes.*;
 
@@ -19,16 +21,17 @@ public class TUI extends View{
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
     Boolean hasServerTimeoutDisconnected;
+    private final boolean verbose;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.scanner = scanner;
+        this.verbose = verbose;
         hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
-        runNicknameSelectScene();
-        setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
+        runNicknameSelectScene(setClientModelUpdater);
         // at this point, connection has concluded successfully.
         TUI_Scene boardUI = new PrintBoardUI(board);
         boardUI.setNotificationBacklog(notificationBacklog);
@@ -51,7 +54,7 @@ public class TUI extends View{
         return nickname.matches("[^\n ].*[a-zA-Z].*[^\n ]")
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
-    private void runNicknameSelectScene() throws RemoteException{
+    private void runNicknameSelectScene(Consumer<ModelUpdater> setClientModelUpdater) throws RemoteException{
         currentScene.display();
         String nickname;
         do {
@@ -60,8 +63,9 @@ public class TUI extends View{
                 try{
                     board = new ViewBoard(nickname);
                     parser = new TUIParser(serverProxy, this, board);
+                    setClientModelUpdater.accept(new ModelUpdater(board, this));
                     parser.parseCommand("connect " + nickname);
-                }catch (IllegalStateException e){
+                }catch (IllegalStateException | DisconnectException e){
                     currentScene.displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
                     nickname = "";
                 }
@@ -76,14 +80,14 @@ public class TUI extends View{
         }
     }
 
-    public void run() throws RemoteException{
+    public void run() throws RemoteException, DisconnectException, TimeoutException {
         refreshScene();
         while(true){ //exits only on System.quit() or RemoteException
             try {
                 String input = scanner.nextLine();
                 synchronized (this) {
                     if (hasServerTimeoutDisconnected) {
-                        throw new RemoteException("TIMEOUT");
+                        throw new TimeoutException();
                     }
                 }
                 parser.parseCommand(input);
@@ -124,12 +128,11 @@ public class TUI extends View{
     public synchronized void update(SceneID sceneID, String description) {
         Scene scene = sceneIDMap.get(sceneID);
         if(scene != null){
-            if(currentScene.equals(scene)){
+            if(currentScene.equals(scene) && !verbose){
                 refreshScene();
             }
             else{
-                if(description != null && !description.isEmpty())
-                    showNotification(description);
+                showNotification(description);
             }
         }
         else if(sceneID.isOpponentAreaScene()){
@@ -148,6 +151,7 @@ public class TUI extends View{
     }
     @Override
     public synchronized void showNotification(String notification) {
+        if(notification == null || notification.isEmpty()) return;
         if(notificationBacklog.size() >= BACKLOG_SIZE){
             notificationBacklog.remove(0);
         }

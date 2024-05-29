@@ -24,17 +24,12 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
 public class ModelUpdater implements VirtualClient {
     private final ViewBoard board;
     private final View view;
-    private final boolean verbose;
     private final JsonImporter jsonImporter;
 
 
     public ModelUpdater(ViewBoard board, View view) {
-        this(board, view, false);
-    }
-    public ModelUpdater(ViewBoard board, View view, boolean verbose) {
         this.board = board;
         this.view = view;
-        this.verbose = verbose;
         jsonImporter = Client.getCardJSONImporter();
     }
 
@@ -47,23 +42,14 @@ public class ModelUpdater implements VirtualClient {
     public synchronized void ping() { } //TODO: remove ping()
 
     private void notifyMyAreaUpdate(String msg){
-        if(verbose)
-            notifyView(msg);
-        else
-            view.update(SceneID.getMyAreaSceneID(), msg);
+        view.update(SceneID.getMyAreaSceneID(), msg);
     }
 
     private void notifyOpponentUpdate(String nickname, String msg){
-        if(verbose)
-            notifyView(msg);
-        else
-            view.update(SceneID.getOpponentAreaSceneID(nickname), msg);
+        view.update(SceneID.getOpponentAreaSceneID(nickname), msg);
     }
     private void notifyBoardUpdate(String msg){
-        if(verbose)
-            notifyView(msg);
-        else
-            view.update(SceneID.getMyAreaSceneID(), msg);
+        view.update(SceneID.getMyAreaSceneID(), msg);
     }
     private void notifyView(String msg){
         view.showNotification(msg);

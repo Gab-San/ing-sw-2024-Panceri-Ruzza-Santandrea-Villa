@@ -31,8 +31,8 @@ public class CreationState extends GameState{
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
-        board.removePlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);
+        board.removePlayer(nickname);
         board.setGamePhase(GamePhase.CREATE);
     }
 

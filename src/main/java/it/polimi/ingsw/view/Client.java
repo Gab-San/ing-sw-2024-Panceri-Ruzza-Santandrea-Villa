@@ -3,6 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
+import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 import it.polimi.ingsw.view.tui.TUI;
@@ -195,12 +197,17 @@ public class Client {
             } catch (RemoteException e) {
                 cls();
                 view = null;
-                if(e.getMessage().equals("DISCONNECTED"))
-                    System.out.println(GREEN_TEXT + "Disconnection succeeded. Returning to main menu." + RESET);
-                else if(e.getMessage().equals("TIMEOUT"))
-                    System.out.println(RED_TEXT + "Server disconnected you for inactivity. Returning to main menu." + RESET);
-                else
-                    System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
+                System.out.println(RED_TEXT + "Server connection lost. Trying to recover..." + RESET);
+            }
+            catch (DisconnectException e){
+                cls();
+                view = null;
+                System.out.println(GREEN_TEXT + "Disconnection succeeded. Returning to main menu." + RESET);
+            }
+            catch (TimeoutException e){
+                cls();
+                view = null;
+                System.out.println(RED_TEXT + "Server disconnected you for inactivity. Returning to main menu." + RESET);
             }
         }
 

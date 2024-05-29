@@ -86,8 +86,6 @@ public class CentralServer {
         if(playerClients.containsValue(client))
             throw new IllegalStateException("Client already connected!");
 
-        client.toString();
-
         if(playerClients.containsKey(nickname)){
             try{
                 playerClients.get(nickname).ping();

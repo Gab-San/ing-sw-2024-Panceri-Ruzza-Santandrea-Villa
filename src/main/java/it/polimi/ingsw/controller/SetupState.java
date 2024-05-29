@@ -20,6 +20,7 @@ public class SetupState extends GameState{
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
 
+    private static final int TURN_TIME = 62;
     private final TurnTimerController timers;
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -35,7 +36,7 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
-        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
     }
 
     @Override
@@ -54,17 +55,17 @@ public class SetupState extends GameState{
 
         disconnectingPlayers.remove(nickname);
 
-        if(!board.getPlayerAreas().keySet().stream().map(Player::getNickname).toList().contains(nickname))
-            throw new IllegalArgumentException(nickname+" non fa parte della partita");
+        board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player not in game
 
-
-        board.disconnectPlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);
+        board.disconnectPlayer(nickname);
         Set<Player> connectedPlayers =board.getPlayerAreas().keySet().stream()
                 // only look at players that are connected
                 .filter(Player:: isConnected)
                 .collect(Collectors.toSet());
-        System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
+
+//        Debug print
+//        System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
 
         timers.stopTimer(board.getPlayerByNickname(nickname));
 
@@ -124,7 +125,7 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);
-            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
             for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
                 controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
         }
@@ -184,7 +185,7 @@ public class SetupState extends GameState{
             }
 
             board.setGamePhase(GamePhase.CHOOSEOBJECTIVE);
-            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
             for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
                 controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2)+1);
         }

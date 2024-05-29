@@ -49,12 +49,10 @@ public class PlayState extends GameState {
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
 
-        if(board.getPlayerAreas().keySet().stream()
-                .map(Player::getNickname).filter((s)-> s.equals(nickname)).findAny().isEmpty())
-            //se non esiste un giocatore con quel nickname
-            throw new IllegalArgumentException(nickname+" non fa parte della partita, non può disconnettersi");
-        board.disconnectPlayer(nickname);
+        board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player not in game
+
         board.unsubscribeClientFromUpdates(nickname);
+        board.disconnectPlayer(nickname);
         Player player = board.getCurrentPlayer();
 
         timerCurrPlayer.stopTimer(player);

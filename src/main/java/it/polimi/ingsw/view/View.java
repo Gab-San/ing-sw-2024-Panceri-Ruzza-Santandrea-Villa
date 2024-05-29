@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.network.CommandPassthrough;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
+import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 
 import java.rmi.RemoteException;
@@ -25,5 +27,5 @@ public abstract class View {
     public abstract void showNotification(String notification);
     public abstract void showChatMessage(String msg);
     public abstract void notifyTimeout();
-    public abstract void run() throws RemoteException;
+    public abstract void run() throws RemoteException, TimeoutException, DisconnectException;
 }
