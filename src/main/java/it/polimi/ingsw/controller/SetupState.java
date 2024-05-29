@@ -73,7 +73,7 @@ public class SetupState extends GameState{
             //se si sono disconnessi tutti i giocatori => torno a creation state
             for(Player p : new HashSet<>(board.getPlayerAreas().keySet()))
                 board.removePlayer(p.getNickname());
-            transition(new CreationState(board, controller, new ArrayList<>()));
+            transition(new CreationState(new Board(), controller, new ArrayList<>()));
             return;
         }
 

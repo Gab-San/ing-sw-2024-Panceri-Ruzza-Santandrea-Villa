@@ -9,6 +9,10 @@ import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.tui.scenes.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -82,16 +86,23 @@ public class TUI extends View{
 
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         refreshScene();
-        while(true){ //exits only on System.quit() or RemoteException
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while(true) { //exits only on System.quit() or RemoteException
             try {
-                String input = scanner.nextLine();
-                synchronized (this) {
-                    if (hasServerTimeoutDisconnected) {
-                        throw new TimeoutException();
+                // wait until we have data to complete a readLine()
+                while (!reader.ready()) {
+                    Thread.sleep(200);
+                    synchronized (this) {
+                        if (hasServerTimeoutDisconnected) {
+                            throw new TimeoutException();
+                        }
                     }
                 }
-                parser.parseCommand(input);
-            }catch (IllegalArgumentException | IllegalStateException e){
+                parser.parseCommand(reader.readLine());
+            } catch (RemoteException e){
+                throw e;
+            } catch (InterruptedException | IOException ignored) {
+            } catch (IllegalArgumentException | IllegalStateException e){
                 showError(e.getMessage());
             }
         }

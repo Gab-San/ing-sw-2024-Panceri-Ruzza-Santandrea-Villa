@@ -10,7 +10,9 @@ public class PlayerHandSetStartingCardEvent extends PlayerEvent {
     private final String startingCardId;
     public PlayerHandSetStartingCardEvent(String nickname, StartingCard startingCard) {
         super(nickname);
-        startingCardId = startingCard.getCardID();
+        //FIXME: [Ale] necessario per poter settare a vuoto la startcard
+        if(startingCard == null) startingCardId = null;
+        else startingCardId = startingCard.getCardID();
     }
 
     @Override

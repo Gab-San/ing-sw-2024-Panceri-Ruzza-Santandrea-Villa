@@ -40,7 +40,7 @@ public class JoinState extends GameState {
         board.removePlayer(nickname);
 
         if(board.getPlayerAreas().isEmpty())
-            transition(new CreationState(board, controller, new ArrayList<>()));
+            transition(new CreationState(new Board(), controller, new ArrayList<>()));
     }
 
     @Override

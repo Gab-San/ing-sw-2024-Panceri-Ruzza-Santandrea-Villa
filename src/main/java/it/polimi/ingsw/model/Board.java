@@ -27,6 +27,7 @@ import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
 import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerRemovalEvent;
+import it.polimi.ingsw.model.listener.remote.events.playerhand.PlayerHandSetStartingCardEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.security.InvalidParameterException;
@@ -331,6 +332,8 @@ public class Board implements GameSubject{
 
         try {
             playerAreas.get(player).placeStartingCard(startingCard);
+            //FIXME: [Ale] notifica rimozione carta
+            notifyAllListeners(new PlayerHandSetStartingCardEvent(player.getNickname(), null));
         } catch (IllegalStateException stateException){
             notifyAllListeners(new IllegalStateError(player.getNickname(), stateException.getMessage().toUpperCase()));
             throw stateException;
