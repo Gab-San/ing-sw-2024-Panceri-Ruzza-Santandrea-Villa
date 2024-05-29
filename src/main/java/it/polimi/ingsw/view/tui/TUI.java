@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class TUI extends View{
-    private static final int BACKLOG_SIZE = 30;
+    private static final int BACKLOG_SIZE = 10;
     private final Scanner scanner;
     private TUIParser parser;
     private ViewBoard board;
@@ -98,6 +98,7 @@ public class TUI extends View{
                         }
                     }
                 }
+                refreshScene();
                 parser.parseCommand(reader.readLine());
             } catch (RemoteException e){
                 throw e;

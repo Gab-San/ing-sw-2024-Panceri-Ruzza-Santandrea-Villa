@@ -135,6 +135,7 @@ public class ModelUpdater implements VirtualClient {
                 + nickname + " has reached " + score + " (>20) points!");
     }
 
+    //TODO: [Ale] remove these debug prints (and maybe remove exception too)
     private void deckCardTypeMismatch(){
         System.out.println(YELLOW_TEXT + "CLEARLY AN ERROR." + RESET);
         System.out.println("|".repeat(500));
@@ -190,19 +191,8 @@ public class ModelUpdater implements VirtualClient {
         }
     }
     public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) {
+        //TODO: handle argument error, maybe just return (ignore wrong update?)
         if(!Character.toString(deck).toUpperCase().matches("[RGO]")) illegalArgument();
-
-//        ViewCard topCard = switch (deck){
-//            case ViewBoard.RESOURCE_DECK -> board.getResourceCardDeck().getTopCard();
-//            case ViewBoard.GOLD_DECK -> board.getGoldCardDeck().getTopCard();
-//            case ViewBoard.OBJECTIVE_DECK -> board.getObjectiveCardDeck().getTopCard();
-//            default -> null; // never triggered
-//        };
-//        if(revealedId == null || cardPosition > 2 || cardPosition < 0) illegalArgument();
-//
-//        if(topCard == null || !revealedId.equals(topCard.getCardID())){
-//            topCard = jsonImporter.getCard(revealedId);
-//        }
 
         ViewCard card = jsonImporter.getCard(revealedId);
         if(cardPosition > 0 && card != null) card.turnFaceUp();
@@ -249,14 +239,13 @@ public class ModelUpdater implements VirtualClient {
                     break;
             }
             if(cardPosition == 0){
-                notifyBoardUpdate("The top card of " + getDeckName(deck) + " was replaced with " + revealedId);
+                notifyBoardUpdate("The top card of " + getDeckName(deck) + " was replaced");
             }
             else{
                 String cardPos = cardPosition == 1 ? "First" : "Second";
-                notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was revealed with " + revealedId);
+                notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was revealed");
             }
         }catch (ClassCastException e){
-            //TODO: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
         }
     }
@@ -400,7 +389,6 @@ public class ModelUpdater implements VirtualClient {
             ViewPlayerHand hand = board.getPlayerHand();
             hand.addSecretObjectiveCard(objective);
 
-            //TODO: debug secret objectives in hand by getting IDs and adding to backlog (chat??)
             notifyMyAreaUpdate("You have received an objective");
         }
         else{

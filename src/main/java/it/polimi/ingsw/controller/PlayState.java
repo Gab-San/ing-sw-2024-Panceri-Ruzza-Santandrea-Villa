@@ -22,6 +22,7 @@ public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
     private final TurnTimerController timerCurrPlayer;
+    private static final int TURN_TIME = 20; //default 302
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -31,7 +32,7 @@ public class PlayState extends GameState {
         timerCurrPlayer=new TurnTimerController(controller);
         board.setGamePhase(GamePhase.PLACECARD);
         Player player = board.getCurrentPlayer();
-        timerCurrPlayer.startTimer(player, 302);
+        timerCurrPlayer.startTimer(player, TURN_TIME);
     }
 
     @Override
@@ -67,7 +68,10 @@ public class PlayState extends GameState {
                 .collect(Collectors.toSet())
                 .isEmpty())
         {
-            nextState();
+            //FIXME: [Ale] returning to CreationState on empty game as Endgame doesn't allow joining (no player disconnects and game is never reset)
+            //      If Endgame allows joining, then restore nextState();
+            transition(new CreationState(new Board(), controller, disconnectingPlayers));
+//            nextState();
         }
     }
 
@@ -205,7 +209,7 @@ public class PlayState extends GameState {
                 board.setGamePhase(GamePhase.DRAWCARD);
             else
                 board.setGamePhase(GamePhase.PLACECARD);
-            timerCurrPlayer.startTimer(board.getCurrentPlayer(), 302);
+            timerCurrPlayer.startTimer(board.getCurrentPlayer(), TURN_TIME);
         }
         else nextState();
     }

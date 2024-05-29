@@ -79,7 +79,7 @@ public class PlayableDeck implements GameSubject {
                 break;
             case SECOND_POSITION:
                 secondRevealedCard = getTopCard();
-                notifyAllListeners(new DeckRevealEvent(deckType, firstRevealedCard, FIRST_POSITION));
+                notifyAllListeners(new DeckRevealEvent(deckType, secondRevealedCard, SECOND_POSITION));
                 break;
             default:
                 break;
