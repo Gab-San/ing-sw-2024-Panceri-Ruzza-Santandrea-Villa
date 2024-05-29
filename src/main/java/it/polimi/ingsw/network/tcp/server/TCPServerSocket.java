@@ -14,12 +14,12 @@ public class TCPServerSocket {
     public TCPServerSocket(int objPort) throws IOException, IllegalArgumentException {
         serverSocket = new ServerSocket(objPort);
         handlerPool = Executors.newCachedThreadPool();
+        System.out.println("TCP server waiting for client on port "+ objPort +"...");
         startServer();
     }
 
 
     private void startServer() {
-        System.out.println("TCP server waiting for client...");
         new Thread(
                 () -> {
                     try {

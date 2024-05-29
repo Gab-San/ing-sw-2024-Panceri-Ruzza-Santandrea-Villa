@@ -14,7 +14,7 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>/</outputDirectory>
-            <useProjectArtifact>true</useProjectArtifact>
+            <useProjectArtifact>false</useProjectArtifact>
             <unpack>true</unpack>
             <scope>runtime</scope>
         </dependencySet>
@@ -26,9 +26,9 @@
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>**/ingsw/*.class</include>
+                <include>**/network/**</include>
                 <include>**/controller/**</include>
                 <include>**/model/**</include>
-                <include>**/network/**</include>
             </includes>
         </fileSet>
     </fileSets>
