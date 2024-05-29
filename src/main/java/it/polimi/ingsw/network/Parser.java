@@ -311,9 +311,11 @@ public class Parser {
         String cornDir;
 
         String argsString =  argsStr.toString().trim();
-        Matcher cardMatcher = Pattern.compile("[RGrg][1-3]?[0-9]").matcher(argsString);
+        Matcher cardMatcher = Pattern.compile("[RGSrgs][1-3]?[0-9]").matcher(argsString);
         if(cardMatcher.find()){
             cardToPlace = cardMatcher.group().trim();
+            if(cardToPlace.toUpperCase().charAt(0) == 'S')
+                throw new IllegalArgumentException("given ID of card to place is invalid.");
         } else {
             throw new IllegalArgumentException("missing ID of card to place or given ID is invalid");
         }

@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
@@ -40,7 +41,7 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public synchronized void displayMessage(String messenger, String msg) throws RemoteException {
+    public synchronized void displayMessage(String messenger, String msg){
         view.showChatMessage(messenger + "> " + msg);
     }
     @Override
@@ -381,7 +382,7 @@ public class ModelUpdater implements VirtualClient {
             ViewPlayerHand hand = board.getPlayerHand();
             hand.addCard(drawnCard);
 
-            notifyMyAreaUpdate("Your have drawn a card");
+            notifyMyAreaUpdate("You have drawn a card");
         }
         else{
             ViewOpponentHand hand = board.getOpponentHand(nickname);
@@ -406,8 +407,8 @@ public class ModelUpdater implements VirtualClient {
             notifyOpponentUpdate(nickname, nickname + " has used a card in their hand");
         }
     }
-    public synchronized void playerHandAddObjective(String nickname, String objectiveCard) {
-        ViewObjectiveCard objective = jsonImporter.getObjectiveCard(objectiveCard);
+    public synchronized void playerHandAddObjective(String nickname, String objectiveCardID) {
+        ViewObjectiveCard objective = jsonImporter.getObjectiveCard(objectiveCardID);
 
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             ViewPlayerHand hand = board.getPlayerHand();
@@ -442,13 +443,17 @@ public class ModelUpdater implements VirtualClient {
             ViewPlayerHand hand = board.getPlayerHand();
             hand.setStartCard(startCard);
 
-            notifyMyAreaUpdate("You have received your starting card");
+            if(startingCardId != null)
+                notifyMyAreaUpdate("You have received your starting card");
+            else notifyMyAreaUpdate("You have placed your starting card");
         }
         else{
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.setStartCard(startCard);
 
-            notifyOpponentUpdate(nickname, nickname + " has received their starting card");
+            if(startingCardId != null)
+                notifyOpponentUpdate(nickname, nickname + " has received their starting card");
+            else notifyOpponentUpdate(nickname,  nickname + " has placed their starting card");
         }
     }
 
@@ -480,6 +485,7 @@ public class ModelUpdater implements VirtualClient {
     public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(placedCardId);
+        //TODO: add boolean placedOnFront and flip card here
         playArea.placeCard(new Point(row, col), card);
 
         if(board.getPlayerHand().getNickname().equals(nickname))

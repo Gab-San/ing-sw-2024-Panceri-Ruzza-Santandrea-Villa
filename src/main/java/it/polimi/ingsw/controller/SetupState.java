@@ -35,7 +35,7 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
-        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard.add(nickname);
         if(playersWhoPlacedStartingCard.size() == board.getPlayerAreas().size()){
             board.setGamePhase(GamePhase.CHOOSECOLOR);
-            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
             for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
                 controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
         }
@@ -184,7 +184,7 @@ public class SetupState extends GameState{
             }
 
             board.setGamePhase(GamePhase.CHOOSEOBJECTIVE);
-            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 62);
+            timers.startAll(board.getPlayerAreas().keySet().stream().toList(), 120);
             for(Player p: board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
                 controller.chooseSecretObjective(p.getNickname(), new Random().nextInt(2)+1);
         }

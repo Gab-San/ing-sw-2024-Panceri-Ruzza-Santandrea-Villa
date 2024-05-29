@@ -38,6 +38,7 @@ public class ViewBoard {
         scoreboard = new Hashtable<>();
         scoreboard.put(nickname, 0);
         currentTurn = 0;
+        gamePhase = GamePhase.PLACECARD;
 
         playerAreas.put(nickname, new ViewPlayArea());
         isPlayerDeadlocked.put(nickname, false);

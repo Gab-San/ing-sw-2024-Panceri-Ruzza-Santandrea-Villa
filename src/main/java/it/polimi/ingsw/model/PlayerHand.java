@@ -171,7 +171,7 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Objective cards were already dealt.", playerRef, ObjectiveCard.class);
         ObjectiveCard objectiveCard = drawCard.get();
         this.secretObjective.add(objectiveCard);
-//        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
+        notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
     }
     
     
