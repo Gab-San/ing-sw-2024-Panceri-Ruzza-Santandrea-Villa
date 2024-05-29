@@ -11,6 +11,24 @@ public class Server {
     private static RMIServer rmiServer = null;
     private static TCPServerSocket tcpServer = null;
 
+    private static boolean isRunningInIDE(){
+        try {
+            return Server.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+    public static String getBaseIDPath(){
+        if(isRunningInIDE())
+            return "src/main/java/it/polimi/ingsw/model/resources/";
+        else return "";
+    }
+    public static String getBaseJSONPath(){
+        if(isRunningInIDE())
+            return "src/main/java/it/polimi/ingsw/model/json/";
+        else return "";
+    }
+
     public static void main(String[] args) {
         if(args.length < 2){
             System.err.println("Must provide RMI and TCP ports, in that order.");

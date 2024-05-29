@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
-import it.polimi.ingsw.view.tui.TUI_Scene;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;

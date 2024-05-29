@@ -12,7 +12,6 @@ import it.polimi.ingsw.view.tui.scenes.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.Consumer;

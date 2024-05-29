@@ -27,16 +27,17 @@ public class Client {
     private static int port;
     private static String connectionTech;
 
+    public static boolean isRunningInIDE(){
+        try {
+            return Client.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
     public static void cls(){
         synchronized (System.out) {
             //TODO: delete \n screen before release (needed for IDE console cls)
-            boolean runningIntelliJ = false;
-            try {
-                runningIntelliJ = Client.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            if (runningIntelliJ) System.out.print("\n".repeat(50));
+            if (isRunningInIDE()) System.out.print("\n".repeat(50));
             else {
                 System.out.print("\033[H\033[2J");
                 //FIXME: [Ale] choose which cls to use

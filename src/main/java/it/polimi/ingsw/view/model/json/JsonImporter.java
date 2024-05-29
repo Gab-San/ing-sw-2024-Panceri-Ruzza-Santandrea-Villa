@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.model.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.view.model.json.deserializers.*;
 
@@ -27,7 +28,9 @@ public class JsonImporter {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addDeserializer(ViewGoldCard.class, new GoldCardDeserializerView());
         objectMapper.registerModule(simpleModule);
-        String basePath = "src/main/java/it/polimi/ingsw/view/model/json/";
+        String basePath = "";
+        if(Client.isRunningInIDE())
+            basePath = "src/main/java/it/polimi/ingsw/view/model/json/";
 
         File json = new File(basePath+"GoldCard.json"); // Path file JSON
         goldCards = new Hashtable<>();

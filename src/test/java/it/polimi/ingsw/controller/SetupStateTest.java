@@ -271,7 +271,7 @@ public class SetupStateTest {
         setUp(numOfPlayers);
         for(Player p: board.getPlayerAreas().keySet())
             controller.disconnect(p.getNickname());
-        assertEquals(GamePhase.CREATE, board.getGamePhase());
+        assertEquals(GamePhase.CREATE, controller.getGameState().board.getGamePhase());
         assertEquals(CreationState.class ,controller.getGameState().getClass());
     }
 

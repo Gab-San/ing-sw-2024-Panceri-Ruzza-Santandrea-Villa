@@ -16,6 +16,9 @@ target/
 ## Astah ##
 *.lock
 
+## System ##
+*.lnk
+
 ### Eclipse ###
 .apt_generated
 .classpath

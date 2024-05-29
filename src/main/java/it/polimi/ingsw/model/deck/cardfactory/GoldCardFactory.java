@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.json.deserializers.GoldCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
+import it.polimi.ingsw.network.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +18,15 @@ import java.util.NoSuchElementException;
 
 public class GoldCardFactory extends CardFactory {
     List<GoldCardJSON> jsonCards;
+    private static final String jsonPath =
+            Server.getBaseJSONPath() + "GoldCard.json";
+    private static final String idPath =
+            Server.getBaseIDPath() + "GoldCard_Id";
+
+
 
     public GoldCardFactory() throws IllegalStateException{
-        super("src/main/java/it/polimi/ingsw/model/resources/GoldCard_Id");
+        super(idPath);
 
         try {
             jsonCards = importFromJson();
@@ -76,7 +83,7 @@ public class GoldCardFactory extends CardFactory {
             simpleModule.addDeserializer(GoldCardJSON.class, new GoldCardDeserializer());
             objectMapper.registerModule(simpleModule);
 
-            File json = new File("src/main/java/it/polimi/ingsw/model/Json/GoldCard.json"); // Path file JSON
+            File json = new File(jsonPath); // Path file JSON
             return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, GoldCardJSON.class));
         } catch (IOException e) {
             throw new DeckException("Error reading file JSON", e, GoldCardFactory.class);
