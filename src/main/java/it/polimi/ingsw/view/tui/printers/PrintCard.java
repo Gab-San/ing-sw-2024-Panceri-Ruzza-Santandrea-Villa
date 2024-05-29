@@ -102,8 +102,6 @@ public class PrintCard {
             return nullCardAsSpaces;
         }
 
-        // FIXME: [Ale] non mi piace usare instanceof, ma non mi viene un'altra soluzione.
-        //          Il metodo getCardAsStringRows deve sapere se è play, starting, o objective card.
         if(card instanceof ViewPlayCard playCard)
             return getCardAsStringRows(playCard, hideID);
         else if(card instanceof ViewStartCard startCard)

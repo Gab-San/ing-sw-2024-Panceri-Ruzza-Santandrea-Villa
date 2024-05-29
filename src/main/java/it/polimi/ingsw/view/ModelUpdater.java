@@ -6,7 +6,6 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
-import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
@@ -18,10 +17,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
 
-public class ModelUpdater implements VirtualClient {
+public class ModelUpdater {
     private final ViewBoard board;
     private final View view;
     private final JsonImporter jsonImporter;
@@ -33,13 +33,9 @@ public class ModelUpdater implements VirtualClient {
         jsonImporter = Client.getCardJSONImporter();
     }
 
-    @Override
     public synchronized void displayMessage(String messenger, String msg){
         view.showChatMessage(messenger + "> " + msg);
     }
-
-    @Override
-    public synchronized void ping() { } //TODO: remove ping()
 
     private void notifyMyAreaUpdate(String msg){
         view.update(SceneID.getMyAreaSceneID(), msg);
@@ -59,7 +55,6 @@ public class ModelUpdater implements VirtualClient {
         view.showError(errorMessage);
     }
 
-    @Override
     public synchronized void notifyIndirectDisconnect()  {
         view.notifyTimeout();
     }
@@ -83,24 +78,23 @@ public class ModelUpdater implements VirtualClient {
     public synchronized void updatePlayer(String nickname, PlayerColor color){
         if(board.getPlayerHand().getNickname().equals(nickname)) {
             if(board.getPlayerHand().setColor(color))
-                notifyMyAreaUpdate("Your color was set");
+                notifyMyAreaUpdate("Your color was set to " + getColorFromEnum(color) + color + RESET);
         }
         else {
             if(board.getOpponentHand(nickname).setColor(color))
-                notifyOpponentUpdate(nickname, nickname + "'s color was set");
+                notifyOpponentUpdate(nickname, nickname + "'s color was set to " + getColorFromEnum(color) + color + RESET);
         }
     }
     public synchronized void updatePlayer(String nickname, int playerTurn){
         if(board.getPlayerHand().getNickname().equals(nickname)){
             if(board.getPlayerHand().setTurn(playerTurn))
-                notifyMyAreaUpdate("Your turn was set");
+                notifyMyAreaUpdate("Your turn was set to " + playerTurn);
         }
         else{
             if(board.getOpponentHand(nickname).setTurn(playerTurn))
-                notifyOpponentUpdate(nickname, nickname + "'s turn was set");
+                notifyOpponentUpdate(nickname, nickname + "'s turn was set to " + playerTurn);
         }
     }
-    @Override
     public synchronized void updatePlayer(String nickname, boolean isConnected){
         if(!board.getPlayerHand().getNickname().equals(nickname)){
             board.getOpponentHand(nickname).setConnected(isConnected);
@@ -109,12 +103,10 @@ public class ModelUpdater implements VirtualClient {
         }
     }
 
-    @Override
     public synchronized void removePlayer(String nickname)  {
         board.removePlayer(nickname);
         notifyView(nickname + " has been removed.");
     }
-    @Override
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         board.setPlayerDeadlock(nickname, isDeadLocked);
         if(isDeadLocked)
@@ -124,12 +116,10 @@ public class ModelUpdater implements VirtualClient {
                 notifyOpponentUpdate(nickname, nickname + " is deadlocked!");
     }
 
-    @Override
     public synchronized void notifyEndgame()  {
         notifyBoardUpdate("Endgame has been reached!");
     }
 
-    @Override
     public synchronized void notifyEndgame(String nickname, int score)  {
         notifyBoardUpdate("Endgame has been reached because "
                 + nickname + " has reached " + score + " (>20) points!");
@@ -184,10 +174,7 @@ public class ModelUpdater implements VirtualClient {
             if(topCard != null) // only false if the call comes from setDeckState(deck, firstCardId, secondCardId)
                 notifyBoardUpdate(getDeckName(deck) + " was updated.");
         }catch (ClassCastException e){
-            //FIXME: handle argument error, maybe just return (ignore wrong update?)
             deckCardTypeMismatch();
-        } catch (Exception e){
-            e.printStackTrace(System.err);
         }
     }
     public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) {
@@ -293,28 +280,19 @@ public class ModelUpdater implements VirtualClient {
         notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn. Deck is empty so no card has replaced it.");
     }
     public synchronized void setEmptyDeckState(char deck) {
-//        return;
         //FIXME: this isn't needed as decks are initialised empty
         setDeckState(deck, null,null,null);
     }
 
-    @Override
     public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock){
-        try {
-            for (String nick : playerDeadLock.keySet()) {
-                boolean deadlock = playerDeadLock.get(nick);
-                board.setPlayerDeadlock(nick, deadlock);
-                board.setScore(nick, scoreboard.getOrDefault(nick, 0));
-                //FIXME: check this player nick too (playerHand)
-                if (deadlock)
-                    notifyOpponentUpdate(nick, nick + " is deadlocked!");
-            }
-            if (board.setGamePhase(gamePhase) || board.setCurrentTurn(currentTurn))
-                notifyBoardUpdate("Board initialised.");
-
-        }catch(Exception e) {
-            notifyView("ERRORE RICEVUTO.");
+        for (String nick : playerDeadLock.keySet()) {
+            playerDeadLockUpdate(nick, playerDeadLock.get(nick));
+            board.setScore(nick, scoreboard.getOrDefault(nick, 0));
         }
+        boolean phaseChanged = board.setGamePhase(gamePhase);
+        boolean turnChanged = board.setCurrentTurn(currentTurn);
+        if (phaseChanged || turnChanged)
+            notifyBoardUpdate("Board initialised.");
     }
     public synchronized void updatePhase(GamePhase gamePhase) {
         if(board.setGamePhase(gamePhase))

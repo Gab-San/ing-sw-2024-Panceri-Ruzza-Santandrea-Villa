@@ -85,13 +85,12 @@ public class PrintPlayArea {
 
     // prints according to following schema:
     /*
-                 topCard
+topLeftCard      topCard       topRightCard
           TLCard         TRCard
   leftCard       midCard       rightCard
           BLCard         BRCard
-                 botCard
+botLeftCard      botCard      botRightCard
      */
-    //FIXME: this is probably a bit brute-forcing
     public void printPlayArea(Point center){
         final Set<CornerDirection> fillCorners = new HashSet<>();
 

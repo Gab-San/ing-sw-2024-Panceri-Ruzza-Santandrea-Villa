@@ -20,6 +20,5 @@ public enum PlayerColor {
         String normalRep = super.toString();
         return normalRep.charAt(0) + normalRep.substring(1).toLowerCase();
         // this returns 'Blue' instead of 'BLUE'
-        //FIXME:[Ale] I think not having all caps looks nicer, but we can remove this if it's problematic
     }
 }

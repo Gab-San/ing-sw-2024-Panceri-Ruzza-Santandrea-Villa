@@ -16,11 +16,6 @@ public class PuppetModelUpdater extends ModelUpdater {
     }
 
     @Override
-    public void ping(){
-
-    }
-
-    @Override
     public void updatePlayer(String nickname, PlayerColor colour){
 
     }

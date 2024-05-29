@@ -96,7 +96,6 @@ class PlayAreaTest {
     }
     @Test
     @DisplayName("Test placement of a PlayCard")
-    // TODO: duplicate this test placing card on back
     void testPlaceCard() {
         setUp(false);
 
