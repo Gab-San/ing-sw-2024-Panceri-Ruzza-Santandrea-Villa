@@ -42,6 +42,7 @@ public class ModelUpdater implements VirtualClient {
     public synchronized void displayMessage(String messenger, String msg){
         view.showChatMessage(messenger + "> " + msg);
     }
+
     @Override
     public synchronized void ping() { } //TODO: remove ping()
 
@@ -67,6 +68,7 @@ public class ModelUpdater implements VirtualClient {
     private void notifyView(String msg){
         view.showNotification(msg);
     }
+
     public synchronized void reportError(String errorMessage) {
         view.showError(errorMessage);
     }
