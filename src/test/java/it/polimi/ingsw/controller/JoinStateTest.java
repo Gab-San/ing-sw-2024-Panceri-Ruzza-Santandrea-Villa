@@ -111,9 +111,5 @@ public class JoinStateTest {
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 3),"StartGame doesn't throw IllegalStateException with numOfPlayers==3");
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
-
-    @Test
-    public void disconnectTest(){
-        //TODO Test disconnect
-    }
+    
 }

@@ -36,7 +36,7 @@ public class EndgameState extends GameState{
         disconnectingPlayers.remove(nickname);
 
         board.disconnectPlayer(nickname);
-        //FIXME: [Ale] shouldn't we still unsubscribe client from updates here?
+        board.unsubscribeClientFromUpdates(nickname);
 
         int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
                 .filter(Player::isConnected)

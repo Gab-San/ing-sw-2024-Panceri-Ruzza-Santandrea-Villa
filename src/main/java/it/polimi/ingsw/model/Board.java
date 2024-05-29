@@ -332,7 +332,6 @@ public class Board implements GameSubject{
 
         try {
             playerAreas.get(player).placeStartingCard(startingCard);
-            //FIXME: [Ale] notifica rimozione carta
             notifyAllListeners(new PlayerHandSetStartingCardEvent(player.getNickname(), null));
         } catch (IllegalStateException stateException){
             notifyAllListeners(new IllegalStateError(player.getNickname(), stateException.getMessage().toUpperCase()));

@@ -27,8 +27,6 @@ public class TurnTimer implements Runnable{
 
     @Override
     public void run() {
-        //FIXME: remove colorize
-        System.out.println(colorize("STARTING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
         long pingTimeMillis = 20000;
 
         CountDownLatch latch = new CountDownLatch(turnTime);
@@ -48,8 +46,6 @@ public class TurnTimer implements Runnable{
                 try {
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
-                    //FIXME: remove colorize
-                    System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
                     player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
                 }
             }
@@ -64,8 +60,6 @@ public class TurnTimer implements Runnable{
             return;
         }
 
-        //FIXME: remove colorize
-        System.out.println(colorize("ENDING TIMER FOR " + player.getNickname(), Attribute.YELLOW_TEXT()));
         player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
     }
 
