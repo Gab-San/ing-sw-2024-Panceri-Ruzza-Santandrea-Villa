@@ -1,13 +1,12 @@
 package it.polimi.ingsw.network.tcp.client;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
-import it.polimi.ingsw.network.tcp.message.*;
+import it.polimi.ingsw.network.tcp.message.TCPMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerMessage;
 import it.polimi.ingsw.view.ModelUpdater;
@@ -18,10 +17,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.*;
-import java.util.concurrent.*;
-
-import static com.diogonunes.jcolor.Ansi.colorize;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class TCPClientSocket implements VirtualClient{
 
@@ -40,15 +39,14 @@ public class TCPClientSocket implements VirtualClient{
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
         startReader();
-        startCommandExecutor();
     }
 //region SOCKET THREADS
 
-    private void startCommandExecutor(){
+    private void startUpdateExecutor(){
         new Thread(
                 () -> {
                     while (!clientSocket.isClosed()){
-                        TCPServerMessage command;
+                        TCPServerMessage update;
                         synchronized (updateQueue) {
                             while (updateQueue.isEmpty()) {
                                 try {
@@ -58,13 +56,13 @@ public class TCPClientSocket implements VirtualClient{
                                 }
                             }
 
-                            command = updateQueue.remove();
+                            update = updateQueue.remove();
                         }
                         try {
-                            command.execute(this);
+                            update.execute(this);
                         } catch (RemoteException e) {
                             System.err.println(e.getMessage() + "\n" + e.getCause().getMessage());
-                            closeSocket();
+//                            closeSocket();
                         }
                     }
                 }
@@ -138,14 +136,14 @@ public class TCPClientSocket implements VirtualClient{
 
     public void setModelUpdater(ModelUpdater modelUpdater){
         this.modelUpdater = modelUpdater;
+        startUpdateExecutor();
     }
 //endregion
 
 //region VIRTUAL CLIENT INTERFACE
     @Override
-    public void displayMessage(String messenger, String msg){
-        System.out.println(messenger.toUpperCase() + ": " + msg);
-        System.out.flush();
+    public void displayMessage(String messenger, String msg) throws RemoteException{
+        modelUpdater.displayMessage(messenger, msg);
     }
 
     @Override
@@ -165,23 +163,23 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
-
+        modelUpdater.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
     }
 
     @Override
     public void notifyEndgame() throws RemoteException {
-
+        modelUpdater.notifyEndgame();
     }
 
     @Override
     public void notifyEndgame(String nickname, int score) throws RemoteException {
-
+        modelUpdater.notifyEndgame(nickname, score);
     }
 
 
     @Override
     public void removePlayer(String nickname) throws RemoteException {
-
+         modelUpdater.removePlayer(nickname);
     }
 
     /**
@@ -193,7 +191,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updatePlayer(String nickname, PlayerColor colour) throws RemoteException {
-
+        modelUpdater.updatePlayer(nickname, colour);
     }
 
     /**
@@ -205,7 +203,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updatePlayer(String nickname, int playerTurn) throws RemoteException {
-
+        modelUpdater.updatePlayer(nickname, playerTurn);
     }
 
     /**
@@ -217,7 +215,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updatePlayer(String nickname, boolean isConnected) throws RemoteException {
-
+        modelUpdater.updatePlayer(nickname, isConnected);
     }
 
     /**
@@ -231,7 +229,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor colour) throws RemoteException {
-
+        modelUpdater.setPlayerState(nickname, isConnected, turn ,colour);
     }
 
     /**
@@ -252,7 +250,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void deckUpdate(char deck, String revealedId, int cardPosition) throws RemoteException {
-
+        modelUpdater.deckUpdate(deck, revealedId, cardPosition);
     }
 
     /**
@@ -272,7 +270,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setDeckState(char deck, String topId, String firstId, String secondId) throws RemoteException {
-
+        modelUpdater.setDeckState(deck, topId, firstId, secondId);
     }
 
     /**
@@ -292,7 +290,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setDeckState(char deck, String revealedId, int cardPosition) throws RemoteException {
-
+        modelUpdater.setDeckState(deck, revealedId, cardPosition);
     }
 
     /**
@@ -309,7 +307,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setDeckState(char deck, String firstCardId, String secondCardId) throws RemoteException {
-
+        modelUpdater.setDeckState(deck, firstCardId, secondCardId);
     }
 
     /**
@@ -321,7 +319,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void emptyReveal(char deck, int cardPosition) throws RemoteException {
-
+        modelUpdater.emptyReveal(deck, cardPosition);
     }
 
     /**
@@ -332,7 +330,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void emptyFaceDownPile(char deck) throws RemoteException {
-
+        modelUpdater.emptyFaceDownPile(deck);
     }
 
     /**
@@ -346,7 +344,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setEmptyDeckState(char deck) throws RemoteException {
-
+        modelUpdater.setEmptyDeckState(deck);
     }
 
     /**
@@ -357,7 +355,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updatePhase(GamePhase gamePhase) throws RemoteException {
-
+        modelUpdater.updatePhase(gamePhase);
     }
 
     /**
@@ -369,7 +367,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updateScore(String nickname, int score) throws RemoteException {
-
+        modelUpdater.updateScore(nickname, score);
     }
 
     /**
@@ -380,7 +378,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updateTurn(int currentTurn) throws RemoteException {
-
+        modelUpdater.updateTurn(currentTurn);
     }
 
     /**
@@ -394,7 +392,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
-
+        modelUpdater.setPlayerHandState(nickname, playCards, objectiveCards, startingCard);
     }
 
     /**
@@ -406,7 +404,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException {
-
+        modelUpdater.playerHandAddedCardUpdate(nickname, drawnCardId);
     }
 
     /**
@@ -418,7 +416,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerHandRemoveCard(String nickname, String playCardId) throws RemoteException {
-
+            modelUpdater.playerHandRemoveCard(nickname, playCardId);
     }
 
     /**
@@ -430,7 +428,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException {
-
+        modelUpdater.playerHandAddObjective(nickname, objectiveCard);
     }
 
     /**
@@ -442,7 +440,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException {
-
+        modelUpdater.playerHandChooseObject(nickname, chosenObjectiveId);
     }
 
     /**
@@ -454,7 +452,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException {
-
+        modelUpdater.playerHandSetStartingCard(nickname, startingCardId);
     }
 
 
@@ -469,7 +467,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-
+        modelUpdater.setPlayAreaState(nickname, cardPositions, visibleResources, freeSerializableCorners);
     }
 
     /**
@@ -488,7 +486,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-
+        modelUpdater.updatePlaceCard(nickname, placedCardId, row, col);
     }
 
     /**
@@ -500,7 +498,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException {
-
+        modelUpdater.visibleResourcesUpdate(nickname, visibleResources);
     }
 
     /**
@@ -512,7 +510,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void freeCornersUpdate(String nickname, List<SerializableCorner> freeSerializableCorners) throws RemoteException {
-
+        modelUpdater.freeCornersUpdate(nickname, freeSerializableCorners);
     }
 
     /**
@@ -527,7 +525,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException {
-
+        modelUpdater.playerDeadLockUpdate(nickname, isDeadLocked);
     }
 
     /**
@@ -538,12 +536,12 @@ public class TCPClientSocket implements VirtualClient{
      */
     @Override
     public void reportError(String errorMessage) throws RemoteException {
-        System.out.println(colorize("ERROR FOUND: " + errorMessage, Attribute.BLACK_TEXT(), Attribute.BRIGHT_BLUE_BACK()));
+        modelUpdater.reportError(errorMessage);
     }
 
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
-        System.out.println("YOU HAVE BEEN DISCONNECTED!");
+        modelUpdater.notifyIndirectDisconnect();
     }
 
 //endregion

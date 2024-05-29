@@ -159,6 +159,7 @@ public class PlayState extends GameState {
             throw new IllegalStateException("It's not your turn to draw yet");
         }
 
+        timerCurrPlayer.stopTimer(player);
 
         try {
             switch (cardPos) {
@@ -179,7 +180,6 @@ public class PlayState extends GameState {
             throw new IllegalArgumentException("Can't draw from position " + cardPos, e);
         }
 
-        timerCurrPlayer.stopTimer(player);
         postDrawChecks();
     }
 

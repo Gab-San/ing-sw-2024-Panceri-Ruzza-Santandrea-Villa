@@ -75,7 +75,7 @@ public class ClientHandler implements Runnable, VirtualServer {
                             proxy.sendCheck(new CheckMessage(argException));
                         } catch (RemoteException e) {
                             System.err.println(e.getMessage() + "\n" + e.getCause().getMessage());
-                            closeSocket();
+//                            closeSocket();
                         }
                     }
                 }

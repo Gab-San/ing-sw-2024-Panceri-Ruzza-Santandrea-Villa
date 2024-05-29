@@ -2,17 +2,16 @@ package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CommandPassthrough;
-import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
 
 import java.rmi.RemoteException;
 
 public class RMIServerProxy implements CommandPassthrough {
     private final VirtualServer server;
-    private final VirtualClient client;
+    private final RMIClient client;
     private String nickname;
 
-    public RMIServerProxy(VirtualClient client, VirtualServer server){
+    public RMIServerProxy(RMIClient client, VirtualServer server){
         this.server = server;
         this.client = client;
     }
@@ -41,6 +40,7 @@ public class RMIServerProxy implements CommandPassthrough {
     public void disconnect() throws IllegalStateException, RemoteException {
         validateConnection();
         server.disconnect(nickname, client);
+        client.close();
     }
 
     @Override

@@ -29,7 +29,6 @@ public class TUI extends View{
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
         runNicknameSelectScene();
         setClientModelUpdater.accept(new ModelUpdater(board, this, verbose));
-
         // at this point, connection has concluded successfully.
         TUI_Scene boardUI = new PrintBoardUI(board);
         boardUI.setNotificationBacklog(notificationBacklog);

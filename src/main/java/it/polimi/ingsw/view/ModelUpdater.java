@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.*;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
@@ -14,11 +14,9 @@ import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
@@ -74,7 +72,7 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public synchronized void notifyIndirectDisconnect() throws RemoteException {
+    public synchronized void notifyIndirectDisconnect()  {
         view.notifyTimeout();
     }
 
@@ -124,7 +122,7 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public synchronized void removePlayer(String nickname) throws RemoteException {
+    public synchronized void removePlayer(String nickname)  {
         board.removePlayer(nickname);
         notifyView(nickname + " has been removed.");
     }
@@ -139,12 +137,12 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public synchronized void notifyEndgame() throws RemoteException {
+    public synchronized void notifyEndgame()  {
         notifyBoardUpdate("Endgame has been reached!");
     }
 
     @Override
-    public synchronized void notifyEndgame(String nickname, int score) throws RemoteException {
+    public synchronized void notifyEndgame(String nickname, int score)  {
         notifyBoardUpdate("Endgame has been reached because "
                 + nickname + " has reached " + score + " (>20) points!");
     }
@@ -324,7 +322,7 @@ public class ModelUpdater implements VirtualClient {
     }
 
     @Override
-    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException {
+    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock){
         try {
             for (String nick : playerDeadLock.keySet()) {
                 boolean deadlock = playerDeadLock.get(nick);

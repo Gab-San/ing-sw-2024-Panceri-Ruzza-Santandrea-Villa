@@ -6,12 +6,14 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-public interface VirtualClient extends Remote{
+public interface VirtualClient extends Remote, Serializable {
+    long serialVersionUID =-124819284198L;
     /**
      * Displays chat messages.
      *

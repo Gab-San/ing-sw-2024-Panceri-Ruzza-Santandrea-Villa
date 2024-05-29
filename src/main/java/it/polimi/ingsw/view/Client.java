@@ -139,7 +139,7 @@ public class Client {
         while(true) {
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;
-            for (int i = 1; i <= MAX_CONNECTION_ATTEMPTS; i++) {
+            for (int i = 0; i <= MAX_CONNECTION_ATTEMPTS; i++) {
                 try {
                     if (connectionTech.equalsIgnoreCase("tcp")) {
                         TCPClientSocket tcpClient = new TCPClientSocket(serverIP, port);
@@ -154,12 +154,14 @@ public class Client {
                     } else {
                         System.err.println("Wrong connection technology passed as parameter. Must be TCP/RMI");
                         quitError();
+                        throw new RuntimeException();
                     }
                 } catch (IOException | NotBoundException e) {
                     if(i < MAX_CONNECTION_ATTEMPTS){
                         System.err.println("Couldn't locate server. Trying again... #"+i);
                     }
                 }
+
                 try{
                     Thread.sleep(500);
                 }catch (InterruptedException e){
@@ -167,6 +169,7 @@ public class Client {
                     quitError();
                 }
             }
+
             if(proxy == null){
                 System.err.println("Couldn't locate server. Closing client.");
                 quitError();
