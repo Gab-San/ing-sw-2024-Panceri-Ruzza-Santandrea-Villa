@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
+import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
@@ -21,10 +22,12 @@ public class Parser {
 
     private CommandPassthrough virtualServer;
     private final ViewBoard board;
+    private final ViewController viewController;
     //TODO: add local checks to commands
     public Parser(CommandPassthrough virtualServer, ViewBoard board){
         this.virtualServer = virtualServer;
         this.board = board;
+        viewController = new ViewController(board);
     }
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
@@ -225,6 +228,7 @@ public class Parser {
     private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         for (String arg : cmdArgs) {
             if (Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()) {
+                viewController.validateChooseColor();
                 virtualServer.chooseColor(arg.toUpperCase().charAt(0));
                 return;
             }
@@ -240,6 +244,7 @@ public class Parser {
     private void parseChooseObjCmd(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         try{
             int choice = searchForNumber(cmdArgs, "[1-2]");
+            viewController.validateChooseObjective();
             virtualServer.chooseObjective(choice);
         }catch (IndexOutOfBoundsException e){
             throw new IllegalArgumentException(
@@ -279,7 +284,7 @@ public class Parser {
                     "Draw must only provide a deck choice and the card position\n" +
                     "For example: \"R1\" is the first revealed card of the Resource Deck");
         }
-
+        viewController.validateDraw(deck, position);
         virtualServer.draw(deck, position);
     }
 
@@ -334,6 +339,7 @@ public class Parser {
         } else {
             throw new IllegalArgumentException("missing direction");
         }
+        viewController.validatePlaceCard(cardToPlace, placementPos, cornDir);
         virtualServer.placeCard(cardToPlace, placementPos, cornDir, board.getPlayerHand().getCardByID(cardToPlace).isFaceUp());
     }
 
@@ -342,9 +348,9 @@ public class Parser {
         if(cmdArgs.size() > 2) throw new IllegalArgumentException("""
                 Maybe you meant: Place starting card
                 """);
+        viewController.validatePlaceStartCard();
         ViewStartCard startCard = board.getPlayerHand().getStartCard();
-        if(startCard == null) throw new IllegalStateException("You do not have a starting card in hand!");
-        else virtualServer.placeStartCard(startCard.isFaceUp());
+        virtualServer.placeStartCard(startCard.isFaceUp());
     }
 
 }
