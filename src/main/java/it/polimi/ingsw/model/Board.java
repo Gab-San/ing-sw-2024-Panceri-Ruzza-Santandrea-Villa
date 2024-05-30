@@ -230,7 +230,7 @@ public class Board implements GameSubject{
     }
     protected void setScore(Player player, int score){
         if(gamePhase != GamePhase.EVALOBJ && score > MAX_PLAY_SCORE){
-            score = 29;
+            score = MAX_PLAY_SCORE;
         }
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));

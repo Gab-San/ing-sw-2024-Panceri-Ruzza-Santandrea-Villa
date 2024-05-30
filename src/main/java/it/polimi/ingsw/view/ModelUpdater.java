@@ -42,7 +42,7 @@ public class ModelUpdater {
         view.update(SceneID.getOpponentAreaSceneID(nickname), msg);
     }
     private void notifyBoardUpdate(String msg){
-        view.update(SceneID.getMyAreaSceneID(), msg);
+        view.update(SceneID.getBoardSceneID(), msg);
     }
     private void notifyView(String msg){
         view.showNotification(msg);

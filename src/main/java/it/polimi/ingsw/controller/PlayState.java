@@ -25,7 +25,11 @@ public class PlayState extends GameState {
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
-        board.setCurrentTurn(1);
+        int startingTurn = board.getPlayersByTurn().stream()
+                .filter(Player::isConnected)
+                .mapToInt(Player::getTurn)
+                .min().orElse(-1); // there should always be at least one connected player at this point
+        board.setCurrentTurn(startingTurn);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
         board.setGamePhase(GamePhase.PLACECARD);
