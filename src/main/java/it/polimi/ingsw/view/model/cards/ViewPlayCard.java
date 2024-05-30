@@ -13,6 +13,11 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
         this.pointsOnPlace = pointsOnPlace;
         this.backResource = backResource;
     }
+    public ViewPlayCard(ViewPlayCard other){
+        super(other);
+        this.pointsOnPlace = other.pointsOnPlace;
+        this.backResource = other.backResource;
+    }
 
     @Override
     public GameResource getCardColour() {

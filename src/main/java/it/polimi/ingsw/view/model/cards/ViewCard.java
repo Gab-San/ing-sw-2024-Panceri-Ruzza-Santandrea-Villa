@@ -12,6 +12,10 @@ public abstract class ViewCard {
         this.imageBackName = imageBackName;
         this.isFaceUp = false;
     }
+    public ViewCard(ViewCard other){
+        this(other.cardID, other.imageFrontName, other.imageBackName);
+        this.isFaceUp = other.isFaceUp;
+    }
 
     @Override
     public boolean equals(Object other){

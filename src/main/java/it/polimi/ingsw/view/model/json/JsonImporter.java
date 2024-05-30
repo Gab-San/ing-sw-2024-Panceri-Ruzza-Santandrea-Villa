@@ -82,11 +82,11 @@ public class JsonImporter {
 
     public ViewResourceCard getResourceCard(String ID){
         if(ID == null) return null;
-        return resourceCards.get(ID);
+        return new ViewResourceCard(resourceCards.get(ID));
     }
     public ViewGoldCard getGoldCard(String ID){
         if(ID == null) return null;
-        return goldCards.get(ID);
+        return new ViewGoldCard(goldCards.get(ID));
     }
     public ViewObjectiveCard getObjectiveCard(String ID){
         if(ID == null) return null;

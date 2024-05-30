@@ -18,6 +18,11 @@ public class ViewGoldCard extends ViewPlayCard{
         this.placementCost = placementCost.stream().sorted(Comparator.comparingInt(GameResource::getResourceIndex)).toList(); // unmodifiable == thread-safe
         this.strategyAsString = strategyAsString;
     }
+    public ViewGoldCard(ViewGoldCard other){
+        super(other);
+        this.placementCost = other.placementCost;
+        this.strategyAsString = other.strategyAsString;
+    }
 
     @Override
     public String getPointsOnPlaceAsString() {

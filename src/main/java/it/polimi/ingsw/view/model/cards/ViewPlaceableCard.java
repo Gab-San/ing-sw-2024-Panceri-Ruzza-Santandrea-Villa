@@ -24,6 +24,15 @@ public abstract class ViewPlaceableCard extends ViewCard{
         this.corners = Collections.unmodifiableMap(thisCorners);
         this.position = null;
     }
+    public ViewPlaceableCard(ViewPlaceableCard other){
+        super(other);
+        Map<CornerDirection, ViewCorner> thisCorners = new Hashtable<>();
+        other.corners.values().forEach(
+                c -> thisCorners.put(c.getDirection(), new ViewCorner(c))
+        );
+        thisCorners.values().forEach(c -> c.setCardRef(this));
+        this.corners = Collections.unmodifiableMap(thisCorners);
+    }
 
     abstract public GameResource getCardColour();
     public GameResource getCornerResource(CornerDirection dir){
