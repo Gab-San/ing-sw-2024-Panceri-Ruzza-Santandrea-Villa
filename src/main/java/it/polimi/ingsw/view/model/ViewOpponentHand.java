@@ -36,12 +36,6 @@ public class ViewOpponentHand extends ViewHand{
         super.addCard(card);
     }
     @Override
-    public void removeCard(ViewPlayCard card){
-        if(card != null)
-            card.turnFaceDown();
-        super.removeCard(card);
-    }
-    @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         if(secretObjectiveCards != null)
             secretObjectiveCards.forEach(ViewCard::turnFaceDown);

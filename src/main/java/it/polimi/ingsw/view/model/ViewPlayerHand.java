@@ -14,6 +14,18 @@ public class ViewPlayerHand extends ViewHand {
         super(nickname);
     }
     @Override
+    public void setCards(List<ViewPlayCard> cards){
+        if(cards != null)
+            cards.forEach(ViewCard::turnFaceUp);
+        super.setCards(cards);
+    }
+    @Override
+    public void addCard(ViewPlayCard card){
+        if(card != null)
+            card.turnFaceUp();
+        super.addCard(card);
+    }
+    @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         if(secretObjectiveCards != null)
             secretObjectiveCards.forEach(ViewCard::turnFaceUp);
