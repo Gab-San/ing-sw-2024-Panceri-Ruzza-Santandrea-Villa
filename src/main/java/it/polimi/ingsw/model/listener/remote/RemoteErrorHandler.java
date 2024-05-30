@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.remote.errors.RemoteErrorEvent;
+import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -46,7 +47,9 @@ public class RemoteErrorHandler implements GameListener {
         try {
             error.executeEvent(client);
         } catch (RemoteException e) {
-            System.err.println("ERROR WHILE TRYING TO REPORT TO " + addressee);
+            CentralServer.getSingleton().disconnect(addressee, client);
+//            System.err.println("ERROR WHILE TRYING TO REPORT AN ERROR TO " + addressee);
+//            System.err.println(e.getMessage());
         }
     }
 

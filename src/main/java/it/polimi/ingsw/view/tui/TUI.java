@@ -89,16 +89,16 @@ public class TUI extends View{
         while(true) { //exits only on System.quit() or RemoteException
             try {
                 // wait until we have data to complete a readLine()
-                while (!reader.ready()) {
+                if (!reader.ready()) {
                     Thread.sleep(200);
                     synchronized (this) {
                         if (hasServerTimeoutDisconnected) {
                             throw new TimeoutException();
                         }
                     }
+                }else{
+                    parser.parseCommand(reader.readLine());
                 }
-                refreshScene();
-                parser.parseCommand(reader.readLine());
             } catch (RemoteException e){
                 throw e;
             } catch (InterruptedException | IOException ignored) {

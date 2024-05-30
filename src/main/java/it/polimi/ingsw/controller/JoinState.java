@@ -14,19 +14,24 @@ import java.util.List;
 
 public class JoinState extends GameState {
     int numOfPlayersToStart;
+    private static final int PING_TIME = 5;
+    private static final int JOIN_TIMEOUT = 60*60; // 1 hour
 
     public JoinState(Board board, BoardController controller, List<String> disconnectingPlayers, int num){
         super(board, controller, disconnectingPlayers);
         numOfPlayersToStart = num;
         board.setGamePhase(GamePhase.JOIN);
+        timers.startAll(board.getPlayerAreas().keySet().stream().toList(), JOIN_TIMEOUT, PING_TIME);
     }
     @Override
     public void join(String nickname, VirtualClient client) throws IllegalStateException {
         if(board.getGamePhase()!=GamePhase.JOIN)
             throw new IllegalStateException("IMPOSSIBLE TO JOIN IN THIS PHASE");
-        board.addPlayer(new Player(nickname));
+        Player joiningPlayer = new Player(nickname);
+        board.addPlayer(joiningPlayer);
         board.subscribeClientToUpdates(nickname, client);
         if(!disconnectingPlayers.isEmpty()) return;
+        timers.startTimer(joiningPlayer, JOIN_TIMEOUT, PING_TIME);
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {
             transition(new SetupState(board, controller, disconnectingPlayers));
         }
@@ -37,8 +42,8 @@ public class JoinState extends GameState {
         disconnectingPlayers.remove(nickname);
 
         board.unsubscribeClientFromUpdates(nickname);
+        timers.stopTimer(board.getPlayerByNickname(nickname));
         board.removePlayer(nickname);
-
         if(board.getPlayerAreas().isEmpty())
             transition(new CreationState(new Board(), controller, new ArrayList<>()));
     }

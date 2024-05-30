@@ -104,6 +104,7 @@ public class ClientHandler implements Runnable, VirtualServer {
                 }
             }
         } catch(EOFException eofException) {
+            //FIXME: we could run CentralServer.getSingleton().disconnect() here directly?
             System.err.println("REACHED EOS!");
         }catch (IOException e) {
             closeSocket();

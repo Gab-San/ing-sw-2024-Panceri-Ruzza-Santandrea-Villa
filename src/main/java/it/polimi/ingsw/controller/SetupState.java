@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.CornerDirection;
@@ -21,14 +20,12 @@ public class SetupState extends GameState{
     public Set<String> playersWhoChoseSecretObjective;
 
     private static final int TURN_TIME = 122;
-    private final TurnTimerController timers;
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         board.setGamePhase(GamePhase.SETUP);
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
-        timers = new TurnTimerController(controller);
         try {
             giveStartingCard();
         } catch (IllegalStateException e){

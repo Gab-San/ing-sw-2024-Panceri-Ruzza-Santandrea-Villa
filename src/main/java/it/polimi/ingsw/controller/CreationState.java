@@ -13,6 +13,8 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 
 public class CreationState extends GameState{
+    private final int SET_TIME = 60; // 1 minute
+
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         board.setGamePhase(GamePhase.CREATE);
@@ -23,15 +25,18 @@ public class CreationState extends GameState{
         if(!board.getPlayerAreas().isEmpty()) {
             throw new IllegalStateException("WAITING FOR THE CONNECTED PLAYER TO START THE LOBBY...");
         }
-        board.addPlayer(new Player(nickname));
+        Player creator = new Player(nickname);
+        board.addPlayer(creator);
         board.subscribeClientToUpdates(nickname, client);
         board.setGamePhase(GamePhase.SETNUMPLAYERS);
+        timers.startTimer(creator, SET_TIME);
     }
 
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
         board.unsubscribeClientFromUpdates(nickname);
+        timers.stopTimer(board.getPlayerByNickname(nickname));
         board.removePlayer(nickname);
         board.setGamePhase(GamePhase.CREATE);
     }

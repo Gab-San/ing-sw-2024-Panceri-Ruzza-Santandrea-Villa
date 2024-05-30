@@ -1,13 +1,9 @@
 package it.polimi.ingsw.controller.timer;
 
-import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -23,10 +19,12 @@ public class TurnTimerController {
     private final ExecutorService timersPool;
     private final BoardController controller;
     private final Map<Player, Future<?>> tasks;
+    private static final int DEFAULT_PING_TIME_SECONDS = 20;
+
     public TurnTimerController(BoardController controller){
         this.controller = controller;
         timersPool = Executors.newCachedThreadPool();
-        tasks = new HashMap<>();
+        tasks = new Hashtable<>();
     }
 
     /**
@@ -34,11 +32,14 @@ public class TurnTimerController {
      * @param currPlayer player whose turn is starting
      * @param turnTimeSeconds time of each turn in seconds
      */
-    public synchronized void startTimer(Player currPlayer, int turnTimeSeconds){
-        //System.out.println(colorize("Starting Timer for " + currPlayer.getNickname(), Attribute.BRIGHT_BLUE_TEXT()));
-        TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds);
+    public synchronized void startTimer(Player currPlayer, int turnTimeSeconds, int pingTimeSeconds){
+        System.out.println("Starting Timer for " + currPlayer.getNickname() + ". Params: timeout(" + turnTimeSeconds + "s) , ping(" + pingTimeSeconds + "s)");
+        TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds, pingTimeSeconds);
         Future<?> timerFuture = timersPool.submit(timer);
         tasks.put(currPlayer, timerFuture);
+    }
+    public synchronized void startTimer(Player currPlayer, int turnTimeSeconds){
+        startTimer(currPlayer, turnTimeSeconds, DEFAULT_PING_TIME_SECONDS);
     }
 
     /**
@@ -54,10 +55,13 @@ public class TurnTimerController {
     }
 
 
-
     public synchronized void startAll(List<Player> playerList, int turnTime){
+        startAll(playerList, turnTime, DEFAULT_PING_TIME_SECONDS);
+    }
+
+    public synchronized void startAll(List<Player> playerList, int turnTime, int pingTimeSeconds){
         for(Player player: playerList){
-            startTimer(player, turnTime);
+            startTimer(player, turnTime, pingTimeSeconds);
         }
     }
 

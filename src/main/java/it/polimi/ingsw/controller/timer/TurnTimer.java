@@ -16,22 +16,23 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class TurnTimer implements Runnable{
 
     private final Player player;
-    private final BoardController controller;
+    private final BoardController controller; //FIXME: [Ale] is controller not used?
     private final int turnTime;
+    private final long pingTimeMillis;
 
-    public TurnTimer(BoardController controller, Player player, int turnTime){
+    public TurnTimer(BoardController controller, Player player, int turnTime, int pingTime){
         this.player = player;
         this.turnTime = turnTime;
         this.controller = controller;
+        this.pingTimeMillis = pingTime*1000L;
     }
 
     @Override
     public void run() {
-        long pingTimeMillis = 20000;
 
         CountDownLatch latch = new CountDownLatch(turnTime);
-        Timer timer = new Timer();
-        Timer pingTimer = new Timer();
+        Timer timer = new Timer(true);
+        Timer pingTimer = new Timer(true);
 
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -44,6 +45,7 @@ public class TurnTimer implements Runnable{
             @Override
             public void run() {
                 try {
+                    System.out.println("TIMER PINGING: " + player.getNickname());
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
                     player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
@@ -56,7 +58,9 @@ public class TurnTimer implements Runnable{
             timer.cancel();
             pingTimer.cancel();
         } catch (InterruptedException e) {
-            System.err.println("TIMER INTERRUPTED");
+            timer.cancel();
+            pingTimer.cancel();
+            System.err.println("TIMER INTERRUPTED " + player.getNickname());
             return;
         }
 

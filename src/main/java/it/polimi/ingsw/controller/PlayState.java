@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
-    private final TurnTimerController timerCurrPlayer;
     private static final int TURN_TIME = 302;
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
@@ -29,10 +28,9 @@ public class PlayState extends GameState {
         board.setCurrentTurn(1);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
-        timerCurrPlayer=new TurnTimerController(controller);
         board.setGamePhase(GamePhase.PLACECARD);
         Player player = board.getCurrentPlayer();
-        timerCurrPlayer.startTimer(player, TURN_TIME);
+        timers.startTimer(player, TURN_TIME);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class PlayState extends GameState {
         board.disconnectPlayer(nickname);
         Player player = board.getCurrentPlayer();
 
-        timerCurrPlayer.stopTimer(player);
+        timers.stopTimer(player);
 
         if(player.getNickname().equals(nickname)){
             postDrawChecks();
@@ -140,7 +138,7 @@ public class PlayState extends GameState {
             board.setGamePhase(GamePhase.DRAWCARD);
         }
         else{
-            timerCurrPlayer.stopTimer(player);
+            timers.stopTimer(player);
             postDrawChecks();
         }
     }
@@ -161,7 +159,7 @@ public class PlayState extends GameState {
             throw new IllegalStateException("It's not your turn to draw yet");
         }
 
-        timerCurrPlayer.stopTimer(player);
+        timers.stopTimer(player);
 
         try {
             switch (cardPos) {
@@ -209,7 +207,7 @@ public class PlayState extends GameState {
                 board.setGamePhase(GamePhase.DRAWCARD);
             else
                 board.setGamePhase(GamePhase.PLACECARD);
-            timerCurrPlayer.startTimer(board.getCurrentPlayer(), TURN_TIME);
+            timers.startTimer(board.getCurrentPlayer(), TURN_TIME);
         }
         else nextState();
     }

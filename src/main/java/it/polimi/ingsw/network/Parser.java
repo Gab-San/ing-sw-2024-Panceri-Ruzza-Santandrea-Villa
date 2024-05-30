@@ -318,15 +318,15 @@ public class Parser {
         String argsString =  argsStr.toString().trim();
         Matcher cardMatcher = Pattern.compile("[RGSrgs][1-3]?[0-9]").matcher(argsString);
         if(cardMatcher.find()){
-            cardToPlace = cardMatcher.group().trim();
-            if(cardToPlace.toUpperCase().charAt(0) == 'S')
+            cardToPlace = cardMatcher.group().trim().toUpperCase();
+            if(cardToPlace.charAt(0) == 'S')
                 throw new IllegalArgumentException("given ID of card to place is invalid.");
         } else {
             throw new IllegalArgumentException("missing ID of card to place or given ID is invalid");
         }
 
         if(cardMatcher.find()){
-            String cardID = cardMatcher.group().trim();
+            String cardID = cardMatcher.group().trim().toUpperCase();
             ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
             placementPos = playArea.getPositionByID(cardID); // throws IllegalArgument if card isn't in playArea
         } else{

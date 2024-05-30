@@ -16,7 +16,7 @@ public class ChatHandler{
     public ChatHandler(CentralServer centralServer) {
         this.centralServer = centralServer;
         this.threadPool = new LinkedList<>();
-        this.connectedClients = new HashMap<>();
+        this.connectedClients = new Hashtable<>();
         directMessageQueue = new LinkedBlockingQueue<>();
         isOpen = true;
         broadcastMessageQueue = new LinkedBlockingQueue<>();
@@ -156,7 +156,7 @@ public class ChatHandler{
             }
             try {
                 client.notifyIndirectDisconnect();
-            } catch (RemoteException ignore) {}
+            } catch (RemoteException | NullPointerException ignore) {}
         }
         disconnectedClients.clear();
     }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.controller.timer.TurnTimerController;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
@@ -12,10 +13,13 @@ public abstract class GameState {
     protected final Board board;
     protected final BoardController controller;
     protected final List<String> disconnectingPlayers;
+    protected final TurnTimerController timers;
+
     public GameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         this.board = board;
         this.controller = controller;
         this.disconnectingPlayers = disconnectingPlayers;
+        this.timers = new TurnTimerController(controller);
     }
 
     abstract public void join (String nickname, VirtualClient client) throws IllegalStateException;
@@ -30,6 +34,7 @@ public abstract class GameState {
     abstract public void draw (String nickname, char deckFrom, int cardPos) throws IllegalStateException, IllegalArgumentException;
     abstract public void restartGame (String nickname, int numOfPlayers) throws IllegalStateException, IllegalArgumentException;
     protected void transition(GameState nextState){
+        timers.stopAll();
         controller.setGameState(nextState);
     }
 }

@@ -139,6 +139,7 @@ public class Client {
             System.err.println(e.getMessage());
             quitError();
         }
+        cls();
         while(true) {
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;

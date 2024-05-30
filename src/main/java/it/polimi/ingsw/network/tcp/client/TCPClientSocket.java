@@ -73,7 +73,7 @@ public class TCPClientSocket implements VirtualClient{
     public void startReader() {
         new Thread(
                 () -> {
-                    System.out.println("Socket connection started!");
+//                    System.out.println("Socket connection started!");
                     try {
                         while (!clientSocket.isClosed()) {
                             TCPMessage commandFromServer;
@@ -88,7 +88,7 @@ public class TCPClientSocket implements VirtualClient{
                             }
                         }
                     } catch(EOFException eofException) {
-                        System.err.println("REACHED EOS!");
+                        System.out.println("REACHED EOS!");
                     } catch (IOException e) {
                         closeSocket();
                     } catch (ClassNotFoundException e) {
