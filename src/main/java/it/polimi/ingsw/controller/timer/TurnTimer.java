@@ -45,7 +45,7 @@ public class TurnTimer implements Runnable{
             @Override
             public void run() {
                 try {
-                    System.out.println("TIMER PINGING: " + player.getNickname());
+//                    System.out.println("TIMER PINGING: " + player.getNickname());
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
                     player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
@@ -60,7 +60,7 @@ public class TurnTimer implements Runnable{
         } catch (InterruptedException e) {
             timer.cancel();
             pingTimer.cancel();
-            System.err.println("TIMER INTERRUPTED " + player.getNickname());
+//            System.err.println("TIMER INTERRUPTED " + player.getNickname());
             return;
         }
 

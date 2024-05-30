@@ -4,12 +4,19 @@ import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
 
 import java.io.IOException;
+import java.net.*;
 import java.rmi.RemoteException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Server {
     private static RMIServer rmiServer = null;
     private static TCPServerSocket tcpServer = null;
+    private static final int MAX_PORT = 65535;
 
     public static void main(String[] args) {
         if(args.length < 2){
@@ -20,11 +27,35 @@ public class Server {
         try{
             rmiPort = Integer.parseInt(args[0]);
             tcpPort = Integer.parseInt(args[1]);
+            if(rmiPort > MAX_PORT || tcpPort > MAX_PORT){
+                System.err.println("Invalid ports provided. They should be within [0 - " + MAX_PORT + "]");
+                System.exit(-1);
+            }
         }catch (NumberFormatException e){
-            //FIXME: maybe add limits like port in range [0 - 65,535]
             System.err.println("Invalid ports provided. They must be numbers");
             System.exit(-1);
         }
+        List<String> localIPs = new LinkedList<>();
+        try {
+            for (Iterator<NetworkInterface> it = NetworkInterface.getNetworkInterfaces().asIterator(); it.hasNext(); ) {
+                NetworkInterface net = it.next();
+                for (Iterator<InetAddress> iter = net.getInetAddresses().asIterator(); iter.hasNext(); ) {
+                    InetAddress address = iter.next();
+                    boolean isRelevantAddress = !address.isLoopbackAddress() && address instanceof Inet4Address;
+                    String hostName = isRelevantAddress ? address.getHostName() : "";
+                    boolean otherFilters = !hostName.contains("mshome.net");
+                    if(isRelevantAddress && otherFilters) {
+                        localIPs.add(address.getHostAddress());
+                        localIPs.add(hostName);
+                    }
+                }
+            }
+        }catch (SocketException ignored){}
+        System.out.println("Server machine IPs and Hostnames: ");
+        System.out.println(YELLOW_TEXT);
+        localIPs.forEach(System.out::println);
+        System.out.println(RESET);
+        System.out.println("Please note: not all these IPs may work. If one doesn't work, try another.\n");
 
         try{
             rmiServer = new RMIServer(rmiPort); //also creates CentralServer via singleton

@@ -33,7 +33,7 @@ public class TurnTimerController {
      * @param turnTimeSeconds time of each turn in seconds
      */
     public synchronized void startTimer(Player currPlayer, int turnTimeSeconds, int pingTimeSeconds){
-        System.out.println("Starting Timer for " + currPlayer.getNickname() + ". Params: timeout(" + turnTimeSeconds + "s) , ping(" + pingTimeSeconds + "s)");
+//        System.out.println("Starting Timer for " + currPlayer.getNickname() + ". Params: timeout(" + turnTimeSeconds + "s) , ping(" + pingTimeSeconds + "s)");
         TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds, pingTimeSeconds);
         Future<?> timerFuture = timersPool.submit(timer);
         tasks.put(currPlayer, timerFuture);

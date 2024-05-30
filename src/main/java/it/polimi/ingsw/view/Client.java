@@ -12,6 +12,7 @@ import it.polimi.ingsw.view.tui.TUI;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -66,46 +67,21 @@ public class Client {
     }
 
     /**
-     * @param args args[0] is (optionally) the serverIP <br>
-     *             args[1] is the server port <br>
-     *             args[2] is the connection tech to be used (TCP/RMI) <br>
-     *             If the serverIP is omitted, then other indexes are reduced by one
+     * @param args args contain the following, in any order:
+     *             - Server IP or Hostname <br>
+     *             - Server port <br>
+     *             - The connection tech to be used (TCP/RMI) <br>
+     *             If the serverIP is omitted, then localhost will be used
+     *             If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
      */
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         serverIP = null; connectionTech = null; port = -1;
         boolean verbose = false;
 
-//region OLD FIXED-POSITION METHOD
-//        try {
-//            if (args.length > 2) {
-//                serverIP = args[0];
-//                port = Integer.parseInt(args[1]);
-//                connectionTech = args[2];
-//            } else {
-//                serverIP = "localhost";
-//                port = Integer.parseInt(args[0]);
-//                connectionTech = args[1];
-//            }
-//            verbose = args[args.length-1].equalsIgnoreCase("-v");
-//        }
-//        catch (IndexOutOfBoundsException e) {
-//            System.err.println("Please pass valid parameters: <serverIP> <connection technology [TCP/RMI]> <serverPort>");
-//            quitError();
-//        }
-//        catch (NumberFormatException e) {
-//            System.err.println("Server port parameter must be a number.");
-//            quitError();
-//        }
-//
-//        if (!serverIP.matches("\\d.\\d.\\d.\\d|localhost")) {
-//            System.err.println("Server IP parameter must be an IP address: x.y.z.w or 'localhost'");
-//            quitError();
-//        }
-//endregion
-
+        String serverHostname = "localhost";
         for(String arg : args){
-            if(arg.matches("\\d.\\d.\\d.\\d|localhost")){
+            if(arg.matches("\\d+.\\d+.\\d+.\\d+")){
                 if(serverIP != null)
                     duplicateArgument();
                 serverIP = arg;
@@ -125,12 +101,18 @@ public class Client {
                     duplicateArgument();
                 verbose = true;
             }
+            else{
+                if(!serverHostname.equals("localhost"))
+                    duplicateArgument();
+                serverHostname = arg;
+            }
         }
         if(connectionTech == null || port <= -1){
             System.err.println("Missing server port or RMI/TCP");
             quitError();
         }
-        if(serverIP == null) serverIP = "localhost";
+        if(serverIP == null) //if no IP was found among args
+            serverIP = serverHostname;
 
         try {
             cardJSONImporter = new JsonImporter();
@@ -140,6 +122,7 @@ public class Client {
             quitError();
         }
         cls();
+        System.out.println("Searching "+ connectionTech.toUpperCase() +" server at address " + serverIP + ":" + port);
         while(true) {
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;
@@ -158,7 +141,6 @@ public class Client {
                     } else {
                         System.err.println("Wrong connection technology passed as parameter. Must be TCP/RMI");
                         quitError();
-                        throw new RuntimeException();
                     }
                 } catch (IOException | NotBoundException e) {
                     if(i < MAX_CONNECTION_ATTEMPTS){
@@ -190,6 +172,9 @@ public class Client {
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         view = new TUI(proxy, setClientModelUpdater, scanner, verbose); // proxy always not null at this point
+                    } else if (gameMode.toLowerCase().matches("quit|exit|q")) {
+                        System.out.println(YELLOW_TEXT + "Exiting Client..." + RESET);
+                        quitError();
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
                         view = null;
