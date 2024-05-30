@@ -23,4 +23,5 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
         else return pointsOnPlace > 0 ? Integer.toString(pointsOnPlace) : "";
     }
     abstract public String getPlacementCostAsString();
+    abstract public List<GameResource> getPlacementCost();
 }

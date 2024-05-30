@@ -482,11 +482,12 @@ public class TCPClientSocket implements VirtualClient{
      * @param placedCardId the placed card's identifier
      * @param row          the row in which the card was placed
      * @param col          the column in which the card was placed
+     * @param placeOnFront the side on which to place the card
      * @throws RemoteException if a connection error occurs
      */
     @Override
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-        modelUpdater.updatePlaceCard(nickname, placedCardId, row, col);
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException {
+        modelUpdater.updatePlaceCard(nickname, placedCardId, row, col, placeOnFront);
     }
 
     /**

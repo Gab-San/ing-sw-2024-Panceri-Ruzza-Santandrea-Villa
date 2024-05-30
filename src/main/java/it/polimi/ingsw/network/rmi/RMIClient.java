@@ -248,9 +248,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     }
 
     @Override
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException {
         synchronized (updateQueue){
-            updateQueue.add(new PlaceCardUpdate(modelUpdater, nickname, placedCardId, row, col));
+            updateQueue.add(new PlaceCardUpdate(modelUpdater, nickname, placedCardId, row, col, placeOnFront));
             updateQueue.notifyAll();
         }
     }

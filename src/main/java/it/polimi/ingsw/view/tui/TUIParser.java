@@ -94,7 +94,7 @@ public class TUIParser {
     private void parseFlipCommand(List<String> cmdArgs) {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
 
-        String arg = cmdArgs.get(0);
+        String arg = cmdArgs.get(0).toUpperCase();
             if(arg.matches("\\d")) {
                 try {
                     int index = Integer.parseInt(cmdArgs.get(0));

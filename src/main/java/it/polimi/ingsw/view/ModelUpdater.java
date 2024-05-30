@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.*;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -415,8 +412,14 @@ public class ModelUpdater {
 
         for(CardPosition pos : cardPositions){
             ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
-            //TODO: add faceUp/Down and visible Corner setting
             if(card != null) {
+                if(pos.isFaceUp()) card.turnFaceUp();
+                else card.turnFaceDown();
+
+                pos.isCornerVisible().keySet().stream()
+                    .filter(dir -> !pos.isCornerVisible().get(dir))
+                    .forEach(dir -> card.getCorner(dir).cover());
+
                 playArea.setCard(new Point(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
                         .filter(c -> c.cardCornerId().equals(card.getCardID()))
@@ -434,11 +437,17 @@ public class ModelUpdater {
         else
             notifyOpponentUpdate(nickname, nickname + "'s playArea was initialised");
     }
-    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) {
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(placedCardId);
-        //TODO: add boolean placedOnFront and flip card here
-        playArea.placeCard(new Point(row, col), card);
+        if(card != null) {
+            if (placeOnFront)
+                card.turnFaceUp();
+            else
+                card.turnFaceDown();
+
+            playArea.placeCard(new Point(row, col), card);
+        }
 
         if(board.getPlayerHand().getNickname().equals(nickname))
             notifyMyAreaUpdate("You placed a card");

@@ -267,7 +267,7 @@ public class Parser {
         int position = 0;
         for(int i = 0; i < cmdArgs.size() && !deckFound; i++){
             if(Pattern.compile("[RGrg][0-2]").matcher(cmdArgs.get(i)).matches()){
-                String arg = cmdArgs.get(i).trim();
+                String arg = cmdArgs.get(i).trim().toUpperCase();
                 deck = arg.charAt(0);
                 position = Integer.parseInt(String.valueOf(arg.charAt(1)));
                 deckFound = true;
@@ -333,7 +333,7 @@ public class Parser {
             throw new IllegalArgumentException("missing ID of card on which to place or given ID is invalid");
         }
 
-        Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString);
+        Matcher dirMatcher = Pattern.compile("TL|BL|TR|BR").matcher(argsString.toUpperCase());
         if(dirMatcher.find()){
             cornDir = dirMatcher.group();
         } else {

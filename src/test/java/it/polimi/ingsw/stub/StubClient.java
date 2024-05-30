@@ -227,10 +227,11 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException {
         System.out.println(colorize("Being notified by " + this.nickname + "\nof card placement with:\n" +
                 "[PLAYER] " + nickname + "\n" +
                 "[PLACED CARD] " + placedCardId + "\n" +
+                "[SIDE] " + (placeOnFront ? "FRONT" : "BACK") + "\n" +
                 "[POINT] " + new Point(row ,col), Attribute.MAGENTA_TEXT()));
     }
 

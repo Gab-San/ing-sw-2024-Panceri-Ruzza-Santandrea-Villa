@@ -18,7 +18,7 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 public class PrintPlayArea {
     private final PrintCard printCard;
     private final ViewPlayArea playArea;
-    private final String freeCornerColor = ConsoleColorsCombiner.combine(BLACK_BRIGHT_TEXT, WHITE);
+    private final String freeCornerColor = ConsoleColorsCombiner.combine(PURPLE_TEXT, WHITE);
 
     public PrintPlayArea(ViewPlayArea playArea){
         printCard = new PrintCard();
@@ -41,9 +41,10 @@ public class PrintPlayArea {
     private String recolorCorner(String row, CornerDirection dir, String color) {
         int rightCorner = PrintCard.cornerStringLength;
         int leftCorner = row.length() - PrintCard.cornerStringLength;
+        int orgColorLen = PrintCard.cornerColor.length();
         return switch (dir){
-            case TL, BL -> color + row.substring(0, rightCorner) + RESET + row.substring(rightCorner);
-            case TR, BR -> row.substring(0, leftCorner) + color + row.substring(leftCorner) + RESET;
+            case TL, BL -> color + row.substring(orgColorLen, rightCorner) + row.substring(rightCorner);
+            case TR, BR -> row.substring(0, leftCorner) + color + row.substring(leftCorner+orgColorLen);
         };
     }
 

@@ -284,13 +284,15 @@ public interface VirtualClient extends Remote, Serializable {
      *     Therefore if this parameter is read when a non-starting card is passed that
      *     an error must occur.
      * </p>
-     * @param nickname the play area owner's identifier
+     *
+     * @param nickname     the play area owner's identifier
      * @param placedCardId the placed card's identifier
-     * @param row the row in which the card was placed
-     * @param col the column in which the card was placed
+     * @param row          the row in which the card was placed
+     * @param col          the column in which the card was placed
+     * @param placeOnFront the side on which to place the card
      * @throws RemoteException if a connection error occurs
      */
-    void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException;
+    void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException;
 
     /**
      * Updates the visible resources map

@@ -121,7 +121,7 @@ public class PuppetModelUpdater extends ModelUpdater {
     }
 
     @Override
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col){
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront){
 
     }
 

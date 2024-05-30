@@ -197,8 +197,8 @@ public class ClientProxy implements VirtualClient {
     }
 
     @Override
-    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
-        sendNotification(new PlayAreaPlaceCardMessage(nickname, placedCardId, row, col));
+    public synchronized void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException {
+        sendNotification(new PlayAreaPlaceCardMessage(nickname, placedCardId, row, col, placeOnFront));
     }
 
     @Override

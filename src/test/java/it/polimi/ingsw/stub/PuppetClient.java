@@ -5,7 +5,6 @@ import it.polimi.ingsw.Point;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.CommandPassthrough;
@@ -228,7 +227,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void updatePlaceCard(String nickname, String placedCardId, int row, int col) throws RemoteException {
+    public void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException {
 
     }
 

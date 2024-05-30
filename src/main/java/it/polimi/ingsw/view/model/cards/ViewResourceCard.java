@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.GameResource;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ViewResourceCard extends ViewPlayCard {
@@ -13,5 +14,10 @@ public class ViewResourceCard extends ViewPlayCard {
     @Override
     public String getPlacementCostAsString() {
         return "";
+    }
+
+    @Override
+    public List<GameResource> getPlacementCost() {
+        return new LinkedList<>();
     }
 }

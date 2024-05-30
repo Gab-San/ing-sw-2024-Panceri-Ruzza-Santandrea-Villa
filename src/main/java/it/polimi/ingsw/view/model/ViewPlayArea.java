@@ -87,10 +87,12 @@ public class ViewPlayArea {
         if(cardMatrix.get(position) != null) return false;
 
         // checks valid cost before placing
-        for(GameResource res : GameResource.values()){
-            if (visibleResources.get(res) == null || visibleResources.get(res) < countResource(res, playCard.getPlacementCostAsString()))
-                return false;
-        }
+        if(!playCard.getPlacementCost().isEmpty())
+            for(GameResource res : GameResource.values()){
+                int numOfResInCost = (int) playCard.getPlacementCost().stream().filter(r->r.equals(res)).count();
+                if (visibleResources.getOrDefault(res, 0) < numOfResInCost)
+                    return false;
+            }
         // checks for FILLED corners, invalid placement if it would cover any
         for(CornerDirection dir : CornerDirection.values()){
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));

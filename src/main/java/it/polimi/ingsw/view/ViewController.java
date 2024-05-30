@@ -40,7 +40,7 @@ public class ViewController {
     public void validatePlaceCard(String cardID, Point placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
         Point correctPos = placePos.move(CornerDirection.getDirectionFromString(cornerDir));
         ViewPlayCard card = board.getPlayerHand().getCardByID(cardID);
-        if(playArea.validatePlacement(correctPos, card))
+        if(!playArea.validatePlacement(correctPos, card))
             throw new IllegalStateException(cardID + " can't be placed there.");
     }
 
