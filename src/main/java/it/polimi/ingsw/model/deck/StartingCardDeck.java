@@ -3,11 +3,7 @@ package it.polimi.ingsw.model.deck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.model.cards.StartingCard;
-import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.json.deserializers.StartingCardDeserializer;
-import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
-import it.polimi.ingsw.network.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +14,6 @@ import java.util.Random;
 public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;
-    private static final String jsonPath =
-            Server.getBaseJSONPath() + "StartingCard.json";
 
     public StartingCardDeck() throws IllegalStateException{
         cardDeck = importFromJson();
@@ -39,7 +33,7 @@ public class StartingCardDeck{
             simpleModule.addDeserializer(StartingCard.class, new StartingCardDeserializer());
             objectMapper.registerModule(simpleModule);
 
-            File json = new File(jsonPath);
+            File json = new File("src/resources/server/StartingCard.json");
             startingCardsList = objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, StartingCard.class));
         } catch (IOException e) {
             throw new IllegalStateException("SYSTEM SHUT DOWN: An error occured while initializing the starting deck");

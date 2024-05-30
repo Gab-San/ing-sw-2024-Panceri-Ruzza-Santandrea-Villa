@@ -38,7 +38,7 @@ class ResourceCardFactoryTest {
     void deckExceptionNoCardsRemaining(){
         ResourceCardFactory resourceCardFactory = null;
         try {
-            resourceCardFactory = new ResourceCardFactory("src/main/java/it/polimi/ingsw/model/resources/ResourceCard_Id");
+            resourceCardFactory = new ResourceCardFactory();
         } catch (DeckInstantiationException deckExc){
             deckExc.printStackTrace(System.err);
         }

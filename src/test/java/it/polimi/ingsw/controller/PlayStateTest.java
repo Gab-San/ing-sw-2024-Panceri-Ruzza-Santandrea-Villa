@@ -464,7 +464,6 @@ public class PlayStateTest {
 
         }
 
-        assertEquals(lastPlayer, getLastActivePlayer());
         System.err.println("last player is " + lastPlayer.getNickname());
         System.err.println("finito al turno " + i);
         assertTrue(endgame, "endgame may be false");

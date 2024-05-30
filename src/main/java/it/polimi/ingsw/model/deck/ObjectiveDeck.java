@@ -2,6 +2,10 @@ package it.polimi.ingsw.model.deck;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.cards.ObjectiveCard;
+import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.json.deserializers.ObjectiveCardDeserializer;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
@@ -9,11 +13,6 @@ import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.cards.ObjectiveCard;
-import it.polimi.ingsw.model.exceptions.ListenException;
-import it.polimi.ingsw.model.json.deserializers.ObjectiveCardDeserializer;
-import it.polimi.ingsw.network.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,8 +33,6 @@ public class ObjectiveDeck implements GameSubject {
     private ObjectiveCard secondRevealed;
     private ObjectiveCard topCard;
     private final List<GameListener> gameListenersList;
-    private static final String jsonPath =
-            Server.getBaseJSONPath() + "ObjectiveCard.json";
 
     public ObjectiveDeck() throws IllegalStateException {
         gameListenersList = new LinkedList<>();
@@ -108,7 +105,7 @@ public class ObjectiveDeck implements GameSubject {
             module.addDeserializer(ObjectiveCard.class, new ObjectiveCardDeserializer());
             mapper.registerModule(module);
 
-            File json = new File(jsonPath);
+            File json = new File("src/resources/server/ObjectiveCard.json");
             objectiveCardList = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(ArrayList.class, ObjectiveCard.class));
         } catch (IOException exc){
             notifyAllListeners(new CrashStateError("all", "An error occured while initializing the objective deck".toUpperCase()));

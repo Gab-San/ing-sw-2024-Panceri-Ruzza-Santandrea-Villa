@@ -20,7 +20,7 @@ public class SetupState extends GameState{
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
 
-    private static final int TURN_TIME = 62;
+    private static final int TURN_TIME = 122;
     private final TurnTimerController timers;
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);

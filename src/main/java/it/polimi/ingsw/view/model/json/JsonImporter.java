@@ -2,9 +2,11 @@ package it.polimi.ingsw.view.model.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.model.cards.*;
-import it.polimi.ingsw.view.model.json.deserializers.*;
+import it.polimi.ingsw.view.model.json.deserializers.GoldCardDeserializerView;
+import it.polimi.ingsw.view.model.json.deserializers.ObjectiveCardDeserializerView;
+import it.polimi.ingsw.view.model.json.deserializers.ResourceCardDeserializerView;
+import it.polimi.ingsw.view.model.json.deserializers.StartingCardDeserializerView;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,11 +30,8 @@ public class JsonImporter {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addDeserializer(ViewGoldCard.class, new GoldCardDeserializerView());
         objectMapper.registerModule(simpleModule);
-        String basePath = "";
-        if(Client.isRunningInIDE())
-            basePath = "src/main/java/it/polimi/ingsw/view/model/json/";
 
-        File json = new File(basePath+"GoldCard.json"); // Path file JSON
+        File json = new File("src/resources/client/GoldCard.json"); // Path file JSON
         goldCards = new Hashtable<>();
         List<ViewGoldCard> goldCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewGoldCard.class));
@@ -46,7 +45,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewResourceCard.class, new ResourceCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File(basePath+"ResourceCard.json"); // Path file JSON
+        json = new File("src/resources/client/ResourceCard.json"); // Path file JSON
         resourceCards = new Hashtable<>();
         List<ViewResourceCard> resourceCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewResourceCard.class));
@@ -59,7 +58,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewObjectiveCard.class, new ObjectiveCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File(basePath+"ObjectiveCard.json"); // Path file JSON
+        json = new File("src/resources/client/ObjectiveCard.json"); // Path file JSON
         objectiveCards = new Hashtable<>();
         List<ViewObjectiveCard> objectiveCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewObjectiveCard.class));
@@ -72,7 +71,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewStartCard.class, new StartingCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File(basePath+"StartingCard.json"); // Path file JSON
+        json = new File("src/resources/client/StartingCard.json"); // Path file JSON
         startCards = new Hashtable<>();
         List<ViewStartCard> startCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewStartCard.class));

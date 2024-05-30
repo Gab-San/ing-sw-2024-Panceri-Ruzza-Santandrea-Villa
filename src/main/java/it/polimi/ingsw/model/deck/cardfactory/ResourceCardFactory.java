@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardJSON;
-import it.polimi.ingsw.network.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +16,8 @@ import java.util.NoSuchElementException;
 
 public class ResourceCardFactory extends CardFactory {
     private final List<ResourceCardJSON> jsonCards;
-    private static final String jsonPath =
-            Server.getBaseJSONPath() + "ResourceCard.json";
-    private static final String idPath =
-            Server.getBaseIDPath() + "ResourceCard_Id";
-
     public ResourceCardFactory() throws IllegalStateException{
-        super(idPath);
+        super("src/resources/server/ResourceCard_Id");
         try{
             jsonCards = importFromJson();
         } catch (DeckException deckException){
@@ -73,7 +67,7 @@ public class ResourceCardFactory extends CardFactory {
             module.addDeserializer(ResourceCardJSON.class,new ResourceCardDeserializer());
             objectMapper.registerModule(module);
 
-            File json = new File(jsonPath);
+            File json = new File("src/resources/server/ResourceCard.json");
             return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, ResourceCardJSON.class));
         } catch (IOException e) {
             throw new DeckException("Error reading file JSON", e, ResourceCardFactory.class);

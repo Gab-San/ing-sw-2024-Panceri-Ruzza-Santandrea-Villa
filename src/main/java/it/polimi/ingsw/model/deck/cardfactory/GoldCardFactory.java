@@ -18,15 +18,9 @@ import java.util.NoSuchElementException;
 
 public class GoldCardFactory extends CardFactory {
     List<GoldCardJSON> jsonCards;
-    private static final String jsonPath =
-            Server.getBaseJSONPath() + "GoldCard.json";
-    private static final String idPath =
-            Server.getBaseIDPath() + "GoldCard_Id";
-
-
 
     public GoldCardFactory() throws IllegalStateException{
-        super(idPath);
+        super("src/resources/server/GoldCard_Id");
 
         try {
             jsonCards = importFromJson();
@@ -83,7 +77,7 @@ public class GoldCardFactory extends CardFactory {
             simpleModule.addDeserializer(GoldCardJSON.class, new GoldCardDeserializer());
             objectMapper.registerModule(simpleModule);
 
-            File json = new File(jsonPath); // Path file JSON
+            File json = new File("src/resources/server/GoldCard.json"); // Path file JSON
             return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, GoldCardJSON.class));
         } catch (IOException e) {
             throw new DeckException("Error reading file JSON", e, GoldCardFactory.class);

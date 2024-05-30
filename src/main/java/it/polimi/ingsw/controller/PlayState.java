@@ -22,7 +22,7 @@ public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
     private final TurnTimerController timerCurrPlayer;
-    private static final int TURN_TIME = 20; //default 302
+    private static final int TURN_TIME = 302;
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
