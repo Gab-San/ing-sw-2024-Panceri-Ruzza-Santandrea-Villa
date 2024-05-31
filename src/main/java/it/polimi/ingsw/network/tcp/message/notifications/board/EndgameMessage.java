@@ -32,6 +32,8 @@ public class EndgameMessage implements TCPServerMessage {
 
     @Override
     public void execute(VirtualClient virtualClient) throws RemoteException {
-
+        if(emptyDecks)
+            virtualClient.notifyEndgame();
+        else virtualClient.notifyEndgame(nickname, score);
     }
 }

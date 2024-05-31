@@ -61,7 +61,7 @@ public class TurnTimer implements Runnable{
             System.out.println("DISCONNECTING FOR BEING IDLE: " + player.getNickname());
             player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
         } catch (InterruptedException e) {
-            System.err.println("TIMER INTERRUPTED");
+//            System.err.println("TIMER INTERRUPTED");
         }finally{
             timer.cancel();
             pingTimer.cancel();

@@ -114,11 +114,11 @@ public class ModelUpdater {
     }
 
     public synchronized void notifyEndgame()  {
-        notifyBoardUpdate("Endgame has been reached!");
+        notifyView("Endgame has been reached!");
     }
 
     public synchronized void notifyEndgame(String nickname, int score)  {
-        notifyBoardUpdate("Endgame has been reached because "
+        notifyView("Endgame has been reached because "
                 + nickname + " has reached " + score + " (>20) points!");
     }
 

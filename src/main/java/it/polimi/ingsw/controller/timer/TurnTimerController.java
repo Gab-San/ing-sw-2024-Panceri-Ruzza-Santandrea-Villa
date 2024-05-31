@@ -44,7 +44,7 @@ public class TurnTimerController {
      * @param currPlayer the player whose turn has finished
      */
     public synchronized void stopTimer(Player currPlayer){
-        System.out.println("STOPPING TIMER FOR: " + currPlayer.getNickname());
+//        System.out.println("STOPPING TIMER FOR: " + currPlayer.getNickname());
         TurnTimer currentTimer = timers.get(currPlayer);
         if(currentTimer != null) {
             currentTimer.killTask();

@@ -514,7 +514,7 @@ public class Board implements GameSubject{
      */
     public List<Player> getPlayersByScore(){
         return playerAreas.keySet().stream()
-                .sorted(Comparator.comparingInt(scoreboard::get))
+                .sorted(Comparator.comparingInt(p -> -scoreboard.get(p)))
                 .toList();
     }
 

@@ -51,11 +51,23 @@ public class Server {
                 }
             }
         }catch (SocketException ignored){}
-        System.out.println("Server machine IPs and Hostnames: ");
-        System.out.println(YELLOW_TEXT);
-        localIPs.forEach(System.out::println);
-        System.out.println(RESET);
-        System.out.println("Please note: not all these IPs may work. If one doesn't work, try another.\n");
+
+        if(args.length >= 3 && localIPs.contains(args[2])){
+            System.out.println("IP/Hostname passed as parameter is valid!");
+            System.out.println(YELLOW_TEXT);
+            System.out.println("Using " + args[2] + " as Server IP/Hostname");
+            System.out.println(RESET);
+            System.setProperty("java.rmi.server.hostname", args[2]);
+        }
+        else{
+            if(args.length >= 3)
+                System.out.println("IP/Hostname passed as parameter is invalid!");
+            System.out.println("Server machine IPs and Hostnames: ");
+            System.out.println(YELLOW_TEXT);
+            localIPs.forEach(System.out::println);
+            System.out.println(RESET);
+            System.out.println("Please note: not all these IPs may work. If one doesn't work, try another.\n");
+        }
 
         try{
             rmiServer = new RMIServer(rmiPort); //also creates CentralServer via singleton
@@ -85,11 +97,11 @@ public class Server {
                     continue;
                 }
 
-                switch(cmdArgs[1]){
-                    case "on", "ON", "On":
+                switch(cmdArgs[1].toLowerCase()){
+                    case "on":
                         CentralServer.setDebugMode(true);
                         break;
-                    case "off", "OFF", "Off":
+                    case "off":
                         CentralServer.setDebugMode(false);
                         break;
                 }
