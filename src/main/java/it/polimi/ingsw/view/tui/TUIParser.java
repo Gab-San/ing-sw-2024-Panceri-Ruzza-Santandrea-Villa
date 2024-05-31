@@ -56,23 +56,23 @@ public class TUIParser {
         List<CornerDirection> directions = new LinkedList<>();
         for(String arg : cmdArgs) {
             switch (arg.toLowerCase()){
-                case "top", "up", "north", "above":
+                case "top", "up", "north", "above", "upward", "northward":
                     directions.add(TL);
                     directions.add(TR);
                     break;
-                case "bottom", "down", "south", "below":
+                case "bottom", "down", "south", "below", "downward", "southward":
                     directions.add(BL);
                     directions.add(BR);
                     break;
-                case "left", "leftward", "west":
+                case "left", "leftward", "west", "westward":
                     directions.add(TL);
                     directions.add(BL);
                     break;
-                case "right", "rightward", "east":
+                case "right", "rightward", "east", "eastward":
                     directions.add(TR);
                     directions.add(BR);
                     break;
-                case "center", "zero":
+                case "center", "zero", "middle":
                     view.setCenter(0,0);
                     break;
                 default: throw new IllegalArgumentException("Invalid direction!");

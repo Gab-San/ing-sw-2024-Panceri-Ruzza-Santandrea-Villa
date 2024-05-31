@@ -63,8 +63,9 @@ public class Client {
         quitError();
     }
     private static void quitError(){
-        scanner.close();
         System.out.print(YELLOW_TEXT + "Press enter to exit..." + RESET);
+        System.out.flush();
+        scanner.close();
         System.exit(-1);
     }
     private static BlockingQueue<String> initInputQueue(){

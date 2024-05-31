@@ -120,12 +120,15 @@ public class TUI extends View{
 
     void moveView(List<CornerDirection> directions){
         currentScene.moveView(directions);
+        printCommandPrompt();
     }
     void setCenter(int row, int col) {
         currentScene.setCenter(row,col);
+        printCommandPrompt();
     }
     void setCenter(Point center) {
         currentScene.setCenter(center);
+        printCommandPrompt();
     }
 
     @Override

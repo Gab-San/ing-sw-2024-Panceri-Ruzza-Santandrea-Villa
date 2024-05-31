@@ -3,6 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewHand;
+import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
@@ -69,13 +71,16 @@ public class ViewController {
     }
 
     public void validateMsg(String addressee) throws IllegalArgumentException {
-        if(board.getPlayerArea(addressee) == null){
-            throw new IllegalArgumentException("Can't message a player not in game!");
-        }
-        if(!board.getPlayerHand().getNickname().equals(addressee)
-            && !board.getOpponentHand(addressee).isConnected())
-        {
-            throw new IllegalArgumentException("Can't message a disconnected player!");
+        ViewHand hand = board.getAllPlayerHands().stream()
+                .filter(h -> h.getNickname().equals(addressee))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Can't message a player not in game!")
+                );
+
+        if(hand instanceof ViewOpponentHand opponentHand){
+            if(!opponentHand.isConnected())
+                throw new IllegalArgumentException("Can't message a disconnected player!");
         }
     }
 }
