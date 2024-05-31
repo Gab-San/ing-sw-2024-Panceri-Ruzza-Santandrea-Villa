@@ -12,8 +12,9 @@ import it.polimi.ingsw.view.tui.TUI;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
@@ -22,7 +23,7 @@ public class Client {
     public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
-    private static Scanner scanner;
+    private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
     private static String serverIP;
     private static int port;
@@ -63,7 +64,25 @@ public class Client {
     }
     private static void quitError(){
         scanner.close();
+        System.out.print(YELLOW_TEXT + "Press enter to exit..." + RESET);
         System.exit(-1);
+    }
+    private static BlockingQueue<String> initInputQueue(){
+        BlockingQueue<String> inputQueue = new LinkedBlockingDeque<>();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Runnable inputReader = () -> {
+            try {
+                while(true) {
+                        String str;
+                        synchronized (scanner) {
+                            str = scanner.nextLine();
+                        }
+                        inputQueue.add(str);
+                }
+            }catch (NoSuchElementException ignored){}
+        };
+        executor.submit(inputReader);
+        return inputQueue;
     }
 
     /**
@@ -75,7 +94,6 @@ public class Client {
      *             If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
      */
     public static void main(String[] args) {
-        scanner = new Scanner(System.in);
         serverIP = null; connectionTech = null; port = -1;
         boolean verbose = false;
 
@@ -123,7 +141,10 @@ public class Client {
         }
         cls();
         System.out.println("Searching "+ connectionTech.toUpperCase() +" server at address " + serverIP + ":" + port);
+
+        BlockingQueue<String> inputQueue = initInputQueue();
         while(true) {
+            inputQueue.clear();
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;
             for (int i = 0; i <= MAX_CONNECTION_ATTEMPTS; i++) {
@@ -166,14 +187,19 @@ public class Client {
                 while (view == null) {
                     System.out.println("Enter the game mode (TUI or GUI). Please use fullscreen (Alt+Enter) if selecting TUI.");
                     System.out.print("> ");
-                    String gameMode = scanner.nextLine();
+
+                    String gameMode = "";
+                    try {
+                        gameMode = inputQueue.take();
+                    }catch (InterruptedException ignored){}
+
                     if (gameMode.equalsIgnoreCase("GUI")) {
                         view = new GUI(proxy, setClientModelUpdater); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
-                        view = new TUI(proxy, setClientModelUpdater, scanner, verbose); // proxy always not null at this point
+                        view = new TUI(proxy, setClientModelUpdater, inputQueue, verbose); // proxy always not null at this point
                     } else if (gameMode.toLowerCase().matches("quit|exit|q")) {
-                        System.out.println(YELLOW_TEXT + "Exiting Client..." + RESET);
+                        System.out.println(YELLOW_TEXT + "Client terminated." + RESET);
                         quitError();
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);

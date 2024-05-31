@@ -14,11 +14,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class TUI extends View{
     private static final int BACKLOG_SIZE = 10;
-    private final Scanner scanner;
+    private final BlockingQueue<String> inputQueue;
     private TUIParser parser;
     private ViewBoard board;
     private final List<String> notificationBacklog;
@@ -26,10 +27,10 @@ public class TUI extends View{
     Boolean hasServerTimeoutDisconnected;
     private final boolean verbose;
 
-    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
+    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue, boolean verbose) throws RemoteException {
         super(serverProxy, new PrintNicknameSelectUI());
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
-        this.scanner = scanner;
+        this.inputQueue = inputQueue;
         this.verbose = verbose;
         hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
@@ -61,7 +62,11 @@ public class TUI extends View{
         currentScene.display();
         String nickname;
         do {
-            nickname = scanner.nextLine();
+            try {
+                nickname = inputQueue.take();
+            }catch (InterruptedException e){
+                nickname = "";
+            }
             if(validateNickname(nickname)){
                 try{
                     board = new ViewBoard(nickname);
@@ -85,23 +90,20 @@ public class TUI extends View{
 
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         refreshScene();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while(true) { //exits only on System.quit() or RemoteException
+        String input;
+        final int SLEEP_MILLIS = 200;
+        while(true) {
             try {
-                // wait until we have data to complete a readLine()
-                if (!reader.ready()) {
-                    Thread.sleep(200);
-                    synchronized (this) {
-                        if (hasServerTimeoutDisconnected) {
-                            throw new TimeoutException();
-                        }
+                input = inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
+                synchronized (this){
+                    if(hasServerTimeoutDisconnected){
+                        throw new TimeoutException();
                     }
-                }else{
-                    parser.parseCommand(reader.readLine());
                 }
-            } catch (RemoteException e){
-                throw e;
-            } catch (InterruptedException | IOException ignored) {
+                if(input != null) {
+                    parser.parseCommand(input);
+                }
+            } catch (InterruptedException ignored) {
             } catch (IllegalArgumentException | IllegalStateException e){
                 showError(e.getMessage());
             }
