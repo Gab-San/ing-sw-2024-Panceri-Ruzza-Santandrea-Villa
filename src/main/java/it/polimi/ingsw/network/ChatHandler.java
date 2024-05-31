@@ -86,11 +86,19 @@ public class ChatHandler{
                             directMessage = directMessageQueue.poll();
                         }
                         VirtualClient addressee;
+                        VirtualClient messengerClient;
                         synchronized (connectedClients) {
                              addressee = directMessage.getAddresseeClient(connectedClients);
+                             messengerClient = directMessage.getAddresseeClient(connectedClients);
                         }
+
                         try {
-                            addressee.displayMessage(directMessage.messenger(), directMessage.message());
+                            if(addressee != null) {
+                                addressee.displayMessage(directMessage.messenger(), directMessage.message());
+                                if(!directMessage.addressee().equals(directMessage.messenger())) {
+                                    messengerClient.displayMessage(directMessage.messenger() + " TO " + directMessage.addressee(), directMessage.message());
+                                }
+                            }
                         } catch (RemoteException e){
                             centralServer.disconnect(directMessage.addressee() , addressee);
                         }

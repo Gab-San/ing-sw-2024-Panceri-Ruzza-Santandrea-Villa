@@ -67,4 +67,15 @@ public class ViewController {
             throw new IllegalArgumentException("Can't draw from empty position!");
         }
     }
+
+    public void validateMsg(String addressee) throws IllegalArgumentException {
+        if(board.getPlayerArea(addressee) == null){
+            throw new IllegalArgumentException("Can't message a player not in game!");
+        }
+        if(!board.getPlayerHand().getNickname().equals(addressee)
+            && !board.getOpponentHand(addressee).isConnected())
+        {
+            throw new IllegalArgumentException("Can't message a disconnected player!");
+        }
+    }
 }

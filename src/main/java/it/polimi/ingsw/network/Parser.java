@@ -156,6 +156,7 @@ public class Parser {
         //removing quotes
         String addressee = addresseeNickExtract.substring(1, addresseeNickExtract.length() - 1);
 
+        viewController.validateMsg(addressee);
         virtualServer.sendMsg(addressee, msg.toString().trim());
     }
 
@@ -165,7 +166,7 @@ public class Parser {
                 (arg) -> command.append(arg).append(" ")
         );
 
-        Matcher matcher = Pattern.compile("\"\\b.*([A-Za-z])+.*\\b\"").matcher(command.toString().trim());
+        Matcher matcher = Pattern.compile("\"[^\n ].*[a-zA-Z].*[^\n ]\"").matcher(command.toString().trim());
 
         if(matcher.find()){
             return matcher.group();
