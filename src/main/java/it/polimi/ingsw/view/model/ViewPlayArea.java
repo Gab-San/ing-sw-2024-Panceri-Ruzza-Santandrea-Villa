@@ -141,6 +141,9 @@ public class ViewPlayArea {
         cardMatrix.put(position, card);
         card.setPosition(position);
     }
+    public void clearCardMatrix() {
+        cardMatrix.clear();
+    }
 
     public void clearFreeCorners(){
         freeCorners.clear();

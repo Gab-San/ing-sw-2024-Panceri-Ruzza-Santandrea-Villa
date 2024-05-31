@@ -60,8 +60,8 @@ public class ModelUpdater {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);
             board.getPlayerHand().setColor(color);
-//            if(turn != 0 || color != null)
-            notifyMyAreaUpdate("Your turn and color were set");
+            if(turn != 0 || color != null)
+                notifyMyAreaUpdate("Your turn and color were set.");
         }
         else{
             //getOpponentHand will also run addPlayer if it wasn't run before.
@@ -69,7 +69,7 @@ public class ModelUpdater {
             hand.setConnected(isConnected);
             hand.setTurn(turn);
             hand.setColor(color);
-            notifyOpponentUpdate(nickname, nickname + " joined the game!");
+            notifyOpponentUpdate(nickname, nickname + "'s hand and state was set.");
         }
     }
     public synchronized void updatePlayer(String nickname, PlayerColor color){
@@ -277,7 +277,6 @@ public class ModelUpdater {
         notifyBoardUpdate(cardPos + " revealed card of " + getDeckName(deck) + " was drawn. Deck is empty so no card has replaced it.");
     }
     public synchronized void setEmptyDeckState(char deck) {
-        //FIXME: this isn't needed as decks are initialised empty
         setDeckState(deck, null,null,null);
     }
 
@@ -292,8 +291,8 @@ public class ModelUpdater {
             notifyBoardUpdate("Board initialised.");
     }
     public synchronized void updatePhase(GamePhase gamePhase) {
-        if(board.setGamePhase(gamePhase))
-            view.showNotification("Game phase updated to " + gamePhase);
+        board.setGamePhase(gamePhase);
+        view.showNotification("Game phase updated to " + gamePhase);
     }
     public synchronized void updateTurn(int currentTurn) {
         if(board.setCurrentTurn(currentTurn))
@@ -409,6 +408,7 @@ public class ModelUpdater {
     public synchronized void setPlayAreaState(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
+        playArea.clearCardMatrix();
 
         for(CardPosition pos : cardPositions){
             ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
