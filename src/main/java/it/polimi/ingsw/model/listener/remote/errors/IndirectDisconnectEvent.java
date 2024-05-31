@@ -14,7 +14,8 @@ public class IndirectDisconnectEvent extends RemoteErrorEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         try {
             CentralServer.getSingleton().disconnect(notifiedClient, virtualClient);
-        } catch (RuntimeException ignore){}
+        } catch (IllegalStateException | IllegalArgumentException ignore){}
+
         virtualClient.notifyIndirectDisconnect();
     }
 }

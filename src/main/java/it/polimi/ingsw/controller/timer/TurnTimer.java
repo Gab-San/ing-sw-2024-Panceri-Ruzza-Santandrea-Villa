@@ -10,20 +10,20 @@ import it.polimi.ingsw.model.listener.remote.errors.IndirectDisconnectEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class TurnTimer implements Runnable{
 
     private final Player player;
-    private final BoardController controller; //FIXME: [Ale] is controller not used?
     private final int turnTime;
     private final long pingTimeMillis;
+    private Future<?> task;
 
-    public TurnTimer(BoardController controller, Player player, int turnTime, int pingTime){
+    public TurnTimer(Player player, int turnTime, int pingTime){
         this.player = player;
         this.turnTime = turnTime;
-        this.controller = controller;
         this.pingTimeMillis = pingTime*1000L;
     }
 
@@ -45,26 +45,36 @@ public class TurnTimer implements Runnable{
             @Override
             public void run() {
                 try {
-//                    System.out.println("TIMER PINGING: " + player.getNickname());
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
+                    System.out.println("CANNOT PING " + player.getNickname());
                     player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
+                    timer.cancel();
+                    pingTimer.cancel();
+                    killTask();
                 }
             }
         }, pingTimeMillis, pingTimeMillis);
 
         try {
             latch.await();
-            timer.cancel();
-            pingTimer.cancel();
+            System.out.println("DISCONNECTING FOR BEING IDLE: " + player.getNickname());
+            player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
         } catch (InterruptedException e) {
+            System.err.println("TIMER INTERRUPTED");
+        }finally{
             timer.cancel();
             pingTimer.cancel();
-//            System.err.println("TIMER INTERRUPTED " + player.getNickname());
-            return;
         }
-
-        player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
     }
 
+    void setTask(Future<?> task){
+        this.task = task;
+    }
+
+    void killTask(){
+        if(task != null){
+            task.cancel(true);
+        }
+    }
 }

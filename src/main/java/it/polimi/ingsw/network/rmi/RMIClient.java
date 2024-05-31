@@ -21,9 +21,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class RMIClient extends UnicastRemoteObject implements VirtualClient {
@@ -306,8 +304,9 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
+        close();
         synchronized (updateQueue){
-            close();
+            updateQueue.clear();
             updateQueue.add(new NotifyIndirectDisconnect(modelUpdater));
             updateQueue.notifyAll();
         }
@@ -348,6 +347,5 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
                 }
         ).start();
     }
-
 //endregion
 }

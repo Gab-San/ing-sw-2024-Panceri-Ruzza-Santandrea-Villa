@@ -120,7 +120,7 @@ public class ChatHandler{
                                     System.err.println("ERROR IN BROADCAST CHAT: " + e.getMessage());
                                 }
                             }
-                             broadcastMessage = broadcastMessageQueue.poll();
+                            broadcastMessage = broadcastMessageQueue.poll();
                         }
                         synchronized (connectedClients){
                             for(String user : connectedClients.keySet()){
@@ -154,9 +154,11 @@ public class ChatHandler{
             synchronized (connectedClients){
                 client = connectedClients.get(nickname);
             }
+
             try {
+                CentralServer.getSingleton().disconnect(nickname, client);
                 client.notifyIndirectDisconnect();
-            } catch (RemoteException | NullPointerException ignore) {}
+            } catch (RemoteException | IllegalStateException | IllegalArgumentException ignored){}
         }
         disconnectedClients.clear();
     }

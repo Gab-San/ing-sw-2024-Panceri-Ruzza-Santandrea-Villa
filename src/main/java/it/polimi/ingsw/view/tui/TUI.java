@@ -7,14 +7,17 @@ import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.tui.scenes.*;
+import it.polimi.ingsw.view.tui.scenes.PrintBoardUI;
+import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
+import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
+import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.rmi.RemoteException;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class TUI extends View{
@@ -24,7 +27,7 @@ public class TUI extends View{
     private ViewBoard board;
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
-    Boolean hasServerTimeoutDisconnected;
+    private boolean hasServerTimeoutDisconnected;
     private final boolean verbose;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue, boolean verbose) throws RemoteException {

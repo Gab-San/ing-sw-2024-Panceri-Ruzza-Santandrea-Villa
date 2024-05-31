@@ -19,7 +19,7 @@ public abstract class GameState {
         this.board = board;
         this.controller = controller;
         this.disconnectingPlayers = disconnectingPlayers;
-        this.timers = new TurnTimerController(controller);
+        this.timers = new TurnTimerController();
     }
 
     abstract public void join (String nickname, VirtualClient client) throws IllegalStateException;
