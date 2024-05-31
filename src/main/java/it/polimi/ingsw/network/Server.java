@@ -75,9 +75,25 @@ public class Server {
         }
 
         Scanner scanner = new Scanner(System.in);
-        String quit="";
-        while(!quit.matches("[qQ]uit")){
-            quit = scanner.nextLine();
+        String command="";
+        while(!command.matches("[qQ]uit")){
+            command = scanner.nextLine();
+            if(command.matches("[Dd]ebug(\\s+.*)*")){
+                String[] cmdArgs = command.split("\\s+");
+                if(cmdArgs.length < 2){
+                    System.err.println("MISSING DEBUG SWITCH (ON|OFF)");
+                    continue;
+                }
+
+                switch(cmdArgs[1]){
+                    case "on", "ON", "On":
+                        CentralServer.setDebugMode(true);
+                        break;
+                    case "off", "OFF", "Off":
+                        CentralServer.setDebugMode(false);
+                        break;
+                }
+            }
         }
         System.exit(0);
     }

@@ -108,7 +108,7 @@ public class EndgameState extends GameState{
         for(Player p : board.getPlayerAreas().keySet().stream().filter((p)->!p.isConnected()).collect(Collectors.toSet()))
             board.removePlayer(p.getNickname());
 
-        Board newBoard = new Board(this.board.getPlayerAreas().keySet().stream().toList());
+        Board newBoard = new Board(this.board, this.board.getPlayerAreas().keySet().stream().toList());
 
         if(board.getPlayerAreas().size() < numOfPlayers) {
             // if not enough players are connected for the new game, go to Join State

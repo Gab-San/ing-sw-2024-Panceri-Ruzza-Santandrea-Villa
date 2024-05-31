@@ -61,4 +61,8 @@ public class RemoteHandler implements GameListener{
         updateTask.setTaskFuture(taskFuture);
         eventRecord.addRunningTask(updateTask);
     }
+
+    public synchronized Map<String, VirtualClient> getClients(){
+        return playerClients;
+    }
 }

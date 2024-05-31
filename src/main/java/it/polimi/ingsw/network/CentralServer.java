@@ -16,6 +16,7 @@ public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final Queue<GameCommand> commandQueue;
+    public static boolean isDebugMode;
     private final BoardController gameRef;
     private final ChatHandler chat;
 
@@ -136,5 +137,10 @@ public class CentralServer {
             throw new IllegalArgumentException("Client not connected to chat!");
         }
         chat.addMessage(messenger, addressee, message);
+    }
+
+    public synchronized static void setDebugMode(boolean on){
+        isDebugMode = on;
+        System.err.println("Debug mode: " + on);
     }
 }

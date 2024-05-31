@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
@@ -16,6 +17,7 @@ import it.polimi.ingsw.model.listener.remote.events.playarea.FreeCornersUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaPlacedCardEvent;
 import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
 import it.polimi.ingsw.model.listener.remote.events.playarea.VisibleResourcesUpdateEvent;
+import it.polimi.ingsw.network.CentralServer;
 import org.jetbrains.annotations.NotNull;
 import it.polimi.ingsw.GameResource;
 
@@ -81,7 +83,8 @@ public class PlayArea implements GameSubject {
         // add resources to visibleResources
         Map<GameResource, Integer> cardResources = card.getCardResources();
         for(GameResource r : cardResources.keySet()){
-            visibleResources.put(r, cardResources.get(r));
+            visibleResources.put(r, cardResources.get(r)
+                                    + (CentralServer.isDebugMode ? 100 : 0));
         }
 
         notifyAllListeners(new VisibleResourcesUpdateEvent(owner, visibleResources));

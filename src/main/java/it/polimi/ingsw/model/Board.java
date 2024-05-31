@@ -28,6 +28,7 @@ import it.polimi.ingsw.model.listener.remote.events.board.*;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerRemovalEvent;
 import it.polimi.ingsw.model.listener.remote.events.playerhand.PlayerHandSetStartingCardEvent;
+import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.security.InvalidParameterException;
@@ -38,6 +39,7 @@ public class Board implements GameSubject{
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAY_SCORE = 29;
     public static final int MAX_PLAYERS = 4;
+    private final int DEBUG_MODE_SCORE_MULT = 10;
     private boolean hasGoneToEndgame;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
@@ -123,11 +125,15 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if players contains duplicates
      * @throws DeckInstantiationException if the decks can't be initialized
      */
-    public Board(List<Player> players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
+    public Board(Board oldBoard, List<Player> players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
         this();
         if(players.isEmpty() || players.size() > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players!");
         for(Player p: players){
             addPlayer(new Player(p.getNickname()));
+        }
+        Map<String, VirtualClient> connectedPlayers = oldBoard.remoteHandler.getClients();
+        for(String username : connectedPlayers.keySet()){
+            subscribeClientToUpdates(username, connectedPlayers.get(username));
         }
     }
 
@@ -225,7 +231,8 @@ public class Board implements GameSubject{
             notifyAllListeners(new IllegalGameAccessError(player.getNickname(), "Player not in game!".toUpperCase()));
             throw new IllegalArgumentException("Player not in game!");
         }
-        int newScore = scoreboard.get(player) + amount;
+
+        int newScore = scoreboard.get(player) + amount * (CentralServer.isDebugMode ? DEBUG_MODE_SCORE_MULT : 1);
         setScore(player, newScore);
     }
     protected void setScore(Player player, int score){
