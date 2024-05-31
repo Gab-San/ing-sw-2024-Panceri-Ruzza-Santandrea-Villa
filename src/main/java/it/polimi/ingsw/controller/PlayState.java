@@ -29,7 +29,7 @@ public class PlayState extends GameState {
         board.setCurrentTurn(1);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
-        timerCurrPlayer=new TurnTimerController(controller);
+        timerCurrPlayer= new TurnTimerController();
         board.setGamePhase(GamePhase.PLACECARD);
         Player player = board.getCurrentPlayer();
         timerCurrPlayer.startTimer(player, TURN_TIME);

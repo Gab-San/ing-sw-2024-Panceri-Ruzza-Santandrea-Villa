@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller.timer;
 
-import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 
 import java.util.ArrayList;
@@ -12,8 +10,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 /**
  * The TurnTimerController delivers an interface that can be used to control the timers of
  * a turn. Exposing only the start and stop methods this class lets the user set up timers
@@ -21,12 +17,10 @@ import static com.diogonunes.jcolor.Ansi.colorize;
  */
 public class TurnTimerController {
     private final ExecutorService timersPool;
-    private final BoardController controller;
-    private final Map<Player, Future<?>> tasks;
-    public TurnTimerController(BoardController controller){
-        this.controller = controller;
+    private final Map<Player, TurnTimer> timers;
+    public TurnTimerController(){
         timersPool = Executors.newCachedThreadPool();
-        tasks = new HashMap<>();
+        timers = new HashMap<>();
     }
 
     /**
@@ -35,10 +29,10 @@ public class TurnTimerController {
      * @param turnTimeSeconds time of each turn in seconds
      */
     public synchronized void startTimer(Player currPlayer, int turnTimeSeconds){
-        //System.out.println(colorize("Starting Timer for " + currPlayer.getNickname(), Attribute.BRIGHT_BLUE_TEXT()));
-        TurnTimer timer = new TurnTimer(controller, currPlayer, turnTimeSeconds);
+        TurnTimer timer = new TurnTimer(currPlayer, turnTimeSeconds);
         Future<?> timerFuture = timersPool.submit(timer);
-        tasks.put(currPlayer, timerFuture);
+        timer.setTask(timerFuture);
+        timers.put(currPlayer, timer);
     }
 
     /**
@@ -46,10 +40,11 @@ public class TurnTimerController {
      * @param currPlayer the player whose turn has finished
      */
     public synchronized void stopTimer(Player currPlayer){
-        Future<?> task = tasks.get(currPlayer);
-        if(task != null) {
-            task.cancel(true);
-            tasks.remove(currPlayer);
+        System.out.println("STOPPING TIMER FOR: " + currPlayer.getNickname());
+        TurnTimer currentTimer = timers.get(currPlayer);
+        if(currentTimer != null) {
+            currentTimer.killTask();
+            timers.remove(currPlayer);
         }
     }
 
@@ -62,7 +57,7 @@ public class TurnTimerController {
     }
 
     public synchronized void stopAll(){
-        List<Player> stoppingTimers = new ArrayList<>(tasks.keySet());
+        List<Player> stoppingTimers = new ArrayList<>(timers.keySet());
 
         for(Player player: stoppingTimers){
             stopTimer(player);

@@ -7,13 +7,19 @@ import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.tui.scenes.*;
+import it.polimi.ingsw.view.tui.scenes.PrintBoardUI;
+import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
+import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
+import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class TUI extends View{
@@ -23,7 +29,7 @@ public class TUI extends View{
     private ViewBoard board;
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
-    Boolean hasServerTimeoutDisconnected;
+    private boolean hasServerTimeoutDisconnected;
     private final boolean verbose;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, Scanner scanner, boolean verbose) throws RemoteException {
@@ -86,24 +92,25 @@ public class TUI extends View{
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         refreshScene();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
         while(true) { //exits only on System.quit() or RemoteException
             try {
                 // wait until we have data to complete a readLine()
                 while (!reader.ready()) {
-                    Thread.sleep(200);
+                    Thread.sleep(500);
                     synchronized (this) {
                         if (hasServerTimeoutDisconnected) {
                             throw new TimeoutException();
                         }
                     }
                 }
-                refreshScene();
                 parser.parseCommand(reader.readLine());
             } catch (RemoteException e){
                 throw e;
             } catch (InterruptedException | IOException ignored) {
-            } catch (IllegalArgumentException | IllegalStateException e){
-                showError(e.getMessage());
+                System.err.println("ERRORE DEL READER!");
+            } catch (IllegalArgumentException | IllegalStateException err){
+                showError(err.getMessage());
             }
         }
     }

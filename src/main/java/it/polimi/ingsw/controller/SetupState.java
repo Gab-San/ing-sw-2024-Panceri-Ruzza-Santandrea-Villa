@@ -20,7 +20,7 @@ public class SetupState extends GameState{
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
 
-    private static final int TURN_TIME = 122;
+    private static final int TURN_TIME = 20;
     private final TurnTimerController timers;
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -28,7 +28,7 @@ public class SetupState extends GameState{
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
-        timers = new TurnTimerController(controller);
+        timers = new TurnTimerController();
         try {
             giveStartingCard();
         } catch (IllegalStateException e){
@@ -36,6 +36,7 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
+        System.err.println("PRE-INIZIALIZZAZIONE TIMER");
         timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
     }
 
@@ -59,6 +60,7 @@ public class SetupState extends GameState{
 
         board.unsubscribeClientFromUpdates(nickname);
         board.disconnectPlayer(nickname);
+        System.err.println("TRYING TO DISCONNECT IN SETUP STATE " + nickname);
         Set<Player> connectedPlayers =board.getPlayerAreas().keySet().stream()
                 // only look at players that are connected
                 .filter(Player:: isConnected)

@@ -21,7 +21,7 @@ public class PuppetController2 extends BoardController {
     public PuppetController2() throws DeckInstantiationException {
         super();
         board = new Board();
-        this.turnTimerController = new TurnTimerController(this);
+        this.turnTimerController = new TurnTimerController();
         connectedNicks = new ArrayList<>();
     }
 

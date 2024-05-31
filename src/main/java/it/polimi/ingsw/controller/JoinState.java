@@ -38,7 +38,7 @@ public class JoinState extends GameState {
 
         board.unsubscribeClientFromUpdates(nickname);
         board.removePlayer(nickname);
-
+        System.err.println("TRYING TO DISCONNECT IN JOIN STATE " + nickname);
         if(board.getPlayerAreas().isEmpty())
             transition(new CreationState(new Board(), controller, new ArrayList<>()));
     }
