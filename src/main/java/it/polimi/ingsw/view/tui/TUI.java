@@ -7,10 +7,7 @@ import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.tui.scenes.PrintBoardUI;
-import it.polimi.ingsw.view.tui.scenes.PrintNicknameSelectUI;
-import it.polimi.ingsw.view.tui.scenes.PrintOpponentUI;
-import it.polimi.ingsw.view.tui.scenes.PrintPlayerUI;
+import it.polimi.ingsw.view.tui.scenes.*;
 
 import java.rmi.RemoteException;
 import java.util.Collections;
@@ -48,6 +45,7 @@ public class TUI extends View{
         myAreaUI.setNotificationBacklog(notificationBacklog);
         myAreaUI.setChatBacklog(chatBacklog);
         sceneIDMap.put(SceneID.getMyAreaSceneID(), myAreaUI);
+        sceneIDMap.put(SceneID.getEndgameID(), new PrintEndgameUI(board));
         currentScene = myAreaUI;
     }
 

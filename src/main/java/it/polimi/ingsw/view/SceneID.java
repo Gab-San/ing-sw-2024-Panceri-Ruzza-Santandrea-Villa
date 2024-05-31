@@ -33,13 +33,10 @@ public class SceneID {
         return isOpponentAreaScene() ? getNickname() : sceneName;
     }
 
-//    public static SceneID getConnectTechSceneID(){
-//        return new SceneID("CONNECT_TECH");
-//    }
+
     public static SceneID getNicknameSelectSceneID(){
         return new SceneID("NICKNAME_SELECT");
     }
-
     public static SceneID getBoardSceneID(){
         return new SceneID("Board");
     }
@@ -48,5 +45,8 @@ public class SceneID {
     }
     public static SceneID getOpponentAreaSceneID(String nickname){
         return new SceneID(OPPONENT_SCENE_PREFIX + nickname);
+    }
+    public static SceneID getEndgameID() {
+        return new SceneID("ENDGAME_SHOW_WINNERS");
     }
 }

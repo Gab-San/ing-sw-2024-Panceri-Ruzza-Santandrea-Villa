@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.Parser;
 import it.polimi.ingsw.view.SceneID;
@@ -82,6 +83,9 @@ public class TUIParser {
     }
     private void parseViewCommand(List<String> cmdArgs) {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
+        if(board.getGamePhase() == GamePhase.SHOWWIN){
+            throw new IllegalStateException("Cannot change scene after the game has ended.");
+        }
 
         SceneID selectedScene =
             switch (cmdArgs.get(0).toLowerCase()) {
