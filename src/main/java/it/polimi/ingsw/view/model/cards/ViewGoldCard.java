@@ -27,6 +27,7 @@ public class ViewGoldCard extends ViewPlayCard{
     @Override
     public String getPointsOnPlaceAsString() {
         if(!isFaceUp() || pointsOnPlace <= 0) return "";
+        if(strategyAsString.isEmpty()) return super.getPointsOnPlaceAsString();
         else return super.getPointsOnPlaceAsString() + " | " + strategyAsString;
     }
 

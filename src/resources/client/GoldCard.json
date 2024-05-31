@@ -86,7 +86,7 @@
     {
       "cardId": "G6",
       "placementCost": "3-M",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -100,7 +100,7 @@
     {
       "cardId": "G7",
       "placementCost": "3-M",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "Q", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -114,7 +114,7 @@
     {
       "cardId": "G8",
       "placementCost": "3-M",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "S", "backResource": "N"},
@@ -128,7 +128,7 @@
     {
       "cardId": "G9",
       "type": "GoldCard",
-      "pointsOnPlace": "5-SP",
+      "pointsOnPlace": "5",
       "placementCost": "5-M",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -227,7 +227,7 @@
     },
     {
       "cardId": "G16",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-L",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -241,7 +241,7 @@
     },
     {
       "cardId": "G17",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-L",
       "corners": [
         {"direction": "TL", "frontResource": "S", "backResource": "N"},
@@ -255,7 +255,7 @@
     },
     {
       "cardId": "G18",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "2-L",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
@@ -269,7 +269,7 @@
     },
     {
       "cardId": "G19",
-      "pointsOnPlace": "5-SP",
+      "pointsOnPlace": "5",
       "placementCost": "5-L",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -367,7 +367,7 @@
     },
     {
       "cardId": "G26",
-      "pointsOnPlace":  "3-SP",
+      "pointsOnPlace":  "3",
       "placementCost": "3-W",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -381,7 +381,7 @@
     },
     {
       "cardId": "G27",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-W",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -395,7 +395,7 @@
     },
     {
       "cardId": "G28",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-W",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
@@ -409,7 +409,7 @@
     },
     {
       "cardId": "G29",
-      "pointsOnPlace": "5-SP",
+      "pointsOnPlace": "5",
       "placementCost": "5-W",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
@@ -507,7 +507,7 @@
     },
     {
       "cardId": "G36",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-B",
       "corners": [
         {"direction": "TL", "frontResource": "P", "backResource": "N"},
@@ -521,7 +521,7 @@
     },
     {
       "cardId": "G37",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-B",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
@@ -535,7 +535,7 @@
     },
     {
       "cardId": "G38",
-      "pointsOnPlace": "3-SP",
+      "pointsOnPlace": "3",
       "placementCost": "3-B",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
@@ -549,7 +549,7 @@
     },
     {
       "cardId": "G39",
-      "pointsOnPlace": "5-SP",
+      "pointsOnPlace": "5",
       "placementCost": "5-B",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},

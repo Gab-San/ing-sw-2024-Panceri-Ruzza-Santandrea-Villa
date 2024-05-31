@@ -48,7 +48,9 @@ public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
 
         String[] fullPointsOnPlace = node.get("pointsOnPlace").asText().split("-");
         int pointsOnPlace = Integer.parseInt(fullPointsOnPlace[0]);
-        String strategyAsString = fullPointsOnPlace[1];
+        String strategyAsString = "";
+        if(fullPointsOnPlace.length > 1)
+            strategyAsString = fullPointsOnPlace[1];
 
         return new ViewGoldCard(cardId, imageFront, imageBack, corners, pointsOnPlace, backResource, placementCostAsResourceList, strategyAsString);
     }
