@@ -70,6 +70,10 @@ public class ViewBoard {
             addPlayer(nickname);
         return opponentHands.get(nickname);
     }
+
+    /**
+     * @return list of all OpponentHands ordered by turn (ascending)
+     */
     public synchronized List<ViewOpponentHand> getOpponents(){
         List<ViewOpponentHand> list = new LinkedList<>(opponentHands.values());
         list.sort(Comparator.comparingInt(ViewHand::getTurn));

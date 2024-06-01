@@ -80,11 +80,14 @@ public class PrintBoardUI extends TUI_Scene {
         printCard.printCardsSideBySide(deckSecondRevealed, cardSpacing);
 
         String myColor = getColorFromEnum(board.getPlayerHand().getColor());
+        if(board.getPlayerHand().getTurn() == 1)
+            myColor = combine(BLACK_TEXT, myColor);
         out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
         for(ViewOpponentHand opponent : board.getOpponents()){
             String colorBG = getColorFromEnum(opponent.getColor());
-            String connectionFG = opponent.isConnected() ? "" : RED_BRIGHT_TEXT;
-            out.print("\t\t" +  combine(connectionFG, colorBG) + " " + opponent.getNickname() + " " + RESET);
+            String colorFG = opponent.getTurn()==1 ? BLACK_TEXT : "";
+            String nickname = opponent.isConnected() ? opponent.getNickname() : opponent.getNickname() + " (OFFLINE)";
+            out.print("\t\t" +  combine(colorFG, colorBG) + " " + nickname + " " + RESET);
         }
         out.println();
     }

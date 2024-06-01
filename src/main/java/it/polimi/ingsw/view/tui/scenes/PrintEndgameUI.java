@@ -2,19 +2,18 @@ package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
-import it.polimi.ingsw.view.tui.ConsoleBackgroundColors;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
+import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
 public class PrintEndgameUI extends TUI_Scene {
     private final ViewBoard board;
-    private static final int LEFT_SPACING = 10;
+    private static final int LEFT_SPACING = 16;
 
     public PrintEndgameUI(ViewBoard board) {
         this.board = board;
@@ -27,12 +26,16 @@ public class PrintEndgameUI extends TUI_Scene {
         else
             return str;
     }
+    private String padScore(ViewHand h, int len) {
+        String score = Integer.toString(board.getScore(h.getNickname()));
+        return padLeft(score, len);
+    }
     private String colorNickname(ViewHand hand){
-        return ConsoleBackgroundColors.getColorFromEnum(hand.getColor())
+        return combine(BLACK_TEXT, getColorFromEnum(hand.getColor()))
                 + " " + hand.getNickname() + " " + RESET;
     }
     private void printSeparator(){
-        out.println("\n" + "-".repeat(50) + "\n");
+        out.println("\n" + "-".repeat(LEFT_SPACING*4) + "\n");
     }
     private String getPadSpaces(){
         return " ".repeat(LEFT_SPACING);
@@ -44,22 +47,34 @@ public class PrintEndgameUI extends TUI_Scene {
         out.println(getPadSpaces() + "Here are the final scores: ");
         printSeparator();
 
-        List<String> leaderboard = board.getAllPlayerHands().stream()
-                    .sorted(Comparator.comparingInt(h -> -board.getScore(h.getNickname())))
-                    .map(h -> colorNickname(h) + " <--> " + board.getScore(h.getNickname()))
+        List<ViewHand> playersByScore = board.getAllPlayerHands().stream()
+                .sorted(Comparator.comparingInt(h -> -board.getScore(h.getNickname())))
+                .toList();
+
+        final int maxNumLen = playersByScore.stream()
+                .map(h -> board.getScore(h.getNickname()))
+                .mapToInt(score -> Integer.toString(score).length())
+                .max().orElse(0);
+
+
+
+        List<String> leaderboard = playersByScore.stream()
+                    .map(h -> colorNickname(h) + " <--> " + padScore(h, maxNumLen))
                     .toList();
 
-        final int maxLen = leaderboard.stream().mapToInt(String::length).max().orElse(0)
-                + LEFT_SPACING;
+        final int maxLen = Math.max(
+                leaderboard.stream().mapToInt(String::length)
+                        .max().orElse(0) + LEFT_SPACING/4
+                ,LEFT_SPACING);
 
         leaderboard.stream()
-                .map(str -> padLeft(str, maxLen))
+                .map(l -> padLeft(l, maxLen))
                 .forEach(out::println);
 
-
-        out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS: " + RESET);
-        out.println(getPadSpaces() + leaderboard.get(0).split(" <--> ")[0]);
+        out.println();
+        out.println(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   " + colorNickname(playersByScore.get(0)));
 
         printSeparator();
     }
+
 }

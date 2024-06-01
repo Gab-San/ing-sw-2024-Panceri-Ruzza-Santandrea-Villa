@@ -31,6 +31,17 @@ public class PrintBoardUITest {
         board.getAllPlayerHands().forEach(h->h.setColor(getRandomAvailableColor(board)));
         // set random colors for all players
 
+        // set turns
+        int t = random.nextInt(4)+1;
+        for (ViewHand hand : board.getAllPlayerHands()) {
+            hand.setTurn(t);
+            if(t >= 4) t=1;
+            else t++;
+        }
+
+        //randomize connection status
+        board.getOpponents().forEach(h -> h.setConnected(random.nextBoolean()));
+
         board.getResourceCardDeck().setTopCard(getRandomResourceCard());
         board.getResourceCardDeck().setFirstRevealed(getRandomResourceCard());
         board.getResourceCardDeck().setSecondRevealed(getRandomResourceCard());
