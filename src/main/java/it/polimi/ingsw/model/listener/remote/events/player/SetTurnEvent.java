@@ -16,4 +16,12 @@ public class SetTurnEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updatePlayer(nickname, playerTurn);
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "\nSetTurnEvent{" +
+                "playerTurn=" + playerTurn +
+                '}';
+    }
 }

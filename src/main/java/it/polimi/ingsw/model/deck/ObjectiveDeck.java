@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
-import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
 
 import java.io.File;
@@ -32,10 +31,10 @@ public class ObjectiveDeck implements GameSubject {
     private ObjectiveCard firstRevealed;
     private ObjectiveCard secondRevealed;
     private ObjectiveCard topCard;
-    private final List<GameListener> gameListenersList;
+    private final List<GameListener> gameListenerList;
 
     public ObjectiveDeck() throws IllegalStateException {
-        gameListenersList = new LinkedList<>();
+        gameListenerList = new LinkedList<>();
         // Populating the array
         cardDeck = importFromJson();
 
@@ -49,7 +48,7 @@ public class ObjectiveDeck implements GameSubject {
      * This method should be called once at the start of the match by each player
      * @return the first card of the deck
      */
-    public ObjectiveCard getCard(){
+    public synchronized ObjectiveCard getCard(){
         ObjectiveCard returnCard = topCard;
         if(cardDeck.isEmpty()){
             topCard = null;
@@ -61,6 +60,10 @@ public class ObjectiveDeck implements GameSubject {
         return returnCard;
     }
 
+    public ObjectiveCard peekTop(){
+        return topCard;
+    }
+
     private int getRandomCard() {
         return new Random().nextInt(cardDeck.size());
     }
@@ -69,7 +72,7 @@ public class ObjectiveDeck implements GameSubject {
      * This method should be called once per game during setup.
      * If called more than once it doesn't change the status of the deck.
      */
-    public void reveal() {
+    public synchronized void reveal() {
         if(firstRevealed != null) return;
         firstRevealed = getCard();
         notifyAllListeners(new DeckRevealEvent(Board.OBJECTIVE_DECK, firstRevealed, PlayableDeck.FIRST_POSITION));
@@ -82,7 +85,7 @@ public class ObjectiveDeck implements GameSubject {
      * points.
      * @return the first revealed objective card
      */
-    public ObjectiveCard getFirstRevealed(){
+    public synchronized ObjectiveCard getFirstRevealed(){
         return firstRevealed;
     }
     /**
@@ -90,7 +93,7 @@ public class ObjectiveDeck implements GameSubject {
      * points.
      * @return the second revealed objective card
      */
-    public ObjectiveCard getSecondRevealed(){
+    public synchronized ObjectiveCard getSecondRevealed(){
         return secondRevealed;
     }
 
@@ -122,24 +125,24 @@ public class ObjectiveDeck implements GameSubject {
 
     @Override
     public void addListener(GameListener listener) {
-        gameListenersList.add(listener);
-        notifyListener(listener, new DeckStateUpdateEvent(Board.OBJECTIVE_DECK, topCard, firstRevealed, secondRevealed));
-    }
-
-    @Override
-    public void removeListener(GameListener listener) {
-        gameListenersList.remove(listener);
-    }
-
-    @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListenersList){
-            listener.listen(event);
+        synchronized (gameListenerList) {
+            gameListenerList.add(listener);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListenerList) {
+            gameListenerList.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListenerList) {
+            for (GameListener listener : gameListenerList) {
+                listener.listen(event);
+            }
+        }
     }
 }

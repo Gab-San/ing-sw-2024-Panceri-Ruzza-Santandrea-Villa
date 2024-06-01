@@ -44,4 +44,13 @@ public class PlayAreaStateUpdate extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.setPlayAreaState(nickname, cardPositions, visibleResources, freeSerializableCorners);
     }
+
+    @Override
+    public String toString() {
+        return "PlayAreaStateUpdate{" +
+                "cardPositions=" + cardPositions +
+                ", visibleResources=" + visibleResources +
+                ", freeSerializableCorners=" + freeSerializableCorners +
+                '}';
+    }
 }

@@ -24,4 +24,9 @@ public class DeckRevealEvent extends DeckEvent{
         }
         virtualClient.deckUpdate(deck, revealedId, cardPosition);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

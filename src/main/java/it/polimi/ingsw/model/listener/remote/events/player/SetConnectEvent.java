@@ -15,4 +15,12 @@ public class SetConnectEvent extends PlayerEvent{
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updatePlayer(nickname, isConnected);
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "\nSetConnectEvent{" +
+                "isConnected=" + isConnected +
+                '}';
+    }
 }

@@ -17,4 +17,12 @@ public class PlayerHandSetStartingCardEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.playerHandSetStartingCard(nickname, startingCardId);
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "\nPlayerHandSetStartingCardEvent{" +
+                "startingCardId='" + startingCardId + '\'' +
+                '}';
+    }
 }

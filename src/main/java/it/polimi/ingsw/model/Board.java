@@ -24,10 +24,15 @@ import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalGameAccessError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.board.*;
+import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
+import it.polimi.ingsw.model.listener.remote.events.playarea.PlayAreaStateUpdate;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerDeadLockedEvent;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerRemovalEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.PlayerStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.playerhand.PlayerHandSetStartingCardEvent;
+import it.polimi.ingsw.model.listener.remote.events.playerhand.PlayerHandStateUpdateEvent;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 
@@ -79,6 +84,7 @@ public class Board implements GameSubject{
         playerAreas = new Hashtable<>();
         // Controlled in Board
         gamePhase = GamePhase.CREATE;
+
         try {
             resourceDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(), 8);
 
@@ -115,6 +121,13 @@ public class Board implements GameSubject{
         errorHandler = new RemoteErrorHandler();
         subscribeListenerToAll(remoteHandler);
         subscribeListenerToAll(errorHandler);
+
+        notifyAllListeners(new BoardStateUpdateEvent(currentTurn, scoreboard, gamePhase, isPlayerDeadlocked));
+        notifyAllListeners(new DeckStateUpdateEvent(Board.OBJECTIVE_DECK, objectiveDeck.peekTop(), objectiveDeck.getFirstRevealed(), objectiveDeck.getSecondRevealed()));
+        notifyAllListeners(new DeckStateUpdateEvent(Board.RESOURCE_DECK, resourceDeck.peekTop(),
+                resourceDeck.peekFirst(), resourceDeck.peekSecond()));
+        notifyAllListeners(new DeckStateUpdateEvent(Board.GOLD_DECK, goldDeck.peekTop(),
+                goldDeck.peekFirst(), goldDeck.peekSecond()));
     }
 
 
@@ -165,9 +178,10 @@ public class Board implements GameSubject{
         Player nextPlayer;
         List<Player> playersByTurn = getPlayersByTurn();
         do {
-            if(currentTurn >= playerAreas.size())
+            if(currentTurn >= playerAreas.size()) {
+                squashHistory();
                 setCurrentTurn(1);
-            else {
+            } else {
                 int nextTurn = currentTurn + 1;
                 setCurrentTurn(nextTurn);
             }
@@ -560,6 +574,14 @@ public class Board implements GameSubject{
         observableObjects.add(player);
         player.addListener(remoteHandler);
         player.addListener(errorHandler);
+        notifyAllListeners(new PlayerStateUpdateEvent(player.getNickname(),
+                player.isConnected(), player.getTurn(), player.getColor()));
+        PlayerHand hand = player.getHand();
+        hand.addListener(remoteHandler);
+        hand.addListener(errorHandler);
+        notifyAllListeners(new PlayerHandStateUpdateEvent(player.getNickname(), hand.peekCards(),
+                hand.getObjectiveChoices(), hand.peekStartingCard()));
+
         // Setting score on scoreboard
         setScore(player, 0);
         // Creating PlayArea and listing as observable
@@ -567,6 +589,10 @@ public class Board implements GameSubject{
         observableObjects.add(joiningPlayerArea);
         joiningPlayerArea.addListener(remoteHandler);
         joiningPlayerArea.addListener(errorHandler);
+
+        notifyAllListeners(new PlayAreaStateUpdate(player.getNickname(),
+                joiningPlayerArea.getCardMatrix(), joiningPlayerArea.getVisibleResources(),
+                joiningPlayerArea.getFreeCorners()));
 
         playerAreas.put(player, joiningPlayerArea);
 
@@ -628,26 +654,26 @@ public class Board implements GameSubject{
     }
 
     @Override
-    public synchronized void addListener(GameListener listener) {
-        gameListeners.add(listener);
-        notifyListener(listener, new BoardStateUpdateEvent(currentTurn, scoreboard, gamePhase, isPlayerDeadlocked));
-    }
-
-    @Override
-    public synchronized void removeListener(GameListener listener) {
-        gameListeners.remove(listener);
-    }
-
-    @Override
-    public synchronized void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListeners){
-            listener.listen(event);
+    public void addListener(GameListener listener) {
+        synchronized (gameListeners) {
+            gameListeners.add(listener);
         }
     }
 
     @Override
-    public synchronized void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListeners) {
+            gameListeners.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListeners) {
+            for (GameListener listener : gameListeners) {
+                listener.listen(event);
+            }
+        }
     }
 
     public void subscribeClientToUpdates(String nickname, VirtualClient client){
@@ -658,6 +684,31 @@ public class Board implements GameSubject{
     public void unsubscribeClientFromUpdates(String nickname){
         remoteHandler.removeClient(nickname);
         errorHandler.removeClient(nickname);
+    }
+
+    public void squashHistory(){
+        List<UpdateEvent> stateSave = new ArrayList<>(16);
+
+        stateSave.add(new BoardStateUpdateEvent(currentTurn, scoreboard, gamePhase, isPlayerDeadlocked));
+        stateSave.add(new DeckStateUpdateEvent(Board.OBJECTIVE_DECK, objectiveDeck.peekTop(),
+                objectiveDeck.getFirstRevealed(), objectiveDeck.getSecondRevealed()));
+        stateSave.add(new DeckStateUpdateEvent(Board.RESOURCE_DECK, resourceDeck.peekTop(),
+                resourceDeck.peekFirst(), resourceDeck.peekSecond()));
+        stateSave.add(new DeckStateUpdateEvent(Board.GOLD_DECK, goldDeck.peekTop(),
+                goldDeck.peekFirst(), goldDeck.peekSecond()));
+        for(Player player : playerAreas.keySet()){
+            stateSave.add(new PlayerStateUpdateEvent(player.getNickname(),
+                    player.isConnected(), player.getTurn(), player.getColor()));
+            PlayerHand hand = player.getHand();
+            stateSave.add(new PlayerHandStateUpdateEvent(player.getNickname(), hand.peekCards(),
+                    hand.getObjectiveChoices(), hand.peekStartingCard()));
+            PlayArea playArea = playerAreas.get(player);
+            stateSave.add(new PlayAreaStateUpdate(player.getNickname(),
+                    playArea.getCardMatrix(), playArea.getVisibleResources(),
+                    playArea.getFreeCorners()));
+        }
+
+        remoteHandler.replaceHistory(stateSave);
     }
 
 //endregion

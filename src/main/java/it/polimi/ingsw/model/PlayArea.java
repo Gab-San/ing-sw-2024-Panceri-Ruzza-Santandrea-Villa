@@ -195,24 +195,24 @@ public class PlayArea implements GameSubject {
 
     @Override
     public void addListener(GameListener listener) {
-        gameListeners.add(listener);
-        notifyListener(listener, new PlayAreaStateUpdate(owner, cardMatrix, visibleResources, freeCorners));
-    }
-
-    @Override
-    public void removeListener(GameListener listener) {
-        gameListeners.remove(listener);
-    }
-
-    @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListeners){
-            listener.listen(event);
+        synchronized (gameListeners) {
+            gameListeners.add(listener);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListeners) {
+            gameListeners.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListeners) {
+            for (GameListener listener : gameListeners) {
+                listener.listen(event);
+            }
+        }
     }
 }

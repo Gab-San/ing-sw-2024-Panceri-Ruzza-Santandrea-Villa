@@ -17,4 +17,12 @@ public class SetColorEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updatePlayer(nickname, color);
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "\nSetColorEvent{" +
+                "color=" + color +
+                '}';
+    }
 }

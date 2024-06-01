@@ -1,14 +1,13 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.listener.remote.events.player.PlayerStateUpdateEvent;
-import it.polimi.ingsw.model.listener.remote.events.player.SetColorEvent;
-import it.polimi.ingsw.model.listener.remote.events.player.SetConnectEvent;
-import it.polimi.ingsw.model.listener.remote.events.player.SetTurnEvent;
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
-import it.polimi.ingsw.model.exceptions.ListenException;
+import it.polimi.ingsw.model.listener.remote.events.player.SetColorEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.SetConnectEvent;
+import it.polimi.ingsw.model.listener.remote.events.player.SetTurnEvent;
 import org.jetbrains.annotations.Range;
 
 import java.util.LinkedList;
@@ -74,26 +73,25 @@ public class Player implements GameSubject {
 
 
     @Override
-    public synchronized void addListener(GameListener listener) {
-        gameListenerList.add(listener);
-        notifyListener(listener, new PlayerStateUpdateEvent(nickname, isConnected, turn, color));
-        hand.addListener(listener);
-    }
-
-    @Override
-    public synchronized void removeListener(GameListener listener) {
-        gameListenerList.remove(listener);
-    }
-
-    @Override
-    public synchronized void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListenerList){
-            listener.listen(event);
+    public void addListener(GameListener listener) {
+        synchronized (gameListenerList) {
+            gameListenerList.add(listener);
         }
     }
 
     @Override
-    public synchronized void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListenerList) {
+            gameListenerList.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListenerList) {
+            for (GameListener listener : gameListenerList) {
+                listener.listen(event);
+            }
+        }
     }
 }

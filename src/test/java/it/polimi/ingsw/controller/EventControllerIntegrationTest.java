@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerHand;
 import it.polimi.ingsw.model.exceptions.DeckException;
+import it.polimi.ingsw.stub.CountUpdateClient;
 import it.polimi.ingsw.stub.StubClient;
 import it.polimi.ingsw.stub.StubView;
 import org.junit.jupiter.api.BeforeEach;
@@ -390,6 +391,59 @@ public class EventControllerIntegrationTest {
         } catch (IllegalStateException ignore){}
 
         controller.chooseSecretObjective(nick2, 1);
+
+        CountDownLatch latch1 = new CountDownLatch(5);
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch1.countDown();
+            }
+        }, 500, 500);
+        latch1.await();
+        timer1.cancel();
+    }
+
+
+    @Test
+    void setupStateTest1() throws InterruptedException {
+        String nick1 = "Gamba";
+        clients[0] = new CountUpdateClient(nick1, view);
+        String nick2 = "Alice";
+        clients[1] = new StubClient(nick2, view);
+        controller.join(nick1, clients[0]);
+        controller.setNumOfPlayers(nick1, 2);
+        controller.join(nick2, clients[1]);
+        controller.disconnect(nick2);
+        CountDownLatch latch = new CountDownLatch(2);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch.countDown();
+            }
+        }, 500, 500);
+        latch.await();
+        timer.cancel();
+
+
+        controller.placeStartingCard(nick1, true);
+
+        controller.chooseYourColor(nick1, PlayerColor.RED);
+
+        CountDownLatch latch2 = new CountDownLatch(5);
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                latch2.countDown();
+            }
+        }, 500, 500);
+        latch2.await();
+        timer2.cancel();
+
+        controller.chooseSecretObjective(nick1, 1);
+
 
         CountDownLatch latch1 = new CountDownLatch(5);
         Timer timer1 = new Timer();

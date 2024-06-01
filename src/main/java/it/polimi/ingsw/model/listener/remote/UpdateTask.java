@@ -12,9 +12,11 @@ public class UpdateTask implements Runnable{
      private final VirtualClient client;
      private final NetworkEventRecord eventRecord;
      private Future<?> taskFuture;
+     private boolean hasToStop;
 
     public UpdateTask(VirtualClient client, NetworkEventRecord eventRecord) {
         this.client = client;
+        hasToStop = false;
         this.eventRecord = eventRecord;
     }
 
@@ -25,7 +27,7 @@ public class UpdateTask implements Runnable{
     @Override
     public void run() {
 
-        while (true) {
+        while (!hasToStop) {
             List<NetworkEvent> history = eventRecord.getHistory(client);
             ListIterator<NetworkEvent> iterator = history.listIterator();
 
@@ -39,7 +41,7 @@ public class UpdateTask implements Runnable{
             }
 
             try {
-                while (iterator.hasNext()) {
+                while (iterator.hasNext() && !hasToStop) {
                     NetworkEvent updateEvent = iterator.next();
                     updateEvent.executeEvent(client);
                 }
@@ -56,7 +58,8 @@ public class UpdateTask implements Runnable{
         this.taskFuture = taskFuture;
     }
     void killTask(){
-       taskFuture.cancel(true);
+        hasToStop = true;
+        taskFuture.cancel(true);
     }
 
     VirtualClient getTaskClient(){

@@ -33,7 +33,6 @@ public class SetupState extends GameState{
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
-        System.err.println("PRE-INIZIALIZZAZIONE TIMER");
         timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
     }
 
@@ -251,6 +250,7 @@ public class SetupState extends GameState{
             players.remove(randomIndex).setTurn(i); // removes from list and sets player turn
         }
 
+        board.squashHistory();
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 

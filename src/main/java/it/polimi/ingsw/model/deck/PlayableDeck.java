@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
-import it.polimi.ingsw.model.listener.remote.events.deck.DeckStateUpdateEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
 
 import java.util.ArrayDeque;
@@ -58,10 +57,18 @@ public class PlayableDeck implements GameSubject {
         return returnCard;
     }
 
+    public synchronized PlayCard peekTop(){
+        return cardDeck.peek();
+    }
+
     public synchronized PlayCard getFirstRevealedCard(){
         PlayCard returnCard = firstRevealedCard;
         reveal(FIRST_POSITION);
         return returnCard;
+    }
+
+    public synchronized PlayCard peekFirst(){
+        return firstRevealedCard;
     }
 
     public synchronized PlayCard getSecondRevealedCard(){
@@ -70,6 +77,9 @@ public class PlayableDeck implements GameSubject {
         return returnCard;
     }
 
+    public synchronized PlayCard peekSecond(){
+        return secondRevealedCard;
+    }
 
     private void reveal(int position){
         switch(position){
@@ -103,24 +113,24 @@ public class PlayableDeck implements GameSubject {
 
     @Override
     public void addListener(GameListener listener) {
-        gameListenerList.add(listener);
-        notifyListener(listener, new DeckStateUpdateEvent(deckType, cardDeck.peek(), firstRevealedCard, secondRevealedCard));
-    }
-
-    @Override
-    public void removeListener(GameListener listener) {
-        gameListenerList.remove(listener);
-    }
-
-    @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListenerList){
-            listener.listen(event);
+        synchronized (gameListenerList) {
+            gameListenerList.add(listener);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListenerList) {
+            gameListenerList.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListenerList) {
+            for (GameListener listener : gameListenerList) {
+                listener.listen(event);
+            }
+        }
     }
 }

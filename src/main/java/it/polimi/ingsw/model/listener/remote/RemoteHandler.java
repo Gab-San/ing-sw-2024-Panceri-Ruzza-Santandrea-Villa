@@ -3,11 +3,11 @@ package it.polimi.ingsw.model.listener.remote;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.exceptions.ListenException;
-import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,6 +39,7 @@ public class RemoteHandler implements GameListener{
         //Send updates until disconnection
         submitUpdates(nickname);
     }
+
     public synchronized void removeClient(String nickname){
         if(!playerClients.containsKey(nickname))
             return;
@@ -52,7 +53,7 @@ public class RemoteHandler implements GameListener{
         if(!(event instanceof UpdateEvent)){
             return;
         }
-        eventRecord.addEvent((NetworkEvent) event);
+        eventRecord.addEvent((UpdateEvent) event);
     }
 
     private void submitUpdates(String nickname){
@@ -64,5 +65,22 @@ public class RemoteHandler implements GameListener{
 
     public synchronized Map<String, VirtualClient> getClients(){
         return playerClients;
+    }
+    public synchronized void replaceHistory(List<UpdateEvent> stateSave){
+        for(VirtualClient virtualClient : playerClients.values()){
+            eventRecord.forceRemoveTask(virtualClient);
+        }
+
+        eventRecord.replaceHistory(stateSave);
+
+        for(String username : playerClients.keySet()){
+            VirtualClient virtualClient = playerClients.get(username);
+            if(eventRecord.isUptoDate(virtualClient)){
+                eventRecord.resetLastUpdate(virtualClient, stateSave.size());
+            } else {
+                eventRecord.resetLastUpdate(virtualClient, 0);
+            }
+            submitUpdates(username);
+        }
     }
 }

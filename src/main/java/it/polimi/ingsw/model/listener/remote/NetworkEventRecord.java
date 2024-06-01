@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.listener.remote;
 
 
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
+import it.polimi.ingsw.view.tui.ConsoleTextColors;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -10,7 +12,7 @@ import java.util.Map;
 
 
 public class NetworkEventRecord {
-    private final List<NetworkEvent> eventsHistory;
+    private final List<UpdateEvent> eventsHistory;
     private final List<UpdateTask> executingTasks;
     private final Map<VirtualClient, Integer> clientUpdateStatus;
 
@@ -20,8 +22,8 @@ public class NetworkEventRecord {
         this.executingTasks = new LinkedList<>();
     }
 
-    public synchronized void addEvent(NetworkEvent networkEvent){
-            eventsHistory.add(networkEvent);
+    public synchronized void addEvent(UpdateEvent updateEvent){
+            eventsHistory.add(updateEvent);
             this.notifyAll();
     }
 
@@ -53,7 +55,11 @@ public class NetworkEventRecord {
             clientUpdateStatus.put(virtualClient, updateStatus + lastIndex);
         }
     }
-
+    public void resetLastUpdate(VirtualClient virtualClient, int newIndex){
+        synchronized (clientUpdateStatus){
+            clientUpdateStatus.put(virtualClient, newIndex);
+        }
+    }
     public void addRunningTask(UpdateTask task){
         synchronized (executingTasks) {
             executingTasks.add(task);
@@ -75,5 +81,23 @@ public class NetworkEventRecord {
                 removeTask(task);
             }
         }
+    }
+
+    public boolean isUptoDate(VirtualClient virtualClient){
+        synchronized (clientUpdateStatus){
+             synchronized (this) {
+                int lastUpdate = clientUpdateStatus.get(virtualClient);
+                boolean isUptoDate = lastUpdate >= eventsHistory.size();
+                System.err.println(ConsoleTextColors.BLUE_TEXT + virtualClient + " " + isUptoDate +
+                        "\n" + lastUpdate +
+                        ConsoleTextColors.RESET);
+                return isUptoDate;
+             }
+        }
+    }
+
+    public synchronized void replaceHistory(List<UpdateEvent> updateEventList){
+        eventsHistory.clear();
+        eventsHistory.addAll(updateEventList);
     }
 }

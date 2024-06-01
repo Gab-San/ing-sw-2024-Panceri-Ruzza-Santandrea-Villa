@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.listener.remote.events.playarea;
 
 import it.polimi.ingsw.CornerDirection;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 

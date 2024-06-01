@@ -33,6 +33,7 @@ public class JoinState extends GameState {
         if(!disconnectingPlayers.isEmpty()) return;
         timers.startTimer(joiningPlayer, JOIN_TIMEOUT, PING_TIME);
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {
+            board.squashHistory();
             transition(new SetupState(board, controller, disconnectingPlayers));
         }
     }

@@ -27,4 +27,14 @@ public class PlayerHandStateUpdateEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.setPlayerHandState(nickname, playCards, objectiveCards, startingCard);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "\nPlayerHandStateUpdateEvent{" +
+                "playCards=" + playCards +
+                ", objectiveCards=" + objectiveCards +
+                ", startingCard='" + startingCard + '\'' +
+                '}';
+    }
 }

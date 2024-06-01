@@ -17,4 +17,12 @@ public class PlayerHandAddObjectiveCardEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.playerHandAddObjective(nickname, objectiveCard);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "\nPlayerHandAddObjectiveCardEvent{" +
+                "objectiveCard='" + objectiveCard + '\'' +
+                '}';
+    }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class BoardStateUpdateEvent implements UpdateEvent {
     private final int currentTurn;
+    private static int updateNumber;
     private final Map<String, Integer> scoreboard;
     private final GamePhase gamePhase;
     private final Map<String, Boolean> playerDeadLock;
@@ -30,6 +31,12 @@ public class BoardStateUpdateEvent implements UpdateEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
+        updateNumber++;
         virtualClient.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
+    }
+
+    @Override
+    public String toString() {
+        return "Board State Update " + updateNumber + " [GAME PHASE] " + gamePhase;
     }
 }

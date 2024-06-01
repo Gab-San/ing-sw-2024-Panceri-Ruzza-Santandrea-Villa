@@ -17,4 +17,9 @@ public class ChangePhaseEvent implements UpdateEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updatePhase(gamePhase);
     }
+
+    @Override
+    public String toString() {
+        return "Phase Update: " + gamePhase;
+    }
 }

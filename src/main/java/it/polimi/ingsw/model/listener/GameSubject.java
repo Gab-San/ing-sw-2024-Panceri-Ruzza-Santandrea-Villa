@@ -6,5 +6,4 @@ public interface GameSubject {
     void addListener(GameListener listener);
     void removeListener(GameListener listener);
     void notifyAllListeners(GameEvent event) throws ListenException;
-    void notifyListener(GameListener listener, GameEvent event) throws ListenException;
 }

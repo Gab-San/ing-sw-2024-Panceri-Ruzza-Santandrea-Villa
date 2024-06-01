@@ -41,4 +41,10 @@ public class DeckStateUpdateEvent extends DeckEvent{
         }
         virtualClient.setDeckState(deck, topId, firstId, secondId);
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

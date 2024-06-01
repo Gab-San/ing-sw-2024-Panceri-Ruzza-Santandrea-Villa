@@ -17,4 +17,11 @@ public class ChangeTurnEvent implements UpdateEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updateTurn(currentTurn);
     }
+
+    @Override
+    public String toString() {
+        return "ChangeTurnEvent{" +
+                "currentTurn=" + currentTurn +
+                '}';
+    }
 }

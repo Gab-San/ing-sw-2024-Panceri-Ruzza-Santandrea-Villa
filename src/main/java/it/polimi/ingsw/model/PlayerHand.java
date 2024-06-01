@@ -72,6 +72,11 @@ public class PlayerHand implements GameSubject {
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
         else return cards.get(pos);
     }
+
+    public List<PlayCard> peekCards() {
+        return cards;
+    }
+
     /**
      * @param cardID ID of the requested card
      * @return card with given cardID in this hand, without removing it from the hand
@@ -214,6 +219,9 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }
+    public StartingCard peekStartingCard(){
+        return startingCard;
+    }
     /**
      * Sets this hand's starting card
      * @param startingCard the starting card
@@ -248,25 +256,25 @@ public class PlayerHand implements GameSubject {
 
     @Override
     public void addListener(GameListener listener) {
-        gameListenerList.add(listener);
-        notifyListener(listener, new PlayerHandStateUpdateEvent(playerRef.getNickname(), cards, secretObjective, startingCard));
-    }
-
-    @Override
-    public void removeListener(GameListener listener) {
-        gameListenerList.remove(listener);
-    }
-
-    @Override
-    public void notifyAllListeners(GameEvent event) throws ListenException {
-        for(GameListener listener: gameListenerList){
-            listener.listen(event);
+        synchronized (gameListenerList) {
+            gameListenerList.add(listener);
         }
     }
 
     @Override
-    public void notifyListener(GameListener listener, GameEvent event) throws ListenException {
-        listener.listen(event);
+    public void removeListener(GameListener listener) {
+        synchronized (gameListenerList) {
+            gameListenerList.remove(listener);
+        }
+    }
+
+    @Override
+    public void notifyAllListeners(GameEvent event) throws ListenException {
+        synchronized (gameListenerList) {
+            for (GameListener listener : gameListenerList) {
+                listener.listen(event);
+            }
+        }
     }
 }
 

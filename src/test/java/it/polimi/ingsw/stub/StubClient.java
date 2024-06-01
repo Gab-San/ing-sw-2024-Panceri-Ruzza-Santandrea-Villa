@@ -273,7 +273,7 @@ public class StubClient implements VirtualClient {
     }
 
     @Override
-    public void notifyIndirectDisconnect() {
+    public void notifyIndirectDisconnect() throws RemoteException {
 
     }
 

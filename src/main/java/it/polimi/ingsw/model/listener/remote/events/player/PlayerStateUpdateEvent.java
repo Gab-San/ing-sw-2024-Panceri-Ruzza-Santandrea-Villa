@@ -20,4 +20,14 @@ public class PlayerStateUpdateEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.setPlayerState(nickname, isConnected, turn, colour);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "\nPlayerStateUpdateEvent{" +
+                "isConnected=" + isConnected +
+                ", turn=" + turn +
+                ", colour=" + colour +
+                '}';
+    }
 }
