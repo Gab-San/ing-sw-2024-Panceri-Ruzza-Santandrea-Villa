@@ -1,13 +1,12 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.Point;
+import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewPlayArea;
-import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 import java.io.IOException;

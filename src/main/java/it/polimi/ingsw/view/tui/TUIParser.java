@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.network.CommandPassthrough;
-import it.polimi.ingsw.network.Parser;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
