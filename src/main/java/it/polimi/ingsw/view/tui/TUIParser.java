@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
 
@@ -15,12 +16,12 @@ import java.util.List;
 import static it.polimi.ingsw.CornerDirection.*;
 
 public class TUIParser {
-    final Parser serverParser;
-    final TUI view;
-    final ViewBoard board;
+    private final Parser serverParser;
+    private final TUI view;
+    private final ViewBoard board;
 
     public TUIParser(CommandPassthrough serverProxy, TUI view, ViewBoard board) {
-        this.serverParser = new Parser(serverProxy, board);
+        this.serverParser = new Parser(serverProxy, new ViewController(board));
         this.view = view;
         this.board = board;
     }
@@ -46,6 +47,7 @@ public class TUIParser {
             default:
                 serverParser.parseCommand(command);
         }
+
         if(command.toLowerCase().matches("quit|disconnect")){
             throw new DisconnectException();
         }

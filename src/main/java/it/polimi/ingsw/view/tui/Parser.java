@@ -20,13 +20,12 @@ import java.util.regex.Pattern;
 public class Parser {
 
     private CommandPassthrough virtualServer;
-    private final ViewBoard board;
     private final ViewController viewController;
     //TODO: add local checks to commands
-    public Parser(CommandPassthrough virtualServer, ViewBoard board){
+    // [Gamba] WUT?
+    public Parser(CommandPassthrough virtualServer, ViewController viewController){
         this.virtualServer = virtualServer;
-        this.board = board;
-        viewController = new ViewController(board);
+        this.viewController = viewController;
     }
 
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
@@ -76,6 +75,7 @@ public class Parser {
 
     }
 
+//region RECONNECT
     //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
     private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
         if (cmdArgs.size() < 3) {
@@ -114,6 +114,7 @@ public class Parser {
                 throw new IllegalArgumentException("Command not recognised");
         }
     }
+//endregion
 
     private void parseSetNumPlayers(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
         int numOfPlayers;
@@ -136,6 +137,7 @@ public class Parser {
         throw new IndexOutOfBoundsException("The number of players selected must be between: ");
     }
 
+//region MESSAGING
     private void parseSendCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException {
         if(cmdArgs.size() < 2) throw new IllegalArgumentException("""
                 Command wrongly formatted: missing either message or addressee.
@@ -173,6 +175,7 @@ public class Parser {
 
         throw new IllegalArgumentException("Missing addressee nick");
     }
+//endregion
 
     private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalStateException {
         if(cmdArgs.isEmpty())
@@ -187,6 +190,7 @@ public class Parser {
         virtualServer.restartGame(numOfPlayers);
     }
 
+//region CONNECTION COMMANDS
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {
         virtualServer.disconnect();
     }
@@ -201,7 +205,7 @@ public class Parser {
 
         virtualServer.connect(nickname.toString().trim());
     }
-
+//endregion
     private void parseChooseCmd(List<String> cmdArgs) throws RemoteException,IllegalArgumentException, IllegalStateException {
         if(cmdArgs.size() < 2) throw new IllegalArgumentException("""
                 Choose command must provide what the player is choosing and the relevant information
@@ -233,6 +237,7 @@ public class Parser {
                 return;
             }
         }
+
         throw new IllegalArgumentException("""
                 Command was wrongly formatted: no color found
                 Command example: choose color Red
@@ -327,7 +332,7 @@ public class Parser {
 
         if(cardMatcher.find()){
             String cardID = cardMatcher.group().trim().toUpperCase();
-            ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
+            ViewPlayArea playArea = viewController.getSelfPlayArea();
             placementPos = playArea.getPositionByID(cardID); // throws IllegalArgument if card isn't in playArea
         } else{
             throw new IllegalArgumentException("missing ID of card on which to place or given ID is invalid");
@@ -340,7 +345,7 @@ public class Parser {
             throw new IllegalArgumentException("missing direction");
         }
         viewController.validatePlaceCard(cardToPlace, placementPos, cornDir);
-        virtualServer.placeCard(cardToPlace, placementPos, cornDir, board.getPlayerHand().getCardByID(cardToPlace).isFaceUp());
+        virtualServer.placeCard(cardToPlace, placementPos, cornDir, viewController.getSelfCardById(cardToPlace).isFaceUp());
     }
 
 
@@ -349,7 +354,7 @@ public class Parser {
                 Maybe you meant: Place starting card
                 """);
         viewController.validatePlaceStartCard();
-        ViewStartCard startCard = board.getPlayerHand().getStartCard();
+        ViewStartCard startCard = viewController.getSelfStartingCard();
         virtualServer.placeStartCard(startCard.isFaceUp());
     }
 

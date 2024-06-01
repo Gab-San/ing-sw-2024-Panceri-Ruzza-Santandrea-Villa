@@ -7,18 +7,19 @@ import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
+import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 public class ViewController {
     private final ViewBoard board;
-    private final ViewPlayArea playArea;
+    private final ViewPlayArea selfPlayArea;
 
     public ViewController(ViewBoard board){
         this.board = board;
-        playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
+        selfPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
     }
 
     public void validatePlaceStartCard() throws IllegalStateException, IllegalArgumentException{
-        if(playArea.getCardAt(0,0) != null)
+        if(selfPlayArea.getCardAt(0,0) != null)
             throw new IllegalStateException("Starting card was already placed!");
         if(board.getPlayerHand().getStartCard() == null)
             throw new IllegalArgumentException("You do not have a starting card in hand!");
@@ -42,7 +43,7 @@ public class ViewController {
     public void validatePlaceCard(String cardID, Point placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
         Point correctPos = placePos.move(CornerDirection.getDirectionFromString(cornerDir));
         ViewPlayCard card = board.getPlayerHand().getCardByID(cardID);
-        if(!playArea.validatePlacement(correctPos, card))
+        if(!selfPlayArea.validatePlacement(correctPos, card))
             throw new IllegalStateException(cardID + " can't be placed there.");
     }
 
@@ -82,5 +83,17 @@ public class ViewController {
             if(!opponentHand.isConnected())
                 throw new IllegalArgumentException("Can't message a disconnected player!");
         }
+    }
+
+    public ViewPlayArea getSelfPlayArea(){
+        return selfPlayArea;
+    }
+
+    public ViewPlayCard getSelfCardById(String id){
+        return board.getPlayerHand().getCardByID(id);
+    }
+
+    public ViewStartCard getSelfStartingCard(){
+        return board.getPlayerHand().getStartCard();
     }
 }

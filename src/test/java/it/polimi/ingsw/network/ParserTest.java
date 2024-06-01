@@ -5,6 +5,7 @@ import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.stub.PuppetClient;
+import it.polimi.ingsw.stub.StubViewController;
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewPlayArea;
@@ -28,10 +29,9 @@ class ParserTest {
     @BeforeEach
     void setup() {
         board = new ViewBoard("Test_Player");
-        parser = new Parser(new PuppetClient(), board);
+        parser = new Parser(new PuppetClient(), new StubViewController(board));
     }
 
-    //TODO: Fix this test according with the checks on ViewBoard
 
     @Test
     void patternTest(){
