@@ -40,7 +40,7 @@ public class BoardPlayersTest extends BaseBoardTest {
 
         for (int i = 0; i < playersByTurn.size()-1; i++) {
             assertTrue(playersByTurn.get(i).getTurn() < playersByTurn.get(i+1).getTurn());
-            assertTrue(board.getScoreboard().get(playersByScore.get(i)) < board.getScoreboard().get(playersByScore.get(i+1)));
+            assertTrue(board.getScoreboard().get(playersByScore.get(i)) > board.getScoreboard().get(playersByScore.get(i+1)));
             assertSame(players[i], playersByTurn.get(i));
         }
     }

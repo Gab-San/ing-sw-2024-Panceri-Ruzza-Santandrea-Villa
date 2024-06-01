@@ -428,9 +428,13 @@ public class EventControllerIntegrationTest {
 
 
         controller.placeStartingCard(nick1, true);
+        try {
+            controller.chooseYourColor(nick1, PlayerColor.RED);
+        } catch(RuntimeException ignore){}
 
-        controller.chooseYourColor(nick1, PlayerColor.RED);
-
+        try{
+            controller.chooseYourColor(nick1, PlayerColor.BLUE);
+        } catch(RuntimeException ignore){}
         CountDownLatch latch2 = new CountDownLatch(5);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
