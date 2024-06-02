@@ -158,36 +158,43 @@ public class Client {
 
     //region SET RMI CLIENT IP UNLESS PASSED AS PARAMETER
         //This part is only necessary if using RMI on a Client with multiple IPs
-        if(connectionTech.equalsIgnoreCase("rmi") && !isLoopbackAddress(serverIP)) {
-            System.out.print("Processing Client IP...");
-            List<String> localIPs = getListOfValidLocalIPs();
-            if (!localIPs.contains(myIP) && localIPs.size() > 1){
-                if(myIP != null) System.out.print(" parameter invalid!");
-                System.out.println("\nYour IPs and Hostnames");
-                System.out.println(YELLOW_TEXT);
-                localIPs.forEach(System.out::println);
-                System.out.println(RESET);
-                do{
-                    System.out.println("Please input one of the options above. Use an IP that is "+ YELLOW_TEXT +"reachable"+ RESET +" by the server.");
-                    myIP = scanner.nextLine();
-                }while(!localIPs.contains(myIP));
-                System.out.println();
-            }
-            else if(localIPs.size() == 1 && !localIPs.contains(myIP)){
-                System.out.println(" located automatically!");
-                myIP = localIPs.get(0);
+        if(connectionTech.equalsIgnoreCase("rmi")) {
+            if (!isLoopbackAddress(serverIP)) {
+                System.out.print("Processing Client IP...");
+                List<String> localIPs = getListOfValidLocalIPs();
+                if(!localIPs.contains(myIP)) {
+                    if (localIPs.size() > 1) {
+                        if (myIP != null) System.out.print(" parameter invalid!");
+                        System.out.println("\nYour IPs and Hostnames");
+                        System.out.println(YELLOW_TEXT);
+                        localIPs.forEach(System.out::println);
+                        System.out.println(RESET);
+                        do {
+                            System.out.println("Please input one of the options above. Use an IP that is " + YELLOW_TEXT + "reachable" + RESET + " by the server.");
+                            myIP = scanner.nextLine();
+                        } while (!localIPs.contains(myIP));
+                        System.out.println();
+                    } else if (localIPs.size() == 1) {
+                        System.out.println(" located automatically!");
+                        myIP = localIPs.get(0);
+                    }else{
+                        System.out.println("\nThere are no valid network interfaces on this machine. Please connect to a network");
+                        quitError();
+                    }
+                }
+                else System.out.println(" parameter valid!");
             }
             else{
-                System.out.println("\nThere are no valid network interfaces on this machine. Please connect to a network");
-                quitError();
+                if(myIP == null)
+                    myIP = serverIP; // equals loopback address
             }
+            if (myIP == null) {
+                System.out.println("myIP is null. Fatal error."); // should never happen
+                quitError();
+                return;
+            }
+            System.setProperty("java.rmi.server.hostname", myIP);
         }
-        if(myIP==null){
-            System.out.println("myIP is null. Fatal error."); // should never happen
-            quitError();
-            return;
-        }
-        System.setProperty("java.rmi.server.hostname", myIP);
     //endregion
 
         System.out.println("Your IP is: " + myIP);
