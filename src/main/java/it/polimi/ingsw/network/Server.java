@@ -4,14 +4,13 @@ import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
 
 import java.io.IOException;
-import java.net.*;
 import java.rmi.RemoteException;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.getListOfValidLocalIPs;
+import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.isLoopbackAddress;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Server {
@@ -20,6 +19,8 @@ public class Server {
     private static final int MAX_PORT = 65535;
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         if(args.length < 2){
             System.err.println("Must provide RMI and TCP ports, in that order.");
             System.exit(-1);
@@ -36,29 +37,15 @@ public class Server {
             System.err.println("Invalid ports provided. They must be numbers");
             System.exit(-1);
         }
-        List<String> localIPs = new LinkedList<>();
-        try {
-            for (Iterator<NetworkInterface> it = NetworkInterface.getNetworkInterfaces().asIterator(); it.hasNext(); ) {
-                NetworkInterface net = it.next();
-                for (Iterator<InetAddress> iter = net.getInetAddresses().asIterator(); iter.hasNext(); ) {
-                    InetAddress address = iter.next();
-                    boolean isRelevantAddress = !address.isLoopbackAddress() && address instanceof Inet4Address;
-                    String hostName = isRelevantAddress ? address.getHostName() : "";
-                    boolean otherFilters = !hostName.contains("mshome.net");
-                    if(isRelevantAddress && otherFilters) {
-                        localIPs.add(address.getHostAddress());
-                        localIPs.add(hostName);
-                    }
-                }
-            }
-        }catch (SocketException ignored){}
 
+    //region SET PROPERTY java.rmi.server.hostname
+        System.out.println("Reading Server IPs...");
+        List<String> localIPs = getListOfValidLocalIPs();
+
+        String serverIP;
         if(args.length >= 3 && localIPs.contains(args[2])){
             System.out.println("IP/Hostname passed as parameter is valid!");
-            System.out.println(YELLOW_TEXT);
-            System.out.println("Using " + args[2] + " as Server IP/Hostname");
-            System.out.println(RESET);
-            System.setProperty("java.rmi.server.hostname", args[2]);
+            serverIP = args[2];
         }
         else{
             if(args.length >= 3)
@@ -68,7 +55,17 @@ public class Server {
             localIPs.forEach(System.out::println);
             System.out.println(RESET);
             System.out.println("Please note: not all these IPs may work. If one doesn't work, try another.\n");
+            do{
+                System.out.println("Please input one of the options above. Use an IP that is "+ YELLOW_TEXT +"reachable"+ RESET +" by the client.");
+                serverIP = scanner.nextLine();
+            }while(!localIPs.contains(serverIP));
         }
+
+        System.out.println(YELLOW_TEXT);
+        System.out.println("Using " + serverIP + " as Server IP/Hostname");
+        System.out.println(RESET);
+        System.setProperty("java.rmi.server.hostname", serverIP);
+    //endregion
 
         try{
             rmiServer = new RMIServer(rmiPort); //also creates CentralServer via singleton
@@ -87,7 +84,6 @@ public class Server {
             System.err.println("Invalid TCP port: " + e.getMessage());
         }
 
-        Scanner scanner = new Scanner(System.in);
         String command="";
         while(!command.matches("[qQ]uit")){
             command = scanner.nextLine();

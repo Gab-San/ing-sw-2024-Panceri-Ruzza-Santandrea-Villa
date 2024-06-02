@@ -72,6 +72,7 @@ public class ViewController {
     }
 
     public void validateMsg(String addressee) throws IllegalArgumentException {
+        if(addressee.equalsIgnoreCase("all")) return;
         ViewHand hand = board.getAllPlayerHands().stream()
                 .filter(h -> h.getNickname().equals(addressee))
                 .findFirst()

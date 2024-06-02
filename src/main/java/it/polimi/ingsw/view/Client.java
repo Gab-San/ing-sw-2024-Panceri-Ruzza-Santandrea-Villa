@@ -12,11 +12,12 @@ import it.polimi.ingsw.view.tui.TUI;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.getListOfValidLocalIPs;
+import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.isLoopbackAddress;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
 public class Client {
@@ -26,6 +27,7 @@ public class Client {
     private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
 
+//region FUNCTIONS
     public static boolean isRunningInIDE(){
         try {
             return Client.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
@@ -60,7 +62,7 @@ public class Client {
         quitError();
     }
     private static void quitError(){
-        System.out.print(YELLOW_TEXT + "Press enter to exit..." + RESET);
+        System.out.println(YELLOW_TEXT + "Client terminated. Press enter to exit..." + RESET);
         System.out.flush();
         scanner.close();
         System.exit(-1);
@@ -83,6 +85,8 @@ public class Client {
         return inputQueue;
     }
 
+//endregion
+
     /**
      * @param args args contain the following, in any order:
      *             - Server IP or Hostname <br>
@@ -97,12 +101,17 @@ public class Client {
         int port = -1;
         boolean verbose = false;
 
+    //region READ-ARGS
         String serverHostname = "localhost";
+        String myIP=null;
         for(String arg : args){
-            if(arg.matches("\\d+.\\d+.\\d+.\\d+")){
+            if(arg.matches("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}")){
                 if(serverIP != null)
                     duplicateArgument();
                 serverIP = arg;
+            }
+            else if(arg.matches("[mM][yY][iI][pP]=[^\n ]+")){
+                myIP = arg.substring("myIP=".length());
             }
             else if(arg.toLowerCase().matches("rmi|tcp")) {
                 if(connectionTech != null)
@@ -129,6 +138,7 @@ public class Client {
         if(connectionTech == null || port <= -1){
             System.err.println("Missing server port or RMI/TCP");
             quitError();
+            return; //removes the connectionTech != null warning
         }
         if(serverIP == null) //if no IP was found among args
             serverIP = serverHostname;
@@ -140,15 +150,54 @@ public class Client {
             System.err.println(e.getMessage());
             quitError();
         }
+
+    //endregion
+
         cls();
-        assert connectionTech != null;
         System.out.println("Searching "+ connectionTech.toUpperCase() +" server at address " + serverIP + ":" + port);
+
+    //region SET RMI CLIENT IP UNLESS PASSED AS PARAMETER
+        //This part is only necessary if using RMI on a Client with multiple IPs
+        if(connectionTech.equalsIgnoreCase("rmi") && !isLoopbackAddress(serverIP)) {
+            System.out.print("Processing Client IP...");
+            List<String> localIPs = getListOfValidLocalIPs();
+            if (!localIPs.contains(myIP) && localIPs.size() > 1){
+                System.out.println("\nYour IPs and Hostnames");
+                System.out.println(YELLOW_TEXT);
+                localIPs.forEach(System.out::println);
+                System.out.println(RESET);
+                do{
+                    System.out.println("Please input one of the options above. Use an IP that is "+ YELLOW_TEXT +"reachable"+ RESET +" by the server.");
+                    myIP = scanner.nextLine();
+                }while(!localIPs.contains(myIP));
+                System.out.println();
+            }
+            else if(!localIPs.isEmpty()){
+                System.out.println(" located automatically!");
+                myIP = localIPs.get(0);
+            }
+            else{
+                System.out.println("\nThere are no valid network interfaces on this machine. Please connect to a network");
+                quitError();
+            }
+        }
+        if(myIP==null){
+            System.out.println("myIP is null. Fatal error."); // should never happen
+            quitError();
+            return;
+        }
+        System.setProperty("java.rmi.server.hostname", myIP);
+    //endregion
+
+        cls();
+        System.out.println("Your IP is: " + myIP);
 
         BlockingQueue<String> inputQueue = initInputQueue();
         while(true) {
             inputQueue.clear();
             CommandPassthrough proxy = null;
             Consumer<ModelUpdater> setClientModelUpdater = null;
+        //region CLIENT CREATION AND CONNECTION
             for (int i = 0; i <= MAX_CONNECTION_ATTEMPTS; i++) {
                 try {
                     if (connectionTech.equalsIgnoreCase("tcp")) {
@@ -183,6 +232,7 @@ public class Client {
                 System.err.println("Couldn't locate server. Closing client.");
                 quitError();
             }
+    //endregion
             try {
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
                 System.out.println("If the above text is not green, TUI is not supported on the current console.");
@@ -201,7 +251,6 @@ public class Client {
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         view = new TUI(proxy, setClientModelUpdater, inputQueue, verbose); // proxy always not null at this point
                     } else if (gameMode.toLowerCase().matches("quit|exit|q")) {
-                        System.out.println(YELLOW_TEXT + "Client terminated." + RESET);
                         quitError();
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
