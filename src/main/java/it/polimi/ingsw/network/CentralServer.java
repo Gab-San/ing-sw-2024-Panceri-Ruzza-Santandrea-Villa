@@ -115,6 +115,7 @@ public class CentralServer {
                 playerClients.get(nickname).ping();
                 throw new IllegalStateException("Player with nickname "+nickname+" already connected!");
             }catch (RemoteException clientLostConnection){
+                disconnect(nickname, playerClients.get(nickname));
                 playerClients.put(nickname, client);
                 chat.addClient(nickname, client);
             }

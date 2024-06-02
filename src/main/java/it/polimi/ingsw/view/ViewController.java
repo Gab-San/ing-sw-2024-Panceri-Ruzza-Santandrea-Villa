@@ -40,7 +40,13 @@ public class ViewController {
         }
     }
 
+    private void validateTurn() throws IllegalStateException{
+        if(board.getCurrentTurn() != board.getPlayerHand().getTurn())
+            throw new IllegalStateException("It's not your turn!");
+    }
+
     public void validatePlaceCard(String cardID, Point placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
+        validateTurn();
         Point correctPos = placePos.move(CornerDirection.getDirectionFromString(cornerDir));
         ViewPlayCard card = board.getPlayerHand().getCardByID(cardID);
         if(!selfPlayArea.validatePlacement(correctPos, card))
@@ -48,6 +54,7 @@ public class ViewController {
     }
 
     public void validateDraw(char deck, int card) throws IllegalStateException, IllegalArgumentException{
+        validateTurn();
         boolean isDrawInvalid =
         switch (Character.toUpperCase(deck)) {
             case ViewBoard.RESOURCE_DECK ->
