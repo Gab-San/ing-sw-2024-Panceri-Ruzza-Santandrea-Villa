@@ -706,6 +706,7 @@ public class Board implements GameSubject{
             stateSave.add(new PlayAreaStateUpdate(player.getNickname(),
                     playArea.getCardMatrix(), playArea.getVisibleResources(),
                     playArea.getFreeCorners()));
+            stateSave.add(new PlayerHandSetStartingCardEvent(player.getNickname(),null));
         }
 
         remoteHandler.replaceHistory(stateSave);

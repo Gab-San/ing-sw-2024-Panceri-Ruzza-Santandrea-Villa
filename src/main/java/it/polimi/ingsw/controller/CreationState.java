@@ -50,13 +50,14 @@ public class CreationState extends GameState{
             throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
         }
 
-        board.getPlayerByNickname(nickname); // throws on player not in game
+        Player player = board.getPlayerByNickname(nickname); // throws on player not in game
 
         if(num<2 || num>4) {
             board.notifyAllListeners(new IllegalParameterError(nickname, "NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + " PLAYERS" ));
             throw new IllegalArgumentException("NUMBER OF PLAYERS IN THE GAME MUST BE BETWEEN 2 AND 4 INCLUDED, YOU INSERTED " + num + " PLAYERS");
         }
 
+        timers.stopTimer(player);
         transition(new JoinState(board, controller, disconnectingPlayers, num));
     }
 

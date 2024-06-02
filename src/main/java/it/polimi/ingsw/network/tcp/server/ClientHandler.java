@@ -188,13 +188,13 @@ public class ClientHandler implements Runnable, VirtualServer {
 
 
     @Override
-    public void draw(String nickname, VirtualClient client, char deck, int card) {
+    public void draw(String nickname, VirtualClient client, char deck, int cardPosition) {
         try {
             validateClient(nickname, client);
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, card));
+        serverRef.issueGameCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, cardPosition));
     }
 
     @Override

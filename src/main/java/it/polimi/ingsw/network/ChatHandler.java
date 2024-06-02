@@ -4,6 +4,9 @@ import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * This class acts as a router for the messages sent from client to client.
+ */
 public class ChatHandler{
 
     private final Map<String, VirtualClient> connectedClients;
@@ -13,6 +16,14 @@ public class ChatHandler{
     private final CentralServer centralServer;
     private final List<Thread> threadPool;
 
+    /**
+     * Default constructor for chat handler.
+     *
+     * <p>
+     *     It takes the central server at which all the messages arrive.
+     * </p>
+     * @param centralServer instance of the central server
+     */
     public ChatHandler(CentralServer centralServer) {
         this.centralServer = centralServer;
         this.threadPool = new LinkedList<>();
@@ -24,7 +35,11 @@ public class ChatHandler{
         startBroadcastMessageThread();
     }
 
-
+    /**
+     * Add a reachable client to the chat handler.
+     * @param nickname player's unique nickname
+     * @param client instance of virtual client bound to player
+     */
     public void addClient(String nickname, VirtualClient client){
         synchronized (connectedClients) {
             connectedClients.put(nickname, client);
@@ -32,14 +47,24 @@ public class ChatHandler{
         addMessage("SERVER", "ALL", nickname + " has connected!" );
     }
 
+    /**
+     * Remove a disconnecting client from chat handler.
+     * @param nickname player's unique nickname
+     */
     public void removeClient(String nickname){
         synchronized (connectedClients) {
             connectedClients.remove(nickname);
         }
-        addMessage("SERVER", "all", "Disconnected " + nickname + " for connection loss");
+        addMessage("SERVER", "all", "Disconnected " + nickname + "!");
     }
 
-    public void addMessage(String messenger, String addressee, String message) throws IllegalArgumentException{
+    /**
+     * Add a message to the queue of messages to handle.
+     * @param messenger messenger player's unique id
+     * @param addressee addressee player's unique id
+     * @param message message to send
+     */
+    public void addMessage(String messenger, String addressee, String message){
         if (addressee.equalsIgnoreCase("all")) {
             BroadcastMessage broadcastMessage = new BroadcastMessage(messenger, message);
             synchronized (broadcastMessageQueue) {
@@ -70,6 +95,9 @@ public class ChatHandler{
 
 //region CHAT THREADS
 
+    /**
+     * Starts the thread that handles direct messages.
+     */
     private void startDirectMessageThread(){
          Thread dmThread = new Thread(
                 () -> {
@@ -88,8 +116,8 @@ public class ChatHandler{
                         VirtualClient addressee;
                         VirtualClient messengerClient;
                         synchronized (connectedClients) {
-                             addressee = directMessage.getAddresseeClient(connectedClients);
-                             messengerClient = directMessage.getMessengerClient(connectedClients);
+                             addressee = connectedClients.get(directMessage.addressee());
+                             messengerClient = connectedClients.get(directMessage.messenger());
                         }
 
                         try {
@@ -114,7 +142,9 @@ public class ChatHandler{
         }
     }
 
-
+    /**
+     * Starts the thread that handles broadcast messages.
+     */
     private void startBroadcastMessageThread(){
         Thread bmThread = new Thread(
                 () -> {
@@ -157,6 +187,11 @@ public class ChatHandler{
     }
 
 //endregion
+
+    /**
+     * Disconnects the clients that have lost connection.
+     * @param disconnectedClients list of clients that have lost connection
+     */
     private void disconnectConnectionLossClients(List<String> disconnectedClients) {
         for(String nickname: disconnectedClients){
             VirtualClient client;

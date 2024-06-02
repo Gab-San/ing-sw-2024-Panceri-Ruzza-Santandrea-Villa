@@ -12,8 +12,12 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This interface represents the skeletal structure of a client
+ */
 public interface VirtualClient extends Remote, Serializable {
     long serialVersionUID =-124819284198L;
+
     /**
      * Displays chat messages.
      *
@@ -22,6 +26,11 @@ public interface VirtualClient extends Remote, Serializable {
      * @throws RemoteException if an error occurs during connection
      */
     void displayMessage(String messenger, String msg) throws RemoteException;
+
+    /**
+     * Pings the remote end of the connection, testing if reachable
+     * @throws RemoteException if an error occurs during connection
+     */
     void ping() throws RemoteException;
 
     /**
@@ -318,7 +327,7 @@ public interface VirtualClient extends Remote, Serializable {
     void reportError(String errorMessage) throws RemoteException;
 
     /**
-     * Reports the timeout notification
+     * Reports an indirect disconnection notification
      */
     void notifyIndirectDisconnect() throws RemoteException;
 }

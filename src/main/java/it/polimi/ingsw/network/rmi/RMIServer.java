@@ -85,9 +85,9 @@ public class RMIServer implements VirtualServer {
     }
 
     @Override
-    public void draw(String nickname, VirtualClient client, char deck, int card) throws RemoteException {
+    public void draw(String nickname, VirtualClient client, char deck, int cardPosition) throws RemoteException {
         validateClient(nickname, client);
-        DrawCmd command = new DrawCmd(serverRef.getGameRef(), nickname, deck, card);
+        DrawCmd command = new DrawCmd(serverRef.getGameRef(), nickname, deck, cardPosition);
         serverRef.issueGameCommand(command);
     }
 

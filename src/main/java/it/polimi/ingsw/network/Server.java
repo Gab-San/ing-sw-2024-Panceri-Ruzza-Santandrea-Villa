@@ -10,12 +10,12 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.getListOfValidLocalIPs;
-import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.isLoopbackAddress;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
+/**
+ * This class is the server starter.
+ */
 public class Server {
-    private static RMIServer rmiServer = null;
-    private static TCPServerSocket tcpServer = null;
     private static final int MAX_PORT = 65535;
 
     public static void main(String[] args) {
@@ -25,7 +25,9 @@ public class Server {
             System.err.println("Must provide RMI and TCP ports, in that order.");
             System.exit(-1);
         }
+
         int rmiPort=-1, tcpPort=-1;
+
         try{
             rmiPort = Integer.parseInt(args[0]);
             tcpPort = Integer.parseInt(args[1]);
@@ -68,7 +70,7 @@ public class Server {
     //endregion
 
         try{
-            rmiServer = new RMIServer(rmiPort); //also creates CentralServer via singleton
+            new RMIServer(rmiPort); //also creates CentralServer via singleton
         }catch (RemoteException e){
             System.err.println("Couldn't create RMI Server.");
         }catch (IllegalArgumentException e){
@@ -76,7 +78,7 @@ public class Server {
         }
 
         try{
-            tcpServer = new TCPServerSocket(tcpPort); //threaded, doesn't stop here
+            new TCPServerSocket(tcpPort); //threaded, doesn't stop here
         }catch (IOException e){
             System.err.println("Couldn't create TCP Server.");
         }catch (IllegalArgumentException e){

@@ -1,12 +1,9 @@
 package it.polimi.ingsw.network;
 
-import java.util.Map;
-
-public record DirectMessage(String messenger, String addressee, String message) {
-    public VirtualClient getAddresseeClient(Map<String, VirtualClient> playerClients){
-        return playerClients.get(addressee);
-    }
-    public VirtualClient getMessengerClient(Map<String, VirtualClient> playerClients){
-        return playerClients.get(messenger);
-    }
-}
+/**
+ * This record represents a direct message
+ * @param messenger unique id of the messenger
+ * @param addressee unique id of the addressee
+ * @param message message to send
+ */
+public record DirectMessage(String messenger, String addressee, String message) {}

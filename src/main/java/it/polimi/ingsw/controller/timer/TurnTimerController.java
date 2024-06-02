@@ -35,20 +35,20 @@ public class TurnTimerController {
         timers.put(currPlayer, timer);
     }
 
-    public synchronized void startTimer(Player currPlayer, int turnTimeSeconds){
-        startTimer(currPlayer, turnTimeSeconds, DEFAULT_PING_TIME_SECONDS);
+    public synchronized void startTimer(Player player, int turnTimeSeconds){
+        startTimer(player, turnTimeSeconds, DEFAULT_PING_TIME_SECONDS);
     }
 
     /**
      * Stops the player timer if running
-     * @param currPlayer the player whose turn has finished
+     * @param player the player whose turn has finished
      */
-    public synchronized void stopTimer(Player currPlayer){
+    public synchronized void stopTimer(Player player){
 //        System.out.println("STOPPING TIMER FOR: " + currPlayer.getNickname());
-        TurnTimer currentTimer = timers.get(currPlayer);
+        TurnTimer currentTimer = timers.get(player);
         if(currentTimer != null) {
             currentTimer.killTask();
-            timers.remove(currPlayer);
+            timers.remove(player);
         }
     }
 

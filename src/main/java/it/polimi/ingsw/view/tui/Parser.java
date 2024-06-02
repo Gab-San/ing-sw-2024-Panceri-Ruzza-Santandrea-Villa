@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.ViewController;
-import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
@@ -69,13 +68,31 @@ public class Parser {
             case "reconnect":
                 parseReconnectCmd(cmdArgs);
                 break;
+            case "help":
+                printHelper();
+                break;
             default:
                 throw new IllegalArgumentException("Command not recognised");
         }
 
     }
 
-//region RECONNECT
+    private void printHelper() {
+        System.out.println("""
+                Each command has a different format, but they follow the same pattern:
+                commandId <optional> <command_arguments>
+                The available commands are:
+                "place|play" to play a card
+                "draw" to draw a card
+                "choose" color|objective to either choose color or objective
+                "disconnect" to leave the game
+                "send" to send a message
+                "set|players|start" to set the number of players and effectively start the match
+                "quit" to close the application
+                """);
+    }
+
+    //region RECONNECT
     //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
     private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
         if (cmdArgs.size() < 3) {

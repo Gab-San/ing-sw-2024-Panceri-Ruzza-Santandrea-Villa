@@ -120,8 +120,8 @@ public class ServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void sendMsg(String addressee, String msg) throws RemoteException {
-        sendCommand(new SendMessage(nickname, addressee, msg));
+    public void sendMsg(String addressee, String message) throws RemoteException {
+        sendCommand(new SendMessage(nickname, addressee, message));
     }
 
     @Override
@@ -132,8 +132,8 @@ public class ServerProxy implements CommandPassthrough {
 
 
     @Override
-    public void chooseColor(char color) throws RemoteException {
-        sendCommand(new ChooseMessage(nickname, color));
+    public void chooseColor(char colour) throws RemoteException {
+        sendCommand(new ChooseMessage(nickname, colour));
     }
 
     @Override
@@ -142,8 +142,8 @@ public class ServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void draw(char deck, int card) throws RemoteException {
-        sendCommand(new DrawMessage(nickname, deck, card));
+    public void draw(char deck, int cardPosition) throws RemoteException {
+        sendCommand(new DrawMessage(nickname, deck, cardPosition));
     }
 
 

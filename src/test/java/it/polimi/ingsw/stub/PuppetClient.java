@@ -33,8 +33,8 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void sendMsg(String addressee, String msg) {
-        System.out.println(colorize(msg.toUpperCase() + " SENT TO " + addressee.toUpperCase(), textColorFormat));
+    public void sendMsg(String addressee, String message) {
+        System.out.println(colorize(message.toUpperCase() + " SENT TO " + addressee.toUpperCase(), textColorFormat));
     }
 
     @Override
@@ -61,9 +61,9 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void chooseColor(char color) throws IllegalStateException {
+    public void chooseColor(char colour) throws IllegalStateException {
         System.out.println(colorize("CHOOSE COLOR COMMAND CALLED WITH ARGS:\n"
-                + color, textColorFormat));
+                + colour, textColorFormat));
     }
 
     @Override
@@ -82,10 +82,10 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void draw(char deck, int card) throws IllegalStateException {
+    public void draw(char deck, int cardPosition) throws IllegalStateException {
         System.out.println(colorize("DRAW COMMAND CALLED WITH ARGS:\n"
                 + deck + "\n"
-                + card , textColorFormat));
+                + cardPosition, textColorFormat));
     }
 
     @Override

@@ -18,10 +18,10 @@ public class RMIServerProxy implements CommandPassthrough {
 
 
     @Override
-    public void sendMsg(String addressee, String msg) throws RemoteException {
+    public void sendMsg(String addressee, String message) throws RemoteException {
         //System.out.println("Sending Message: " + msg);
         validateConnection();
-        server.sendMsg(nickname, client, addressee, msg);
+        server.sendMsg(nickname, client, addressee, message);
     }
 
     private void validateConnection() throws IllegalStateException, RemoteException{
@@ -36,6 +36,7 @@ public class RMIServerProxy implements CommandPassthrough {
         server.connect(nickname, client);
         this.nickname = nickname;
     }
+
     @Override
     public void disconnect() throws IllegalStateException, RemoteException {
         validateConnection();
@@ -54,9 +55,9 @@ public class RMIServerProxy implements CommandPassthrough {
         server.placeStartCard(nickname, client, placeOnFront);
     }
     @Override
-    public void chooseColor(char color) throws IllegalStateException, RemoteException{
+    public void chooseColor(char colour) throws IllegalStateException, RemoteException{
         validateConnection();
-        server.chooseColor(nickname, client, color);
+        server.chooseColor(nickname, client, colour);
     }
     @Override
     public void chooseObjective(int choice) throws IllegalStateException, RemoteException {
@@ -71,9 +72,9 @@ public class RMIServerProxy implements CommandPassthrough {
                 placePos.col(), cornerDir, placeOnFront);
     }
     @Override
-    public void draw(char deck, int card) throws IllegalStateException, RemoteException {
+    public void draw(char deck, int cardPosition) throws IllegalStateException, RemoteException {
         validateConnection();
-        server.draw(nickname, client, deck, card);
+        server.draw(nickname, client, deck, cardPosition);
     }
 
     @Override
