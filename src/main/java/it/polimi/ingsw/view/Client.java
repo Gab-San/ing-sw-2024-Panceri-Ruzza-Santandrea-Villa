@@ -162,6 +162,7 @@ public class Client {
             System.out.print("Processing Client IP...");
             List<String> localIPs = getListOfValidLocalIPs();
             if (!localIPs.contains(myIP) && localIPs.size() > 1){
+                if(myIP != null) System.out.print(" parameter invalid!");
                 System.out.println("\nYour IPs and Hostnames");
                 System.out.println(YELLOW_TEXT);
                 localIPs.forEach(System.out::println);
@@ -172,7 +173,7 @@ public class Client {
                 }while(!localIPs.contains(myIP));
                 System.out.println();
             }
-            else if(!localIPs.isEmpty()){
+            else if(localIPs.size() == 1 && !localIPs.contains(myIP)){
                 System.out.println(" located automatically!");
                 myIP = localIPs.get(0);
             }
@@ -189,7 +190,6 @@ public class Client {
         System.setProperty("java.rmi.server.hostname", myIP);
     //endregion
 
-        cls();
         System.out.println("Your IP is: " + myIP);
 
         BlockingQueue<String> inputQueue = initInputQueue();
