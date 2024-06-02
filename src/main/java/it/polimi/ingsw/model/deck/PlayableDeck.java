@@ -52,8 +52,6 @@ public class PlayableDeck implements GameSubject {
         try {
             if(!CentralServer.isEmptyDeckMode()) {
                 cardDeck.add(cardFactory.addCardToDeck());
-            } else{
-                cardDeck.poll();
             }
         } catch (DeckException ignored){
             // If the cardFactory is empty there's no mean to throw an error

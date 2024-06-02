@@ -15,6 +15,7 @@ public class NetworkEventRecord {
     private final List<UpdateEvent> eventsHistory;
     private final List<UpdateTask> executingTasks;
     private final Map<VirtualClient, Integer> clientUpdateStatus;
+    private boolean isSaving;
 
     public NetworkEventRecord() {
         this.eventsHistory = new LinkedList<>();
@@ -39,7 +40,7 @@ public class NetworkEventRecord {
         }
     }
 
-    public List<NetworkEvent> getHistory(VirtualClient virtualClient){
+    public List<UpdateEvent> getHistory(VirtualClient virtualClient){
         Integer lastUpdate;
         synchronized (clientUpdateStatus) {
             lastUpdate = clientUpdateStatus.get(virtualClient);
@@ -96,8 +97,32 @@ public class NetworkEventRecord {
         }
     }
 
+    public void resetUpdates(int stateSaveSize){
+        synchronized (clientUpdateStatus) {
+            for (VirtualClient virtualClient : clientUpdateStatus.keySet()) {
+                if (isUptoDate(virtualClient)) {
+                    resetLastUpdate(virtualClient, stateSaveSize);
+                } else {
+                    resetLastUpdate(virtualClient, 0);
+                }
+            }
+        }
+    }
+
     public synchronized void replaceHistory(List<UpdateEvent> updateEventList){
         eventsHistory.clear();
         eventsHistory.addAll(updateEventList);
+        setSaving(false);
+    }
+
+    //isSaving is always synchronized on this
+    public synchronized void setSaving(boolean on){
+        isSaving = on;
+        this.notifyAll();
+    }
+
+    //isSaving is always synchronized on this
+    public synchronized boolean isSaving(){
+        return isSaving;
     }
 }

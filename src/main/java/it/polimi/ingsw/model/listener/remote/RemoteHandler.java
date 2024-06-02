@@ -67,20 +67,8 @@ public class RemoteHandler implements GameListener{
         return playerClients;
     }
     public synchronized void replaceHistory(List<UpdateEvent> stateSave){
-        for(VirtualClient virtualClient : playerClients.values()){
-            eventRecord.forceRemoveTask(virtualClient);
-        }
-
+        eventRecord.setSaving(true);
+        eventRecord.resetUpdates(stateSave.size());
         eventRecord.replaceHistory(stateSave);
-
-        for(String username : playerClients.keySet()){
-            VirtualClient virtualClient = playerClients.get(username);
-            if(eventRecord.isUptoDate(virtualClient)){
-                eventRecord.resetLastUpdate(virtualClient, stateSave.size());
-            } else {
-                eventRecord.resetLastUpdate(virtualClient, 0);
-            }
-            submitUpdates(username);
-        }
     }
 }

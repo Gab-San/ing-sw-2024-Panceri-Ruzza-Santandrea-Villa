@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.listener.remote;
 
+import it.polimi.ingsw.model.listener.remote.events.UpdateEvent;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
@@ -28,25 +29,31 @@ public class UpdateTask implements Runnable{
     public void run() {
 
         while (!hasToStop) {
-            List<NetworkEvent> history = eventRecord.getHistory(client);
-            ListIterator<NetworkEvent> iterator = history.listIterator();
+            synchronized (eventRecord) {
+                while (eventRecord.isSaving()) {
+                    try {
+                        eventRecord.wait();
+                    } catch (InterruptedException ignore) {}
+                }
+            }
+
+            List<UpdateEvent> history = eventRecord.getHistory(client);
+            ListIterator<UpdateEvent> iterator = history.listIterator();
+            eventRecord.saveLastUpdate(client, history.size());
 
             synchronized (eventRecord) {
                 if (!iterator.hasNext()){
                     try {
                         eventRecord.wait();
-                    } catch (InterruptedException ignore) {
-                    }
+                    } catch (InterruptedException ignore) {}
                 }
             }
 
             try {
                 while (iterator.hasNext() && !hasToStop) {
-                    NetworkEvent updateEvent = iterator.next();
+                    UpdateEvent updateEvent = iterator.next();
                     updateEvent.executeEvent(client);
                 }
-                int lastUpdate = iterator.nextIndex();
-                eventRecord.saveLastUpdate(client, lastUpdate);
             } catch (RemoteException e) {
                 break;
             }
