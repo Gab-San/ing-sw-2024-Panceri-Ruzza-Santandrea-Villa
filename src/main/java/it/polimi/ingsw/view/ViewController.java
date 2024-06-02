@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -19,6 +20,7 @@ public class ViewController {
     }
 
     public void validatePlaceStartCard() throws IllegalStateException, IllegalArgumentException{
+        validatePhase(GamePhase.PLACESTARTING);
         if(selfPlayArea.getCardAt(0,0) != null)
             throw new IllegalStateException("Starting card was already placed!");
         if(board.getPlayerHand().getStartCard() == null)
@@ -26,12 +28,14 @@ public class ViewController {
     }
 
     public void validateChooseColor() throws IllegalStateException, IllegalArgumentException{
+        validatePhase(GamePhase.CHOOSECOLOR);
         if(board.getPlayerHand().getColor() != null){
             throw new IllegalStateException("Color was already chosen!");
         }
     }
 
     public void validateChooseObjective() throws IllegalStateException{
+        validatePhase(GamePhase.CHOOSEOBJECTIVE);
         if(board.getPlayerHand().getSecretObjectives().size() == 1) {
             throw new IllegalStateException("Cannot choose objective. The secret objective was already chosen!");
         }
@@ -44,9 +48,14 @@ public class ViewController {
         if(board.getCurrentTurn() != board.getPlayerHand().getTurn())
             throw new IllegalStateException("It's not your turn!");
     }
+    private void validatePhase(GamePhase phase) throws IllegalStateException{
+        if(board.getGamePhase() != board.getGamePhase())
+            throw new IllegalStateException("It's not the correct phase for that action!");
+    }
 
     public void validatePlaceCard(String cardID, Point placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
         validateTurn();
+        validatePhase(GamePhase.PLACECARD);
         Point correctPos = placePos.move(CornerDirection.getDirectionFromString(cornerDir));
         ViewPlayCard card = board.getPlayerHand().getCardByID(cardID);
         if(!selfPlayArea.validatePlacement(correctPos, card))
@@ -55,6 +64,7 @@ public class ViewController {
 
     public void validateDraw(char deck, int card) throws IllegalStateException, IllegalArgumentException{
         validateTurn();
+        validatePhase(GamePhase.DRAWCARD);
         boolean isDrawInvalid =
         switch (Character.toUpperCase(deck)) {
             case ViewBoard.RESOURCE_DECK ->

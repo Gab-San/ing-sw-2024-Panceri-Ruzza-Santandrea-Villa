@@ -710,6 +710,11 @@ public class Board implements GameSubject{
         }
 
         remoteHandler.replaceHistory(stateSave);
+        //adds the endgame notification after squash if needed
+        if(hasGoneToEndgame){
+            hasGoneToEndgame = false; //needed to actually send notification
+            checkEndgame(); // resets hasGoneToEndgame
+        }
     }
 
 //endregion

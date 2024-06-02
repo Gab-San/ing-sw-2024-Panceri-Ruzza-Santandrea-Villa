@@ -91,7 +91,7 @@ public class Server {
             command = scanner.nextLine();
             if(command.matches("[Dd]ebug(\\s+.*)*")){
                 String[] cmdArgs = command.split("\\s+");
-                if(cmdArgs[1].equalsIgnoreCase("help")){
+                if(cmdArgs.length > 1 && cmdArgs[1].equalsIgnoreCase("help")){
                     System.out.println("""
                             Debug <DebugMode> <on|off>
                             
@@ -112,7 +112,7 @@ public class Server {
                     }
 
                     Consumer<Boolean> func = switch (cmdArgs[1].toLowerCase()) {
-                        case "points" -> CentralServer::setPointsMode;
+                        case "points", "point", "p" -> CentralServer::setPointsMode;
                         case "resource", "resources", "res" -> CentralServer::setResourcesMode;
                         case "deck", "empty", "emptydeck" -> CentralServer::setEmptyDeckMode;
                         default -> CentralServer::setDebugMode;

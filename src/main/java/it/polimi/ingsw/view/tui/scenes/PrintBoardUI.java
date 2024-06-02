@@ -54,7 +54,7 @@ public class PrintBoardUI extends TUI_Scene {
         List<String[]> deckBacks = new LinkedList<>();
         deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getResourceCardDeck().getTopCard())));
         deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getGoldCardDeck().getTopCard())));
-        deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getTopCard())));
+        deckBacks.add(printCard.cutAllCornersIfEmpty(printCard.getCardAsStringRows(board.getObjectiveCardDeck().getTopCard(), true)));
         for(String[] card : deckBacks){
             // only match resource and gold cards, objective cards are already hidden in PrintCard
             Matcher matcher = Pattern.compile("[RG][0-9]?[0-9]").matcher(card[2]);

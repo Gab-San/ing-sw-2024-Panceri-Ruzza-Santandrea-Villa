@@ -136,6 +136,7 @@ public class PlayState extends GameState {
         else cardToPlace.turnFaceDown();
 
         board.placeCard(player, cardToPlace, corner);
+        board.checkEndgame(); //only useful to send notification
 
         if(board.canDraw()){
             currentPlayerHasPlacedCard = true;

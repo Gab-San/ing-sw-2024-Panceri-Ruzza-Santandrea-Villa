@@ -94,7 +94,8 @@ public class ViewBoard {
     }
     public synchronized boolean isEndgame(){
         int maxScore = scoreboard.values().stream().max(Integer::compare).orElse(0);
-        return maxScore >= ENDGAME_SCORE;
+        boolean decksEmpty = resourceCardDeck.isEmpty() && goldCardDeck.isEmpty();
+        return maxScore >= ENDGAME_SCORE || decksEmpty;
     }
 
     public synchronized int getCurrentTurn() {
