@@ -16,7 +16,10 @@ public class CentralServer {
     private static CentralServer singleton;
     private final Map<String, VirtualClient> playerClients;   // key == player nickname
     private final Queue<GameCommand> commandQueue;
-    public static boolean isDebugMode;
+    private final static Object DEBUG_LOCK = new Object();
+    private static boolean pointsDebugMode;
+    private static boolean resDebugMode;
+    private static boolean emptyDeckMode;
     private final BoardController gameRef;
     private final ChatHandler chat;
 
@@ -139,8 +142,53 @@ public class CentralServer {
         chat.addMessage(messenger, addressee, message);
     }
 
-    public synchronized static void setDebugMode(boolean on){
-        isDebugMode = on;
-        System.err.println("Debug mode: " + on);
+//region DEBUG MODES
+    public static void setPointsMode(boolean on){
+        synchronized (DEBUG_LOCK) {
+            pointsDebugMode = on;
+            System.err.println("Points mode: " + on);
+        }
     }
+
+    public static boolean isPointsDebugMode(){
+        synchronized (DEBUG_LOCK){
+            return pointsDebugMode;
+        }
+    }
+
+    public static void setResourcesMode(boolean on){
+        synchronized (DEBUG_LOCK){
+            resDebugMode = on;
+            System.err.println("Resource mode: " + on);
+        }
+    }
+
+    public static boolean isResDebugMode(){
+        synchronized (DEBUG_LOCK){
+            return resDebugMode;
+        }
+    }
+
+    public static void setEmptyDeckMode(boolean on){
+        synchronized (DEBUG_LOCK){
+            emptyDeckMode = on;
+            System.err.println("Empty deck mode: " + on);
+        }
+    }
+
+    public static boolean isEmptyDeckMode(){
+        synchronized (DEBUG_LOCK){
+            return emptyDeckMode;
+        }
+    }
+
+    public static void setDebugMode(boolean on){
+        synchronized (DEBUG_LOCK){
+            setEmptyDeckMode(on);
+            setPointsMode(on);
+            setResourcesMode(on);
+        }
+    }
+
+//endregion
 }

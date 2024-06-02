@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
+import it.polimi.ingsw.network.CentralServer;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -38,7 +39,7 @@ public class PlayableDeck implements GameSubject {
     }
 
     private void fillDeck(int initialCapacity){
-        for(int i = 0; i < initialCapacity; i++ ){
+        for(int i = 0; i < initialCapacity ; i++ ){
             try {
                 cardDeck.add(cardFactory.addCardToDeck());
             } catch (DeckException ignore){}
@@ -49,7 +50,11 @@ public class PlayableDeck implements GameSubject {
         PlayCard returnCard;
         returnCard = cardDeck.poll();
         try {
-            cardDeck.add(cardFactory.addCardToDeck());
+            if(!CentralServer.isEmptyDeckMode()) {
+                cardDeck.add(cardFactory.addCardToDeck());
+            } else{
+                cardDeck.poll();
+            }
         } catch (DeckException ignored){
             // If the cardFactory is empty there's no mean to throw an error
         }

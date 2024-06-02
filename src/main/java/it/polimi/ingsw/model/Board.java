@@ -246,7 +246,7 @@ public class Board implements GameSubject{
             throw new IllegalArgumentException("Player not in game!");
         }
 
-        int newScore = scoreboard.get(player) + amount * (CentralServer.isDebugMode ? DEBUG_MODE_SCORE_MULT : 1);
+        int newScore = scoreboard.get(player) + amount * (CentralServer.isPointsDebugMode() ? DEBUG_MODE_SCORE_MULT : 1);
         setScore(player, newScore);
     }
     protected void setScore(Player player, int score){

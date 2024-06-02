@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
@@ -92,18 +93,41 @@ public class Server {
             command = scanner.nextLine();
             if(command.matches("[Dd]ebug(\\s+.*)*")){
                 String[] cmdArgs = command.split("\\s+");
-                if(cmdArgs.length < 2){
-                    System.err.println("MISSING DEBUG SWITCH (ON|OFF)");
-                    continue;
-                }
+                if(cmdArgs[1].equalsIgnoreCase("help")){
+                    System.out.println("""
+                            Debug <DebugMode> <on|off>
+                            
+                            There are 3 debug modes:
+                            points: multiplies the points x10
+                            res: gives 100 resources as the starting card is placed [!ACTIVATE BEFORE PLACING STARTING CARD!]
+                            deck
+                            emptydeck
+                            empty: empties deck faster
+                            """);
+                } else {
+                    if (cmdArgs.length < 3) {
+                        System.out.println("""
+                                Incorrect debug command:
+                                Debug <DebugMode> <on|off>
+                                """);
+                        continue;
+                    }
 
-                switch(cmdArgs[1].toLowerCase()){
-                    case "on":
-                        CentralServer.setDebugMode(true);
-                        break;
-                    case "off":
-                        CentralServer.setDebugMode(false);
-                        break;
+                    Consumer<Boolean> func = switch (cmdArgs[1].toLowerCase()) {
+                        case "points" -> CentralServer::setPointsMode;
+                        case "resource", "resources", "res" -> CentralServer::setResourcesMode;
+                        case "deck", "empty", "emptydeck" -> CentralServer::setEmptyDeckMode;
+                        default -> CentralServer::setDebugMode;
+                    };
+
+                    switch (cmdArgs[2].toLowerCase()) {
+                        case "on":
+                            func.accept(true);
+                            break;
+                        case "off":
+                            func.accept(false);
+                            break;
+                    }
                 }
             }
         }

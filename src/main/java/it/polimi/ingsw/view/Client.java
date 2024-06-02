@@ -25,9 +25,6 @@ public class Client {
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
     private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
-    private static String serverIP;
-    private static int port;
-    private static String connectionTech;
 
     public static boolean isRunningInIDE(){
         try {
@@ -95,7 +92,9 @@ public class Client {
      *             If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
      */
     public static void main(String[] args) {
-        serverIP = null; connectionTech = null; port = -1;
+        String serverIP = null;
+        String connectionTech = null;
+        int port = -1;
         boolean verbose = false;
 
         String serverHostname = "localhost";
@@ -126,6 +125,7 @@ public class Client {
                 serverHostname = arg;
             }
         }
+
         if(connectionTech == null || port <= -1){
             System.err.println("Missing server port or RMI/TCP");
             quitError();
@@ -141,6 +141,7 @@ public class Client {
             quitError();
         }
         cls();
+        assert connectionTech != null;
         System.out.println("Searching "+ connectionTech.toUpperCase() +" server at address " + serverIP + ":" + port);
 
         BlockingQueue<String> inputQueue = initInputQueue();
