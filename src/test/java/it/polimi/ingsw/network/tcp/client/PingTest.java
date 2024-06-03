@@ -6,6 +6,7 @@ import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,7 +51,10 @@ public class PingTest {
     }
 
     @Test
-    void timeoutPingTest() throws IOException, InterruptedException {
+    void timeoutPingTest() throws IOException, InterruptedException, NoSuchFieldException, IllegalAccessException {
+        Field singleton = CentralServer.class.getDeclaredField("singleton");
+        singleton.setAccessible(true);
+        singleton.set(null, null);
         new TCPServerSocket(8888);
         TCPClientSocket clientSocket = new TCPClientSocket(8888);
         clientSocket.getProxy().connect("GIANGIANNI");

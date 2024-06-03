@@ -36,8 +36,7 @@ public class Parser {
         List<String> cmdArgs = commandComponents.stream().distinct().skip(1).toList();
 
         switch (keyCommand){
-            case "place":
-            case "play":
+            case "place", "play":
                 parsePlayCmd(cmdArgs);
                 break;
             case "draw":
@@ -46,12 +45,10 @@ public class Parser {
             case "choose":
                 parseChooseCmd(cmdArgs);
                 break;
-            case "join":
-            case "connect":
+            case "join", "connect":
                 parseConnectCmd(cmdArgs);
                 break;
-            case "disconnect":
-            case "quit":
+            case "disconnect", "quit":
                 parseDisconnectCmd();
                 break;
             case "restart":
@@ -60,9 +57,7 @@ public class Parser {
             case "send":
                 parseSendCmd(cmdArgs);
                 break;
-            case "set":
-            case "players":
-            case "start":
+            case "set", "players":
                 parseSetNumPlayers(cmdArgs);
                 break;
             case "reconnect":
