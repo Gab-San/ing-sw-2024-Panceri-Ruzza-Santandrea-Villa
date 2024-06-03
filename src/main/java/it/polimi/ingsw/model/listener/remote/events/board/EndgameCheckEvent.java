@@ -31,13 +31,4 @@ public class EndgameCheckEvent implements UpdateEvent {
         }
         virtualClient.notifyEndgame(nickname, score);
     }
-
-    @Override
-    public String toString() {
-        return "EndgameCheckEvent{" +
-                "nickname='" + nickname + '\'' +
-                ", score=" + score +
-                ", emptyDecks=" + emptyDecks +
-                '}';
-    }
 }

@@ -11,6 +11,10 @@ import java.rmi.RemoteException;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
+/**
+ * This class implements both tcp client and server message interfaces.
+ * It is an empty message that tries to reach the other endpoint
+ */
 public class PingMessage implements TCPClientMessage, TCPServerMessage {
     @Serial
     private static final long serialVersionUID = 0000L;

@@ -9,6 +9,10 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class implements tcp server message interface.
+ * Carries board initialization information.
+ */
 public class BoardStateMessage implements TCPServerMessage {
     @Serial
     private static final long serialVersionUID = 1920384L;
@@ -17,8 +21,15 @@ public class BoardStateMessage implements TCPServerMessage {
     private final GamePhase gamePhase;
     private final Map<String, Boolean> playerDeadLock;
 
+    /**
+     * Constructs the board state message.
+     * @param currentTurn match's current turn
+     * @param scoreboard map of players' scores
+     * @param gamePhase current game phase
+     * @param isPlayerDeadLocked map of players' deadlocks
+     */
     public BoardStateMessage(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> isPlayerDeadLocked) {
-        // TODO: decide if to just use refs
+
         this.currentTurn = currentTurn;
         this.scoreboard = new HashMap<>();
         for(String nickname: scoreboard.keySet()){

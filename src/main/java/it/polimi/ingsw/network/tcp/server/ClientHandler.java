@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
 import it.polimi.ingsw.network.commands.*;
 import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
+import it.polimi.ingsw.network.tcp.message.TCPMessage;
 import it.polimi.ingsw.network.tcp.message.check.CheckMessage;
 import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
 
@@ -99,16 +100,19 @@ public class ClientHandler implements Runnable, VirtualServer {
     public void run() {
         try{
             while (!connectionSocket.isClosed()){
-                TCPClientMessage commandFromClient;
-                commandFromClient = (TCPClientMessage) inputStream.readObject();
-                synchronized (commandQueue) {
-                    commandQueue.offer(commandFromClient);
-                    commandQueue.notifyAll();
+                TCPMessage commandFromClient;
+                commandFromClient = (TCPMessage) inputStream.readObject();
+                if(!commandFromClient.isCheck()) {
+                    synchronized (commandQueue) {
+                        commandQueue.offer((TCPClientMessage) commandFromClient);
+                        commandQueue.notifyAll();
+                    }
                 }
             }
         } catch(EOFException eofException) {
             //FIXME: we could run CentralServer.getSingleton().disconnect() here directly?
             System.err.println("REACHED EOS!");
+            closeSocket();
         }catch (IOException e) {
             closeSocket();
         } catch (ClassNotFoundException e) {

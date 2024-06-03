@@ -77,6 +77,7 @@ public class ClientProxy implements VirtualClient {
             outputStream.reset();
         } catch (IOException e) {
             clientHandler.closeSocket();
+            throw new RemoteException("Connection Lost");
         }
     }
 

@@ -18,9 +18,4 @@ public class ChangeScoreEvent implements UpdateEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.updateScore(nickname, score);
     }
-
-    @Override
-    public String toString() {
-        return "Score Update: " + nickname + " " + score;
-    }
 }

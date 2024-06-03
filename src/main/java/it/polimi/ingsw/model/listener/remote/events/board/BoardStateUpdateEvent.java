@@ -34,9 +34,4 @@ public class BoardStateUpdateEvent implements UpdateEvent {
         updateNumber++;
         virtualClient.setBoardState(currentTurn, scoreboard, gamePhase, playerDeadLock);
     }
-
-    @Override
-    public String toString() {
-        return "Board State Update " + updateNumber + " [GAME PHASE] " + gamePhase;
-    }
 }

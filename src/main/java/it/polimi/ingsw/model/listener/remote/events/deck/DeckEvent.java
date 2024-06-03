@@ -8,11 +8,4 @@ abstract public class DeckEvent implements UpdateEvent {
     protected DeckEvent(char deck) {
         this.deck = deck;
     }
-
-    @Override
-    public String toString() {
-        return "DeckEvent{" +
-                "deck=" + deck +
-                '}';
-    }
 }

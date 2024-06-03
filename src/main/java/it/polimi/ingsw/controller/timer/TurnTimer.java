@@ -1,18 +1,16 @@
 package it.polimi.ingsw.controller.timer;
 
-import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.remote.errors.PingEvent;
 import it.polimi.ingsw.model.listener.remote.errors.IndirectDisconnectEvent;
+import it.polimi.ingsw.network.CentralServer;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class TurnTimer implements Runnable{
 
@@ -45,10 +43,10 @@ public class TurnTimer implements Runnable{
             @Override
             public void run() {
                 try {
+                    System.out.println("PINGING...");
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
                     System.out.println("CANNOT PING " + player.getNickname());
-                    player.notifyAllListeners(new IndirectDisconnectEvent(player.getNickname()));
                     timer.cancel();
                     pingTimer.cancel();
                     killTask();

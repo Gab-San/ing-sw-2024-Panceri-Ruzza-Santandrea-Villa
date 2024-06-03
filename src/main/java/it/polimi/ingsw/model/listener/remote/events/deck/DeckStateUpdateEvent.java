@@ -43,8 +43,4 @@ public class DeckStateUpdateEvent extends DeckEvent{
     }
 
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

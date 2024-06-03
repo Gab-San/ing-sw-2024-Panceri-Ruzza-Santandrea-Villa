@@ -15,11 +15,4 @@ abstract public class PlayerEvent implements UpdateEvent {
 
     @Override
     abstract public void executeEvent(VirtualClient virtualClient) throws RemoteException;
-
-    @Override
-    public String toString() {
-        return "PlayerEvent{" +
-                "nickname='" + nickname + '\'' +
-                '}';
-    }
 }

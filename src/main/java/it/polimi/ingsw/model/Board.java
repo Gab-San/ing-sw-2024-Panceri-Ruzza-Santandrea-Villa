@@ -44,7 +44,6 @@ public class Board implements GameSubject{
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAY_SCORE = 29;
     public static final int MAX_PLAYERS = 4;
-    private final int DEBUG_MODE_SCORE_MULT = 10;
     private boolean hasGoneToEndgame;
     private final Map<Player, Integer> scoreboard;
     private final Map<Player, PlayArea> playerAreas;
@@ -246,6 +245,7 @@ public class Board implements GameSubject{
             throw new IllegalArgumentException("Player not in game!");
         }
 
+        int DEBUG_MODE_SCORE_MULT = 10;
         int newScore = scoreboard.get(player) + amount * (CentralServer.isPointsDebugMode() ? DEBUG_MODE_SCORE_MULT : 1);
         setScore(player, newScore);
     }

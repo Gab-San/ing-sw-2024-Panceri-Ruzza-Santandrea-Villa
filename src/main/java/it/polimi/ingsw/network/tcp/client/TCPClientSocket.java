@@ -110,6 +110,7 @@ public class TCPClientSocket implements VirtualClient{
                         }
                     } catch(EOFException eofException) {
                         System.out.println("REACHED EOS!");
+                        closeSocket();
                     } catch (IOException e) {
                         closeSocket();
                     } catch (ClassNotFoundException e) {

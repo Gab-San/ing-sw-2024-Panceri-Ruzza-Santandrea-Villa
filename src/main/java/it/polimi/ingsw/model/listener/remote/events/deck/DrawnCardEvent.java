@@ -22,9 +22,4 @@ public class DrawnCardEvent extends DeckEvent{
 
         virtualClient.deckUpdate(deck, topCard.getCardID(), PlayableDeck.TOP_POSITION);
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

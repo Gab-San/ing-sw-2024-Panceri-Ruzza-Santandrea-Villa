@@ -17,12 +17,4 @@ public class PlayerHandAddCardEvent extends PlayerEvent {
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         virtualClient.playerHandAddedCardUpdate(nickname, drawnCardId);
     }
-
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\nPlayerHandAddCardEvent{" +
-                "drawnCardId='" + drawnCardId + '\'' +
-                '}';
-    }
 }

@@ -48,8 +48,7 @@ public class RemoteErrorHandler implements GameListener {
             error.executeEvent(client);
         } catch (RemoteException e) {
             CentralServer.getSingleton().disconnect(addressee, client);
-//            System.err.println("ERROR WHILE TRYING TO REPORT AN ERROR TO " + addressee);
-//            System.err.println(e.getMessage());
+            throw new ListenException();
         }
     }
 
@@ -60,6 +59,7 @@ public class RemoteErrorHandler implements GameListener {
                 try{
                     errorEvent.executeEvent(client);
                 } catch (RemoteException e){
+                    CentralServer.getSingleton().disconnect(username, client);
                     System.err.println("ERROR WHILE TRYING TO REPORT TO " + username);
                 }
             });
