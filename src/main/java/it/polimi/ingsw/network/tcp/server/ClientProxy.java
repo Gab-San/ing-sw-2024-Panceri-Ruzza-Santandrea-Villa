@@ -27,16 +27,30 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class implements virtual client interface and acts as server-side proxy
+ */
 public class ClientProxy implements VirtualClient {
 
     private final ObjectOutputStream outputStream;
     private final ClientHandler clientHandler;
-    private String nickname;
+
+    /**
+     * Constructs the server-side proxy.
+     * @param clientHandler client handler bound to this proxy, they use the same socket to communicate with
+     *                      the client
+     * @param outputStream output stream of the socket
+     */
     public ClientProxy(ClientHandler clientHandler, ObjectOutputStream outputStream) {
         this.clientHandler = clientHandler;
         this.outputStream = outputStream;
     }
 
+    /**
+     * Send a notification to the client.
+     * @param notification updates or errors to be sent to the client
+     * @throws RemoteException if a connection error occurs
+     */
     void sendNotification(TCPServerMessage notification) throws RemoteException {
         try{
             outputStream.writeObject(notification);
@@ -225,10 +239,11 @@ public class ClientProxy implements VirtualClient {
 
 //endregion
 
-    void setUsername(String nickname){
-        this.nickname = nickname;
-    }
-
+    /**
+     * Sends a check message to the client.
+     * @param message check message to notify the client of
+     *                the correct or incorrect result of computation
+     */
     public synchronized void sendCheck(TCPServerCheckMessage message){
         try{
             ping();

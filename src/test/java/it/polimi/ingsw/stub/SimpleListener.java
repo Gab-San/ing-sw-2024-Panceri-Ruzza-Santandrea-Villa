@@ -1,6 +1,5 @@
 package it.polimi.ingsw.stub;
 
-import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.remote.NetworkEvent;
@@ -13,7 +12,7 @@ public class SimpleListener implements GameListener {
         this.client = client;
     }
     @Override
-    public void listen(GameEvent event) throws ListenException {
+    public void listen(GameEvent event) {
         if(!(event instanceof NetworkEvent networkEvent)){
             return;
         }

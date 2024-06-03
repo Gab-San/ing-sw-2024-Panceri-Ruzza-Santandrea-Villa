@@ -7,9 +7,7 @@ import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
 import it.polimi.ingsw.network.commands.*;
-import it.polimi.ingsw.network.tcp.message.TCPClientCheckMessage;
 import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
-import it.polimi.ingsw.network.tcp.message.TCPMessage;
 import it.polimi.ingsw.network.tcp.message.check.CheckMessage;
 import it.polimi.ingsw.network.tcp.message.error.ErrorMessage;
 
@@ -22,15 +20,26 @@ import java.rmi.RemoteException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Thread that handles one tcp socket.
+ * <p>
+ *     Client handler implements virtual server interface and acts as
+ *     the virtual server for the bound client socket.
+ * </p>
+ */
 public class ClientHandler implements Runnable, VirtualServer {
 
     private final Socket connectionSocket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private final Queue<TCPClientMessage> commandQueue;
-    private final Queue<TCPClientCheckMessage> errorQueue;
     private final CentralServer serverRef;
     private final ClientProxy proxy;
+
+    /**
+     * Constructs the client handler.
+     * @param connectionSocket socket created when the connection was accepted
+     */
     public ClientHandler(Socket connectionSocket){
         this.connectionSocket = connectionSocket;
         try {
@@ -40,13 +49,16 @@ public class ClientHandler implements Runnable, VirtualServer {
             closeSocket();
         }
         commandQueue = new LinkedBlockingQueue<>();
-        errorQueue = new LinkedBlockingQueue<>();
         serverRef = CentralServer.getSingleton();
         proxy = new ClientProxy(this, outputStream);
         startCommandExecutor();
     }
+
 //region SOCKET THREADS
 
+    /**
+     * Starts the thread that executes the commands.
+     */
     private void startCommandExecutor(){
         new Thread(
                 () -> {
@@ -87,18 +99,11 @@ public class ClientHandler implements Runnable, VirtualServer {
     public void run() {
         try{
             while (!connectionSocket.isClosed()){
-                TCPMessage commandFromClient;
-                commandFromClient = (TCPMessage) inputStream.readObject();
-                if(!commandFromClient.isCheck()) {
-                    synchronized (commandQueue) {
-                        commandQueue.offer((TCPClientMessage) commandFromClient);
-                        commandQueue.notifyAll();
-                    }
-                } else{
-                    synchronized (errorQueue) {
-                        errorQueue.offer((TCPClientCheckMessage) commandFromClient);
-                        errorQueue.notifyAll();
-                    }
+                TCPClientMessage commandFromClient;
+                commandFromClient = (TCPClientMessage) inputStream.readObject();
+                synchronized (commandQueue) {
+                    commandQueue.offer(commandFromClient);
+                    commandQueue.notifyAll();
                 }
             }
         } catch(EOFException eofException) {
@@ -113,6 +118,12 @@ public class ClientHandler implements Runnable, VirtualServer {
 //endregion
 
 //region AUXILIARY FUNCTIONS
+    /**
+     * Client validation server-side.
+     * @param nickname unique id of the user
+     * @param client instance of virtual client
+     * @throws RemoteException if an error occurs while notifying the client
+     */
     private void validateClient(String nickname, VirtualClient client) throws RemoteException {
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
             proxy.sendNotification(new ErrorMessage("Illegal request, wrong client!"));
@@ -125,7 +136,6 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void connect(String nickname, VirtualClient client) throws IllegalStateException{
         serverRef.connect(nickname, client);
-        proxy.setUsername(nickname);
         proxy.sendCheck(new CheckMessage());
     }
 
@@ -239,6 +249,10 @@ public class ClientHandler implements Runnable, VirtualServer {
 //endregion
 
 //region SOCKET FUNCTIONS
+
+    /**
+     * Closes this socket, ending the connection.
+     */
     void closeSocket(){
         try {
             if(!connectionSocket.isClosed()) {

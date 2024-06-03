@@ -27,6 +27,7 @@ public class RMIServer implements VirtualServer {
 
     /**
      * Instantiates the RMIServer and binds it to the registry
+     * @param connectionPort port on which rmi connections are processed
      * @throws RemoteException on registry binding failure
      */
     public RMIServer(int connectionPort) throws RemoteException {
@@ -38,7 +39,7 @@ public class RMIServer implements VirtualServer {
     }
 
     /**
-     * Client validation server-side
+     * Client validation server-side.
      * @param nickname unique id of the user
      * @param client instance of virtual client
      * @throws IllegalStateException if client instance is different from the one of the connected client (security check)

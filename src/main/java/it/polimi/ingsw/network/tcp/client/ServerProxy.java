@@ -10,26 +10,51 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * This class implements the command pass through interface using socket connection protocol
+ * and functions as a server proxy.
+ *
+ * <p>
+ *     This class effectively hides the network calls structure and gives more space
+ *     to add logic on the client-side.
+ * </p>
+ */
 public class ServerProxy implements CommandPassthrough {
     private final ObjectOutputStream outputStream;
     private String nickname;
     private final TCPClientSocket clientSocket;
     private final Queue<TCPServerCheckMessage> checkQueue;
+
+    /**
+     * Constructs the tcp server proxy.
+     * @param outputStream wrapped socket output stream
+     * @param clientSocket client socket this proxy is bound to
+     */
     public ServerProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
         this.outputStream = outputStream;
         this.clientSocket = clientSocket;
-        checkQueue = new LinkedBlockingQueue<>();
+        checkQueue = new ArrayBlockingQueue<>(2);
     }
 
 //region PROXY FUNCTIONS
+
+    /**
+     * Adds a check message to the queue of check messages.
+     * @param checkMessage check message to be handled
+     */
     void addCheck(TCPServerCheckMessage checkMessage){
         synchronized (checkQueue) {
             checkQueue.offer(checkMessage);
             checkQueue.notifyAll();
         }
     }
+
+    /**
+     * Closes proxy and socket, effectively ending the connection.
+     */
     void closeProxy(){
         try{
             if(clientSocket.isClosed()) {
@@ -43,19 +68,32 @@ public class ServerProxy implements CommandPassthrough {
         }
     }
 
+    /**
+     * Returns the nickname of this proxy. Used for testing purposes.
+     * @return nickname with which the user connected to the server.
+     */
     String getNickname(){
         return nickname;
     }
 //endregion
 
 //region AUXILIARY FUNCTIONS
+    /**
+     * Validates proxy connection by checking if the client has ever subscribed to the server or by pinging.
+     * @throws IllegalStateException if the client has never subscribed to the server
+     * @throws RemoteException if an error occurs during connection
+     */
     private void validateConnection() throws IllegalStateException, RemoteException{
         if(nickname == null){
             throw new IllegalStateException("Connect or wait for connection before sending more commands");
         } else ping();
     }
 
-
+    /**
+     * Sends a command to the server.
+     * @param command command message to send
+     * @throws RemoteException if an error while sending message
+     */
     private void sendCommand(TCPClientMessage command) throws RemoteException{
         validateConnection();
         try{
@@ -68,7 +106,12 @@ public class ServerProxy implements CommandPassthrough {
         }
     }
 
-    private void waitForCheck() throws IllegalStateException{
+    /**
+     * Synchronizes the tcp call waiting for a check from the server.
+     * @throws IllegalStateException exception brought by the check
+     * @throws IllegalArgumentException exception brought by the check
+     */
+    private void waitForCheck() throws IllegalStateException, IllegalArgumentException{
         TCPServerCheckMessage checkMessage;
         do{
             try{

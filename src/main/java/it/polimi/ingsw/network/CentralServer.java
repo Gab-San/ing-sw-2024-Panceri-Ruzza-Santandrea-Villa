@@ -209,7 +209,7 @@ public class CentralServer {
         if(!playerClients.containsKey(messenger)){
             throw new IllegalArgumentException("Client not connected to chat!");
         }
-        if(!playerClients.containsKey(addressee)){
+        if(!playerClients.containsKey(addressee) && !addressee.equalsIgnoreCase("all")){
             throw new IllegalArgumentException("Addressee not connected!");
         }
         chat.addMessage(messenger, addressee, message);

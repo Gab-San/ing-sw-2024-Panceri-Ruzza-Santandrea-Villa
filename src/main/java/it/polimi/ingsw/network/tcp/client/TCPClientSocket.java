@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * This class implements the virtual client using socket connection protocol
+ */
 public class TCPClientSocket implements VirtualClient{
 
     private final Socket clientSocket;
@@ -29,10 +32,22 @@ public class TCPClientSocket implements VirtualClient{
     private final Queue<TCPServerMessage> updateQueue;
     private final ServerProxy proxy;
     private ModelUpdater modelUpdater;
+
+    /**
+     * Constructs a tcp client establishing connection on localhost.
+     * @param port server port
+     * @throws IOException if an error occurs while creating the socket
+     */
     public TCPClientSocket(int port) throws IOException {
         this("localhost", port);
     }
 
+    /**
+     * Constructs a tcp client establishing connection on specified ip.
+     * @param hostAddr server ip
+     * @param connectionPort server port
+     * @throws IOException if an error occurs while creating the socket
+     */
     public TCPClientSocket(String hostAddr, int connectionPort) throws IOException{
         this.clientSocket = new Socket(hostAddr, connectionPort);
         this.proxy = new ServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
@@ -40,8 +55,12 @@ public class TCPClientSocket implements VirtualClient{
         updateQueue = new LinkedBlockingQueue<>();
         startReader();
     }
+
 //region SOCKET THREADS
 
+    /**
+     * Starts the thread executing updates.
+     */
     private void startUpdateExecutor(){
         new Thread(
                 () -> {
@@ -69,11 +88,13 @@ public class TCPClientSocket implements VirtualClient{
         ).start();
     }
 
-
+    /**
+     * Starts the reader thread that receives the tcp messages
+     * and populates the update queue.
+     */
     public void startReader() {
         new Thread(
                 () -> {
-//                    System.out.println("Socket connection started!");
                     try {
                         while (!clientSocket.isClosed()) {
                             TCPMessage commandFromServer;
@@ -100,43 +121,47 @@ public class TCPClientSocket implements VirtualClient{
 
 //endregion
 
-//region FOR TEST PURPOSES
-    public boolean isClosed(){
-        return clientSocket.isClosed();
-    }
-
-//    void sendObject(Object obj){
-//        try{
-//            outputStream.writeObject(obj);
-//            outputStream.flush();
-//        } catch (IOException exception){
-//            closeSocket();
-//        }
-//    }
-
-//endregion
 
 //region SOCKET FUNCTIONS
+
+    /**
+     * Closes socket and proxy ending the connection.
+     */
     public void closeSocket(){
         try{
             if(!clientSocket.isClosed()) {
                 if (inputStream != null) inputStream.close();
 
                 clientSocket.close();
-
             }
         } catch (IOException e){
             System.err.println(e.getMessage());
         }
     }
 
+    /**
+     * Returns the client-side proxy bound to this client.
+     * @return proxy bound to this client
+     */
     public ServerProxy getProxy(){
         return proxy;
     }
 
+    /**
+     * Sets the instance of model updater
+     * @param modelUpdater instance of model updater
+     */
     public void setModelUpdater(ModelUpdater modelUpdater){
         this.modelUpdater = modelUpdater;
         startUpdateExecutor();
+    }
+
+    /**
+     * Returns the socket connection state.
+     * @return true if the socket is open, false otherwise
+     */
+    public boolean isClosed(){
+        return clientSocket.isClosed();
     }
 //endregion
 
