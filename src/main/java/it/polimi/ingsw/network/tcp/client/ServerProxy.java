@@ -3,15 +3,14 @@ package it.polimi.ingsw.network.tcp.client;
 import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
-import it.polimi.ingsw.network.tcp.message.commands.*;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
+import it.polimi.ingsw.network.tcp.message.commands.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class implements the command pass through interface using socket connection protocol
@@ -57,12 +56,7 @@ public class ServerProxy implements CommandPassthrough {
      */
     void closeProxy(){
         try{
-            if(clientSocket.isClosed()) {
-                return;
-            }
             if(outputStream != null) outputStream.close();
-
-            clientSocket.closeSocket();
         } catch (IOException e){
             System.err.println(e.getMessage());
         }
@@ -101,7 +95,7 @@ public class ServerProxy implements CommandPassthrough {
             outputStream.flush();
             outputStream.reset();
         } catch (IOException exception){
-            closeProxy();
+            clientSocket.closeSocket();
             throw new RemoteException("Connection Lost: " + exception.getMessage());
         }
     }
@@ -150,7 +144,7 @@ public class ServerProxy implements CommandPassthrough {
             outputStream.reset();
             this.nickname = nickname;
         } catch (IOException e) {
-            closeProxy();
+            clientSocket.closeSocket();
             throw new RemoteException("Connection Lost: " + e.getMessage());
         }
     }
@@ -159,7 +153,7 @@ public class ServerProxy implements CommandPassthrough {
     public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
         sendCommand(new DisconnectMessage(nickname));
         waitForCheck();
-        closeProxy();
+        clientSocket.closeSocket();
     }
 
     @Override

@@ -132,7 +132,7 @@ public class TCPClientSocket implements VirtualClient{
         try{
             if(!clientSocket.isClosed()) {
                 if (inputStream != null) inputStream.close();
-
+                proxy.closeProxy();
                 clientSocket.close();
             }
         } catch (IOException e){

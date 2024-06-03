@@ -1,14 +1,18 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.Point;
-import it.polimi.ingsw.stub.PuppetClient;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JoinStateTest {
@@ -112,4 +116,41 @@ public class JoinStateTest {
         assertThrows(IllegalStateException.class, () -> controller.restartGame(playerNickname, 4),"StartGame doesn't throw IllegalStateException with numOfPlayers==4");
     }
 
+    @ParameterizedTest
+    @ValueSource (ints = {2,3,4})
+    public void joinAndDisconnectTest(int numOfPlayers) {
+        setUp(numOfPlayers);
+        int numConnPlayers=board.getPlayerAreas().size();
+        int i=0;
+        System.out.println("numConnPlayers is "+ numConnPlayers);
+        System.out.println(board.getPlayerAreas().keySet());
+
+        while(numConnPlayers<numOfPlayers && numConnPlayers>0){
+
+            if(new Random().nextBoolean())
+                controller.join("Player"+i, new PuppetClient());
+            else{
+                Player player = board.getPlayerAreas().keySet().stream().findAny().orElse(null);
+                assert player != null;
+                controller.disconnect(player.getNickname());
+            }
+
+            numConnPlayers=board.getPlayerAreas().size();
+            i++;
+            System.out.println("numConnPlayers is "+ numConnPlayers);
+        }
+
+        if(numConnPlayers==0){
+            board = controller.getGameState().board; // board changed on return to creation phase
+            assertEquals(GamePhase.CREATE, board.getGamePhase(), "wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.CREATE +"\".");
+            assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
+            assertTrue(board.getPlayerAreas().isEmpty(), "PlayerAreas ain't empty");
+        }
+        else{
+            assertEquals(numConnPlayers, numOfPlayers, "ERRORE SOMEWHERE");
+            assertEquals(GamePhase.PLACESTARTING, board.getGamePhase(), "wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.PLACESTARTING +"\".");
+            assertEquals(SetupState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ SetupState.class +".");
+            assertEquals(board.getPlayerAreas().size(), numOfPlayers, "PlayerAreas ain't empty");
+        }
+    }
 }

@@ -56,11 +56,11 @@ public class TUIParser {
         }
     }
     private void printHelper() {
-        //TODO Complete helper
         System.out.println("""
                 Each command has a different format, but they follow the same pattern:
                 commandId <optional> <command_arguments>
                 The available commands are:
+                "move" <direction>|<cardinal_direction>|"center"
                 "place|play" to play a card
                 "draw" to draw a card
                 "choose" color|objective to either choose color or objective

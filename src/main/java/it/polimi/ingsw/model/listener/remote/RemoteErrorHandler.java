@@ -47,7 +47,9 @@ public class RemoteErrorHandler implements GameListener {
         try {
             error.executeEvent(client);
         } catch (RemoteException e) {
-            CentralServer.getSingleton().disconnect(addressee, client);
+            try {
+                CentralServer.getSingleton().disconnect(addressee, client);
+            } catch (IllegalArgumentException | IllegalStateException ignore){}
             throw new ListenException();
         }
     }
