@@ -46,7 +46,10 @@ public class SceneID {
     public static SceneID getOpponentAreaSceneID(String nickname){
         return new SceneID(OPPONENT_SCENE_PREFIX + nickname);
     }
-    public static SceneID getEndgameID() {
+    public static SceneID getEndgameSceneID() {
         return new SceneID("ENDGAME_SHOW_WINNERS");
+    }
+    public static SceneID getHelperSceneID() {
+        return new SceneID("COMMAND_HELPER_LEGEND");
     }
 }

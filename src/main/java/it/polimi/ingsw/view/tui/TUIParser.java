@@ -44,8 +44,8 @@ public class TUIParser {
             case "flip", "turn", "turnover":
                 parseFlipCommand(cmdArgs);
                 break;
-            case "help":
-                printHelper();
+            case "help", "legend":
+                viewHelperScene();
                 break;
             default:
                 serverParser.parseCommand(command);
@@ -55,20 +55,8 @@ public class TUIParser {
             throw new DisconnectException();
         }
     }
-    private void printHelper() {
-        System.out.println("""
-                Each command has a different format, but they follow the same pattern:
-                commandId <optional> <command_arguments>
-                The available commands are:
-                "move" <direction>|<cardinal_direction>|"center"
-                "place|play" to play a card
-                "draw" to draw a card
-                "choose" color|objective to either choose color or objective
-                "disconnect" to leave the game
-                "send" to send a message
-                "set|players|start" to set the number of players and effectively start the match
-                "quit" to close the application
-                """);
+    private void viewHelperScene() {
+        view.setScene(SceneID.getHelperSceneID());
     }
     private void parseMoveCommand(List<String> cmdArgs) throws IllegalArgumentException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide a direction to move towards!");
@@ -110,6 +98,7 @@ public class TUIParser {
             switch (cmdArgs.get(0).toLowerCase()) {
                 case "me" -> SceneID.getMyAreaSceneID();
                 case "board" -> SceneID.getBoardSceneID();
+                case "help", "legend" -> SceneID.getHelperSceneID();
                 default -> SceneID.getOpponentAreaSceneID(cmdArgs.get(0));
             };
         view.setScene(selectedScene);

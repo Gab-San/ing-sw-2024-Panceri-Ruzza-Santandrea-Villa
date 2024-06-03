@@ -295,7 +295,7 @@ public class ModelUpdater {
         if(gamePhase != GamePhase.SHOWWIN)
             view.showNotification("Game phase updated to " + gamePhase);
         else
-            view.setScene(SceneID.getEndgameID());
+            view.setScene(SceneID.getEndgameSceneID());
     }
     public synchronized void updateTurn(int currentTurn) {
         if(board.setCurrentTurn(currentTurn))
