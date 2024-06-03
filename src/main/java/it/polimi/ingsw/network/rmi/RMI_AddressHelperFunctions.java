@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public interface RMI_AddressHelperFunctions {
+    //DOCS: [Ale] write docs for this
     static List<String> getListOfValidLocalIPs(){
         List<String> localIPs = new LinkedList<>();
         try {
@@ -29,7 +30,7 @@ public interface RMI_AddressHelperFunctions {
         }catch (SocketException ignored){}
         return localIPs.stream().distinct().toList();
     }
-
+    //DOCS: [Ale] write docs for this
     static boolean isLoopbackAddress(String address){
         return address.matches("127.0.0.1|localhost");
     }

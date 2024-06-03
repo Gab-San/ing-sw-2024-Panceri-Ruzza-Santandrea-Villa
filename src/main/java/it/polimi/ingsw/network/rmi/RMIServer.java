@@ -14,9 +14,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * This class implements virtual server interface using rmi connection protocol
+ */
 public class RMIServer implements VirtualServer {
+    /**
+     * The unique name of the server located on the registry
+     */
     public static final String CANONICAL_NAME = "CODEX_RMIServer";
-    public final int REGISTRY_PORT;
     private final CentralServer serverRef;
     private final Registry registry;
 
@@ -26,14 +31,18 @@ public class RMIServer implements VirtualServer {
      */
     public RMIServer(int connectionPort) throws RemoteException {
         serverRef = CentralServer.getSingleton();
-        this.REGISTRY_PORT = connectionPort;
         VirtualServer stub = (VirtualServer) UnicastRemoteObject.exportObject(this, 0);
-        this.registry = LocateRegistry.createRegistry(REGISTRY_PORT);
+        this.registry = LocateRegistry.createRegistry(connectionPort);
         registry.rebind(CANONICAL_NAME, stub);
         System.out.println("RMI server waiting for client on port "+ connectionPort +"...");
     }
 
-
+    /**
+     * Client validation server-side
+     * @param nickname unique id of the user
+     * @param client instance of virtual client
+     * @throws IllegalStateException if client instance is different from the one of the connected client (security check)
+     */
     private void validateClient(String nickname, VirtualClient client) throws IllegalStateException{
         if(!client.equals(serverRef.getClientFromNickname(nickname)))
             throw new IllegalStateException("Illegal request, wrong client!");
@@ -47,7 +56,7 @@ public class RMIServer implements VirtualServer {
     @Override
     public void setNumOfPlayers(String nickname, VirtualClient client, int num) throws RemoteException {
         validateClient(nickname, client);
-        SetNumOfPlayersCmd command = new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num);
+        SetNumOfPlayersCmd command = new SetNumOfPlayersCmd(serverRef.getGameController(), nickname, num);
         serverRef.issueGameCommand(command);
     }
 
@@ -59,19 +68,19 @@ public class RMIServer implements VirtualServer {
     @Override
     public void placeStartCard(String nickname, VirtualClient client, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
-        PlaceStartingCmd command = new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront);
+        PlaceStartingCmd command = new PlaceStartingCmd(serverRef.getGameController(), nickname, placeOnFront);
         serverRef.issueGameCommand(command);
     }
     @Override
     public void chooseColor(String nickname, VirtualClient client, char colour) throws RemoteException{
         validateClient(nickname, client);
-        ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameRef(), nickname, PlayerColor.parseColour(colour) );
+        ChooseColorCmd command = new ChooseColorCmd(serverRef.getGameController(), nickname, PlayerColor.parseColour(colour) );
         serverRef.issueGameCommand(command);
     }
     @Override
     public void chooseObjective(String nickname, VirtualClient client, int choice) throws RemoteException {
         validateClient(nickname, client);
-        ChooseObjCmd command = new ChooseObjCmd(serverRef.getGameRef(), nickname, choice);
+        ChooseObjCmd command = new ChooseObjCmd(serverRef.getGameController(), nickname, choice);
         serverRef.issueGameCommand(command);
     }
 
@@ -79,7 +88,7 @@ public class RMIServer implements VirtualServer {
     public void placeCard(String nickname, VirtualClient client, String cardID,int row,
                           int col, String cornerDir, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
-        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameRef(), nickname, cardID,
+        PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameController(), nickname, cardID,
                 new Point(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
         serverRef.issueGameCommand(command);
     }
@@ -87,14 +96,14 @@ public class RMIServer implements VirtualServer {
     @Override
     public void draw(String nickname, VirtualClient client, char deck, int cardPosition) throws RemoteException {
         validateClient(nickname, client);
-        DrawCmd command = new DrawCmd(serverRef.getGameRef(), nickname, deck, cardPosition);
+        DrawCmd command = new DrawCmd(serverRef.getGameController(), nickname, deck, cardPosition);
         serverRef.issueGameCommand(command);
     }
 
     @Override
     public void restartGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
-        RestartGameCmd command = new RestartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers);
+        RestartGameCmd command = new RestartGameCmd(serverRef.getGameController(), nickname, numOfPlayers);
         serverRef.issueGameCommand(command);
     }
 

@@ -28,13 +28,13 @@ public interface VirtualClient extends Remote, Serializable {
     void displayMessage(String messenger, String msg) throws RemoteException;
 
     /**
-     * Pings the remote end of the connection, testing if reachable
+     * Pings the remote end of the connection, testing if reachable.
      * @throws RemoteException if an error occurs during connection
      */
     void ping() throws RemoteException;
 
     /**
-     * Notifies about the board initialization status
+     * Notifies about the board initialization status.
      * @param currentTurn the board current turn at initialization
      * @param gamePhase the game phase at initialization
      * @param scoreboard current scoreboard state
@@ -44,14 +44,14 @@ public interface VirtualClient extends Remote, Serializable {
     void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException;
 
     /**
-     * Notifies about game phase change in match
+     * Notifies about game phase change in match.
      * @param gamePhase current game phase
      * @throws RemoteException if a connection error occurs
      */
     void updatePhase(GamePhase gamePhase) throws RemoteException;
 
     /**
-     * Notifies about player's score change
+     * Notifies about player's score change.
      * @param nickname the unique player's identifier whose score has changed
      * @param score the player's score change
      * @throws RemoteException if a connection error occurs
@@ -59,16 +59,16 @@ public interface VirtualClient extends Remote, Serializable {
     void updateScore(String nickname, int score) throws RemoteException;
 
     /**
-     * Updates current match turn
+     * Updates current match turn.
      * @param currentTurn the match's current turn
      * @throws RemoteException if a connection error occurs
      */
     void updateTurn(int currentTurn) throws RemoteException;
 
     /**
-     * Updates the player's deadlock status
+     * Updates the player's deadlock status.
      * <p>
-     *     Complete with dead lock description
+     *     Complete with dead lock description.
      * </p>
      * @param nickname the player unique id
      * @param isDeadLocked the player deadlock value
@@ -77,14 +77,14 @@ public interface VirtualClient extends Remote, Serializable {
     void playerDeadLockUpdate(String nickname, boolean isDeadLocked) throws RemoteException;
 
     /**
-     * Notifies the start of the endgame due to decks emptying
+     * Notifies the start of the endgame due to decks emptying.
      * @throws RemoteException if an error occurs while send notification
      */
     void notifyEndgame() throws RemoteException;
 
     /**
      * Notifies the start of the endgame because the highlighted player has reached or surpassed
-     * the score marker of 20
+     * the score marker of 20.
      * @param nickname the unique player's nickname identifier
      * @param score the score with which he triggered the endgame
      * @throws RemoteException if a connection error occurs
@@ -104,7 +104,7 @@ public interface VirtualClient extends Remote, Serializable {
 
 
     /**
-     * Notifies a change in the player color
+     * Notifies a change in the player color.
      * @param nickname the unique nickname identifier of the player
      * @param colour the colour chosen from the player for the match
      * @throws RemoteException if a connection error occurs
@@ -112,7 +112,7 @@ public interface VirtualClient extends Remote, Serializable {
     void updatePlayer(String nickname, PlayerColor colour) throws RemoteException;
 
     /**
-     * Updates the player turn
+     * Updates the player turn.
      * @param nickname the unique nickname identifier of the player
      * @param playerTurn the turn randomly given to the player
      * @throws RemoteException if a connection error is detected
@@ -120,7 +120,7 @@ public interface VirtualClient extends Remote, Serializable {
     void updatePlayer(String nickname, int playerTurn) throws RemoteException;
 
     /**
-     * Updates the connection status of the player
+     * Updates the connection status of the player.
      * @param nickname the unique nickname identifier of the player
      * @param isConnected the current connection status of the player
      * @throws RemoteException if a connection error is detected
@@ -128,7 +128,7 @@ public interface VirtualClient extends Remote, Serializable {
     void updatePlayer(String nickname, boolean isConnected) throws RemoteException;
 
     /**
-     * Notifies about the removal of a player
+     * Notifies about the removal of a player.
      * @param nickname the player's unique nickname identifier
      * @throws RemoteException if a connection error is detected
      */
@@ -195,9 +195,9 @@ public interface VirtualClient extends Remote, Serializable {
      * Notifies a change in the specified deck.
      *<p>
      * A deck has three positions to model the three visible cards of a deck: <br>
-     * 0 - the top card <br>
-     * 1 - the first revealed card <br>
-     * 2 - the second revealed card <br>
+     * 0 - the top card; <br>
+     * 1 - the first revealed card;<br>
+     * 2 - the second revealed card. <br>
      *<br>
      * A revealed card is one of the previous, as once a card is drawn another one must be revealed.
      * </p>
@@ -210,7 +210,7 @@ public interface VirtualClient extends Remote, Serializable {
 
 
     /**
-     * Updates the current revealed card's position to empty
+     * Updates the current revealed card's position to empty.
      * @param deck the deck identifier
      * @param cardPosition the empty revealed card's position (1 or 2)
      * @throws RemoteException if a connection error occurs
@@ -218,7 +218,7 @@ public interface VirtualClient extends Remote, Serializable {
     void emptyReveal(char deck, int cardPosition) throws RemoteException;
 
     /**
-     * Updates the current deck's face-down pile to empty
+     * Updates the current deck's face-down pile to empty.
      * @param deck the deck identifier
      * @throws RemoteException if a connection error occurs
      */
@@ -227,7 +227,7 @@ public interface VirtualClient extends Remote, Serializable {
 
 
     /**
-     * Notifies about the current player's hand status
+     * Notifies about the current player's hand status.
      * @param nickname the unique player's identifier
      * @param playCards the list of playable cards in the player's hand (can be empty)
      * @param objectiveCards the list of objective cards in the player's hand (can be empty)
@@ -237,7 +237,7 @@ public interface VirtualClient extends Remote, Serializable {
     void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException;
 
     /**
-     * Updates the current player's hand status after a card was added to it
+     * Updates the current player's hand status after a card was added to it.
      * @param nickname the unique player's identifier
      * @param drawnCardId the id of the card added in the hand
      * @throws RemoteException if a connection error is detected
@@ -245,7 +245,7 @@ public interface VirtualClient extends Remote, Serializable {
     void playerHandAddedCardUpdate(String nickname, String drawnCardId) throws RemoteException;
 
     /**
-     * Updates the current player's hand status after a card was removed
+     * Updates the current player's hand status after a card was removed.
      * @param nickname the unique player's id
      * @param playCardId the played card identifier
      * @throws RemoteException if a connection error is detected
@@ -253,7 +253,7 @@ public interface VirtualClient extends Remote, Serializable {
     void playerHandRemoveCard(String nickname, String playCardId) throws RemoteException;
 
     /**
-     * Updates the current player's hand status after an objective card was drawn
+     * Updates the current player's hand status after an objective card was drawn.
      * @param nickname the unique player's identifier
      * @param objectiveCard the added objective card's id
      * @throws RemoteException if connection was lost
@@ -261,7 +261,7 @@ public interface VirtualClient extends Remote, Serializable {
     void playerHandAddObjective(String nickname, String objectiveCard) throws RemoteException;
 
     /**
-     * Updates the current player's hand after an objective card was chosen
+     * Updates the current player's hand after an objective card was chosen.
      * @param nickname player's id
      * @param chosenObjectiveId the id of the chosen objective card
      * @throws RemoteException if connection was lost
@@ -269,7 +269,7 @@ public interface VirtualClient extends Remote, Serializable {
     void playerHandChooseObject(String nickname, String chosenObjectiveId) throws RemoteException;
 
     /**
-     * Updates the current player's hand after the starting card was dealt
+     * Updates the current player's hand after the starting card was dealt.
      * @param nickname player's id
      * @param startingCardId the id of the given starting card
      * @throws RemoteException if connection was lost
@@ -277,7 +277,7 @@ public interface VirtualClient extends Remote, Serializable {
     void playerHandSetStartingCard(String nickname, String startingCardId) throws RemoteException;
 
     /**
-     * Notifies about the player's play area status
+     * Notifies about the player's play area status.
      * @param nickname the play area owner's id
      * @param cardPositions a list/set of card positions representing the play area (can be empty)
      * @param visibleResources a map of the current visible resources on the player's play area (can be empty)
@@ -304,7 +304,7 @@ public interface VirtualClient extends Remote, Serializable {
     void updatePlaceCard(String nickname, String placedCardId, int row, int col, boolean placeOnFront) throws RemoteException;
 
     /**
-     * Updates the visible resources map
+     * Updates the visible resources map.
      * @param nickname the play area owner's id
      * @param visibleResources the current visible resources in the play area
      * @throws RemoteException if an error during connection is detected
@@ -312,7 +312,7 @@ public interface VirtualClient extends Remote, Serializable {
     void visibleResourcesUpdate(String nickname, Map<GameResource, Integer> visibleResources) throws RemoteException;
 
     /**
-     * The list of current free corners represented so that they are serializable
+     * The list of current free corners represented so that they are serializable.
      * @param nickname the play area owner's id
      * @param freeSerializableCorners the current list of free corners
      * @throws RemoteException if an error during connection occurs
@@ -327,7 +327,7 @@ public interface VirtualClient extends Remote, Serializable {
     void reportError(String errorMessage) throws RemoteException;
 
     /**
-     * Reports an indirect disconnection notification
+     * Reports an indirect disconnection notification.
      */
     void notifyIndirectDisconnect() throws RemoteException;
 }

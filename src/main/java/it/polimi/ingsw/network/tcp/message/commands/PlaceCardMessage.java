@@ -30,7 +30,7 @@ public class PlaceCardMessage implements TCPClientMessage {
     @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {
         virtualServer.placeCard(nickname, virtualClient, cardID,
-                xPosition, yPosition,cornDirection, placeOnFront);
+                xPosition, yPosition, cornDirection, placeOnFront);
     }
 
     @Override

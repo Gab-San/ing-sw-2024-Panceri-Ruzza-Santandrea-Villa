@@ -24,6 +24,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * This class implements VirtualClient interface using rmi connection protocol.
+ */
 public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     private final RMIServerProxy proxy;
@@ -31,9 +34,23 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     private final Queue<RMIUpdate> updateQueue;
     private boolean isOpen;
 
+    /**
+     * Constructs a rmi client establishing connection on localhost.
+     * @param registryPort server port
+     * @throws RemoteException if the object can't be exported or if the registry cannot be located
+     * @throws NotBoundException if virtual server name is not bound
+     */
     public RMIClient(int registryPort) throws RemoteException, NotBoundException{
         this("localhost", registryPort);
     }
+
+    /**
+     * Constructs a rmi client establishing connection on specified ip.
+     * @param registryIP server ip
+     * @param registryPort server port
+     * @throws RemoteException if the object can't be exported or if the registry cannot be located
+     * @throws NotBoundException if virtual server name is not bound
+     */
     public RMIClient(String registryIP, int registryPort) throws RemoteException, NotBoundException {
         super();
         Registry registry = LocateRegistry.getRegistry(registryIP, registryPort);
@@ -43,6 +60,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         isOpen = true;
     }
 
+//region VIRTUAL CLIENT IMPLEMENTATION
     @Override
     public void displayMessage(String messenger, String msg) throws RemoteException {
         synchronized (updateQueue){
@@ -51,10 +69,6 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
         }
     }
 
-    /**
-     * If a call to this function successfully returns, then this client is still connected
-     * @throws RemoteException on connection loss
-     */
     @Override
     public void ping() throws RemoteException {
         return;
@@ -192,7 +206,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     @Override
     public void setPlayerHandState(String nickname, List<String> playCards, List<String> objectiveCards, String startingCard) throws RemoteException {
         synchronized (updateQueue){
-            updateQueue.add(new SetPlayerHandUpdate(modelUpdater, nickname, playCards, objectiveCards, startingCard));
+            updateQueue.add(new SetPlayerHandStateUpdate(modelUpdater, nickname, playCards, objectiveCards, startingCard));
             updateQueue.notifyAll();
         }
     }
@@ -311,21 +325,38 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
             updateQueue.notifyAll();
         }
     }
+//endregion
 
 //region INTERNAL FUNCTIONS
+
+    /**
+     * Returns client-side proxy.
+     * @return rmi proxy
+     */
     public RMIServerProxy getProxy(){
         return proxy;
     }
 
+    /**
+     * Since rmi connection cannot be effectively closed, this method
+     * stops the update thread, so that calls to rmi client have no effect on the application.
+     */
     public void close(){
         isOpen = false;
     }
 
+    /**
+     * Sets the instance of model updater
+     * @param modelUpdater instance of model updater
+     */
     public void setModelUpdater(ModelUpdater modelUpdater){
         this.modelUpdater = modelUpdater;
         startUpdateExecutor();
     }
 
+    /**
+     * Starts the thread responsible for applying the updates.
+     */
     private void startUpdateExecutor() {
         new Thread(
                 () -> {

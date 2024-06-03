@@ -27,33 +27,59 @@ public class CentralServer {
     private final BoardController gameRef;
     private final ChatHandler chat;
 
+    /**
+     * Default CentralServer constructor
+     * @throws IllegalStateException
+     */
     private CentralServer() throws IllegalStateException{
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
+        //FIXME: If board controller launches an exception should the application just close?
         gameRef = new BoardController();
         chat = new ChatHandler(this);
         startCommandExecutor();
     }
 
+    /**
+     * Getter of the central server instance.
+     * @return unique instance of the central server
+     */
     public synchronized static CentralServer getSingleton() throws IllegalStateException{
         if (singleton == null) singleton = new CentralServer();
         return singleton;
     }
 
+    /**
+     * Inserts the specified element into the actions queue to be executed when possible.
+     * @param action game action issued by the user
+     */
     public void issueGameCommand(GameCommand action) {
         synchronized (commandQueue) {
             commandQueue.offer(action);
             commandQueue.notifyAll();
         }
     }
+
+    /**
+     * Returns the virtual client bound to the specified user's nickname.
+     * @param nickname unique user's id
+     * @return virtual client's instance bound to the user
+     */
     public synchronized VirtualClient getClientFromNickname(String nickname){
         return playerClients.get(nickname);
     }
-    public BoardController getGameRef() {
+
+    /**
+     * Returns the game controller
+     * @return instance of the game controller
+     */
+    public BoardController getGameController() {
         return gameRef;
     }
 
-
+    /**
+     * Starts the thread that executes players' actions
+     */
     private void startCommandExecutor(){
         Thread commandExecutor = new Thread(
                 () -> {
@@ -172,14 +198,29 @@ public class CentralServer {
         System.out.println(PURPLE_TEXT + nickname + " has disconnected!" + RESET);
     }
 
+    /**
+     * Forwards the message to the chat handler to be handled.
+     * @param messenger unique id of the messenger
+     * @param addressee nickname of the addressee
+     * @param message text to be sent
+     * @throws IllegalArgumentException if the messenger or the addressee is not connected to the server.
+     */
     public synchronized void sendMessage(String messenger, String addressee, String message) throws IllegalArgumentException {
         if(!playerClients.containsKey(messenger)){
             throw new IllegalArgumentException("Client not connected to chat!");
+        }
+        if(!playerClients.containsKey(addressee)){
+            throw new IllegalArgumentException("Addressee not connected!");
         }
         chat.addMessage(messenger, addressee, message);
     }
 
 //region DEBUG MODES
+
+    /**
+     * Sets the debug mode for enhancing points
+     * @param on on/off value of debug mode
+     */
     public static void setPointsMode(boolean on){
         synchronized (DEBUG_LOCK) {
             pointsDebugMode = on;
@@ -187,12 +228,19 @@ public class CentralServer {
         }
     }
 
+    /**
+     * Returns the value of the debug mode for enhancing points.
+     * @return on/off value of debug mode
+     */
     public static boolean isPointsDebugMode(){
         synchronized (DEBUG_LOCK){
             return pointsDebugMode;
         }
     }
-
+    /**
+     * Sets the debug mode for granting more resources.
+     * @param on on/off value of debug mode
+     */
     public static void setResourcesMode(boolean on){
         synchronized (DEBUG_LOCK){
             resDebugMode = on;
@@ -200,25 +248,39 @@ public class CentralServer {
         }
     }
 
+    /**
+     * Returns the value of the debug mode for grating more resources.
+     * @return on/off value of debug mode
+     */
     public static boolean isResDebugMode(){
         synchronized (DEBUG_LOCK){
             return resDebugMode;
         }
     }
-
+    /**
+     * Sets the debug mode for emptying the deck faster.
+     * @param on on/off value of debug mode
+     */
     public static void setEmptyDeckMode(boolean on){
         synchronized (DEBUG_LOCK){
             emptyDeckMode = on;
             System.err.println("Empty deck mode: " + on);
         }
     }
-
+    /**
+     * Returns the value of the debug mode for emptying the deck faster.
+     * @return on/off value of debug mode
+     */
     public static boolean isEmptyDeckMode(){
         synchronized (DEBUG_LOCK){
             return emptyDeckMode;
         }
     }
 
+    /**
+     * Sets all the debug modes.
+     * @param on on/off value of debug mode
+     */
     public static void setDebugMode(boolean on){
         synchronized (DEBUG_LOCK){
             setEmptyDeckMode(on);

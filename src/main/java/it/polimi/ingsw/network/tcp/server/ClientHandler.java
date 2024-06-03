@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.tcp.server;
 
-import it.polimi.ingsw.Point;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.Point;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
@@ -21,8 +21,6 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class ClientHandler implements Runnable, VirtualServer {
 
@@ -149,7 +147,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new SetNumOfPlayersCmd(serverRef.getGameRef(), nickname, num));
+        serverRef.issueGameCommand(new SetNumOfPlayersCmd(serverRef.getGameController(), nickname, num));
     }
 
     @Override
@@ -172,7 +170,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new ChooseColorCmd(serverRef.getGameRef(), nickname,
+        serverRef.issueGameCommand(new ChooseColorCmd(serverRef.getGameController(), nickname,
                 PlayerColor.parseColour(colour)));
     }
 
@@ -183,7 +181,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new ChooseObjCmd(serverRef.getGameRef(), nickname, choice));
+        serverRef.issueGameCommand(new ChooseObjCmd(serverRef.getGameController(), nickname, choice));
     }
 
 
@@ -194,7 +192,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new DrawCmd(serverRef.getGameRef(), nickname, deck, cardPosition));
+        serverRef.issueGameCommand(new DrawCmd(serverRef.getGameController(), nickname, deck, cardPosition));
     }
 
     @Override
@@ -210,7 +208,7 @@ public class ClientHandler implements Runnable, VirtualServer {
         } catch (IOException ioException){
             closeSocket();
         }
-        serverRef.issueGameCommand(new PlaceStartingCmd(serverRef.getGameRef(), nickname, placeOnFront));
+        serverRef.issueGameCommand(new PlaceStartingCmd(serverRef.getGameController(), nickname, placeOnFront));
     }
 
 
@@ -220,7 +218,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     public void placeCard(String nickname, VirtualClient client, String cardID, int row,
                           int col, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         serverRef.issueGameCommand(new PlacePlayCmd(
-                serverRef.getGameRef(),
+                serverRef.getGameController(),
                 nickname,
                 cardID,
                 new Point(row, col),
@@ -234,7 +232,7 @@ public class ClientHandler implements Runnable, VirtualServer {
     @Override
     public void restartGame(String nickname, VirtualClient client, int numOfPlayers) throws RemoteException {
         validateClient(nickname, client);
-        serverRef.issueGameCommand(new RestartGameCmd(serverRef.getGameRef(), nickname, numOfPlayers));
+        serverRef.issueGameCommand(new RestartGameCmd(serverRef.getGameController(), nickname, numOfPlayers));
     }
 
 

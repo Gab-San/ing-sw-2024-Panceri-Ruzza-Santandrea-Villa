@@ -82,6 +82,9 @@ public class ChatHandler{
         }
     }
 
+    /**
+     * This method closes the chat. Any message not handled is lost.
+     */
     public void closeChat(){
         if(isOpen){
             isOpen = false;
