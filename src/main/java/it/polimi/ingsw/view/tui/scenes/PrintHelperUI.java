@@ -7,6 +7,7 @@ public class PrintHelperUI extends TUI_Scene {
     protected void print() {
         System.out.println("""
                 Each command has a different format, but they follow the same pattern:
+                
                 commandId [identifier] <command_arguments>
                 
                 The available commands are:

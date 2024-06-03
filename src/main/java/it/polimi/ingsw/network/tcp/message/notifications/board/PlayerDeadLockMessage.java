@@ -26,11 +26,6 @@ public class PlayerDeadLockMessage extends PlayerMessage {
     }
 
     @Override
-    public boolean isCheck() {
-        return false;
-    }
-
-    @Override
     public void execute(VirtualClient virtualClient) throws RemoteException {
         virtualClient.playerDeadLockUpdate(nickname, isDeadLocked);
     }
