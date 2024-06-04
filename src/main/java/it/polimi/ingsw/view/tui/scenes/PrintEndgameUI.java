@@ -15,9 +15,12 @@ import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 public class PrintEndgameUI extends TUI_Scene {
     private final ViewBoard board;
     private static final int LEFT_SPACING = 16;
+    private boolean isWonByDefault;
 
     public PrintEndgameUI(ViewBoard board) {
         this.board = board;
+        isWonByDefault = true; //flag determining if the player won by timeout on disconnected players rejoin
+        //initialised to true and updated on the first print of this scene
     }
 
     private String padLeft(String str, int len){
@@ -58,7 +61,6 @@ public class PrintEndgameUI extends TUI_Scene {
                 .max().orElse(0);
 
 
-
         List<String> leaderboard = playersByScore.stream()
                 .map(h -> colorNickname(h) + " <--> " + padScore(h, maxNumLen))
                 .toList();
@@ -76,9 +78,16 @@ public class PrintEndgameUI extends TUI_Scene {
         out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   ");
         boolean atLeast2Players = board.getOpponents().stream().anyMatch(ViewOpponentHand::isConnected);
         //if I'm the only one left in the game, I win automatically, regardless of score
-        if(!atLeast2Players)
+        if(!atLeast2Players && isWonByDefault) {
             out.println(colorNickname(board.getPlayerHand()) + YELLOW_TEXT + " BY DEFAULT" + RESET);
-        else out.println(colorNickname(playersByScore.get(0)));
+        }
+        else{
+            out.println(colorNickname(playersByScore.get(0)));
+            isWonByDefault = false;
+        }
+        //the flag isWonByDefault prevents this scene from showing "won by default" after opponents quit
+        // in endgame state, unless atLeast2Players was false at the first print of this scene.
+        // no players can join during endgame state, so atLeast2Players remains true if it was true at the first print
 
         printSeparator();
     }

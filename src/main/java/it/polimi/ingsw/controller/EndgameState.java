@@ -27,7 +27,9 @@ public class EndgameState extends GameState{
         board.setGamePhase(GamePhase.SHOWWIN);
         //prevent softlock if all connected players crash without explicit disconnect()
         //also prevents players from blocking the server by never leaving endgame state
-        timers.startAll(board.getPlayersByScore(), ENDGAME_TIME);
+        List<Player> connectedPlayers = board.getPlayerAreas().keySet().stream()
+                .filter(Player::isConnected).toList();
+        timers.startAll(connectedPlayers, ENDGAME_TIME);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class ViewController {
             throw new IllegalStateException("It's not your turn!");
     }
     private void validatePhase(GamePhase phase) throws IllegalStateException{
-        if(board.getGamePhase() != board.getGamePhase())
+        if(board.getGamePhase() != phase)
             throw new IllegalStateException("It's not the correct phase for that action!");
     }
 

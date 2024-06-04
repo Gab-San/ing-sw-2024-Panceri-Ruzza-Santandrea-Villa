@@ -43,7 +43,7 @@ public class TurnTimer implements Runnable{
             @Override
             public void run() {
                 try {
-                    System.out.println("PINGING...");
+//                    System.out.println("PINGING...");
                     player.notifyAllListeners(new PingEvent(player.getNickname()));
                 } catch (ListenException connectionException) {
                     System.out.println("CANNOT PING " + player.getNickname());

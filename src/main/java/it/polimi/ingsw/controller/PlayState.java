@@ -16,10 +16,8 @@ import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.stream.Collectors;
 
 public class PlayState extends GameState {
     private boolean lastRound;
@@ -37,16 +35,10 @@ public class PlayState extends GameState {
         board.setCurrentTurn(startingTurn);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
-        boolean isOnlyOnePlayerConnected = board.getPlayerAreas().keySet().stream()
-                .filter(Player::isConnected).count() == 1;
-        if(isOnlyOnePlayerConnected){
-            startRejoinTimer();
-        }
-        else{
-            board.setGamePhase(GamePhase.PLACECARD);
-            Player player = board.getCurrentPlayer();
-            timers.startTimer(player, TURN_TIME);
-        }
+
+        board.setGamePhase(GamePhase.PLACECARD);
+        Player player = board.getCurrentPlayer();
+        timers.startTimer(player, TURN_TIME);
     }
 
     @Override
@@ -81,8 +73,13 @@ public class PlayState extends GameState {
         int connectedPlayers = (int) board.getPlayerAreas().keySet().stream()
                 .filter(Player:: isConnected)
                 .count();
-        if(connectedPlayers == 0)
+        if(connectedPlayers == 0) {
+            if(disconnectRejoinTimer != null){
+                disconnectRejoinTimer.cancel();
+                disconnectRejoinTimer = null;
+            }
             transition(new CreationState(new Board(), controller, disconnectingPlayers));
+        }
     }
 
     @Override
@@ -210,11 +207,11 @@ public class PlayState extends GameState {
             return;
         }
 
-        if(board.checkEndgame() && isLastPlayerTurn)
-            lastRound=true;
-
         boolean onePlayerRemaining = board.getPlayerAreas().keySet().stream()
                 .filter(Player::isConnected).count() == 1;
+        if(board.checkEndgame() && isLastPlayerTurn && !onePlayerRemaining)
+            lastRound=true;
+
         if(onePlayerRemaining){
             startRejoinTimer();
         }
