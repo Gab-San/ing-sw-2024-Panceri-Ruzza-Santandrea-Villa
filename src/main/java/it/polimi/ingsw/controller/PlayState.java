@@ -16,12 +16,17 @@ import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.List;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
-    private static final int TURN_TIME = 302;
+    private Timer disconnectRejoinTimer;
+    private static final int TURN_TIME = 302; // seconds
+    private static final int PLAYER_REJOIN_TIME = 120; //seconds
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -32,17 +37,26 @@ public class PlayState extends GameState {
         board.setCurrentTurn(startingTurn);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
-        board.setGamePhase(GamePhase.PLACECARD);
-        Player player = board.getCurrentPlayer();
-        timers.startTimer(player, TURN_TIME);
+        boolean isOnlyOnePlayerConnected = board.getPlayerAreas().keySet().stream()
+                .filter(Player::isConnected).count() == 1;
+        if(isOnlyOnePlayerConnected){
+            startRejoinTimer();
+        }
+        else{
+            board.setGamePhase(GamePhase.PLACECARD);
+            Player player = board.getCurrentPlayer();
+            timers.startTimer(player, TURN_TIME);
+        }
     }
 
     @Override
-    public void join(String nickname, VirtualClient client) throws IllegalStateException {
-        try{
-            board.reconnectPlayer(nickname);
-        }catch (IllegalStateException e){
-            throw new IllegalStateException(e.getMessage());
+    public void join(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
+        board.reconnectPlayer(nickname);
+
+        if(disconnectRejoinTimer != null) {
+            disconnectRejoinTimer.cancel();
+            disconnectRejoinTimer = null;
+            postDrawChecks(); //resumes game
         }
 
         board.subscribeClientToUpdates(nickname, client);
@@ -64,17 +78,11 @@ public class PlayState extends GameState {
             postDrawChecks();
         }
 
-        if(board.getPlayerAreas().keySet().stream()
-                // only look at players that are connected
+        int connectedPlayers = (int) board.getPlayerAreas().keySet().stream()
                 .filter(Player:: isConnected)
-                .collect(Collectors.toSet())
-                .isEmpty())
-        {
-            //FIXME: [Ale] returning to CreationState on empty game as Endgame doesn't allow joining (no player disconnects and game is never reset)
-            //      If Endgame allows joining, then restore nextState();
+                .count();
+        if(connectedPlayers == 0)
             transition(new CreationState(new Board(), controller, disconnectingPlayers));
-//            nextState();
-        }
     }
 
     @Override
@@ -153,8 +161,8 @@ public class PlayState extends GameState {
             throws IllegalStateException, IllegalArgumentException {
 
         if(board.getGamePhase() != GamePhase.DRAWCARD) {
-            board.notifyAllListeners(new IllegalActionError(nickname, "Player has not placed a card yet!".toUpperCase()));
-            throw new IllegalStateException("Player has not placed a card yet!");
+            board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO DRAW IN THIS PHASE"));
+            throw new IllegalStateException("IMPOSSIBLE TO DRAW IN THIS PHASE");
         }
 
         Player player = board.getPlayerByNickname(nickname);
@@ -204,14 +212,21 @@ public class PlayState extends GameState {
 
         if(board.checkEndgame() && isLastPlayerTurn)
             lastRound=true;
-        // if a player disconnected after place card but before draw:
-        //      that player skips the updatePlaceCard step (if he can draw)
-        if(board.nextTurn()) {
+
+        boolean onePlayerRemaining = board.getPlayerAreas().keySet().stream()
+                .filter(Player::isConnected).count() == 1;
+        if(onePlayerRemaining){
+            startRejoinTimer();
+        }
+        else if(board.nextTurn()) {
+            // if a player disconnected after place card but before draw:
+            //      that player skips the updatePlaceCard step (if he can draw)
             currentPlayerHasPlacedCard = board.canDraw() && !board.getCurrentPlayer().getHand().isHandFull();
             if(currentPlayerHasPlacedCard)
                 board.setGamePhase(GamePhase.DRAWCARD);
             else
                 board.setGamePhase(GamePhase.PLACECARD);
+
             timers.startTimer(board.getCurrentPlayer(), TURN_TIME);
         }
         else nextState();
@@ -225,5 +240,18 @@ public class PlayState extends GameState {
     public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START GAME DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
+    }
+
+    private void startRejoinTimer(){
+        if(disconnectRejoinTimer == null){ //if not already waiting for rejoin
+            disconnectRejoinTimer = new Timer();
+            disconnectRejoinTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    nextState();
+                }
+            }, PLAYER_REJOIN_TIME * 1000L);
+            board.setGamePhase(GamePhase.WAITING_FOR_REJOIN);
+        }
     }
 }

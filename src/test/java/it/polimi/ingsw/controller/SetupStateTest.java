@@ -343,7 +343,13 @@ public class SetupStateTest {
                     controller.chooseSecretObjective(p.getNickname(), 1);
             }
 
-            assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+            int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
+                            .filter(Player::isConnected).count();
+            if(numOfConnectedPlayers > 1)
+                assertEquals(GamePhase.PLACECARD, board.getGamePhase());
+            else
+                assertEquals(GamePhase.WAITING_FOR_REJOIN, board.getGamePhase());
+
             assertEquals(PlayState.class, controller.getGameState().getClass());
         }
 

@@ -18,12 +18,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EndgameState extends GameState{
+    private static final int ENDGAME_TIME = 60*60; //1 hour
 
     public EndgameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller,disconnectingPlayers);
         board.setGamePhase(GamePhase.EVALOBJ);
         evaluateSecretObjectives();
         board.setGamePhase(GamePhase.SHOWWIN);
+        //prevent softlock if all connected players crash without explicit disconnect()
+        //also prevents players from blocking the server by never leaving endgame state
+        timers.startAll(board.getPlayersByScore(), ENDGAME_TIME);
     }
 
     @Override

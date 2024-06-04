@@ -194,10 +194,9 @@ public class Client {
                 return;
             }
             System.setProperty("java.rmi.server.hostname", myIP);
+            System.out.println("Your IP is: " + myIP);
         }
     //endregion
-
-        System.out.println("Your IP is: " + myIP);
 
         BlockingQueue<String> inputQueue = initInputQueue();
         while(true) {

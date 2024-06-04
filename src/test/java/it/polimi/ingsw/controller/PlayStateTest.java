@@ -358,7 +358,7 @@ public class PlayStateTest {
     //@RepeatedTest(200)
     public void simulateRandomGameWithDisconnect(int numOfPlayers) {
         //int numOfPlayers=2;
-        setUp(/*2*/numOfPlayers);
+        setUp(numOfPlayers);
 
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
@@ -428,22 +428,19 @@ public class PlayStateTest {
                     isLastTurn = controlIsLastTurn(currPlayer, endgame);
                     System.err.println("isLastTurn=" + isLastTurn);
 
-
-                    //se non posso più pescare
                     if (!board.canDraw()) {
                         isLastTurn = controlIsLastTurn(currPlayer, endgame);
-                        //se sono all'ultimo turno dell'ultimo round
+                        //if this is the last turn of the last round
                         if (isLastTurn)
                             break;
 
-                        //se non sono all'ultimo turno dell'ultimo round
+                        //if this is not the last turn of the last round
                         System.err.println("board can draw=" + board.canDraw());
 
                         controlPostPlaceCantDraw();
-
-                    } else { //se posso ancora pescare
+                    } else { //if I can draw
                         System.err.println("can draw: " + board.canDraw());
-                        //controllo che sia in drawState/Phase (se posso pescare devo sempre entrare qui prima di terminare il game)
+                        //check if this is drawPhase (if I can draw I must pass through here to end the game)
                         controlPostPlaceDrawable();
 
                         System.err.println("I'M DRAWING");
@@ -459,8 +456,8 @@ public class PlayStateTest {
                                     break;
                         } else {
                             isLastTurn = controlIsLastTurn(currPlayer, endgame);
-                            //se sono all'ultimo turno dell'ultimo round
-                            if (isLastTurn/*==numOfPlayers*/)
+                            //if this is the last turn of the last round
+                            if (isLastTurn)
                                 break;
 
                             controlPostDraw();
@@ -472,10 +469,8 @@ public class PlayStateTest {
             }
             endgame = controlEndgame(currPlayer, endgame);
             System.err.println(">>>>>>>>>>>>>>>>>CHECK END GAME IS " + board.checkEndgame() + "<<<<<<<<<<<<<<<<<");
-            //assertTrue(endgame == controlEndgame(currPlayer, numOfPlayers, endgame), "how is it different: endgame="+endgame);
 
             i++;
-
         }
 
         // assertEquals(lastPlayer, getLastActivePlayer());
@@ -491,7 +486,7 @@ public class PlayStateTest {
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
     public void simulateRandomGameWithDisconnectAndJoin(int numOfPlayers){
-        setUp(/*2*/numOfPlayers);
+        setUp(numOfPlayers);
 
         assertEquals(GamePhase.PLACECARD, board.getGamePhase());
         assertEquals(PlayState.class, controller.getGameState().getClass());
@@ -746,5 +741,16 @@ public class PlayStateTest {
                 IllegalArgumentException.class,
                 () -> controller.disconnect("Player 5")
         );
+    }
+
+//FIXME: [Ale] tried to add this to compensate for disconnections
+//    I think we can use this to prevent GamePhase.WAITING_FOR_REJOIN in the tests
+    private void rejoinAnyPlayer(){
+        if(board.getGamePhase() == GamePhase.WAITING_FOR_REJOIN) {
+            System.err.println("reconnecting because of WAITING_FOR_REJOIN");
+            board.getPlayerAreas().keySet().stream()
+                    .filter(p -> !p.isConnected()).findAny()
+                    .ifPresent(p -> controller.join(p.getNickname(), new PuppetClient()));
+        }
     }
 }

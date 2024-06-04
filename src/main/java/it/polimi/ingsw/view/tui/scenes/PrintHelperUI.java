@@ -62,6 +62,6 @@ public class PrintHelperUI extends TUI_Scene {
                 restart <2-4>
                 """);
 
-        out.println("\n" + "-".repeat(30) + "\n");
+        out.println("\n" + "-".repeat(30) + " Scroll up to see all commands" + "\n");
     }
 }

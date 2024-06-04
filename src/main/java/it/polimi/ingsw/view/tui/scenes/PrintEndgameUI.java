@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
+import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 
 import java.util.Comparator;
@@ -59,8 +60,8 @@ public class PrintEndgameUI extends TUI_Scene {
 
 
         List<String> leaderboard = playersByScore.stream()
-                    .map(h -> colorNickname(h) + " <--> " + padScore(h, maxNumLen))
-                    .toList();
+                .map(h -> colorNickname(h) + " <--> " + padScore(h, maxNumLen))
+                .toList();
 
         final int maxLen = Math.max(
                 leaderboard.stream().mapToInt(String::length)
@@ -72,7 +73,12 @@ public class PrintEndgameUI extends TUI_Scene {
                 .forEach(out::println);
 
         out.println();
-        out.println(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   " + colorNickname(playersByScore.get(0)));
+        out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   ");
+        boolean atLeast2Players = board.getOpponents().stream().anyMatch(ViewOpponentHand::isConnected);
+        //if I'm the only one left in the game, I win automatically, regardless of score
+        if(!atLeast2Players)
+            out.println(colorNickname(board.getPlayerHand()) + YELLOW_TEXT + " BY DEFAULT" + RESET);
+        else out.println(colorNickname(playersByScore.get(0)));
 
         printSeparator();
     }
