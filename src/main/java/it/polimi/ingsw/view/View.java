@@ -10,14 +10,12 @@ import java.util.Map;
 
 
 public abstract class View {
-    protected final CommandPassthrough serverProxy;
     protected Scene currentScene;
     protected final Map<SceneID, Scene> sceneIDMap;
 
-    protected View(CommandPassthrough serverProxy, Scene currentScene){
+    protected View(Scene currentScene){
         this.currentScene = currentScene;
         sceneIDMap = new Hashtable<>();
-        this.serverProxy = serverProxy;
     }
 
     public abstract void setScene(SceneID sceneID) throws IllegalArgumentException;

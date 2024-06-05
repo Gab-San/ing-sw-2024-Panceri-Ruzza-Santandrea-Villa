@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class GUI extends View {
 
     public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater){
-        super(serverProxy, new PrintNicknameSelectUI()); // change this scene to GUI scene
+        super(new PrintNicknameSelectUI()); // change this scene to GUI scene
         //TODO: make GUI
     }
 

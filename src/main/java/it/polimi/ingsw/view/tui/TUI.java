@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class TUI extends View{
+    private final CommandPassthrough serverProxy;
     private static final int BACKLOG_SIZE = 10;
     private final BlockingQueue<String> inputQueue;
     private TUIParser parser;
@@ -28,7 +29,8 @@ public class TUI extends View{
     private final boolean verbose;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue, boolean verbose) throws RemoteException {
-        super(serverProxy, new PrintNicknameSelectUI());
+        super(new PrintNicknameSelectUI());
+        this.serverProxy = serverProxy;
         sceneIDMap.put(SceneID.getNicknameSelectSceneID(), currentScene);
         this.inputQueue = inputQueue;
         this.verbose = verbose;
