@@ -1,6 +1,6 @@
 package it.polimi.ingsw.stub;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.model.ViewBoard;
 
@@ -24,7 +24,7 @@ public class StubViewController extends ViewController {
     }
 
     @Override
-    public void validatePlaceCard(String cardID, Point placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
+    public void validatePlaceCard(String cardID, GamePoint placePos, String cornerDir) throws IllegalStateException, IllegalArgumentException{
 
     }
 

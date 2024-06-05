@@ -1,5 +1,5 @@
 package it.polimi.ingsw.model.cards;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.PlayArea;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +73,7 @@ public class ResourceCard extends PlayCard{
      * @param placement coordinates at which it is placed
      * @param oldCard copied card
      */
-    private ResourceCard(Point placement, ResourceCard oldCard){
+    private ResourceCard(GamePoint placement, ResourceCard oldCard){
         super(placement, oldCard);
     }
 
@@ -110,7 +110,7 @@ public class ResourceCard extends PlayCard{
      * @return an equal positioned card
      */
     @Override
-    public PlaceableCard setPosition(Point placement) {
+    public PlaceableCard setPosition(GamePoint placement) {
         return new ResourceCard(placement, this);
     }
 }

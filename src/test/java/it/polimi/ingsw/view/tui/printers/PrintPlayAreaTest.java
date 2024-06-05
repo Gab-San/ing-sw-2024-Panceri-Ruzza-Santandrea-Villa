@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.tui.printers;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,22 +30,22 @@ public class PrintPlayAreaTest {
         ViewStartCard startCard = getRandomStartingCard();
         playArea.placeStarting(startCard);
     }
-    void printOnCenter(Point center){
+    void printOnCenter(GamePoint center){
         System.out.println("Printing PlayArea centered on: (" + center.row() + ", " + center.col() + ")");
         printPlayArea.printPlayArea(center);
     }
-    void printPlayArea(Point ...centers){
-        for(Point c : centers){
+    void printPlayArea(GamePoint...centers){
+        for(GamePoint c : centers){
             printOnCenter(c);
             System.out.println("\n\n"); //spacing
         }
     }
     void standardPrintPlayArea(){
-        Point zero = new Point(0,0);
-        Point top = zero.move(TL, TR);
-        Point left = zero.move(TL, BL);
-        Point right = zero.move(TR, BR);
-        Point bottom = zero.move(BL, BR);
+        GamePoint zero = new GamePoint(0,0);
+        GamePoint top = zero.move(TL, TR);
+        GamePoint left = zero.move(TL, BL);
+        GamePoint right = zero.move(TR, BR);
+        GamePoint bottom = zero.move(BL, BR);
         printPlayArea(zero,top,left,right,bottom);
     }
 
@@ -56,7 +56,7 @@ public class PrintPlayAreaTest {
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+            GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
 
@@ -69,7 +69,7 @@ public class PrintPlayAreaTest {
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+            GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
 
@@ -82,7 +82,7 @@ public class PrintPlayAreaTest {
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+            GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
 
@@ -104,7 +104,7 @@ public class PrintPlayAreaTest {
             if(rightCorners.isEmpty()) continue;
             int randomCornerIdx = random.nextInt(rightCorners.size());
             ViewCorner corner = rightCorners.get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+            GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
 
@@ -116,7 +116,7 @@ public class PrintPlayAreaTest {
                         .toList();
                 int randomCornerIdx = random.nextInt(leftCorners.size());
                 ViewCorner corner = leftCorners.get(randomCornerIdx);
-                Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+                GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
                 playArea.placeCard(position, card);
             }
         }

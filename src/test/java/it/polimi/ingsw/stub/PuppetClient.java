@@ -1,7 +1,7 @@
 package it.polimi.ingsw.stub;
 
 import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
@@ -73,7 +73,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     }
 
     @Override
-    public void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
         System.out.println(colorize("PLACE CARD COMMAND CALLED WITH ARGS:\n"
                 + cardID + "\n" +
                 placePos + "\n" +

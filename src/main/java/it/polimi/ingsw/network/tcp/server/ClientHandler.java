@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.tcp.server;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
@@ -235,7 +235,7 @@ public class ClientHandler implements Runnable, VirtualServer {
                 serverRef.getGameController(),
                 nickname,
                 cardID,
-                new Point(row, col),
+                new GamePoint(row, col),
                 CornerDirection.getDirectionFromString(cornerDir),
                 placeOnFront
         ));

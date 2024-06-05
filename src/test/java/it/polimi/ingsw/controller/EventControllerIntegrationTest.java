@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerHand;
@@ -26,9 +26,9 @@ public class EventControllerIntegrationTest {
     StubClient[] clients = new StubClient[4];
     BoardController controller;
 
-    private Point getRandomPoint(){
+    private GamePoint getRandomPoint(){
         Random random = new Random();
-        return new Point(random.nextInt(80), random.nextInt(80));
+        return new GamePoint(random.nextInt(80), random.nextInt(80));
     }
 
     private CornerDirection getRandomDir(){
@@ -83,7 +83,7 @@ public class EventControllerIntegrationTest {
         Player currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TR,
                 false
         );
@@ -96,7 +96,7 @@ public class EventControllerIntegrationTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TR,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -108,7 +108,7 @@ public class EventControllerIntegrationTest {
         board.addScore(currentPlayer, 20);
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TL,
                 false
         );
@@ -121,7 +121,7 @@ public class EventControllerIntegrationTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -132,7 +132,7 @@ public class EventControllerIntegrationTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.BL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -143,7 +143,7 @@ public class EventControllerIntegrationTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.BL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -329,7 +329,7 @@ public class EventControllerIntegrationTest {
         }
 
         try{
-            controller.placeCard(nick1, "A0", new Point(2, 2), CornerDirection.BL, true);
+            controller.placeCard(nick1, "A0", new GamePoint(2, 2), CornerDirection.BL, true);
         }catch (IllegalStateException e){
             assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
         }
@@ -552,7 +552,7 @@ public class EventControllerIntegrationTest {
         String notConnectedNick = "JOJO";
 
         try{
-            controller.placeCard(notConnectedNick, "A0", new Point(0,0), CornerDirection.BL, false);
+            controller.placeCard(notConnectedNick, "A0", new GamePoint(0,0), CornerDirection.BL, false);
         } catch (IllegalArgumentException argumentException){
             CountDownLatch latch4 = new CountDownLatch(2);
 
@@ -582,7 +582,7 @@ public class EventControllerIntegrationTest {
             String cardId = "R"+cardId2;
             if(worthy1)
                 try {
-                    controller.placeCard(nick1, cardId, new Point(0, 0), CornerDirection.BL, false);
+                    controller.placeCard(nick1, cardId, new GamePoint(0, 0), CornerDirection.BL, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
@@ -592,7 +592,7 @@ public class EventControllerIntegrationTest {
 
             if(worthy2)
                 try {
-                    controller.placeCard(nick2, cardId, new Point(0, 0), CornerDirection.BL, false);
+                    controller.placeCard(nick2, cardId, new GamePoint(0, 0), CornerDirection.BL, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[1].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
@@ -602,7 +602,7 @@ public class EventControllerIntegrationTest {
         }
 
         try {
-            controller.placeCard(nick1, "", new Point(0, 0), CornerDirection.BL, false);
+            controller.placeCard(nick1, "", new GamePoint(0, 0), CornerDirection.BL, false);
         } catch (IllegalStateException e) {
             assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
         } catch (IllegalArgumentException ignore) {
@@ -610,7 +610,7 @@ public class EventControllerIntegrationTest {
 
 
         try {
-            controller.placeCard(nick2, "", new Point(0, 0), CornerDirection.BL, false);
+            controller.placeCard(nick2, "", new GamePoint(0, 0), CornerDirection.BL, false);
         } catch (IllegalStateException e) {
             assertEquals(clients[1].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
         } catch (IllegalArgumentException ignore) {
@@ -660,7 +660,7 @@ public class EventControllerIntegrationTest {
             String cardId = "R"+cardId2;
             if(worthy1)
                 try {
-                    controller.placeCard(nick1, cardId, new Point(0, 0), CornerDirection.TR, false);
+                    controller.placeCard(nick1, cardId, new GamePoint(0, 0), CornerDirection.TR, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[0].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());
@@ -670,7 +670,7 @@ public class EventControllerIntegrationTest {
 
             if(worthy2)
                 try {
-                    controller.placeCard(nick2, cardId, new Point(0, 0), CornerDirection.TR, false);
+                    controller.placeCard(nick2, cardId, new GamePoint(0, 0), CornerDirection.TR, false);
                     hasPlaced = true;
                 } catch (IllegalStateException e) {
                     assertEquals(clients[1].reportedError.split(":")[1].trim(), e.getMessage().toUpperCase());

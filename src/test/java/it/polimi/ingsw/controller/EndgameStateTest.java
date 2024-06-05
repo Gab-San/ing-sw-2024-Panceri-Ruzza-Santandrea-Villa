@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.CornerDirection;
@@ -85,7 +85,7 @@ class EndgameStateTest {
         Player currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TR,
                 false
                 );
@@ -98,7 +98,7 @@ class EndgameStateTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TR,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -110,7 +110,7 @@ class EndgameStateTest {
         board.addScore(currentPlayer, 20);
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TL,
                 false
         );
@@ -123,7 +123,7 @@ class EndgameStateTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.TL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -134,7 +134,7 @@ class EndgameStateTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.BL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -145,7 +145,7 @@ class EndgameStateTest {
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
-                new Point(0,0),
+                new GamePoint(0,0),
                 CornerDirection.BL,
                 false);
         controller.draw(currentPlayer.getNickname(),
@@ -218,7 +218,7 @@ class EndgameStateTest {
     void placeCard() {
         assertThrows(
                 IllegalStateException.class,
-                () -> controller.placeCard("Donnina bella", "SUS", new Point(69,69),
+                () -> controller.placeCard("Donnina bella", "SUS", new GamePoint(69,69),
                         CornerDirection.TR, true)
         );
 

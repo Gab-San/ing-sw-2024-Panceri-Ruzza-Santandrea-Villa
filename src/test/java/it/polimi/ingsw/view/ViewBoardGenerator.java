@@ -2,7 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.functions.UsefulFunc;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
@@ -53,7 +53,7 @@ public class ViewBoardGenerator {
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
-            Point position = corner.getCardRef().getPosition().move(corner.getDirection());
+            GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
         int numOfVisibleResources = random.nextInt(30*4);

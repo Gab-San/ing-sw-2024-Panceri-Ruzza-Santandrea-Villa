@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.VirtualServer;
 
@@ -84,7 +84,7 @@ public class RMIServerProxy implements CommandPassthrough {
     }
 
     @Override
-    public void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
         validateConnection();
         server.placeCard(nickname, client, cardID, placePos.row(),
                 placePos.col(), cornerDir, placeOnFront);

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.Scene;
 
@@ -99,7 +99,7 @@ public abstract class TUI_Scene implements Scene {
         display();
     }
     @Override
-    public void setCenter(Point center){
+    public void setCenter(GamePoint center){
         display();
     }
 }

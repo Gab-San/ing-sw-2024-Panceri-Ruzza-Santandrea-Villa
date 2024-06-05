@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CentralServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -151,7 +151,7 @@ class RMIClientTest {
     void placeCard() throws NotBoundException, RemoteException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Claudio");
-        client.getProxy().placeCard("S0", new Point(1,1), "TL", true);
+        client.getProxy().placeCard("S0", new GamePoint(1,1), "TL", true);
     }
 
     @Test

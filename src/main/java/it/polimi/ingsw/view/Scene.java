@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface Scene {
     void displayChatMessage(List<String> backlog);
     void moveView(List<CornerDirection> cornerDirections);
     void setCenter(int row, int col);
-    void setCenter(Point center);
+    void setCenter(GamePoint center);
 }

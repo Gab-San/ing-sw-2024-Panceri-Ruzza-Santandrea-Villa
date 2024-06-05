@@ -1,17 +1,17 @@
 package it.polimi.ingsw.network.commands;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.controller.BoardController;
 import it.polimi.ingsw.CornerDirection;
 
 public class PlacePlayCmd extends GameCommand{
 
     private final String cardID;
-    private final Point placePos;
+    private final GamePoint placePos;
     private final CornerDirection cornerDir;
     private final boolean placeOnFront;
 
-    public PlacePlayCmd(BoardController gameController, String nickname, String cardID, Point placePos, CornerDirection cornerDir, boolean placeOnFront){
+    public PlacePlayCmd(BoardController gameController, String nickname, String cardID, GamePoint placePos, CornerDirection cornerDir, boolean placeOnFront){
         super(gameController, nickname);
         this.cardID = cardID;
         this.placePos = placePos;

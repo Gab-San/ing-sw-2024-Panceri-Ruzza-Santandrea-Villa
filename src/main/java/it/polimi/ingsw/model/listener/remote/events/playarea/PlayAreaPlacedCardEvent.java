@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
 import it.polimi.ingsw.network.VirtualClient;
@@ -13,7 +13,7 @@ public class PlayAreaPlacedCardEvent extends PlayerEvent {
     private final int row;
     private final int col;
 
-    public PlayAreaPlacedCardEvent(String nickname, PlaceableCard card, Point cardPosition) {
+    public PlayAreaPlacedCardEvent(String nickname, PlaceableCard card, GamePoint cardPosition) {
         super(nickname);
         this.placedCardId = card.getCardID();
         this.placeOnFront = card.isFaceUp();

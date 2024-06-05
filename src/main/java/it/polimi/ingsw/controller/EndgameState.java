@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
@@ -85,7 +85,7 @@ public class EndgameState extends GameState{
     }
 
     @Override
-    public void placeCard(String nickname, String cardID, Point cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public void placeCard(String nickname, String cardID, GamePoint cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARD DURING ENDGAME STATE");
     }

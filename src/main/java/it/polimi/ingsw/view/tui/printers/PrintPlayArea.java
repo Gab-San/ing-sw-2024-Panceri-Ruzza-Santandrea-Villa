@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.tui.ConsoleBackgroundColors;
@@ -92,7 +92,7 @@ topLeftCard      topCard       topRightCard
           BLCard         BRCard
 botLeftCard      botCard      botRightCard
      */
-    public void printPlayArea(Point center){
+    public void printPlayArea(GamePoint center){
         final Set<CornerDirection> fillCorners = new HashSet<>();
 
         ViewPlaceableCard topCard = playArea.getCardAt(center.move(TL, TR));

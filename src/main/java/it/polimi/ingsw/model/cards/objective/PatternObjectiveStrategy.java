@@ -1,5 +1,5 @@
 package it.polimi.ingsw.model.cards.objective;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.GameResource;
@@ -27,21 +27,21 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
 
     @Override
     public int calculateSolves(@NotNull PlayArea playArea) {
-        Map<Point, PlaceableCard> cardMatrix = playArea.getCardMatrix();
-        Map<Point, GameResource> pattern = this.pattern.getPattern();
-        Set<Point> usedPoints = new HashSet<>();
+        Map<GamePoint, PlaceableCard> cardMatrix = playArea.getCardMatrix();
+        Map<GamePoint, GameResource> pattern = this.pattern.getPattern();
+        Set<GamePoint> usedPoints = new HashSet<>();
         int numOfSolves = 0;
 
-        List<Point> cardPositions = cardMatrix.keySet().stream()
-                .sorted(Point::compare).toList();
-        for (Point pos : cardPositions){
+        List<GamePoint> cardPositions = cardMatrix.keySet().stream()
+                .sorted(GamePoint::compare).toList();
+        for (GamePoint pos : cardPositions){
             boolean patternFound = true;
             // only look at cards in points necessary for the pattern (relative to center of this check)
             // terminate early with failure if that point:
             //     - has no card
             //     - was already used for this objective
             //     - has a card of the wrong color
-            for(Point patternPos : pattern.keySet()){
+            for(GamePoint patternPos : pattern.keySet()){
                 PlaceableCard card = cardMatrix.get(pos.add(patternPos));
                 boolean invalidCard = card == null || card.getCardColour()==null || !card.getCardColour().equals(pattern.get(patternPos));
                 boolean cardAlreadyUsed = usedPoints.contains(pos.add(patternPos));
@@ -52,7 +52,7 @@ public class PatternObjectiveStrategy implements ObjectiveStrategy{
             }
             if (patternFound){
                 numOfSolves++;
-                for(Point patternPos : pattern.keySet()){
+                for(GamePoint patternPos : pattern.keySet()){
                     usedPoints.add(pos.add(patternPos));
                 }
             }

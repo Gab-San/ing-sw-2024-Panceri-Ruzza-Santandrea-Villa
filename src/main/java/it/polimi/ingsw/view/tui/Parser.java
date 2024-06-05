@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
@@ -311,7 +311,7 @@ public class Parser {
         }
 
         String cardToPlace;
-        Point placementPos;
+        GamePoint placementPos;
         String cornDir;
 
         String argsString =  argsStr.toString().trim();

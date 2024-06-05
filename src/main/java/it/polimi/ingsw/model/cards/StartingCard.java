@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.functions.UsefulFunc;
 
 import java.security.InvalidParameterException;
@@ -58,7 +58,7 @@ public class StartingCard extends PlaceableCard {
      * @param placement The placement point of the card (starting cards are always placed at (0,0))
      * @param oldCard The unplaced card which is copied
      */
-     private StartingCard(Point placement, StartingCard oldCard) {
+     private StartingCard(GamePoint placement, StartingCard oldCard) {
         super(placement, oldCard);
         this.centralFrontResources = oldCard.centralFrontResources;
     }
@@ -99,7 +99,7 @@ public class StartingCard extends PlaceableCard {
      * @return an equal positioned card
      */
     @Override
-    public PlaceableCard setPosition(Point placement) {
+    public PlaceableCard setPosition(GamePoint placement) {
         return new StartingCard(placement, this);
     }
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.client;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.tcp.message.TCPClientMessage;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
@@ -191,7 +191,7 @@ public class ServerProxy implements CommandPassthrough {
 
 
     @Override
-    public void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws RemoteException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException {
         sendCommand(new PlaceCardMessage(nickname, cardID,
                 placePos.row(), placePos.col(),cornerDir,placeOnFront));
     }

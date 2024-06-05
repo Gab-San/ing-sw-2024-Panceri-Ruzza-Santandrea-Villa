@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.CornerDirection;
@@ -88,11 +88,11 @@ public class JoinStateTest {
     @Test
     public void placeCardTest() {
         setUp(4);
-        assertThrows(IllegalStateException.class, () -> controller.placeCard("definitelyNotRight", "r0", new Point(0, 0), CornerDirection.TR, true), "PlaceCard doesn't throw IllegalStateException with wrong nickname");
-        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r0", new Point(0, 0), CornerDirection.TR, true),"PlaceCard doesn't throw IllegalStateException");
-        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r2", new Point(1, 0), CornerDirection.TL, false),"PlaceCard doesn't throw IllegalStateException");
-        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g22", new Point(0, 1), CornerDirection.BL, true),"PlaceCard doesn't throw IllegalStateException");
-        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g8", new Point(1, 1), CornerDirection.BL, false),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard("definitelyNotRight", "r0", new GamePoint(0, 0), CornerDirection.TR, true), "PlaceCard doesn't throw IllegalStateException with wrong nickname");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r0", new GamePoint(0, 0), CornerDirection.TR, true),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "r2", new GamePoint(1, 0), CornerDirection.TL, false),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g22", new GamePoint(0, 1), CornerDirection.BL, true),"PlaceCard doesn't throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> controller.placeCard(playerNickname, "g8", new GamePoint(1, 1), CornerDirection.BL, false),"PlaceCard doesn't throw IllegalStateException");
     }
 
     @Test

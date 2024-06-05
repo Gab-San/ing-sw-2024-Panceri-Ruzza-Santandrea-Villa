@@ -2,7 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.stub.PuppetClient;
 import it.polimi.ingsw.stub.StubViewController;
@@ -365,9 +365,9 @@ class ParserTest {
 
         ViewPlayCard cardInPlay = new ViewResourceCard("R21", "", "",
                 otherCorners, 1, GameResource.LEAF);
-        playArea.placeCard(new Point(1,1) , cardInPlay);
+        playArea.placeCard(new GamePoint(1,1) , cardInPlay);
 
-        assertEquals("R21", playArea.getCardAt(new Point(1,1)).getCardID());
+        assertEquals("R21", playArea.getCardAt(new GamePoint(1,1)).getCardID());
 
         System.out.println("Placed card ID: " + cardInPlay.getCardID());
         parser.parseCommand("play "+ cardInHand.getCardID() +" on "+ cardInPlay.getCardID() +" TR");

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.GameResource;
 
@@ -10,7 +10,7 @@ import static it.polimi.ingsw.GameResource.FILLED;
 import java.util.*;
 
 public class ViewPlayArea {
-    private final Map<Point, ViewPlaceableCard> cardMatrix;
+    private final Map<GamePoint, ViewPlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<ViewCorner> freeCorners;
     private GameResource color;
@@ -26,7 +26,7 @@ public class ViewPlayArea {
      * @param startCard starting card to place
      */
     public void placeStarting(ViewStartCard startCard){
-        Point zero = new Point(0,0);
+        GamePoint zero = new GamePoint(0,0);
         cardMatrix.put(zero, startCard);
         startCard.setPosition(zero);
         for(CornerDirection dir : CornerDirection.values()) {
@@ -41,7 +41,7 @@ public class ViewPlayArea {
      * @param position point on which to place the card
      * @param card card to place
      */
-    public void placeCard(Point position, ViewPlaceableCard card){
+    public void placeCard(GamePoint position, ViewPlaceableCard card){
         setCard(position, card);
         for(CornerDirection dir : CornerDirection.values()){
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
@@ -52,7 +52,7 @@ public class ViewPlayArea {
             else{
                 if(card.getCornerResource(dir) != FILLED){
                     boolean isCornerFree = true;
-                    Point pointToCheck = position.move(dir);
+                    GamePoint pointToCheck = position.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()) {
                         ViewPlaceableCard cardDir = cardMatrix.get(pointToCheck.move(dir2));
                         if (cardDir != null && cardDir.getCornerResource(dir2.opposite()) == FILLED) {
@@ -63,7 +63,7 @@ public class ViewPlayArea {
                     if(isCornerFree) freeCorners.add(card.getCorner(dir));
                 }
                 else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
-                    Point pointLocked = position.move(dir);
+                    GamePoint pointLocked = position.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()){
                         ViewPlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
                         if(cardDir != null) {
@@ -83,7 +83,7 @@ public class ViewPlayArea {
                 .filter(s -> s.equals(res.toString()))
                 .count();
     }
-    public boolean validatePlacement(Point position, ViewPlayCard playCard){
+    public boolean validatePlacement(GamePoint position, ViewPlayCard playCard){
         if(cardMatrix.get(position) != null) return false;
 
         // checks valid cost before placing
@@ -102,7 +102,7 @@ public class ViewPlayArea {
 
         return true;
     }
-    public Point getPositionByID(String cardID) throws IllegalArgumentException{
+    public GamePoint getPositionByID(String cardID) throws IllegalArgumentException{
         synchronized (cardMatrix){
             return cardMatrix.values().stream()
                     .filter(c->c.getCardID().equals(cardID))
@@ -112,11 +112,11 @@ public class ViewPlayArea {
         }
     }
 
-    public ViewPlaceableCard getCardAt(Point position){
+    public ViewPlaceableCard getCardAt(GamePoint position){
         return cardMatrix.get(position);
     }
     public ViewPlaceableCard getCardAt(int row, int col){
-        return cardMatrix.get(new Point(row, col));
+        return cardMatrix.get(new GamePoint(row, col));
     }
 
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){
@@ -137,7 +137,7 @@ public class ViewPlayArea {
         this.color = color;
     }
 
-    public void setCard(Point position, ViewPlaceableCard card) {
+    public void setCard(GamePoint position, ViewPlaceableCard card) {
         cardMatrix.put(position, card);
         card.setPosition(position);
     }

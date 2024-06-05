@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
 import it.polimi.ingsw.GameResource;
@@ -60,7 +60,7 @@ class PlayAreaTest {
         }
 
         //assert correct freeCorners added
-        StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new Point(0,0));
+        StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new GamePoint(0,0));
         assertEquals(startingCard, this.startingCard);
         assertEquals(playArea.getFreeCorners(), startingCard.getFreeCorners());
         assertEquals(2, playArea.getFreeCorners().size());
@@ -81,7 +81,7 @@ class PlayAreaTest {
         }
 
         //assert correct freeCorners added
-        StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new Point(0,0));
+        StartingCard startingCard = (StartingCard) playArea.getCardMatrix().get(new GamePoint(0,0));
         assertEquals(startingCard, this.startingCard);
         assertEquals(playArea.getFreeCorners(), startingCard.getFreeCorners());
         assertEquals(4, playArea.getFreeCorners().size());
@@ -112,7 +112,7 @@ class PlayAreaTest {
         // place card, assert no exception raised
         assertDoesNotThrow(() -> playArea.placeCard(cardToPlace, coveredCorner));
 
-        Point placePosition = coveredCorner.getCardRef().getPosition().move(coveredCorner.getDirection());
+        GamePoint placePosition = coveredCorner.getCardRef().getPosition().move(coveredCorner.getDirection());
         PlaceableCard cardPlaced = playArea.getCardMatrix().get(placePosition);
 
         // assert correct placement
@@ -150,11 +150,11 @@ class PlayAreaTest {
         assertFalse(playArea.getFreeCorners().contains(placedCard_corner));
     }
 
-    private Map<Point, PlaceableCard> duplicateCardMatrix(){
+    private Map<GamePoint, PlaceableCard> duplicateCardMatrix(){
         //duplicate playArea to check for invariance after failed updatePlaceCard attempts
-        Map<Point, PlaceableCard> oldCardMatrix = new Hashtable<>();
-        Map<Point, PlaceableCard> cardMatrix = playArea.getCardMatrix();
-        for(Point p : cardMatrix.keySet()){
+        Map<GamePoint, PlaceableCard> oldCardMatrix = new Hashtable<>();
+        Map<GamePoint, PlaceableCard> cardMatrix = playArea.getCardMatrix();
+        for(GamePoint p : cardMatrix.keySet()){
             oldCardMatrix.put(p, cardMatrix.get(p));
         }
         return oldCardMatrix;
@@ -175,7 +175,7 @@ class PlayAreaTest {
         assertEquals(3, playArea.getFreeCorners().size());
 
         //duplicate playArea to check for invariance after failed updatePlaceCard attempts
-        Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
+        Map<GamePoint, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard cardToPlace = new ResourceCard();
         assertThrows(IllegalStateException.class,
@@ -203,7 +203,7 @@ class PlayAreaTest {
         playArea.placeCard(card, startCardCorner);
 
         //duplicate playArea to check for invariance after failed updatePlaceCard attempts
-        Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
+        Map<GamePoint, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         PlayCard otherCard = new ResourceCard();
         // test of failure on occupied non-visible corner
@@ -275,7 +275,7 @@ class PlayAreaTest {
         goldCard.turnFaceUp();
 
         //duplicate playArea to check for invariance after failed updatePlaceCard attempts
-        Map<Point, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
+        Map<GamePoint, PlaceableCard> oldCardMatrix = duplicateCardMatrix();
 
         assertThrows(IllegalStateException.class, ()->playArea.placeCard(goldCard, playArea.getFreeCorners().get(0)));
         assertEquals(oldCardMatrix, playArea.getCardMatrix());

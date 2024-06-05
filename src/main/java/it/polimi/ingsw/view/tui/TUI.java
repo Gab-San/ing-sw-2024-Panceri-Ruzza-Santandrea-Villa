@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
@@ -152,7 +152,7 @@ public class TUI extends View{
         currentScene.setCenter(row,col);
         printCommandPrompt();
     }
-    void setCenter(Point center) {
+    void setCenter(GamePoint center) {
         currentScene.setCenter(center);
         printCommandPrompt();
     }

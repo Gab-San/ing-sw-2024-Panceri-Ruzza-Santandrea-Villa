@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards.objective;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class PatternTest {
     @Test
     void pattern_StringToPattern_Test(){
-        Point center = new Point(0,0);
+        GamePoint center = new GamePoint(0,0);
         PatternObjective diagBLUE = new PatternObjective("**B *B* B**");
         assertEquals(WOLF, diagBLUE.getPattern().get(center.move(TR)));
         assertEquals(WOLF, diagBLUE.getPattern().get(center));
@@ -35,8 +35,8 @@ public class PatternTest {
     @Test
     void pattern_DIAG_BLUE_Test(){
         PatternObjective pattern = new PatternObjective("**B *B* B**");
-        Map<Point, GameResource> map = pattern.getPattern();
-        Point center = new Point(0,0);
+        Map<GamePoint, GameResource> map = pattern.getPattern();
+        GamePoint center = new GamePoint(0,0);
 
         assertEquals(WOLF, map.get(center));
         assertEquals(WOLF, map.get(center.move(TR)));
@@ -51,8 +51,8 @@ public class PatternTest {
     @Test
     void pattern_L_RED_RED_GREEN_Test(){
         PatternObjective pattern = new PatternObjective("*R* *R* **G");
-        Map<Point, GameResource> map = pattern.getPattern();
-        Point center = new Point(0,0);
+        Map<GamePoint, GameResource> map = pattern.getPattern();
+        GamePoint center = new GamePoint(0,0);
 
         assertEquals(MUSHROOM, map.get(center));
         assertEquals(LEAF, map.get(center.move(BR)));

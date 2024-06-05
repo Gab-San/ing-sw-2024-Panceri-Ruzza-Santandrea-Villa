@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.tui.TUI_Scene;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class PrintGameUI extends TUI_Scene {
     protected final PrintPlayArea printPlayArea;
-    protected Point printCenter;
+    protected GamePoint printCenter;
     protected final PrintHand printHand;
     protected final String nickname;
 
@@ -20,7 +20,7 @@ public abstract class PrintGameUI extends TUI_Scene {
         super();
         printPlayArea = new PrintPlayArea(playArea);
         printHand = new PrintHand(hand);
-        printCenter = new Point(0,0);
+        printCenter = new GamePoint(0,0);
         this.nickname = hand.getNickname();
     }
     @Override
@@ -33,10 +33,10 @@ public abstract class PrintGameUI extends TUI_Scene {
     }
     @Override
     public void setCenter(int row, int col) {
-        setCenter(new Point(row, col));
+        setCenter(new GamePoint(row, col));
     }
     @Override
-    public void setCenter(Point center) {
+    public void setCenter(GamePoint center) {
         printCenter = center;
         display();
     }

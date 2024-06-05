@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.BeforeAll;
@@ -94,7 +94,7 @@ class BaseStartingCardTest {
         // At instantiation position == null
         assertThrows(IllegalStateException.class, ()-> testCard.getPosition());
 
-        Point pos = new Point(5, 5);
+        GamePoint pos = new GamePoint(5, 5);
         StartingCard placedCard = (StartingCard) testCard.setPosition(pos);
         // After placement, new card will have updated position with no other changes
         assertEquals(pos, placedCard.getPosition());

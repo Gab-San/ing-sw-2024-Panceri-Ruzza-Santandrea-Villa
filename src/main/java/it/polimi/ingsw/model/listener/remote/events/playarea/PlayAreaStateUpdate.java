@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.GameResource;
@@ -15,10 +15,10 @@ public class PlayAreaStateUpdate extends PlayerEvent {
     private final List<CardPosition> cardPositions;
     private final Map<GameResource, Integer> visibleResources;
     private final List<SerializableCorner> freeSerializableCorners;
-    public PlayAreaStateUpdate(String nickname, Map<Point, PlaceableCard> cardMap, Map<GameResource, Integer> visibleResources, List<Corner> freeCorners) {
+    public PlayAreaStateUpdate(String nickname, Map<GamePoint, PlaceableCard> cardMap, Map<GameResource, Integer> visibleResources, List<Corner> freeCorners) {
         super(nickname);
         this.cardPositions = new LinkedList<>();
-        for(Point pos : cardMap.keySet()){
+        for(GamePoint pos : cardMap.keySet()){
             PlaceableCard card = cardMap.get(pos);
             Map<CornerDirection, Boolean> cornerVisibility = new Hashtable<>();
             for(CornerDirection dir : CornerDirection.values()){

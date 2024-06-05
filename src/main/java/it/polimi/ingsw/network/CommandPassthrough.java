@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -103,7 +103,7 @@ public interface CommandPassthrough extends Remote{
      * @param placeOnFront true if the face of the card is up, false if down
      * @throws RemoteException if an error occurs during connection
      */
-    void placeCard(String cardID, Point placePos, String cornerDir, boolean placeOnFront) throws RemoteException;
+    void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException;
 
     /**
      * Draw the selected cardPosition on the player's play area.

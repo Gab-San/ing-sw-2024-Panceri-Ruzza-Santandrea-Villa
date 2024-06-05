@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
@@ -161,7 +161,7 @@ public class PlayStateTest {
         }
 
         Corner corner = currPlayArea.getFreeCorners().get(new Random().nextInt(currPlayArea.getFreeCorners().size()));
-        Point pos = corner.getCardRef().getPosition();
+        GamePoint pos = corner.getCardRef().getPosition();
 
         assertNotEquals(null, pos, "there's an error somewhere"); //should never be happening but to pr
         controller.placeCard(player.getNickname(), cardID, pos, corner.getDirection(), flipped);

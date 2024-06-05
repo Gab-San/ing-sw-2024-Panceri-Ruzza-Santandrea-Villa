@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.client;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
 import it.polimi.ingsw.stub.PuppetServer;
@@ -241,7 +241,7 @@ class TCPClientSocketTest {
     void testPlaceCard() throws IOException {
         TCPClientSocket client = new TCPClientSocket("localhost", 8888);
         client.getProxy().connect("Giacomo");
-        client.getProxy().placeCard("R2", new Point(1,1), "TR", true);
+        client.getProxy().placeCard("R2", new GamePoint(1,1), "TR", true);
         waitExecution(client, 2000);
     }
 

@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.VirtualServer;
@@ -90,7 +90,7 @@ public class RMIServer implements VirtualServer {
                           int col, String cornerDir, boolean placeOnFront) throws RemoteException {
         validateClient(nickname, client);
         PlacePlayCmd command = new PlacePlayCmd(serverRef.getGameController(), nickname, cardID,
-                new Point(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
+                new GamePoint(row,col), CornerDirection.getDirectionFromString(cornerDir), placeOnFront);
         serverRef.issueGameCommand(command);
     }
 

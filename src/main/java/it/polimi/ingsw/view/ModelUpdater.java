@@ -423,7 +423,7 @@ public class ModelUpdater {
                     .filter(dir -> !pos.isCornerVisible().get(dir))
                     .forEach(dir -> card.getCorner(dir).cover());
 
-                playArea.setCard(new Point(pos.row(), pos.col()), card);
+                playArea.setCard(new GamePoint(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
                         .filter(c -> c.cardCornerId().equals(card.getCardID()))
                         .map(SerializableCorner::getCornerDirection)
@@ -449,7 +449,7 @@ public class ModelUpdater {
             else
                 card.turnFaceDown();
 
-            playArea.placeCard(new Point(row, col), card);
+            playArea.placeCard(new GamePoint(row, col), card);
         }
 
         if(board.getPlayerHand().getNickname().equals(nickname))
@@ -483,7 +483,7 @@ public class ModelUpdater {
         List<ViewCorner> newCorners = new LinkedList<>();
         for(SerializableCorner serCorner : freeSerializableCorners) {
             try{
-                Point pos = playArea.getPositionByID(serCorner.cardCornerId());
+                GamePoint pos = playArea.getPositionByID(serCorner.cardCornerId());
                 ViewCorner corner = playArea.getCardAt(pos).getCorner(serCorner.getCornerDirection());
                 newCorners.add(corner);
             }catch (IllegalArgumentException ignored){}

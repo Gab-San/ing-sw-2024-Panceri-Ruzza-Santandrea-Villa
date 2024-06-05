@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards.objective;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.*;
 import java.security.InvalidParameterException;
@@ -33,7 +33,7 @@ import java.util.*;
  */
 
 public class PatternObjective {
-    final Map<Point, GameResource> pattern;
+    final Map<GamePoint, GameResource> pattern;
     final String initialString;
 
     /**
@@ -64,7 +64,7 @@ public class PatternObjective {
     /**
      * @return pattern as a Map similar to PlayArea.cardMatrix (points are centered in (0,0))
      */
-    public Map<Point, GameResource> getPattern(){
+    public Map<GamePoint, GameResource> getPattern(){
         return pattern;
     }
     private GameResource charToResource(char c) throws InvalidParameterException{
@@ -77,8 +77,8 @@ public class PatternObjective {
         };
     }
 
-    private Point patternPosToPoint(int pos) throws InvalidParameterException{
-        Point center = new Point(0,0);
+    private GamePoint patternPosToPoint(int pos) throws InvalidParameterException{
+        GamePoint center = new GamePoint(0,0);
         return switch (pos){
             case 0 -> center.move(TL);
             case 1 -> center.move(TL, TR);

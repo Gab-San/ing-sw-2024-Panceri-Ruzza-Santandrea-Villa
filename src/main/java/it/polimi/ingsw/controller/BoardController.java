@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.PlayerColor;
@@ -50,7 +50,7 @@ public class BoardController {
             throws IllegalStateException, IllegalArgumentException{
         gameState.draw(nickname, deckFrom, cardPos);
     }
-    public synchronized void placeCard(String nickname, String cardID, Point cardPos,
+    public synchronized void placeCard(String nickname, String cardID, GamePoint cardPos,
                                        CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException, IllegalArgumentException{
         gameState.placeCard(nickname, cardID, cardPos, cornerDir, placeOnFront);
     }

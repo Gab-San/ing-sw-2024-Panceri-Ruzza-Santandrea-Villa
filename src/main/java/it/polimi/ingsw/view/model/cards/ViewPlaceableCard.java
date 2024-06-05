@@ -2,13 +2,13 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 
 import java.util.*;
 
 public abstract class ViewPlaceableCard extends ViewCard{
     private final Map<CornerDirection, ViewCorner> corners;
-    private Point position;
+    private GamePoint position;
 
     public ViewPlaceableCard(String cardID, String imageFrontName, String imageBackName, List<ViewCorner> corners) {
         super(cardID, imageFrontName, imageBackName);
@@ -42,10 +42,10 @@ public abstract class ViewPlaceableCard extends ViewCard{
         return corners.get(dir);
     }
 
-    public synchronized void setPosition(Point position) {
+    public synchronized void setPosition(GamePoint position) {
         this.position = position;
     }
-    public synchronized Point getPosition(){
+    public synchronized GamePoint getPosition(){
         return position;
     }
 }

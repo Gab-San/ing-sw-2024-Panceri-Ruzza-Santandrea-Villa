@@ -1,5 +1,5 @@
 package it.polimi.ingsw.model.cards;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import java.security.InvalidParameterException;
@@ -17,7 +17,7 @@ import java.util.*;
  * </p>
  */
 public abstract class PlaceableCard extends Card{
-    private final Point position;
+    private final GamePoint position;
     /**
      * The corners the card is composed of.
      */
@@ -100,13 +100,13 @@ public abstract class PlaceableCard extends Card{
      * @param placement coordinates at which it is placed
      * @param oldCard copied card
      */
-    protected PlaceableCard(Point placement, PlaceableCard oldCard){
+    protected PlaceableCard(GamePoint placement, PlaceableCard oldCard){
         super(oldCard);
         this.corners = oldCard.corners;
         for (Corner c : corners.values()){
             c.setCardRef(this);
         }
-        position = new Point(placement);
+        position = new GamePoint(placement);
     }
 
 // ---- Corner related methods: they are already implemented because this information is visible and needs
@@ -181,7 +181,7 @@ public abstract class PlaceableCard extends Card{
      * @return the position of the card
      * @throws IllegalStateException when trying to access the position of a not positioned card.
      */
-    public Point getPosition() throws IllegalStateException {
+    public GamePoint getPosition() throws IllegalStateException {
         if(position == null){
             throw new IllegalStateException("Tried to access position on a card that wasn't placed");
         }
@@ -197,7 +197,7 @@ public abstract class PlaceableCard extends Card{
      * @param placement the position in which the card has to be placed
      * @return an equal positioned card
      */
-    public abstract PlaceableCard setPosition(Point placement);
+    public abstract PlaceableCard setPosition(GamePoint placement);
 
 
     // OBJECT METHODS

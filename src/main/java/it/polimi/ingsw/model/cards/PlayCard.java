@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.functions.UsefulFunc;
@@ -80,7 +80,7 @@ public abstract class PlayCard extends PlaceableCard{
      * @param placement coordinates at which it is placed
      * @param oldCard copied card
      */
-    protected PlayCard(Point placement, PlayCard oldCard){
+    protected PlayCard(GamePoint placement, PlayCard oldCard){
         super(placement, oldCard);
         this.backResource = oldCard.backResource;
         this.pointsOnPlace = oldCard.pointsOnPlace;

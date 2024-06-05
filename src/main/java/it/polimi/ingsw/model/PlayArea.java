@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.model.cards.PlayCard;
@@ -24,7 +24,7 @@ import java.util.*;
 
 public class PlayArea implements GameSubject {
     private final String owner;
-    private final Map<Point, PlaceableCard> cardMatrix;
+    private final Map<GamePoint, PlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<Corner> freeCorners;
     private final List<GameListener> gameListeners;
@@ -43,7 +43,7 @@ public class PlayArea implements GameSubject {
         freeCorners = new LinkedList<>();
     }
 
-    public Map<Point, PlaceableCard> getCardMatrix(){
+    public Map<GamePoint, PlaceableCard> getCardMatrix(){
         return Collections.unmodifiableMap(cardMatrix);
     }
 
@@ -74,7 +74,7 @@ public class PlayArea implements GameSubject {
             throw new IllegalStateException("Attempting to place starting card on non-empty cardMatrix");
         }
         // place card
-        Point cardPos = new Point(0,0);
+        GamePoint cardPos = new GamePoint(0,0);
         PlaceableCard card = startCard.setPosition(cardPos);
         cardMatrix.put(cardPos, card);
         notifyAllListeners(new PlayAreaPlacedCardEvent(owner, card, cardPos));
@@ -108,7 +108,7 @@ public class PlayArea implements GameSubject {
             }
         }
 
-        Point cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
+        GamePoint cardPos = corner.getCardRef().getPosition().move(corner.getDirection());
 
         //checks valid placement, throw IllegalStateException on failure
         if(cardMatrix.get(cardPos) != null){
@@ -152,7 +152,7 @@ public class PlayArea implements GameSubject {
             else{
                 if(!card.getCorner(dir).isOccupied()) { // if that corner isn't FILLED
                     boolean isCornerFree = true;
-                    Point pointToCheck = cardPos.move(dir);
+                    GamePoint pointToCheck = cardPos.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()) {
                         PlaceableCard cardDir = cardMatrix.get(pointToCheck.move(dir2));
                         if (cardDir != null && cardDir.getCorner(dir2.opposite()).isOccupied()) {
@@ -163,7 +163,7 @@ public class PlayArea implements GameSubject {
                     if(isCornerFree) freeCorners.add(card.getCorner(dir));
                 }
                 else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
-                    Point pointLocked = cardPos.move(dir);
+                    GamePoint pointLocked = cardPos.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()){
                         PlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
                         if(cardDir != null) {

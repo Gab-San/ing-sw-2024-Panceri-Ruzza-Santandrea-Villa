@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.cardstrategies.GoldCardStrategy;
 import it.polimi.ingsw.GameResource;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +76,7 @@ public class GoldCard extends PlayCard{
      * @param placement coordinates at which it is placed
      * @param oldCard copied card
      */
-    private GoldCard(Point placement, GoldCard oldCard){
+    private GoldCard(GamePoint placement, GoldCard oldCard){
         super(placement, oldCard);
         this.placementCost = oldCard.placementCost;
         this.goldStrat = oldCard.goldStrat;
@@ -114,7 +114,7 @@ public class GoldCard extends PlayCard{
      * @return an equal positioned card
      */
     @Override
-    public PlaceableCard setPosition(Point placement) {
+    public PlaceableCard setPosition(GamePoint placement) {
         return new GoldCard(placement, this);
     }
 

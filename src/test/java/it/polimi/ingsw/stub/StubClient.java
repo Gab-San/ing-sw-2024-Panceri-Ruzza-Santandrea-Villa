@@ -5,7 +5,7 @@ import com.diogonunes.jcolor.Attribute;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
 import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
@@ -232,7 +232,7 @@ public class StubClient implements VirtualClient {
                 "[PLAYER] " + nickname + "\n" +
                 "[PLACED CARD] " + placedCardId + "\n" +
                 "[SIDE] " + (placeOnFront ? "FRONT" : "BACK") + "\n" +
-                "[POINT] " + new Point(row ,col), Attribute.MAGENTA_TEXT()));
+                "[POINT] " + new GamePoint(row ,col), Attribute.MAGENTA_TEXT()));
     }
 
     @Override

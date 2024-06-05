@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.objective;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.GameResource;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ public class BaseObjectiveCardTest {
                 new Corner(FILLED, MUSHROOM, BR)
         );
         playArea.placeStartingCard(card);
-        startingCard = playArea.getCardMatrix().get(new Point(0,0));
+        startingCard = playArea.getCardMatrix().get(new GamePoint(0,0));
         assertEquals(1, playArea.getVisibleResources().get(LEAF));
         assertEquals(1, playArea.getVisibleResources().get(WOLF));
         assertEquals(1, playArea.getVisibleResources().get(BUTTERFLY));

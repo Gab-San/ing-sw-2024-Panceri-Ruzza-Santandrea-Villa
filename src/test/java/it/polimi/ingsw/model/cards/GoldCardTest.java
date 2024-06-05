@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.Point;
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.cards.cardstrategies.CornerCoverGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.ItemCountGoldCard;
 import it.polimi.ingsw.model.cards.cardstrategies.SimpleGoldCard;
@@ -551,7 +551,7 @@ class GoldCardTest {
                 new Corner(null, TR)
         );
 
-        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new Point(2,2));
+        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new GamePoint(2,2));
 
         assertEquals(testCard1,testCardCopy);
         assertEquals(placedCard, testCard1);
@@ -615,7 +615,7 @@ class GoldCardTest {
                 new Corner(null, TR)
         );
 
-        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new Point(2,2));
+        GoldCard placedCard = (GoldCard) testCardCopy.setPosition(new GamePoint(2,2));
 
         assertEquals(testCard1,testCardCopy);
         assertEquals(placedCard, testCard1);
