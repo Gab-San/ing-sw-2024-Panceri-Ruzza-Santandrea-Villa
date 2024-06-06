@@ -21,8 +21,10 @@ public class JoinState extends GameState {
         super(board, controller, disconnectingPlayers);
         numOfPlayersToStart = num;
         board.setGamePhase(GamePhase.JOIN);
+        board.squashHistory();
         timers.startAll(board.getPlayerAreas().keySet().stream().toList(), JOIN_TIMEOUT, PING_TIME);
     }
+
     @Override
     public void join(String nickname, VirtualClient client) throws IllegalStateException {
         if(board.getGamePhase()!=GamePhase.JOIN)
@@ -33,7 +35,6 @@ public class JoinState extends GameState {
         if(!disconnectingPlayers.isEmpty()) return;
         timers.startTimer(joiningPlayer, JOIN_TIMEOUT, PING_TIME);
         if(board.getPlayerAreas().size() == numOfPlayersToStart) {
-            board.squashHistory();
             transition(new SetupState(board, controller, disconnectingPlayers));
         }
     }

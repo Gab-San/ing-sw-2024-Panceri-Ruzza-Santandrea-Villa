@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.*;
@@ -19,29 +21,25 @@ public class ViewBoard {
 
     private final Map<String, ViewPlayArea> playerAreas;
     private final Map<String, ViewOpponentHand> opponentHands;
-    private final ViewPlayerHand playerHand;
+    private ViewPlayerHand playerHand;
     private final Map<String, Boolean> isPlayerDeadlocked;
     private final Map<String, Integer> scoreboard;
 
     private int currentTurn;
     private GamePhase gamePhase;
 
-    public ViewBoard(String nickname){
-        resourceCardDeck = new ViewDeck<>();
-        goldCardDeck = new ViewDeck<>();
-        objectiveCardViewDeck = new ViewDeck<>();
+    public ViewBoard(View view){
+        resourceCardDeck = new ViewDeck<>(ViewBoard.RESOURCE_DECK);
+        goldCardDeck = new ViewDeck<>(ViewBoard.GOLD_DECK);
+        objectiveCardViewDeck = new ViewDeck<>(ViewBoard.OBJECTIVE_DECK);
 
         playerAreas = new Hashtable<>();
         opponentHands = new Hashtable<>();
-        playerHand = new ViewPlayerHand(nickname);
         isPlayerDeadlocked = new Hashtable<>();
         scoreboard = new Hashtable<>();
-        scoreboard.put(nickname, 0);
         currentTurn = 0;
         gamePhase = GamePhase.PLACECARD;
 
-        playerAreas.put(nickname, new ViewPlayArea());
-        isPlayerDeadlocked.put(nickname, false);
     }
 
     public ViewDeck<ViewResourceCard> getResourceCardDeck() {
@@ -59,6 +57,7 @@ public class ViewBoard {
             addPlayer(nickname);
         return playerAreas.get(nickname);
     }
+
     public synchronized boolean isPlayerDeadlocked(String nickname) {
         return isPlayerDeadlocked.getOrDefault(nickname, false);
     }
@@ -91,6 +90,7 @@ public class ViewBoard {
     }
     public synchronized void setScore(String nickname, int score){
         scoreboard.put(nickname, score);
+        view.notifyBoardUpdate(nickname + "'s score is now " + score);
     }
     public synchronized boolean isEndgame(){
         int maxScore = scoreboard.values().stream().max(Integer::compare).orElse(0);
@@ -104,6 +104,7 @@ public class ViewBoard {
     public synchronized boolean setCurrentTurn(int currentTurn) {
         boolean changed = this.currentTurn != currentTurn;
         this.currentTurn = currentTurn;
+        if(changed) view.showNotification("Turn advanced to " + currentTurn);
         return changed;
     }
 
@@ -113,22 +114,51 @@ public class ViewBoard {
     public synchronized boolean setGamePhase(GamePhase gamePhase) {
         boolean changed = this.gamePhase != gamePhase;
         this.gamePhase = gamePhase;
+        if(gamePhase != GamePhase.SHOWWIN)
+            view.showNotification("Game phase updated to " + gamePhase);
+        else
+            view.setScene(SceneID.getEndgameSceneID());
         return changed;
     }
 
     public synchronized void addPlayer(String nickname){
-        playerAreas.put(nickname, new ViewPlayArea());
+        playerAreas.put(nickname, new ViewPlayArea(nickname));
         opponentHands.put(nickname, new ViewOpponentHand(nickname));
         isPlayerDeadlocked.put(nickname, false);
         scoreboard.put(nickname, 0);
+    }
+
+    public synchronized void addLocalPlayer(String nickname){
+        playerHand = new ViewPlayerHand(nickname);
+        scoreboard.put(nickname, 0);
+        playerAreas.put(nickname, new ViewPlayArea(nickname));
+        isPlayerDeadlocked.put(nickname, false);
     }
     public synchronized void removePlayer(String nickname){
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
+        view.notifyView(nickname + " has been removed.");
     }
     public synchronized void setPlayerDeadlock(String nickname, boolean isDeadLocked) {
         isPlayerDeadlocked.put(nickname, isDeadLocked);
+        if(isDeadLocked){
+            if(getPlayerHand().getNickname().equals(nickname)){
+                view.notifyMyAreaUpdate("You are deadlocked!");
+            } else {
+                view.notifyOpponentUpdate(nickname, nickname + " is deadlocked!");
+            }
+        }
+    }
+
+    //TODO maybe these methods can both be called by notifyView(Event event)
+    public synchronized void notifyEndgame(){
+        view.notifyView("Endgame has been reached!");
+    }
+
+    public synchronized void notifyEndgame(String nickname, int score)  {
+        view.notifyView("Endgame has been reached because "
+                + nickname + " has reached " + score + " (>20) points!");
     }
 }

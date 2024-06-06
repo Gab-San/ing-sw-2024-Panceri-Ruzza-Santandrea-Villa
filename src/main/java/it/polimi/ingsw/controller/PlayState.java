@@ -37,6 +37,7 @@ public class PlayState extends GameState {
         currentPlayerHasPlacedCard = false;
 
         board.setGamePhase(GamePhase.PLACECARD);
+        board.squashHistory();
         Player player = board.getCurrentPlayer();
         timers.startTimer(player, TURN_TIME);
     }
@@ -229,7 +230,6 @@ public class PlayState extends GameState {
         else nextState();
     }
     private void nextState() throws IllegalStateException {
-        board.squashHistory();
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }
 

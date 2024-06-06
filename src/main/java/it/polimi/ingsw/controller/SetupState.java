@@ -23,6 +23,7 @@ public class SetupState extends GameState{
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         board.setGamePhase(GamePhase.SETUP);
+        board.squashHistory();
         playersWhoPlacedStartingCard = new HashSet<>();
         playersWhoChoseColor=new HashSet<>();
         playersWhoChoseSecretObjective=new HashSet<>();
@@ -250,7 +251,6 @@ public class SetupState extends GameState{
             players.remove(randomIndex).setTurn(i); // removes from list and sets player turn
         }
 
-        board.squashHistory();
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 

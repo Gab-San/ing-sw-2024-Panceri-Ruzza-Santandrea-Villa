@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -56,7 +57,8 @@ public class TUIParser {
         }
     }
     private void viewHelperScene() {
-        view.setScene(SceneID.getHelperSceneID());
+        SceneManager.getInstance().setScene(SceneID.getHelperSceneID());
+        view.refreshScene();
     }
     private void parseMoveCommand(List<String> cmdArgs) throws IllegalArgumentException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide a direction to move towards!");
@@ -101,7 +103,9 @@ public class TUIParser {
                 case "help", "legend" -> SceneID.getHelperSceneID();
                 default -> SceneID.getOpponentAreaSceneID(cmdArgs.get(0));
             };
-        view.setScene(selectedScene);
+        
+        SceneManager.getInstance().setScene(selectedScene);
+        view.refreshScene();
     }
     private void parseFlipCommand(List<String> cmdArgs) {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");

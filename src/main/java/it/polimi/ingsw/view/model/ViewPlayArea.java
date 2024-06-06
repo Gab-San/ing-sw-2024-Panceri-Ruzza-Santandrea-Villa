@@ -10,12 +10,14 @@ import static it.polimi.ingsw.GameResource.FILLED;
 import java.util.*;
 
 public class ViewPlayArea {
+    private final String owner;
     private final Map<GamePoint, ViewPlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<ViewCorner> freeCorners;
     private GameResource color;
 
-    public ViewPlayArea() {
+    public ViewPlayArea(String owner) {
+        this.owner = owner;
         this.cardMatrix = Collections.synchronizedMap(new Hashtable<>());
         this.visibleResources = Collections.synchronizedMap(new Hashtable<>());
         this.freeCorners = Collections.synchronizedList(new LinkedList<>());
@@ -75,6 +77,11 @@ public class ViewPlayArea {
                 }
             }
         }
+
+        if(board.getPlayerHand().getNickname().equals(owner))
+            view.notifyMyAreaUpdate("You placed a card");
+        else
+            view.notifyOpponentUpdate(owner, owner + " placed a card");
     }
 
     private int countResource(GameResource res, String placementCostString){
@@ -122,6 +129,10 @@ public class ViewPlayArea {
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){
         this.visibleResources.clear();
         this.visibleResources.putAll(visibleResources);
+        if(board.getPlayerHand().getNickname().equals(owner))
+            notifyMyAreaUpdate("");
+        else
+            notifyOpponentUpdate(owner, "");
     }
     public Map<GameResource, Integer> getVisibleResources(){
         return Collections.unmodifiableMap(visibleResources);
@@ -150,5 +161,10 @@ public class ViewPlayArea {
     }
     public void addFreeCorners(List<ViewCorner> cardFreeCorners) {
         freeCorners.addAll(cardFreeCorners);
+
+        if(board.getPlayerHand().getNickname().equals(owner))
+            notifyMyAreaUpdate("");
+        else
+            notifyOpponentUpdate(owner, "");
     }
 }

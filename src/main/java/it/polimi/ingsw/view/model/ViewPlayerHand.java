@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.model;
 
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
@@ -8,6 +9,9 @@ import it.polimi.ingsw.view.model.cards.ViewStartCard;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 public class ViewPlayerHand extends ViewHand {
     public ViewPlayerHand(String nickname) {
@@ -23,8 +27,16 @@ public class ViewPlayerHand extends ViewHand {
     public void addCard(ViewPlayCard card){
         if(card != null)
             card.turnFaceUp();
+        view.notifyMyAreaUpdate("You have drawn a card");
         super.addCard(card);
     }
+
+    @Override
+    public synchronized void removeCard(ViewPlayCard card) {
+        super.removeCard(card);
+        view.notifyMyAreaUpdate("You have used a card in your hand");
+    }
+
     @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         if(secretObjectiveCards != null)
@@ -35,11 +47,22 @@ public class ViewPlayerHand extends ViewHand {
     public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
         if(objectiveCard != null)
             objectiveCard.turnFaceUp();
+        view.notifyMyAreaUpdate("You have received an objective");
         super.addSecretObjectiveCard(objectiveCard);
     }
+
+    @Override
+    public synchronized void chooseObjective(String choiceID) {
+        super.chooseObjective(choiceID);
+        view.notifyMyAreaUpdate("You have chosen your objective");
+    }
+
     @Override
     public void setStartCard(ViewStartCard startCard){
         if(startCard != null) startCard.turnFaceUp();
+        if(startingCardId != null)
+            view.notifyMyAreaUpdate("You have received your starting card");
+        else view.notifyMyAreaUpdate("You have placed your starting card");
         super.setStartCard(startCard);
     }
 
@@ -72,5 +95,23 @@ public class ViewPlayerHand extends ViewHand {
         }
 
         throw new IllegalArgumentException("Card " + cardID + " is not in this hand.");
+    }
+
+    @Override
+    public synchronized boolean setColor(PlayerColor color) {
+        if(super.setColor(color)){
+            view.notifyMyAreaUpdate("Your color was set to " + getColorFromEnum(color) + color + RESET);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized boolean setTurn(int turn) {
+        if(super.setTurn(turn)){
+            view.notifyMyAreaUpdate("Your turn was set to " + turn);
+            return true;
+        }
+        return false;
     }
 }

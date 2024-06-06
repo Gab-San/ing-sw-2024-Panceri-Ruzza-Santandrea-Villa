@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ViewHand {
-    private final String nickname;
+    protected final String nickname;
     private final List<ViewPlayCard> cards;
     private ViewStartCard startCard;
     private final List<ViewObjectiveCard> secretObjectiveCards;

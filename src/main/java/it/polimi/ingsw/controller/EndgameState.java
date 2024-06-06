@@ -23,6 +23,7 @@ public class EndgameState extends GameState{
     public EndgameState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller,disconnectingPlayers);
         board.setGamePhase(GamePhase.EVALOBJ);
+        board.squashHistory();
         evaluateSecretObjectives();
         board.setGamePhase(GamePhase.SHOWWIN);
         //prevent softlock if all connected players crash without explicit disconnect()
