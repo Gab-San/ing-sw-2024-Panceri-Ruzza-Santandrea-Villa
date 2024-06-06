@@ -58,7 +58,7 @@ public class ViewDeck<C extends ViewCard>{
         }
     }
 
-    private String getDeckName(char deck){
+    public static String getDeckName(char deck){
         return switch (deck) {
             case ViewBoard.RESOURCE_DECK -> "Resource deck";
             case ViewBoard.GOLD_DECK -> "Gold deck";

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.model.cards.*;
@@ -27,8 +28,10 @@ public class ViewBoard {
 
     private int currentTurn;
     private GamePhase gamePhase;
+    private final View view;
 
     public ViewBoard(View view){
+        this.view = view;
         resourceCardDeck = new ViewDeck<>(ViewBoard.RESOURCE_DECK);
         goldCardDeck = new ViewDeck<>(ViewBoard.GOLD_DECK);
         objectiveCardViewDeck = new ViewDeck<>(ViewBoard.OBJECTIVE_DECK);
@@ -153,12 +156,7 @@ public class ViewBoard {
     }
 
     //TODO maybe these methods can both be called by notifyView(Event event)
-    public synchronized void notifyEndgame(){
-        view.notifyView("Endgame has been reached!");
-    }
-
-    public synchronized void notifyEndgame(String nickname, int score)  {
-        view.notifyView("Endgame has been reached because "
-                + nickname + " has reached " + score + " (>20) points!");
+    public synchronized void notifyView(SceneID scene, DisplayEvent event){
+        view.update(scene, event);
     }
 }

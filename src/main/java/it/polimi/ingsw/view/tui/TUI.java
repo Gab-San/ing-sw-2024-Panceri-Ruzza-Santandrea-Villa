@@ -1,9 +1,10 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
+import it.polimi.ingsw.view.events.DisplayEvent;
+import it.polimi.ingsw.view.events.TUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -18,11 +19,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class TUI implements View{
-    private final CommandPassthrough serverProxy;
     private static final int BACKLOG_SIZE = 10;
     private final BlockingQueue<String> inputQueue;
-    private TUIParser parser;
-    private ViewBoard board;
+    private final ViewBoard board;
+    private final TUIParser parser;
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
     private boolean hasServerTimeoutDisconnected;
@@ -30,28 +30,23 @@ public class TUI implements View{
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue, boolean verbose) throws RemoteException {
         SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
-        this.serverProxy = serverProxy;
+        this.board = new ViewBoard(this);
+        ModelUpdater modelUpdater = new ModelUpdater(board);
+        setClientModelUpdater.accept(modelUpdater);
+        parser = new TUIParser(serverProxy, this, board);
+
         this.inputQueue = inputQueue;
         this.verbose = verbose;
         hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
-        //TODO: if possible correct this, it should be in run not in the constructor
-        runNicknameSelectScene(setClientModelUpdater);
-        // at this point, connection has concluded successfully.
 
     //region Loading TUI_SCENES
-
 
         TUI_Scene boardUI = new PrintBoardUI(board);
         boardUI.setNotificationBacklog(notificationBacklog);
         boardUI.setChatBacklog(chatBacklog);
         SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
-
-        TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname()));
-        myAreaUI.setNotificationBacklog(notificationBacklog);
-        myAreaUI.setChatBacklog(chatBacklog);
-        SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
 
         TUI_Scene endgameUI = new PrintEndgameUI(board);
         endgameUI.setNotificationBacklog(notificationBacklog);
@@ -75,7 +70,7 @@ public class TUI implements View{
         return nickname.matches("[^\n ].*[a-zA-Z].*[^\n ]")
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
-    private void runNicknameSelectScene(Consumer<ModelUpdater> setClientModelUpdater) throws RemoteException{
+    private void runNicknameSelectScene() throws RemoteException{
         SceneManager.getInstance().setScene(SceneID.getNicknameSelectSceneID());
         String nickname;
         do {
@@ -86,10 +81,9 @@ public class TUI implements View{
             }
             if(validateNickname(nickname)){
                 try{
-                    board = new ViewBoard(nickname);
-                    parser = new TUIParser(serverProxy, this, board);
-                    setClientModelUpdater.accept(new ModelUpdater(board, this));
                     parser.parseCommand("connect " + nickname);
+                    // If connection is through
+                    board.addLocalPlayer(nickname);
                 }catch (IllegalStateException | DisconnectException e){
                     //FIXME Post event handle
                     SceneManager.getInstance().getCurrentScene().displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
@@ -101,6 +95,13 @@ public class TUI implements View{
                 SceneManager.getInstance().getCurrentScene().displayError(error);
             }
         }while (!validateNickname(nickname));
+
+
+
+        TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname()));
+        myAreaUI.setNotificationBacklog(notificationBacklog);
+        myAreaUI.setChatBacklog(chatBacklog);
+        SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
     }
 
     private void printCommandPrompt(){
@@ -110,6 +111,8 @@ public class TUI implements View{
     }
 
     public void run() throws RemoteException, DisconnectException, TimeoutException {
+        runNicknameSelectScene();
+        // at this point, connection has concluded successfully.
         SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
         refreshScene();
         String input;
@@ -145,12 +148,10 @@ public class TUI implements View{
         SceneManager.getInstance().getCurrentScene().setCenter(row,col);
         printCommandPrompt();
     }
-    void setCenter(GamePoint center) {
-        SceneManager.getInstance().getCurrentScene().setCenter(center);
-        printCommandPrompt();
-    }
+
+
     @Override
-    public synchronized void update(SceneID sceneID, String description) {
+    public synchronized void update(SceneID sceneID, DisplayEvent event) {
         Scene scene = SceneManager.getInstance().getScene(sceneID);
         if(scene != null){
             Scene currentScene = SceneManager.getInstance().getCurrentScene();
@@ -158,7 +159,10 @@ public class TUI implements View{
                 refreshScene();
             }
             else{
-                showNotification(description);
+                if(!(event instanceof TUIEvent tuiEvent)){
+                    return;
+                }
+                tuiEvent.displayEvent(this);
             }
         }
         else if(sceneID.isOpponentAreaScene()){
