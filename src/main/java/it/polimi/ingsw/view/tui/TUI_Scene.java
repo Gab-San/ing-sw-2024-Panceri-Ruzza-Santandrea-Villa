@@ -38,7 +38,7 @@ public abstract class TUI_Scene implements Scene {
         Client.cls();
     }
     @Override
-    public final void display(){
+    public void display(){
         synchronized (System.out){
             cls();
             print();
@@ -59,6 +59,13 @@ public abstract class TUI_Scene implements Scene {
                     out.print(chatBacklog.get(i-chatDiff));
                 out.println();
             }
+            printCommandPrompt();
+        }
+    }
+
+    private void printCommandPrompt(){
+        synchronized(System.out){
+            System.out.print("Command > ");
         }
     }
 

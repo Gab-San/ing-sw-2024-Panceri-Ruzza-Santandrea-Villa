@@ -12,6 +12,13 @@ public class PrintNicknameSelectUI extends TUI_Scene {
     }
 
     @Override
+    public void display(){
+        synchronized (System.out) {
+            cls();
+            print();
+        }
+    }
+    @Override
     public void print() {
         out.print("Choose your nickname (min 3 characters): ");
         out.flush();

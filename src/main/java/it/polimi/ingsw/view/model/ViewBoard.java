@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.GamePhase;
+import it.polimi.ingsw.view.Scene;
 import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GotoEndgameEvent;
@@ -124,7 +126,7 @@ public class ViewBoard {
         this.gamePhase = gamePhase;
         if(changed) {
             if (gamePhase != GamePhase.SHOWWIN)
-                notifyView(SceneID.getNotificationSceneID(), new DisplayGamePhase(gamePhase));
+                notifyView(SceneID.getBoardSceneID(), new DisplayGamePhase(gamePhase));
             else
                 notifyView(SceneID.getEndgameSceneID(), new GotoEndgameEvent());
         }
@@ -155,6 +157,7 @@ public class ViewBoard {
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
+
         notifyView(SceneID.getNotificationSceneID(), new DisplayPlayerRemove(nickname));
     }
 

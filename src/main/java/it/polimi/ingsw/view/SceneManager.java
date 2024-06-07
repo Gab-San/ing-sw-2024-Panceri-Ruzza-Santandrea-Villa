@@ -56,4 +56,10 @@ public class SceneManager {
             return currentScene;
         }
     }
+
+    public void remove(SceneID sceneID){
+        synchronized (loadedScenes){
+            loadedScenes.remove(sceneID);
+        }
+    }
 }

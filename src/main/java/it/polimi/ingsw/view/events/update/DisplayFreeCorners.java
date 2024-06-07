@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.events.update;
 
+import it.polimi.ingsw.view.Scene;
+import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
@@ -28,6 +30,6 @@ public class DisplayFreeCorners extends DisplayPlayerEvent {
     @Override
     public void displayEvent(TUI tui) {
         // Check if flash worsen
-        tui.refreshScene();
+        SceneManager.getInstance().getCurrentScene().display();
     }
 }

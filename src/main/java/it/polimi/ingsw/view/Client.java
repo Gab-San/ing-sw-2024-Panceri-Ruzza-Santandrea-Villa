@@ -99,7 +99,6 @@ public class Client {
         String serverIP = null;
         String connectionTech = null;
         int port = -1;
-        boolean verbose = false;
 
     //region READ-ARGS
         String serverHostname = "localhost";
@@ -122,11 +121,6 @@ public class Client {
                 if(port >= 0)
                     duplicateArgument();
                 port = Integer.parseInt(arg);
-            }
-            else if(arg.equalsIgnoreCase("-v")) {
-                if(verbose)
-                    duplicateArgument();
-                verbose = true;
             }
             else{
                 if(!serverHostname.equals("localhost"))
@@ -255,7 +249,7 @@ public class Client {
                         view = new GUI(); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
-                        view = new TUI(proxy, setClientModelUpdater, inputQueue, verbose); // proxy always not null at this point
+                        view = new TUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
                     } else if (gameMode.toLowerCase().matches("quit|exit|q")) {
                         quitError();
                     } else {
@@ -264,8 +258,6 @@ public class Client {
                     }
                     if(view != null) view.run();
                 }
-            //TODO [Gamba] decide if want to clear the scenes as they will
-            // be reloaded in the following instance
             } catch (RemoteException e) {
                 cls();
                 view = null;

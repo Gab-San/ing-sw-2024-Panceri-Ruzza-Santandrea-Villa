@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
@@ -30,6 +32,6 @@ public class DisplayVisibleResources extends DisplayPlayerEvent {
     @Override
     public void displayEvent(TUI tui) {
         // Might flash a bit
-        tui.refreshScene();
+        SceneManager.getInstance().getCurrentScene().display();
     }
 }

@@ -60,7 +60,6 @@ public class TUIParser {
     }
     private void viewHelperScene() {
         SceneManager.getInstance().setScene(SceneID.getHelperSceneID());
-        view.refreshScene();
     }
     private void parseMoveCommand(List<String> cmdArgs) throws IllegalArgumentException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide a direction to move towards!");
@@ -107,7 +106,6 @@ public class TUIParser {
             };
         
         SceneManager.getInstance().setScene(selectedScene);
-        view.refreshScene();
     }
     private void parseFlipCommand(List<String> cmdArgs) {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");

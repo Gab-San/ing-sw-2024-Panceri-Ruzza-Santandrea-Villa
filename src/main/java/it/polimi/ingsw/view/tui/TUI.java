@@ -26,9 +26,7 @@ public class TUI implements View{
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
     private boolean hasServerTimeoutDisconnected;
-    private final boolean verbose;
-
-    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue, boolean verbose) throws RemoteException {
+    public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue) throws RemoteException {
         SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
         this.board = new ViewBoard(this);
         ModelUpdater modelUpdater = new ModelUpdater(board);
@@ -36,13 +34,13 @@ public class TUI implements View{
         parser = new TUIParser(serverProxy, this, board);
 
         this.inputQueue = inputQueue;
-        this.verbose = verbose;
         hasServerTimeoutDisconnected = false;
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
 
     //region Loading TUI_SCENES
         SceneManager.getInstance().loadScene(SceneID.getNotificationSceneID(), new NotificationScene());
+        loadScenes();
     //endregion
     }
 
@@ -82,17 +80,15 @@ public class TUI implements View{
                 SceneManager.getInstance().getCurrentScene().displayError(error);
             }
         }while (!validateNickname(nickname));
-    }
-
-    private void loadScenes(){
         TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(),
                 board.getPlayerArea(board.getPlayerHand().getNickname()));
         myAreaUI.setNotificationBacklog(notificationBacklog);
         myAreaUI.setChatBacklog(chatBacklog);
         SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
         SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
-        refreshScene();
+    }
 
+    private void loadScenes(){
         TUI_Scene boardUI = new PrintBoardUI(board);
         boardUI.setNotificationBacklog(notificationBacklog);
         boardUI.setChatBacklog(chatBacklog);
@@ -109,15 +105,8 @@ public class TUI implements View{
         SceneManager.getInstance().loadScene(SceneID.getHelperSceneID(), helperUI);
     }
 
-    private void printCommandPrompt(){
-        synchronized(System.out){
-            System.out.print("Command > ");
-        }
-    }
-
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         runNicknameSelectScene();
-        loadScenes();
         // at this point, connection has concluded successfully.
         String input;
         final int SLEEP_MILLIS = 200;
@@ -139,18 +128,12 @@ public class TUI implements View{
         }
     }
 
-    public synchronized void refreshScene(){
-        SceneManager.getInstance().getCurrentScene().display();
-        printCommandPrompt();
-    }
 
     void moveView(List<CornerDirection> directions){
         SceneManager.getInstance().getCurrentScene().moveView(directions);
-        printCommandPrompt();
     }
     void setCenter(int row, int col) {
         SceneManager.getInstance().getCurrentScene().setCenter(row,col);
-        printCommandPrompt();
     }
 
 
@@ -158,16 +141,10 @@ public class TUI implements View{
     public synchronized void update(SceneID sceneID, DisplayEvent event) {
         Scene scene = SceneManager.getInstance().getScene(sceneID);
         if(scene != null){
-            Scene currentScene = SceneManager.getInstance().getCurrentScene();
-            if(currentScene.equals(scene) && !verbose){
-                refreshScene();
+            if(!(event instanceof TUIEvent tuiEvent)){
+                return;
             }
-            else{
-                if(!(event instanceof TUIEvent tuiEvent)){
-                    return;
-                }
-                tuiEvent.displayEvent(this);
-            }
+            tuiEvent.displayEvent(this);
         }
         else if(sceneID.isOpponentAreaScene()){
             String nick = sceneID.getNickname();
@@ -181,7 +158,6 @@ public class TUI implements View{
     @Override
     public synchronized void showError(String errorMsg) {
         SceneManager.getInstance().getCurrentScene().displayError(errorMsg);
-        printCommandPrompt();
     }
 
     public synchronized void showNotification(String notification) {
@@ -191,7 +167,6 @@ public class TUI implements View{
         }
         notificationBacklog.add(notification);
         SceneManager.getInstance().getCurrentScene().displayNotification(notificationBacklog);
-        printCommandPrompt();
     }
     @Override
     public synchronized void showChatMessage(String msg){
@@ -200,7 +175,6 @@ public class TUI implements View{
         }
         chatBacklog.add(msg);
         SceneManager.getInstance().getCurrentScene().displayChatMessage(chatBacklog);
-        printCommandPrompt();
     }
     public synchronized void notifyTimeout(){
         hasServerTimeoutDisconnected = true;
