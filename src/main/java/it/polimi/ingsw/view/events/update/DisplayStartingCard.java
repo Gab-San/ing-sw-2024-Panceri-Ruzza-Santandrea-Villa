@@ -7,15 +7,19 @@ import it.polimi.ingsw.view.tui.TUI;
 //DOCS add docs
 public class DisplayStartingCard extends DisplayPlayerEvent {
     private final ViewStartCard startingCard;
+    private final boolean wasStartCardNull;
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
+     * @param wasStartCardNull true if old value of starting card was null
+     * @param startingCard the starting card value that was set on player hand
      */
-    public DisplayStartingCard(String nickname, boolean isLocalPlayer, ViewStartCard startingCard) {
+    public DisplayStartingCard(String nickname, boolean isLocalPlayer, boolean wasStartCardNull, ViewStartCard startingCard) {
         super(nickname, isLocalPlayer);
         this.startingCard = startingCard;
+        this.wasStartCardNull = wasStartCardNull;
     }
 
     @Override
@@ -25,6 +29,10 @@ public class DisplayStartingCard extends DisplayPlayerEvent {
 
     @Override
     public void displayEvent(TUI tui) {
+        if(wasStartCardNull && startingCard == null){
+            //no update if start card does not change
+            return;
+        }
         if(startingCard == null){
             if(isLocalPlayer){
                 tui.showNotification("You have placed your starting card");

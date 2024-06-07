@@ -59,7 +59,7 @@ public class RMIServerProxy implements CommandPassthrough {
     public void disconnect() throws IllegalStateException, RemoteException {
         validateConnection();
         server.disconnect(nickname, client);
-        client.close();
+        client.closeOnNext();
     }
 
     @Override

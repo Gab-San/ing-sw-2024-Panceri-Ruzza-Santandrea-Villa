@@ -40,29 +40,32 @@ public abstract class TUI_Scene implements Scene {
     @Override
     public void display(){
         synchronized (System.out){
-            cls();
-            print();
-
-            int notifMaxMsgLen = notificationBacklog.stream()
-                    .mapToInt(String::length)
-                    .max().orElse(0);
-
-            notifMaxMsgLen += NOTIF_CHAT_SPACING;
-
-            int backlogSize = Math.max(notificationBacklog.size(), chatBacklog.size());
-            int notifDiff = backlogSize - notificationBacklog.size();
-            int chatDiff = backlogSize - chatBacklog.size();
-            for (int i = 0; i < backlogSize; i++) {
-                if(i >= notifDiff)
-                    out.print(pad(notificationBacklog.get(i-notifDiff), notifMaxMsgLen));
-                if(i >= chatDiff)
-                    out.print(chatBacklog.get(i-chatDiff));
-                out.println();
-            }
+            displayNoPrompt();
             printCommandPrompt();
         }
     }
 
+    private void displayNoPrompt(){
+        cls();
+        print();
+
+        int notifMaxMsgLen = notificationBacklog.stream()
+                .mapToInt(String::length)
+                .max().orElse(0);
+
+        notifMaxMsgLen += NOTIF_CHAT_SPACING;
+
+        int backlogSize = Math.max(notificationBacklog.size(), chatBacklog.size());
+        int notifDiff = backlogSize - notificationBacklog.size();
+        int chatDiff = backlogSize - chatBacklog.size();
+        for (int i = 0; i < backlogSize; i++) {
+            if(i >= notifDiff)
+                out.print(pad(notificationBacklog.get(i-notifDiff), notifMaxMsgLen));
+            if(i >= chatDiff)
+                out.print(chatBacklog.get(i-chatDiff));
+            out.println();
+        }
+    }
     private void printCommandPrompt(){
         synchronized(System.out){
             System.out.print("Command > ");
@@ -79,8 +82,9 @@ public abstract class TUI_Scene implements Scene {
     @Override
     public void displayError(String error){
         synchronized (System.out){
-            display();
+            displayNoPrompt();
             out.println(RED_TEXT + error + RESET);
+            printCommandPrompt();
         }
     }
     @Override

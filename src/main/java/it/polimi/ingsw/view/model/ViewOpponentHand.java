@@ -82,7 +82,7 @@ public class ViewOpponentHand extends ViewHand{
         if(startCard != null) startCard.turnFaceDown();
         // Check into event
         notifyView(SceneID.getOpponentAreaSceneID(nickname),
-                    new DisplayStartingCard(nickname, false, startCard));
+                    new DisplayStartingCard(nickname, false, this.startCard == null, startCard));
         super.setStartCard(startCard);
     }
 

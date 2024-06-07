@@ -32,6 +32,7 @@ public class TCPClientSocket implements VirtualClient{
     private final Queue<TCPServerMessage> updateQueue;
     private final ServerProxy proxy;
     private ModelUpdater modelUpdater;
+    private boolean quitUpdateThread;
 
     /**
      * Constructs a tcp client establishing connection on localhost.
@@ -53,6 +54,7 @@ public class TCPClientSocket implements VirtualClient{
         this.proxy = new ServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
+        quitUpdateThread = false;
         startReader();
     }
 
@@ -64,7 +66,7 @@ public class TCPClientSocket implements VirtualClient{
     private void startUpdateExecutor(){
         new Thread(
                 () -> {
-                    while (!clientSocket.isClosed()){
+                    while (!quitUpdateThread){
                         TCPServerMessage update;
                         synchronized (updateQueue) {
                             while (updateQueue.isEmpty()) {
@@ -74,7 +76,6 @@ public class TCPClientSocket implements VirtualClient{
                                     throw new RuntimeException(e);
                                 }
                             }
-
                             update = updateQueue.remove();
                         }
                         try {
@@ -569,6 +570,7 @@ public class TCPClientSocket implements VirtualClient{
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
         modelUpdater.notifyIndirectDisconnect();
+        quitUpdateThread = true;
     }
 
 //endregion

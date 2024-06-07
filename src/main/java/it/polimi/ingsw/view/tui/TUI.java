@@ -11,9 +11,7 @@ import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.tui.scenes.*;
 
 import java.rmi.RemoteException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -26,6 +24,9 @@ public class TUI implements View{
     private final List<String> notificationBacklog;
     private final List<String> chatBacklog;
     private boolean hasServerTimeoutDisconnected;
+    private Timer refreshTimer = new Timer();
+    private static final long REFRESH_TIMEOUT_MILLIS = 500L;
+
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue) throws RemoteException {
         SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
         this.board = new ViewBoard(this);
@@ -70,7 +71,7 @@ public class TUI implements View{
                     parser.setSelfPlayerArea();
                     parser.parseCommand("connect " + nickname);
                 }catch (IllegalStateException | DisconnectException e){
-                    //FIXME Post event handle
+                    //FIXME Post event handle [Ale] ???
                     SceneManager.getInstance().getCurrentScene().displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
                     nickname = "";
                 }
@@ -90,13 +91,11 @@ public class TUI implements View{
 
     private void loadScenes(){
         TUI_Scene boardUI = new PrintBoardUI(board);
-        boardUI.setNotificationBacklog(notificationBacklog);
-        boardUI.setChatBacklog(chatBacklog);
+        setBacklogs(boardUI);
         SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
 
         TUI_Scene helperUI = new PrintHelperUI();
-        helperUI.setNotificationBacklog(notificationBacklog);
-        helperUI.setChatBacklog(chatBacklog);
+        setBacklogs(helperUI);
         SceneManager.getInstance().loadScene(SceneID.getHelperSceneID(), helperUI);
     }
 
@@ -110,6 +109,7 @@ public class TUI implements View{
                 input = inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
                 synchronized (this){
                     if(hasServerTimeoutDisconnected){
+                        refreshTimer.cancel();
                         throw new TimeoutException();
                     }
                 }
@@ -155,13 +155,24 @@ public class TUI implements View{
         SceneManager.getInstance().getCurrentScene().displayError(errorMsg);
     }
 
+    private void setRefreshTimer(){
+        refreshTimer.cancel();
+        refreshTimer = new Timer(true);
+        refreshTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SceneManager.getInstance().getCurrentScene().display();
+            }
+        }, REFRESH_TIMEOUT_MILLIS);
+    }
+
     public synchronized void showNotification(String notification) {
         if(notification == null || notification.isEmpty()) return;
         if(notificationBacklog.size() >= BACKLOG_SIZE){
             notificationBacklog.remove(0);
         }
         notificationBacklog.add(notification);
-        SceneManager.getInstance().getCurrentScene().displayNotification(notificationBacklog);
+        setRefreshTimer();
     }
     @Override
     public synchronized void showChatMessage(String msg){
@@ -169,8 +180,9 @@ public class TUI implements View{
             chatBacklog.remove(0);
         }
         chatBacklog.add(msg);
-        SceneManager.getInstance().getCurrentScene().displayChatMessage(chatBacklog);
+        setRefreshTimer();
     }
+
     public synchronized void notifyTimeout(){
         hasServerTimeoutDisconnected = true;
         showError("You have been disconnected for timeout!");

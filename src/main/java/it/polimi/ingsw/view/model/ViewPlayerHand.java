@@ -68,7 +68,7 @@ public class ViewPlayerHand extends ViewHand {
     public void setStartCard(ViewStartCard startCard){
         if(startCard != null) startCard.turnFaceUp();
         notifyView(SceneID.getMyAreaSceneID(),
-                new DisplayStartingCard(nickname, true, startCard));
+                new DisplayStartingCard(nickname, true, this.startCard == null, startCard));
         super.setStartCard(startCard);
     }
 

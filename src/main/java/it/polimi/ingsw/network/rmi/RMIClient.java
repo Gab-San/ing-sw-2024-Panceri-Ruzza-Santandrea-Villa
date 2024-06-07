@@ -318,10 +318,10 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
 
     @Override
     public void notifyIndirectDisconnect() throws RemoteException {
-        close();
         synchronized (updateQueue){
             updateQueue.clear();
             updateQueue.add(new NotifyIndirectDisconnect(modelUpdater));
+            closeOnNext();
             updateQueue.notifyAll();
         }
     }
@@ -341,7 +341,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
      * Since rmi connection cannot be effectively closed, this method
      * stops the update thread, so that calls to rmi client have no effect on the application.
      */
-    public void close(){
+    public synchronized void closeOnNext(){
         isOpen = false;
     }
 
@@ -360,7 +360,8 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
     private void startUpdateExecutor() {
         new Thread(
                 () -> {
-                    while (isOpen){
+                    boolean run = isOpen;
+                    while (run){
                         RMIUpdate rmiUpdate;
                         synchronized (updateQueue) {
                             while (updateQueue.isEmpty()) {
@@ -372,6 +373,11 @@ public class RMIClient extends UnicastRemoteObject implements VirtualClient {
                             }
 
                             rmiUpdate = updateQueue.remove();
+                            synchronized (this) {
+                                run = isOpen; // only update exit condition after taking an update
+                                //if isOpen is set false on timeout while thread is executing .update() below,
+                                //then it would not execute the last update (NotifyIndirectDisconnect)
+                            }
                         }
                         rmiUpdate.update();
                     }
