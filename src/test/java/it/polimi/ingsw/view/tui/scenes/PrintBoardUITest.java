@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.tui.scenes;
 import static it.polimi.ingsw.view.ViewBoardGenerator.*;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
 
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 import org.junit.jupiter.api.AfterEach;
@@ -20,7 +21,8 @@ public class PrintBoardUITest {
 
     @BeforeEach
     void setUp(){
-        board = new ViewBoard("testPlayer");
+        board = new ViewBoard(new StubView());
+        board.addLocalPlayer("Test_Player");
         printBoardUI = new PrintBoardUI(board);
         random = new Random();
 

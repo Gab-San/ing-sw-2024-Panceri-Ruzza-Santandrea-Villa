@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.printers;
 
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,10 @@ public class PrintPlayAreaTest {
     @BeforeEach
     void setUp(){
         random = new Random();
-        playArea = new ViewPlayArea();
+        ViewBoard board = new ViewBoard(new StubView());
+        board.addLocalPlayer("Test_Player");
+
+        playArea = board.getPlayerArea("Test_Player");
         printPlayArea = new PrintPlayArea(playArea);
 
         ViewStartCard startCard = getRandomStartingCard();

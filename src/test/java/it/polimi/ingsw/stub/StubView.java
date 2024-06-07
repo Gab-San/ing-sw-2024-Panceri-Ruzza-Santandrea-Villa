@@ -5,13 +5,19 @@ import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.SerializableCorner;
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.events.DisplayEvent;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
+import it.polimi.ingsw.view.exceptions.TimeoutException;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class StubView {
+public class StubView implements View {
     private final List<Player> playerList;
     private GamePhase gamePhase;
     private int turn;
@@ -88,5 +94,30 @@ public class StubView {
 
     public void setVisibleResources(Map<GameResource, Integer> visibleResources) {
         this.visibleResources = visibleResources;
+    }
+
+    @Override
+    public void update(SceneID sceneID, DisplayEvent event) {
+
+    }
+
+    @Override
+    public void showError(String errorMsg) {
+
+    }
+
+    @Override
+    public void showChatMessage(String msg) {
+
+    }
+
+    @Override
+    public void notifyTimeout() {
+
+    }
+
+    @Override
+    public void run() throws RemoteException, TimeoutException, DisconnectException {
+
     }
 }

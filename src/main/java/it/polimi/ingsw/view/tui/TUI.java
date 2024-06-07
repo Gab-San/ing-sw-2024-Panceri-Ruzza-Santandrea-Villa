@@ -81,9 +81,10 @@ public class TUI implements View{
             }
             if(validateNickname(nickname)){
                 try{
-                    parser.parseCommand("connect " + nickname);
                     // If connection is through
                     board.addLocalPlayer(nickname);
+                    parser.setSelfPlayerArea();
+                    parser.parseCommand("connect " + nickname);
                 }catch (IllegalStateException | DisconnectException e){
                     //FIXME Post event handle
                     SceneManager.getInstance().getCurrentScene().displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
@@ -96,12 +97,13 @@ public class TUI implements View{
             }
         }while (!validateNickname(nickname));
 
-
-
-        TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(), board.getPlayerArea(board.getPlayerHand().getNickname()));
+        TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(),
+                board.getPlayerArea(board.getPlayerHand().getNickname()));
         myAreaUI.setNotificationBacklog(notificationBacklog);
         myAreaUI.setChatBacklog(chatBacklog);
         SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
+        SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
+        refreshScene();
     }
 
     private void printCommandPrompt(){
@@ -113,8 +115,6 @@ public class TUI implements View{
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         runNicknameSelectScene();
         // at this point, connection has concluded successfully.
-        SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
-        refreshScene();
         String input;
         final int SLEEP_MILLIS = 200;
         while(true) {
@@ -135,7 +135,7 @@ public class TUI implements View{
         }
     }
 
-    void refreshScene(){
+    public synchronized void refreshScene(){
         SceneManager.getInstance().getCurrentScene().display();
         printCommandPrompt();
     }
@@ -171,7 +171,7 @@ public class TUI implements View{
             opponentUI.setNotificationBacklog(notificationBacklog);
             opponentUI.setChatBacklog(chatBacklog);
             SceneManager.getInstance().loadScene(sceneID, opponentUI);
-            update(sceneID, description); // won't loop indefinitely as next iteration will have scene != null
+            update(sceneID, event); // won't loop indefinitely as next iteration will have scene != null
         }
     }
     @Override
@@ -179,7 +179,7 @@ public class TUI implements View{
         SceneManager.getInstance().getCurrentScene().displayError(errorMsg);
         printCommandPrompt();
     }
-    @Override
+
     public synchronized void showNotification(String notification) {
         if(notification == null || notification.isEmpty()) return;
         if(notificationBacklog.size() >= BACKLOG_SIZE){

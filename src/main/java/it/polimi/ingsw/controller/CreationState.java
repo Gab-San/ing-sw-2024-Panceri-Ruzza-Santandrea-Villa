@@ -13,7 +13,7 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 
 public class CreationState extends GameState{
-    private final int SET_TIME = 60; // 1 minute
+    private final int SET_TIME = 60*60; // 1 minute
 
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -39,6 +39,7 @@ public class CreationState extends GameState{
         timers.stopTimer(board.getPlayerByNickname(nickname));
         board.removePlayer(nickname);
         board.setGamePhase(GamePhase.CREATE);
+        board.squashHistory();
     }
 
     @Override

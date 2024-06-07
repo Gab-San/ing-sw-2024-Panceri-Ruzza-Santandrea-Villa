@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui.printers;
 
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.model.cards.*;
@@ -21,7 +22,7 @@ public class PrintOpponentHandTest {
 
     @BeforeAll
     static void setUp(){
-        hand = new ViewOpponentHand("Test_Player");
+        hand = new ViewOpponentHand("Test_Player", new StubView());
         printHand = new PrintHand(hand);
         random = new Random();
     }

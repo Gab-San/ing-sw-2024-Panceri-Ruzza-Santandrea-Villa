@@ -1,15 +1,21 @@
 package it.polimi.ingsw.view.model;
 
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.events.DisplayEvent;
+import it.polimi.ingsw.view.events.update.DisplayDeckUpdate;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 
 public class ViewDeck<C extends ViewCard>{
-    private char deckType;
+    private final char deckId;
     private C topCard;
     private C firstRevealed;
     private C secondRevealed;
+    private final View view;
 
-    public ViewDeck(char deckType){
-        this.deckType = deckType;
+    public ViewDeck(char deckId, View view){
+        this.deckId = deckId;
+        this.view = view;
         topCard = null;
         firstRevealed = null;
         secondRevealed = null;
@@ -25,11 +31,8 @@ public class ViewDeck<C extends ViewCard>{
     public synchronized void setTopCard(C card) {
         if(card != null) card.turnFaceDown();
         this.topCard = card;
-        if(card == null){
-            view.notifyBoardUpdate(getDeckName(deckType) + " is now empty! Only the 2 revealed cards remain.");
-        } else {
-            view.notifyBoardUpdate("The top card of " + getDeckName(deckType) + " was replaced");
-        }
+        // Checks are inside the event
+        notifyView(SceneID.getBoardSceneID(), new DisplayDeckUpdate(deckId, topCard, 0));
     }
 
     public synchronized C getFirstRevealed() {
@@ -38,11 +41,9 @@ public class ViewDeck<C extends ViewCard>{
     public synchronized void setFirstRevealed(C card) {
         if(card != null) card.turnFaceUp();
         this.firstRevealed = card;
-        if(card == null){
-            view.notifyBoardUpdate("First revealed card of " + getDeckName(deckType) + " was drawn. Deck is empty so no card has replaced it.");
-        } else{
-            view.notifyBoardUpdate("First revealed card of " + getDeckName(deckType) + " was revealed");
-        }
+        // Checks inside event
+        notifyView(SceneID.getBoardSceneID(), new DisplayDeckUpdate(deckId, firstRevealed, 1));
+
     }
 
     public synchronized C getSecondRevealed() {
@@ -51,11 +52,8 @@ public class ViewDeck<C extends ViewCard>{
     public synchronized void setSecondRevealed(C card) {
         if(card != null) card.turnFaceUp();
         this.secondRevealed = card;
-        if(card == null){
-            view.notifyBoardUpdate("Second revealed card of " + getDeckName(deckType) + " was drawn. Deck is empty so no card has replaced it.");
-        } else {
-            view.notifyBoardUpdate("Second revealed card of " + getDeckName(deckType) + " was revealed");
-        }
+        // Checks inside event
+        notifyView(SceneID.getBoardSceneID(), new DisplayDeckUpdate(deckId, secondRevealed, 2));
     }
 
     public static String getDeckName(char deck){
@@ -65,5 +63,9 @@ public class ViewDeck<C extends ViewCard>{
             case ViewBoard.OBJECTIVE_DECK -> "Objective deck";
             default -> "";
         };
+    }
+
+    public synchronized void notifyView(SceneID scene, DisplayEvent event){
+        view.update(scene, event);
     }
 }

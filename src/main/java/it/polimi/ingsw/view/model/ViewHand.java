@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
@@ -11,14 +14,16 @@ import java.util.List;
 
 public abstract class ViewHand {
     protected final String nickname;
-    private final List<ViewPlayCard> cards;
-    private ViewStartCard startCard;
-    private final List<ViewObjectiveCard> secretObjectiveCards;
-    private PlayerColor color;
+    protected final List<ViewPlayCard> cards;
+    protected ViewStartCard startCard;
+    protected final List<ViewObjectiveCard> secretObjectiveCards;
+    protected PlayerColor color;
     private int turn;
+    protected final View view;
 
-    public ViewHand(String nickname) {
+    public ViewHand(String nickname, View view) {
         this.nickname = nickname;
+        this.view = view;
         this.cards = Collections.synchronizedList(new LinkedList<>());
         startCard = null;
         this.secretObjectiveCards = Collections.synchronizedList(new LinkedList<>());
@@ -102,5 +107,9 @@ public abstract class ViewHand {
         boolean changed = this.turn != turn;
         this.turn = turn;
         return changed;
+    }
+
+    public synchronized void notifyView(SceneID scene, DisplayEvent event){
+        view.update(scene, event);
     }
 }

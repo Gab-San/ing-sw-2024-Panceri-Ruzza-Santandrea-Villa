@@ -12,11 +12,10 @@ import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 public class ViewController {
     private final ViewBoard board;
-    private final ViewPlayArea selfPlayArea;
+    private ViewPlayArea selfPlayArea;
 
     public ViewController(ViewBoard board){
         this.board = board;
-        selfPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
     }
 
     public void validatePlaceStartCard() throws IllegalStateException, IllegalArgumentException{
@@ -113,5 +112,9 @@ public class ViewController {
 
     public ViewStartCard getSelfStartingCard(){
         return board.getPlayerHand().getStartCard();
+    }
+
+    public void setSelfPlayerArea() {
+        selfPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
     }
 }

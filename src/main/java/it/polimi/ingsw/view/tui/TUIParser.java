@@ -6,8 +6,10 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.ViewController;
+import it.polimi.ingsw.view.events.commands.DisplayFlippedCard;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -111,15 +113,26 @@ public class TUIParser {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
 
         String arg = cmdArgs.get(0).toUpperCase();
-            if(arg.matches("\\d")) {
-                try {
-                    int index = Integer.parseInt(cmdArgs.get(0));
-                    board.getPlayerHand().flipCard(index);
-                }catch (IndexOutOfBoundsException | NumberFormatException e){
-                    throw new IllegalArgumentException("Invalid flip index provided.");
-                }
+        ViewPlayCard flippedCard = null;
+        if(arg.matches("\\d")) {
+            try {
+                int index = Integer.parseInt(cmdArgs.get(0));
+                board.getPlayerHand().flipCard(index);
+                flippedCard = board.getPlayerHand().getCard(index);
+            }catch (IndexOutOfBoundsException | NumberFormatException e){
+                throw new IllegalArgumentException("Invalid flip index provided.");
             }
-            else board.getPlayerHand().flipCard(arg); //throws if card not in hand
-        view.update(SceneID.getMyAreaSceneID(), "Flipped card " + arg);
+        }
+        else{
+            board.getPlayerHand().flipCard(arg); //throws if card not in hand
+            board.getPlayerHand().getCardByID(arg);
+        }
+
+        view.update(SceneID.getMyAreaSceneID(),
+                new DisplayFlippedCard(flippedCard));
+    }
+
+    void setSelfPlayerArea() {
+        serverParser.setSelfPlayerArea();
     }
 }

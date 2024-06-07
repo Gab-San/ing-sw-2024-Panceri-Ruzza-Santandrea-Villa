@@ -352,6 +352,9 @@ public class Parser {
         virtualServer.placeStartCard(startCard.isFaceUp());
     }
 
+    public void setSelfPlayerArea() {
+        viewController.setSelfPlayerArea();
+    }
 }
 
 

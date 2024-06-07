@@ -1,22 +1,22 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.view.SceneID;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.events.DisplayEvent;
+import it.polimi.ingsw.view.events.update.*;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
-import java.util.LinkedList;
 import java.util.List;
-
-import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 public class ViewOpponentHand extends ViewHand{
     private boolean isConnected;
 
-    public ViewOpponentHand(String nickname) {
-        super(nickname);
+    public ViewOpponentHand(String nickname, View view) {
+        super(nickname, view);
         isConnected = true;
     }
 
@@ -29,8 +29,8 @@ public class ViewOpponentHand extends ViewHand{
         // they were connected and they are still
         boolean changed = isConnected != connected;
         isConnected = connected;
-        view.notifyOpponentUpdate(nickname, nickname + " " +
-                (isConnected ? (changed ? "reconnected" : "connected") : "disconnected"));
+        notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayConnection(nickname,
+                isConnected, changed));
     }
 
     @Override
@@ -43,14 +43,16 @@ public class ViewOpponentHand extends ViewHand{
     public void addCard(ViewPlayCard card){
         if(card != null)
             card.turnFaceDown();
-        view.notifyOpponentUpdate(nickname, nickname + " has drawn a card");
+        notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                new DisplayAddedCard(nickname, false, cards));
         super.addCard(card);
     }
 
     @Override
     public synchronized void removeCard(ViewPlayCard card) {
         super.removeCard(card);
-        view.notifyOpponentUpdate(nickname, nickname + " has used a card in their hand");
+        notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                new DisplayRemoveCards(nickname, false, cards));
     }
 
     @Override
@@ -63,29 +65,32 @@ public class ViewOpponentHand extends ViewHand{
     public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
         if(objectiveCard != null)
             objectiveCard.turnFaceDown();
-        view.notifyOpponentUpdate(nickname, nickname + " has received an objective");
+        notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayAddedObjective(nickname, false,
+                secretObjectiveCards));
         super.addSecretObjectiveCard(objectiveCard);
     }
 
     @Override
     public synchronized void chooseObjective(String choiceID) {
         super.chooseObjective(choiceID);
-        view.notifyOpponentUpdate(nickname, nickname + " has chosen their objective");
+        notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                new DisplayChosenObjective(nickname, false, choiceID));
     }
 
     @Override
     public void setStartCard(ViewStartCard startCard){
         if(startCard != null) startCard.turnFaceDown();
-        if(startingCardId != null)
-            view.notifyOpponentUpdate(nickname, nickname + " has received their starting card");
-        else view.notifyOpponentUpdate(nickname,  nickname + " has placed their starting card");
+        // Check into event
+        notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                    new DisplayStartingCard(nickname, false, startCard));
         super.setStartCard(startCard);
     }
 
     @Override
     public synchronized boolean setColor(PlayerColor color) {
         if(super.setColor(color)){
-            view.notifyOpponentUpdate(nickname, nickname + "'s color was set to " + getColorFromEnum(color) + color + RESET);
+            notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                    new DisplayPlayerColor(nickname, false, color));
             return true;
         }
         return false;
@@ -94,7 +99,8 @@ public class ViewOpponentHand extends ViewHand{
     @Override
     public synchronized boolean setTurn(int turn) {
         if(super.setTurn(turn)){
-            view.notifyOpponentUpdate(nickname, nickname + "'s turn was set to " + turn);
+            notifyView(SceneID.getOpponentAreaSceneID(nickname),
+                    new DisplayPlayerTurn(nickname, false, turn));
             return true;
         }
         return false;

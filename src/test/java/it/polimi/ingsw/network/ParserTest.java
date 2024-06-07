@@ -5,6 +5,7 @@ import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.stub.PuppetClient;
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.stub.StubViewController;
 import it.polimi.ingsw.view.ViewCardGenerator;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -26,9 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ParserTest {
     private Parser parser;
     private ViewBoard board;
+    // FIXME fix tests
     @BeforeEach
     void setup() {
-        board = new ViewBoard("Test_Player");
+        board = new ViewBoard(new StubView());
+        board.addLocalPlayer("Test_Player");
         parser = new Parser(new PuppetClient(), new StubViewController(board));
     }
 

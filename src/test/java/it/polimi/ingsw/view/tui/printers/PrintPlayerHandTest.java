@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui.printers;
 
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.tui.ConsoleTextColors;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +15,7 @@ public abstract class PrintPlayerHandTest {
 
     @BeforeAll
     static void setUp(){
-        hand = new ViewPlayerHand("Test_Player");
+        hand = new ViewPlayerHand("Test_Player", new StubView());
         printPlayerHand = new PrintHand(hand);
     }
 

@@ -249,9 +249,9 @@ public class ModelUpdater {
         }
         boolean phaseChanged = board.setGamePhase(gamePhase);
         boolean turnChanged = board.setCurrentTurn(currentTurn);
-        if (phaseChanged || turnChanged)
-            board.notifyView(SceneID.getBoardSceneID(), new DisplayBoardState(currentTurn, scoreboard, gamePhase,
-                    playerDeadLock));
+//        if (phaseChanged || turnChanged)
+//            board.notifyView(SceneID.getBoardSceneID(), new DisplayBoardState(currentTurn, scoreboard, gamePhase,
+//                    playerDeadLock));
     }
     public synchronized void updatePhase(GamePhase gamePhase) {
         board.setGamePhase(gamePhase);

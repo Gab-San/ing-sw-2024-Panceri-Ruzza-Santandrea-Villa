@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PuppetModelUpdater extends ModelUpdater {
     public PuppetModelUpdater() {
-        super(null, null);
+        super(null);
     }
 
     @Override

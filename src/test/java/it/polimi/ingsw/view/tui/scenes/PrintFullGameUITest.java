@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.Client;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.model.*;
@@ -20,7 +21,8 @@ public class PrintFullGameUITest {
 
     PrintFullGameUITest(){
         random = new Random();
-        board = new ViewBoard("Test_Player");
+        board = new ViewBoard(new StubView());
+        board.addLocalPlayer("Test_Player");
 
         fillDeckRandomly(board.getResourceCardDeck(), ViewResourceCard.class);
         fillDeckRandomly(board.getGoldCardDeck(), ViewGoldCard.class);

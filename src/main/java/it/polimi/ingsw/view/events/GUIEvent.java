@@ -7,7 +7,7 @@ import it.polimi.ingsw.view.gui.GUI;
  */
 public interface GUIEvent extends DisplayEvent {
     /**
-     * Displays event on given gui.
+     * Displays event on gui.
      * @param gui gui on which to display event
      */
     void displayEvent(GUI gui);
