@@ -264,6 +264,8 @@ public class Client {
                     }
                     if(view != null) view.run();
                 }
+            //TODO [Gamba] decide if want to clear the scenes as they will
+            // be reloaded in the following instance
             } catch (RemoteException e) {
                 cls();
                 view = null;

@@ -13,7 +13,7 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 
 public class CreationState extends GameState{
-    private final int SET_TIME = 60*60; // 1 minute
+    private final int SET_TIME = 60; // 1 minute
 
     public CreationState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);

@@ -18,42 +18,42 @@ public class SceneManager {
         return instance;
     }
 
-    public synchronized void loadScene(SceneID sceneID, Scene scene){
-//        synchronized (loadedScenes) {
+    public void loadScene(SceneID sceneID, Scene scene){
+        synchronized (loadedScenes) {
             loadedScenes.put(sceneID, scene);
-//        }
+        }
     }
 
-    public synchronized Scene getScene(SceneID sceneID){
-//        synchronized (loadedScenes) {
+    public Scene getScene(SceneID sceneID){
+        synchronized (loadedScenes) {
             return loadedScenes.get(sceneID);
-//        }
+        }
     }
 
-    public synchronized void setScene(Scene scene){
-//        synchronized (SCENE_LOCK) {
+    public void setScene(Scene scene){
+        synchronized (SCENE_LOCK) {
             currentScene = scene;
             currentScene.display();
-//        }
+        }
     }
 
-    public synchronized void setScene(SceneID sceneID) throws IllegalArgumentException{
+    public void setScene(SceneID sceneID) throws IllegalArgumentException{
         Scene newScene;
-//        synchronized (loadedScenes) {
+        synchronized (loadedScenes) {
             newScene = loadedScenes.get(sceneID);
-//        }
+        }
         if(newScene == null){
             throw new IllegalArgumentException("Scene " + sceneID + " does not exist.");
         }
-//        synchronized (SCENE_LOCK) {
+        synchronized (SCENE_LOCK) {
             currentScene = newScene;
             currentScene.display();
-//        }
+        }
     }
 
-    public synchronized Scene getCurrentScene(){
-//        synchronized (SCENE_LOCK) {
+    public Scene getCurrentScene(){
+        synchronized (SCENE_LOCK) {
             return currentScene;
-//        }
+        }
     }
 }

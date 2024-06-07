@@ -42,21 +42,7 @@ public class TUI implements View{
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
 
     //region Loading TUI_SCENES
-
-        TUI_Scene boardUI = new PrintBoardUI(board);
-        boardUI.setNotificationBacklog(notificationBacklog);
-        boardUI.setChatBacklog(chatBacklog);
-        SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
-
-        TUI_Scene endgameUI = new PrintEndgameUI(board);
-        endgameUI.setNotificationBacklog(notificationBacklog);
-        endgameUI.setChatBacklog(chatBacklog);
-        SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameUI);
-
-        TUI_Scene helperUI = new PrintHelperUI();
-        helperUI.setNotificationBacklog(notificationBacklog);
-        helperUI.setChatBacklog(chatBacklog);
-        SceneManager.getInstance().loadScene(SceneID.getHelperSceneID(), helperUI);
+        SceneManager.getInstance().loadScene(SceneID.getNotificationSceneID(), new NotificationScene());
     //endregion
     }
 
@@ -96,7 +82,9 @@ public class TUI implements View{
                 SceneManager.getInstance().getCurrentScene().displayError(error);
             }
         }while (!validateNickname(nickname));
+    }
 
+    private void loadScenes(){
         TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(),
                 board.getPlayerArea(board.getPlayerHand().getNickname()));
         myAreaUI.setNotificationBacklog(notificationBacklog);
@@ -104,6 +92,21 @@ public class TUI implements View{
         SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
         SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
         refreshScene();
+
+        TUI_Scene boardUI = new PrintBoardUI(board);
+        boardUI.setNotificationBacklog(notificationBacklog);
+        boardUI.setChatBacklog(chatBacklog);
+        SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
+
+        TUI_Scene endgameUI = new PrintEndgameUI(board);
+        endgameUI.setNotificationBacklog(notificationBacklog);
+        endgameUI.setChatBacklog(chatBacklog);
+        SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameUI);
+
+        TUI_Scene helperUI = new PrintHelperUI();
+        helperUI.setNotificationBacklog(notificationBacklog);
+        helperUI.setChatBacklog(chatBacklog);
+        SceneManager.getInstance().loadScene(SceneID.getHelperSceneID(), helperUI);
     }
 
     private void printCommandPrompt(){
@@ -114,6 +117,7 @@ public class TUI implements View{
 
     public void run() throws RemoteException, DisconnectException, TimeoutException {
         runNicknameSelectScene();
+        loadScenes();
         // at this point, connection has concluded successfully.
         String input;
         final int SLEEP_MILLIS = 200;

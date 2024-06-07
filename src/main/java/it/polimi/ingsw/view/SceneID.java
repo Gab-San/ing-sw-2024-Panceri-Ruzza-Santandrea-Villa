@@ -37,7 +37,7 @@ public class SceneID {
     public static SceneID getNicknameSelectSceneID(){
         return new SceneID("NICKNAME_SELECT");
     }
-    public static SceneID getDefaultSceneID(){return new SceneID("DEFAULT");}
+    public static SceneID getNotificationSceneID(){return new SceneID("DEFAULT");}
     public static SceneID getBoardSceneID(){
         return new SceneID("Board");
     }

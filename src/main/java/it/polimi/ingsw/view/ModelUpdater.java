@@ -33,15 +33,15 @@ public class ModelUpdater {
 
 
     public synchronized void displayMessage(String messenger, String msg){
-        board.notifyView(SceneID.getDefaultSceneID(), new DisplayMessageEvent(messenger, msg));
+        board.notifyView(SceneID.getNotificationSceneID(), new DisplayMessageEvent(messenger, msg));
     }
 
     public synchronized void reportError(String errorMessage) {
-        board.notifyView(SceneID.getDefaultSceneID(), new DisplayErrorEvent(errorMessage));
+        board.notifyView(SceneID.getNotificationSceneID(), new DisplayErrorEvent(errorMessage));
     }
 
     public synchronized void notifyIndirectDisconnect()  {
-        board.notifyView(SceneID.getDefaultSceneID(), new NotifyTimeoutEvent());
+        board.notifyView(SceneID.getNotificationSceneID(), new NotifyTimeoutEvent());
     }
 
     public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
@@ -95,11 +95,11 @@ public class ModelUpdater {
     }
 
     public synchronized void notifyEndgame()  {
-        board.notifyView(SceneID.getEndgameSceneID(), new DisplayEndgameEvent());
+        board.notifyView(SceneID.getNotificationSceneID(), new DisplayEndgameEvent());
     }
 
     public synchronized void notifyEndgame(String nickname, int score)  {
-        board.notifyView(SceneID.getEndgameSceneID(), new DisplayEndgameEvent(nickname, score));
+        board.notifyView(SceneID.getNotificationSceneID(), new DisplayEndgameEvent(nickname, score));
     }
 
     //TODO: [Ale] remove these debug prints (and maybe remove exception too)

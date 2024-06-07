@@ -112,7 +112,7 @@ public class ViewBoard {
         boolean changed = this.currentTurn != currentTurn;
         this.currentTurn = currentTurn;
         //TODO check if 'if' is correct
-        if(changed) notifyView(SceneID.getBoardSceneID(), new DisplayTurn(currentTurn));
+        if(changed) notifyView(SceneID.getNotificationSceneID(), new DisplayTurn(currentTurn));
         return changed;
     }
 
@@ -124,9 +124,9 @@ public class ViewBoard {
         this.gamePhase = gamePhase;
         if(changed) {
             if (gamePhase != GamePhase.SHOWWIN)
-                notifyView(SceneID.getBoardSceneID(), new DisplayGamePhase(gamePhase));
+                notifyView(SceneID.getNotificationSceneID(), new DisplayGamePhase(gamePhase));
             else
-                notifyView(SceneID.getDefaultSceneID(), new GotoEndgameEvent());
+                notifyView(SceneID.getEndgameSceneID(), new GotoEndgameEvent());
         }
         return changed;
     }
@@ -155,7 +155,7 @@ public class ViewBoard {
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
-        notifyView(SceneID.getDefaultSceneID(), new DisplayPlayerRemove(nickname));
+        notifyView(SceneID.getNotificationSceneID(), new DisplayPlayerRemove(nickname));
     }
 
     public synchronized void setPlayerDeadlock(String nickname, boolean isDeadLocked) {
