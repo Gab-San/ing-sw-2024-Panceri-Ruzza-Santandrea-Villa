@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.model;
 
 import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.view.Scene;
 import it.polimi.ingsw.view.SceneID;
-import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GotoEndgameEvent;
@@ -128,7 +126,7 @@ public class ViewBoard {
             if (gamePhase != GamePhase.SHOWWIN)
                 notifyView(SceneID.getBoardSceneID(), new DisplayGamePhase(gamePhase));
             else
-                notifyView(SceneID.getEndgameSceneID(), new GotoEndgameEvent());
+                notifyView(SceneID.getEndgameSceneID(), new GotoEndgameEvent(this));
         }
         return changed;
     }
@@ -165,8 +163,6 @@ public class ViewBoard {
         isPlayerDeadlocked.put(nickname, isDeadLocked);
         if(isDeadLocked){
             if(getPlayerHand().getNickname().equals(nickname)){
-                //COMMENT FOR "ALE": this notification should be displayed even if
-                // player is looking at itself. Are we displaying dead locks in some other way?
                 notifyView(SceneID.getMyAreaSceneID(), new DisplayDeadLock(nickname, true));
             } else {
                 notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayDeadLock(nickname, false));

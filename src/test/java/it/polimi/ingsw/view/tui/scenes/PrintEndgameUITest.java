@@ -21,7 +21,7 @@ public class PrintEndgameUITest {
     void setUp(){
         ViewBoard board = new ViewBoard(new StubView());
         board.addLocalPlayer(name1);
-        endgameUI = new PrintEndgameUI(board);
+        endgameUI = new PrintEndgameUI(board, false);
         Random random = new Random();
         board.addPlayer(name2);
         board.addPlayer(name3);

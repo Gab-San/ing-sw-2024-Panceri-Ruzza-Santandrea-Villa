@@ -94,11 +94,6 @@ public class TUI implements View{
         boardUI.setChatBacklog(chatBacklog);
         SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
 
-        TUI_Scene endgameUI = new PrintEndgameUI(board);
-        endgameUI.setNotificationBacklog(notificationBacklog);
-        endgameUI.setChatBacklog(chatBacklog);
-        SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameUI);
-
         TUI_Scene helperUI = new PrintHelperUI();
         helperUI.setNotificationBacklog(notificationBacklog);
         helperUI.setChatBacklog(chatBacklog);
@@ -179,6 +174,11 @@ public class TUI implements View{
     public synchronized void notifyTimeout(){
         hasServerTimeoutDisconnected = true;
         showError("You have been disconnected for timeout!");
+    }
+
+    public void setBacklogs(TUI_Scene scene){
+        scene.setNotificationBacklog(notificationBacklog);
+        scene.setChatBacklog(chatBacklog);
     }
 
 }
