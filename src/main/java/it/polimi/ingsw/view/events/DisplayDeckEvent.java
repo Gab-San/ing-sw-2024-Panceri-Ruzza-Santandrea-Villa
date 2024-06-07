@@ -1,17 +1,19 @@
 package it.polimi.ingsw.view.events;
 
-import it.polimi.ingsw.view.tui.TUI;
+/**
+ * This class represents an event dealing with a deck
+ */
+abstract public class DisplayDeckEvent implements TUIEvent {
+    /**
+     * Deck initial letter that acts as identifier.
+     */
+    protected final char deck;
 
-public class DisplayDeckEvent implements TUIEvent{
-    private final String message;
-
-    public DisplayDeckEvent(String message) {
-        this.message = message;
-    }
-
-
-    @Override
-    public void displayEvent(TUI tui) {
-        tui.showNotification(message);
+    /**
+     * Constructs deck event.
+     * @param deck deck name initial
+     */
+    protected DisplayDeckEvent(char deck) {
+        this.deck = deck;
     }
 }

@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 public interface View {
     void update(SceneID sceneID, DisplayEvent event);
     void showError(String errorMsg);
-    void showNotification(String notification);
     void showChatMessage(String msg);
     void notifyTimeout();
     void run() throws RemoteException, TimeoutException, DisconnectException;

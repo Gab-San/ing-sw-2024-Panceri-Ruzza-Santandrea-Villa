@@ -125,6 +125,7 @@ public class ViewPlayArea {
     public ViewPlaceableCard getCardAt(int row, int col){
         return cardMatrix.get(new GamePoint(row, col));
     }
+    public Map<GamePoint, ViewPlaceableCard> getCardMatrix(){ return Collections.unmodifiableMap(cardMatrix);}
 
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){
         this.visibleResources.clear();

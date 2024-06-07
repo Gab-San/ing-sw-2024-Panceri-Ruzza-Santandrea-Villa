@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.*;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.cards.PlaceableCard;
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
 import it.polimi.ingsw.network.VirtualClient;
 

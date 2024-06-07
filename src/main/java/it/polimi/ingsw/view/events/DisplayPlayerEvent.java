@@ -1,17 +1,23 @@
 package it.polimi.ingsw.view.events;
 
-import it.polimi.ingsw.view.tui.TUI;
+/**
+ * This class represents an event dealing with a player
+ */
+abstract public class DisplayPlayerEvent implements TUIEvent, GUIEvent{
+    /**
+     * Player's nickname (unique identifier)
+     */
+    protected final String nickname;
+    protected final boolean isLocalPlayer;
 
-public class DisplayPlayerEvent implements TUIEvent{
-    private final String msg;
-
-    public DisplayPlayerEvent(String msg) {
-        this.msg = msg;
+    /**
+     * Constructs player event.
+     * @param nickname player's nickname who caused event to be triggered
+     * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
+     */
+    protected DisplayPlayerEvent(String nickname, boolean isLocalPlayer) {
+        this.nickname = nickname;
+        this.isLocalPlayer = isLocalPlayer;
     }
 
-
-    @Override
-    public void displayEvent(TUI tui) {
-        tui.showNotification(msg);
-    }
 }

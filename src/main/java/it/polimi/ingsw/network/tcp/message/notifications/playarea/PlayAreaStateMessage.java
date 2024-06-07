@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.tcp.message.notifications.playarea;
 
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
-import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
+import it.polimi.ingsw.CardPosition;
+import it.polimi.ingsw.SerializableCorner;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.network.tcp.message.notifications.player.PlayerMessage;
 

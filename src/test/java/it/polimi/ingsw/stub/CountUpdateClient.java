@@ -3,9 +3,8 @@ package it.polimi.ingsw.stub;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
-import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
-import it.polimi.ingsw.network.VirtualClient;
+import it.polimi.ingsw.CardPosition;
+import it.polimi.ingsw.SerializableCorner;
 
 import java.rmi.RemoteException;
 import java.util.List;

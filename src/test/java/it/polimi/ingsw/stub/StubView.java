@@ -4,7 +4,7 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
+import it.polimi.ingsw.SerializableCorner;
 
 import java.util.HashMap;
 import java.util.LinkedList;

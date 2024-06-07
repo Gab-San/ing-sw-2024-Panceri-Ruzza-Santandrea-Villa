@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.listener.remote.events.playarea;
 
+import it.polimi.ingsw.SerializableCorner;
 import it.polimi.ingsw.model.cards.Corner;
 import it.polimi.ingsw.model.listener.remote.events.player.PlayerEvent;
 import it.polimi.ingsw.network.VirtualClient;

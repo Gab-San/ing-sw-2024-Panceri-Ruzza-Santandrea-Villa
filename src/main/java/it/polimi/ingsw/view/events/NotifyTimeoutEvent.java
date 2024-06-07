@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.events;
 
 import it.polimi.ingsw.view.tui.TUI;
 
+/**
+ * This class handles indirect disconnection by timeout event.
+ */
 public class NotifyTimeoutEvent implements TUIEvent{
 
     @Override

@@ -1,8 +1,12 @@
-package it.polimi.ingsw.view.events;
+package it.polimi.ingsw.view.events.state;
 
+import it.polimi.ingsw.view.events.TUIEvent;
 import it.polimi.ingsw.view.tui.TUI;
 
-public class DisplayEndgameEvent implements TUIEvent{
+/**
+ * This class handles endgame notification event.
+ */
+public class DisplayEndgameEvent implements TUIEvent {
     private final String nickname;
     private final int score;
     public DisplayEndgameEvent(){

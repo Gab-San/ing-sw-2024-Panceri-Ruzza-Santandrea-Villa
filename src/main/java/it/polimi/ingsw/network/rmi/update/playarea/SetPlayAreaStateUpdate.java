@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.rmi.update.playarea;
 
 import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.model.listener.remote.events.playarea.CardPosition;
-import it.polimi.ingsw.model.listener.remote.events.playarea.SerializableCorner;
+import it.polimi.ingsw.CardPosition;
+import it.polimi.ingsw.SerializableCorner;
 import it.polimi.ingsw.network.rmi.update.player.PlayerTypeUpdate;
 import it.polimi.ingsw.view.ModelUpdater;
 
