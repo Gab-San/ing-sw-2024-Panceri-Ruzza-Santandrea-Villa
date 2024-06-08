@@ -6,15 +6,19 @@ import it.polimi.ingsw.view.UIFunctions;
 import it.polimi.ingsw.view.ViewController;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameInputHandler {
     private final CommandPassthrough serverProxy;
     private final GUI gui;
     private final ViewController controller;
+    private final ExecutorService threadPool;
     public GameInputHandler(CommandPassthrough serverProxy, GUI gui, ViewController controller){
         this.serverProxy = serverProxy;
         this.gui = gui;
         this.controller = controller;
+        threadPool = Executors.newCachedThreadPool();
     }
 
     private boolean validateNickname(String nickname){
@@ -37,5 +41,6 @@ public class GameInputHandler {
 
     public void notifyDisconnection(){
         System.out.println("NOTIFYING DISCONNECTION");
+        threadPool.execute( gui::notifyServerFailure );
     }
 }

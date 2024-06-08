@@ -62,14 +62,14 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     }
 
     @Override
-    public void display() {
+    public synchronized void display() {
         this.setVisible(true);
         this.requestFocus();
     }
 
     @Override
     public void displayError(String error) {
-        displayError(error, 1);
+        displayError(error, 1, false);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     public void displayChatMessage(List<String> backlog) {/*unused*/}
 
     @Override
-    public void moveView(List<CornerDirection> cornerDirections) {/*unused*/}
+    public  void moveView(List<CornerDirection> cornerDirections) {/*unused*/}
 
     @Override
     public void setCenter(int row, int col) {/*unused*/}
@@ -88,7 +88,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     public void setCenter(GamePoint center) {/*unused*/}
 
     @Override
-    public void close() {
+    public synchronized void close() {
         this.dispose();
     }
 
@@ -104,9 +104,9 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 displaySuccess("Login success!", 1.5f);
                 gui.displayNextScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
-                displayError(correctToLabelFormat(exc.getMessage()), 2);
+                displayError(correctToLabelFormat(exc.getMessage()), 2, false);
             } catch (RemoteException exc) {
-                displayError(correctToLabelFormat(exc.getMessage()), 1);
+                displayError(correctToLabelFormat("Connection Lost!"), 1, true);
                 inputHandler.notifyDisconnection();
             }
         }
@@ -129,17 +129,17 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         return label;
     }
 
-    private void displayError(String errorMessage, float displayTimeSeconds){
+    private synchronized void displayError(String errorMessage, float displayTimeSeconds, boolean close){
         int displayTime = setupDisplayTimer(displayTimeSeconds);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.red);
         notificationLabel.setText(errorMessage);
         notificationLabel.setVisible(true);
         this.setVisible(true);
-        startDisplayTimer(displayTime, false);
+        startDisplayTimer(displayTime, close);
     }
 
-    private void displaySuccess(String successMessage, float displayTimeSeconds){
+    private synchronized void displaySuccess(String successMessage, float displayTimeSeconds){
         int displayTime = setupDisplayTimer(displayTimeSeconds);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.green);

@@ -126,12 +126,30 @@ public class GUI extends JFrame implements View {
         final int SLEEP_MILLIS = 200;
         try {
             while (true) {
-                inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
+                String message = "";
+                synchronized (inputQueue) {
+                     message = inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
+                }
+                if(message != null) {
+                    // all of these will be error messages
+                    this.dispose();
+                    switch (message) {
+                        case "SERVER_FAILURE":
+                            throw new RemoteException();
+                    }
+                }
             }
         } catch (InterruptedException interruptedException){
             interruptedException.printStackTrace(System.err);
         } catch (IllegalArgumentException | IllegalStateException e){
             showError(e.getMessage());
+        }
+    }
+
+    public void notifyServerFailure() {
+        synchronized (inputQueue) {
+            inputQueue.add("SERVER_FAILURE");
+            inputQueue.notifyAll();
         }
     }
 }

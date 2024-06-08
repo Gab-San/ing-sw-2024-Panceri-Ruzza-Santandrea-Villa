@@ -2,18 +2,11 @@ package it.polimi.ingsw.view.gui.scenes.setplayers;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.Scene;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -22,6 +15,8 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
     private final JButton twoPlayersButton;
     private final JButton threePlayersButton;
     private final JButton fourPlayersButton;
+    private final JLabel errorLabel;
+    private Timer errorTimer;
     public SetPlayersScene(GameInputHandler inputHandler){
 
         setLayout(new GridBagLayout());
@@ -32,23 +27,22 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
 
         //When something happens to this action
         // it means it has been triggered.
-        buttonAction.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                String propertyName = evt.getPropertyName();
-                if(propertyName.equals(PlayerChoiceAction.PLAYERS_NUM_PROPERTY_NAME)){
-                    try {
-                        inputHandler.setNumOfPlayers((Integer) evt.getNewValue());
-                    } catch (RemoteException e) {
-                        inputHandler.notifyDisconnection();
-                    }
+        buttonAction.addPropertyChangeListener(evt -> {
+            String propertyName = evt.getPropertyName();
+            if(propertyName.equals(PlayerChoiceAction.PLAYERS_NUM_PROPERTY_NAME)){
+                try {
+                    inputHandler.setNumOfPlayers((Integer) evt.getNewValue());
+                    close();
+                } catch (RemoteException e) {
+                    displayError("Connection lost!");
+                    inputHandler.notifyDisconnection();
                 }
-                close();
             }
         });
         twoPlayersButton = new JButton(buttonAction);
         threePlayersButton = new JButton(buttonAction);
         fourPlayersButton = new JButton(buttonAction);
+
 
         twoPlayersButton.setText("2 Players");
         threePlayersButton.setText("3 Players");
@@ -72,6 +66,13 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
                 GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0),
                 0,0);
 
+        errorLabel = new JLabel("ERROR");
+        errorLabel.setVisible(false);
+        //TODO choose better color
+        errorLabel.setForeground(Color.red);
+
+        addGridComponent(errorLabel, 1,1,2,1,1.0,1.0,GridBagConstraints.WEST,
+                GridBagConstraints.VERTICAL, new Insets(0,0,0,0), 0,0);
     }
 
     private void addGridComponent(Component component, int x, int y, int width, int height, double weightx,
@@ -102,7 +103,21 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
 
     @Override
     public void displayError(String error) {
-
+        if(errorTimer != null){
+            errorTimer.stop();
+        }
+        errorTimer = new Timer(2500,
+                event -> {
+                    errorLabel.setText("");
+                    errorLabel.setVisible(false);
+                    errorTimer.stop();
+                    errorTimer = null;
+                    close();
+                }
+        );
+        errorLabel.setText(error);
+        errorLabel.setVisible(true);
+        errorTimer.start();
     }
 
     @Override
