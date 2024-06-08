@@ -246,7 +246,7 @@ public class Client {
                     }catch (InterruptedException ignored){}
 
                     if (gameMode.equalsIgnoreCase("GUI")) {
-                        view = new GUI(); // proxy always not null at this point
+                        view = new GUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         view = new TUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
