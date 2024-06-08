@@ -117,4 +117,8 @@ public class ViewController {
     public void setSelfPlayerArea() {
         selfPlayArea = board.getPlayerArea(board.getPlayerHand().getNickname());
     }
+
+    public void addLocalPlayer(String nickname) {
+        board.addLocalPlayer(nickname);
+    }
 }

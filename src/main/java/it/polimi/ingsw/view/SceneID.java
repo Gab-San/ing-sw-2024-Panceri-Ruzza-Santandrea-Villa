@@ -1,11 +1,19 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.GamePhase;
+
+import java.util.Map;
+
 public class SceneID {
     private static final String OPPONENT_SCENE_PREFIX = "OPPONENT_AREA_";
     private final String sceneName;
 
     private SceneID(String sceneName){
         this.sceneName = sceneName;
+    }
+
+    public static SceneID getSetNumberOfPlayersID() {
+        return new SceneID("SET_NUMBER_OF_PLAYERS");
     }
 
     public boolean isOpponentAreaScene(){

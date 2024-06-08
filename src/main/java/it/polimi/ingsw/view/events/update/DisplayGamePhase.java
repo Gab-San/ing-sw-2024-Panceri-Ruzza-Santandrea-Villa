@@ -23,7 +23,7 @@ public class DisplayGamePhase implements TUIEvent, GUIEvent {
 
     @Override
     public void displayEvent(GUI gui) {
-
+        gui.updatePhase(gamePhase);
     }
 
     @Override

@@ -62,4 +62,14 @@ public class SceneManager {
             loadedScenes.remove(sceneID);
         }
     }
+    public void remove(Scene scene){
+        synchronized (loadedScenes){
+            for(SceneID sceneID: loadedScenes.keySet()) {
+                if(scene == loadedScenes.get(sceneID)) {
+                    loadedScenes.remove(sceneID);
+                }
+            }
+        }
+    }
+
 }

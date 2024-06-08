@@ -2,19 +2,18 @@ package it.polimi.ingsw.view.gui.scenes.connection;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.Scene;
+import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class ConnectionScene extends JFrame implements Scene, KeyListener {
+public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
+    // TODO: this is horrible
 
     // Settings
     private final int LOGIN_FRAME_WIDTH = 500;
@@ -22,10 +21,32 @@ public class ConnectionScene extends JFrame implements Scene, KeyListener {
 
     private final GameInputHandler inputHandler;
     // Components
-    private final ErrorPanel errorPanel;
     private final LoginPanel loginPanel;
+    private final JLabel notificationLabel;
+    private Timer displayTimer;
 
     public ConnectionScene(GameInputHandler inputHandler){
+        setupFrame();
+        //Setting layout
+        this.setLayout(new BorderLayout());
+
+        this.inputHandler = inputHandler;
+
+        //Creating components
+        loginPanel = new LoginPanel();
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(25,0,10,0));
+        loginPanel.addKeyListener(this);
+
+        notificationLabel = createErrorLabel();
+
+        //Adding components
+        add(loginPanel, BorderLayout.CENTER);
+        add(notificationLabel, BorderLayout.SOUTH);
+
+        loginPanel.setVisible(true);
+    }
+
+    private void setupFrame() {
         // Classic JFrame setup
         this.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_HEIGHT);
         // Defining center based on pack method. So this display shall be done
@@ -35,21 +56,6 @@ public class ConnectionScene extends JFrame implements Scene, KeyListener {
         this.setLocation(center);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Login");
-        this.setLayout(new BorderLayout());
-
-        this.inputHandler = inputHandler;
-
-        //Creating components
-        loginPanel = new LoginPanel();
-//        loginPanel.setBorder(BorderFactory.createEmptyBorder(20,0,10,0));
-        loginPanel.addKeyListener(this);
-        errorPanel = new ErrorPanel();
-        //Adding components
-        add (loginPanel, BorderLayout.CENTER);
-        add(errorPanel, BorderLayout.SOUTH);
-
-        loginPanel.setVisible(true);
-        errorPanel.setVisible(true);
     }
 
     @Override
@@ -60,32 +66,28 @@ public class ConnectionScene extends JFrame implements Scene, KeyListener {
 
     @Override
     public void displayError(String error) {
-
+        displayError(error, 1);
     }
 
     @Override
-    public void displayNotification(List<String> backlog) {
-
-    }
+    public void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
-    public void displayChatMessage(List<String> backlog) {
-
-    }
+    public void displayChatMessage(List<String> backlog) {/*unused*/}
 
     @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
+    public void moveView(List<CornerDirection> cornerDirections) {/*unused*/}
 
     @Override
-    public void setCenter(int row, int col) {
-
-    }
+    public void setCenter(int row, int col) {/*unused*/}
 
     @Override
-    public void setCenter(GamePoint center) {
+    public void setCenter(GamePoint center) {/*unused*/}
 
+    @Override
+    public void close() {
+        this.setEnabled(false);
+        this.setVisible(false);
     }
 
     @Override
@@ -97,14 +99,69 @@ public class ConnectionScene extends JFrame implements Scene, KeyListener {
             String nickname = loginPanel.getUserInput();
             try{
                 inputHandler.connect(nickname);
+                displaySuccess("Login success!", 2);
             } catch (IllegalStateException exc){
-                errorPanel.displayError(exc.getMessage(), 2);
-            } catch (RemoteException ex) {
+                displayError(correctToLabelFormat(exc.getMessage()), 2);
+            } catch (RemoteException exc) {
+                displayError(correctToLabelFormat(exc.getMessage()), 1);
                 inputHandler.notifyDisconnection();
             }
         }
     }
 
+    private String correctToLabelFormat(String message) {
+        return "<html>" + message.replaceAll("\n", "<br>") + "</html>";
+    }
+
     @Override
     public void keyReleased(KeyEvent e) {/*unused*/}
+
+
+    private JLabel createErrorLabel(){
+        JLabel label =  new JLabel("");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setPreferredSize(new Dimension(200,100));
+        label.setMaximumSize(new Dimension(300,150));
+        label.setVisible(false);
+        return label;
+    }
+
+    private void displayError(String errorMessage, int displayTimeSeconds){
+        int displayTime = setupDisplayTimer(displayTimeSeconds);
+        //TODO [Gamba] Fix color
+        notificationLabel.setForeground(Color.red);
+        notificationLabel.setText(errorMessage);
+        notificationLabel.setVisible(true);
+        this.setVisible(true);
+        startDisplayTimer(displayTime);
+    }
+
+    private void displaySuccess(String successMessage, int displayTimeSeconds){
+        int displayTime = setupDisplayTimer(displayTimeSeconds);
+        //TODO [Gamba] Fix color
+        notificationLabel.setForeground(Color.green);
+        notificationLabel.setText(successMessage);
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
+    }
+
+    private void startDisplayTimer(int displayTime) {
+        displayTimer = new Timer(displayTime,
+                (event) -> {
+                        notificationLabel.setVisible(false);
+                        displayTimer.stop();
+                        displayTimer = null;
+                });
+        displayTimer.start();
+    }
+
+    private int setupDisplayTimer(int displayTimeSeconds){
+        int displayTime = displayTimeSeconds * 1000;
+        if(displayTimer != null){
+            displayTimer.stop();
+        }
+        return displayTime;
+    }
+
+
 }

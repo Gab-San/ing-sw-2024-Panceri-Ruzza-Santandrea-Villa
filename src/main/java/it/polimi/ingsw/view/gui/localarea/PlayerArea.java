@@ -1,0 +1,49 @@
+package it.polimi.ingsw.view.gui.localarea;
+
+import it.polimi.ingsw.CornerDirection;
+import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.gui.GUI_Scene;
+
+import java.util.List;
+
+public class PlayerArea implements GUI_Scene {
+    @Override
+    public void display() {
+
+    }
+
+    @Override
+    public void displayError(String error) {
+
+    }
+
+    @Override
+    public void displayNotification(List<String> backlog) {
+
+    }
+
+    @Override
+    public void displayChatMessage(List<String> backlog) {
+
+    }
+
+    @Override
+    public void moveView(List<CornerDirection> cornerDirections) {
+
+    }
+
+    @Override
+    public void setCenter(int row, int col) {
+
+    }
+
+    @Override
+    public void setCenter(GamePoint center) {
+
+    }
+
+    @Override
+    public void close() {
+
+    }
+}
