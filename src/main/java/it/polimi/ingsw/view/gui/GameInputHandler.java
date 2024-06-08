@@ -40,7 +40,10 @@ public class GameInputHandler {
     }
 
     public void notifyDisconnection(){
-        System.out.println("NOTIFYING DISCONNECTION");
+        // Calls to actions block the UI thread, so all the actions
+        // should be called on threads unless a synchronous response is wanted.
+        // In this case, this action would block the thread as it waits for the
+        // inputQueue to update and parse the notification
         threadPool.execute( gui::notifyServerFailure );
     }
 }

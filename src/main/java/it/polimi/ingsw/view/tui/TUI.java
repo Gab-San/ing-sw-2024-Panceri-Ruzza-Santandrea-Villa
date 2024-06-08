@@ -28,7 +28,7 @@ public class TUI implements View{
     private static final long REFRESH_TIMEOUT_MILLIS = 500L;
 
     public TUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpdater, BlockingQueue<String> inputQueue) throws RemoteException {
-        SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
+
         this.board = new ViewBoard(this);
         ModelUpdater modelUpdater = new ModelUpdater(board);
         setClientModelUpdater.accept(modelUpdater);
@@ -39,10 +39,7 @@ public class TUI implements View{
         this.notificationBacklog = Collections.synchronizedList(new LinkedList<>());
         this.chatBacklog = Collections.synchronizedList(new LinkedList<>());
 
-    //region Loading TUI_SCENES
-        SceneManager.getInstance().loadScene(SceneID.getNotificationSceneID(), new NotificationScene());
         loadScenes();
-    //endregion
     }
 
     /**
@@ -90,6 +87,9 @@ public class TUI implements View{
     }
 
     private void loadScenes(){
+        SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
+        SceneManager.getInstance().loadScene(SceneID.getNotificationSceneID(), new NotificationScene());
+
         TUI_Scene boardUI = new PrintBoardUI(board);
         setBacklogs(boardUI);
         SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);

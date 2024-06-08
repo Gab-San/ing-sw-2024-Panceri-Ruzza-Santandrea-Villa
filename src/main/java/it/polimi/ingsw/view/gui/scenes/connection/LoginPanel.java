@@ -10,7 +10,7 @@ public class LoginPanel extends JPanel {
     private final JTextField loginTextField;
 
     public LoginPanel() {
-
+        //Flow layout is always displayed on top
         this.setLayout(new FlowLayout());
         // Text field is responsible for taking user input as string
         // it will then pass it to the input controller when the user hits
@@ -24,6 +24,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 loginTextField.setText("");
+                //Makes it possible to write
                 loginTextField.setFocusable(true);
                 loginTextField.grabFocus();
             }
@@ -42,6 +43,10 @@ public class LoginPanel extends JPanel {
         loginTextField.addKeyListener(l);
     }
 
+    /**
+     * Returns the input string written by the user in the corresponding field.
+     * @return user input string
+     */
     public String getUserInput() {
         return loginTextField.getText();
     }
