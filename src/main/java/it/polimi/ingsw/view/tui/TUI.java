@@ -155,7 +155,7 @@ public class TUI implements View{
         SceneManager.getInstance().getCurrentScene().displayError(errorMsg);
     }
 
-    private void setRefreshTimer(){
+    public synchronized void setRefreshTimer(){
         refreshTimer.cancel();
         refreshTimer = new Timer(true);
         refreshTimer.schedule(new TimerTask() {

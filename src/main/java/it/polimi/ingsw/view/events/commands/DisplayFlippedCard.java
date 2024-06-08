@@ -19,6 +19,6 @@ public class DisplayFlippedCard implements TUIEvent, GUIEvent {
 
     @Override
     public void displayEvent(TUI tui) {
-        tui.showNotification("Flipped card " + flippedCard);
+        tui.showNotification("Flipped card " + flippedCard.getCardID());
     }
 }

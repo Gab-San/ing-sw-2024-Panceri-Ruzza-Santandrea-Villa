@@ -89,9 +89,9 @@ public class NetworkEventRecord {
              synchronized (this) {
                 int lastUpdate = clientUpdateStatus.get(virtualClient);
                 boolean isUptoDate = lastUpdate >= eventsHistory.size();
-                System.err.println(ConsoleTextColors.BLUE_TEXT + virtualClient + " " + isUptoDate +
-                        "\n" + lastUpdate +
-                        ConsoleTextColors.RESET);
+//                System.err.println(ConsoleTextColors.BLUE_TEXT + virtualClient + " " + isUptoDate +
+//                        "\n" + lastUpdate +
+//                        ConsoleTextColors.RESET);
                 return isUptoDate;
              }
         }

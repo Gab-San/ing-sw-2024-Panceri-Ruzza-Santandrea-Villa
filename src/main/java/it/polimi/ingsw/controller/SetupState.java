@@ -57,21 +57,11 @@ public class SetupState extends GameState{
 
         board.unsubscribeClientFromUpdates(nickname);
         board.disconnectPlayer(nickname);
-        System.err.println("TRYING TO DISCONNECT IN SETUP STATE " + nickname);
-        Set<Player> connectedPlayers =board.getPlayerAreas().keySet().stream()
-                // only look at players that are connected
-                .filter(Player:: isConnected)
-                .collect(Collectors.toSet());
-
-//        Debug print
-//        System.err.println(connectedPlayers +" è vuoto? "+connectedPlayers .isEmpty());
 
         timers.stopTimer(board.getPlayerByNickname(nickname));
 
-        if(connectedPlayers .isEmpty()) {
-            //se si sono disconnessi tutti i giocatori => torno a creation state
-            for(Player p : new HashSet<>(board.getPlayerAreas().keySet()))
-                board.removePlayer(p.getNickname());
+        if(board.getNumOfConnectedPlayers() == 0) {
+            //if all players disconnected, go back to creation state
             transition(new CreationState(new Board(), controller, new ArrayList<>()));
             return;
         }

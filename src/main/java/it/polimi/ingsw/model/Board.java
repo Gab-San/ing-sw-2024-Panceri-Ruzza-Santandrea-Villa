@@ -557,7 +557,21 @@ public class Board implements GameSubject{
                     notifyAllListeners(new IllegalGameAccessError("all", ("Cannot find a player with given nickname " + "'" + nickname + "'" + " in this game").toUpperCase()) );
                     return new IllegalArgumentException("Cannot find a player with given nickname " + "'" + nickname + "'" + " in this game");
                 });
-        }
+    }
+
+    /**
+     * @return true if only one player is connected, false otherwise
+     */
+    public boolean isOnePlayerRemaining(){
+        return getNumOfConnectedPlayers() == 1;
+    }
+
+    /**
+     * @return (0-4) number of connected players in this game
+     */
+    public int getNumOfConnectedPlayers(){
+        return (int) playerAreas.keySet().stream().filter(Player::isConnected).count();
+    }
 
     //endregion
     /**

@@ -45,11 +45,7 @@ public class EndgameState extends GameState{
         board.disconnectPlayer(nickname);
         board.unsubscribeClientFromUpdates(nickname);
 
-        int numOfConnectedPlayers = (int) board.getPlayerAreas().keySet().stream()
-                .filter(Player::isConnected)
-                .count();
-
-        if(numOfConnectedPlayers == 0){
+        if(board.getNumOfConnectedPlayers() == 0){
             transition(new CreationState(new Board(), controller, new ArrayList<>()));
         }
     }

@@ -12,7 +12,6 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
 import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
-//TODO [Ale] cambia il costruttore della PrintEndGameUI
 public class PrintEndgameUI extends TUI_Scene {
     private final ViewBoard board;
     private static final int LEFT_SPACING = 16;

@@ -25,6 +25,7 @@ public class PlayState extends GameState {
     private Timer disconnectRejoinTimer;
     private static final int TURN_TIME = 302; // seconds
     private static final int PLAYER_REJOIN_TIME = 120; //seconds
+    private GamePhase phase_preWaitingRejoin;
 
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
@@ -35,21 +36,24 @@ public class PlayState extends GameState {
         board.setCurrentTurn(startingTurn);
         lastRound = false;
         currentPlayerHasPlacedCard = false;
-
         board.setGamePhase(GamePhase.PLACECARD);
         board.squashHistory();
-        Player player = board.getCurrentPlayer();
-        timers.startTimer(player, TURN_TIME);
+
+        if(board.isOnePlayerRemaining()){
+            startRejoinTimer();
+        }
+        else{
+            Player player = board.getCurrentPlayer();
+            timers.startTimer(player, TURN_TIME);
+        }
     }
 
     @Override
     public void join(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         board.reconnectPlayer(nickname);
 
-        if(disconnectRejoinTimer != null) {
-            disconnectRejoinTimer.cancel();
-            disconnectRejoinTimer = null;
-            postDrawChecks(); //resumes game
+        if(board.getGamePhase() == GamePhase.WAITING_FOR_REJOIN){
+            resumePlay();
         }
 
         board.subscribeClientToUpdates(nickname, client);
@@ -67,18 +71,13 @@ public class PlayState extends GameState {
 
         timers.stopTimer(player);
 
-        if(player.getNickname().equals(nickname)){
-            postDrawChecks();
-        }
+        if(board.isOnePlayerRemaining()) // pause game if only one player is left
+            startRejoinTimer();
+        else if(player.getNickname().equals(nickname))
+            postDrawChecks(); //if the game can continue and disconnecting player was playing, end their turn
 
-        int connectedPlayers = (int) board.getPlayerAreas().keySet().stream()
-                .filter(Player:: isConnected)
-                .count();
-        if(connectedPlayers == 0) {
-            if(disconnectRejoinTimer != null){
-                disconnectRejoinTimer.cancel();
-                disconnectRejoinTimer = null;
-            }
+        if(board.getNumOfConnectedPlayers() == 0) {
+            stopRejoinTimer();
             transition(new CreationState(new Board(), controller, disconnectingPlayers));
         }
     }
@@ -208,15 +207,10 @@ public class PlayState extends GameState {
             return;
         }
 
-        boolean onePlayerRemaining = board.getPlayerAreas().keySet().stream()
-                .filter(Player::isConnected).count() == 1;
-        if(board.checkEndgame() && isLastPlayerTurn && !onePlayerRemaining)
+        if(board.checkEndgame() && isLastPlayerTurn)
             lastRound=true;
 
-        if(onePlayerRemaining){
-            startRejoinTimer();
-        }
-        else if(board.nextTurn()) {
+        if(board.nextTurn()) {
             // if a player disconnected after place card but before draw:
             //      that player skips the updatePlaceCard step (if he can draw)
             currentPlayerHasPlacedCard = board.canDraw() && !board.getCurrentPlayer().getHand().isHandFull();
@@ -230,6 +224,7 @@ public class PlayState extends GameState {
         else nextState();
     }
     private void nextState() throws IllegalStateException {
+        stopRejoinTimer();
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }
 
@@ -248,7 +243,23 @@ public class PlayState extends GameState {
                     nextState();
                 }
             }, PLAYER_REJOIN_TIME * 1000L);
+            phase_preWaitingRejoin = board.getGamePhase();
+            timers.stopTimer(board.getCurrentPlayer());
             board.setGamePhase(GamePhase.WAITING_FOR_REJOIN);
         }
+    }
+    private void stopRejoinTimer(){
+        if(disconnectRejoinTimer != null){
+            disconnectRejoinTimer.cancel();
+            disconnectRejoinTimer = null;
+        }
+    }
+    private void resumePlay(){
+        stopRejoinTimer();
+        board.setGamePhase(phase_preWaitingRejoin);
+        if(board.getCurrentPlayer().isConnected())
+            timers.startTimer(board.getCurrentPlayer(), TURN_TIME);
+        else postDrawChecks();
+        //if the current player isn't connected but the game can continue (>2 players), skip the turn
     }
 }

@@ -211,7 +211,7 @@ public class Parser {
             return;
         }
 
-        if(cmdArgs.parallelStream().anyMatch(e -> e.equalsIgnoreCase("objectives") || e.equalsIgnoreCase("obj"))) {
+        if(cmdArgs.parallelStream().anyMatch(e -> e.toLowerCase().matches("objectives?|obj"))){
             parseChooseObjCmd(cmdArgs);
             return;
         }

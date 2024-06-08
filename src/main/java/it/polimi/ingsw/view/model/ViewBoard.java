@@ -126,7 +126,8 @@ public class ViewBoard {
             if (gamePhase != GamePhase.SHOWWIN)
                 notifyView(SceneID.getBoardSceneID(), new DisplayGamePhase(gamePhase));
             else
-                notifyView(SceneID.getEndgameSceneID(), new GotoEndgameEvent(this));
+                notifyView(SceneID.getBoardSceneID(), new GotoEndgameEvent(this));
+            // must notify GotoEndgameEvent to an existing scene (the Board scene is fine)
         }
         return changed;
     }
