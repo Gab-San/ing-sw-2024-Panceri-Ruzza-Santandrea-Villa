@@ -2,11 +2,18 @@ package it.polimi.ingsw.view.gui.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 
+import javax.swing.*;
 import java.util.List;
 
-public class PlayerArea implements GUI_Scene {
+public class PlayerAreaScene extends JPanel implements GUI_Scene {
+
+    public PlayerAreaScene(){
+        setSize(GUI.SCREEN_WIDTH, GUI.SCREEN_HEIGHT);
+
+    }
     @Override
     public void display() {
 

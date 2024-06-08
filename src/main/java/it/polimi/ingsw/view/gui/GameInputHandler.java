@@ -31,6 +31,10 @@ public class GameInputHandler {
         serverProxy.connect(nickname);
     }
 
+    public void setNumOfPlayers(int numOfPlayers) throws RemoteException {
+        serverProxy.setNumOfPlayers(numOfPlayers);
+    }
+
     public void notifyDisconnection(){
         System.out.println("NOTIFYING DISCONNECTION");
     }

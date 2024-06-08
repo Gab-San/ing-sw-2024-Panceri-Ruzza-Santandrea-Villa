@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 import it.polimi.ingsw.view.tui.TUI;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -234,6 +235,7 @@ public class Client {
             }
     //endregion
             try {
+                assert setClientModelUpdater != null;
                 System.out.println(GREEN_TEXT + "Server located successfully!" + RESET);
                 System.out.println("If the above text is not green, TUI is not supported on the current console.");
                 while (view == null) {

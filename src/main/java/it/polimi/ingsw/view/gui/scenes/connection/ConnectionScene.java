@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.scenes.connection;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -24,8 +25,10 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     private final LoginPanel loginPanel;
     private final JLabel notificationLabel;
     private Timer displayTimer;
+    private final GUI gui;
 
-    public ConnectionScene(GameInputHandler inputHandler){
+    public ConnectionScene(GameInputHandler inputHandler, GUI gui){
+        this.gui = gui;
         setupFrame();
         //Setting layout
         this.setLayout(new BorderLayout());
@@ -86,8 +89,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
 
     @Override
     public void close() {
-        this.setEnabled(false);
-        this.setVisible(false);
+        this.dispose();
     }
 
     @Override
@@ -99,7 +101,8 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
             String nickname = loginPanel.getUserInput();
             try{
                 inputHandler.connect(nickname);
-                displaySuccess("Login success!", 2);
+                displaySuccess("Login success!", 1.5f);
+                gui.displayNextScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
                 displayError(correctToLabelFormat(exc.getMessage()), 2);
             } catch (RemoteException exc) {
@@ -126,37 +129,40 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         return label;
     }
 
-    private void displayError(String errorMessage, int displayTimeSeconds){
+    private void displayError(String errorMessage, float displayTimeSeconds){
         int displayTime = setupDisplayTimer(displayTimeSeconds);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.red);
         notificationLabel.setText(errorMessage);
         notificationLabel.setVisible(true);
         this.setVisible(true);
-        startDisplayTimer(displayTime);
+        startDisplayTimer(displayTime, false);
     }
 
-    private void displaySuccess(String successMessage, int displayTimeSeconds){
+    private void displaySuccess(String successMessage, float displayTimeSeconds){
         int displayTime = setupDisplayTimer(displayTimeSeconds);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.green);
         notificationLabel.setText(successMessage);
         notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime);
+        startDisplayTimer(displayTime, true);
     }
 
-    private void startDisplayTimer(int displayTime) {
+    private void startDisplayTimer(int displayTime, boolean isClosing) {
         displayTimer = new Timer(displayTime,
                 (event) -> {
                         notificationLabel.setVisible(false);
                         displayTimer.stop();
                         displayTimer = null;
+                        if(isClosing){
+                            close();
+                        }
                 });
         displayTimer.start();
     }
 
-    private int setupDisplayTimer(int displayTimeSeconds){
-        int displayTime = displayTimeSeconds * 1000;
+    private int setupDisplayTimer(float displayTimeSeconds){
+        int displayTime = (int) (displayTimeSeconds * 1000);
         if(displayTimer != null){
             displayTimer.stop();
         }
