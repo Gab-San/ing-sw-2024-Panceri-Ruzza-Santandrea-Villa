@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.tui.scenes;
 
 import it.polimi.ingsw.view.tui.TUI_Scene;
 
+/**
+ * The command helper (legend) UI scene printer for the TUI
+ */
 public class PrintHelperUI extends TUI_Scene {
     @Override
     protected void print() {

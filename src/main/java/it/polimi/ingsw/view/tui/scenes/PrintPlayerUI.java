@@ -6,7 +6,15 @@ import it.polimi.ingsw.view.model.ViewPlayArea;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
+/**
+ * The playerArea UI scene printer for the TUI.
+ */
 public class PrintPlayerUI extends PrintGameUI {
+    /**
+     * Constructs the playerArea UI printer (for 'myArea' scene)
+     * @param hand local player's hand
+     * @param playArea local player's playArea
+     */
     public PrintPlayerUI(ViewPlayerHand hand, ViewPlayArea playArea){
         super(hand, playArea);
     }

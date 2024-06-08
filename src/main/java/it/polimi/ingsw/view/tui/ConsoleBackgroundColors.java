@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 
+/**
+ * Collection of ANSI background colors
+ */
 public class ConsoleBackgroundColors {
     public static final String PREFIX = "\u001B[";
     public static final String POSTFIX = "m";
@@ -27,6 +30,10 @@ public class ConsoleBackgroundColors {
     public static final String CYAN_BRIGHT = PREFIX + "0;106" + POSTFIX;
     public static final String WHITE_BRIGHT = PREFIX + "0;107" + POSTFIX;
 
+    /**
+     * @param color the PlayerColor to transform into its ANSI equivalent
+     * @return PlayerColor's ANSI background color equivalent string
+     */
     public static String getColorFromEnum(PlayerColor color){
         if(color == null) return RESET;
         return switch (color){
@@ -36,6 +43,10 @@ public class ConsoleBackgroundColors {
             case YELLOW -> YELLOW;
         };
     }
+    /**
+     * @param resource the GameResource to transform into its ANSI equivalent
+     * @return GameResource's ANSI background color equivalent string
+     */
     public static String getColorFromEnum(GameResource resource){
         if(resource == null) return YELLOW;
         return switch (resource){

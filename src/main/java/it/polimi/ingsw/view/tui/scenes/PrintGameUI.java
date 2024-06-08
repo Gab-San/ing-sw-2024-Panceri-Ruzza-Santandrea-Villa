@@ -10,13 +10,23 @@ import it.polimi.ingsw.view.tui.printers.PrintPlayArea;
 
 import java.util.List;
 
+/**
+ * The generic PlayerArea UI scene printer for the TUI.
+ * Implements the common methods of myAreaUI and opponentAreaUI
+ * such as moveView and setCenter.
+ */
 public abstract class PrintGameUI extends TUI_Scene {
     protected final PrintPlayArea printPlayArea;
     protected GamePoint printCenter;
     protected final PrintHand printHand;
     protected final String nickname;
 
-    public PrintGameUI(ViewHand hand, ViewPlayArea playArea){
+    /**
+     * Constructs the PlayerArea UI scene
+     * @param hand hand of the player associated to this scene
+     * @param playArea playArea of the player associated to this scene
+     */
+    protected PrintGameUI(ViewHand hand, ViewPlayArea playArea){
         super();
         printPlayArea = new PrintPlayArea(playArea);
         printHand = new PrintHand(hand);

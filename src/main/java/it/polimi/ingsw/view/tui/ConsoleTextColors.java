@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.tui;
 
+/**
+ * Collection of ANSI text (foreground) colors
+ */
 public class ConsoleTextColors {
     public static final String PREFIX = "\u001B[";
     public static final String POSTFIX = "m";

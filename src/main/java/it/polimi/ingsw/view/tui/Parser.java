@@ -20,8 +20,6 @@ public class Parser {
 
     private CommandPassthrough virtualServer;
     private final ViewController viewController;
-    //TODO: add local checks to commands
-    // [Gamba] WUT?
     public Parser(CommandPassthrough virtualServer, ViewController viewController){
         this.virtualServer = virtualServer;
         this.viewController = viewController;

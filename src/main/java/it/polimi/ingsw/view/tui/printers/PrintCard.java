@@ -10,6 +10,10 @@ import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.*;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.BLACK_TEXT;
 
+/**
+ * This printer contains all methods to transform a ViewCard into its String[5] representation <br>
+ * It also contains some methods to manipulate or print String[5] representations as needed. <br>
+ */
 public class PrintCard {
     static final int cornerRowSpaceCount = 16;  // Exact spacing between Corners
     static final int middleRowSideSpaceCount = 10;  // Spacing of the middle row sides (excluding the resource character in the center)
@@ -19,18 +23,46 @@ public class PrintCard {
     private final int cardIDSpacing = 2;
     private String colorCode;
 
+    /**
+     * Sets the background color internally for the card to be constructed next. <br>
+     * Accessible by other printers to allow for finer manipulation of this class' methods.
+     * @param color the background color of the card as a GameResource
+     */
     void setColorCode(GameResource color){
         colorCode = getColorFromEnum(color);
     }
+
+    /**
+     * Adds the cardID in text format (e.g. R15, G1, O5) to the given row on the left side. <br>
+     * The cardID inserted is offset towards the center by cardIDSpacing (local constant)
+     * @param cardRow a row of the card that is not a corner row (preferably the middle row)
+     * @param cardID the card's ID
+     * @return modified row with added ID
+     */
     private String insertID(String cardRow, String cardID){
         return cardRow.replace(
                 colorCode + getSpaces(cardID.length()+cardIDSpacing),
                 colorCode + getSpaces(cardIDSpacing) + cardID
         );
     }
+
+    /**
+     * @param length number of spaces to return
+     * @return a string composed of 'length' spaces, empty if length <= 0
+     */
     public String getSpaces(int length){
         return " ".repeat(Math.max(0, length));
     }
+
+    /**
+     * Constructs a corner row (either top or bottom) with the two resources as string initials <br>
+     * This should be used to construct rows 0 and 4
+     * @param leftResource resource of the left corner of the row to be constructed
+     * @param rightResource resource of the right corner of the row to be constructed
+     * @param centerString string representation of pointsOnPlace, or what should be printed in the center of this row
+     * @return the constructed corner row, already colored and formatted with ANSI characters.
+     *          Works for both the top and bottom corner rows.
+     */
     private String getCornerRow(GameResource leftResource, GameResource rightResource, String centerString){
         int totalSpaces = cornerRowSpaceCount - centerString.length();
         String halfSpace = getSpaces(totalSpaces/2);
@@ -44,6 +76,13 @@ public class PrintCard {
                 colorCode + halfSpace + centerString + halfSpace + RESET +
                 cornerColor + " " + rightResourceStr + " " + RESET;
     }
+
+    /**
+     * Constructs a center row with the (optional) single resource as string initial in the middle <br>
+     * This should be used to construct rows 1,2,3
+     * @param centralResource resource to be printed in the center of the row to be constructed
+     * @return the constructed center row, already colored and formatted with ANSI characters
+     */
     private String getCenterRow(GameResource centralResource){
         String middleChar;
         if(centralResource != null)
@@ -56,6 +95,12 @@ public class PrintCard {
         return colorCode + getSpaces(middleRowSideSpaceCount) + middleChar + getSpaces(middleRowSideSpaceCount) + RESET;
     }
 
+    /**
+     * @param playCard a ViewPlayCard to represent as String[5]
+     * @param hideID true if the card's ID digits should be hidden (only the letter would be shown).
+     * @return the PlayCard's String[5] representation. An array of 5 strings top->bottom.<br>
+     * Already colored and formatted with ANSI characters.
+     */
     private String[] getCardAsStringRows(ViewPlayCard playCard, boolean hideID){
         setColorCode(playCard.getCardColour());
 
@@ -72,6 +117,12 @@ public class PrintCard {
         card[2] = insertID(card[2], playCard.isFaceUp() || !hideID ? ID : ID.charAt(0)+" ");
         return card;
     }
+    /**
+     * @param startCard a ViewStartCard to represent as String[5]
+     * @param hideID true if the card's ID digits should be hidden (only the letter would be shown).
+     * @return the StartCard's String[5] representation. An array of 5 strings top->bottom.<br>
+     * Already colored and formatted with ANSI characters.
+     */
     private String[] getCardAsStringRows(ViewStartCard startCard, boolean hideID) {
         setColorCode(startCard.getCardColour());
 
@@ -87,9 +138,29 @@ public class PrintCard {
         card[2] = insertID(card[2], startCard.isFaceUp() || !hideID ? startCard.getCardID() : "S ");
         return card;
     }
+
+    /**
+     * Defaults getCardAsStringRows(ViewCard, hideID) to hideID = false
+     * @param card any ViewCard to be transformed in String[5] representation
+     * @return the Card's String[5] representation. An array of 5 strings top->bottom.<br>
+     * Already colored and formatted with ANSI characters.
+     */
     public String[] getCardAsStringRows(ViewCard card){
         return getCardAsStringRows(card, false);
     }
+    /**
+     * This method delegates the creation of the String[5] representation to the specific
+     * (private) implementation of getCardAsStringRows for the effective type of the card.
+     * @param card any ViewCard to be transformed in String[5] representation.
+     *             A null value is interpreted as an "empty" card.
+     * @param hideID true if the card's ID digits should be hidden (only the letter would be shown).
+     * @return the Card's String[5] representation. An array of 5 strings top->bottom.<br>
+     * Already colored and formatted with ANSI characters. <br>
+     * A null card (empty) is transformed into 5 rows of spaces with the same display length
+     * as non-null cards, to be printed alongside other non-null cards. <br>
+     * *Please note* that the corners of a null card are still colored as normal corners and should
+     * be processed by cutAllCornersIfEmpty(String[5]) to be replaced by spaces with no coloring.
+     */
     public String[] getCardAsStringRows(ViewCard card, boolean hideID){
         if(card == null){
             String[] nullCardAsSpaces = new String[5];
@@ -110,11 +181,24 @@ public class PrintCard {
         // ViewCard is abstract, the card must be of 1 of the 3 types, no need to explicitly check the last instanceof ViewObjectiveCard
     }
 
+    /**
+     * @param pattern the pattern of an ObjectiveCard (format: '*B* B** R*R'). <br>
+     *                Each section of 3 characters is considered a row of the pattern, in order top -> bottom <br>
+     *                Each row must have 3 characters and be separated from other rows by a space
+     * @param rowIdx which of the (0-2) rows of the pattern to print on the card row to return
+     * @return the spaced pattern row to add in the objective card String[5] representation
+     */
     private String getPatternRow(String pattern, int rowIdx){
         String row = pattern.split(" ")[rowIdx];
         String spacing = getSpaces(2);
         return row.charAt(0) + spacing + row.charAt(1) + spacing + row.charAt(2);
     }
+    /**
+     * @param objCard a ViewObjectiveCard to represent as String[5]
+     * @param hideID true if the card's ID digits should be hidden (only the letter would be shown).
+     * @return the ObjectiveCard's String[5] representation. An array of 5 strings top->bottom.<br>
+     * Already colored and formatted with ANSI characters.
+     */
     private String[] getCardAsStringRows(ViewObjectiveCard objCard, boolean hideID){
         setColorCode(objCard.getCardColour());
 
@@ -147,11 +231,21 @@ public class PrintCard {
         return card;
     }
 
+    /**
+     * Prints any ViewCard on System.out in its String[5] representation. <br>
+     * @param card the ViewCard to print
+     */
     public void printCard(ViewCard card) {
         for (String line : getCardAsStringRows(card)) {
             System.out.println(line);
         }
     }
+    /**
+     * Prints a list of ViewCards on System.out in their String[5] representation. <br>
+     * The cards are printed in a row left -> right in the order they are in the List
+     * @param cardsAsStringRows the ViewCards to print
+     * @param cardSpacing the spacing between printed cards
+     */
     public void printCardsSideBySide(List<String[]> cardsAsStringRows, int cardSpacing){
         if(cardsAsStringRows.isEmpty()) return;
 
@@ -165,6 +259,11 @@ public class PrintCard {
         System.out.print("\n");
     }
 
+    /**
+     * @param cardAsStringRows any ViewCard's String[5] representation, even a null card's
+     * @return the unchanged cardAsStringRows if it wasn't a null card's String[5] representation. <br>
+     * Otherwise, returns a String[5] of just spaces with no coloring.
+     */
     public String[] cutAllCornersIfEmpty(String[] cardAsStringRows){
         String emptyRow = getSpaces(cornerStringAsSpacesLength*2 + cornerRowSpaceCount);
         if(cardAsStringRows[2].equals(emptyRow)){

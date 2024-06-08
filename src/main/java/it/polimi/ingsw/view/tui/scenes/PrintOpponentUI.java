@@ -7,8 +7,17 @@ import java.io.PrintWriter;
 
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
+/**
+ * The opponentArea UI scene printer for the TUI.
+ */
 public class PrintOpponentUI extends PrintGameUI {
     private final ViewOpponentHand hand;
+
+    /**
+     * Constructs the Opponent UI scene
+     * @param hand opponent's hand
+     * @param playArea opponent's playArea
+     */
     public PrintOpponentUI(ViewOpponentHand hand, ViewPlayArea playArea){
         super(hand, playArea);
         this.hand = hand;

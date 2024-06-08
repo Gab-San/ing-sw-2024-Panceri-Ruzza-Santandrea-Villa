@@ -123,14 +123,12 @@ public class TUI implements View{
         }
     }
 
-
     void moveView(List<CornerDirection> directions){
         SceneManager.getInstance().getCurrentScene().moveView(directions);
     }
     void setCenter(int row, int col) {
         SceneManager.getInstance().getCurrentScene().setCenter(row,col);
     }
-
 
     @Override
     public synchronized void update(SceneID sceneID, DisplayEvent event) {

@@ -5,12 +5,10 @@ import it.polimi.ingsw.view.tui.TUI_Scene;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
+/**
+ * The Nickname selection UI scene printer for the TUI
+ */
 public class PrintNicknameSelectUI extends TUI_Scene {
-
-    public PrintNicknameSelectUI(){
-        super();
-    }
-
     @Override
     public void display(){
         synchronized (System.out) {

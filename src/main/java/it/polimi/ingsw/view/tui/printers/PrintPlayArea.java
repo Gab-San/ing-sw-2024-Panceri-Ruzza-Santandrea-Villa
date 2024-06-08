@@ -15,11 +15,18 @@ import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.WHITE;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
+/**
+ * This printer is used to visualise any player's PlayArea.
+ */
 public class PrintPlayArea {
     private final PrintCard printCard;
     private final ViewPlayArea playArea;
     private final String freeCornerColor = ConsoleColorsCombiner.combine(PURPLE_TEXT, WHITE);
 
+    /**
+     * Constructs the ViewPlayArea printer
+     * @param playArea the playArea of this printer
+     */
     public PrintPlayArea(ViewPlayArea playArea){
         printCard = new PrintCard();
         this.playArea = playArea;
@@ -28,7 +35,7 @@ public class PrintPlayArea {
     /**
      * Cuts the string corresponding to a card's corner
      * @param row the row from which to cut the corner
-     * @param dir the corner direction
+     * @param dir the corner direction (TL/BL and TR/BR are treated as left and right)
      * @return the string corresponding to row without the card's corner in given direction
      */
     private String cutCorner(String row, CornerDirection dir, Set<CornerDirection> fillCorners){
@@ -38,6 +45,15 @@ public class PrintPlayArea {
             case TR, BR -> row.substring(0, row.length() - PrintCard.cornerStringLength) + spaces;
         };
     }
+
+    /**
+     * Multiple successive recolorings of the same corner are not allowed
+     * and may produce unwanted behaviour.
+     * @param row the card's String[5] corner row to recolor. Only pass a default row 0 or 4.
+     * @param dir the corner direction (TL/BL and TR/BR are treated as left and right)
+     * @param color the new color of the corner
+     * @return the row with a re-formatted corner, replacing its old color (only if it was the standard color)
+     */
     private String recolorCorner(String row, CornerDirection dir, String color) {
         int rightCorner = PrintCard.cornerStringLength;
         int leftCorner = row.length() - PrintCard.cornerStringLength;
@@ -48,6 +64,12 @@ public class PrintPlayArea {
         };
     }
 
+    /**
+     * @param card the ViewPlaceableCard to transform to String[5] representation
+     * @param fillCorners corner directions to fill with spaces
+     * @return the String[5] representation of card, cutting the non-visible corners and filling
+     * the corners whose direction is contained in fillCorners
+     */
     private String[] getCardAsStringRows(ViewPlaceableCard card, Set<CornerDirection> fillCorners){
         String[] cardAsStringRows = printCard.getCardAsStringRows(card);
 
@@ -78,10 +100,17 @@ public class PrintPlayArea {
         return cardAsStringRows;
     }
 
-
+    /**
+     * Short alias for System.out.print(String str)
+     * @param str string to be printed
+     */
     private void print(String str){
         System.out.print(str);
     }
+
+    /**
+     * Short alias for System.out.print("\n")
+     */
     private void endl(){ System.out.print("\n"); }
 
     // prints according to following schema:
@@ -91,6 +120,21 @@ topLeftCard      topCard       topRightCard
   leftCard       midCard       rightCard
           BLCard         BRCard
 botLeftCard      botCard      botRightCard
+     */
+    //FIXME: [Ale] this doc could be horrible
+    /**
+     * Prints according to following schema: <br><br>
+     * topLeftCard______topCard________topRightCard <br>
+     * ___________TLCard________TRCard <br>
+     * __leftCard_______midCard________rightCard    <br>
+     * __________BLCard_________BRCard              <br>
+     * botLeftCard______botCard_______botRightCard  <br>
+     * <br>
+     * The outside corners of cards on the edges of the view that are
+     * covered by another card (not in view) are not shown to indicate
+     * the presence of another card in that outside position.
+     * @param center position of the card to be printed as the center
+     *               (midCard in the above schema)
      */
     public void printPlayArea(GamePoint center){
         final Set<CornerDirection> fillCorners = new HashSet<>();

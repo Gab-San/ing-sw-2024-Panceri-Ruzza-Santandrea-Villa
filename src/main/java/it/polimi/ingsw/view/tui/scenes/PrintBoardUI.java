@@ -16,11 +16,18 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleColorsCombiner.combine;
 
+/**
+ * The Board UI scene printer for the TUI
+ */
 public class PrintBoardUI extends TUI_Scene {
     static final int cardSpacing = 4;
     private final PrintCard printCard;
     private final ViewBoard board;
 
+    /**
+     * Constructs the Board UI scene
+     * @param board ViewBoard of the game to be displayed
+     */
     public PrintBoardUI(ViewBoard board){
         super();
         this.board = board;

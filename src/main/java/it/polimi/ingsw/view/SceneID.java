@@ -12,9 +12,6 @@ public class SceneID {
         this.sceneName = sceneName;
     }
 
-    public static SceneID getSetNumberOfPlayersID() {
-        return new SceneID("SET_NUMBER_OF_PLAYERS");
-    }
 
     public boolean isOpponentAreaScene(){
         return sceneName.startsWith(OPPONENT_SCENE_PREFIX);
@@ -41,16 +38,31 @@ public class SceneID {
         return isOpponentAreaScene() ? getNickname() : sceneName;
     }
 
-
+//region COMMON SCENES
+    public static SceneID getMyAreaSceneID(){
+        return new SceneID("Me");
+    }
     public static SceneID getNicknameSelectSceneID(){
         return new SceneID("NICKNAME_SELECT");
     }
+
+//endregion
+
+//region GUI-ONLY SCENE IDS
+    public static SceneID getSetNumberOfPlayersID() {
+    return new SceneID("SET_NUMBER_OF_PLAYERS");
+}
+
+//endregion
+
+//region TUI-ONLY SCENE IDS
+
+//endregion
+
+//region Unknown/Not assigned SCENE IDS
     public static SceneID getNotificationSceneID(){return new SceneID("DEFAULT");}
     public static SceneID getBoardSceneID(){
         return new SceneID("Board");
-    }
-    public static SceneID getMyAreaSceneID(){
-        return new SceneID("Me");
     }
     public static SceneID getOpponentAreaSceneID(String nickname){
         return new SceneID(OPPONENT_SCENE_PREFIX + nickname);
@@ -61,4 +73,5 @@ public class SceneID {
     public static SceneID getHelperSceneID() {
         return new SceneID("COMMAND_HELPER_LEGEND");
     }
+//endregion
 }
