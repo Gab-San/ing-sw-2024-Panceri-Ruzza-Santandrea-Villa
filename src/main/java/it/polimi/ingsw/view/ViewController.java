@@ -121,4 +121,12 @@ public class ViewController {
     public void addLocalPlayer(String nickname) {
         board.addLocalPlayer(nickname);
     }
+
+    public ViewHand getPlayer(String nickname) {
+        if(board.getPlayerHand().getNickname().equals(nickname)){
+            return board.getPlayerHand();
+        } else {
+            return board.getOpponentHand(nickname);
+        }
+    }
 }

@@ -7,14 +7,19 @@ import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
-import it.polimi.ingsw.view.gui.localarea.PlayerAreaScene;
+import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
+import it.polimi.ingsw.view.gui.scenes.localarea.PlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -32,9 +37,11 @@ public class GUI extends JFrame implements View {
     private final BlockingQueue<String> inputQueue;
     private final GameInputHandler inputHandler;
     private final SceneManager sceneManager = SceneManager.getInstance();
+    private final List<JComponent> observableComponents;
     public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
         // Initializing View elements
         this.inputQueue = inputQueue;
+        observableComponents = new LinkedList<>();
         ViewBoard board = new ViewBoard(this);
         ModelUpdater modelUpdater = new ModelUpdater(board);
         setClientModelUpd.accept(modelUpdater);
@@ -75,13 +82,29 @@ public class GUI extends JFrame implements View {
                     SwingUtilities.invokeLater(
                             setNumberOfPlayers::display
                     );
-            case JOIN, SETUP, PLACESTARTING,
-                    CHOOSECOLOR, DEALCARDS,
+                    break;
+            case JOIN, SETUP, DEALCARDS,
                     CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER,
                     PLACECARD, DRAWCARD:
-//                    map.putIfAbsent(SceneID.getMyAreaSceneID(), GameScene::new);
+                break;
+            case PLACESTARTING:
+                break;
+            case CHOOSECOLOR:
+                GUI_Scene chooseColorScene = new ChooseColorScene(inputHandler);
+                SwingUtilities.invokeLater(
+                        () -> {
+                            for (JComponent component : observableComponents) {
+                                if (component instanceof ViewHand) {
+                                    component.addPropertyChangeListener(ViewHand.COLOR_PROPERTY,
+                                            (PropertyChangeListener) chooseColorScene);
+                                }
+                            }
+                            chooseColorScene.display();
+                        }
+                );
+                break;
             case EVALOBJ, SHOWWIN:
-//                    map.putIfAbsent(SceneID.getEndgameSceneID(), EndgameScene::new);
+
         }
     }
 
@@ -176,5 +199,10 @@ public class GUI extends JFrame implements View {
             inputQueue.add("SERVER_FAILURE");
             inputQueue.notifyAll();
         }
+    }
+
+    public void addSubject(String nickname) {
+        ViewHand playerHand = inputHandler.getPlayerHand(nickname);
+        observableComponents.add(playerHand);
     }
 }

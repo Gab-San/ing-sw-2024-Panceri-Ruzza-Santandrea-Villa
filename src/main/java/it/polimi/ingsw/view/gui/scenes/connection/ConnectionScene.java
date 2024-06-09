@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 
@@ -43,7 +44,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         loginPanel.setBorder(BorderFactory.createEmptyBorder(25,0,10,0));
         loginPanel.addKeyListener(this);
 
-        notificationLabel = createErrorLabel();
+        notificationLabel = GUIFunc.createNotificationLabel(200, 100, 300, 150);
 
         //Adding components
         add(loginPanel, BorderLayout.CENTER);
@@ -114,36 +115,19 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 // Goes to the next scene
                 gui.displayNextScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
-                displayError(correctToLabelFormat(exc.getMessage()), 2, false);
+                displayError(GUIFunc.correctToLabelFormat(exc.getMessage()), 2, false);
             } catch (RemoteException exc) {
-                displayError(correctToLabelFormat("Connection Lost!"), 1, true);
+                displayError(GUIFunc.correctToLabelFormat("Connection Lost!"), 1, true);
                 inputHandler.notifyDisconnection();
             }
         }
     }
 
-    private String correctToLabelFormat(String message) {
-        // Labels don't parse newlines
-        return "<html>" + message.replaceAll("\n", "<br>") + "</html>";
-    }
-
     @Override
     public void keyReleased(KeyEvent e) {/*unused*/}
 
-
-    private JLabel createErrorLabel(){
-        JLabel label =  new JLabel("");
-        //Align the label to the center of its display area
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setPreferredSize(new Dimension(200,100));
-        label.setMaximumSize(new Dimension(300,150));
-        //Error is not shown until it occurs
-        label.setVisible(false);
-        return label;
-    }
-
     private synchronized void displayError(String errorMessage, float displayTimeSeconds, boolean close){
-        int displayTime = setupDisplayTimer(displayTimeSeconds);
+        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.red);
         notificationLabel.setText(errorMessage);
@@ -153,7 +137,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     }
 
     private synchronized void displaySuccess(String successMessage, float displayTimeSeconds){
-        int displayTime = setupDisplayTimer(displayTimeSeconds);
+        int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
         //TODO [Gamba] Fix color
         notificationLabel.setForeground(Color.green);
         notificationLabel.setText(successMessage);
@@ -178,16 +162,4 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 });
         displayTimer.start();
     }
-
-    private int setupDisplayTimer(float displayTimeSeconds){
-        int displayTime = (int) (displayTimeSeconds * 1000);
-        // Stops any error timer, the label will be changed
-        // so there's no need to wait for the display timer to end
-        if(displayTimer != null){
-            displayTimer.stop();
-        }
-        return displayTime;
-    }
-
-
 }

@@ -43,7 +43,7 @@ public class DisplayPlayerState extends DisplayPlayerEvent {
 
     @Override
     public void displayEvent(GUI gui) {
-
+        gui.addSubject(nickname);
     }
 
     @Override

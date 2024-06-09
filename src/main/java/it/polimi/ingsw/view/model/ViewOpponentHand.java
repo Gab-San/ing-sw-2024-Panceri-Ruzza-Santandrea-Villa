@@ -10,9 +10,11 @@ import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
-public class ViewOpponentHand extends ViewHand{
+public class ViewOpponentHand extends ViewHand {
     private boolean isConnected;
 
     public ViewOpponentHand(String nickname, View view) {
@@ -91,6 +93,7 @@ public class ViewOpponentHand extends ViewHand{
         if(super.setColor(color)){
             notifyView(SceneID.getOpponentAreaSceneID(nickname),
                     new DisplayPlayerColor(nickname, false, color));
+            firePropertyChange(COLOR_PROPERTY, null, color);
             return true;
         }
         return false;

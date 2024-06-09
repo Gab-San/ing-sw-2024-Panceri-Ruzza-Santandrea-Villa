@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.localarea;
+package it.polimi.ingsw.view.gui.scenes.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;

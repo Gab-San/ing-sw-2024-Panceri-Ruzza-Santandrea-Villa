@@ -8,11 +8,13 @@ import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
+import javax.swing.*;
+import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ViewHand {
+public abstract class ViewHand extends JComponent {
     protected final String nickname;
     protected final List<ViewPlayCard> cards;
     protected ViewStartCard startCard;
@@ -20,6 +22,8 @@ public abstract class ViewHand {
     protected PlayerColor color;
     private int turn;
     protected final View view;
+
+    public static final String COLOR_PROPERTY = "PROPERTY_COLOR";
 
     public ViewHand(String nickname, View view) {
         this.nickname = nickname;
@@ -107,6 +111,11 @@ public abstract class ViewHand {
         boolean changed = this.turn != turn;
         this.turn = turn;
         return changed;
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        super.addPropertyChangeListener(listener);
     }
 
     public synchronized void notifyView(SceneID scene, DisplayEvent event){
