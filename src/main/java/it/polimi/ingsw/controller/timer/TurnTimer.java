@@ -11,7 +11,10 @@ import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 
-
+/**
+ * A timer that handles a player's turn duration, sending periodic pings to the player
+ * to keep the connection alive and disconnecting the player if they exceed their turn time.
+ */
 public class TurnTimer implements Runnable{
 
     private final Player player;
@@ -19,12 +22,22 @@ public class TurnTimer implements Runnable{
     private final long pingTimeMillis;
     private Future<?> task;
 
+    /**
+     * Constructs a TurnTimer object with the specified player, turn time, and ping time.
+     * @param player The player associated with this timer.
+     * @param turnTime The duration of the player's turn in seconds.
+     * @param pingTime The interval between ping messages in seconds.
+     */
     public TurnTimer(Player player, int turnTime, int pingTime){
         this.player = player;
         this.turnTime = turnTime;
         this.pingTimeMillis = pingTime*1000L;
     }
 
+    /**
+     * Runs the TurnTimer, managing the player's turn duration, sending periodic pings,
+     * and disconnecting the player if they exceed their turn time.
+     */
     @Override
     public void run() {
 
@@ -66,10 +79,17 @@ public class TurnTimer implements Runnable{
         }
     }
 
+    /**
+     * Sets the task associated with this timer.
+     * @param task The task to set.
+     */
     void setTask(Future<?> task){
         this.task = task;
     }
 
+    /**
+     * Cancels the task associated with this timer if it exists.
+     */
     void killTask(){
         if(task != null){
             task.cancel(true);

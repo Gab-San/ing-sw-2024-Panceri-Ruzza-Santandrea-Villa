@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Represents the play state in the game where players take turns to place and draw cards.
+ * Handles player actions and transitions between phases.
+ */
 public class PlayState extends GameState {
     private boolean lastRound;
     private boolean currentPlayerHasPlacedCard;
@@ -27,6 +31,12 @@ public class PlayState extends GameState {
     private static final int PLAYER_REJOIN_TIME = 120; //seconds
     private GamePhase phase_preWaitingRejoin;
 
+    /**
+     * Constructs a new instance of PlayState.
+     * @param board the board representing the game state
+     * @param controller the controller managing the game flow
+     * @param disconnectingPlayers a list of players who disconnected during the game
+     */
     public PlayState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         int startingTurn = board.getPlayersByTurn().stream()
@@ -48,6 +58,11 @@ public class PlayState extends GameState {
         }
     }
 
+    /**
+     * Handles the player joining the game during the play state.
+     * @throws IllegalStateException if the game phase does not allow joining
+     * @throws IllegalArgumentException if the player cannot be reconnected
+     */
     @Override
     public void join(String nickname, VirtualClient client) throws IllegalStateException, IllegalArgumentException {
         board.reconnectPlayer(nickname);
@@ -59,6 +74,11 @@ public class PlayState extends GameState {
         board.subscribeClientToUpdates(nickname, client);
     }
 
+    /**
+     * Handles the player disconnecting from the game during the play state.
+     * @throws IllegalStateException if the game phase does not allow disconnecting
+     * @throws IllegalArgumentException if the player is not in the game
+     */
     @Override
     public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
@@ -82,28 +102,49 @@ public class PlayState extends GameState {
         }
     }
 
+    /**
+     * Sets the number of players for the game. Not allowed during the play state.
+     * @throws IllegalStateException always, because changing the number of players is not allowed during the play state
+     */
     @Override
     public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING PLAY STATE");
     }
 
+    /**
+     * Places a starting card for a player. Not allowed during the play state.
+     * @throws IllegalStateException always, because placing starting cards is not allowed during the play state
+     */
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname,"IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO PLACE STARTING CARD DURING PLAY STATE");
     }
+    /**
+     * Allows a player to choose or change their color. Not allowed during the play state.
+     * @throws IllegalStateException always, because choosing or changing color is not allowed during the play state
+     */
     public void chooseYourColor(String nickname, PlayerColor color) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHOOSE OR CHANGE YOUR COLOR DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE OR CHANGE YOUR COLOR DURING PLAY STATE");
     }
 
+    /**
+     * Allows a player to choose a secret objective. Not allowed during the play state.
+     * @throws IllegalStateException always, because choosing a secret objective is not allowed during the play state
+     */
     @Override
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO CHOOSE SECRET OBJECTIVE DURING PLAY STATE");
     }
 
+    /**
+     * Places a card on the board for the current player.
+     * @throws IllegalStateException if the card cannot be placed in the current phase or if it is not the player's turn
+     * @throws IllegalArgumentException if the card position or corner is invalid
+     */
     @Override
     public void placeCard(String nickname, String cardID, GamePoint cardPos, CornerDirection cornerDir, boolean placeOnFront)
             throws IllegalStateException, IllegalArgumentException {
@@ -153,6 +194,11 @@ public class PlayState extends GameState {
         }
     }
 
+    /**
+     * Draws a card from the specified deck for the current player.
+     * @throws IllegalStateException if the draw cannot be performed in the current phase or if it is not the player's turn
+     * @throws IllegalArgumentException if the card position is invalid or the draw cannot be completed
+     */
     @Override
     public void draw(String nickname, char deckFrom, int cardPos)
             throws IllegalStateException, IllegalArgumentException {
@@ -193,6 +239,9 @@ public class PlayState extends GameState {
         postDrawChecks();
     }
 
+    /**
+     * Checks the state of the game after a player draws a card, updates game phases and transitions if necessary.
+     */
     private void postDrawChecks(){
         int lastPlayerTurn = board.getPlayerAreas().keySet().stream()
         // only look at players that are connected and NOT deadlocked
@@ -223,17 +272,28 @@ public class PlayState extends GameState {
         }
         else nextState();
     }
+    /**
+     * Transitions the game to the next state, which is the endgame state.
+     * @throws IllegalStateException if the transition to the next state is not possible
+     */
     private void nextState() throws IllegalStateException {
         stopRejoinTimer();
         transition( new EndgameState(board, controller, disconnectingPlayers) );
     }
 
+    /**
+     * Restarts the game. Not allowed during the play state.
+     * @throws IllegalStateException always, because restarting the game is not allowed during the play state
+     */
     @Override
     public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START GAME DURING PLAY STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO START GAME DURING PLAY STATE");
     }
 
+    /**
+     * Starts a timer to wait for players to rejoin if only one player remains connected.
+     */
     private void startRejoinTimer(){
         if(disconnectRejoinTimer == null){ //if not already waiting for rejoin
             disconnectRejoinTimer = new Timer();
@@ -248,12 +308,18 @@ public class PlayState extends GameState {
             board.setGamePhase(GamePhase.WAITING_FOR_REJOIN);
         }
     }
+    /**
+     * Stops the rejoin timer if it is running.
+     */
     private void stopRejoinTimer(){
         if(disconnectRejoinTimer != null){
             disconnectRejoinTimer.cancel();
             disconnectRejoinTimer = null;
         }
     }
+    /**
+     * Resumes play from where it was paused for player rejoining.
+     */
     private void resumePlay(){
         stopRejoinTimer();
         board.setGamePhase(phase_preWaitingRejoin);
