@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
@@ -142,6 +143,7 @@ public class Parser {
                     + exception.getMessage() + "2 and 4");
         }
 
+        viewController.validatePhase(GamePhase.SETNUMPLAYERS);
         virtualServer.setNumOfPlayers(numOfPlayers);
     }
 
@@ -231,6 +233,7 @@ public class Parser {
         } catch (IndexOutOfBoundsException outOfBoundsException){
             throw new IllegalArgumentException("Invalid number of players." + outOfBoundsException.getMessage() + "2 and 4");
         }
+        viewController.validatePhase(GamePhase.SHOWWIN);
         virtualServer.restartGame(numOfPlayers);
     }
 
