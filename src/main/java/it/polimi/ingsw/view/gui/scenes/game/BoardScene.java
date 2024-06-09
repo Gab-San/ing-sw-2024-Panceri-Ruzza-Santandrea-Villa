@@ -23,11 +23,6 @@ public class BoardScene implements GUI_Scene {
     }
 
     @Override
-    public void displayChatMessage(List<String> backlog) {
-
-    }
-
-    @Override
     public void moveView(List<CornerDirection> cornerDirections) {
 
     }

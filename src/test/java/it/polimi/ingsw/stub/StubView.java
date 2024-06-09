@@ -107,7 +107,7 @@ public class StubView implements View {
     }
 
     @Override
-    public void showChatMessage(String msg) {
+    public void showChatMessage(String messenger, String msg) {
 
     }
 

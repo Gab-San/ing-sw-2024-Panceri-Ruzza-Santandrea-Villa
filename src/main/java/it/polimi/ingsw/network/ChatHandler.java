@@ -125,7 +125,7 @@ public class ChatHandler{
 
                         try {
                             if(addressee != null) {
-                                String header = directMessage.messenger() + " TO " + directMessage.addressee();
+                                String header = directMessage.messenger() + " to " + directMessage.addressee();
                                 addressee.displayMessage(header, directMessage.message());
                                 if(!directMessage.addressee().equals(directMessage.messenger())) {
                                     messengerClient.displayMessage(header, directMessage.message());

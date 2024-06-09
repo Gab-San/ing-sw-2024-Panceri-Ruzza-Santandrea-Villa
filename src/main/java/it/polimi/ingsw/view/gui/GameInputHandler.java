@@ -30,7 +30,7 @@ public class GameInputHandler implements CommandPassthrough{
 
     @Override
     public void sendMsg(String addressee, String message) throws RemoteException {
-
+        serverProxy.sendMsg(addressee, message);
     }
 
     public void connect(String nickname) throws RemoteException, IllegalStateException {

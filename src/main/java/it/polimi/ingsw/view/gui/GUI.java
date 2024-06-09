@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
+import it.polimi.ingsw.view.gui.scenes.extra.ChatPanel;
+import it.polimi.ingsw.view.gui.scenes.extra.PlayerListPanel;
 import it.polimi.ingsw.view.gui.scenes.localarea.PlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
@@ -38,10 +40,15 @@ public class GUI extends JFrame implements View {
     private final GameInputHandler inputHandler;
     private final SceneManager sceneManager = SceneManager.getInstance();
     private final List<JComponent> observableComponents;
+    private final List<PropertyChangeListener> propertyChangeListenerList;
+    private final List<ChatListener> chatListenerList;
+    private GUI_Scene lastOpenedScene;
     public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
         // Initializing View elements
         this.inputQueue = inputQueue;
         observableComponents = new LinkedList<>();
+        propertyChangeListenerList = new LinkedList<>();
+        chatListenerList = new LinkedList<>();
         ViewBoard board = new ViewBoard(this);
         ModelUpdater modelUpdater = new ModelUpdater(board);
         setClientModelUpd.accept(modelUpdater);
@@ -78,19 +85,27 @@ public class GUI extends JFrame implements View {
     public synchronized void updatePhase(GamePhase gamePhase){
         switch (gamePhase){
             case SETNUMPLAYERS:
-                    GUI_Scene setNumberOfPlayers = new SetPlayersScene(inputHandler);
+                    GUI_Scene setNumberOfPlayers = new SetPlayersScene(this, "Choose your objective",
+                            inputHandler);
                     SwingUtilities.invokeLater(
                             setNumberOfPlayers::display
                     );
+                    lastOpenedScene = setNumberOfPlayers;
                     break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEOBJECTIVE, CHOOSEFIRSTPLAYER,
-                    PLACECARD, DRAWCARD:
+                    CHOOSEFIRSTPLAYER, PLACECARD, DRAWCARD:
                 break;
             case PLACESTARTING:
+                // I really don't like this method but nothing else seems to work
+                if(lastOpenedScene != null){
+                    SwingUtilities.invokeLater(
+                            lastOpenedScene::close
+                    );
+                    lastOpenedScene = null;
+                }
                 break;
             case CHOOSECOLOR:
-                GUI_Scene chooseColorScene = new ChooseColorScene(inputHandler);
+                GUI_Scene chooseColorScene = new ChooseColorScene(this, "Choose your color!", inputHandler);
                 SwingUtilities.invokeLater(
                         () -> {
                             for (JComponent component : observableComponents) {
@@ -102,6 +117,15 @@ public class GUI extends JFrame implements View {
                             chooseColorScene.display();
                         }
                 );
+                lastOpenedScene = chooseColorScene;
+                break;
+            case CHOOSEOBJECTIVE:
+                if(lastOpenedScene != null){
+                    SwingUtilities.invokeLater(
+                        lastOpenedScene::close
+                    );
+                    lastOpenedScene = null;
+                }
                 break;
             case EVALOBJ, SHOWWIN:
 
@@ -117,14 +141,9 @@ public class GUI extends JFrame implements View {
         // All scenes to display on the main frame will be JPanels
         // if a scene that is not a JPanel is issued there is an error
         // either in the design or in the execution
-        add((JPanel) nextScene);
+        this.add((JPanel) nextScene, BorderLayout.CENTER);
         // Sets and executes the scene
         sceneManager.setScene(nextScene);
-        this.pack();
-        // Must center after every pack call, or fix the screen size and not pack the scene
-        Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-        center.translate(-getWidth()/2, -getHeight()/2);
-        this.setLocation(center);
         // This needs to be called each time a scene change
         // is issued to be sure that all the items are validated for display
         this.setVisible(true);
@@ -146,8 +165,10 @@ public class GUI extends JFrame implements View {
     }
 
     @Override
-    public synchronized void showChatMessage(String msg) {
-
+    public synchronized void showChatMessage(String messenger, String msg) {
+        for(ChatListener listener : chatListenerList) {
+            listener.displayMessage(messenger, msg);
+        }
     }
 
     @Override
@@ -156,10 +177,37 @@ public class GUI extends JFrame implements View {
     }
     private void createGUI(){
         // Standard JFrame stuff defining window size, position and layout
-        this.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setLayout(new BorderLayout());
+        GUIFunc.setupFrame(this, "Codex Naturalis",
+                SCREEN_WIDTH, SCREEN_HEIGHT);
+        setLayout(new BorderLayout());
+
+        JPanel leftSidePanel = setupLeftPanel();
+        add(leftSidePanel, BorderLayout.WEST);
     }
+
+    private JPanel setupLeftPanel() {
+        ChatPanel chatPanel = new ChatPanel(inputHandler);
+        addChatListener(chatPanel);
+        PlayerListPanel playerListPanel = new PlayerListPanel(this);
+        propertyChangeListenerList.add(chatPanel);
+        propertyChangeListenerList.add(playerListPanel);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                playerListPanel, chatPanel);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setResizeWeight(0.5);
+
+        JPanel leftPanel = new JPanel(new GridLayout(1,0));
+        leftPanel.setPreferredSize(new Dimension(300,10));
+        leftPanel.add(splitPane);
+        return leftPanel;
+    }
+
+    public void addChatListener(ChatListener chatListener){
+        synchronized (chatListenerList) {
+            chatListenerList.add(chatListener);
+        }
+    }
+
     private void RunNicknameScene(){
         sceneManager.setScene(SceneID.getNicknameSelectSceneID());
     }
@@ -172,7 +220,6 @@ public class GUI extends JFrame implements View {
         SwingUtilities.invokeLater(
                 this::createGUI
         );
-
         final int SLEEP_MILLIS = 200;
         try {
             while (true) {

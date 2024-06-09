@@ -16,12 +16,13 @@ import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class ChooseColorScene extends JFrame implements GUI_Scene, PropertyChangeListener {
+public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChangeListener {
     private final JButton redButton, yellowButton, greenButton, blueButton;
     private final JLabel notificationLabel;
     private Timer displayTimer;
 
-    public ChooseColorScene(GameInputHandler inputHandler) {
+    public ChooseColorScene(Frame owner, String title, GameInputHandler inputHandler) {
+        super(owner, title, true);
         setLayout(new GridBagLayout());
         Action colorButtonAction = getButtonAction(inputHandler);
         redButton = createColorButton( colorButtonAction, "Red", Color.red);
@@ -96,9 +97,7 @@ public class ChooseColorScene extends JFrame implements GUI_Scene, PropertyChang
     public synchronized void display() {
         final int WIDTH = 700;
         final int HEIGHT = 300;
-        GUIFunc.setupFrame(this, "Choose your color!",
-                WIDTH, HEIGHT);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        GUIFunc.setupDialog(this, WIDTH, HEIGHT);
         setAllComponentsVisible();
         setVisible(true);
     }
@@ -118,11 +117,6 @@ public class ChooseColorScene extends JFrame implements GUI_Scene, PropertyChang
 
     @Override
     public synchronized void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public synchronized void displayChatMessage(List<String> backlog) {
 
     }
 

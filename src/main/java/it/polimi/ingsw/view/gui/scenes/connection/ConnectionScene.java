@@ -83,9 +83,6 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     public void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
-    public void displayChatMessage(List<String> backlog) {/*unused*/}
-
-    @Override
     public  void moveView(List<CornerDirection> cornerDirections) {/*unused*/}
 
     @Override

@@ -23,10 +23,12 @@ public class LoginPanel extends JPanel {
         loginTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                loginTextField.setText("");
-                //Makes it possible to write
-                loginTextField.setFocusable(true);
-                loginTextField.grabFocus();
+                if(!loginTextField.isFocusable()) {
+                    loginTextField.setText("");
+                    //Makes it possible to write
+                    loginTextField.setFocusable(true);
+                    loginTextField.grabFocus();
+                }
             }
         });
 

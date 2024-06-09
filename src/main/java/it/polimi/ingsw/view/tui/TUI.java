@@ -173,11 +173,12 @@ public class TUI implements View{
         setRefreshTimer();
     }
     @Override
-    public synchronized void showChatMessage(String msg){
+    public synchronized void showChatMessage(String messenger, String msg){
+        String message = messenger + "> " + msg;
         if(chatBacklog.size() >= BACKLOG_SIZE){
             chatBacklog.remove(0);
         }
-        chatBacklog.add(msg);
+        chatBacklog.add(message);
         setRefreshTimer();
     }
 

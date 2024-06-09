@@ -45,9 +45,18 @@ public final class GUIFunc extends UIFunctions {
         frame.setSize(width, height);
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         center.translate(-width/2, -height/2);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocation(center);
     }
-
+    public static void setupDialog(JDialog dialog, int width, int height){
+        dialog.setSize(width, height);
+        Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+        center.translate(-width/2, -height/2);
+        dialog.setLocation(center);
+        //FIXME: for now it can exit since join should ping the client
+        // but it should first send a notification to the server
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
     public static void setupPanel(JPanel panel){
 
     }

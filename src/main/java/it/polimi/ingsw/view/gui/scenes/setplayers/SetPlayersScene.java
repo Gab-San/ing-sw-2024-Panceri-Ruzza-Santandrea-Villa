@@ -12,14 +12,16 @@ import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class SetPlayersScene extends JFrame implements GUI_Scene {
+public class SetPlayersScene extends JDialog implements GUI_Scene {
     private final JLabel setPlayerLabel;
     private final JButton twoPlayersButton;
     private final JButton threePlayersButton;
     private final JButton fourPlayersButton;
     private final JLabel errorLabel;
     private Timer errorTimer;
-    public SetPlayersScene(GameInputHandler inputHandler){
+    public SetPlayersScene(Frame owner, String title, GameInputHandler inputHandler){
+        // A modal dialog blocks all inputs on other windows
+        super(owner, title, true);
 
         setLayout(new GridBagLayout());
 
@@ -97,11 +99,7 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
     public void display() {
         final int WIDTH = 500;
         final int HEIGHT = 200;
-        GUIFunc.setupFrame(this, "Choose number of players!",
-                WIDTH, HEIGHT);
-        //FIXME: for now it can exit since join should ping the client
-        // but it should first send a notification to the server
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        GUIFunc.setupDialog(this, WIDTH, HEIGHT);
         setAllComponentsVisible();
         setVisible(true);
         requestFocus();
@@ -135,11 +133,6 @@ public class SetPlayersScene extends JFrame implements GUI_Scene {
 
     @Override
     public void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public void displayChatMessage(List<String> backlog) {
 
     }
 
