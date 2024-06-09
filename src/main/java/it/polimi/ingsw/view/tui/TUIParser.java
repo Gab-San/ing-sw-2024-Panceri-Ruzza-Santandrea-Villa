@@ -18,17 +18,37 @@ import java.util.List;
 
 import static it.polimi.ingsw.CornerDirection.*;
 
+/**
+ * Parser for all command inputs on the TUI. <br>
+ * Delegates all server-related commands to Parser.
+ */
 public class TUIParser {
     private final Parser serverParser;
     private final TUI view;
     private final ViewBoard board;
 
+    /**
+     * Builds the TUI command parser
+     * @param serverProxy proxy on which to call commands that perform an action on the server
+     * @param view reference to the TUI
+     * @param board reference to the ViewModel's board
+     */
     public TUIParser(CommandPassthrough serverProxy, TUI view, ViewBoard board) {
         this.serverParser = new Parser(serverProxy, new ViewController(board));
         this.view = view;
         this.board = board;
     }
 
+    /**
+     * Parses the given command and executes it if it's a command only related to the view. <br>
+     * Delegates parsing and execution to Parser if it's a command to perform an action on the server.
+     * @param command the user input to be parsed as a command
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while Parser communicates with the server
+     * @throws DisconnectException if the command is quit/disconnect. This is to notify the TUI of the disconnection.
+     *                          The disconnection is first sent to the server, then the exception is thrown.
+     */
     public void parseCommand(String command) throws IllegalArgumentException, IllegalStateException, RemoteException, DisconnectException {
         List<String> commandComponents = Arrays.stream(command.trim().split("\\s+")).distinct().toList();
         String keyCommand = "";
@@ -58,9 +78,19 @@ public class TUIParser {
             throw new DisconnectException();
         }
     }
+
+    /**
+     * Changes scene to the Helper scene.
+     */
     private void viewHelperScene() {
         SceneManager.getInstance().setScene(SceneID.getHelperSceneID());
     }
+
+    /**
+     * Parses the move command to move the center of the playArea visualisation in a GameUI scene.
+     * @param cmdArgs the command arguments
+     * @throws IllegalArgumentException if nor a direction nor "center" is given as a command parameter
+     */
     private void parseMoveCommand(List<String> cmdArgs) throws IllegalArgumentException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide a direction to move towards!");
         List<CornerDirection> directions = new LinkedList<>();
@@ -90,8 +120,13 @@ public class TUIParser {
         }
         view.moveView(directions);
     }
-
-    private void parseViewCommand(List<String> cmdArgs) {
+    /**
+     * Parses the view command to change the current scene.
+     * @param cmdArgs the command arguments
+     * @throws IllegalArgumentException if the command parameter is not a valid scene ID
+     * @throws IllegalStateException if the Gamephase is SHOW_WINNERS (prevents leaving endgame leaderboard scene)
+     */
+    private void parseViewCommand(List<String> cmdArgs) throws IllegalArgumentException,IllegalStateException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
         if(board.getGamePhase() == GamePhase.SHOWWIN){
             throw new IllegalStateException("Cannot change scene after the game has ended.");
@@ -107,7 +142,14 @@ public class TUIParser {
         
         SceneManager.getInstance().setScene(selectedScene);
     }
-    private void parseFlipCommand(List<String> cmdArgs) {
+
+    /**
+     * Parses flip command to flip a card in hand
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the arguments are empty
+     * or if the argument is an invalid index or cardID (not corresponding to a card in hand)
+     */
+    private void parseFlipCommand(List<String> cmdArgs) throws IllegalArgumentException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
 
         String arg = cmdArgs.get(0).toUpperCase();
@@ -130,6 +172,10 @@ public class TUIParser {
                 new DisplayFlippedCard(flippedCard));
     }
 
+    /**
+     * Sets the local player's playArea in the ViewController. <br>
+     * This method provides access to the TUI.
+     */
     void setSelfPlayerArea() {
         serverParser.setSelfPlayerArea();
     }

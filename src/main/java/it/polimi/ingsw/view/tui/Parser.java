@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.ViewController;
+import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
@@ -16,15 +17,31 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser for all  server-related commands on the TUI.
+ */
 public class Parser {
 
     private CommandPassthrough virtualServer;
     private final ViewController viewController;
+
+    /**
+     * Builds the Parser and sets references to ViewController and VirtualServer
+     * @param virtualServer reference to the server proxy
+     * @param viewController reference to the ViewController
+     */
     public Parser(CommandPassthrough virtualServer, ViewController viewController){
         this.virtualServer = virtualServer;
         this.viewController = viewController;
     }
-
+    /**
+     * Parses the given command and executes it if it's a command to perform an action on the server.
+     * @param command the user input to be parsed as a command
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message generally specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     public void parseCommand(String command) throws RemoteException, IllegalArgumentException, IllegalStateException {
         List<String> commandComponents = Arrays.stream(command.trim().split("\\s+")).distinct().toList();
         String keyCommand = "";
@@ -58,57 +75,65 @@ public class Parser {
             case "set", "players":
                 parseSetNumPlayers(cmdArgs);
                 break;
-            case "reconnect":
-                parseReconnectCmd(cmdArgs);
-                break;
+//            case "reconnect":
+//                parseReconnectCmd(cmdArgs);
+//                break;
             default:
                 throw new IllegalArgumentException("Command not recognised");
         }
 
     }
 
-    //region RECONNECT
-    //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
-    private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
-        if (cmdArgs.size() < 3) {
-            throw new IllegalArgumentException("Too few arguments.\n" +
-                    "Format as such: reconnect TCP/RMI hostname port");
-        }
-
-        String hostAddr = cmdArgs.get(1);
-        int port;
-        try {
-            port = Integer.parseInt(cmdArgs.get(2));
-        } catch (NumberFormatException formatException) {
-            throw new IllegalArgumentException(formatException.getMessage());
-        }
-
-
-        switch (cmdArgs.get(0).toLowerCase()) {
-            case "tcp":
-            case "socket":
-                try {
-                    TCPClientSocket socket = new TCPClientSocket(hostAddr, port);
-                    virtualServer = socket.getProxy();
-                    break;
-                }  catch (IOException e) {
-                    throw new IllegalArgumentException(e.getMessage());
-                }
-            case "rmi":
-                try {
-                    RMIClient rmiClient = new RMIClient(hostAddr, port);
-                    virtualServer = rmiClient.getProxy();
-                    break;
-                } catch (RemoteException | NotBoundException e) {
-                    throw new IllegalArgumentException(e.getMessage());
-                }
-            default:
-                throw new IllegalArgumentException("Command not recognised");
-        }
-    }
+//region RECONNECT (unused)
+//    //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
+//    private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
+//        if (cmdArgs.size() < 3) {
+//            throw new IllegalArgumentException("Too few arguments.\n" +
+//                    "Format as such: reconnect TCP/RMI hostname port");
+//        }
+//
+//        String hostAddr = cmdArgs.get(1);
+//        int port;
+//        try {
+//            port = Integer.parseInt(cmdArgs.get(2));
+//        } catch (NumberFormatException formatException) {
+//            throw new IllegalArgumentException(formatException.getMessage());
+//        }
+//
+//
+//        switch (cmdArgs.get(0).toLowerCase()) {
+//            case "tcp":
+//            case "socket":
+//                try {
+//                    TCPClientSocket socket = new TCPClientSocket(hostAddr, port);
+//                    virtualServer = socket.getProxy();
+//                    break;
+//                }  catch (IOException e) {
+//                    throw new IllegalArgumentException(e.getMessage());
+//                }
+//            case "rmi":
+//                try {
+//                    RMIClient rmiClient = new RMIClient(hostAddr, port);
+//                    virtualServer = rmiClient.getProxy();
+//                    break;
+//                } catch (RemoteException | NotBoundException e) {
+//                    throw new IllegalArgumentException(e.getMessage());
+//                }
+//            default:
+//                throw new IllegalArgumentException("Command not recognised");
+//        }
+//    }
 //endregion
 
-    private void parseSetNumPlayers(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
+    /**
+     * Parses set < num players > command and calls the related function on the server proxy.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
+    private void parseSetNumPlayers(List<String> cmdArgs) throws IllegalArgumentException, IllegalStateException, RemoteException {
         int numOfPlayers;
         try {
             numOfPlayers = searchForNumber(cmdArgs, "[2-4]");
@@ -120,6 +145,14 @@ public class Parser {
         virtualServer.setNumOfPlayers(numOfPlayers);
     }
 
+    /**
+     * Finds the first number within bounds in the given list of arguments
+     * @param numCmdComp list of command arguments
+     * @param numberBounds regex matching the number that should be returned
+     * @return the first number in the list matching the bounds
+     * @throws IndexOutOfBoundsException if there are no numbers in the list
+     *                                or if all numbers do not match the bounds
+     */
     private int searchForNumber(List<String> numCmdComp, String numberBounds) throws IndexOutOfBoundsException{
         for(String cmp : numCmdComp){
             if(Pattern.compile(numberBounds).matcher(cmp).matches()){
@@ -130,6 +163,12 @@ public class Parser {
     }
 
 //region MESSAGING
+    /**
+     * Parses the send command to send a chat message.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseSendCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException {
         if(cmdArgs.size() < 2) throw new IllegalArgumentException("""
                 Command wrongly formatted: missing either message or addressee.
@@ -153,6 +192,12 @@ public class Parser {
         virtualServer.sendMsg(addressee, msg.toString().trim());
     }
 
+    /**
+     * Parses the Addressee for a chat send message command according to the nickname regex. <br>
+     * "[^\n ].*[a-zA-Z].*[^\n ]" (including the "")
+     * @param cmdArgs send command arguments
+     * @return the first argument that matches the addressee regex
+     */
     private String parseAddressee(List<String> cmdArgs){
         StringBuilder command = new StringBuilder();
         cmdArgs.forEach(
@@ -169,6 +214,13 @@ public class Parser {
     }
 //endregion
 
+    /**
+     * Parses the restart command and calls the related function on the server proxy.
+     * @param cmdArgs the command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalStateException {
         if(cmdArgs.isEmpty())
             throw new IllegalArgumentException("Restart must provide the number of players with which to restart the game (2-4)\n"+
@@ -183,10 +235,24 @@ public class Parser {
     }
 
 //region CONNECTION COMMANDS
+
+    /**
+     * Calls the disconnect() function on the server proxy.
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     */
     private void parseDisconnectCmd() throws RemoteException, IllegalStateException {
         virtualServer.disconnect();
     }
 
+    /**
+     * Parses the connect command and calls the related function on the server proxy.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseConnectCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Connect command must provide a nickname.");
 
@@ -198,6 +264,14 @@ public class Parser {
         virtualServer.connect(nickname.toString().trim());
     }
 //endregion
+    /**
+     * Parses the generic choose command and delegates parsing to parseChooseColor or parseChooseObjective.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseChooseCmd(List<String> cmdArgs) throws RemoteException,IllegalArgumentException, IllegalStateException {
         if(cmdArgs.size() < 2) throw new IllegalArgumentException("""
                 Choose command must provide what the player is choosing and the relevant information
@@ -216,11 +290,19 @@ public class Parser {
 
         throw new IllegalArgumentException("""
                 Command not recognised. Maybe you meant:
-                choose color ...
-                choose objective ...
+                choose color Red|Blue|Yellow|Green
+                choose objective 1|2
                 """);
     }
 
+    /**
+     * Parses the choose color command and calls the related function on the server proxy.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseChooseColorCommand(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         for (String arg : cmdArgs) {
             if (Pattern.compile("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen").matcher(arg).matches()) {
@@ -233,11 +315,18 @@ public class Parser {
         throw new IllegalArgumentException("""
                 Command was wrongly formatted: no color found
                 Command example: choose color Red
-                Choosable colors: Red, Blue, Yellow, Green (check availables!)
+                Player colors: Red, Blue, Yellow, Green (check availability in Board scene!)
                 """);
     }
 
-
+    /**
+     * Parses the choose objective command and calls the related function on the server proxy.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseChooseObjCmd(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         try{
             int choice = searchForNumber(cmdArgs, "[1-2]");
@@ -253,7 +342,14 @@ public class Parser {
                             );
         }
     }
-
+    /**
+     * Parses the draw command and calls the related function on the server proxy.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parseDrawCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("""
                 Draw must only provide a deck choice and the card position
@@ -284,7 +380,14 @@ public class Parser {
         viewController.validateDraw(deck, position);
         virtualServer.draw(deck, position);
     }
-
+    /**
+     * Parses the place command and delegates parsing to either parsePlaceStartingCard or parsePlaceCard.
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parsePlayCmd(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException {
         if(cmdArgs.contains("Starting") || cmdArgs.contains("starting")) {
             parsePlaceStartingCard(cmdArgs);
@@ -299,12 +402,19 @@ public class Parser {
                     + "For example: place card G0 on G4 TL|TR|BL|BR");
         }
     }
-
-    private void parsePlaceCard(List<String> cmdArg) throws IllegalArgumentException, RemoteException, IllegalStateException{
-        if( cmdArg.size() < 3 ) throw new IllegalArgumentException("Too few command arguments");
+    /**
+     * Parses the place card command and calls the related function on the server proxy
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
+    private void parsePlaceCard(List<String> cmdArgs) throws IllegalArgumentException, RemoteException, IllegalStateException{
+        if( cmdArgs.size() < 3 ) throw new IllegalArgumentException("Too few command arguments");
 
         StringBuilder argsStr = new StringBuilder();
-        for(String arg : cmdArg){
+        for(String arg : cmdArgs){
             argsStr.append(arg).append(" ");
         }
 
@@ -340,7 +450,14 @@ public class Parser {
         virtualServer.placeCard(cardToPlace, placementPos, cornDir, viewController.getSelfCardById(cardToPlace).isFaceUp());
     }
 
-
+    /**
+     * Parses the place starting command and calls the related function on the server proxy
+     * @param cmdArgs command arguments
+     * @throws IllegalArgumentException if the command is invalid or formatted incorrectly.
+     *                              The exception message specifies the proper formatting
+     * @throws IllegalStateException if the command cannot be executed at the time of parsing
+     * @throws RemoteException if a connection error occurs while communicating with the server
+     */
     private void parsePlaceStartingCard(List<String> cmdArgs) throws RemoteException, IllegalArgumentException, IllegalStateException {
         if(cmdArgs.size() > 2) throw new IllegalArgumentException("""
                 Maybe you meant: Place starting card
@@ -350,6 +467,10 @@ public class Parser {
         virtualServer.placeStartCard(startCard.isFaceUp());
     }
 
+    /**
+     * Sets the local player's playArea in the ViewController. <br>
+     * This method provides access to the TUI.
+     */
     public void setSelfPlayerArea() {
         viewController.setSelfPlayerArea();
     }
