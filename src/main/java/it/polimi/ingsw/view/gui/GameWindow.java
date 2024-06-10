@@ -1,15 +1,14 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.SceneManager;
-import it.polimi.ingsw.view.gui.scenes.extra.ChatPanel;
-import it.polimi.ingsw.view.gui.scenes.extra.PlayerListPanel;
+import it.polimi.ingsw.view.gui.scenes.extra.chat.ChatPanel;
+import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.instrument.ClassFileTransformer;
 
 public class GameWindow extends JFrame implements PropertyChangeListener {
     public static final int SCREEN_WIDTH = 1280;

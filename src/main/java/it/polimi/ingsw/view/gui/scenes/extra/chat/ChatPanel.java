@@ -1,5 +1,6 @@
-package it.polimi.ingsw.view.gui.scenes.extra;
+package it.polimi.ingsw.view.gui.scenes.extra.chat;
 
+import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.ChatListener;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -120,7 +121,15 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
                 playerNickname = ((ViewHand) evt.getOldValue()).getNickname();
                 addresseeList.removeItem(playerNickname);
                 break;
+            case ChangeNotifications.COLOR_CHANGE:
+                assert evt.getSource() instanceof ViewHand;
+                playerNickname = ((ViewHand) evt.getSource()).getNickname();
+                assert evt.getNewValue() instanceof PlayerColor;
+                Color playerColor = PlayerColor.getColor((PlayerColor) evt.getNewValue());
+                chatDocument.addUserStyle(playerNickname, playerColor);
+                break;
         }
+
     }
 
     @Override
@@ -140,6 +149,7 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
             scrollToBottom();
         }
     }
+
     private boolean isViewAtBottom(){
         JScrollBar vertScrollBar = chatVisualizer.getVerticalScrollBar();
         int min = vertScrollBar.getValue() + vertScrollBar.getVisibleAmount();
@@ -155,10 +165,8 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
     }
     private void scrollToBottom(){
         SwingUtilities.invokeLater(
-                () -> {
-                    chatVisualizer.getVerticalScrollBar()
-                            .setValue(chatVisualizer.getVerticalScrollBar().getMaximum());
-                }
+                () -> chatVisualizer.getVerticalScrollBar()
+                        .setValue(chatVisualizer.getVerticalScrollBar().getMaximum())
         );
     }
 }

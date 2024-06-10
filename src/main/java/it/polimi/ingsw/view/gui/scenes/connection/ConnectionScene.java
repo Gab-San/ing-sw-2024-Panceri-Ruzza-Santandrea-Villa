@@ -108,7 +108,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 // Here connection is successful
                 displaySuccess("Login success!", 1.5f);
                 // Goes to the next scene
-                inputHandler.displayNextScene(SceneID.getMyAreaSceneID());
+                inputHandler.changeScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
                 displayError(GUIFunc.correctToLabelFormat(exc.getMessage()), 2, false);
             } catch (RemoteException exc) {

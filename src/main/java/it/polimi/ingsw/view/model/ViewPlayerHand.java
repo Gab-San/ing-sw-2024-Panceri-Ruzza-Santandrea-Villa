@@ -4,6 +4,7 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.update.*;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
@@ -106,6 +107,7 @@ public class ViewPlayerHand extends ViewHand {
     @Override
     public synchronized boolean setColor(PlayerColor color) {
         if(super.setColor(color)){
+            firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, color);
             notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlayerColor(nickname, true, color));
             return true;

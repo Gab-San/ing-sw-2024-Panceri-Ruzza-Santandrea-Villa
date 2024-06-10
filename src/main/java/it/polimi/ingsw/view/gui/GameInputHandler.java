@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
-import it.polimi.ingsw.view.gui.scenes.extra.ChatPanel;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 
@@ -113,8 +112,12 @@ public class GameInputHandler implements CommandPassthrough{
      * Invokes the scene identified by the unique sceneId to be displayed next.
      * @param nextSceneID next scene identifier
      */
-    public void displayNextScene(SceneID nextSceneID) {
+    public void changeScene(SceneID nextSceneID) {
         GUI_Scene nextScene = (GUI_Scene) SceneManager.getInstance().getScene(nextSceneID);
-        gui.displayNextScene(nextScene);
+        gui.changeScene(nextScene);
+    }
+
+    public boolean isLocalPlayer(String nickname) {
+        return controller.isLocalPlayer(nickname);
     }
 }

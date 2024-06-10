@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.extra;
+package it.polimi.ingsw.view.gui.scenes.extra.chat;
 
 import javax.swing.text.*;
 import java.awt.*;
@@ -74,7 +74,7 @@ public class ChatDocument extends DefaultStyledDocument {
             Style sendeeStyle = usersStyles.get(addressee.toUpperCase());
             nicknameStyle = sendeeStyle != null ? sendeeStyle : def;
             // If sending a private message to self display self.
-            String trueSendee = addressee.equals(messenger) ? "self" : addressee;
+            String trueSendee = addressee.equals(messenger) ? "SELF" : addressee;
             insertString(getLength(), " to " + trueSendee, nicknameStyle);
         }
 

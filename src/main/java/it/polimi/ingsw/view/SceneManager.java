@@ -57,6 +57,19 @@ public class SceneManager {
         }
     }
 
+    public SceneID getCurrentSceneID(){
+        synchronized (SCENE_LOCK){
+            synchronized (loadedScenes){
+                for(SceneID id : loadedScenes.keySet()){
+                    if(currentScene.equals(loadedScenes.get(id))){
+                        return id;
+                    }
+                }
+            }
+        }
+        throw new IllegalStateException("No current scene selected");
+    }
+
     public void remove(SceneID sceneID){
         synchronized (loadedScenes){
             loadedScenes.remove(sceneID);

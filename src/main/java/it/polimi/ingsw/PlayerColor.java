@@ -1,4 +1,6 @@
 package it.polimi.ingsw;
+import java.awt.*;
+
 
 /**
  * Enumeration of all the possible colors Players can choose
@@ -24,10 +26,32 @@ public enum PlayerColor {
         };
     }
 
+
     /**
      * Override of the standard toString method of enums
      * @return the LowerCamelCase string representation of the enum value, for cleaner printing.
      */
+    public static Color getColor(PlayerColor colorName) {
+        //TODO fix colors
+        switch (colorName){
+            case RED -> {
+                return Color.red;
+            }
+            case BLUE -> {
+                return Color.blue;
+            }
+            case GREEN -> {
+                return Color.green;
+            }
+            case YELLOW -> {
+                return Color.yellow;
+            }
+            default -> {
+                return Color.black;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         String normalRep = super.toString();

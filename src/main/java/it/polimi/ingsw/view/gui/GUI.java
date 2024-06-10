@@ -9,7 +9,8 @@ import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
-import it.polimi.ingsw.view.gui.scenes.localarea.PlayerAreaScene;
+import it.polimi.ingsw.view.gui.scenes.game.BoardScene;
+import it.polimi.ingsw.view.gui.scenes.localarea.LocalPlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -62,7 +63,8 @@ public class GUI implements View {
      */
     private void loadScenes() {
         sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
-        sceneManager.loadScene(SceneID.getMyAreaSceneID(), new PlayerAreaScene());
+        sceneManager.loadScene(SceneID.getMyAreaSceneID(), new LocalPlayerAreaScene());
+        sceneManager.loadScene(SceneID.getBoardSceneID(), new BoardScene());
     }
 
     /**
@@ -111,7 +113,7 @@ public class GUI implements View {
                         () -> {
                             for (JComponent component : observableComponents) {
                                 if (component instanceof ViewHand) {
-                                    component.addPropertyChangeListener(ViewHand.COLOR_PROPERTY,
+                                    component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
                                             (PropertyChangeListener) chooseColorScene);
                                 }
                             }
@@ -137,7 +139,8 @@ public class GUI implements View {
      * Invokes the specified scene to be displayed next.
      * @param nextScene scene to be next
      */
-    public synchronized void displayNextScene(GUI_Scene nextScene) {
+    public synchronized void changeScene(GUI_Scene nextScene) {
+        System.out.println("Displaying " + nextScene);
         assert nextScene instanceof JPanel;
         // All scenes to display on the main frame will be JPanels
         // if a scene that is not a JPanel is issued there is an error

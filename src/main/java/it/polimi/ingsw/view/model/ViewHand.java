@@ -24,8 +24,6 @@ public abstract class ViewHand extends JComponent {
     private int turn;
     protected final View view;
 
-    public static final String COLOR_PROPERTY = "PROPERTY_COLOR";
-
     public ViewHand(String nickname, View view) {
         this.nickname = nickname;
         this.view = view;

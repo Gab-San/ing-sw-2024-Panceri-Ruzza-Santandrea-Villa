@@ -3,15 +3,13 @@ package it.polimi.ingsw.view.model;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.update.*;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 public class ViewOpponentHand extends ViewHand {
@@ -93,7 +91,7 @@ public class ViewOpponentHand extends ViewHand {
         if(super.setColor(color)){
             notifyView(SceneID.getOpponentAreaSceneID(nickname),
                     new DisplayPlayerColor(nickname, false, color));
-            firePropertyChange(COLOR_PROPERTY, null, color);
+            firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, color);
             return true;
         }
         return false;
