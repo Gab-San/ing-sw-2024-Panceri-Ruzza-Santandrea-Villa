@@ -35,10 +35,6 @@ public class DisplayHandState extends DisplayPlayerEvent {
         this.startCard = startCard;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

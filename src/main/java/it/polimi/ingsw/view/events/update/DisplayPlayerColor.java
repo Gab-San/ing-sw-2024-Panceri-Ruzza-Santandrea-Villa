@@ -23,11 +23,6 @@ public class DisplayPlayerColor extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         if(isLocalPlayer){
             tui.showNotification("Your color was set to " + getColorFromEnum(color) + color + RESET);

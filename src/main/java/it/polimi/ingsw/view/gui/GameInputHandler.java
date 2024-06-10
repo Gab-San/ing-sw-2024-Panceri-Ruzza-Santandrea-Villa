@@ -2,11 +2,12 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
-import it.polimi.ingsw.view.Client;
-import it.polimi.ingsw.view.UIFunctions;
-import it.polimi.ingsw.view.ViewController;
+import it.polimi.ingsw.view.*;
+import it.polimi.ingsw.view.gui.scenes.extra.ChatPanel;
 import it.polimi.ingsw.view.model.ViewHand;
+import it.polimi.ingsw.view.model.ViewPlayArea;
 
+import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -96,5 +97,24 @@ public class GameInputHandler implements CommandPassthrough{
 
     public ViewHand getPlayerHand(String nickname) {
         return controller.getPlayer(nickname);
+    }
+
+    public ViewPlayArea getPlayArea(String nickname) { return controller.getPlayArea(nickname);}
+
+    public void addChatListener(ChatListener chatListener) {
+        gui.addChatListener(chatListener);
+    }
+
+    public void addPropertyListener(PropertyChangeListener pcl) {
+        gui.addToPropListeners(pcl);
+    }
+
+    /**
+     * Invokes the scene identified by the unique sceneId to be displayed next.
+     * @param nextSceneID next scene identifier
+     */
+    public void displayNextScene(SceneID nextSceneID) {
+        GUI_Scene nextScene = (GUI_Scene) SceneManager.getInstance().getScene(nextSceneID);
+        gui.displayNextScene(nextScene);
     }
 }

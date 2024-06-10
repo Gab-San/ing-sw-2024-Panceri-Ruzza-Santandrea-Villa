@@ -212,4 +212,12 @@ public class ViewController {
             return board.getOpponentHand(nickname);
         }
     }
+
+    public ViewPlayArea getPlayArea(String nickname) {
+        if(board.getPlayerHand().getNickname().equals(nickname)){
+            return selfPlayArea;
+        } else {
+            return board.getPlayerArea(nickname);
+        }
+    }
 }

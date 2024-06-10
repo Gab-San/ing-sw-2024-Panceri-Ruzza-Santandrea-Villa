@@ -17,7 +17,21 @@ public class ChatDocument extends DefaultStyledDocument {
     public ChatDocument(int fontSize){
         usersStyles = new HashMap<>();
         this.fontSize = fontSize;
-        try( InputStream fontIS = this.getClass().getClassLoader().getResourceAsStream("fonts/raleway/Raleway-VariableFont_wght.ttf") ){
+        importFonts();
+    }
+
+    private void importFonts() {
+        try( InputStream fontIS = this.getClass().getClassLoader()
+                .getResourceAsStream("fonts/inter/Inter-VariableFont_slnt,wght.ttf") ){
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            assert fontIS != null;
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));
+        } catch (IOException | FontFormatException e) {
+            System.err.println(e.getMessage());
+        }
+
+        try( InputStream fontIS = this.getClass().getClassLoader()
+                .getResourceAsStream("fonts/raleway/Raleway-VariableFont_wght.ttf") ){
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             assert fontIS != null;
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));
@@ -31,7 +45,7 @@ public class ChatDocument extends DefaultStyledDocument {
         Style style = this.addStyle(user, def);
         StyleConstants.setForeground(style, color);
         StyleConstants.setFontSize(style, fontSize);
-        StyleConstants.setFontFamily(style, "Raleway");
+        StyleConstants.setFontFamily(style, "Inter");
         synchronized (usersStyles){
             usersStyles.put(user.toUpperCase(), style);
         }
@@ -46,7 +60,7 @@ public class ChatDocument extends DefaultStyledDocument {
             def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
         } else  def = a;
         StyleConstants.setFontSize(def, fontSize);
-        StyleConstants.setFontFamily(def, "Raleway");
+        StyleConstants.setFontFamily(def, "Inter");
 
         synchronized (usersStyles){
             Style messengerStyle = usersStyles.get(messenger.toUpperCase());
@@ -56,9 +70,12 @@ public class ChatDocument extends DefaultStyledDocument {
         insertString(getLength(), messenger, nicknameStyle);
 
         if(addressee != null) {
+
             Style sendeeStyle = usersStyles.get(addressee.toUpperCase());
-            nicknameStyle =  sendeeStyle != null ? sendeeStyle  : def;
-            insertString(getLength(), " to " + addressee, nicknameStyle);
+            nicknameStyle = sendeeStyle != null ? sendeeStyle : def;
+            // If sending a private message to self display self.
+            String trueSendee = addressee.equals(messenger) ? "self" : addressee;
+            insertString(getLength(), " to " + trueSendee, nicknameStyle);
         }
 
         insertString(getLength(), ": ", nicknameStyle);

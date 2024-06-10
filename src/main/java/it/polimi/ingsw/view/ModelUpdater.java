@@ -52,7 +52,6 @@ public class ModelUpdater {
             if(turn != 0 || color != null)
                 board.notifyView(SceneID.getMyAreaSceneID(), new DisplayPlayerState(nickname,
                         turn, color));
-
         }
         else{
             //getOpponentHand will also run addPlayer if it wasn't run before.

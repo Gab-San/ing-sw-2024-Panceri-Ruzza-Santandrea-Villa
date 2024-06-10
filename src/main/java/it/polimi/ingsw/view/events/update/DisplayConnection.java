@@ -28,8 +28,4 @@ public class DisplayConnection extends DisplayPlayerEvent {
                 (isConnected ? (changed ? "reconnected" : "connected") : "disconnected"));
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 }

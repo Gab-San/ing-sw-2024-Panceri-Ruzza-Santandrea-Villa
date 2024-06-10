@@ -3,14 +3,14 @@ package it.polimi.ingsw.view.gui.scenes.connection;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.SceneID;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -22,15 +22,13 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     private static final int LOGIN_FRAME_HEIGHT = 200;
 
     private final GameInputHandler inputHandler;
-    private final GUI gui;
     // Components
     private final LoginPanel loginPanel;
     private final JLabel notificationLabel;
     private Timer displayTimer;
 
 
-    public ConnectionScene(GameInputHandler inputHandler, GUI gui){
-        this.gui = gui;
+    public ConnectionScene(GameInputHandler inputHandler){
         setupFrame();
         //Setting layout
         this.setLayout(new BorderLayout());
@@ -110,7 +108,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 // Here connection is successful
                 displaySuccess("Login success!", 1.5f);
                 // Goes to the next scene
-                gui.displayNextScene(SceneID.getMyAreaSceneID());
+                inputHandler.displayNextScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
                 displayError(GUIFunc.correctToLabelFormat(exc.getMessage()), 2, false);
             } catch (RemoteException exc) {

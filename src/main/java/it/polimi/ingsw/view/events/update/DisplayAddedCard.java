@@ -23,11 +23,6 @@ public class DisplayAddedCard extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         if(isLocalPlayer){
             tui.showNotification("You have drawn a card");

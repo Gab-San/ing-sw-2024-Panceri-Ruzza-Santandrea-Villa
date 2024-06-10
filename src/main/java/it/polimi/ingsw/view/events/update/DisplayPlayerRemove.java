@@ -20,10 +20,6 @@ public class DisplayPlayerRemove extends DisplayPlayerEvent {
         super(nickname, false);
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

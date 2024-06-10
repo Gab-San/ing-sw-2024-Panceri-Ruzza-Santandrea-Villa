@@ -8,16 +8,13 @@ import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
-import it.polimi.ingsw.view.gui.scenes.extra.ChatPanel;
-import it.polimi.ingsw.view.gui.scenes.extra.PlayerListPanel;
-import it.polimi.ingsw.view.gui.scenes.localarea.PlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
+import it.polimi.ingsw.view.gui.scenes.localarea.PlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -33,11 +30,10 @@ import java.util.function.Consumer;
  *     and only effective frame.
  * </p>
  */
-public class GUI extends JFrame implements View {
-    public static final int SCREEN_WIDTH = 1280;
-    public static final int SCREEN_HEIGHT = 720;
+public class GUI implements View {
     private final BlockingQueue<String> inputQueue;
     private final GameInputHandler inputHandler;
+    private GameWindow gameWindow;
     private final SceneManager sceneManager = SceneManager.getInstance();
     private final List<JComponent> observableComponents;
     private final List<PropertyChangeListener> propertyChangeListenerList;
@@ -49,18 +45,23 @@ public class GUI extends JFrame implements View {
         observableComponents = new LinkedList<>();
         propertyChangeListenerList = new LinkedList<>();
         chatListenerList = new LinkedList<>();
+
         ViewBoard board = new ViewBoard(this);
+        addToObservableComponents(board);
+
         ModelUpdater modelUpdater = new ModelUpdater(board);
         setClientModelUpd.accept(modelUpdater);
         inputHandler = new GameInputHandler(serverProxy, this, new ViewController(board));
         loadScenes();
+        createGUI();
+        subscribeListenersToComponent(board);
     }
 
     /**
      * Loading scenes that will be displayed during the course of the game.
      */
     private void loadScenes() {
-        sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler, this));
+        sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
         sceneManager.loadScene(SceneID.getMyAreaSceneID(), new PlayerAreaScene());
     }
 
@@ -85,7 +86,7 @@ public class GUI extends JFrame implements View {
     public synchronized void updatePhase(GamePhase gamePhase){
         switch (gamePhase){
             case SETNUMPLAYERS:
-                    GUI_Scene setNumberOfPlayers = new SetPlayersScene(this, "Choose your objective",
+                    GUI_Scene setNumberOfPlayers = new SetPlayersScene(gameWindow, "Choose your objective",
                             inputHandler);
                     SwingUtilities.invokeLater(
                             setNumberOfPlayers::display
@@ -105,7 +106,7 @@ public class GUI extends JFrame implements View {
                 }
                 break;
             case CHOOSECOLOR:
-                GUI_Scene chooseColorScene = new ChooseColorScene(this, "Choose your color!", inputHandler);
+                GUI_Scene chooseColorScene = new ChooseColorScene(gameWindow, "Choose your color!", inputHandler);
                 SwingUtilities.invokeLater(
                         () -> {
                             for (JComponent component : observableComponents) {
@@ -141,21 +142,9 @@ public class GUI extends JFrame implements View {
         // All scenes to display on the main frame will be JPanels
         // if a scene that is not a JPanel is issued there is an error
         // either in the design or in the execution
-        this.add((JPanel) nextScene, BorderLayout.CENTER);
-        // Sets and executes the scene
-        sceneManager.setScene(nextScene);
-        // This needs to be called each time a scene change
-        // is issued to be sure that all the items are validated for display
-        this.setVisible(true);
-    }
-
-    /**
-     * Invokes the scene identified by the unique sceneId to be displayed next.
-     * @param nextSceneID next scene identifier
-     */
-    public synchronized void displayNextScene(SceneID nextSceneID) {
-        GUI_Scene nextScene = (GUI_Scene) sceneManager.getScene(nextSceneID);
-        displayNextScene(nextScene);
+        SwingUtilities.invokeLater(
+                () -> gameWindow.displayScene(nextScene)
+        );
     }
 
 
@@ -175,38 +164,6 @@ public class GUI extends JFrame implements View {
     public synchronized void notifyTimeout() {
 
     }
-    private void createGUI(){
-        // Standard JFrame stuff defining window size, position and layout
-        GUIFunc.setupFrame(this, "Codex Naturalis",
-                SCREEN_WIDTH, SCREEN_HEIGHT);
-        setLayout(new BorderLayout());
-
-        JPanel leftSidePanel = setupLeftPanel();
-        add(leftSidePanel, BorderLayout.WEST);
-    }
-
-    private JPanel setupLeftPanel() {
-        ChatPanel chatPanel = new ChatPanel(inputHandler);
-        addChatListener(chatPanel);
-        PlayerListPanel playerListPanel = new PlayerListPanel(this);
-        propertyChangeListenerList.add(chatPanel);
-        propertyChangeListenerList.add(playerListPanel);
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                playerListPanel, chatPanel);
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setResizeWeight(0.5);
-
-        JPanel leftPanel = new JPanel(new GridLayout(1,0));
-        leftPanel.setPreferredSize(new Dimension(300,10));
-        leftPanel.add(splitPane);
-        return leftPanel;
-    }
-
-    public void addChatListener(ChatListener chatListener){
-        synchronized (chatListenerList) {
-            chatListenerList.add(chatListener);
-        }
-    }
 
     private void RunNicknameScene(){
         sceneManager.setScene(SceneID.getNicknameSelectSceneID());
@@ -217,9 +174,6 @@ public class GUI extends JFrame implements View {
         SwingUtilities.invokeLater(
                 this::RunNicknameScene
         );
-        SwingUtilities.invokeLater(
-                this::createGUI
-        );
         final int SLEEP_MILLIS = 200;
         try {
             while (true) {
@@ -229,7 +183,7 @@ public class GUI extends JFrame implements View {
                 }
                 if(message != null) {
                     // all of these will be error messages
-                    this.dispose();
+                    gameWindow.dispose();
                     switch (message) {
                         case "SERVER_FAILURE":
                             throw new RemoteException();
@@ -241,6 +195,19 @@ public class GUI extends JFrame implements View {
         }
     }
 
+    private void createGUI() {
+        gameWindow = new GameWindow(inputHandler);
+        addToPropListeners(gameWindow);
+    }
+
+    public void subscribeToComponents(PropertyChangeListener pcl) {
+        synchronized (observableComponents){
+            for(JComponent component : observableComponents){
+                component.addPropertyChangeListener(pcl);
+            }
+        }
+    }
+
     public void notifyServerFailure() {
         synchronized (inputQueue) {
             inputQueue.add("SERVER_FAILURE");
@@ -248,8 +215,40 @@ public class GUI extends JFrame implements View {
         }
     }
 
-    public void addSubject(String nickname) {
-        ViewHand playerHand = inputHandler.getPlayerHand(nickname);
-        observableComponents.add(playerHand);
+    private void subscribeListenersToComponent(JComponent component) {
+        synchronized (propertyChangeListenerList){
+            for(PropertyChangeListener pcl : propertyChangeListenerList) {
+                component.addPropertyChangeListener(pcl);
+            }
+        }
     }
+    private void removeFromObservableComponents(JComponent component){
+        synchronized (observableComponents){
+            observableComponents.remove(component);
+        }
+        List<PropertyChangeListener> compPCLs = List.of(component.getPropertyChangeListeners());
+        for(PropertyChangeListener pcl : compPCLs){
+            component.removePropertyChangeListener(pcl);
+        }
+    }
+
+    private void addToObservableComponents(JComponent component){
+        synchronized (observableComponents){
+            observableComponents.add(component);
+        }
+    }
+
+
+    public void addToPropListeners(PropertyChangeListener pcl) {
+        synchronized (propertyChangeListenerList){
+            propertyChangeListenerList.add(pcl);
+        }
+    }
+
+    public void addChatListener(ChatListener chatListener){
+        synchronized (chatListenerList) {
+            chatListenerList.add(chatListener);
+        }
+    }
+
 }

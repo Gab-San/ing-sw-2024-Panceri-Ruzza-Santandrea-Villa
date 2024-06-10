@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.gui.GUI_Scene;
+import it.polimi.ingsw.view.gui.GameWindow;
 
 import javax.swing.*;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class PlayerAreaScene extends JPanel implements GUI_Scene {
 
     public PlayerAreaScene(){
-        setSize(GUI.SCREEN_WIDTH, GUI.SCREEN_HEIGHT);
+        setSize(GameWindow.SCREEN_WIDTH, GameWindow.SCREEN_HEIGHT);
 
     }
     @Override

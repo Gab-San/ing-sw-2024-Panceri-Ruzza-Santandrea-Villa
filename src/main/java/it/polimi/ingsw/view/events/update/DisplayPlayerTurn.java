@@ -19,11 +19,6 @@ public class DisplayPlayerTurn extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         if(isLocalPlayer){
             tui.showNotification("Your turn was set to " + playerTurn);

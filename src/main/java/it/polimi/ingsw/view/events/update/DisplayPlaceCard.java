@@ -25,11 +25,6 @@ public class DisplayPlaceCard extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         if(isLocalPlayer){
             tui.showNotification("You placed a card");

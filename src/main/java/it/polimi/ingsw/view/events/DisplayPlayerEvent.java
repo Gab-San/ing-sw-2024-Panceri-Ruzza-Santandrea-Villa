@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.events;
 /**
  * This class represents an event dealing with a player
  */
-abstract public class DisplayPlayerEvent implements TUIEvent, GUIEvent{
+abstract public class DisplayPlayerEvent implements TUIEvent{
     /**
      * Player's nickname (unique identifier)
      */

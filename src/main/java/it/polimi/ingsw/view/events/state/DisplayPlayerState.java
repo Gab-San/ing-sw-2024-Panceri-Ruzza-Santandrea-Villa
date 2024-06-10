@@ -42,11 +42,6 @@ public class DisplayPlayerState extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-        gui.addSubject(nickname);
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         if(isLocalPlayer) {
             tui.showNotification("Your turn and color were set.");

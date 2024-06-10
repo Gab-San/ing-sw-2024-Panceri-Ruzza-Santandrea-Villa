@@ -6,13 +6,15 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GotoEndgameEvent;
 import it.polimi.ingsw.view.events.update.*;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 
+import javax.swing.*;
 import java.util.*;
 
-public class ViewBoard {
+public class ViewBoard extends JComponent {
     public static final int ENDGAME_SCORE = 20;
     public static final int MAX_PLAYERS = 4;
 
@@ -29,7 +31,6 @@ public class ViewBoard {
     private ViewPlayerHand playerHand;
     private final Map<String, Boolean> isPlayerDeadlocked;
     private final Map<String, Integer> scoreboard;
-
     private int currentTurn;
     private GamePhase gamePhase;
     private final View view;
@@ -133,10 +134,14 @@ public class ViewBoard {
     }
 
     public synchronized void addPlayer(String nickname){
-        playerAreas.put(nickname, new ViewPlayArea(nickname, this));
-        opponentHands.put(nickname, new ViewOpponentHand(nickname, view));
+        ViewOpponentHand opponentHand = new ViewOpponentHand(nickname, view);
+        ViewPlayArea playArea =  new ViewPlayArea(nickname, this);
+        playerAreas.put(nickname,playArea);
+        opponentHands.put(nickname, opponentHand);
         isPlayerDeadlocked.put(nickname, false);
         scoreboard.put(nickname, 0);
+        firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, opponentHand);
+        firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
     }
 
     public synchronized void addLocalPlayer(String nickname){
@@ -147,16 +152,22 @@ public class ViewBoard {
         playerAreas.clear();
         isPlayerDeadlocked.clear();
         playerHand = new ViewPlayerHand(nickname, view);
+        ViewPlayArea playArea = new ViewPlayArea(nickname, this);
         scoreboard.put(nickname, 0);
-        playerAreas.put(nickname, new ViewPlayArea(nickname, this));
+        playerAreas.put(nickname, playArea);
         isPlayerDeadlocked.put(nickname, false);
+        firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, playerHand);
+        firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
     }
     public synchronized void removePlayer(String nickname){
+        ViewOpponentHand opponentHand = opponentHands.get(nickname);
+        ViewPlayArea playArea = playerAreas.get(nickname);
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);
         isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
-
+        firePropertyChange(ChangeNotifications.REMOVE_PLAYER, opponentHand, null);
+        firePropertyChange(ChangeNotifications.REMOVE_AREA, playArea, null);
         notifyView(SceneID.getNotificationSceneID(), new DisplayPlayerRemove(nickname));
     }
 

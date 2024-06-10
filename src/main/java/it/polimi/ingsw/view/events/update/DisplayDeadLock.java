@@ -18,10 +18,6 @@ public class DisplayDeadLock extends DisplayPlayerEvent {
         super(nickname, isLocalPlayer);
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

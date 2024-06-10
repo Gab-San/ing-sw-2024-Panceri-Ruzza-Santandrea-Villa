@@ -17,10 +17,6 @@ public class DisplayChosenObjective extends DisplayPlayerEvent {
         this.choiceID = choiceID;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

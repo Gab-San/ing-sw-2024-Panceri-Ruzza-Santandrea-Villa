@@ -21,11 +21,6 @@ public class DisplayFreeCorners extends DisplayPlayerEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
-
-    }
-
-    @Override
     public void displayEvent(TUI tui) {
         tui.setRefreshTimer();
     }

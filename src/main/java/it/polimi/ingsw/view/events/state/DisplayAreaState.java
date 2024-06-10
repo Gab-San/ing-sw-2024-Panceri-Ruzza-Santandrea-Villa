@@ -35,10 +35,6 @@ public class DisplayAreaState extends DisplayPlayerEvent {
         this.freeCorners = freeCorners;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

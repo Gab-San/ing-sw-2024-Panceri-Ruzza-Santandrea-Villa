@@ -21,10 +21,6 @@ public class DisplayAddedObjective extends DisplayPlayerEvent {
         this.objectiveCards = objectiveCards;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

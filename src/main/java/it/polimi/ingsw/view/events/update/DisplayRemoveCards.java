@@ -21,10 +21,7 @@ public class DisplayRemoveCards extends DisplayPlayerEvent {
         this.playCards = playCards;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
 
-    }
 
     @Override
     public void displayEvent(TUI tui) {
