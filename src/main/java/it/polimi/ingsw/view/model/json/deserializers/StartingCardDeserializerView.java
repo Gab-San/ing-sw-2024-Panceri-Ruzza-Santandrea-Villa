@@ -21,6 +21,7 @@ public class StartingCardDeserializerView extends StdDeserializer<ViewStartCard>
         super(vc);
     }
 
+    //DOCS: add docs for deserialize (??)
     @Override
     public ViewStartCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {

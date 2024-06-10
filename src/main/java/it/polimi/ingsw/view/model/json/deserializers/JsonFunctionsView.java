@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 public interface JsonFunctionsView {
 
+    /**
+     * @param node the node of the card that is being imported
+     * @return a list of that card's ViewCorners
+     */
     static List<ViewCorner> parseCorners(@NotNull JsonNode node){
         List<ViewCorner> corners = new ArrayList<>();
         node.get("corners").forEach(

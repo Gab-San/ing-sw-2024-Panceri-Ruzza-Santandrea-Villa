@@ -20,6 +20,7 @@ public class ResourceCardDeserializerView extends StdDeserializer<ViewResourceCa
         super(vc);
     }
 
+    //DOCS: add docs for deserialize (??)
     @Override
     public ViewResourceCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {

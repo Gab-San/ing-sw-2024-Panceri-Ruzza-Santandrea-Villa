@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that provides an interface to get cards from JSON.
+ */
 public class JsonImporter {
     private final Map<String, ViewResourceCard> resourceCards;
     private final Map<String, ViewGoldCard> goldCards;
@@ -80,23 +83,49 @@ public class JsonImporter {
         );
     }
 
+    /**
+     * @param ID a card ID (can be null)
+     * @return returns a copy of the resource card with given ID
+     *        (or null if the ID is null or doesn't correspond to a resource card)
+     */
     public ViewResourceCard getResourceCard(String ID){
         if(ID == null) return null;
         return new ViewResourceCard(resourceCards.get(ID));
     }
+
+    /**
+     * @param ID a card ID (can be null)
+     * @return returns a copy of the gold card with given ID
+     *        (or null if the ID is null or doesn't correspond to a gold card)
+     */
     public ViewGoldCard getGoldCard(String ID){
         if(ID == null) return null;
         return new ViewGoldCard(goldCards.get(ID));
     }
+    /**
+     * @param ID a card ID (can be null)
+     * @return returns the objective card with given ID
+     *        (or null if the ID is null or doesn't correspond to an objective card)
+     */
     public ViewObjectiveCard getObjectiveCard(String ID){
         if(ID == null) return null;
         return objectiveCards.get(ID);
     }
+    /**
+     * @param ID a card ID (can be null)
+     * @return returns a starting card with given ID
+     *        (or null if the ID is null or doesn't correspond to a starting card)
+     */
     public ViewStartCard getStartCard(String ID){
         if(ID == null) return null;
         return startCards.get(ID);
     }
 
+    /**
+     * @param ID a card ID (can be null)
+     * @return the card with the given ID
+     *        (or null if the ID is null or doesn't correspond to any card)
+     */
     public ViewCard getCard(String ID){
         if(ID == null) return null;
         return switch (ID.toUpperCase().charAt(0)){
@@ -107,6 +136,11 @@ public class JsonImporter {
             default -> null;
         };
     }
+    /**
+     * @param ID a card ID (can be null)
+     * @return the playCard with the given ID
+     *        (or null if the ID is null or doesn't correspond to a playCard)
+     */
     public ViewPlayCard getPlayCard(String ID){
         if(ID == null) return null;
         return switch (ID.toUpperCase().charAt(0)){
@@ -115,7 +149,11 @@ public class JsonImporter {
             default -> null;
         };
     }
-
+    /**
+     * @param IDList a list of card IDs
+     * @return the list of cards with the given IDs, in the same order as the IDs
+     *        (the list may contain null values for the IDs that don't correspond to a card)
+     */
     public List<ViewCard> getCards(List<String> IDList){
         List<ViewCard> cardList = new LinkedList<>();
         if(IDList != null)
@@ -126,7 +164,11 @@ public class JsonImporter {
             });
         return cardList;
     }
-
+    /**
+     * @param IDList a list of playCard IDs
+     * @return the list of playCards with the given IDs, in the same order as the IDs
+     *        (the list may contain null values for the IDs that don't correspond to a playCard)
+     */
     public List<ViewPlayCard> getPlayCards(List<String> IDList){
         List<ViewPlayCard> cardList = new LinkedList<>();
         if(IDList != null)
@@ -137,6 +179,11 @@ public class JsonImporter {
             });
         return cardList;
     }
+    /**
+     * @param IDList a list of objectiveCard IDs
+     * @return the list of objectiveCards with the given IDs, in the same order as the IDs
+     *        (the list may contain null values for the IDs that don't correspond to an objectiveCard)
+     */
     public List<ViewObjectiveCard> getObjectiveCards(List<String> IDList){
         List<ViewObjectiveCard> cardList = new LinkedList<>();
         if(IDList != null)
