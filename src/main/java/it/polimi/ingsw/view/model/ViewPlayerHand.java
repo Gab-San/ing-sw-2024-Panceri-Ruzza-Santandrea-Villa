@@ -158,7 +158,6 @@ public class ViewPlayerHand extends ViewHand {
     @Override
     public synchronized boolean setColor(PlayerColor color) {
         if(super.setColor(color)){
-            firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, color);
             notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlayerColor(nickname, true, color));
             return true;

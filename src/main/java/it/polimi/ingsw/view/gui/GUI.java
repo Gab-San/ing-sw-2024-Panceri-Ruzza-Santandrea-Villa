@@ -40,6 +40,7 @@ public class GUI implements View {
     private final List<JComponent> observableComponents;
     private final List<PropertyChangeListener> propertyChangeListenerList;
     private final List<ChatListener> chatListenerList;
+    private boolean hasPlaced;
     //FIXME: Maybe remove
 //    private GUI_Scene lastOpenedScene;
     public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
@@ -103,20 +104,23 @@ public class GUI implements View {
                     CHOOSEFIRSTPLAYER, PLACECARD, DRAWCARD:
                 break;
             case PLACESTARTING:
+                while(!hasPlaced){
+                    try {
+                        inputHandler.placeStartCard(false);
+                        hasPlaced =true;
+                    } catch (RuntimeException | RemoteException ignore) {}
+                }
                 break;
             case CHOOSECOLOR:
                 ChooseColorScene chooseColorScene = new ChooseColorScene(gameWindow, "Choose your color!", inputHandler);
+                for (JComponent component : observableComponents) {
+                    if (component instanceof ViewHand) {
+                        component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
+                                chooseColorScene);
+                    }
+                }
                 SwingUtilities.invokeLater(
-                        () -> {
-                            for (JComponent component : observableComponents) {
-                                if (component instanceof ViewHand) {
-                                    System.out.println( "ADDING LISTENER TO: " + ((ViewHand) component).getNickname());
-                                    component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
-                                            chooseColorScene);
-                                }
-                            }
-                            chooseColorScene.display();
-                        }
+                        chooseColorScene::display
                 );
                 break;
             case CHOOSEOBJECTIVE:

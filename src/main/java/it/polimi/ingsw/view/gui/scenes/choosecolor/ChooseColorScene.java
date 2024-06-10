@@ -48,14 +48,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
 
     }
 
-    private JLabel createErrorLabel() {
-        JLabel errorLabel =  new JLabel("ERROR");
-        errorLabel.setVisible(false);
-        //TODO choose better color
-        errorLabel.setForeground(Color.red);
-        return errorLabel;
-    }
-
     private void addGridComponent(Component component, int x, int y, int width, int height, double weightx,
                                   double weighty, int anchor, int fill, Insets insets,
                                   int ipadx, int ipady){
@@ -149,7 +141,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         ViewHand playerHand = (ViewHand) evt.getSource();
 
         if(inputHandler.isLocalPlayer(playerHand.getNickname())){
-            System.err.println("CLOSING WINDOW");
             SwingUtilities.invokeLater(
                     this::close
             );

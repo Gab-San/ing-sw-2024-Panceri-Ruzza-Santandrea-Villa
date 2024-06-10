@@ -225,4 +225,5 @@ public class ViewController {
         return board.getPlayerHand().getNickname().equals(nickname);
     }
 
+    public void notifyPlayerAddition() { board.notifyLocalPlayerAddition(); }
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.DisplayEvent;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
@@ -192,6 +193,7 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized boolean setColor(PlayerColor color) {
         boolean changed = this.color != color;
+        if(changed) firePropertyChange(ChangeNotifications.COLOR_CHANGE, this.color, color);
         this.color = color;
         return changed;
     }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
+import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,8 +47,12 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
 
         if(evt.getPropertyName().equals(ChangeNotifications.COLOR_CHANGE)){
             assert evt.getNewValue() instanceof PlayerColor;
+            System.out.println("COLOR CHANGE BY: " + ((ViewHand) evt.getSource()).getNickname());
             Color playerColor = PlayerColor.getColor((PlayerColor) evt.getNewValue());
             areaButton.setBackground(playerColor);
+            SwingUtilities.invokeLater(
+                this::repaint
+            );
         }
     }
 

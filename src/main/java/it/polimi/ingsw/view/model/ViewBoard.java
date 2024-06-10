@@ -232,12 +232,23 @@ public class ViewBoard extends JComponent {
         // connection attempts failed
         scoreboard.clear();
         playerAreas.clear();
+        ViewPlayArea playArea;
+        if(playerHand != null){
+            firePropertyChange(ChangeNotifications.REMOVE_PLAYER, playerHand, null);
+            playArea = getPlayerArea(playerHand.getNickname());
+            firePropertyChange(ChangeNotifications.REMOVE_AREA, playArea, null);
+        }
         playerHand = new ViewPlayerHand(nickname, view);
-        ViewPlayArea playArea = new ViewPlayArea(nickname, this);
+        playArea = new ViewPlayArea(nickname, this);
         scoreboard.put(nickname, 0);
         playerAreas.put(nickname, playArea);
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, playerHand);
+        playArea = getPlayerArea(playerHand.getNickname());
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
+    }
+
+    public void notifyLocalPlayerAddition(){
+
     }
 
     /**

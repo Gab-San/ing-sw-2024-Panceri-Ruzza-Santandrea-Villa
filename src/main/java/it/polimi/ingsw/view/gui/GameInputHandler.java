@@ -40,6 +40,7 @@ public class GameInputHandler implements CommandPassthrough{
         controller.addLocalPlayer(nickname);
         controller.setSelfPlayerArea();
         serverProxy.connect(nickname);
+        controller.notifyPlayerAddition();
     }
 
     public void setNumOfPlayers(int numOfPlayers) throws RemoteException {

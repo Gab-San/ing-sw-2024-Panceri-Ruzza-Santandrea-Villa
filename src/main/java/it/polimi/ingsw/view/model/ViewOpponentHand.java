@@ -147,7 +147,6 @@ public class ViewOpponentHand extends ViewHand {
         if(super.setColor(color)){
             notifyView(SceneID.getOpponentAreaSceneID(nickname),
                     new DisplayPlayerColor(nickname, false, color));
-            firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, color);
             return true;
         }
         return false;

@@ -33,23 +33,15 @@ public enum PlayerColor {
      */
     public static Color getColor(PlayerColor colorName) {
         //TODO fix colors
-        switch (colorName){
-            case RED -> {
-                return Color.red;
-            }
-            case BLUE -> {
-                return Color.blue;
-            }
-            case GREEN -> {
-                return Color.green;
-            }
-            case YELLOW -> {
-                return Color.yellow;
-            }
-            default -> {
-                return Color.black;
-            }
+        if(colorName == null){
+            return Color.black;
         }
+        return switch (colorName) {
+            case RED -> Color.red;
+            case BLUE -> Color.blue;
+            case GREEN -> Color.green;
+            case YELLOW -> Color.yellow;
+        };
     }
 
     @Override
