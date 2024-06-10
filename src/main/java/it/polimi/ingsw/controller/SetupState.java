@@ -14,12 +14,24 @@ import it.polimi.ingsw.network.VirtualClient;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The SetupState class represents the state of the game during the setup phase,
+ *      where the board and the players' hands are initialized
+ */
 public class SetupState extends GameState{
     public Set<String> playersWhoPlacedStartingCard;
     public Set<String> playersWhoChoseColor;
     public Set<String> playersWhoChoseSecretObjective;
     private static final int TURN_TIME = 122;
 
+    /**
+     * Construct a SetupState instance:
+     *      set phase to SETUP and give starting cards to each player
+     *      then set phase to PLACESTARTING and start the timers for the turn
+     * @param board the game board.
+     * @param controller the board controller.
+     * @param disconnectingPlayers the list of players who are disconnecting.
+     */
     public SetupState(Board board, BoardController controller, List<String> disconnectingPlayers) {
         super(board, controller, disconnectingPlayers);
         board.setGamePhase(GamePhase.SETUP);
@@ -37,6 +49,12 @@ public class SetupState extends GameState{
         timers.startAll(board.getPlayerAreas().keySet().stream().toList(), TURN_TIME);
     }
 
+    /**
+     * Handle players reconnecting during SetupState:
+     *      if the player is already part of the game he can reconnect;
+     *      if the player isn't part of the game throws IllegalStateException.
+     * @throws IllegalStateException if the nickname isn't already part of the game
+     */
     @Override
     public void join(String nickname, VirtualClient client) throws IllegalStateException {
         try{
@@ -46,6 +64,15 @@ public class SetupState extends GameState{
             throw new IllegalStateException("IMPOSSIBLE TO JOIN A GAME DURING SETUP STATE", e);
         }
     }
+
+    /**
+     * Handle the disconnecting players during SetupState:
+     *      if the player is part of the game, he disconnects and his phase action is done randomly;
+     *      if the player isn't part of the game throws IllegalArgumentException.
+     * @param nickname the nickname of the disconnecting player
+     * @throws IllegalStateException if the action after the disconnection is not allowed at this stage
+     * @throws IllegalArgumentException if the player is not part of the game
+     */
 
     @Override
     public void disconnect(String nickname)
@@ -78,12 +105,31 @@ public class SetupState extends GameState{
     }
 
 
+    /**
+     * Throws an exception because setting the number of players is not allowed during SetupState
+     * @param nickname the nickname of the player initiating the action
+     * @param num the number of players to set
+     * @throws IllegalStateException always, as this action is not allowed in this state.
+     */
     @Override
     public void setNumOfPlayers(String nickname, int num) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE" ));
         throw new IllegalStateException("IMPOSSIBLE TO CHANGE THE NUMBER OF PLAYERS DURING SETUP STATE");
     }
 
+    /**
+     * Handles the placing of the starting card for each player:
+     *      if the player has not placed his starting card yet, place it on the side specified by placeOnFront and stop his timer
+     *      if all connected player has placed their starting card, place disconnected players' starting card on random side
+     *          then go to CHOOSECOLOR phase and restart timers
+     *      if the player is not part of the game, throws IllegalArgumentException
+     *      if the phase is not PLACESTARTING, throws IllegalStateException
+     * @param nickname the nickname of the player placing the card
+     * @param placeOnFront true if the card should be placed on the front side, false otherwise
+     * @throws IllegalStateException if placing the starting card is not allowed at this stage
+     *      or the player has already placed his starting card
+     * @throws IllegalArgumentException if the player is not part of the game
+     */
     @Override
     public void placeStartingCard(String nickname, boolean placeOnFront)
             throws IllegalStateException, IllegalArgumentException {
@@ -119,6 +165,21 @@ public class SetupState extends GameState{
                 controller.chooseYourColor(p.getNickname(), board.getRandomAvailableColor());
         }
     }
+
+    /**
+     * Handles the choosing of the color for each player:
+     *      if the player has not chosen his color yet, assign the color specified by "color" to the player and stop his timer
+     *      if all connected player has chosen their color, choose disconnected players' color at random
+     *          then go to DEALCARDS phase and draw the first hand,
+     *          then give the secret objectives to choose from, go to CHOOSEOBJECTIVE phase and restart the timers
+     *      if the player is not part of the game, throws IllegalArgumentException
+     *      if the phase is not CHOOSECOLOR, throws IllegalStateException
+     * @param nickname the nickname of the player choosing the color
+     * @param color the color chosen by the player
+     * @throws IllegalStateException if choosing color is not allowed at this stage
+     *      or the player has already chosen his color
+     * @throws IllegalArgumentException if the player is not part of the game
+     */
     @Override
     public void chooseYourColor(String nickname, PlayerColor color)
             throws IllegalStateException, IllegalArgumentException {
@@ -180,6 +241,19 @@ public class SetupState extends GameState{
         }
     }
 
+    /**
+     * Handles the choosing of the secret objective for each player:
+     *      if the player has not chosen his secret objective yet, assign the secret objective specified by choice to the player and stop his timer
+     *      if all connected player has chosen their secret objective, choose disconnected players' secret objective at random
+     *          then go to next state
+     *      if the player is not part of the game, throws IllegalArgumentException
+     *      if the phase is not CHOOSEOBJECTIVE, throws IllegalStateException
+     * @param nickname the nickname of the player choosing the objective
+     * @param choice the choice made by the player
+     * @throws IllegalStateException if choosing secret objective is not allowed at this stage
+     *      or the player has already chosen his secret objective
+     * @throws IllegalArgumentException if the player is not part of the game
+     */
     @Override
     public void chooseSecretObjective(String nickname, int choice) throws IllegalStateException, IllegalArgumentException {
         if(board.getGamePhase() != GamePhase.CHOOSEOBJECTIVE)
@@ -218,19 +292,41 @@ public class SetupState extends GameState{
         }
     }
 
+    /**
+     * Throws an exception because drawing is not allowed during SetupState
+     * @param nickname the nickname of the player drawing the card
+     * @param deckFrom the deck from which the card is drawn
+     * @param cardPos the position on the card
+     * @throws IllegalStateException always, as this action is not allowed in this state.
+     */
     @Override
     public void draw(String nickname, char deckFrom, int cardPos) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO DRAW DURING SETUP STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO DRAW DURING SETUP STATE");
     }
 
+    /**
+     * Throws an exception because placing cards is not allowed during SetupState
+     * @param nickname the nickname of the player placing the card
+     * @param cardID the ID of the card to place
+     * @param cardPos the position on the game board where the card will be placed
+     * @param cornerDir the direction in which to place the card's corner
+     * @param placeOnFront true if the card should be placed on the front side, false otherwise
+     * @throws IllegalStateException always, as this action is not allowed in this state.
+     */
     @Override
     public void placeCard(String nickname, String cardID, GamePoint cardPos, CornerDirection cornerDir, boolean placeOnFront) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE"));
         throw new IllegalStateException("IMPOSSIBLE TO PLACE CARDS OTHER THAN THE STARTING CARD DURING SETUP STATE");
     }
 
-
+    /**
+     * Moves the controller to the next state:
+     *      set phase to CHOOSEFIRSTPLAYER and choose the first player randomly
+     *      then changes the game state to PlayState
+     *      never throws IllegalStateException
+     * @throws IllegalStateException never thrown, only if controls pre-nextState fail FIXME:[FLAVIO]
+     */
     private void nextState() throws IllegalStateException {
         board.setGamePhase(GamePhase.CHOOSEFIRSTPLAYER);
         List<Player> players = new LinkedList<>(board.getPlayerAreas().keySet());
@@ -244,7 +340,11 @@ public class SetupState extends GameState{
         transition(new PlayState(board, controller, disconnectingPlayers));
     }
 
-
+    /**
+     * Assign a first hand to each player in the game composed of: 2 resource cards + 1 gold card
+     * @throws PlayerHandException if drawTop fails and throws the exception
+     * @throws DeckException if drawTop fails and throws the exception
+     */
     private void drawFirstHand() throws PlayerHandException, DeckException {
         for (Player player : board.getPlayerAreas().keySet()) {
             board.drawTop(Board.RESOURCE_DECK, player.getHand());
@@ -252,17 +352,33 @@ public class SetupState extends GameState{
             board.drawTop(Board.GOLD_DECK, player.getHand());
         }
     }
+
+    /**
+     * Assign two secret objectives to choose from to each player
+     * @throws IllegalStateException if deal fails and throws the exception
+     */
     private void giveSecretObjectives() throws IllegalStateException {
         for(Player player : board.getPlayerAreas().keySet()) {
             board.deal(Board.OBJECTIVE_DECK, player.getHand());
         }
     }
+
+    /**
+     * Assign a starting card to each player
+     * @throws IllegalStateException if deal fails and throws the exception
+     */
     private void giveStartingCard() throws IllegalStateException{
         for(Player player : board.getPlayerAreas().keySet()) {
             board.deal(Board.STARTING_DECK, player.getHand());
         }
     }
 
+    /**
+     * Throws an exception because restarting the game is not allowed during SetupState
+     * @param nickname the nickname of the player initiating the restart
+     * @param numOfPlayers the number of players for the restarted game
+     * @throws IllegalStateException always, as this action is not allowed in this state.
+     */
     @Override
     public void restartGame(String nickname, int numOfPlayers) throws IllegalStateException {
         board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START GAME DURING SETUP STATE"));

@@ -53,6 +53,7 @@ public abstract class GameState {
      * @throws IllegalStateException if the operation is not allowed in the current game state
      * @throws IllegalArgumentException if the provided nickname is invalid
      */
+    //FIXME:[FLAVIO] disconnect does not need IllegalStateException
     abstract public void disconnect (String nickname) throws IllegalStateException, IllegalArgumentException;
     /**
      * Handles placing a starting card on the game board.
@@ -115,4 +116,5 @@ public abstract class GameState {
         timers.stopAll();
         controller.setGameState(nextState);
     }
+    //FIXME:[FLAVIO] nextState does not need IllegalStateException
 }
