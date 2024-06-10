@@ -37,7 +37,7 @@ public class PrintFullGameUITest {
 
         printOpponentUIMap = new Hashtable<>();
         for(String opponentNickname : new String[]{"Player2", "Player3", "Player4"}){
-            board.addPlayer(opponentNickname);
+            board.addOpponent(opponentNickname);
             board.setScore(opponentNickname, getRandomScore());
             fillHandRandomly(board.getOpponentHand(opponentNickname));
             fillPlayAreaRandomly(board.getPlayerArea(opponentNickname));

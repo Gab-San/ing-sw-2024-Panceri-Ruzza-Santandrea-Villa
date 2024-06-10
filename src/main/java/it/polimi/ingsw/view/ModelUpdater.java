@@ -87,7 +87,7 @@ public class ModelUpdater {
     }
 
     public synchronized void removePlayer(String nickname)  {
-        board.removePlayer(nickname);
+        board.removeOpponent(nickname);
     }
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         if(board.getPlayerHand().getNickname().equals(nickname)){
@@ -250,11 +250,8 @@ public class ModelUpdater {
             playerDeadLockUpdate(nick, playerDeadLock.get(nick));
             board.setScore(nick, scoreboard.getOrDefault(nick, 0));
         }
-        boolean phaseChanged = board.setGamePhase(gamePhase);
-        boolean turnChanged = board.setCurrentTurn(currentTurn);
-//        if (phaseChanged || turnChanged)
-//            board.notifyView(SceneID.getBoardSceneID(), new DisplayBoardState(currentTurn, scoreboard, gamePhase,
-//                    playerDeadLock));
+        board.setGamePhase(gamePhase);
+        board.setCurrentTurn(currentTurn);
     }
     public synchronized void updatePhase(GamePhase gamePhase) {
         board.setGamePhase(gamePhase);

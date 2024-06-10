@@ -12,10 +12,25 @@ import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 import java.util.List;
 
+/**
+ * The local player's hand.
+ * Also contains the player's information such as
+ * nickname, color, turn and deadlock status.
+ */
 public class ViewPlayerHand extends ViewHand {
+    /**
+     * Constructs the local player hand
+     * @param nickname the player's nickname
+     * @param view the View this hand should notify events to.
+     */
     public ViewPlayerHand(String nickname, View view) {
         super(nickname, view);
     }
+
+    /**
+     * @param cards list of cards to set as the hand content. <br>
+     *             Turns the cards face-down before setting them to the hand.
+     */
     @Override
     public void setCards(List<ViewPlayCard> cards){
         if(cards != null)
@@ -23,10 +38,21 @@ public class ViewPlayerHand extends ViewHand {
         super.setCards(cards);
     }
 
-    public ViewPlayCard getCard(int idx){
+    /**
+     * Returns card at given index
+     * @param idx (0-2) the 0-based card index to return
+     * @return the playCard in hand at given index
+     * @throws IndexOutOfBoundsException the index does not correspond to a card in hand.
+     */
+    public ViewPlayCard getCard(int idx) throws IndexOutOfBoundsException{
         return cards.get(idx);
     }
 
+    /**
+     * Adds a playCard to the hand. <br>
+     * Also notifies the addCard event to myArea scene.
+     * Turns the card face-up before adding it to hand.
+     */
     @Override
     public void addCard(ViewPlayCard card){
         if(card != null)
@@ -35,20 +61,32 @@ public class ViewPlayerHand extends ViewHand {
                  new DisplayAddedCard(nickname, true, cards));
         super.addCard(card);
     }
-
+    /**
+     * Removes a playCard from the hand. <br>
+     * Also notifies the removeCard event to myArea scene.
+     */
     @Override
     public synchronized void removeCard(ViewPlayCard card) {
         super.removeCard(card);
         notifyView(SceneID.getMyAreaSceneID(),
                 new DisplayRemoveCards(nickname, true, cards));
     }
-
+    /**
+     * @param secretObjectiveCards list of objectiveCards to set as the hand content. <br>
+     *                      Turns all objective cards face-up before setting them to the hand.
+     */
     @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
         if(secretObjectiveCards != null)
             secretObjectiveCards.forEach(ViewCard::turnFaceUp);
         super.setSecretObjectiveCards(secretObjectiveCards);
     }
+    /**
+     * Adds a objectiveCard to the hand. <br>
+     * Turns the objectiveCard face-up before adding it to hand. <br>
+     * Also notifies the addObjective event to myArea scene.
+     * @param objectiveCard objectiveCard to add to the hand. <br>
+     */
     @Override
     public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
         if(objectiveCard != null)
@@ -58,13 +96,21 @@ public class ViewPlayerHand extends ViewHand {
         super.addSecretObjectiveCard(objectiveCard);
     }
 
+    /**
+     * Removes all objectiveCards that do *not* have the given ID. <br>
+     * Also notifies the chosen objective event to myArea scene.
+     */
     @Override
     public synchronized void chooseObjective(String choiceID) {
         super.chooseObjective(choiceID);
         notifyView(SceneID.getMyAreaSceneID(),
                 new DisplayChosenObjective(nickname, true, choiceID));
     }
-
+    /**
+     * Sets the start card in this hand. <br>
+     * Turns the start card face-up before setting it to the hand. <br>
+     * Also notifies the starting card update event to myArea scene.
+     */
     @Override
     public void setStartCard(ViewStartCard startCard){
         if(startCard != null) startCard.turnFaceUp();
@@ -104,6 +150,11 @@ public class ViewPlayerHand extends ViewHand {
         throw new IllegalArgumentException("Card " + cardID + " is not in this hand.");
     }
 
+    /**
+     * Sets this player's color. <br>
+     * Also notifies the color update event to myArea scene.
+     * if the color changed with this assignment.
+     */
     @Override
     public synchronized boolean setColor(PlayerColor color) {
         if(super.setColor(color)){
@@ -115,6 +166,11 @@ public class ViewPlayerHand extends ViewHand {
         return false;
     }
 
+    /**
+     * Sets this player's turn. <br>
+     * Also notifies the turn update event to myArea scene if
+     * the turn changed with this assignment.
+     */
     @Override
     public synchronized boolean setTurn(int turn) {
         if(super.setTurn(turn)){
@@ -125,6 +181,11 @@ public class ViewPlayerHand extends ViewHand {
         return false;
     }
 
+    /**
+     * Sets the deadlock status for this player. <br>
+     * Also notifies the deadlock event to myArea scene if
+     * the deadlock status was set to true with this assignment.
+     */
     @Override
     public void setDeadlocked(boolean deadlocked) {
         super.setDeadlocked(deadlocked);

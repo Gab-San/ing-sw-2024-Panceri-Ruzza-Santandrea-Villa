@@ -27,9 +27,9 @@ public class PrintBoardUITest {
         random = new Random();
 
         randomScoresTest(); // set random scores
-        board.addPlayer("Player2");
-        board.addPlayer("Player3");
-        board.addPlayer("Player4");
+        board.addOpponent("Player2");
+        board.addOpponent("Player3");
+        board.addOpponent("Player4");
         board.getAllPlayerHands().forEach(h->h.setColor(getRandomAvailableColor(board)));
         // set random colors for all players
 

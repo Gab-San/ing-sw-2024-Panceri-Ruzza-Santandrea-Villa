@@ -16,20 +16,30 @@ import java.util.*;
 
 import static it.polimi.ingsw.GameResource.FILLED;
 
+/**
+ * Represents any player's PlayArea (as the place where their cards are placed)
+ */
 public class ViewPlayArea {
+    /**
+     * This playArea owner's nickname
+     */
     private final String owner;
     private final Map<GamePoint, ViewPlaceableCard> cardMatrix;
     private final Map<GameResource, Integer> visibleResources;
     private final List<ViewCorner> freeCorners;
-    private GameResource color;
     private final ViewBoard board;
+
+    /**
+     * Constructs the playArea.
+     * @param owner this playArea owner's nickname.
+     * @param board the board this playArea belongs to.
+     */
     public ViewPlayArea(String owner, ViewBoard board) {
         this.owner = owner;
         this.board = board;
         this.cardMatrix = Collections.synchronizedMap(new Hashtable<>());
         this.visibleResources = Collections.synchronizedMap(new Hashtable<>());
         this.freeCorners = Collections.synchronizedList(new LinkedList<>());
-        color = null;
     }
     /**
      * Places a card at position (0,0), handling freeCorners list <br>
@@ -94,12 +104,20 @@ public class ViewPlayArea {
                     new DisplayPlaceCard(owner, true, cardMatrix));
     }
 
-    private int countResource(GameResource res, String placementCostString){
-        if(placementCostString.isEmpty()) return 0;
-        return (int) Arrays.stream(placementCostString.split(""))
-                .filter(s -> s.equals(res.toString()))
-                .count();
-    }
+    /**
+     * Validates the placement by checking the satisfaction of the game rules:
+     * <ul>
+     *     <li>
+     *         Visible resources satisfy the placement cost.
+     *     </li>
+     *     <li>
+     *         All corners covered are not filled and belong to different cards.
+     *     </li>
+     * </ul>
+     * @param position position where the card would be placed
+     * @param playCard card that would be placed
+     * @return true if the proposed placement is valid (does *not* perform the placement)
+     */
     public boolean validatePlacement(GamePoint position, ViewPlayCard playCard){
         if(cardMatrix.get(position) != null) return false;
 
@@ -119,6 +137,12 @@ public class ViewPlayArea {
 
         return true;
     }
+
+    /**
+     * @param cardID the ID of the card to find in this playArea
+     * @return the position of the requested card.
+     * @throws IllegalArgumentException if there is no card with given ID in this playArea
+     */
     public GamePoint getPositionByID(String cardID) throws IllegalArgumentException{
         synchronized (cardMatrix){
             return cardMatrix.values().stream()
@@ -129,14 +153,33 @@ public class ViewPlayArea {
         }
     }
 
+    /**
+     * @param position position to read
+     * @return the card that was placed at given position (or null if there is no card there)
+     */
     public ViewPlaceableCard getCardAt(GamePoint position){
         return cardMatrix.get(position);
     }
+    /**
+     * @param row y coordinate of the position
+     * @param col x coordinate of the position
+     * @return the card that was placed at given position (or null if there is no card there)
+     */
     public ViewPlaceableCard getCardAt(int row, int col){
-        return cardMatrix.get(new GamePoint(row, col));
+        return getCardAt(new GamePoint(row, col));
     }
+
+    /**
+     * @return an unmodifiable, synchronized view of this playArea's card matrix.
+     */
     public Map<GamePoint, ViewPlaceableCard> getCardMatrix(){ return Collections.unmodifiableMap(cardMatrix);}
 
+    /**
+     * Sets the visible resources of this playArea (overriding the old values). <br>
+     * Note that the map is copied by value, not by reference. <br>
+     * Also notifies the owner's scene of the visibleResources update event.
+     * @param visibleResources the new map of visible resources
+     */
     public void setVisibleResources(Map<GameResource, Integer> visibleResources){
         this.visibleResources.clear();
         this.visibleResources.putAll(visibleResources);
@@ -147,31 +190,47 @@ public class ViewPlayArea {
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
                     new DisplayVisibleResources(owner, false, visibleResources));
     }
+    /**
+     * @return an unmodifiable, synchronized view of this playArea's visible resources map.
+     */
     public Map<GameResource, Integer> getVisibleResources(){
         return Collections.unmodifiableMap(visibleResources);
     }
+    /**
+     * @return an unmodifiable, synchronized view of this playArea's free corners list.
+     */
     public List<ViewCorner> getFreeCorners(){
         return Collections.unmodifiableList(freeCorners);
     }
 
-    public synchronized GameResource getColor() {
-        return color;
-    }
-    public synchronized void setColor(GameResource color) {
-        this.color = color;
-    }
-
+    /**
+     * Places a card at position bypassing all checks.
+     * @param position position to place the card on
+     * @param card card to place
+     */
     public void setCard(GamePoint position, ViewPlaceableCard card) {
         cardMatrix.put(position, card);
         card.setPosition(position);
     }
+
+    /**
+     * Resets this playArea's information on placed cards.
+     */
     public void clearCardMatrix() {
         cardMatrix.clear();
     }
-
+    /**
+     * Resets this playArea's free corners list.
+     */
     public void clearFreeCorners(){
         freeCorners.clear();
     }
+
+    /**
+     * Adds a list of free corners to the freeCorners list. <br>
+     * Also notifies the playArea owner's scene of the addFreeCorners event
+     * @param cardFreeCorners the new freeCorners to add to the list.
+     */
     public void addFreeCorners(List<ViewCorner> cardFreeCorners) {
         freeCorners.addAll(cardFreeCorners);
 

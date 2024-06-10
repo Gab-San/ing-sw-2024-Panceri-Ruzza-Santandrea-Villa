@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.tui.scenes;
 
-import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.model.ViewBoard;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +22,9 @@ public class PrintEndgameUITest {
         board.addLocalPlayer(name1);
         endgameUI = new PrintEndgameUI(board, false);
         Random random = new Random();
-        board.addPlayer(name2);
-        board.addPlayer(name3);
-        board.addPlayer(name4);
+        board.addOpponent(name2);
+        board.addOpponent(name3);
+        board.addOpponent(name4);
 
         board.setScore(name1, random.nextInt(1300));
         board.setScore(name2, random.nextInt(1300));
