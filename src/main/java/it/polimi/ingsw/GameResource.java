@@ -8,9 +8,14 @@ public enum GameResource {
     WOLF(4), SCROLL(5), POTION(6),
     QUILL(7), FILLED(-1);
     private final int resourceIndex;
-    private GameResource(int resourceIndex){
+    GameResource(int resourceIndex){
         this.resourceIndex = resourceIndex;
     }
+
+    /**
+     * @param resName the desired resource's name
+     * @return the resource associated to the given name (or null if no resources match)
+     */
     public static GameResource getResourceFromName(String resName){
         return switch (resName) {
             case "MUSHROOM" -> GameResource.MUSHROOM;
@@ -24,6 +29,10 @@ public enum GameResource {
             default -> null;
         };
     }
+    /**
+     * @param resName the desired resource's name initial
+     * @return the resource associated to the given initial (or null if no resources match)
+     */
     public static GameResource getResourceFromNameInitial(String resName){
         return switch (resName) {
             case "M" -> GameResource.MUSHROOM;
@@ -37,6 +46,11 @@ public enum GameResource {
             default -> null;
         };
     }
+
+    /**
+     * @param colorName the color name
+     * @return the resource associated with the given color
+     */
     public static GameResource getResourceFromColor(String colorName){
         return switch (colorName.toUpperCase()){
             case "RED" -> MUSHROOM;
@@ -46,6 +60,12 @@ public enum GameResource {
             default -> null;
         };
     }
+
+    /**
+     * Override of the standard toString method of enums
+     * @return the initial of the resource's name
+     */
+    @Override
     public String toString(){
         return switch (this) {
             case MUSHROOM -> "M";
@@ -58,6 +78,10 @@ public enum GameResource {
             case FILLED -> "F";
         };
     }
+
+    /**
+     * @return the initial of the color associated to this resource
+     */
     public String asColor(){
         return switch (this) {
             case MUSHROOM -> "R";
@@ -68,6 +92,11 @@ public enum GameResource {
         };
     }
 
+    /**
+     * @return the resource index for array indexing (0-based) <br>
+     *      Please note that the FILLED resource has a negative index
+     *      to prevent its usage as a "valid" resource
+     */
     public int getResourceIndex(){
         return resourceIndex - 1;
     }

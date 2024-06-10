@@ -9,7 +9,6 @@ import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 import it.polimi.ingsw.view.tui.TUI;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -25,10 +24,16 @@ public class Client {
     public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
+    public static final int CONNECT_ATTEMPT_DELAY_MILLIS = 500;
     private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
 
 //region FUNCTIONS
+
+    /**
+     * @return true if the program is being run in the IntelliJ IDE
+     */
+    // TODO: delete this
     public static boolean isRunningInIDE(){
         try {
             return Client.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
@@ -36,6 +41,12 @@ public class Client {
             return false;
         }
     }
+
+    /**
+     * Clears the screen. <br>
+     * On Windows: same as running "cls", prevents scrolling up <br>
+     * On Linux/WSL: same as running "clear", does not prevent scrolling up
+     */
     public static void cls(){
         synchronized (System.out) {
             //TODO: delete \n screen before release (needed for IDE console cls)
@@ -55,19 +66,39 @@ public class Client {
         }
     }
 
+    /**
+     * @return the static JSONImporter reference
+     */
     public static JsonImporter getCardJSONImporter(){
         return cardJSONImporter;
     }
+
+    /**
+     * Prints an error message related to duplicate arguments passed by command line. <br>
+     * Then quits the application.
+     */
     private static void duplicateArgument(){
         System.err.println("Duplicate argument detected. Closing.");
         quitError();
     }
+    /**
+     * Quits the application.
+     */
     private static void quitError(){
         System.out.println(YELLOW_TEXT + "Client terminated. Press enter to exit..." + RESET);
         System.out.flush();
         scanner.close();
         System.exit(-1);
     }
+
+    /**
+     * Starts the input thread. <br>
+     * Any number of input threads can be created as they synchronize,
+     * but the inputs would be spread randomly among them. <br>
+     * It is advised to only use one such thread for reading input.
+     * @return a queue where the inputs read by this thread will be put. <br>
+     *         Read the input using queue.take() or queue.poll(timeout).
+     */
     private static BlockingQueue<String> initInputQueue(){
         BlockingQueue<String> inputQueue = new LinkedBlockingDeque<>();
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -89,12 +120,28 @@ public class Client {
 //endregion
 
     /**
-     * @param args args contain the following, in any order:
-     *             - Server IP or Hostname <br>
-     *             - Server port <br>
-     *             - The connection tech to be used (TCP/RMI) <br>
-     *             If the serverIP is omitted, then localhost will be used
-     *             If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
+     * Main method of the Client. Reads args passed by command line and connects to the
+     * server using the specified connection technology.
+     * @param args args contain the following, in any order (* is mandatory): <br>
+ *             <ul>
+     *             <li>
+     *                  Server IP or Hostname (defaults to localhost) <br>
+     *                  If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
+     *             </li>
+     *             <li>
+     *                  Server port (0-65535) *
+     *             </li>
+     *             <li>
+     *                  The connection tech to be used (TCP/RMI) *
+     *             </li>
+     *             <li>
+     *                  "myIP = a.b.c.d" or "myIP = hostname" to indicate the Client's IP. It must be reachable by the server
+     *                  to allow update and notifications to be return to the Client.
+     *             </li>
+ *             </ul>
+     *                 If "myIP" parameter is not passed, the Client will find the IP automatically
+     *                 or ask for it if there are multiple NICs active on the local machine (ignoring loopback and local addresses). <br>
+     *                 If a wrong address is passed as "myIP" parameter, the Client will recognize it automatically.
      */
     public static void main(String[] args) {
         String serverIP = null;
@@ -110,8 +157,8 @@ public class Client {
                     duplicateArgument();
                 serverIP = arg;
             }
-            else if(arg.matches("[mM][yY][iI][pP]=[^\n ]+")){
-                myIP = arg.substring("myIP=".length());
+            else if(arg.matches("[mM][yY][iI][pP]\\s*=\\s*[^\n ]+")){
+                myIP = arg.split("=")[1].stripLeading();
             }
             else if(arg.toLowerCase().matches("rmi|tcp")) {
                 if(connectionTech != null)
@@ -222,7 +269,7 @@ public class Client {
                 }
 
                 try{
-                    Thread.sleep(500);
+                    Thread.sleep(CONNECT_ATTEMPT_DELAY_MILLIS); //add some delay between connection attempts
                 }catch (InterruptedException e){
                     System.err.println("Couldn't locate server. Closing client.");
                     quitError();
@@ -253,11 +300,12 @@ public class Client {
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         view = new TUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
                     } else if (gameMode.toLowerCase().matches("quit|exit|q")) {
-                        quitError();
+                        quitError(); //allow user to quit the app naturally by writing "quit" or "exit"
                     } else {
                         System.out.println(RED_TEXT + "Invalid input." + RESET);
                         view = null;
                     }
+
                     if(view != null) view.run();
                 }
             } catch (RemoteException e) {

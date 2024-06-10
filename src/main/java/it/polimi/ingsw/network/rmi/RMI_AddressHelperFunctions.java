@@ -8,8 +8,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Collection of static functions related to local IP address retrieval and handling.
+ */
 public interface RMI_AddressHelperFunctions {
-    //DOCS: [Ale] write docs for this
+    /**
+     * @return list of distinct IPs and hostnames on the local machine. <br>
+     *      Reads the IPs using java.net.NetworkInterface
+     */
     static List<String> getListOfValidLocalIPs(){
         List<String> localIPs = new LinkedList<>();
         try {
@@ -28,9 +34,13 @@ public interface RMI_AddressHelperFunctions {
                 }
             }
         }catch (SocketException ignored){}
-        return localIPs.stream().distinct().toList();
+        return localIPs.stream().distinct().toList(); //not using a Set to keep the IP-hostname pairings
     }
-    //DOCS: [Ale] write docs for this
+
+    /**
+     * @param address and IP address or a hostname
+     * @return true if address matches the loopback address (127.0.0.1) or "localhost"
+     */
     static boolean isLoopbackAddress(String address){
         return address.matches("127.0.0.1|localhost");
     }

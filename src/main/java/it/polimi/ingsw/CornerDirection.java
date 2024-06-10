@@ -4,29 +4,19 @@ package it.polimi.ingsw;
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)
  */
 public enum CornerDirection {
-    TL("TL"), TR("TR"), BL("BL"), BR("BR");
-    // Could be useful for debugging information or to display to the player
-    private final String stringId;
-    CornerDirection(String stringId){
-        this.stringId = stringId;
-    }
-
-    @Override
-    public String toString() {
-        return stringId;
-    }
+    TL, TR,
+    BL, BR;
 
     /**
-     * @return the direction opposite to this <br> (TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR)
+     * @return the direction opposite to this <br> TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR
      */
     public CornerDirection opposite(){
-        switch (this){
-            default: // never triggered, but necessary to compile
-            case TL: return BR;
-            case TR: return BL;
-            case BL: return TR;
-            case BR: return TL;
-        }
+        return switch (this) {
+            case TL -> BR;
+            case TR -> BL;
+            case BL -> TR;
+            case BR -> TL;
+        };
     }
 
     /**

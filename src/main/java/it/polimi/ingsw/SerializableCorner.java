@@ -1,9 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.CornerDirection;
-
 import java.io.Serializable;
 
+/**
+ * Serializable record representing the key information of a corner in the freeCorners list.
+ * @param cardCornerId card ID of the card this corner is attached to.
+ * @param cornerDirection the direction of this corner, as its toString()
+ */
 public record SerializableCorner(String cardCornerId, String cornerDirection) implements Serializable {
     public CornerDirection getCornerDirection(){
         return CornerDirection.getDirectionFromString(cornerDirection);

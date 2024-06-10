@@ -46,8 +46,7 @@ public class ViewBoard extends JComponent {
         isPlayerDeadlocked = new Hashtable<>();
         scoreboard = new Hashtable<>();
         currentTurn = 0;
-        gamePhase = GamePhase.PLACECARD;
-
+        gamePhase = GamePhase.CREATE; //initialise gamePhase to the first phase
     }
 
     public ViewDeck<ViewResourceCard> getResourceCardDeck() {

@@ -2,6 +2,12 @@ package it.polimi.ingsw;
 
 import java.util.List;
 
+/**
+ * Record representing 2D coordinates. <br>
+ * Includes methods to conveniently move using CornerDirections.
+ * @param row the y coordinate
+ * @param col the x coordinate
+ */
 public record GamePoint(int row, int col) {
     /**
      * Constructs a Point as a copy of another point
@@ -43,6 +49,10 @@ public record GamePoint(int row, int col) {
         }
         return p;
     }
+    /**
+     * @param directions ordered sequence of moves to apply to this point
+     * @return the destination point obtained by applying successive moves
+     */
     public GamePoint move(List<CornerDirection> directions){
         GamePoint p = this;
         for (CornerDirection c : directions){
@@ -51,6 +61,7 @@ public record GamePoint(int row, int col) {
         return p;
     }
 
+    @Override
     public boolean equals(Object other){
         if(other == this) return true;
         if(other instanceof GamePoint otherPoint){
