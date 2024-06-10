@@ -47,6 +47,7 @@ public class ViewOpponentHand extends ViewHand {
         // either the player was disconnected and is still disconnected or
         // they were connected and they are still
         boolean changed = isConnected != connected;
+        if(changed) firePropertyChange(ChangeNotifications.CONNECTION_CHANGE, this.isConnected, connected);
         isConnected = connected;
         notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayConnection(nickname,
                 isConnected, changed));

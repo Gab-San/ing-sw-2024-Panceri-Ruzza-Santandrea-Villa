@@ -40,8 +40,15 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ChangeNotifications.CONNECTION_CHANGE)){
             assert evt.getNewValue() instanceof Boolean;
+            System.out.println("CONNECTION CHANGED: " + ((ViewHand) evt.getSource()).getNickname());
             boolean connectionStatus = (boolean) evt.getNewValue();
             setLabelFormat(connectionLabel, connectionStatus);
+            SwingUtilities.invokeLater(
+                    () ->{
+                        this.revalidate();
+                        this.repaint();
+                    }
+            );
             return;
         }
 

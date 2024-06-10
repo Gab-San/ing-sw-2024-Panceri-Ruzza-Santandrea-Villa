@@ -78,11 +78,13 @@ public abstract class TUI_Scene implements Scene {
     private void displayNoPrompt(){
         cls();
         print();
-
-        int notifMaxMsgLen = notificationBacklog.stream()
-                .map(ConsoleColorsCombiner::removeAllANSIColors)
-                .mapToInt(String::length)
-                .max().orElse(0);
+        int notifMaxMsgLen;
+        synchronized (notificationBacklog){
+             notifMaxMsgLen = notificationBacklog.stream()
+                    .map(ConsoleColorsCombiner::removeAllANSIColors)
+                    .mapToInt(String::length)
+                    .max().orElse(0);
+        }
         // the "maxMsgLen" is intended to be the "amount of characters displayed"
         // any ANSI code offsets that count because it's an invisible set of characters,
         // so I remove them and only count the number of visible characters

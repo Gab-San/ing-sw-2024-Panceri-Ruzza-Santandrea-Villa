@@ -59,6 +59,7 @@ public class ChatDocument extends DefaultStyledDocument {
         if(a == null) {
             def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
         } else  def = a;
+
         StyleConstants.setFontSize(def, fontSize);
         StyleConstants.setFontFamily(def, "Inter");
 
@@ -75,7 +76,8 @@ public class ChatDocument extends DefaultStyledDocument {
             nicknameStyle = sendeeStyle != null ? sendeeStyle : def;
             // If sending a private message to self display self.
             String trueSendee = addressee.equals(messenger) ? "SELF" : addressee;
-            insertString(getLength(), " to " + trueSendee, nicknameStyle);
+            insertString(getLength(), " to " , def);
+            insertString(getLength(),  trueSendee, nicknameStyle);
         }
 
         insertString(getLength(), ": ", nicknameStyle);
