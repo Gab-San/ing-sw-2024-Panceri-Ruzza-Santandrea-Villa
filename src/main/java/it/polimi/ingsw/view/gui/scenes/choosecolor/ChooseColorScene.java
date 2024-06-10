@@ -20,11 +20,13 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     private final JButton redButton, yellowButton, greenButton, blueButton;
     private final JLabel notificationLabel;
     private Timer displayTimer;
+    private final GameInputHandler inputHandler;
 
     public ChooseColorScene(Frame owner, String title, GameInputHandler inputHandler) {
         super(owner, title, true);
+        this.inputHandler = inputHandler;
         setLayout(new GridBagLayout());
-        Action colorButtonAction = getButtonAction(inputHandler);
+        Action colorButtonAction = getButtonAction();
         redButton = createColorButton( colorButtonAction, "Red", Color.red);
         yellowButton = createColorButton(colorButtonAction,"Yellow", Color.yellow);
         blueButton = createColorButton(colorButtonAction,"Blue", Color.BLUE);
@@ -43,6 +45,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
                 GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0);
         addGridComponent(notificationLabel,1,1,2,1,1.0,1.0,GridBagConstraints.CENTER,
                 GridBagConstraints.VERTICAL, new Insets(0,20,0,0), 0, 0);
+
     }
 
     private JLabel createErrorLabel() {
@@ -61,7 +64,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     }
 
     @NotNull
-    private Action getButtonAction(GameInputHandler inputHandler) {
+    private Action getButtonAction() {
         Action colorButtonAction = new ChooseColorAction();
         colorButtonAction.addPropertyChangeListener(
                 evt -> {
@@ -144,30 +147,47 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     public void propertyChange(PropertyChangeEvent evt) {
         assert evt.getSource() instanceof ViewHand;
         ViewHand playerHand = (ViewHand) evt.getSource();
-        displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue(), 1500);
-        PlayerColor color = (PlayerColor) evt.getNewValue();
-        switch (color){
-            case BLUE:
-                blueButton.setEnabled(false);
-                blueButton.setAction(null);
-                blueButton.setVisible(false);
-                break;
-            case YELLOW:
-                    yellowButton.setEnabled(false);
-                    yellowButton.setAction(null);
-                    yellowButton.setVisible(false);
-                    break;
-            case GREEN:
-                    greenButton.setEnabled(false);
-                    greenButton.setAction(null);
-                    greenButton.setVisible(false);
-                    break;
-            case RED:
-                    redButton.setEnabled(false);
-                    redButton.setAction(null);
-                    redButton.setVisible(false);
-                    break;
+
+        if(inputHandler.isLocalPlayer(playerHand.getNickname())){
+            System.err.println("CLOSING WINDOW");
+            SwingUtilities.invokeLater(
+                    this::close
+            );
+            return;
         }
+        SwingUtilities.invokeLater(
+                () -> displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue(), 1500)
+        );
+        PlayerColor color = (PlayerColor) evt.getNewValue();
+        SwingUtilities.invokeLater(
+                () -> {
+                    switch (color) {
+                        case BLUE:
+                            blueButton.setEnabled(false);
+                            blueButton.setAction(null);
+                            blueButton.setVisible(false);
+                            break;
+                        case YELLOW:
+                            yellowButton.setEnabled(false);
+                            yellowButton.setAction(null);
+                            yellowButton.setVisible(false);
+                            break;
+                        case GREEN:
+                            greenButton.setEnabled(false);
+                            greenButton.setAction(null);
+                            greenButton.setVisible(false);
+                            break;
+                        case RED:
+                            redButton.setEnabled(false);
+                            redButton.setAction(null);
+                            redButton.setVisible(false);
+                            break;
+                    }
+                    System.out.println("SHOULD BE REVALIDATING");
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 
 
@@ -187,7 +207,11 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         notificationLabel.setForeground(Color.green);
         notificationLabel.setText(notificationMsg);
         notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime, true);
+        SwingUtilities.invokeLater(
+                () -> startDisplayTimer(displayTime, true)
+        );
+        revalidate();
+        repaint();
     }
 
     private void startDisplayTimer(int displayTime, boolean isClosing) {

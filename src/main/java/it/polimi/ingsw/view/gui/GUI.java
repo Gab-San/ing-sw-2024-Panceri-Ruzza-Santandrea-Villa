@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
 import it.polimi.ingsw.view.gui.scenes.game.BoardScene;
 import it.polimi.ingsw.view.gui.scenes.localarea.LocalPlayerAreaScene;
+import it.polimi.ingsw.view.gui.scenes.opponentarea.OpponentAreaScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -39,7 +40,8 @@ public class GUI implements View {
     private final List<JComponent> observableComponents;
     private final List<PropertyChangeListener> propertyChangeListenerList;
     private final List<ChatListener> chatListenerList;
-    private GUI_Scene lastOpenedScene;
+    //FIXME: Maybe remove
+//    private GUI_Scene lastOpenedScene;
     public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
         // Initializing View elements
         this.inputQueue = inputQueue;
@@ -63,8 +65,11 @@ public class GUI implements View {
      */
     private void loadScenes() {
         sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
-        sceneManager.loadScene(SceneID.getMyAreaSceneID(), new LocalPlayerAreaScene());
-        sceneManager.loadScene(SceneID.getBoardSceneID(), new BoardScene());
+        LocalPlayerAreaScene localPlayerAreaScene = new LocalPlayerAreaScene();
+        sceneManager.loadScene(SceneID.getMyAreaSceneID(), localPlayerAreaScene);
+        BoardScene boardScene = new BoardScene();
+        sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
+        addToPropListeners(boardScene);
     }
 
     /**
@@ -93,42 +98,28 @@ public class GUI implements View {
                     SwingUtilities.invokeLater(
                             setNumberOfPlayers::display
                     );
-                    lastOpenedScene = setNumberOfPlayers;
                     break;
             case JOIN, SETUP, DEALCARDS,
                     CHOOSEFIRSTPLAYER, PLACECARD, DRAWCARD:
                 break;
             case PLACESTARTING:
-                // I really don't like this method but nothing else seems to work
-                if(lastOpenedScene != null){
-                    SwingUtilities.invokeLater(
-                            lastOpenedScene::close
-                    );
-                    lastOpenedScene = null;
-                }
                 break;
             case CHOOSECOLOR:
-                GUI_Scene chooseColorScene = new ChooseColorScene(gameWindow, "Choose your color!", inputHandler);
+                ChooseColorScene chooseColorScene = new ChooseColorScene(gameWindow, "Choose your color!", inputHandler);
                 SwingUtilities.invokeLater(
                         () -> {
                             for (JComponent component : observableComponents) {
                                 if (component instanceof ViewHand) {
+                                    System.out.println( "ADDING LISTENER TO: " + ((ViewHand) component).getNickname());
                                     component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
-                                            (PropertyChangeListener) chooseColorScene);
+                                            chooseColorScene);
                                 }
                             }
                             chooseColorScene.display();
                         }
                 );
-                lastOpenedScene = chooseColorScene;
                 break;
             case CHOOSEOBJECTIVE:
-                if(lastOpenedScene != null){
-                    SwingUtilities.invokeLater(
-                        lastOpenedScene::close
-                    );
-                    lastOpenedScene = null;
-                }
                 break;
             case EVALOBJ, SHOWWIN:
 
@@ -225,15 +216,6 @@ public class GUI implements View {
             }
         }
     }
-    private void removeFromObservableComponents(JComponent component){
-        synchronized (observableComponents){
-            observableComponents.remove(component);
-        }
-        List<PropertyChangeListener> compPCLs = List.of(component.getPropertyChangeListeners());
-        for(PropertyChangeListener pcl : compPCLs){
-            component.removePropertyChangeListener(pcl);
-        }
-    }
 
     private void addToObservableComponents(JComponent component){
         synchronized (observableComponents){
@@ -254,4 +236,55 @@ public class GUI implements View {
         }
     }
 
+    private void removeFromObservableComponents(JComponent component){
+        synchronized (observableComponents){
+            observableComponents.remove(component);
+        }
+        List<PropertyChangeListener> compPCLs = List.of(component.getPropertyChangeListeners());
+        for(PropertyChangeListener pcl : compPCLs){
+            component.removePropertyChangeListener(pcl);
+        }
+    }
+
+    private void removeListenersFromComponent(OpponentAreaScene opponentAreaScene) {
+        synchronized (observableComponents){
+            for(JComponent component : observableComponents){
+                component.removePropertyChangeListener(opponentAreaScene);
+            }
+        }
+    }
+
+    public void addPlayerScene(String nickname) {
+        if(inputHandler.isLocalPlayer(nickname)){
+            SceneID localID = SceneID.getMyAreaSceneID();
+            LocalPlayerAreaScene localScene = (LocalPlayerAreaScene) SceneManager.getInstance().getScene(localID);
+            JComponent localArea = inputHandler.getPlayerHand(nickname);
+            localArea.addPropertyChangeListener(localScene);
+//            inputHandler.getPlayerHand(nickname)
+//                    .addPropertyChangeListener(localScene);
+            addToObservableComponents(localArea);
+            return;
+        }
+        //TODO make opponent area scene
+        OpponentAreaScene opponentScene = new OpponentAreaScene();
+        SceneManager.getInstance().loadScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
+        JComponent opponentArea = inputHandler.getPlayerHand(nickname);
+        opponentArea
+                .addPropertyChangeListener(opponentScene);
+//        inputHandler.getPlayArea(nickname).addPropertyChangeListener();
+        addToObservableComponents(opponentArea);
+    }
+
+    public void removePlayerScene(String nickname) {
+        SceneID sceneID = SceneID.getOpponentAreaSceneID(nickname);
+        OpponentAreaScene opponentAreaScene = (OpponentAreaScene) SceneManager.getInstance().getScene(sceneID);
+        GUI_Scene currentScene = (GUI_Scene) SceneManager.getInstance().getCurrentScene();
+        if(opponentAreaScene == currentScene){
+            SceneID mainSceneId = SceneID.getMyAreaSceneID();
+            GUI_Scene nextScene = (GUI_Scene) SceneManager.getInstance().getScene(mainSceneId);
+            changeScene(nextScene);
+            removeFromObservableComponents(opponentAreaScene);
+            removeListenersFromComponent(opponentAreaScene);
+        }
+    }
 }

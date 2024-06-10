@@ -59,7 +59,6 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ChangeNotifications.ADDED_PLAYER)){
             ViewHand hand = (ViewHand) evt.getNewValue();
-            System.out.println("Added " + hand.getNickname());
             hand.addPropertyChangeListener(chatPanel);
             hand.addPropertyChangeListener(playerListPanel);
         }

@@ -18,7 +18,7 @@ import java.util.ListIterator;
 public class PlayerListPanel extends JPanel implements PropertyChangeListener{
     private final GameInputHandler inputHandler;
     private final ButtonGroup buttonPlayerGroup;
-    private final Action buttonAction;
+    private final ChangeAreaAction buttonAction;
     private final List<ChangeAreaPanel> areaList;
     public PlayerListPanel(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
@@ -32,8 +32,8 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
         add(boardArea);
     }
 
-    private Action setupButtonAction() {
-        Action action = new ChangeAreaAction();
+    private ChangeAreaAction setupButtonAction() {
+        ChangeAreaAction action = new ChangeAreaAction();
         action.addPropertyChangeListener(evt -> {
             if(evt.getPropertyName().equals(ChangeAreaAction.SCENE_CHANGE)) {
                 assert evt.getNewValue() instanceof SceneID;
@@ -72,16 +72,20 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
                         ((ViewOpponentHand) hand).isConnected();
                 ChangeAreaPanel changeAreaPanel = new ChangeAreaPanel(playerNick, buttonAction,
                         sceneID, connectionStatus);
+                buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
+                if (inputHandler.isLocalPlayer(playerNick)) {
+                    buttonPlayerGroup.setSelected(
+                            changeAreaPanel.getAreaButton().getModel(),
+                            true
+                    );
+                    buttonAction.setOldButton(changeAreaPanel.getAreaButton());
+                }
                 SwingUtilities.invokeLater(
                         () -> {
                             add(changeAreaPanel);
-                            buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
-                            if(inputHandler.isLocalPlayer(playerNick)){
-                                buttonPlayerGroup.setSelected(
-                                        changeAreaPanel.getAreaButton().getModel(),
-                                        true
-                                );
-                            }
+                            revalidate();
+                            repaint();
+                            setVisible(true);
                         }
                 );
                 areaList.add(changeAreaPanel);
@@ -97,11 +101,14 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
                     if(area.getAreaName().equalsIgnoreCase(playerNick)) {
                         SwingUtilities.invokeLater(
                                 () -> {
-                                    hand.removePropertyChangeListener(area);
                                     remove(area);
-                                    buttonPlayerGroup.remove(area.getAreaButton());
+                                    revalidate();
+                                    repaint();
+                                    setVisible(true);
                                 }
                         );
+                        hand.removePropertyChangeListener(area);
+                        buttonPlayerGroup.remove(area.getAreaButton());
                         iterator.remove();
                         return;
                     }

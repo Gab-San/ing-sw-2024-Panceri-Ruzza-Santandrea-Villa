@@ -6,9 +6,11 @@ import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameWindow;
 
 import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
-public class LocalPlayerAreaScene extends JPanel implements GUI_Scene {
+public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyChangeListener {
 
     public LocalPlayerAreaScene(){
         setSize(GameWindow.SCREEN_WIDTH, GameWindow.SCREEN_HEIGHT);
@@ -46,6 +48,11 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene {
 
     @Override
     public void close() {
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
 
     }
 }

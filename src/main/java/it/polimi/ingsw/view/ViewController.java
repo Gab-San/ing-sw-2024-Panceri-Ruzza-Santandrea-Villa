@@ -224,4 +224,5 @@ public class ViewController {
     public boolean isLocalPlayer(String nickname) {
         return board.getPlayerHand().getNickname().equals(nickname);
     }
+
 }

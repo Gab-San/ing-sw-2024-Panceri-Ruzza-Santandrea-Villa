@@ -4,13 +4,14 @@ import it.polimi.ingsw.view.Scene;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
+import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
  * This event handles player removal update.
  */
-public class DisplayPlayerRemove extends DisplayPlayerEvent {
+public class DisplayPlayerRemove extends DisplayPlayerEvent implements GUIEvent {
     /**
      * Constructs player removal event.
      *
@@ -30,5 +31,10 @@ public class DisplayPlayerRemove extends DisplayPlayerEvent {
         }
         tui.showNotification(nickname + " has been removed.");
         SceneManager.getInstance().remove(SceneID.getOpponentAreaSceneID(nickname));
+    }
+
+    @Override
+    public void displayEvent(GUI gui) {
+        gui.removePlayerScene(nickname);
     }
 }

@@ -31,7 +31,6 @@ public class ModelUpdater {
         jsonImporter = Client.getCardJSONImporter();
     }
 
-
     public synchronized void displayMessage(String messenger, String msg){
         board.notifyView(SceneID.getNotificationSceneID(), new DisplayMessageEvent(messenger, msg));
     }
@@ -49,9 +48,8 @@ public class ModelUpdater {
         if (board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setTurn(turn);
             board.getPlayerHand().setColor(color);
-            if(turn != 0 || color != null)
-                board.notifyView(SceneID.getMyAreaSceneID(), new DisplayPlayerState(nickname,
-                        turn, color));
+            board.notifyView(SceneID.getMyAreaSceneID(), new DisplayPlayerState(nickname,
+                    turn, color));
         }
         else{
             //getOpponentHand will also run addPlayer if it wasn't run before.

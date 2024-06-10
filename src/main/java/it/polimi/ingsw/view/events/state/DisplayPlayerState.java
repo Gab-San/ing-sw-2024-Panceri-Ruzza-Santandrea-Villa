@@ -2,13 +2,14 @@ package it.polimi.ingsw.view.events.state;
 
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
+import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
  * This class represents an event triggered by a player state update.
  */
-public class DisplayPlayerState extends DisplayPlayerEvent {
+public class DisplayPlayerState extends DisplayPlayerEvent implements GUIEvent {
     private final boolean isConnected;
     private final int turn;
     private final PlayerColor color;
@@ -43,10 +44,17 @@ public class DisplayPlayerState extends DisplayPlayerEvent {
 
     @Override
     public void displayEvent(TUI tui) {
-        if(isLocalPlayer) {
-            tui.showNotification("Your turn and color were set.");
-            return;
+        if(turn != 0 || color != null) {
+            if (isLocalPlayer) {
+                tui.showNotification("Your turn and color were set.");
+                return;
+            }
+            tui.showNotification(nickname + "'s hand and state was set.");
         }
-        tui.showNotification(nickname + "'s hand and state was set.");
+    }
+
+    @Override
+    public void displayEvent(GUI gui) {
+        gui.addPlayerScene(nickname);
     }
 }

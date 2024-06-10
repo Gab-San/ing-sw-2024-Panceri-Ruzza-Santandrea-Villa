@@ -23,8 +23,8 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
         //TODO: add icon
         connectionLabel = setupConnectionLabel(areaName, isConnected);
 
-        add(connectionLabel);
         add(areaButton);
+        add(connectionLabel);
     }
 
     private JLabel setupConnectionLabel(String areaName, boolean isConnected) {
