@@ -20,6 +20,7 @@ public abstract class ViewHand extends JComponent {
     protected ViewStartCard startCard;
     protected final List<ViewObjectiveCard> secretObjectiveCards;
     protected PlayerColor color;
+    protected boolean isDeadlocked;
     private int turn;
     protected final View view;
 
@@ -30,6 +31,7 @@ public abstract class ViewHand extends JComponent {
         this.view = view;
         this.cards = Collections.synchronizedList(new LinkedList<>());
         startCard = null;
+        isDeadlocked = false;
         this.secretObjectiveCards = Collections.synchronizedList(new LinkedList<>());
         color = null;
         turn = 0;
@@ -111,6 +113,13 @@ public abstract class ViewHand extends JComponent {
         boolean changed = this.turn != turn;
         this.turn = turn;
         return changed;
+    }
+
+    public boolean isDeadlocked() {
+        return isDeadlocked;
+    }
+    public void setDeadlocked(boolean deadlocked) {
+        isDeadlocked = deadlocked;
     }
 
     @Override

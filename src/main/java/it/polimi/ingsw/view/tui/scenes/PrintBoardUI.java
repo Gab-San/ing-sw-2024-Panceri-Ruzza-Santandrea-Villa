@@ -89,11 +89,17 @@ public class PrintBoardUI extends TUI_Scene {
         String myColor = getColorFromEnum(board.getPlayerHand().getColor());
         if(board.getPlayerHand().getTurn() == 1)
             myColor = combine(BLACK_TEXT, myColor);
-        out.print("Player list:\t" + myColor + " Me (" + board.getPlayerHand().getNickname() + ") " + RESET);
+
+        String myNickname = "Me (" + board.getPlayerHand().getNickname() + ")";
+        if(board.getPlayerHand().isDeadlocked()) myNickname += " (DEADLOCKED)";
+
+        out.print("Player list:\t" + myColor + " " + myNickname + " " + RESET);
         for(ViewOpponentHand opponent : board.getOpponents()){
             String colorBG = getColorFromEnum(opponent.getColor());
             String colorFG = opponent.getTurn()==1 ? BLACK_TEXT : "";
-            String nickname = opponent.isConnected() ? opponent.getNickname() : opponent.getNickname() + " (OFFLINE)";
+            String nickname = opponent.getNickname();
+            if(!opponent.isConnected()) nickname += " (OFFLINE)";
+            if(opponent.isDeadlocked()) nickname += " (DEADLOCKED)";
             out.print("\t\t" +  combine(colorFG, colorBG) + " " + nickname + " " + RESET);
         }
         out.println();

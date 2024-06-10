@@ -16,7 +16,6 @@ import java.util.*;
 
 public class ViewBoard extends JComponent {
     public static final int ENDGAME_SCORE = 20;
-    public static final int MAX_PLAYERS = 4;
 
     public static final char OBJECTIVE_DECK = 'O';
     public static final char RESOURCE_DECK = 'R';
@@ -29,7 +28,6 @@ public class ViewBoard extends JComponent {
     private final Map<String, ViewPlayArea> playerAreas;
     private final Map<String, ViewOpponentHand> opponentHands;
     private ViewPlayerHand playerHand;
-    private final Map<String, Boolean> isPlayerDeadlocked;
     private final Map<String, Integer> scoreboard;
     private int currentTurn;
     private GamePhase gamePhase;
@@ -43,7 +41,6 @@ public class ViewBoard extends JComponent {
 
         playerAreas = new Hashtable<>();
         opponentHands = new Hashtable<>();
-        isPlayerDeadlocked = new Hashtable<>();
         scoreboard = new Hashtable<>();
         currentTurn = 0;
         gamePhase = GamePhase.CREATE; //initialise gamePhase to the first phase
@@ -65,10 +62,7 @@ public class ViewBoard extends JComponent {
         return playerAreas.get(nickname);
     }
 
-    public synchronized boolean isPlayerDeadlocked(String nickname) {
-        return isPlayerDeadlocked.getOrDefault(nickname, false);
-    }
-    public synchronized   ViewPlayerHand getPlayerHand() {
+    public synchronized ViewPlayerHand getPlayerHand() {
         return playerHand;
     }
     public synchronized ViewOpponentHand getOpponentHand(String nickname){
@@ -137,7 +131,6 @@ public class ViewBoard extends JComponent {
         ViewPlayArea playArea =  new ViewPlayArea(nickname, this);
         playerAreas.put(nickname,playArea);
         opponentHands.put(nickname, opponentHand);
-        isPlayerDeadlocked.put(nickname, false);
         scoreboard.put(nickname, 0);
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, opponentHand);
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
@@ -149,12 +142,10 @@ public class ViewBoard extends JComponent {
         // connection attempts failed
         scoreboard.clear();
         playerAreas.clear();
-        isPlayerDeadlocked.clear();
         playerHand = new ViewPlayerHand(nickname, view);
         ViewPlayArea playArea = new ViewPlayArea(nickname, this);
         scoreboard.put(nickname, 0);
         playerAreas.put(nickname, playArea);
-        isPlayerDeadlocked.put(nickname, false);
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, playerHand);
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
     }
@@ -163,22 +154,10 @@ public class ViewBoard extends JComponent {
         ViewPlayArea playArea = playerAreas.get(nickname);
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);
-        isPlayerDeadlocked.remove(nickname);
         scoreboard.remove(nickname);
         firePropertyChange(ChangeNotifications.REMOVE_PLAYER, opponentHand, null);
         firePropertyChange(ChangeNotifications.REMOVE_AREA, playArea, null);
         notifyView(SceneID.getNotificationSceneID(), new DisplayPlayerRemove(nickname));
-    }
-
-    public synchronized void setPlayerDeadlock(String nickname, boolean isDeadLocked) {
-        isPlayerDeadlocked.put(nickname, isDeadLocked);
-        if(isDeadLocked){
-            if(getPlayerHand().getNickname().equals(nickname)){
-                notifyView(SceneID.getMyAreaSceneID(), new DisplayDeadLock(nickname, true));
-            } else {
-                notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayDeadLock(nickname, false));
-            }
-        }
     }
 
     public synchronized void notifyView(SceneID scene, DisplayEvent event){

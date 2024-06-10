@@ -108,4 +108,11 @@ public class ViewOpponentHand extends ViewHand {
         }
         return false;
     }
+
+    @Override
+    public void setDeadlocked(boolean deadlocked) {
+        super.setDeadlocked(deadlocked);
+        if(deadlocked)
+            notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayDeadLock(nickname, false));
+    }
 }

@@ -122,4 +122,11 @@ public class ViewPlayerHand extends ViewHand {
         }
         return false;
     }
+
+    @Override
+    public void setDeadlocked(boolean deadlocked) {
+        super.setDeadlocked(deadlocked);
+        if(deadlocked)
+            notifyView(SceneID.getMyAreaSceneID(), new DisplayDeadLock(nickname, true));
+    }
 }

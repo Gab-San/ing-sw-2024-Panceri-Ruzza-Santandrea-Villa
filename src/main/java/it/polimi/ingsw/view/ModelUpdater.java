@@ -90,7 +90,11 @@ public class ModelUpdater {
         board.removePlayer(nickname);
     }
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
-        board.setPlayerDeadlock(nickname, isDeadLocked);
+        if(board.getPlayerHand().getNickname().equals(nickname)){
+            board.getPlayerHand().setDeadlocked(isDeadLocked);
+        } else {
+            board.getOpponentHand(nickname).setDeadlocked(isDeadLocked);
+        }
     }
 
     public synchronized void notifyEndgame()  {

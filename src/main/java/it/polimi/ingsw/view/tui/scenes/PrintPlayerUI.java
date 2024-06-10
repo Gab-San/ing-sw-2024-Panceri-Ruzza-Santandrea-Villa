@@ -10,6 +10,7 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
  * The playerArea UI scene printer for the TUI.
  */
 public class PrintPlayerUI extends PrintGameUI {
+    private final ViewPlayerHand hand;
     /**
      * Constructs the playerArea UI printer (for 'myArea' scene)
      * @param hand local player's hand
@@ -17,6 +18,7 @@ public class PrintPlayerUI extends PrintGameUI {
      */
     public PrintPlayerUI(ViewPlayerHand hand, ViewPlayArea playArea){
         super(hand, playArea);
+        this.hand = hand;
     }
 
     @Override
@@ -24,7 +26,8 @@ public class PrintPlayerUI extends PrintGameUI {
         out.println("Your (" + nickname + "'s) playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 
-        out.println("\nYour hand: ");
+        String statusText = hand.isDeadlocked() ? RED_TEXT + "[DEADLOCKED]" + RESET : "";
+        out.println("\nYour hand: " + statusText);
         printHand.printHand();
     }
 }

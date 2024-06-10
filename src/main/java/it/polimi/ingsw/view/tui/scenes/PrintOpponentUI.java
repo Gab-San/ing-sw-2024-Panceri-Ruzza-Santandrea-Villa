@@ -28,9 +28,12 @@ public class PrintOpponentUI extends PrintGameUI {
         out.println(nickname + "'s playArea, centered on ("+ printCenter.col() + "," + printCenter.row() +"): ");
         printPlayArea.printPlayArea(printCenter);
 
-        String disconnectedText = RED_TEXT + "[DISCONNECTED]" + RESET;
-        String connectedText = GREEN_TEXT + "[CONNECTED]" + RESET;
-        out.println("\nOpponent's hand: " + (hand.isConnected() ? connectedText : disconnectedText));
+        String statusText = hand.isConnected() ? GREEN_TEXT + "[CONNECTED]" + RESET
+                                                : RED_TEXT + "[DISCONNECTED]" + RESET;
+
+        if(hand.isDeadlocked())
+            statusText += RED_TEXT + " [DEADLOCKED]" + RESET;
+        out.println("\nOpponent's hand: " + statusText);
         printHand.printHand(true);
     }
 }
