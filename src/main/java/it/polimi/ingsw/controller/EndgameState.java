@@ -2,7 +2,9 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
@@ -11,10 +13,10 @@ import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalParameterError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalStateError;
+import it.polimi.ingsw.network.BroadcastMessage;
 import it.polimi.ingsw.network.VirtualClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +36,8 @@ public class EndgameState extends GameState{
         super(board, controller,disconnectingPlayers);
         board.setGamePhase(GamePhase.EVALOBJ);
         board.squashHistory();
-        evaluateSecretObjectives();
+        evaluateObjectives();
+        resolveTies();
         board.setGamePhase(GamePhase.SHOWWIN);
         //prevent softlock if all connected players crash without explicit disconnect()
         //also prevents players from blocking the server by never leaving endgame state
@@ -141,6 +144,8 @@ public class EndgameState extends GameState{
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START A NEW GAME IN THIS PHASE"));
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         }
+        if(numOfPlayers > Board.MAX_PLAYERS)
+            throw new IllegalArgumentException("Can't restart the game with more than "+ Board.MAX_PLAYERS + " players!");
 
         board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
 
@@ -173,23 +178,81 @@ public class EndgameState extends GameState{
     }
 
 //region AUXILIARY FUNCTIONS
+    //DOCS: [Ale] correct docs if we have the server crash on PlayerHandException
     /**
-     * Evaluates the secret objectives of all players and updates their scores.
-     * @throws IllegalStateException if there is an issue with evaluating secret objectives.
+     * Evaluates the objectives of all players (secret and shared) and updates their scores.
+     * @throws IllegalStateException if a player does not have a secret objective.
      */
-    private void evaluateSecretObjectives() throws IllegalStateException{
+    private void evaluateObjectives() throws IllegalStateException{
+        List<ObjectiveCard> revealedObjectives = board.getRevealedObjectives();
         for(Player player : board.getPlayerAreas().keySet()){
-            ObjectiveCard objCard;
+            ObjectiveCard secretObjective;
             try {
-                objCard = player.getHand().getSecretObjective();
+                secretObjective = player.getHand().getSecretObjective();
             } catch (PlayerHandException e){
                 //FIXME if at this point in the game the secret objective has to be set
                 // if this error occurs than the application should crash
                 throw new IllegalStateException(e);
             }
-            objCard.turnFaceUp(); // reveal secret objective
-            int points = objCard.calculatePoints(board.getPlayerAreas().get(player));
+            secretObjective.turnFaceUp(); // reveal the secret objective
+            PlayArea playArea = board.getPlayerAreas().get(player);
+
+            //calculate points of all objectives
+            int points = secretObjective.calculatePoints(playArea);
+            points += revealedObjectives.stream()
+                    .mapToInt(obj -> obj.calculatePoints(playArea))
+                    .sum();
+
+            //add points to the player score
             board.addScore(player, points);
+        }
+    }
+
+    /**
+     * Adds 1 to the score of the winning player(s) if necessary to break a tie. <br>
+     * Does not add 1 if all tied players have solved the same number of objectives
+     * or if there is only one winner.
+     */
+    private void resolveTies() {
+        List<Player> tiedByScorePlayers = board.getPlayersByScore();
+        int topScore = board.getScoreboard().get(tiedByScorePlayers.get(0));
+        tiedByScorePlayers = tiedByScorePlayers.stream()
+                .filter(p -> board.getScoreboard().get(p) == topScore)
+                .toList();
+
+        //tiedByScorePlayers now contains all players tied for first place
+        if(tiedByScorePlayers.size() > 1) { //a tie has occurred
+            Map<Player, Integer> objectiveSolvesPerPlayer = new Hashtable<>();
+
+            //calculate #objectives solved per player
+            for (Player player : tiedByScorePlayers) {
+                PlayArea playArea = board.getPlayerAreas().get(player);
+                int solves = 0;
+                solves += player.getHand().getSecretObjective().calculateSolves(playArea);
+                solves += board.getRevealedObjectives().stream()
+                        .mapToInt(obj -> obj.calculateSolves(playArea))
+                        .sum();
+                objectiveSolvesPerPlayer.put(player, solves);
+            }
+
+            //resolve tie based on the objective solves (most solves wins)
+            int mostSolves = objectiveSolvesPerPlayer.values().stream()
+                    .reduce(Integer::max).orElseThrow(); //never throws as list is not empty
+
+            //real ties happen when 2+ players are tied on objective solves as well as score
+            List<Player> tiedBySolvePlayers = tiedByScorePlayers.stream()
+                    .filter(p -> objectiveSolvesPerPlayer.get(p) == mostSolves)
+                    .toList();
+
+            //add one to player score to break the tie, *if necessary*.
+            //If all tied players are actually tied, there's no need to add one to all their scores
+            //This tiebreaker will be notified to clients as an additional score notification
+            if(tiedBySolvePlayers.size() < tiedByScorePlayers.size())
+                tiedBySolvePlayers.forEach(
+                        p -> board.addScore(p, 1)
+                );
+            //if 1 player was in tiedPlayers, then that player wins
+            //if 2+ players were in tiedPlayers, then they all share victory.
         }
     }
 //endregion

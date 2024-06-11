@@ -110,13 +110,23 @@ public class PrintEndgameUI extends TUI_Scene {
                 .forEach(out::println);
 
         out.println();
-        out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   ");
+
+        int maxScore = board.getScore(playersByScore.get(0).getNickname());
+        List<ViewHand> winners = playersByScore.stream()
+                .filter(h -> board.getScore(h.getNickname()) == maxScore)
+                .toList();
+        if(winners.size() > 1 && atLeast2Players)
+            out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNERS ARE:   ");
+        else
+            out.print(getPadSpaces() + YELLOW_TEXT + "THE WINNER IS:   ");
+
         //if I'm the only one left in the game, I win automatically, regardless of score
         if(!atLeast2Players) {
             out.println(colorNickname(board.getPlayerHand()) + YELLOW_TEXT + " BY DEFAULT" + RESET);
         }
         else{
-            out.println(colorNickname(playersByScore.get(0)));
+            winners.forEach(winner -> out.print(colorNickname(winner) + "  "));
+            out.println();
         }
 
         printSeparator();

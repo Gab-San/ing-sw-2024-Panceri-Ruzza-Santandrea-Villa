@@ -1,11 +1,8 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.*;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.network.VirtualClient;
 import it.polimi.ingsw.stub.PuppetClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,26 +20,29 @@ class EndgameStateTest {
     private Board board;
     private final String playerNickname = "Flavio";
     private final String secondPlNick = "Player 2";
-    private final List<VirtualClient> clientList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
+        init();
+        joinUntilSetupState(3);
+        playUntilPlayState();
+        playUntilLastTurn();
+        playLastTurn();
+    }
+
+    private void init(){
         controller = new BoardController();
         VirtualClient flaviosClient = new PuppetClient();
-        clientList.add(flaviosClient);
         controller.join(playerNickname, flaviosClient);
         controller.setNumOfPlayers(playerNickname, 3);
         board = controller.getGameState().board;
-        joinUntilPlayState(3);
     }
 
-
-    public void joinUntilSetupState(int numOfPlayers){
+    private void joinUntilSetupState(int numOfPlayers){
         assertEquals(JoinState.class, controller.getGameState().getClass());
         GameState nextGS=null;
         for(int j = 2; j <= numOfPlayers; j++){
-            clientList.add(new PuppetClient());
-            controller.join("Player " + j, clientList.get(j - 1));
+            controller.join("Player " + j, new PuppetClient());
             nextGS = controller.getGameState();
             if(j < numOfPlayers){
                 assertNotNull(nextGS);
@@ -53,16 +54,10 @@ class EndgameStateTest {
         assertEquals(board.getGamePhase(), GamePhase.PLACESTARTING);
     }
 
-    private void joinUntilPlayState(int numOfPlayers) {
-        joinUntilSetupState(numOfPlayers);
-
-        //FOR TWO PLAYERS
+    private void playUntilPlayState() {
         controller.placeStartingCard(playerNickname, false);
         controller.placeStartingCard(secondPlNick, false);
-        //FOR THREE PLAYERS
         controller.placeStartingCard("Player 3", false);
-        //FOR FOUR PLAYERS
-//        controller.placeStartingCard("Player 4", false);
         //CHOOSING COLOR
         //FOR TWO PLAYERS
         controller.chooseYourColor(playerNickname, PlayerColor.BLUE);
@@ -81,6 +76,9 @@ class EndgameStateTest {
         //FOR FOUR PLAYERS
 //        controller.chooseSecretObjective("Player 4", 1);
         assertEquals(PlayState.class, controller.getGameState().getClass());
+    }
+
+    private void playUntilLastTurn(){
         // FIRST TURN
         Player currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
@@ -119,7 +117,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
-        // FOURTH TURN
+        //FIRST TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -130,7 +128,7 @@ class EndgameStateTest {
                 'R',
                 0
         );
-        //FIRST TURN
+        // SECOND TURN
         currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
@@ -141,8 +139,10 @@ class EndgameStateTest {
                 'R',
                 0
         );
-        // SECOND TURN
-        currentPlayer = board.getCurrentPlayer();
+    }
+    private void playLastTurn(){
+        // THIRD TURN
+        Player currentPlayer = board.getCurrentPlayer();
         controller.placeCard(currentPlayer.getNickname(),
                 currentPlayer.getHand().getCard(0).getCardID(),
                 new GamePoint(0,0),
@@ -232,8 +232,7 @@ class EndgameStateTest {
         );
         controller.restartGame(playerNickname, 4);
         assertEquals(JoinState.class, controller.getGameState().getClass());
-        clientList.add( new PuppetClient() );
-        controller.join("Player 4", clientList.get(3));
+        controller.join("Player 4", new PuppetClient());
         assertEquals(SetupState.class, controller.getGameState().getClass());
     }
 
@@ -280,5 +279,53 @@ class EndgameStateTest {
         controller.disconnect(secondPlNick);
         controller.disconnect("Player 3");
         assertEquals(CreationState.class, controller.getGameState().getClass());
+    }
+
+    @Test
+    void testTies(){
+        init();
+        joinUntilSetupState(3);
+        playUntilPlayState();
+        playUntilLastTurn();
+
+        //now manually setup the tie:
+        List<Player> playersByScore = board.getPlayersByScore();
+
+        //reset scores
+        playersByScore.forEach(
+                p -> board.addScore(p, -board.getScoreboard().get(p))
+        );
+
+        //set top scores
+        board.addScore(playersByScore.get(0), 5);
+        board.addScore(playersByScore.get(1), 5);
+
+        displayScores(playersByScore);
+        playersByScore.forEach(this::displayVisibleRes);
+        System.out.println();
+
+        board.getRevealedObjectives().forEach(
+                obj -> System.out.println("Final objective: " + obj)
+        );
+        System.out.println("EXECUTE LAST TURN");
+        playLastTurn();
+
+        displayScores(playersByScore);
+    }
+    private void displayScores(List<Player> playersByScore){
+        playersByScore.forEach(
+                p -> System.out.println(p.getNickname() + " -> " + board.getScoreboard().get(p))
+        );
+    }
+    private void displayVisibleRes(Player player){
+        Map<GameResource, Integer> visibleRes = board.getPlayerAreas().get(player).getVisibleResources();
+        System.out.println("Visible Resources of " + player.getNickname());
+        visibleRes.keySet().forEach(
+                res ->{
+                    if(visibleRes.get(res)>0)
+                        System.out.println(res + " = " + visibleRes.get(res));
+                }
+        );
+        System.out.println();
     }
 }

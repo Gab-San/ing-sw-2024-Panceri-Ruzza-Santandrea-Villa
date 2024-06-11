@@ -40,13 +40,37 @@ import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The main class of the model. <br>
+ * Represents the central board visible by all players. <br>
+ * Acts as the first point of access to the model.
+ */
 public class Board implements GameSubject{
+    /**
+     * The score that triggers the endgame (last rounds)
+     */
     public static final int ENDGAME_SCORE = 20;
+    /**
+     * The player score limit during PlayState
+     */
     public static final int MAX_PLAY_SCORE = 29;
+    /**
+     * The max number of players in a game
+     */
     public static final int MAX_PLAYERS = 4;
+    /**
+     * True if the endgame notification has already been sent to Clients
+     */
     private boolean hasGoneToEndgame;
+    /**
+     * Map containing Player - score pairings
+     */
     private final Map<Player, Integer> scoreboard;
+    /**
+     * Map containing Player - PlayArea pairings
+     */
     private final Map<Player, PlayArea> playerAreas;
+
     private final PlayableDeck resourceDeck, goldDeck;
     private final ObjectiveDeck objectiveDeck;
     private final StartingCardDeck startingDeck;
@@ -55,6 +79,9 @@ public class Board implements GameSubject{
     public static final char RESOURCE_DECK = 'R';
     public static final char GOLD_DECK = 'G';
 
+    /**
+     * Map containing Player - Deadlock pairings
+     */
     private final Map<Player, Boolean> isPlayerDeadlocked;
 
     private int currentTurn;
@@ -625,6 +652,7 @@ public class Board implements GameSubject{
         playerAreas.remove(player);
         // Probably should notify
         scoreboard.remove(player);
+        isPlayerDeadlocked.remove(player);
         //decrement turn of each player that followed the removed player in turn order
         playerAreas.keySet().stream()
                 .filter(p -> p.getTurn() > player.getTurn())
