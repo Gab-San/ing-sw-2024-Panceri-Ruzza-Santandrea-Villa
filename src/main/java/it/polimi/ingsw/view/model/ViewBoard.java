@@ -179,6 +179,7 @@ public class ViewBoard extends JComponent {
      */
     public synchronized void setCurrentTurn(int currentTurn) {
         if(this.currentTurn != currentTurn) notifyView(SceneID.getNotificationSceneID(), new DisplayTurn(currentTurn));
+        firePropertyChange(ChangeNotifications.CURRENT_TURN_UPDATE, this.currentTurn, currentTurn);
         this.currentTurn = currentTurn;
     }
 
@@ -243,7 +244,6 @@ public class ViewBoard extends JComponent {
         scoreboard.put(nickname, 0);
         playerAreas.put(nickname, playArea);
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, playerHand);
-        playArea = getPlayerArea(playerHand.getNickname());
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
     }
 

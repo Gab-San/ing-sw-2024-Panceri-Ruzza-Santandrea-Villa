@@ -66,8 +66,9 @@ public class GUI implements View {
      */
     private void loadScenes() {
         sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
-        LocalPlayerAreaScene localPlayerAreaScene = new LocalPlayerAreaScene();
+        LocalPlayerAreaScene localPlayerAreaScene = new LocalPlayerAreaScene(inputHandler);
         sceneManager.loadScene(SceneID.getMyAreaSceneID(), localPlayerAreaScene);
+        addToPropListeners(localPlayerAreaScene);
         BoardScene boardScene = new BoardScene();
         sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
         addToPropListeners(boardScene);
@@ -258,8 +259,8 @@ public class GUI implements View {
         }
     }
 
-    public void addPlayerScene(String nickname) {
-        if(inputHandler.isLocalPlayer(nickname)){
+    public void addPlayerScene(String nickname, boolean isLocalPlayer) {
+        if(isLocalPlayer){
             SceneID localID = SceneID.getMyAreaSceneID();
             LocalPlayerAreaScene localScene = (LocalPlayerAreaScene) SceneManager.getInstance().getScene(localID);
             JComponent localArea = inputHandler.getPlayerHand(nickname);

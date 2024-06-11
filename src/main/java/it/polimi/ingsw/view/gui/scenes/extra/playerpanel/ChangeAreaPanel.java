@@ -5,10 +5,13 @@ import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.ViewHand;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     private final ChangeAreaButton areaButton;
@@ -19,7 +22,9 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     public ChangeAreaPanel(String areaName, Action action,
                            SceneID sceneID, boolean isConnected){
         this.areaButton = new ChangeAreaButton(action, sceneID);
-        areaButton.setSceneName(areaName);
+        importIcons();
+        areaButton.setText(areaName);
+
         areaButton.setFocusable(false);
         //TODO: add icon
         connectionLabel = setupConnectionLabel(areaName, isConnected);
@@ -28,10 +33,26 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
         add(connectionLabel);
     }
 
+    private void importIcons() {
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/Online_Icon_x16.png")){
+            assert is != null;
+            connectedIcon = new ImageIcon(ImageIO.read(is));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/Offline_Icon_x16.png")){
+            assert is != null;
+            disconnectedIcon = new ImageIcon(ImageIO.read(is));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private JLabel setupConnectionLabel(String areaName, boolean isConnected) {
         JLabel label = new JLabel();
         if(areaName.equalsIgnoreCase("board")){
-            label.setText("BOARD");
+            label.setText("");
         } else setLabelFormat(label, isConnected);
         return label;
     }
@@ -40,7 +61,6 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ChangeNotifications.CONNECTION_CHANGE)){
             assert evt.getNewValue() instanceof Boolean;
-            System.out.println("CONNECTION CHANGED: " + ((ViewHand) evt.getSource()).getNickname());
             boolean connectionStatus = (boolean) evt.getNewValue();
             setLabelFormat(connectionLabel, connectionStatus);
             SwingUtilities.invokeLater(
@@ -54,7 +74,6 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
 
         if(evt.getPropertyName().equals(ChangeNotifications.COLOR_CHANGE)){
             assert evt.getNewValue() instanceof PlayerColor;
-            System.out.println("COLOR CHANGE BY: " + ((ViewHand) evt.getSource()).getNickname());
             Color playerColor = PlayerColor.getColor((PlayerColor) evt.getNewValue());
             areaButton.setBackground(playerColor);
             SwingUtilities.invokeLater(
@@ -76,18 +95,13 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
                 label.setText("OFFLINE");
                 label.setForeground(Color.red);
             } else {
-                label.setIcon(connectedIcon);
+                label.setIcon(disconnectedIcon);
             }
         }
     }
 
     public ChangeAreaButton getAreaButton(){
         return areaButton;
-    }
-
-    public void setIconImages(ImageIcon connectedIcon, ImageIcon disconnectedIcon){
-        this.connectedIcon = connectedIcon;
-        this.disconnectedIcon = disconnectedIcon;
     }
 
     public String getAreaName(){

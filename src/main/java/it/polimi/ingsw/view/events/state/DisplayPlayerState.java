@@ -55,6 +55,6 @@ public class DisplayPlayerState extends DisplayPlayerEvent implements GUIEvent {
 
     @Override
     public void displayEvent(GUI gui) {
-        gui.addPlayerScene(nickname);
+        gui.addPlayerScene(nickname, isLocalPlayer);
     }
 }

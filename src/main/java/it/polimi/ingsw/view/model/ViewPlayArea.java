@@ -7,11 +7,13 @@ import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.events.update.DisplayFreeCorners;
 import it.polimi.ingsw.view.events.update.DisplayPlaceCard;
 import it.polimi.ingsw.view.events.update.DisplayVisibleResources;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
+import javax.swing.*;
 import java.util.*;
 
 import static it.polimi.ingsw.GameResource.FILLED;
@@ -19,7 +21,7 @@ import static it.polimi.ingsw.GameResource.FILLED;
 /**
  * Represents any player's PlayArea (as the place where their cards are placed)
  */
-public class ViewPlayArea {
+public class ViewPlayArea extends JComponent {
     /**
      * This playArea owner's nickname
      */
@@ -189,6 +191,8 @@ public class ViewPlayArea {
         else
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
                     new DisplayVisibleResources(owner, false, visibleResources));
+
+        firePropertyChange(ChangeNotifications.VIS_RES_CHANGE, null, visibleResources);
     }
     /**
      * @return an unmodifiable, synchronized view of this playArea's visible resources map.
@@ -240,5 +244,11 @@ public class ViewPlayArea {
         else
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
                     new DisplayFreeCorners(owner, false, freeCorners));
+
+        firePropertyChange(ChangeNotifications.FREE_CORN_CHANGE, null, cardFreeCorners);
+    }
+
+    public String getOwner(){
+        return owner;
     }
 }
