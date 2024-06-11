@@ -123,7 +123,7 @@ public class Client {
      * Main method of the Client. Reads args passed by command line and connects to the
      * server using the specified connection technology.
      * @param args args contain the following, in any order (* is mandatory): <br>
- *             <ul>
+     *         <ul>
      *             <li>
      *                  Server IP or Hostname (defaults to localhost) <br>
      *                  If both a serverIP and a hostname are given, then the IP will be preferred over the hostname
@@ -138,10 +138,10 @@ public class Client {
      *                  "myIP = a.b.c.d" or "myIP = hostname" to indicate the Client's IP. It must be reachable by the server
      *                  to allow update and notifications to be return to the Client.
      *             </li>
- *             </ul>
+     *         </ul>
      *                 If "myIP" parameter is not passed, the Client will find the IP automatically
-     *                 or ask for it if there are multiple NICs active on the local machine (ignoring loopback and local addresses). <br>
-     *                 If a wrong address is passed as "myIP" parameter, the Client will recognize it automatically.
+     *                 or ask for it if there are multiple NICs active on the local machine (ignoring loopback and local addresses). <br><br>
+     *                 If a wrong address is passed as "myIP" parameter, the Client will notice and ignore it automatically.
      */
     public static void main(String[] args) {
         String serverIP = null;

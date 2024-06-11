@@ -6,10 +6,26 @@ import it.polimi.ingsw.GamePoint;
 
 import java.util.*;
 
+/**
+ * The base class of PlaceableCards in the ViewModel
+ */
 public abstract class ViewPlaceableCard extends ViewCard{
+    /**
+     * Map associating a direction with this card's corner in that direction
+     */
     private final Map<CornerDirection, ViewCorner> corners;
+    /**
+     * This card's position after being placed on a playArea
+     */
     private GamePoint position;
 
+    /**
+     * Constructs the placeable card base.
+     * @param cardID this card's ID
+     * @param imageFrontName the front image file name
+     * @param imageBackName the back image file name
+     * @param corners list of corners (not attached to another card)
+     */
     public ViewPlaceableCard(String cardID, String imageFrontName, String imageBackName, List<ViewCorner> corners) {
         super(cardID, imageFrontName, imageBackName);
 
@@ -24,6 +40,10 @@ public abstract class ViewPlaceableCard extends ViewCard{
         this.corners = Collections.unmodifiableMap(thisCorners);
         this.position = null;
     }
+    /**
+     * Construct the placeable card as a copy of another placeable card.
+     * @param other the other placeable card to copy.
+     */
     public ViewPlaceableCard(ViewPlaceableCard other){
         super(other);
         Map<CornerDirection, ViewCorner> thisCorners = new Hashtable<>();
@@ -34,10 +54,23 @@ public abstract class ViewPlaceableCard extends ViewCard{
         this.corners = Collections.unmodifiableMap(thisCorners);
     }
 
+    /**
+     * @return this card's colour as a resource. (e.g. purple <-> Butterfly resource)
+     */
     abstract public GameResource getCardColour();
+
+    /**
+     * @param dir the corner's direction on this card
+     * @return the resource on that corner on the current visible side of this card
+     */
     public GameResource getCornerResource(CornerDirection dir){
         return corners.get(dir).getResource();
     }
+
+    /**
+     * @param dir the corner's direction on this card
+     * @return this card's corner in the given direction
+     */
     public ViewCorner getCorner(CornerDirection dir) {
         return corners.get(dir);
     }

@@ -18,6 +18,29 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 public class Server {
     private static final int MAX_PORT = 65535;
 
+
+    /**
+     * Main method of the Server. Reads args passed by command line and
+     * creates both the RMI and TCP servers in that order, according to the port args. <br>
+     * The central server is also created when the RMI server calls CentralServer.getInstance()
+     * @param args args contain the following, in this precise order (* is mandatory): <br>
+     *         <ul>
+     *             <li>
+     *                  RMI Server port (0-65535) *
+     *             </li>
+     *             <li>
+     *                  TCP Server port (0-65535) *
+     *             </li>
+     *             <li>
+     *                  Server IP or Hostname (defaults to localhost)
+     *             </li>
+     *         </ul>
+     *              Please note that the RMI and TCP ports must be different from one another. <br><br>
+     *              If the "IP" parameter is not passed, the Server will ask for it
+     *              and list all available IPs and hostname active on the local machine
+     *              (ignoring loopback and local addresses). <br>
+     *              If a wrong address is passed as "IP" parameter, the Server will notice and ignore it automatically.
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 

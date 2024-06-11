@@ -7,14 +7,26 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Base class of a generic card in the ViewModel
+ */
 public abstract class ViewCard extends JComponent {
     private final String cardID;
     private final String imageFrontName;
     private final String imageBackName;
     private BufferedImage imageFront;
     private BufferedImage imageBack;
+    /**
+     * True if this card is front-face up
+     */
     protected boolean isFaceUp;
 
+    /**
+     * Constructs the card base.
+     * @param cardID this card's ID
+     * @param imageFrontName the front image file name
+     * @param imageBackName the back image file name
+     */
     public ViewCard(String cardID, String imageFrontName, String imageBackName){
         this.cardID = cardID;
 
@@ -56,11 +68,20 @@ public abstract class ViewCard extends JComponent {
 //        this.imageBack = img;
     }
 
+    /**
+     * Construct the card base as a copy of another card.
+     * @param other the other card to copy.
+     */
     public ViewCard(ViewCard other){
         this(other.cardID, other.imageFrontName, other.imageBackName);
         this.isFaceUp = other.isFaceUp;
     }
 
+    /**
+     * @param other the card to compare this with.
+     * @return if the other object is a ViewCard and
+     *        the card IDs match.
+     */
     @Override
     public boolean equals(Object other){
         if(other == this) return true;
@@ -73,19 +94,33 @@ public abstract class ViewCard extends JComponent {
         return cardID.hashCode();
     }
 
+    /**
+     * @return this card's ID
+     */
     public String getCardID(){
         return cardID;
     }
+
     public synchronized boolean isFaceUp(){
         return isFaceUp;
     }
+
+    /**
+     * Flips this card, inverting its "faceUp" status
+     */
     public synchronized void flip(){
         isFaceUp = !isFaceUp;
         // eventual GUI code here
     }
+    /**
+     * Sets the "faceUp" status to true
+     */
     public synchronized void turnFaceUp(){
         if(!isFaceUp) flip();
     }
+    /**
+     * Sets the "faceUp" status to false
+     */
     public synchronized void turnFaceDown(){
         if(isFaceUp) flip();
     }
@@ -98,6 +133,7 @@ public abstract class ViewCard extends JComponent {
     }
 
 
+    //DOCS: add docs for GUI paint
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
