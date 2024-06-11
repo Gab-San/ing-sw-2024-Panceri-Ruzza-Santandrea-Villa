@@ -19,7 +19,7 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     public ChangeAreaPanel(String areaName, Action action,
                            SceneID sceneID, boolean isConnected){
         this.areaButton = new ChangeAreaButton(action, sceneID);
-        areaButton.setText(areaName);
+        areaButton.setSceneName(areaName);
         areaButton.setFocusable(false);
         //TODO: add icon
         connectionLabel = setupConnectionLabel(areaName, isConnected);

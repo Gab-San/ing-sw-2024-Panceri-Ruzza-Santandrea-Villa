@@ -230,14 +230,14 @@ public class ViewBoard extends JComponent {
         // Since it is launched before connect if user inputs
         // different nicknames, board will be clean if previous
         // connection attempts failed
-        scoreboard.clear();
-        playerAreas.clear();
         ViewPlayArea playArea;
         if(playerHand != null){
             firePropertyChange(ChangeNotifications.REMOVE_PLAYER, playerHand, null);
             playArea = getPlayerArea(playerHand.getNickname());
             firePropertyChange(ChangeNotifications.REMOVE_AREA, playArea, null);
         }
+        scoreboard.clear();
+        playerAreas.clear();
         playerHand = new ViewPlayerHand(nickname, view);
         playArea = new ViewPlayArea(nickname, this);
         scoreboard.put(nickname, 0);
