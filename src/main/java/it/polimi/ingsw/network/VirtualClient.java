@@ -38,7 +38,7 @@ public interface VirtualClient extends Remote, Serializable {
      * @param currentTurn the board current turn at initialization
      * @param gamePhase the game phase at initialization
      * @param scoreboard current scoreboard state
-     * @param playerDeadLock current player dead locks
+     * @param playerDeadLock current player deadlocks
      * @throws RemoteException if a connection error is detected
      */
     void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) throws RemoteException;
