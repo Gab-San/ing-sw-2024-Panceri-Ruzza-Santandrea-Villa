@@ -120,16 +120,16 @@ public interface VirtualClient extends Remote, Serializable {
     void updatePlayer(String nickname, int playerTurn) throws RemoteException;
 
     /**
-     * Updates the connection status of the player.
-     * @param nickname the unique nickname identifier of the player
-     * @param isConnected the current connection status of the player
+     * Updates the connection status of an opponent.
+     * @param nickname the unique nickname identifier of the opponent
+     * @param isConnected the current connection status of the opponent
      * @throws RemoteException if a connection error is detected
      */
     void updatePlayer(String nickname, boolean isConnected) throws RemoteException;
 
     /**
-     * Notifies about the removal of a player.
-     * @param nickname the player's unique nickname identifier
+     * Notifies about the removal of an opponent.
+     * @param nickname the opponent's unique nickname identifier
      * @throws RemoteException if a connection error is detected
      */
     void removePlayer(String nickname) throws RemoteException;

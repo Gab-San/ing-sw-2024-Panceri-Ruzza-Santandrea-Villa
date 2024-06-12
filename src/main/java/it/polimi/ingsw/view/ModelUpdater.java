@@ -30,7 +30,12 @@ public class ModelUpdater {
         this.board = board;
         jsonImporter = Client.getCardJSONImporter();
     }
-
+    /**
+     * Displays chat messages.
+     *
+     * @param messenger message messenger
+     * @param msg       message to display
+     */
     public synchronized void displayMessage(String messenger, String msg){
         board.notifyView(SceneID.getNotificationSceneID(), new DisplayMessageEvent(messenger, msg));
     }
@@ -43,6 +48,13 @@ public class ModelUpdater {
         board.notifyView(SceneID.getNotificationSceneID(), new NotifyTimeoutEvent());
     }
 
+    /**
+     * Notifies about the current state of the player.
+     * @param nickname the unique nickname identifier of the player
+     * @param isConnected the connection status as for the moment of the displayMessage
+     * @param turn the given player's turn
+     * @param color the colour the player has chosen for the match
+     */
     public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
         // Setting current player check
         if (board.getPlayerHand().getNickname().equals(nickname)) {
@@ -61,6 +73,11 @@ public class ModelUpdater {
                     isConnected, turn, color));
         }
     }
+    /**
+     * Notifies a change in the player color.
+     * @param nickname the unique nickname identifier of the player
+     * @param color the colour chosen from the player for the match
+     */
     public synchronized void updatePlayer(String nickname, PlayerColor color){
         if(board.getPlayerHand().getNickname().equals(nickname)) {
             board.getPlayerHand().setColor(color);
@@ -69,6 +86,11 @@ public class ModelUpdater {
             board.getOpponentHand(nickname).setColor(color);
         }
     }
+    /**
+     * Updates the player turn.
+     * @param nickname the unique nickname identifier of the player
+     * @param playerTurn the turn randomly given to the player
+     */
     public synchronized void updatePlayer(String nickname, int playerTurn){
         if(board.getPlayerHand().getNickname().equals(nickname)){
             board.getPlayerHand().setTurn(playerTurn);
@@ -77,16 +99,32 @@ public class ModelUpdater {
             board.getOpponentHand(nickname).setTurn(playerTurn);
         }
     }
+    /**
+     * Updates the connection status of an opponent.
+     * @param nickname the unique nickname identifier of the opponent
+     * @param isConnected the current connection status of the opponent
+     */
     public synchronized void updatePlayer(String nickname, boolean isConnected){
         // Connection needs to be displayed only for opponents
         if(!board.getPlayerHand().getNickname().equals(nickname)){
             board.getOpponentHand(nickname).setConnected(isConnected);
         }
     }
-
+    /**
+     * Notifies about the removal of an opponent.
+     * @param nickname the opponent's unique nickname identifier
+     */
     public synchronized void removePlayer(String nickname)  {
         board.removeOpponent(nickname);
     }
+    /**
+     * Updates the player's deadlock status.
+     * <p>
+     *     Complete with dead lock description.
+     * </p>
+     * @param nickname the player unique id
+     * @param isDeadLocked the player deadlock value
+     */
     public synchronized void playerDeadLockUpdate(String nickname, boolean isDeadLocked) {
         if(board.getPlayerHand().getNickname().equals(nickname)){
             board.getPlayerHand().setDeadlocked(isDeadLocked);

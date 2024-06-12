@@ -15,6 +15,7 @@ import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.GameResource.FILLED;
 
@@ -30,6 +31,9 @@ public class ViewPlayArea extends JComponent {
     private final Map<GameResource, Integer> visibleResources;
     private final List<ViewCorner> freeCorners;
     private final ViewBoard board;
+    //zLayer information is needed for GUI image layering
+    private final Map<GamePoint, Integer> zLayerMatrix;
+    private int maxZ;
 
     /**
      * Constructs the playArea.
@@ -42,6 +46,8 @@ public class ViewPlayArea extends JComponent {
         this.cardMatrix = Collections.synchronizedMap(new Hashtable<>());
         this.visibleResources = Collections.synchronizedMap(new Hashtable<>());
         this.freeCorners = Collections.synchronizedList(new LinkedList<>());
+        this.zLayerMatrix = Collections.synchronizedMap(new Hashtable<>());
+        maxZ = 0;
     }
     /**
      * Places a card at position (0,0), handling freeCorners list <br>
@@ -49,8 +55,7 @@ public class ViewPlayArea extends JComponent {
      */
     public void placeStarting(ViewStartCard startCard){
         GamePoint zero = new GamePoint(0,0);
-        cardMatrix.put(zero, startCard);
-        startCard.setPosition(zero);
+        setCard(zero, startCard);
         for(CornerDirection dir : CornerDirection.values()) {
             if(startCard.getCorner(dir).getResource() != FILLED)
                 freeCorners.add(startCard.getCorner(dir));
@@ -177,6 +182,11 @@ public class ViewPlayArea extends JComponent {
     public Map<GamePoint, ViewPlaceableCard> getCardMatrix(){ return Collections.unmodifiableMap(cardMatrix);}
 
     /**
+     * @return an unmodifiable, synchronized view of this playArea's zLayer matrix (for the GUI).
+     */
+    public Map<GamePoint, Integer> getZLayerMatrix(){ return Collections.unmodifiableMap(zLayerMatrix);}
+
+    /**
      * Sets the visible resources of this playArea (overriding the old values). <br>
      * Note that the map is copied by value, not by reference. <br>
      * Also notifies the owner's scene of the visibleResources update event.
@@ -212,9 +222,11 @@ public class ViewPlayArea extends JComponent {
      * @param position position to place the card on
      * @param card card to place
      */
-    public void setCard(GamePoint position, ViewPlaceableCard card) {
+    public synchronized void setCard(GamePoint position, ViewPlaceableCard card) {
         cardMatrix.put(position, card);
         card.setPosition(position);
+        zLayerMatrix.put(position, maxZ++);
+        //this method is synchronized to prevent conflicts when reading/writing maxZ
     }
 
     /**
@@ -222,6 +234,7 @@ public class ViewPlayArea extends JComponent {
      */
     public void clearCardMatrix() {
         cardMatrix.clear();
+        zLayerMatrix.clear();
     }
     /**
      * Resets this playArea's free corners list.

@@ -202,8 +202,8 @@ public class ViewController {
     /**
      * @param nickname a player nickname
      * @return the ViewHand of the player with given nickname. <br>
-     *          Due to ViewBoard implementation, it also runs addPlayer()
-     *          if the given nickname doesn't correspond to any player in game
+     *          Due to ViewBoard implementation, it also runs addOpponent()
+     *          if the given nickname doesn't correspond to the local player or to any opponent in game.
      */
     public ViewHand getPlayer(String nickname) {
         if(board.getPlayerHand().getNickname().equals(nickname)){
@@ -213,6 +213,12 @@ public class ViewController {
         }
     }
 
+    /**
+     * @param nickname any player nickname
+     * @return the ViewPlayArea of the player with given nickname. <br>
+     *          Due to ViewBoard implementation, it also runs addOpponent()
+     *          if the given nickname doesn't correspond to the local player or to any opponent in game.
+     */
     public ViewPlayArea getPlayArea(String nickname) {
         if(board.getPlayerHand().getNickname().equals(nickname)){
             return selfPlayArea;
@@ -221,6 +227,10 @@ public class ViewController {
         }
     }
 
+    /**
+     * @param nickname a player nickname
+     * @return true if the nickname corresponds to the local player's nickname.
+     */
     public boolean isLocalPlayer(String nickname) {
         return board.getPlayerHand().getNickname().equals(nickname);
     }
