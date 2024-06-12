@@ -15,6 +15,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 
+/**
+ * This class implements the chat.
+ * <p>
+ *     It composes of a text field in which to write messages, a sender selector and
+ *     a text pane on which chat history is displayed. <br>
+ *     When reconnecting chat history is not retained.
+ * </p>
+ */
 public class ChatPanel extends JPanel implements PropertyChangeListener, ChatListener {
     private final JTextField messageEditArea;
     private final JScrollPane chatVisualizer;

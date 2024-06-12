@@ -4,7 +4,9 @@ import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
-//DOCS add docs
+/**
+ * This event handles player's turn assignment event.
+ */
 public class DisplayPlayerTurn extends DisplayPlayerEvent {
     private final int playerTurn;
     /**

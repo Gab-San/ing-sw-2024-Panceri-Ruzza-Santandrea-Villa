@@ -1,13 +1,14 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.List;
 
-//DOCS [Gamba] add docs
+/**
+ * This class represents an event triggered by a card being added to the player's hand
+ */
 public class DisplayAddedCard extends DisplayPlayerEvent {
     //TODO: decide whether to pass all cards or only added
     private final List<ViewPlayCard> playCardList;

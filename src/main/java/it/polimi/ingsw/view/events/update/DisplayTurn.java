@@ -1,14 +1,12 @@
 package it.polimi.ingsw.view.events.update;
 
-import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
  * This class represents a turn event update.
  */
-public class DisplayTurn implements TUIEvent, GUIEvent {
+public class DisplayTurn implements TUIEvent{
     private final int turn;
 
     /**
@@ -19,10 +17,6 @@ public class DisplayTurn implements TUIEvent, GUIEvent {
         this.turn = turn;
     }
 
-    @Override
-    public void displayEvent(GUI gui) {
-
-    }
 
     @Override
     public void displayEvent(TUI tui) {

@@ -8,7 +8,9 @@ import it.polimi.ingsw.view.tui.TUI;
 import static it.polimi.ingsw.view.tui.ConsoleBackgroundColors.getColorFromEnum;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
-//DOCS add docs
+/**
+ * This card handles color choice event.
+ */
 public class DisplayPlayerColor extends DisplayPlayerEvent {
     private final PlayerColor color;
     /**

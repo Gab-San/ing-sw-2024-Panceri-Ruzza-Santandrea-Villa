@@ -7,7 +7,9 @@ import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.List;
 
-//DOCS [Gamba] add docs
+/**
+ * This class represents an event triggered when a card is removed from a player's hand.
+ */
 public class DisplayRemoveCards extends DisplayPlayerEvent {
     private final List<ViewPlayCard> playCards;
     /**

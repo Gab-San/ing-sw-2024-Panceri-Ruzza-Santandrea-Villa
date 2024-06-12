@@ -7,7 +7,9 @@ import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.Map;
 
-//DOCS add docs
+/**
+ * This class handles visible resources updates.
+ */
 public class DisplayVisibleResources extends DisplayPlayerEvent {
     private final Map<GameResource, Integer> visibleResources;
     /**

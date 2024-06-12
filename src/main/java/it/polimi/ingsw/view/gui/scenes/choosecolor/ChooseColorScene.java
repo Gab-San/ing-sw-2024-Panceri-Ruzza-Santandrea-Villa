@@ -107,6 +107,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     @Override
     public synchronized void displayError(String error) {
         // Can be called only by timeout disconnection
+        //FIXME: Should be called also if an error occurs while choosing color
         displayError(error, 1, false);
     }
 

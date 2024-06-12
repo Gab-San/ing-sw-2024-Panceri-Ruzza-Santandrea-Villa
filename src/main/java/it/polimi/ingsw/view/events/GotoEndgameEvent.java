@@ -9,8 +9,10 @@ import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUI_Scene;
 import it.polimi.ingsw.view.tui.scenes.PrintEndgameUI;
 
-//DOCS [Gamba] add docs
-public class    GotoEndgameEvent implements TUIEvent, GUIEvent{
+/**
+ * This class represents an event triggered by reaching the endgame. It displays the endgame screen.
+ */
+public class GotoEndgameEvent implements TUIEvent, GUIEvent{
     private final ViewBoard board;
     boolean atLeast2Players;
     public GotoEndgameEvent(ViewBoard board){

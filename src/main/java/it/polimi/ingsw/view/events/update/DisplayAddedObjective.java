@@ -1,13 +1,15 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.List;
 
-//DOCS ADD DOCS
+/**
+ * This class represents an event triggered by an objective card being added
+ * to the player's hand.
+ */
 public class DisplayAddedObjective extends DisplayPlayerEvent {
     private final List<ViewObjectiveCard> objectiveCards;
     /**

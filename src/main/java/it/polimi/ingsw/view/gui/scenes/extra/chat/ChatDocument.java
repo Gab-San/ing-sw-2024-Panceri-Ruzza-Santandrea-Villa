@@ -17,27 +17,6 @@ public class ChatDocument extends DefaultStyledDocument {
     public ChatDocument(int fontSize){
         usersStyles = new HashMap<>();
         this.fontSize = fontSize;
-        importFonts();
-    }
-
-    private void importFonts() {
-        try( InputStream fontIS = this.getClass().getClassLoader()
-                .getResourceAsStream("fonts/inter/Inter-VariableFont_slnt,wght.ttf") ){
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            assert fontIS != null;
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));
-        } catch (IOException | FontFormatException e) {
-            System.err.println(e.getMessage());
-        }
-
-        try( InputStream fontIS = this.getClass().getClassLoader()
-                .getResourceAsStream("fonts/raleway/Raleway-VariableFont_wght.ttf") ){
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            assert fontIS != null;
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));
-        } catch (IOException | FontFormatException e) {
-            System.err.println(e.getMessage());
-        }
     }
 
     public void addUserStyle(String user, Color color){

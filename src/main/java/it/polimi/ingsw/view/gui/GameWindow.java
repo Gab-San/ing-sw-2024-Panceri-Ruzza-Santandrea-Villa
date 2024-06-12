@@ -10,31 +10,47 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * This is the main frame of the UI. All the scenes are coded to be panels
+ * attached to it, and it will control the interactions between the panels.
+ */
 public class GameWindow extends JFrame implements PropertyChangeListener {
+    /**
+     * Window starting width.
+     */
     public static final int SCREEN_WIDTH = 1280;
+    /**
+     * Window starting height
+     */
     public static final int SCREEN_HEIGHT = 720;
     private final GameInputHandler inputHandler;
     private ChatPanel chatPanel;
     private PlayerListPanel playerListPanel;
+
+    /**
+     * Game window constructor.
+     * @param inputHandler input handler ref
+     */
     public GameWindow(GameInputHandler inputHandler){
         // Standard JFrame stuff defining window size, position and layout
         GUIFunc.setupFrame(this, "Codex Naturalis",
                 SCREEN_WIDTH, SCREEN_HEIGHT);
         this.inputHandler = inputHandler;
         setLayout(new BorderLayout());
-
+        // Sets up the panel containing chat and players list
         JPanel leftSidePanel = setupLeftPanel();
         add(leftSidePanel, BorderLayout.WEST);
     }
 
     private JPanel setupLeftPanel() {
         chatPanel = new ChatPanel(inputHandler);
-
         inputHandler.addChatListener(chatPanel);
-        playerListPanel = new PlayerListPanel(inputHandler);
 
+        playerListPanel = new PlayerListPanel(inputHandler);
         inputHandler.addPropertyListener(chatPanel);
         inputHandler.addPropertyListener(playerListPanel);
+        // Putting chat panel and players list into a resizable split pane
+        // So that each user can choose the dimension they want
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 playerListPanel, chatPanel);
         splitPane.setOneTouchExpandable(true);
@@ -58,8 +74,10 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ChangeNotifications.ADDED_PLAYER)){
+            // When a player is added than it adds chat and
+            // hand as listeners to their event.
             ViewHand hand = (ViewHand) evt.getNewValue();
-            hand.addPropertyChangeListener(chatPanel);
+            hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, chatPanel);
             hand.addPropertyChangeListener(playerListPanel);
         }
     }

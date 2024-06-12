@@ -8,7 +8,9 @@ import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.Map;
 
-//DOCS add docs
+/**
+ * This class represents an event triggered when a card is placed on player's area.
+ */
 public class DisplayPlaceCard extends DisplayPlayerEvent {
     //TODO decide if to pass only card
     private final Map<GamePoint, ViewPlaceableCard> cardMatrix;

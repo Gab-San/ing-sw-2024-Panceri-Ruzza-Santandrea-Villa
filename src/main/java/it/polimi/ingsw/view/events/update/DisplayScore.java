@@ -1,14 +1,12 @@
 package it.polimi.ingsw.view.events.update;
 
-import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
  * This class represents score update event.
  */
-public class DisplayScore implements TUIEvent, GUIEvent {
+public class DisplayScore implements TUIEvent{
     private final String nickname;
     private final int score;
 
@@ -21,11 +19,6 @@ public class DisplayScore implements TUIEvent, GUIEvent {
     public DisplayScore(String nickname, int score) {
         this.nickname = nickname;
         this.score = score;
-    }
-
-    @Override
-    public void displayEvent(GUI gui) {
-
     }
 
     @Override

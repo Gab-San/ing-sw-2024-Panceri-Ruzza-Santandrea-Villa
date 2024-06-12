@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
- * This class implements deadlock update event.
+ * This class represents an event triggered by a player becoming deadlocked.
+ * <p>
+ *     A deadlocked player can't place cards anymore.
+ * </p>
  */
 public class DisplayDeadLock extends DisplayPlayerEvent {
     /**

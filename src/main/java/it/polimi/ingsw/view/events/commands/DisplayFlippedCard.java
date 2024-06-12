@@ -5,16 +5,20 @@ import it.polimi.ingsw.view.events.TUIEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.tui.TUI;
-//DOCS add docs
-public class DisplayFlippedCard implements TUIEvent, GUIEvent {
+
+/**
+ * This class represents a flip card event. This event is triggered by an interaction
+ * of the user with one of his owned cards.
+ */
+public class DisplayFlippedCard implements TUIEvent{
     private final ViewPlayCard flippedCard;
+
+    /**
+     * Constructs flipped card event.
+     * @param flippedCard flipped card ref
+     */
     public DisplayFlippedCard(ViewPlayCard flippedCard){
         this.flippedCard = flippedCard;
-    }
-
-    @Override
-    public void displayEvent(GUI gui) {
-
     }
 
     @Override

@@ -1,12 +1,14 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.tui.TUI;
 
 import java.util.List;
 
+/**
+ * This class represents an event triggered by free corner update.
+ */
 public class DisplayFreeCorners extends DisplayPlayerEvent {
     private final List<ViewCorner> freeCorners;
     /**

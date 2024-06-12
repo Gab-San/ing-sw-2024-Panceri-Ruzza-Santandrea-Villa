@@ -4,7 +4,10 @@ import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 import it.polimi.ingsw.view.tui.TUI;
-//DOCS add docs
+
+/**
+ * This class represents an event triggered by a starting card being given to the player.
+ */
 public class DisplayStartingCard extends DisplayPlayerEvent {
     private final ViewStartCard startingCard;
     private final boolean wasStartCardNull;

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
-//DOCS add docs
+
+/**
+ * This class represents an event triggered by a user when choosing the objective card.
+ */
 public class DisplayChosenObjective extends DisplayPlayerEvent {
     private final String choiceID;
     /**

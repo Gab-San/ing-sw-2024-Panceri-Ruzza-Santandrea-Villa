@@ -1,11 +1,11 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.events.TUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
 import it.polimi.ingsw.view.tui.TUI;
 
-//DOCS [Gamba] add docs
+/**
+ * This class represents a connection event. It notifies about the connection status of the specified player.
+ */
 public class DisplayConnection extends DisplayPlayerEvent {
 
     private final boolean isConnected;
