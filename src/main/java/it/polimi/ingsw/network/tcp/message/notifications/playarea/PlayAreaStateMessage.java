@@ -11,6 +11,10 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class implements tcp server message interface.
+ * Carries information about play area state.
+ */
 public class PlayAreaStateMessage extends PlayerMessage {
     @Serial
     private static final long serialVersionUID = 157028937190L;
@@ -18,6 +22,13 @@ public class PlayAreaStateMessage extends PlayerMessage {
     private final Map<GameResource, Integer> visibleResources;
     private final List<SerializableCorner> freeSerializableCorners;
 
+    /**
+     * Constructs the play area state message.
+     * @param nickname play area's owner id
+     * @param cardPositions list of placed cards
+     * @param visibleResources visible resources on the play area
+     * @param freeSerializableCorners list of free corners
+     */
     public PlayAreaStateMessage(String nickname, List<CardPosition> cardPositions, Map<GameResource, Integer> visibleResources, List<SerializableCorner> freeSerializableCorners) {
         super(nickname);
         this.cardPositions = cardPositions;
