@@ -308,6 +308,9 @@ public class ViewPlayArea extends JComponent {
         }
         if(i >= MAX_ITERATIONS)
             throw new IllegalArgumentException("MAX ITERATIONS REACHED");
+
+        maxZ = zLayerMatrix.values().stream()
+                .mapToInt(v->v).max().orElse(0);
     }
     /**
      * Return the zChange that fixes a position pos

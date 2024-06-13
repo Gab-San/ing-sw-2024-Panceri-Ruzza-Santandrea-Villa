@@ -63,12 +63,17 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
     }
 
     public void displayScene(GUI_Scene nextScene) {
+        GUI_Scene currentScene = (GUI_Scene) SceneManager.getInstance().getCurrentScene();
+        currentScene.close();
         add((JPanel) nextScene, BorderLayout.CENTER);
         // Sets and executes the scene
         SceneManager.getInstance().setScene(nextScene);
+        revalidate();
+        repaint();
         // This needs to be called each time a scene change
         // is issued to be sure that all the items are validated for display
         setVisible(true);
+
     }
 
     @Override

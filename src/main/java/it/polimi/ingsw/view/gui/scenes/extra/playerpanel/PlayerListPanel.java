@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class PlayerListPanel extends JPanel implements PropertyChangeListener{
+    public static int WIDTH = 300;
+    public static int HEIGHT = 200;
     private final GameInputHandler inputHandler;
     private final ButtonGroup buttonPlayerGroup;
     private final ChangeAreaAction buttonAction;
@@ -23,7 +25,7 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
     public PlayerListPanel(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
         this.areaList = new LinkedList<>();
-        setPreferredSize(new Dimension(300,200));
+        setPreferredSize(new Dimension(WIDTH,HEIGHT));
         setLayout(new GridLayout(0,1));
         buttonAction = setupButtonAction();
         ChangeAreaPanel boardArea = new ChangeAreaPanel("Board", buttonAction, SceneID.getBoardSceneID(), true);

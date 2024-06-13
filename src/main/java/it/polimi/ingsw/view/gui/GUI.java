@@ -9,7 +9,7 @@ import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
 import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
-import it.polimi.ingsw.view.gui.scenes.game.BoardScene;
+import it.polimi.ingsw.view.gui.scenes.board.BoardScene;
 import it.polimi.ingsw.view.gui.scenes.localarea.LocalPlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.opponentarea.OpponentAreaScene;
 import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
@@ -151,15 +151,7 @@ public class GUI implements View {
                 );
                 break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEFIRSTPLAYER, PLACECARD, DRAWCARD:
-                break;
-            case PLACESTARTING:
-                while(!hasPlaced){
-                    try {
-                        inputHandler.placeStartCard(false);
-                        hasPlaced =true;
-                    } catch (RuntimeException | RemoteException ignore) {}
-                }
+                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD, DRAWCARD:
                 break;
             case CHOOSECOLOR:
                 // Setting up and displaying the pop-up screen that handles user selection

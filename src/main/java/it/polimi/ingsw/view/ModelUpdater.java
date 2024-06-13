@@ -548,6 +548,8 @@ public class ModelUpdater {
                 playArea.addFreeCorners(cardFreeCorners);
             }
         }
+        playArea.calculateZLayers(); //calculate zLayers for the GUI
+
         playArea.setVisibleResources(visibleResources);
         if(board.getPlayerHand().getNickname().equals(nickname))
             board.notifyView(SceneID.getMyAreaSceneID(),

@@ -12,7 +12,7 @@ import java.util.List;
 public class OpponentAreaScene extends JPanel implements GUI_Scene, PropertyChangeListener {
     @Override
     public void display() {
-
+        setVisible(true);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class OpponentAreaScene extends JPanel implements GUI_Scene, PropertyChan
 
     @Override
     public void close() {
-
+        setVisible(false);
     }
 
     @Override

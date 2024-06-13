@@ -11,4 +11,5 @@ public class ChangeNotifications {
     public static final String VIS_RES_CHANGE = "VISIBLE_RESOURCES_CHANGE";
     public static final String FREE_CORN_CHANGE = "FREE_CORNERS_CHANGE";
     public static final String CURRENT_TURN_UPDATE = "BOARD_TURN_UPDATE";
+    public static final String SET_STARTING_CARD = "SET_STARTING_CARD";
 }
