@@ -264,4 +264,104 @@ public class ViewPlayArea extends JComponent {
     public String getOwner(){
         return owner;
     }
+
+    /**
+     * Updates the zLayerMatrix with valid values for each card. <br>
+     * All adjacent z values will be different. z1 > z2 means that card1 covers card2.
+     * @throws IllegalArgumentException if the assignment of z values can't be completed.
+     */
+    public void calculateZLayers() throws IllegalArgumentException{
+        zLayerMatrix.clear();
+        Set<CornerDirection> dirs = Arrays.stream(CornerDirection.values()).collect(Collectors.toSet());
+        for (GamePoint pos : cardMatrix.keySet()) {
+            int numFreeCorners = (int) dirs.stream()
+                    .map(dir->cardMatrix.get(pos).getCorner(dir))
+                    .filter(ViewCorner::isVisible)
+                    .count();
+            zLayerMatrix.put(pos, numFreeCorners*1000);
+        }
+        //start from a ZLayer per card = #visible corners (*1000 to leave space between layers)
+        //idea: a card with more covered corners is always under cards with less covered corners
+
+        // I use a big gap (1000) to prevent a case like these coverages: 0 -> x -> 1
+        // where x -> y  means "x covers y" with x,y integers
+        // in this case (0 < x < 1) there are would be no integer solutions for x.
+
+        // iteratively look at all cards and
+        // adjust the layers of adjacent cards with equal zLayer
+        Set<GamePoint> unassignedPos = new HashSet<>(cardMatrix.keySet());
+        Set<GamePoint> assignedPos = new HashSet<>();
+        final int MAX_ITERATIONS = 5000;
+        int i=0;
+        while(!unassignedPos.isEmpty() &&  i < MAX_ITERATIONS){
+            for (GamePoint pos : unassignedPos) {
+                int z = zLayerMatrix.get(pos);
+                try{
+                    int zChange = determineZChange(pos);
+                    if(zChange != 0)
+                        zLayerMatrix.put(pos, z + zChange);
+                    assignedPos.add(pos);
+                }catch (IllegalStateException ignored){} //due to being currently undecidable
+            }
+            if(assignedPos.isEmpty())
+                throw new IllegalArgumentException("UNDECIDABLE zLAYERING PROBLEM due to non-assignability");
+            unassignedPos.removeAll(assignedPos);
+            assignedPos.clear();
+            ++i;
+        }
+        if(i >= MAX_ITERATIONS)
+            throw new IllegalArgumentException("MAX ITERATIONS REACHED");
+    }
+    /**
+     * Return the zChange that fixes a position pos
+     * @param pos the position where the zLayer should be checked/modified
+     * @throws IllegalStateException if the z values is currently undetermined, but it may be found in future iterations.
+     * @throws IllegalArgumentException if the assignment of z values can't be completed.
+     */
+    private int determineZChange(GamePoint pos)throws IllegalStateException, IllegalArgumentException{
+        Set<CornerDirection> dirs = Arrays.stream(CornerDirection.values()).collect(Collectors.toSet());
+        ViewPlaceableCard card = cardMatrix.get(pos);
+        int zCard = zLayerMatrix.get(pos);
+
+        List<Boolean> covers = dirs.stream()
+                .filter(d -> zLayerMatrix.get(pos.move(d)) != null)
+                .filter(d -> zLayerMatrix.get(pos.move(d)) == zCard) //only dirs with equal zValue
+                .map(d -> card.getCorner(d).isVisible())
+                .distinct().toList();
+        //covers contains true/false for each adjacent card *with the same z value*
+
+        if(covers.size() > 1) { //in this case card is both covering and covered by a card with the same zLayer value
+            throw new IllegalStateException();
+        }else{
+            if(covers.isEmpty())
+                return 0; //no issues if all zLayers are different
+
+            //here I know that:
+            // -    at least one adjacent card has the same zLayer value
+            // -    all such cards either cover or are covered by this card
+            //      (thus covers contains one boolean, true if such cards are covered by this card)
+            boolean isCoveringOthers = covers.get(0);
+            List<Integer> diffs = dirs.stream()
+                    .map(d -> zLayerMatrix.get(pos.move(d)))
+                    .filter(Objects::nonNull)
+                    //if this card is covering,
+                    // then this card's zLayer must be increased
+                    .filter(i -> isCoveringOthers ? i>0 : i<0)
+                    .sorted(Integer::compare) //sort ascending
+                    .toList();
+            if(diffs.isEmpty()) //unbounded increase/decrease
+                // use a big number for the same problem described above
+                return isCoveringOthers ? 500 : -500;
+            else{
+                //diffs contains all relevant differences in zLayer
+                // (only >0 is this covers them) (only <0 if they cover this)
+                int minDiff = diffs.get(0);
+                int zChange = minDiff/2;
+                if(zChange==0)
+                    throw new IllegalArgumentException("UNDECIDABLE zLAYERING PROBLEM");
+                else
+                    return zChange;
+            }
+        }
+    }
 }
