@@ -101,6 +101,7 @@ public abstract class ViewHand extends JComponent {
      * @param startCard the starting card, can be null to set a state of "not having a starting card in hand"
      */
     protected synchronized void setStartCard(ViewStartCard startCard){
+        firePropertyChange(ChangeNotifications.SET_STARTING_CARD, this.startCard, startCard);
         this.startCard = startCard;
     }
 
@@ -108,6 +109,7 @@ public abstract class ViewHand extends JComponent {
      * Sets a state of "not having a starting card in hand"
      */
     public synchronized void clearStartCard(){
+        firePropertyChange(ChangeNotifications.CLEAR_STARTING_CARD, startCard, null);
         startCard = null;
     }
 
@@ -122,7 +124,7 @@ public abstract class ViewHand extends JComponent {
     public synchronized void setCards(List<ViewPlayCard> cards){
         this.cards.clear();
         if(cards == null) return;
-        this.cards.addAll(cards);
+        cards.forEach(this::addCard);
     }
 
     /**
@@ -132,6 +134,7 @@ public abstract class ViewHand extends JComponent {
     public synchronized void addCard(ViewPlayCard card){
         if(card == null) return;
         this.cards.add(card);
+        firePropertyChange(ChangeNotifications.ADD_CARD_HAND, null, card);
     }
     /**
      * Removes a playCard from the hand.
@@ -140,6 +143,7 @@ public abstract class ViewHand extends JComponent {
     public synchronized void removeCard(ViewPlayCard card){
         if(card == null) return;
         this.cards.remove(card);
+        firePropertyChange(ChangeNotifications.REMOVE_CARD_HAND, card, null);
     }
     /**
      * Sets the objectiveCards in hand to the given list of objectiveCards. <br>
@@ -212,6 +216,7 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized boolean setTurn(int turn) {
         boolean changed = this.turn != turn;
+        firePropertyChange(ChangeNotifications.PLAYER_TURN_UPDATE, this.turn, turn);
         this.turn = turn;
         return changed;
     }

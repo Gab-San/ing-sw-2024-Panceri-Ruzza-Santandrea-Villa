@@ -36,7 +36,7 @@ public class PrintPlayAreaTest {
         printPlayArea = new PrintPlayArea(playArea);
 
         ViewStartCard startCard = getRandomStartingCard();
-        playArea.placeStarting(startCard);
+        playArea.placeCard(new GamePoint(0,0), startCard);
     }
     void printOnCenter(GamePoint center){
         System.out.println("Printing PlayArea centered on: (" + center.row() + ", " + center.col() + ")");

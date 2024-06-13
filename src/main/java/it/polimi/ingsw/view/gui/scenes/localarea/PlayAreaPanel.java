@@ -1,36 +1,32 @@
 package it.polimi.ingsw.view.gui.scenes.localarea;
 
+import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GameInputHandler;
+import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class PlayAreaPanel extends JPanel{
+public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
     private static final int AREA_WIDTH = 16620;
-    public static final int CARD_WIDTH = AREA_WIDTH/80; //80 cards wide
     private static final int AREA_HEIGHT = 11120;
-    public static final int CARD_HEIGHT = AREA_HEIGHT/80; //80 cards high
+    private static final int CENTER_X = AREA_WIDTH/2;
+    private static final int CENTER_Y = AREA_HEIGHT/2;
     private final SpringLayout layout;
     private CardListener cardListener;
-    public PlayAreaPanel(GameInputHandler inputHandler){
+    public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setBackground(new Color(0xc76f30));
-
+        //FIXME USE LAYERED PANE
         layout = new SpringLayout();
         PlaceHolder placeHolder = setupPlaceHolder();
-        placeHolder.addMouseListener(
-                new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        System.out.println("PLACING CARD!");
-                        cardListener.setClickedCard(null, placeHolder.getX(), placeHolder.getY(), null);
-                    }
-                }
-        );
 
         setLayout(layout);
         add(placeHolder);
@@ -38,20 +34,31 @@ public class PlayAreaPanel extends JPanel{
 
     private PlaceHolder setupPlaceHolder() {
         PlaceHolder placeHolder = new PlaceHolder();
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placeHolder, this.getWidth()/2,
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placeHolder, CENTER_X,
                 SpringLayout.WEST, this);
-        layout.putConstraint(SpringLayout.VERTICAL_CENTER, placeHolder, this.getHeight()/2,
+        layout.putConstraint(SpringLayout.VERTICAL_CENTER, placeHolder, CENTER_Y,
                 SpringLayout.NORTH, this);
         layout.putConstraint(SpringLayout.EAST, placeHolder,
-                this.getWidth()/2 + placeHolder.getWidth()/2, SpringLayout.WEST, this);
+                CENTER_X + placeHolder.getWidth()/2, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.SOUTH, placeHolder,
-            this.getHeight()/2 + placeHolder.getHeight()/2, SpringLayout.NORTH, this);
+            CENTER_Y + placeHolder.getHeight()/2, SpringLayout.NORTH, this);
         placeHolder.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 PlaceHolder p = (PlaceHolder) e.getSource();
                 System.out.println(p);
-
+                try {
+                    cardListener.setClickedCard(null, 0, 0, null);
+                    remove(p);
+                } catch (IllegalStateException exception){
+                    //TODO display error
+                }
+                SwingUtilities.invokeLater(
+                        () -> {
+                            revalidate();
+                            repaint();
+                        }
+                );
             }
         });
         return placeHolder;
@@ -80,5 +87,45 @@ public class PlayAreaPanel extends JPanel{
 
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        switch (evt.getPropertyName()){
+            case ChangeNotifications.PLACED_CARD:
+                assert evt.getNewValue() instanceof ViewPlaceableCard;
+                ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+                setCardPosition(placedCard);
+                regeneratePlaceHolders(placedCard);
+
+                SwingUtilities.invokeLater(
+                        () -> {
+                            placedCard.setBorder(BorderFactory.createEmptyBorder());
+                            add(placedCard);
+                            revalidate();
+                            repaint();
+                        }
+                );
+        }
+
+    }
+
+    private void regeneratePlaceHolders(ViewPlaceableCard placedCard) {
+        //TODO Add placeholders
+    }
+
+    private void setCardPosition(ViewPlaceableCard placedCard) {
+        if(placedCard.getPosition().equals(new GamePoint(0,0))) {
+            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placedCard, CENTER_X,
+                    SpringLayout.WEST, this);
+            layout.putConstraint(SpringLayout.VERTICAL_CENTER, placedCard, CENTER_Y,
+                    SpringLayout.NORTH, this);
+            layout.putConstraint(SpringLayout.EAST, placedCard,
+                    CENTER_X + ViewCard.getScaledWidth() / 2, SpringLayout.WEST, this);
+            layout.putConstraint(SpringLayout.SOUTH, placedCard,
+                    CENTER_Y + ViewCard.getScaledHeight() / 2, SpringLayout.NORTH, this);
+            return;
+        }
+
     }
 }

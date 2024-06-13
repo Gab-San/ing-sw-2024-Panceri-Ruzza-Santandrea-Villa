@@ -113,11 +113,13 @@ public class ViewPlayerHand extends ViewHand {
      */
     @Override
     public void setStartCard(ViewStartCard startCard){
-        if(startCard != null) startCard.turnFaceUp();
+        if(startCard == null){
+            super.clearStartCard();
+            return;
+        }
+        startCard.turnFaceUp();
         notifyView(SceneID.getMyAreaSceneID(),
                 new DisplayStartingCard(nickname, true, this.startCard == null, startCard));
-        System.err.println("STARTING CARD: " + this.startCard + " " + startCard);
-        firePropertyChange(ChangeNotifications.SET_STARTING_CARD, this.startCard, startCard);
         super.setStartCard(startCard);
     }
 

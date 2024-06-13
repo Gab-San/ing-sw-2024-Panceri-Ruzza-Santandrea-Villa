@@ -8,8 +8,8 @@
         {"direction": "BL", "frontResource": "B", "backResource": "B"},
         {"direction": "BR", "frontResource": "N", "backResource": "W"}
       ],
-      "frontImageFileName": "img_S0_front.png",
-      "backImageFileName": "img_S0_back.png"
+      "frontImageFileName": "starting/img_S0_front.png",
+      "backImageFileName": "starting/img_S0_back.png"
     },
     {
       "cardId": "S1",
@@ -20,8 +20,8 @@
         {"direction": "BL", "frontResource": "N", "backResource": "M"},
         {"direction": "BR", "frontResource": "M", "backResource": "B"}
       ],
-      "frontImageFileName": "img_S1_front.png",
-      "backImageFileName": "img_S1_back.png"
+      "frontImageFileName": "starting/img_S1_front.png",
+      "backImageFileName": "starting/img_S1_back.png"
     },
     {
       "cardId": "S2",
@@ -32,8 +32,8 @@
         {"direction": "BL", "frontResource": "N", "backResource": "M"},
         {"direction": "BR", "frontResource": "N", "backResource": "L"}
       ],
-      "frontImageFileName": "img_S2_front.png",
-      "backImageFileName": "img_S2_back.png"
+      "frontImageFileName": "starting/img_S2_front.png",
+      "backImageFileName": "starting/img_S2_back.png"
     },
     {
       "cardId": "S3",
@@ -44,8 +44,8 @@
         {"direction": "BL", "frontResource": "N", "backResource": "W"},
         {"direction": "BR", "frontResource": "N", "backResource": "M"}
       ],
-      "frontImageFileName": "img_S3_front.png",
-      "backImageFileName": "img_S3_back.png"
+      "frontImageFileName": "starting/img_S3_front.png",
+      "backImageFileName": "starting/img_S3_back.png"
     },
     {
       "cardId": "S4",
@@ -56,8 +56,8 @@
         {"direction": "BL", "frontResource": "F", "backResource": "L"},
         {"direction": "BR", "frontResource": "F", "backResource": "W"}
       ],
-      "frontImageFileName": "img_S4_front.png",
-      "backImageFileName": "img_S4_back.png"
+      "frontImageFileName": "starting/img_S4_front.png",
+      "backImageFileName": "starting/img_S4_back.png"
     },
     {
       "cardId": "S5",
@@ -68,7 +68,7 @@
         {"direction": "BL", "frontResource": "F", "backResource": "L"},
         {"direction": "BR", "frontResource": "F", "backResource": "B"}
       ],
-      "frontImageFileName": "img_S5_front.png",
-      "backImageFileName": "img_S5_back.png"
+      "frontImageFileName": "starting/img_S5_front.png",
+      "backImageFileName": "starting/img_S5_back.png"
     }
 ]

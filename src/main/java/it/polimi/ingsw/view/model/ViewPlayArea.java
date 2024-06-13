@@ -49,18 +49,6 @@ public class ViewPlayArea extends JComponent {
         this.zLayerMatrix = Collections.synchronizedMap(new Hashtable<>());
         maxZ = 0;
     }
-    /**
-     * Places a card at position (0,0), handling freeCorners list <br>
-     * @param startCard starting card to place
-     */
-    public void placeStarting(ViewStartCard startCard){
-        GamePoint zero = new GamePoint(0,0);
-        setCard(zero, startCard);
-        for(CornerDirection dir : CornerDirection.values()) {
-            if(startCard.getCorner(dir).getResource() != FILLED)
-                freeCorners.add(startCard.getCorner(dir));
-        }
-    }
 
     /**
      * Places a card at position, covering corners and handling freeCorners list <br>
@@ -109,6 +97,19 @@ public class ViewPlayArea extends JComponent {
         else
             board.notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlaceCard(owner, true, cardMatrix));
+
+    }
+    /**
+     * Places a card at position bypassing all checks.
+     * @param position position to place the card on
+     * @param card card to place
+     */
+    public synchronized void setCard(GamePoint position, ViewPlaceableCard card) {
+        //this method is synchronized to prevent conflicts when reading/writing maxZ
+        cardMatrix.put(position, card);
+        card.setPosition(position);
+        zLayerMatrix.put(position, maxZ++);
+        firePropertyChange(ChangeNotifications.PLACED_CARD, null, card);
     }
 
     /**
@@ -218,18 +219,6 @@ public class ViewPlayArea extends JComponent {
     }
 
     /**
-     * Places a card at position bypassing all checks.
-     * @param position position to place the card on
-     * @param card card to place
-     */
-    public synchronized void setCard(GamePoint position, ViewPlaceableCard card) {
-        cardMatrix.put(position, card);
-        card.setPosition(position);
-        zLayerMatrix.put(position, maxZ++);
-        //this method is synchronized to prevent conflicts when reading/writing maxZ
-    }
-
-    /**
      * Resets this playArea's information on placed cards.
      */
     public void clearCardMatrix() {
@@ -277,6 +266,7 @@ public class ViewPlayArea extends JComponent {
     public void calculateZLayers() throws IllegalArgumentException{
         zLayerMatrix.clear();
         for (GamePoint pos : cardMatrix.keySet()) {
+            //TODO: fix this to scale on size of cardMatrix
             zLayerMatrix.put(pos, 3000);
         }
 
@@ -322,6 +312,7 @@ public class ViewPlayArea extends JComponent {
         ViewPlaceableCard card = cardMatrix.get(pos);
         int zCard = zLayerMatrix.get(pos);
         int zChange;
+        //TODO: fix this to scale on size of cardMatrix
         final int UNBOUND_BIG_CHANGE = 5000;
 
         List<Boolean> covers = dirs.stream()

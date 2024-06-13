@@ -208,23 +208,14 @@ public class GUI implements View {
         SwingUtilities.invokeLater(
                 () -> currentScene.displayError("Disconnecting for being idle!")
         );
-        synchronized (inputQueue){
-            try {
-                inputQueue.put("IDLE_DISCONNECTION");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        inputQueue.add("IDLE_DISCONNECTION");
     }
 
     /**
      * Notifies of a network error occurring and closes the application.
      */
     public void notifyServerFailure() {
-        synchronized (inputQueue) {
-            inputQueue.add("SERVER_FAILURE");
-            inputQueue.notifyAll();
-        }
+        inputQueue.add("SERVER_FAILURE");
     }
 //endregion
 
@@ -241,16 +232,14 @@ public class GUI implements View {
         try {
             while (true) {
                 String message;
-                synchronized (inputQueue) {
-                     message = inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
-                }
+                message = inputQueue.poll(SLEEP_MILLIS, TimeUnit.MILLISECONDS);
                 if(message != null) {
-                    // all of these will be error messages
-                    gameWindow.dispose();
                     switch (message) {
                         case "SERVER_FAILURE":
+                            gameWindow.dispose();
                             throw new RemoteException();
                         case "IDLE_DISCONNECTION":
+                            gameWindow.dispose();
                             throw new TimeoutException();
                     }
                 }
@@ -355,26 +344,37 @@ public class GUI implements View {
      * @param isLocalPlayer true if it is the local player, false otherwise
      */
     public void addPlayerScene(String nickname, boolean isLocalPlayer) {
+        // Must connect updates to my scene area after
+        // the player has connected
         if(isLocalPlayer){
             SceneID localID = SceneID.getMyAreaSceneID();
             LocalPlayerAreaScene localScene = (LocalPlayerAreaScene) SceneManager.getInstance().getScene(localID);
             JComponent localHand = inputHandler.getPlayerHand(nickname);
             // Adds local scene as listener to the local player's hand
+            synchronized (observableComponents) {
+                if (observableComponents.contains(localHand)) {
+                    return;
+                }
+            }
             localHand.addPropertyChangeListener(localScene);
-//            inputHandler.getPlayArea(nickname)
-//                    .addPropertyChangeListener(localScene);
             addToObservableComponents(localHand);
             return;
         }
-        //TODO make opponent area scene
+
+        // Creating opposing player's area
+        // the player has connected
         OpponentAreaScene opponentScene = new OpponentAreaScene();
         SceneManager.getInstance().loadScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
         // Adds opponent scene as listener for opponent's hand
-        JComponent opponentArea = inputHandler.getPlayerHand(nickname);
-        opponentArea
-                .addPropertyChangeListener(opponentScene);
+        JComponent opponentHand = inputHandler.getPlayerHand(nickname);
+        synchronized (observableComponents) {
+            if (observableComponents.contains(opponentHand)) {
+                return;
+            }
+        }
+        opponentHand.addPropertyChangeListener(opponentScene);
 //        inputHandler.getPlayArea(nickname).addPropertyChangeListener();
-        addToObservableComponents(opponentArea);
+        addToObservableComponents(opponentHand);
     }
 
     /**
@@ -384,6 +384,10 @@ public class GUI implements View {
     public void removePlayerScene(String nickname) {
         SceneID sceneID = SceneID.getOpponentAreaSceneID(nickname);
         OpponentAreaScene opponentAreaScene = (OpponentAreaScene) SceneManager.getInstance().getScene(sceneID);
+        if(opponentAreaScene == null){
+            System.out.println("THIS CALL SHOULD BE ERRANEOUS!");
+            return;
+        }
         GUI_Scene currentScene = (GUI_Scene) SceneManager.getInstance().getCurrentScene();
         // if the user is on the opponent area scene than
         // it gets moved to the local player's area scene

@@ -9,8 +9,8 @@
           {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R0_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R0_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R1",
@@ -22,8 +22,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R1_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R1_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R2",
@@ -35,8 +35,8 @@
         {"direction": "BR", "frontResource": "M", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R2_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R2_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R3",
@@ -48,8 +48,8 @@
         {"direction": "BR", "frontResource": "M", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R3_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R3_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R4",
@@ -61,8 +61,8 @@
         {"direction": "BR", "frontResource": "M", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R4_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R4_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R5",
@@ -74,8 +74,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R5_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R5_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R6",
@@ -87,8 +87,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R6_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R6_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R7",
@@ -100,8 +100,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R7_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R7_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R8",
@@ -113,8 +113,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R8_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R8_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R9",
@@ -126,8 +126,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_R9_front.png",
-      "backImageFileName": "img_R0_back.png"
+      "frontImageFileName": "res/img_R9_front.png",
+      "backImageFileName": "res/img_R0_back.png"
     },
     {
       "cardId": "R10",
@@ -139,8 +139,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R10_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R10_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R11",
@@ -152,8 +152,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R11_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R11_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R12",
@@ -165,8 +165,8 @@
         {"direction": "BR", "frontResource": "L", "backResource": "N"}
         ],
       "backResource": "L",
-      "frontImageFileName": "img_R12_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R12_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R13",
@@ -178,8 +178,8 @@
         {"direction": "BR", "frontResource": "L", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R13_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R13_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R14",
@@ -191,8 +191,8 @@
         {"direction": "BR", "frontResource": "L", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R14_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R14_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R15",
@@ -204,8 +204,8 @@
           {"direction": "BR", "frontResource": "P", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R15_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R15_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R16",
@@ -217,8 +217,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R16_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R16_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R17",
@@ -230,8 +230,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R17_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R17_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R18",
@@ -243,8 +243,8 @@
         {"direction": "BR", "frontResource": "L", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R18_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R18_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R19",
@@ -256,8 +256,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_R19_front.png",
-      "backImageFileName": "img_R10_back.png"
+      "frontImageFileName": "res/img_R19_front.png",
+      "backImageFileName": "res/img_R10_back.png"
     },
     {
       "cardId": "R20",
@@ -269,8 +269,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R20_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R20_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R21",
@@ -282,8 +282,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R21_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R21_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R22",
@@ -295,8 +295,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ], 
       "backResource": "W",
-      "frontImageFileName": "img_R22_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R22_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R23",
@@ -308,8 +308,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R23_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R23_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R24",
@@ -321,8 +321,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R24_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R24_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R25",
@@ -334,8 +334,8 @@
         {"direction": "BR", "frontResource": "S", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R25_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R25_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R26",
@@ -347,8 +347,8 @@
         {"direction": "BR", "frontResource": "M", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R26_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R26_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R27",
@@ -360,8 +360,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R27_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R27_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R28",
@@ -373,8 +373,8 @@
         {"direction": "BR", "frontResource": "W", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R28_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R28_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R29",
@@ -386,8 +386,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_R29_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R29_front.png",
+      "backImageFileName": "res/img_R20_back.png"
     },
     {
       "cardId": "R30",
@@ -399,8 +399,8 @@
           {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R30_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R30_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R31",
@@ -412,8 +412,8 @@
           {"direction": "BR", "frontResource": "B", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R31_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R31_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R32",
@@ -425,8 +425,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R32_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R32_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R33",
@@ -438,8 +438,8 @@
         {"direction": "BR", "frontResource": "B", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R33_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R33_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R34",
@@ -451,8 +451,8 @@
         {"direction": "BR", "frontResource": "B", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R34_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R34_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R35",
@@ -464,8 +464,8 @@
         {"direction": "BR", "frontResource": "M", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R35_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R35_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R36",
@@ -477,8 +477,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R36_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R36_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R37",
@@ -490,8 +490,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R37_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R37_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R38",
@@ -503,8 +503,8 @@
         {"direction": "BR", "frontResource": "B", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R38_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R38_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     },
     {
       "cardId": "R39",
@@ -516,7 +516,7 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_R39_front.png",
-      "backImageFileName": "img_R20_back.png"
+      "frontImageFileName": "res/img_R39_front.png",
+      "backImageFileName": "res/img_R30_back.png"
     }
 ]

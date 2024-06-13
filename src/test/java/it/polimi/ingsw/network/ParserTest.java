@@ -364,7 +364,7 @@ class ParserTest {
         ViewStartCard startCard = new ViewStartCard("S0", "", "",
                 emptyCorners, new LinkedList<>());
         ViewPlayArea playArea = board.getPlayerArea(board.getPlayerHand().getNickname());
-        playArea.placeStarting(startCard);
+        playArea.placeCard(new GamePoint(0,0),startCard);
 
         ViewGoldCard cardInHand = ViewCardGenerator.getRandomGoldCard();
         board.getPlayerHand().addCard(cardInHand);

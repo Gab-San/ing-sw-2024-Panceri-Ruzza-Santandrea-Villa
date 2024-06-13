@@ -48,7 +48,7 @@ public class ViewBoardGenerator {
         hand.setColor(getRandomPlayerColor());
     }
     public static void fillPlayAreaRandomly(ViewPlayArea playArea){
-        playArea.placeStarting(getRandomStartingCard());
+        playArea.placeCard(new GamePoint(0,0), getRandomStartingCard());
         List<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(30, false));
         for(ViewPlaceableCard card : cards){
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());

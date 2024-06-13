@@ -182,6 +182,11 @@ public class Client {
             quitError();
             return; //removes the connectionTech != null warning
         }
+        if(port >= 65535){
+            System.err.println("Server port is invalid! Can't be greater than 65535");
+            quitError();
+            return; //removes the connectionTech != null warning
+        }
         if(serverIP == null) //if no IP was found among args
             serverIP = serverHostname;
 

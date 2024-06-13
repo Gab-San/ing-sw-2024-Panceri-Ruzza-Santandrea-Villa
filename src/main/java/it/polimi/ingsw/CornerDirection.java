@@ -1,11 +1,19 @@
 package it.polimi.ingsw;
 
+import java.util.Comparator;
+
 /**
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)
  */
 public enum CornerDirection {
-    TL, TR,
-    BL, BR;
+    TL(0), TR(1),
+    BL(2), BR(3);
+
+    private final int index;
+    CornerDirection(int index){
+        this.index = index;
+    }
+    public int getIndex(){ return index; }
 
     /**
      * @return the direction opposite to this <br> TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR
@@ -34,4 +42,9 @@ public enum CornerDirection {
             default -> throw new IllegalArgumentException("Invalid direction name");
         };
     }
+
+    public static Comparator<CornerDirection> getComparator(){
+        return Comparator.comparingInt(CornerDirection::getIndex);
+    }
+
 }

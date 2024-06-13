@@ -53,7 +53,8 @@ public class GameInputHandler implements CommandPassthrough{
     }
 
     @Override
-    public void placeStartCard(boolean placeOnFront) throws RemoteException {
+    public void placeStartCard(boolean placeOnFront) throws RemoteException, IllegalStateException {
+        controller.validatePlaceStartCard();
         serverProxy.placeStartCard(placeOnFront);
     }
 

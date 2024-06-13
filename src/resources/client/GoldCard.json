@@ -10,8 +10,8 @@
         {"direction": "BR", "frontResource": "Q", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G0_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G0_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G1",
@@ -24,8 +24,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G1_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G1_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G2",
@@ -38,8 +38,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G2_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G2_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G3",
@@ -52,8 +52,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G3_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G3_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G4",
@@ -66,8 +66,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G4_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G4_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G5",
@@ -80,8 +80,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G5_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G5_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G6",
@@ -94,8 +94,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G6_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G6_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G7",
@@ -108,8 +108,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G7_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G7_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G8",
@@ -122,8 +122,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G8_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G8_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G9",
@@ -137,8 +137,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "M",
-      "frontImageFileName": "img_G9_front.png",
-      "backImageFileName": "img_G0_back.png"
+      "frontImageFileName": "gold/img_G9_front.png",
+      "backImageFileName": "gold/img_G0_back.png"
     },
     {
       "cardId": "G10",
@@ -151,8 +151,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G10_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G10_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G11",
@@ -165,8 +165,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G11_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G11_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G12",
@@ -179,8 +179,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G12_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G12_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G13",
@@ -193,8 +193,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G13_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G13_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "type": "GoldCard",
@@ -208,8 +208,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G14_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G14_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G15",
@@ -222,8 +222,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G15_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G15_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G16",
@@ -236,8 +236,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G16_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G16_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G17",
@@ -250,8 +250,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G17_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G17_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G18",
@@ -264,8 +264,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G18_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G18_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G19",
@@ -278,8 +278,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "L",
-      "frontImageFileName": "img_G19_front.png",
-      "backImageFileName": "img_G10_back.png"
+      "frontImageFileName": "gold/img_G19_front.png",
+      "backImageFileName": "gold/img_G10_back.png"
     },
     {
       "cardId": "G20",
@@ -292,8 +292,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G20_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G20_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G21",
@@ -306,8 +306,8 @@
         {"direction": "BR", "frontResource": "S", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G21_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G21_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G22",
@@ -320,8 +320,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G22_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G22_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G23",
@@ -334,8 +334,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G23_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G23_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G24",
@@ -348,8 +348,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G24_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G24_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G25",
@@ -362,8 +362,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G25_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G25_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G26",
@@ -376,8 +376,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G26_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G26_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G27",
@@ -390,8 +390,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G27_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G27_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G28",
@@ -404,8 +404,8 @@
         {"direction": "BR", "frontResource": "Q", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G28_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G28_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G29",
@@ -418,8 +418,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "W",
-      "frontImageFileName": "img_G29_front.png",
-      "backImageFileName": "img_G20_back.png"
+      "frontImageFileName": "gold/img_G29_front.png",
+      "backImageFileName": "gold/img_G20_back.png"
     },
     {
       "cardId": "G30",
@@ -432,8 +432,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G30_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G30_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G31",
@@ -446,8 +446,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G31_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G31_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G32",
@@ -460,8 +460,8 @@
         {"direction": "BR", "frontResource": "P", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G32_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G32_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G33",
@@ -474,8 +474,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G33_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G33_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G34",
@@ -488,8 +488,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G34_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G34_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G35",
@@ -502,8 +502,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G35_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G35_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G36",
@@ -516,8 +516,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G36_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G36_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G37",
@@ -530,8 +530,8 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G37_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G37_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G38",
@@ -544,8 +544,8 @@
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G38_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G38_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     },
     {
       "cardId": "G39",
@@ -558,7 +558,7 @@
         {"direction": "BR", "frontResource": "F", "backResource": "N"}
       ],
       "backResource": "B",
-      "frontImageFileName": "img_G39_front.png",
-      "backImageFileName": "img_G30_back.png"
+      "frontImageFileName": "gold/img_G39_front.png",
+      "backImageFileName": "gold/img_G30_back.png"
     }
 ]

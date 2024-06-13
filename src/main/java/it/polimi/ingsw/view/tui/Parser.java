@@ -3,15 +3,10 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
-import it.polimi.ingsw.network.rmi.RMIClient;
-import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.ViewController;
-import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
-import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class Parser {
 
-    private CommandPassthrough virtualServer;
+    private final CommandPassthrough virtualServer;
     private final ViewController viewController;
 
     /**
@@ -76,55 +71,11 @@ public class Parser {
             case "set", "players":
                 parseSetNumPlayers(cmdArgs);
                 break;
-//            case "reconnect":
-//                parseReconnectCmd(cmdArgs);
-//                break;
             default:
                 throw new IllegalArgumentException("Command not recognised");
         }
 
     }
-
-//region RECONNECT (unused)
-//    //FIXME: as per current View implementation, this is useless (may be useful for GUI or for future reworks though?)
-//    private void parseReconnectCmd(List<String> cmdArgs) throws IllegalArgumentException {
-//        if (cmdArgs.size() < 3) {
-//            throw new IllegalArgumentException("Too few arguments.\n" +
-//                    "Format as such: reconnect TCP/RMI hostname port");
-//        }
-//
-//        String hostAddr = cmdArgs.get(1);
-//        int port;
-//        try {
-//            port = Integer.parseInt(cmdArgs.get(2));
-//        } catch (NumberFormatException formatException) {
-//            throw new IllegalArgumentException(formatException.getMessage());
-//        }
-//
-//
-//        switch (cmdArgs.get(0).toLowerCase()) {
-//            case "tcp":
-//            case "socket":
-//                try {
-//                    TCPClientSocket socket = new TCPClientSocket(hostAddr, port);
-//                    virtualServer = socket.getProxy();
-//                    break;
-//                }  catch (IOException e) {
-//                    throw new IllegalArgumentException(e.getMessage());
-//                }
-//            case "rmi":
-//                try {
-//                    RMIClient rmiClient = new RMIClient(hostAddr, port);
-//                    virtualServer = rmiClient.getProxy();
-//                    break;
-//                } catch (RemoteException | NotBoundException e) {
-//                    throw new IllegalArgumentException(e.getMessage());
-//                }
-//            default:
-//                throw new IllegalArgumentException("Command not recognised");
-//        }
-//    }
-//endregion
 
     /**
      * Parses set < num players > command and calls the related function on the server proxy.

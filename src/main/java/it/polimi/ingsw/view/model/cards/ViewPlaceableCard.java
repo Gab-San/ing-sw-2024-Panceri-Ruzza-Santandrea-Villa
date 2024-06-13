@@ -4,12 +4,16 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.GamePoint;
 
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
+import java.util.List;
 
 /**
  * The base class of PlaceableCards in the ViewModel
  */
-public abstract class ViewPlaceableCard extends ViewCard{
+public abstract class ViewPlaceableCard extends ViewCard implements MouseListener{
     /**
      * Map associating a direction with this card's corner in that direction
      */
@@ -39,6 +43,7 @@ public abstract class ViewPlaceableCard extends ViewCard{
 
         this.corners = Collections.unmodifiableMap(thisCorners);
         this.position = null;
+        setupViewCard();
     }
     /**
      * Construct the placeable card as a copy of another placeable card.
@@ -52,6 +57,7 @@ public abstract class ViewPlaceableCard extends ViewCard{
         );
         thisCorners.values().forEach(c -> c.setCardRef(this));
         this.corners = Collections.unmodifiableMap(thisCorners);
+        setupViewCard();
     }
 
     /**
@@ -77,8 +83,48 @@ public abstract class ViewPlaceableCard extends ViewCard{
 
     public synchronized void setPosition(GamePoint position) {
         this.position = position;
+        enableCorners();
+        removeMouseListener(this);
     }
+
+    private void enableCorners(){
+        for(ViewCorner corn: corners.values()){
+            corn.setEnabled(true);
+            corn.addMouseListener(this);
+        }
+    }
+
     public synchronized GamePoint getPosition(){
         return position;
+    }
+
+    private void setupViewCard(){
+        setLayout(new GridLayout(2,2,100,100));
+        for(ViewCorner corner: corners.values()){
+            corner.setEnabled(false);
+            corner.setFocusable(false);
+        }
+        corners.keySet().stream()
+                .sorted(CornerDirection.getComparator())
+                .forEach((dir) -> add(corners.get(dir)));
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("SELECTED: " + ((ViewCorner) e.getSource()).getDirection());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

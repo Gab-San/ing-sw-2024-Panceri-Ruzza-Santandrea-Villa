@@ -3,11 +3,13 @@ package it.polimi.ingsw.view.model.cards;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 
+import javax.swing.*;
+
 /**
  * A card's corner. Should always be associated with a card,
  * except during card construction.
  */
-public class ViewCorner {
+public class ViewCorner extends JComponent {
     private final GameResource frontResource;
     private final GameResource backResource;
     /**
