@@ -91,4 +91,9 @@ public record GamePoint(int row, int col) {
         }
         else return -1;
     }
+
+    @Override
+    public String toString(){
+        return "(" + col + "," + row + ")";
+    }
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,6 +17,9 @@ import java.util.Random;
 
 import static it.polimi.ingsw.CornerDirection.*;
 import static it.polimi.ingsw.view.ViewCardGenerator.*;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RED_TEXT;
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PrintPlayAreaTest {
     PrintPlayArea printPlayArea;
@@ -39,6 +43,7 @@ public class PrintPlayAreaTest {
         printPlayArea.printPlayArea(center);
     }
     void printPlayArea(GamePoint...centers){
+        playArea.calculateZLayers();
         for(GamePoint c : centers){
             printOnCenter(c);
             System.out.println("\n\n"); //spacing
@@ -81,17 +86,45 @@ public class PrintPlayAreaTest {
     }
     @Test
     void testPrintPlayArea_mixedCards(){
-        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(40, false));
+        PlaceOnPlayArea_mixedCards(40);
+        standardPrintPlayArea();
+    }
+    private void PlaceOnPlayArea_mixedCards(int cardNum){
+        Queue<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(cardNum, false));
 
         for(ViewPlaceableCard card : cards){
+            if(playArea.getFreeCorners().isEmpty()){
+                System.out.println("DEADLOCK!");
+                System.out.println("Stopping at "+ playArea.getCardMatrix().size() +" cards!");
+                return;
+            }
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
             GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
-
-        standardPrintPlayArea();
     }
+    @ParameterizedTest
+    @ValueSource(ints={0,1,5,10,20,40,50}) //there are at most 80 cards in the deck
+    void zLayerValidationTest(int i){
+        try {
+            System.out.println("PRINTING " + i);
+            PlaceOnPlayArea_mixedCards(i);
+            printPlayArea(new GamePoint(0,0));
+            playArea.calculateZLayers();
+        }catch (IllegalArgumentException e){
+            System.out.println("\n\n" + RED_TEXT + e.getMessage() + RESET);
+            fail(RED_TEXT + "FAILED AT " + i + RESET);
+        }
+    }
+//    @RepeatedTest(10000)
+//    void looped_ZLayer_validation(){
+//        int[] tries = new int[]{20, 40, 80, 120};
+//        for (int i : tries){
+//            setUp();
+//            zLayerValidationTest(i);
+//        }
+//    }
 
     @ParameterizedTest
     @ValueSource(booleans = {true,false})
