@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.tcp.client;
 import it.polimi.ingsw.network.CentralServer;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,17 +17,22 @@ import java.util.concurrent.CountDownLatch;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PingTest {
+    private TCPServerSocket server;
+
+    @BeforeEach
+    void openServer() throws IOException, NoSuchFieldException, IllegalAccessException {
+        Field singleton = CentralServer.class.getDeclaredField("singleton");
+        singleton.setAccessible(true);
+        singleton.set(null, null);
+        server = new TCPServerSocket(8888);
+    }
+    @AfterEach
+    void closeServer(){
+        server.closeServer();
+    }
 
     @Test
     void pingTest() throws RemoteException, InterruptedException {
-        TCPServerSocket server;
-        try {
-            server = new TCPServerSocket(8888);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
         TCPClientSocket client;
         try {
             client = new TCPClientSocket("localhost", 8888);
@@ -47,15 +54,10 @@ public class PingTest {
         latch.await();
         timer.cancel();
         client.closeSocket();
-        server.closeServer();
     }
 
     @Test
-    void timeoutPingTest() throws IOException, InterruptedException, NoSuchFieldException, IllegalAccessException {
-        Field singleton = CentralServer.class.getDeclaredField("singleton");
-        singleton.setAccessible(true);
-        singleton.set(null, null);
-        new TCPServerSocket(8888);
+    void timeoutPingTest() throws IOException, InterruptedException{
         TCPClientSocket clientSocket = new TCPClientSocket(8888);
         clientSocket.getProxy().connect("GIANGIANNI");
         clientSocket.closeSocket();

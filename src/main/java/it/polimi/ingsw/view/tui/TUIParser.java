@@ -77,6 +77,10 @@ public class TUIParser {
         if(command.toLowerCase().matches("quit|disconnect")){
             throw new DisconnectException();
         }
+        if(keyCommand.toLowerCase().matches("restart") && board.getGamePhase() == GamePhase.SHOWWIN){
+            SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
+            //go back to myAreaScene on game restart
+        }
     }
 
     /**

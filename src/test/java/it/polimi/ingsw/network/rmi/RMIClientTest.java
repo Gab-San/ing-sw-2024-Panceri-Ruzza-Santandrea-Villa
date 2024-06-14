@@ -106,10 +106,11 @@ class RMIClientTest {
     }
 
     @Test
-    void placeStartCard() throws NotBoundException, RemoteException {
+    void placeStartCard() throws NotBoundException, RemoteException, InterruptedException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Ale");
         client.getProxy().setNumOfPlayers(2);
+        Thread.sleep(500);
         RMIClient cli2 = new RMIClient(1234);
         cli2.getProxy().connect("Gamba");
         client.getProxy().placeStartCard(true);
@@ -117,10 +118,11 @@ class RMIClientTest {
     }
 
     @Test
-    void chooseColor() throws NotBoundException, RemoteException {
+    void chooseColor() throws NotBoundException, RemoteException, InterruptedException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Ale");
         client.getProxy().setNumOfPlayers(2);
+        Thread.sleep(500);
         RMIClient cli2 = new RMIClient(1234);
         cli2.getProxy().connect("Gamba");
         client.getProxy().placeStartCard(true);
@@ -131,10 +133,11 @@ class RMIClientTest {
     }
 
     @Test
-    void chooseObjective() throws NotBoundException, RemoteException {
+    void chooseObjective() throws NotBoundException, RemoteException, InterruptedException {
         RMIClient client = new RMIClient(1234);
         client.getProxy().connect("Ale");
         client.getProxy().setNumOfPlayers(2);
+        Thread.sleep(500);
         RMIClient cli2 = new RMIClient(1234);
         cli2.getProxy().connect("Gamba");
         client.getProxy().placeStartCard(true);
