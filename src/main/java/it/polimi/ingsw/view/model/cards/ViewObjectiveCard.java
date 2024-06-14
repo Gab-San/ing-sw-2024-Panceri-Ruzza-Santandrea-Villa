@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.GameResource;
 
+import java.awt.*;
+
 /**
  * The objective card representation in the ViewModel. <br>
  * This class is more of a "record" of information regarding the
@@ -57,5 +59,10 @@ public class ViewObjectiveCard extends ViewCard {
     }
     public int getPointsPerSolve() {
         return pointsPerSolve;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return super.getPreferredSize();
     }
 }

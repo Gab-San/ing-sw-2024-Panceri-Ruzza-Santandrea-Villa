@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.opponentarea;
+package it.polimi.ingsw.view.gui.scenes.areas.opponentarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;

@@ -2,14 +2,19 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * A card's corner. Should always be associated with a card,
  * except during card construction.
  */
-public class ViewCorner extends JComponent {
+public class ViewCorner extends JComponent implements MouseListener {
     private final GameResource frontResource;
     private final GameResource backResource;
     /**
@@ -78,6 +83,12 @@ public class ViewCorner extends JComponent {
      */
     public synchronized void cover(){
         isVisible = false;
+        SwingUtilities.invokeLater(
+                () -> {
+                    setEnabled(false);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }
+        );
     }
 
     public synchronized ViewPlaceableCard getCardRef() {
@@ -85,5 +96,46 @@ public class ViewCorner extends JComponent {
     }
     public synchronized void setCardRef(ViewPlaceableCard card) {
         cardRef = card;
+    }
+
+    @Override
+    public Dimension getSize() {
+        return new Dimension(50,60);
+    }
+
+    public void highlight() {
+        SwingUtilities.invokeLater(
+                () -> {
+                    Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
+                    Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
+                    setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+                    repaint();
+                }
+        );
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

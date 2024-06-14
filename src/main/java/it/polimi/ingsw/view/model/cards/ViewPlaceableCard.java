@@ -3,7 +3,9 @@ package it.polimi.ingsw.view.model.cards;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.gui.CardListener;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -84,13 +86,13 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     public synchronized void setPosition(GamePoint position) {
         this.position = position;
         enableCorners();
-        removeMouseListener(this);
+        this.removeMouseListener(this);
     }
 
     private void enableCorners(){
         for(ViewCorner corn: corners.values()){
             corn.setEnabled(true);
-            corn.addMouseListener(this);
+            corn.addMouseListener(corn);
         }
     }
 
@@ -99,7 +101,7 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     }
 
     private void setupViewCard(){
-        setLayout(new GridLayout(2,2,100,100));
+        setLayout(new GridLayout(2,2,115,30));
         for(ViewCorner corner: corners.values()){
             corner.setEnabled(false);
             corner.setFocusable(false);
@@ -107,24 +109,35 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         corners.keySet().stream()
                 .sorted(CornerDirection.getComparator())
                 .forEach((dir) -> add(corners.get(dir)));
+        this.addMouseListener(this);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("SELECTED: " + ((ViewCorner) e.getSource()).getDirection());
+        assert e.getSource() instanceof ViewPlaceableCard;
+        ViewPlaceableCard selectedCard = (ViewPlaceableCard) e.getSource();
+        cardListener.setSelectedCard(selectedCard);
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {/*unused*/}
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {/*unused*/}
 
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+        assert e.getSource() instanceof ViewPlaceableCard;
+        ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
+        card.setFocusable(false);
+        card.setEnabled(false);
+    }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        assert e.getSource() instanceof ViewPlaceableCard;
+        ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
+        card.setFocusable(true);
+        card.setEnabled(true);
     }
 }

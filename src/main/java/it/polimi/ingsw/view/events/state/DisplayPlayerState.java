@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.events.state;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
@@ -54,7 +54,7 @@ public class DisplayPlayerState extends DisplayPlayerEvent implements GUIEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
+    public void displayEvent(GameGUI gui) {
         gui.addPlayerScene(nickname, isLocalPlayer);
     }
 }

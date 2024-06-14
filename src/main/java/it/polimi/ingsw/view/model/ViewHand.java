@@ -122,8 +122,8 @@ public abstract class ViewHand extends JComponent {
      * @param cards list of cards to set as the hand content.
      */
     public synchronized void setCards(List<ViewPlayCard> cards){
-        this.cards.clear();
         if(cards == null) return;
+        cards.forEach(this::removeCard);
         cards.forEach(this::addCard);
     }
 
@@ -151,12 +151,14 @@ public abstract class ViewHand extends JComponent {
      * but the list reference itself doesn't change. <br>
      * Changes to the list passed as a parameter after this method call
      * will not reflect in the hand. Changes to the objectiveCards will.
-     * @param secretObjectiveCards list of objectiveCards to set as the hand content.
+     * @param objectiveCards list of objectiveCards to set as the hand content.
      */
-    protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
+    protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
         this.secretObjectiveCards.clear();
-        if(secretObjectiveCards == null) return;
-        this.secretObjectiveCards.addAll(secretObjectiveCards);
+        if(objectiveCards == null) return;
+        for(ViewObjectiveCard objCard : objectiveCards){
+            addSecretObjectiveCard(objCard);
+        }
     }
     /**
      * Adds an objectiveCard to the hand.
@@ -165,6 +167,7 @@ public abstract class ViewHand extends JComponent {
     protected synchronized void addSecretObjectiveCard(ViewObjectiveCard secretObjectiveCard){
         if(secretObjectiveCard == null) return;
         this.secretObjectiveCards.add(secretObjectiveCard);
+        firePropertyChange(ChangeNotifications.ADDED_SECRET_CARD, null, secretObjectiveCard);
     }
 
     /**
@@ -181,6 +184,7 @@ public abstract class ViewHand extends JComponent {
             secretObjectiveCards.clear();
             addSecretObjectiveCard(choice);
         }
+        firePropertyChange(ChangeNotifications.CHOSEN_OBJECTIVE_CARD, null, choice);
     }
 
     /**

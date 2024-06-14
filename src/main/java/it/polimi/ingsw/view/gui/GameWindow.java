@@ -23,6 +23,7 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
      * Window starting height
      */
     public static final int SCREEN_HEIGHT = 720;
+    public static GameWindow displayWindow;
     private final GameInputHandler inputHandler;
     private ChatPanel chatPanel;
     private PlayerListPanel playerListPanel;
@@ -32,6 +33,7 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
      * @param inputHandler input handler ref
      */
     public GameWindow(GameInputHandler inputHandler){
+        displayWindow = this;
         // Standard JFrame stuff defining window size, position and layout
         GUIFunc.setupFrame(this, "Codex Naturalis",
                 SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -40,6 +42,11 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         // Sets up the panel containing chat and players list
         JPanel leftSidePanel = setupLeftPanel();
         add(leftSidePanel, BorderLayout.WEST);
+    }
+
+    public synchronized static GameWindow getDisplayWindow() throws IllegalStateException{
+        if(displayWindow == null) throw new IllegalStateException("Trying to acquire non existent window");
+        return displayWindow;
     }
 
     private JPanel setupLeftPanel() {

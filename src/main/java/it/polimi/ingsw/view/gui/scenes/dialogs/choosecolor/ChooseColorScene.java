@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.choosecolor;
+package it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
@@ -147,6 +147,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
             );
             return;
         }
+
         SwingUtilities.invokeLater(
                 () -> displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue(), 1500)
         );
@@ -175,7 +176,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
                             redButton.setVisible(false);
                             break;
                     }
-                    System.out.println("SHOULD BE REVALIDATING");
                     revalidate();
                     repaint();
                 }

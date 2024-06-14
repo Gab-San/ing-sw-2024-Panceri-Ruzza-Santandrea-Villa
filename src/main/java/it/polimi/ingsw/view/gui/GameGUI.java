@@ -7,12 +7,13 @@ import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
-import it.polimi.ingsw.view.gui.scenes.choosecolor.ChooseColorScene;
+import it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor.ChooseColorScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
 import it.polimi.ingsw.view.gui.scenes.board.BoardScene;
-import it.polimi.ingsw.view.gui.scenes.localarea.LocalPlayerAreaScene;
-import it.polimi.ingsw.view.gui.scenes.opponentarea.OpponentAreaScene;
-import it.polimi.ingsw.view.gui.scenes.setplayers.SetPlayersScene;
+import it.polimi.ingsw.view.gui.scenes.dialogs.chooseobjective.ChooseObjectiveScene;
+import it.polimi.ingsw.view.gui.scenes.areas.localarea.LocalPlayerAreaScene;
+import it.polimi.ingsw.view.gui.scenes.areas.opponentarea.OpponentAreaScene;
+import it.polimi.ingsw.view.gui.scenes.dialogs.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+
 //DOCS add docs for all gui and comment code
 /**
  * This class acts as the GUI main controller class.
@@ -40,7 +42,7 @@ import java.util.function.Consumer;
  *     through to the network interface.
  * </p>
  */
-public class GUI implements View {
+public class GameGUI implements View {
     private final BlockingQueue<String> inputQueue;
     private final GameInputHandler inputHandler;
     private GameWindow gameWindow;
@@ -50,10 +52,7 @@ public class GUI implements View {
     private final List<PropertyChangeListener> propertyChangeListenerList;
     private final List<ChatListener> chatListenerList;
 //endregion
-    //FIXME to remove after implementing card placement
-    private boolean hasPlaced;
-    //FIXME: Maybe remove
-//    private GUI_Scene lastOpenedScene;
+
 
     /**
      * Constructs GUI.
@@ -61,7 +60,7 @@ public class GUI implements View {
      * @param setClientModelUpd setter for the updater of the view
      * @param inputQueue queue for the player's input
      */
-    public GUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
+    public GameGUI(CommandPassthrough serverProxy, Consumer<ModelUpdater> setClientModelUpd, BlockingQueue<String> inputQueue){
         // Initializing View elements
         this.inputQueue = inputQueue;
         observableComponents = new LinkedList<>();
@@ -74,9 +73,9 @@ public class GUI implements View {
         ModelUpdater modelUpdater = new ModelUpdater(board);
         setClientModelUpd.accept(modelUpdater);
         inputHandler = new GameInputHandler(serverProxy, this, new ViewController(board));
+        createGUI();
         loadScenes();
         importFonts();
-        createGUI();
         // Subscribing all the created listeners to board events
         subscribeListenersToComponent(board);
     }
@@ -127,9 +126,7 @@ public class GUI implements View {
      */
     @Override
     public synchronized void update(SceneID sceneID, DisplayEvent event) {
-        // FIXME: check whether is good or not
         // Executing gui events
-//        Scene scene = sceneManager.getScene(sceneID);
         if (!(event instanceof GUIEvent guiEvent)) {
             return;
         }
@@ -144,7 +141,7 @@ public class GUI implements View {
         switch (gamePhase){
             case SETNUMPLAYERS:
                 // Setting up and running the pop-up screen that handles user selection
-                GUI_Scene setNumberOfPlayers = new SetPlayersScene(gameWindow, "Choose your objective",
+                GUI_Scene setNumberOfPlayers = new SetPlayersScene(gameWindow, "Choose number of players",
                         inputHandler);
                 SwingUtilities.invokeLater(
                         setNumberOfPlayers::display
@@ -168,6 +165,19 @@ public class GUI implements View {
                 );
                 break;
             case CHOOSEOBJECTIVE:
+                // Setting up and displaying the pop-up screen that handles user selection
+                ChooseObjectiveScene chooseObjectiveScene = new ChooseObjectiveScene(gameWindow,
+                        "Choose your objective!", inputHandler);
+                // Listening to chosen objective event to close the pop-up
+                for (JComponent component : observableComponents) {
+                    if (component instanceof ViewHand &&
+                            inputHandler.isLocalPlayer(((ViewHand) component).getNickname())) {
+                        component.addPropertyChangeListener(ChangeNotifications.CHOSEN_OBJECTIVE_CARD, chooseObjectiveScene);
+                    }
+                }
+                SwingUtilities.invokeLater(
+                        chooseObjectiveScene::display
+                );
                 break;
             case EVALOBJ, SHOWWIN:
 
@@ -179,7 +189,6 @@ public class GUI implements View {
      * @param nextScene scene to be next
      */
     public synchronized void changeScene(GUI_Scene nextScene) {
-        System.out.println("Displaying " + nextScene);
         assert nextScene instanceof JPanel;
         // All scenes to display on the main frame will be JPanels
         // if a scene that is not a JPanel is issued there is an error

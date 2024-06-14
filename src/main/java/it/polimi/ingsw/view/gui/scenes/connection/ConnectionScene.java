@@ -103,6 +103,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
             String nickname = loginPanel.getUserInput();
             try{
+                loginPanel.disableInput();
                 // Attempt of connection
                 inputHandler.connect(nickname);
                 // Here connection is successful
@@ -110,6 +111,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 // Goes to the next scene
                 inputHandler.changeScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
+                loginPanel.enableInput();
                 displayError(GUIFunc.correctToLabelFormat(exc.getMessage()), 2, false);
             } catch (RemoteException exc) {
                 displayError(GUIFunc.correctToLabelFormat("Connection Lost!"), 1, true);

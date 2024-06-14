@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -27,12 +28,15 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
         this.areaList = new LinkedList<>();
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
         setLayout(new GridLayout(0,1));
+
         buttonAction = setupButtonAction();
         ChangeAreaPanel boardArea = new ChangeAreaPanel("Board", buttonAction, SceneID.getBoardSceneID(), true);
         buttonPlayerGroup = setupButtonGroup(new ArrayList<>(List.of(new ChangeAreaButton[]{boardArea.getAreaButton()})));
-
+        boardArea.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(boardArea);
+
     }
+
 
     private ChangeAreaAction setupButtonAction() {
         ChangeAreaAction action = new ChangeAreaAction();

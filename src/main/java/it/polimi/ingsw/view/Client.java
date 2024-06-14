@@ -5,7 +5,7 @@ import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.tcp.client.TCPClientSocket;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 import it.polimi.ingsw.view.tui.TUI;
 
@@ -300,7 +300,7 @@ public class Client {
                     }catch (InterruptedException ignored){}
 
                     if (gameMode.equalsIgnoreCase("GUI")) {
-                        view = new GUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
+                        view = new GameGUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point
                     }
                     else if (gameMode.equalsIgnoreCase("TUI")) {
                         view = new TUI(proxy, setClientModelUpdater, inputQueue); // proxy always not null at this point

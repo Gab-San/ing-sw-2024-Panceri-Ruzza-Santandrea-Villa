@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.events;
 
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 import it.polimi.ingsw.view.tui.TUI;
@@ -20,7 +20,7 @@ public class GotoEndgameEvent implements TUIEvent, GUIEvent{
         atLeast2Players = board.getOpponents().stream().anyMatch(ViewOpponentHand::isConnected);
     }
     @Override
-    public void displayEvent(GUI gui) {
+    public void displayEvent(GameGUI gui) {
 
     }
 

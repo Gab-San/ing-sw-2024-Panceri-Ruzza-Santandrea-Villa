@@ -5,7 +5,7 @@ import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
@@ -34,7 +34,7 @@ public class DisplayPlayerRemove extends DisplayPlayerEvent implements GUIEvent 
     }
 
     @Override
-    public void displayEvent(GUI gui) {
+    public void displayEvent(GameGUI gui) {
         gui.removePlayerScene(nickname);
     }
 }

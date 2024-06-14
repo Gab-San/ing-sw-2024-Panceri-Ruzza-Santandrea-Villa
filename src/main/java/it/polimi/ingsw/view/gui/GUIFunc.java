@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.UIFunctions;
+import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * This class extends UIFunctions class. It acts as a library for GUI methods that work
@@ -97,6 +99,7 @@ public final class GUIFunc extends UIFunctions {
      */
     public static void setupDialog(JDialog dialog, int width, int height){
         dialog.setSize(width, height);
+        dialog.setPreferredSize(new Dimension(width, height));
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         center.translate(-width/2, -height/2);
         dialog.setLocation(center);

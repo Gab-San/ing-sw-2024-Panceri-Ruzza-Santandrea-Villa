@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.setplayers;
+package it.polimi.ingsw.view.gui.scenes.dialogs.setplayers;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;

@@ -1,44 +1,42 @@
-package it.polimi.ingsw.view.gui.scenes.localarea;
+package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
-import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PlayerHandPanel extends JPanel implements PropertyChangeListener, CardListener, MouseListener {
+import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
+
+public class PlayerHandPanel extends JPanel implements PropertyChangeListener, CardListener{
     private static final int HEIGHT = ViewCard.getScaledHeight();
-    private static final int WIDTH = ViewCard.getScaledWidth() * 3 + 10 * 3;
+    private static final int WIDTH = ViewCard.getScaledWidth() * 4 + 10 * 3;
     private final List<ViewPlaceableCard> cardsInHand;
     private final GameInputHandler inputHandler;
-    private final List<ViewObjectiveCard> secretObjectives;
+    private ViewObjectiveCard secretObjective;
+    private static final int MAX_PLAY_CARDS = 3;
 
     private ViewPlaceableCard selectedCard;
 
     public PlayerHandPanel(GameInputHandler inputHandler){
         cardsInHand = new LinkedList<>();
         this.inputHandler = inputHandler;
-        secretObjectives = new LinkedList<>();
 
 
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setSize(WIDTH, HEIGHT);
-        setLayout(new GridLayout(1,3, 10, 10));
+        setLayout(new GridLayout(1,4, 10, 10));
         setOpaque(false);
     }
 
@@ -62,10 +60,10 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                 if(card == null) return;
 
                 cardsInHand.add(card);
+                card.setCardListener(this);
                 SwingUtilities.invokeLater(
                         () -> {
                             add(card);
-                            card.addMouseListener(this);
                             revalidate();
                             repaint();
                         }
@@ -77,6 +75,7 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                 if(!cardsInHand.contains(card)){
                     return;
                 }
+                card.setCardListener(null);
                 cardsInHand.remove(card);
                 SwingUtilities.invokeLater(
                         ()->{
@@ -86,14 +85,20 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                         }
                 );
                 break;
+            case CHOSEN_OBJECTIVE_CARD:
+                assert evt.getNewValue() instanceof ViewObjectiveCard;
+                secretObjective = (ViewObjectiveCard) evt.getNewValue();
+                SwingUtilities.invokeLater(
+                        () ->{
+                            add(secretObjective, MAX_PLAY_CARDS);
+                            revalidate();
+                            repaint();
+                        }
+                );
+                break;
         }
     }
 
-    private void deselectCards() {
-        cardsInHand.forEach(
-                c -> c.setBorder(BorderFactory.createEmptyBorder())
-        );
-    }
 
     @Override
     public void setClickedCard(String cardID, int x, int y, CornerDirection direction)
@@ -104,7 +109,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
         if(cardID == null) {
             try {
                 inputHandler.placeStartCard(selectedCard.isFaceUp());
-                selectedCard.removeMouseListener(this);
             } catch (RemoteException e) {
                 //TODO notify disconnection on screen
                 inputHandler.notifyDisconnection();
@@ -115,33 +119,26 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
         try {
             inputHandler.placeCard(selectedCard.getCardID(),new GamePoint(x,y),
                     direction.toString(), selectedCard.isFaceUp());
-            selectedCard.removeMouseListener(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        assert e.getSource() instanceof ViewPlaceableCard;
-        ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
-        deselectCards();
+    public void setSelectedCard(ViewPlaceableCard card) {
         selectedCard = card;
-        card.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+        SwingUtilities.invokeLater(
+                () -> {
+                    deselectCards();
+                    selectedCard.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+                }
+        );
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        assert e.getSource() instanceof ViewPlaceableCard;
-        ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
-        System.out.println("ENTERING CARD + " + card.getCardID());
+    private void deselectCards() {
+        cardsInHand.forEach(
+                c -> c.setBorder(BorderFactory.createEmptyBorder())
+        );
     }
 
 }

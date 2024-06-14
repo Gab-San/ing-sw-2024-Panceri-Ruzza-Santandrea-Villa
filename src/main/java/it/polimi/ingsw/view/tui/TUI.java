@@ -16,6 +16,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
+
 /**
  * Main class of the TUI
  */

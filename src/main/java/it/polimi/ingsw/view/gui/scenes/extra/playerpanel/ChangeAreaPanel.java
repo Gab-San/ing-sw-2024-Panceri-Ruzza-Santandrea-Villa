@@ -110,14 +110,14 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public Dimension getMaximumSize() {
-        return new Dimension(300, 30);
+        return new Dimension(300, (int) (areaButton.getPreferredSize().getHeight() + 20));
     }
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(300, 20);
+        return new Dimension(300, (int) areaButton.getPreferredSize().getHeight());
     }
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(300, 25);
+        return new Dimension(300, (int) (areaButton.getPreferredSize().getHeight() + 10));
     }
 }

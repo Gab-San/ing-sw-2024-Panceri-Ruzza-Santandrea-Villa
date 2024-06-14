@@ -5,7 +5,10 @@ import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GotoEndgameEvent;
-import it.polimi.ingsw.view.events.update.*;
+import it.polimi.ingsw.view.events.update.DisplayGamePhase;
+import it.polimi.ingsw.view.events.update.DisplayPlayerRemove;
+import it.polimi.ingsw.view.events.update.DisplayScore;
+import it.polimi.ingsw.view.events.update.DisplayTurn;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
@@ -111,8 +114,9 @@ public class ViewBoard extends JComponent {
      * @return the hand of the opponent with given nickname
      */
     public synchronized ViewOpponentHand getOpponentHand(String nickname){
-        if(!opponentHands.containsKey(nickname))
+        if(!opponentHands.containsKey(nickname)) {
             addOpponent(nickname);
+        }
         return opponentHands.get(nickname);
     }
 
@@ -245,10 +249,6 @@ public class ViewBoard extends JComponent {
         playerAreas.put(nickname, playArea);
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, playerHand);
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
-    }
-
-    public void notifyLocalPlayerAddition(){
-
     }
 
     /**

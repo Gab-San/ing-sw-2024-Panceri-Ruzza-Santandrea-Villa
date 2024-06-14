@@ -5,18 +5,19 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class GameInputHandler implements CommandPassthrough{
+public class GameInputHandler{
     private final CommandPassthrough serverProxy;
-    private final GUI gui;
+    private final GameGUI gui;
     private final ViewController controller;
     private final ExecutorService threadPool;
-    public GameInputHandler(CommandPassthrough serverProxy, GUI gui, ViewController controller){
+    public GameInputHandler(CommandPassthrough serverProxy, GameGUI gui, ViewController controller){
         this.serverProxy = serverProxy;
         this.gui = gui;
         this.controller = controller;
@@ -28,7 +29,7 @@ public class GameInputHandler implements CommandPassthrough{
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
 
-    @Override
+
     public void sendMsg(String addressee, String message) throws RemoteException {
         serverProxy.sendMsg(addressee, message);
     }
@@ -40,51 +41,49 @@ public class GameInputHandler implements CommandPassthrough{
         controller.addLocalPlayer(nickname);
         controller.setSelfPlayerArea();
         serverProxy.connect(nickname);
-        controller.notifyPlayerAddition();
     }
 
     public void setNumOfPlayers(int numOfPlayers) throws RemoteException {
         serverProxy.setNumOfPlayers(numOfPlayers);
     }
 
-    @Override
+
     public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
 
     }
 
-    @Override
+
     public void placeStartCard(boolean placeOnFront) throws RemoteException, IllegalStateException {
         controller.validatePlaceStartCard();
         serverProxy.placeStartCard(placeOnFront);
     }
 
-    @Override
+
     public void chooseColor(char colour) throws RemoteException {
         serverProxy.chooseColor(colour);
     }
 
-    @Override
-    public void chooseObjective(int choice) throws RemoteException {
 
+    public void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
+        if(chosenCard == null){
+            throw new IllegalStateException("Choose a card!");
+        }
+        int choice = controller.getObjectiveCardIndex(chosenCard);
+        serverProxy.chooseObjective(choice);
     }
 
-    @Override
+
     public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException {
 
     }
 
-    @Override
+
     public void draw(char deck, int cardPosition) throws RemoteException {
 
     }
 
-    @Override
+
     public void restartGame(int numOfPlayers) throws RemoteException {
-
-    }
-
-    @Override
-    public void ping() throws RemoteException {
 
     }
 
@@ -121,5 +120,9 @@ public class GameInputHandler implements CommandPassthrough{
 
     public boolean isLocalPlayer(String nickname) {
         return controller.isLocalPlayer(nickname);
+    }
+
+    public ViewHand getLocalPlayer() {
+        return controller.getLocalPlayer();
     }
 }

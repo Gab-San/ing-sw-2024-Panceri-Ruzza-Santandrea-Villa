@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.model.cards;
 
+import it.polimi.ingsw.view.gui.CardListener;
+import org.jetbrains.annotations.NotNull;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +18,13 @@ public abstract class ViewCard extends JComponent {
     private final String imageFrontName;
     private final String imageBackName;
 //region GUI ATTRIBUTES
-    private final BufferedImage imageFront;
-    private final BufferedImage imageBack;
+    private BufferedImage imageFront;
+    private BufferedImage imageBack;
+    private boolean importedImg;
     public static final int IMAGE_WIDTH = 831;
     public static final int IMAGE_HEIGHT = 556;
+    public static final int SCALE_FACTOR = 4;
+    protected CardListener cardListener;
 //endregion
     /**
      * True if this card is front-face up
@@ -36,38 +42,7 @@ public abstract class ViewCard extends JComponent {
         this.imageFrontName = imageFrontName;
         this.imageBackName = imageBackName;
         this.isFaceUp = false;
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = null;
-        try {
-            url = cl.getResourceAsStream(imageFrontName);
-        } catch(NullPointerException e){
-            e.printStackTrace(System.err);
-        }
-
-        BufferedImage img = null;
-        try{
-            assert url != null;
-            img = ImageIO.read(url);
-        } catch(IOException e){
-            e.printStackTrace(System.err);
-        }
-        this.imageFront = img;
-
-
-        try {
-            url =  cl.getResourceAsStream(imageBackName);
-        } catch(NullPointerException e){
-            e.printStackTrace(System.err);
-        }
-
-        img = null;
-        try{
-            assert url != null;
-            img = ImageIO.read(url);
-        } catch(IOException e){
-            e.printStackTrace(System.err);
-        }
-        this.imageBack = img;
+        importedImg = false;
     }
 
     /**
@@ -135,26 +110,72 @@ public abstract class ViewCard extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-//TODO        if(!importedIMG) importIMG();
+        if(!importedImg) importIMG();
         Graphics2D g2D = (Graphics2D) g;
         BufferedImage img = isFaceUp ? imageFront : imageBack;
         // width = 831 height  = 556
         g2D.drawImage(img,0,0, img.getWidth()/4, img.getHeight()/4, null);
     }
 
+    private void importIMG() {
+        ClassLoader cl = this.getClass().getClassLoader();
+        InputStream url = null;
+        try {
+            url = cl.getResourceAsStream(imageFrontName);
+        } catch(NullPointerException e){
+            e.printStackTrace(System.err);
+        }
+
+        BufferedImage img = null;
+        try{
+            assert url != null;
+            img = ImageIO.read(url);
+        } catch(IOException e){
+            e.printStackTrace(System.err);
+        }
+        this.imageFront = img;
+
+
+        try {
+            url =  cl.getResourceAsStream(imageBackName);
+        } catch(NullPointerException e){
+            e.printStackTrace(System.err);
+        }
+
+        img = null;
+        try{
+            assert url != null;
+            img = ImageIO.read(url);
+        } catch(IOException e){
+            e.printStackTrace(System.err);
+        }
+        this.imageBack = img;
+
+        importedImg = true;
+    }
+
+    /**
+     * This method sets the card listener to listen to this card.
+     * @param cardListener listener to this card actions
+     */
+    public void setCardListener(CardListener cardListener){
+        this.cardListener = cardListener;
+    }
+
+
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(IMAGE_WIDTH/4, IMAGE_HEIGHT/4);
+        return new Dimension(IMAGE_WIDTH/SCALE_FACTOR, IMAGE_HEIGHT/SCALE_FACTOR);
     }
 
     @Override
     public int getWidth() {
-        return IMAGE_WIDTH/4;
+        return IMAGE_WIDTH/SCALE_FACTOR;
     }
 
     @Override
     public int getHeight() {
-        return IMAGE_HEIGHT/4;
+        return IMAGE_HEIGHT/SCALE_FACTOR;
     }
     @Override
     public Dimension getSize(){
@@ -162,10 +183,15 @@ public abstract class ViewCard extends JComponent {
     }
 
     public static int getScaledWidth(){
-        //TODO add scale factor
-        return IMAGE_WIDTH/4;
+        return IMAGE_WIDTH/SCALE_FACTOR;
     }
     public static int getScaledHeight(){
-        return IMAGE_HEIGHT/4;
+        return IMAGE_HEIGHT/SCALE_FACTOR;
+    }
+
+    @NotNull
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(0,0, getWidth(), getHeight());
     }
 }

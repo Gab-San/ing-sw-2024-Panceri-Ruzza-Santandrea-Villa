@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.localarea;
+package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import javax.swing.*;
 import java.awt.*;

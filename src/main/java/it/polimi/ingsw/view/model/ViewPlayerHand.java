@@ -72,14 +72,14 @@ public class ViewPlayerHand extends ViewHand {
                 new DisplayRemoveCards(nickname, true, cards));
     }
     /**
-     * @param secretObjectiveCards list of objectiveCards to set as the hand content. <br>
+     * @param objectiveCards list of objectiveCards to set as the hand content. <br>
      *                      Turns all objective cards face-up before setting them to the hand.
      */
     @Override
-    public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
-        if(secretObjectiveCards != null)
-            secretObjectiveCards.forEach(ViewCard::turnFaceUp);
-        super.setSecretObjectiveCards(secretObjectiveCards);
+    public void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
+        if(objectiveCards != null)
+            objectiveCards.forEach(ViewCard::turnFaceUp);
+        super.setSecretObjectiveCards(objectiveCards);
     }
     /**
      * Adds a objectiveCard to the hand. <br>

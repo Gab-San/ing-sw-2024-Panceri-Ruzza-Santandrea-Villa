@@ -52,4 +52,12 @@ public class LoginPanel extends JPanel {
     public String getUserInput() {
         return loginTextField.getText();
     }
+
+    public void disableInput() {
+        loginTextField.setEnabled(false);
+    }
+
+    public void enableInput() {
+        loginTextField.setEnabled(true);
+    }
 }

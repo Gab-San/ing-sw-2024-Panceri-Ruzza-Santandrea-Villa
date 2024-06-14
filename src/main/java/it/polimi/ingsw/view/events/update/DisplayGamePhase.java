@@ -4,7 +4,7 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
@@ -22,7 +22,7 @@ public class DisplayGamePhase implements TUIEvent, GUIEvent {
     }
 
     @Override
-    public void displayEvent(GUI gui) {
+    public void displayEvent(GameGUI gui) {
         gui.updatePhase(gamePhase);
     }
 

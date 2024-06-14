@@ -90,14 +90,14 @@ public class ViewOpponentHand extends ViewHand {
     }
 
     /**
-     * @param secretObjectiveCards list of objectiveCards to set as the hand content. <br>
+     * @param objectiveCards list of objectiveCards to set as the hand content. <br>
      *                      Turns all objective cards face-down before setting them to the hand.
      */
     @Override
-    public void setSecretObjectiveCards(List<ViewObjectiveCard> secretObjectiveCards){
-        if(secretObjectiveCards != null)
-            secretObjectiveCards.forEach(ViewCard::turnFaceDown);
-        super.setSecretObjectiveCards(secretObjectiveCards);
+    public void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
+        if(objectiveCards != null)
+            objectiveCards.forEach(ViewCard::turnFaceDown);
+        super.setSecretObjectiveCards(objectiveCards);
     }
     /**
      * Adds a objectiveCard to the hand. <br>

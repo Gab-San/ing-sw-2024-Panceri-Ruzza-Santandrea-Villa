@@ -1,9 +1,8 @@
-package it.polimi.ingsw.view.gui.scenes.localarea;
+package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
-import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
@@ -13,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
     private static final int AREA_WIDTH = 16620;
@@ -20,10 +21,12 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
     private static final int CENTER_X = AREA_WIDTH/2;
     private static final int CENTER_Y = AREA_HEIGHT/2;
     private final SpringLayout layout;
+    private List<PlaceHolder> placeHolderList;
     private CardListener cardListener;
     public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setBackground(new Color(0xc76f30));
+        placeHolderList = new LinkedList<>();
         //FIXME USE LAYERED PANE
         layout = new SpringLayout();
         PlaceHolder placeHolder = setupPlaceHolder();
@@ -46,7 +49,6 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 PlaceHolder p = (PlaceHolder) e.getSource();
-                System.out.println(p);
                 try {
                     cardListener.setClickedCard(null, 0, 0, null);
                     remove(p);
@@ -61,6 +63,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
                 );
             }
         });
+        placeHolderList.add(placeHolder);
         return placeHolder;
     }
 
@@ -96,7 +99,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
                 assert evt.getNewValue() instanceof ViewPlaceableCard;
                 ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
                 setCardPosition(placedCard);
-                regeneratePlaceHolders(placedCard);
+                deletePlaceHolders();
 
                 SwingUtilities.invokeLater(
                         () -> {
@@ -110,8 +113,14 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
 
     }
 
-    private void regeneratePlaceHolders(ViewPlaceableCard placedCard) {
-        //TODO Add placeholders
+    private void deletePlaceHolders() {
+       SwingUtilities.invokeLater(
+               () -> {
+                   placeHolderList.forEach(
+                           this::remove
+                           );
+               }
+       );
     }
 
     private void setCardPosition(ViewPlaceableCard placedCard) {

@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.events.state;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.tui.TUI;

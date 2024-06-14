@@ -3,12 +3,16 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.model.ViewHand;
-import it.polimi.ingsw.view.model.ViewOpponentHand;
-import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.model.*;
+import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
+import it.polimi.ingsw.view.tui.ConsoleTextColors;
+
+import java.util.List;
+import java.util.ListIterator;
+
+import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 
 /**
  * DOCS: add general description of ViewController
@@ -235,5 +239,18 @@ public class ViewController {
         return board.getPlayerHand().getNickname().equals(nickname);
     }
 
-    public void notifyPlayerAddition() { board.notifyLocalPlayerAddition(); }
+    public ViewPlayerHand getLocalPlayer() {
+        return board.getPlayerHand();
+    }
+
+    public int getObjectiveCardIndex(ViewObjectiveCard comparedCard) {
+        List<ViewObjectiveCard> secretCards = board.getPlayerHand().getSecretObjectives();
+        ListIterator<ViewObjectiveCard> iterator = secretCards.listIterator();
+        while(iterator.hasNext()){
+            if(iterator.next().equals(comparedCard)){
+                return iterator.nextIndex();
+            }
+        }
+        throw new IllegalStateException("Card not in hand");
+    }
 }

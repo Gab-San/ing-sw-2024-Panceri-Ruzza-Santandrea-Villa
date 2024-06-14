@@ -1,18 +1,17 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.CardPosition;
-import it.polimi.ingsw.SerializableCorner;
-import it.polimi.ingsw.view.events.*;
+import it.polimi.ingsw.*;
+import it.polimi.ingsw.view.events.DisplayErrorEvent;
+import it.polimi.ingsw.view.events.DisplayMessageEvent;
+import it.polimi.ingsw.view.events.NotifyTimeoutEvent;
 import it.polimi.ingsw.view.events.state.*;
-import it.polimi.ingsw.view.model.*;
+import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewOpponentHand;
+import it.polimi.ingsw.view.model.ViewPlayArea;
+import it.polimi.ingsw.view.model.ViewPlayerHand;
 import it.polimi.ingsw.view.model.cards.*;
 import it.polimi.ingsw.view.model.json.JsonImporter;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +55,7 @@ public class ModelUpdater {
      * Reports an indirect disconnection notification.
      */
     public synchronized void notifyIndirectDisconnect()  {
+        System.out.println("DISCONNECTING DUE TO TIMEOUT");
         board.notifyView(SceneID.getNotificationSceneID(), new NotifyTimeoutEvent());
     }
 
@@ -410,6 +410,7 @@ public class ModelUpdater {
      */
     public synchronized void setPlayerHandState(String nickname, List<String> playCardIDs,
                                                 List<String> objectiveCardIDs, String startingCardID) {
+
         List<ViewPlayCard> cardsInHand = jsonImporter.getPlayCards(playCardIDs);
         List<ViewObjectiveCard> objectives = jsonImporter.getObjectiveCards(objectiveCardIDs);
         ViewStartCard startCard = jsonImporter.getStartCard(startingCardID);

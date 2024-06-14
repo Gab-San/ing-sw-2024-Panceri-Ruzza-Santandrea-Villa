@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.events.commands;
 
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.tui.TUI;
 

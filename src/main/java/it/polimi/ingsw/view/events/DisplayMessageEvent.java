@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.events;
 
-import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.GameGUI;
 import it.polimi.ingsw.view.tui.TUI;
 
 /**
@@ -20,7 +20,7 @@ public class DisplayMessageEvent implements TUIEvent, GUIEvent{
     }
 
     @Override
-    public void displayEvent(GUI gui) {
+    public void displayEvent(GameGUI gui) {
         gui.showChatMessage(messenger, message);
     }
 }

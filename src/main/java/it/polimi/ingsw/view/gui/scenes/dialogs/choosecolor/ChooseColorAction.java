@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.choosecolor;
+package it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor;
 
 import it.polimi.ingsw.PlayerColor;
 
@@ -13,7 +13,6 @@ public class ChooseColorAction extends AbstractAction {
         JButton selectedButton = (JButton) e.getSource();
         String buttonColor = selectedButton.getText();
         char colorChar = buttonColor.charAt(0);
-        System.out.println("CHOSEN COLOR: "+ PlayerColor.parseColour(colorChar));
         firePropertyChange(CHOSEN_COLOR, null, colorChar);
     }
 }
