@@ -19,4 +19,6 @@ public class ChangeNotifications {
     public static final String PLAYER_TURN_UPDATE = "PLAYER_TURN_EVENT";
     public static final String ADDED_SECRET_CARD = "ADDED_SECRET_CARD";
     public static final String CHOSEN_OBJECTIVE_CARD = "CHOSEN_OBJECTIVE_CARD";
+    public static final String CLEAR_OBJECTIVES = "CLEAR_OBJECTIVES";
+    public static final String CLEAR_PLAY_CARDS = "CLEAR_PLAY_CARDS";
 }

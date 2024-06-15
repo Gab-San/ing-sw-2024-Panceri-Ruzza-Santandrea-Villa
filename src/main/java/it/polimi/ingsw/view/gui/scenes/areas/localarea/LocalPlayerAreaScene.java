@@ -39,11 +39,13 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
 
         JScrollPane scrollPane = setupAreaScrollPane();
         layersPane.add(scrollPane, Integer.valueOf(0));
+
         handPanel = new PlayerHandPanel(inputHandler);
         handPanel.setBounds(WIDTH/2 - handPanel.getWidth()/2,
                 HEIGHT - handPanel.getHeight(),
                 handPanel.getWidth(), handPanel.getHeight());
         layersPane.add(handPanel,  Integer.valueOf(10));
+
         playAreaPanel.setCardListener(handPanel);
 
         add(layersPane,BorderLayout.CENTER);

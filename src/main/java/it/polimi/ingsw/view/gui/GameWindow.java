@@ -15,14 +15,15 @@ import java.beans.PropertyChangeListener;
  * attached to it, and it will control the interactions between the panels.
  */
 public class GameWindow extends JFrame implements PropertyChangeListener {
+    public static final float SCALE_FACTOR = (float) GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds().width /GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
     /**
      * Window starting width.
      */
-    public static final int SCREEN_WIDTH = 1280;
+    public static final int SCREEN_WIDTH = (int) (1600 * SCALE_FACTOR);
     /**
      * Window starting height
      */
-    public static final int SCREEN_HEIGHT = 720;
+    public static final int SCREEN_HEIGHT = (int) (900 * SCALE_FACTOR);
     public static GameWindow displayWindow;
     private final GameInputHandler inputHandler;
     private ChatPanel chatPanel;

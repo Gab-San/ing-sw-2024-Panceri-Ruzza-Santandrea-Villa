@@ -123,7 +123,8 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized void setCards(List<ViewPlayCard> cards){
         if(cards == null) return;
-        cards.forEach(this::removeCard);
+        firePropertyChange(ChangeNotifications.CLEAR_PLAY_CARDS, this.cards, null);
+        this.cards.clear();
         cards.forEach(this::addCard);
     }
 
@@ -155,6 +156,7 @@ public abstract class ViewHand extends JComponent {
      */
     protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
         this.secretObjectiveCards.clear();
+        firePropertyChange(ChangeNotifications.CLEAR_OBJECTIVES, secretObjectiveCards, null);
         if(objectiveCards == null) return;
         for(ViewObjectiveCard objCard : objectiveCards){
             addSecretObjectiveCard(objCard);
