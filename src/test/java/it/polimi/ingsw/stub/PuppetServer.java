@@ -23,7 +23,6 @@ public class PuppetServer {
                     try {
                         while (!serverSocket.isClosed()) {
                             Socket connectionSocket = serverSocket.accept();
-                            System.out.println("A new client has connected!");
                             handler = new ConnectionHandler(connectionSocket);
                             handler.run();
                         }

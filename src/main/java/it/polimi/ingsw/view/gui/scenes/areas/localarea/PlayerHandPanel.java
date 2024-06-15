@@ -24,7 +24,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
     private static final int CARD_WIDTH = ViewCard.getScaledWidth();
     private final List<ViewPlaceableCard> cardsInHand;
     private final GameInputHandler inputHandler;
-    private ViewObjectiveCard secretObjective;
     private final JPanel playCardsPanel;
     private final JPanel objectiveCardsPanel;
     private ViewPlaceableCard selectedCard;
@@ -87,7 +86,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                             repaint();
                         }
                 );
-                removedCard.setCardListener(null);
                 cardsInHand.remove(removedCard);
                 break;
             case CLEAR_PLAY_CARDS:
@@ -101,14 +99,12 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                                 repaint();
                             }
                     );
-                    removedPlayCard.setCardListener(null);
                     cardsInHand.remove(removedPlayCard);
                 }
                 break;
             case ADDED_SECRET_CARD:
                 assert evt.getNewValue() instanceof ViewObjectiveCard;
                 ViewObjectiveCard objectiveCard = (ViewObjectiveCard) evt.getNewValue();
-                secretObjective = objectiveCard;
                 SwingUtilities.invokeLater(
                         () ->{
                             objectiveCardsPanel.add(objectiveCard);
@@ -128,7 +124,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                                 repaint();
                             }
                     );
-                    secretObjective = null;
                 }
                 break;
         }
@@ -136,7 +131,7 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
 
 
     @Override
-    public void setClickedCard(String cardID, int x, int y, CornerDirection direction)
+    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction)
             throws IllegalStateException {
         if(selectedCard == null){
             throw new IllegalStateException("NO CARD SELECTED.");
@@ -152,7 +147,7 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
         }
 
         try {
-            inputHandler.placeCard(selectedCard.getCardID(),new GamePoint(x,y),
+            inputHandler.placeCard(selectedCard.getCardID(),position,
                     direction.toString(), selectedCard.isFaceUp());
         } catch (RemoteException e) {
             throw new RuntimeException(e);

@@ -85,15 +85,7 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
 
     public synchronized void setPosition(GamePoint position) {
         this.position = position;
-        enableCorners();
         this.removeMouseListener(this);
-    }
-
-    private void enableCorners(){
-        for(ViewCorner corn: corners.values()){
-            corn.setEnabled(true);
-            corn.addMouseListener(corn);
-        }
     }
 
     public synchronized GamePoint getPosition(){
@@ -110,6 +102,14 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
                 .sorted(CornerDirection.getComparator())
                 .forEach((dir) -> add(corners.get(dir)));
         this.addMouseListener(this);
+    }
+
+    public synchronized void disableComponent(){
+        this.setEnabled(false);
+        for(ViewCorner corner : corners.values()){
+            corner.setEnabled(false);
+            corner.setBorder(BorderFactory.createEmptyBorder());
+        }
     }
 
     @Override

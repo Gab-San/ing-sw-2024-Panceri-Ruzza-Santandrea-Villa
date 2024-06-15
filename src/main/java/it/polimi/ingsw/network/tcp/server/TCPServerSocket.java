@@ -39,7 +39,6 @@ public class TCPServerSocket {
                     try {
                         while (!serverSocket.isClosed()) {
                             Socket connectionSocket = serverSocket.accept();
-                            System.out.println("A new client has connected!");
                             ClientHandler handler = new ClientHandler(connectionSocket);
                             handlerPool.execute(handler);
                         }

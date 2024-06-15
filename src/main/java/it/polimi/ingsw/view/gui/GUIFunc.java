@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static java.awt.Component.CENTER_ALIGNMENT;
+
 /**
  * This class extends UIFunctions class. It acts as a library for GUI methods that work
  * for most setups across UI elements.
@@ -20,8 +22,10 @@ public final class GUIFunc extends UIFunctions {
         JLabel label =  new JLabel("");
         //Error is not shown until it occurs
         label.setVisible(false);
+        label.setAlignmentX(CENTER_ALIGNMENT);
         return label;
     }
+
 
     /**
      * Creates a notification label with given sizes.

@@ -123,16 +123,6 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {/*unused*/}
 
-    private synchronized void displayError(String errorMessage, float displayTimeSeconds, boolean close){
-        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.red);
-        notificationLabel.setText(errorMessage);
-        // The error will become visible
-        notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime, close);
-    }
-
     private synchronized void displaySuccess(String successMessage, float displayTimeSeconds){
         int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
         //TODO [Gamba] Fix color
@@ -140,6 +130,16 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         notificationLabel.setText(successMessage);
         notificationLabel.setVisible(true);
         startDisplayTimer(displayTime, true);
+    }
+
+    private void displayError(String errorMessage, float displayTimeSeconds, boolean close) {
+        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
+        //TODO [Gamba] Fix color
+        notificationLabel.setForeground(Color.red);
+        notificationLabel.setText(errorMessage);
+        // The error will become visible
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime, close);
     }
 
     private void startDisplayTimer(int displayTime, boolean isClosing) {

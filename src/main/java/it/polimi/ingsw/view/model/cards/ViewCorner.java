@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.synth.SynthUI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -103,7 +104,22 @@ public class ViewCorner extends JComponent implements MouseListener {
         return new Dimension(50,60);
     }
 
-    public void highlight() {
+    @NotNull
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(0,0, 50, 60);
+    }
+
+    public static int getFixedWidth(){
+        return 50;
+    }
+
+    public static int getFixedHeight(){
+        return 60;
+    }
+
+    public void activateCorner() {
+        addMouseListener(this);
         SwingUtilities.invokeLater(
                 () -> {
                     Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
@@ -116,26 +132,28 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if(!isVisible){
+            return;
+        }
+        System.out.println("CARD POSITION: " + cardRef.getPosition() + "DIRECTION: " + direction);
+        cardRef.cardListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {/*unused*/}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {/*unused*/}
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        setEnabled(true);
+        setFocusable(true);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        setEnabled(false);
+        setFocusable(false);
     }
 }

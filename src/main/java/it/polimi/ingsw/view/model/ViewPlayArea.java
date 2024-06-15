@@ -11,7 +11,6 @@ import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
-import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
 import javax.swing.*;
 import java.util.*;
@@ -250,7 +249,7 @@ public class ViewPlayArea extends JComponent {
 //        firePropertyChange(ChangeNotifications.FREE_CORN_CHANGE, null, cardFreeCorners);
 
         freeCorners.forEach(
-                ViewCorner::highlight
+                ViewCorner::activateCorner
         );
     }
 

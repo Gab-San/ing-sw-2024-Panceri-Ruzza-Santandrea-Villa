@@ -528,7 +528,12 @@ public class ModelUpdater {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
         playArea.clearCardMatrix();
-
+        for(CardPosition position: cardPositions){
+            if(position.row() == 0 && position.col() == 0){
+                ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(position.cardId());
+                playArea.setCard(new GamePoint(0, 0), card);
+            }
+        }
         for(CardPosition pos : cardPositions){
             ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
             if(card != null) {
@@ -538,7 +543,7 @@ public class ModelUpdater {
                 pos.isCornerVisible().keySet().stream()
                     .filter(dir -> !pos.isCornerVisible().get(dir))
                     .forEach(dir -> card.getCorner(dir).cover());
-
+                System.out.println("Card position: " + pos);
                 playArea.setCard(new GamePoint(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
                         .filter(c -> c.cardCornerId().equals(card.getCardID()))

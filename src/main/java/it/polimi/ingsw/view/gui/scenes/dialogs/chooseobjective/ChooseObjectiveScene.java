@@ -120,11 +120,13 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
     private synchronized void displayError(String error, float displayTimeSec, boolean isClosing) {
         int displayTime = GUIFunc.setupDisplayTimer(displayTimeSec, displayTimer);
         errorLabel.setText(GUIFunc.correctToLabelFormat(error));
+        errorLabel.setEnabled(true);
         errorLabel.setVisible(true);
         // After delay time the notification will
         // disappear from the screen
         displayTimer = new Timer(displayTime,
                 (event) -> {
+                    errorLabel.setEnabled(false);
                     errorLabel.setVisible(false);
                     // java.awt timers don't stop after
                     // the delay time has passed,

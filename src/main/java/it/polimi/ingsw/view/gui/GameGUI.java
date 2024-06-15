@@ -148,7 +148,7 @@ public class GameGUI implements View {
                 );
                 break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD, DRAWCARD:
+                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD:
                 break;
             case CHOOSECOLOR:
                 // Setting up and displaying the pop-up screen that handles user selection
@@ -179,6 +179,18 @@ public class GameGUI implements View {
                         chooseObjectiveScene::display
                 );
                 break;
+            case DRAWCARD:
+                boolean hasDrawn = false;
+                while(!hasDrawn) {
+                    try {
+                        inputHandler.draw('R', 0);
+                        hasDrawn = true;
+                    } catch (IllegalStateException ignore){
+                    }
+                    catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             case EVALOBJ, SHOWWIN:
 
         }

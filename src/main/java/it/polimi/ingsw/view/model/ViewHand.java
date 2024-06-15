@@ -143,8 +143,12 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized void removeCard(ViewPlayCard card){
         if(card == null) return;
+        for(ViewPlayCard playCard : cards){
+            if(playCard.equals(card)){
+                firePropertyChange(ChangeNotifications.REMOVE_CARD_HAND, playCard, null);
+            }
+        }
         this.cards.remove(card);
-        firePropertyChange(ChangeNotifications.REMOVE_CARD_HAND, card, null);
     }
     /**
      * Sets the objectiveCards in hand to the given list of objectiveCards. <br>

@@ -74,12 +74,12 @@ public class GameInputHandler{
 
 
     public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException {
-
+        serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
     }
 
 
     public void draw(char deck, int cardPosition) throws RemoteException {
-
+        serverProxy.draw(deck, cardPosition);
     }
 
 

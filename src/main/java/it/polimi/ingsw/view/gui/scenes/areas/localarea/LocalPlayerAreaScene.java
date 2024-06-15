@@ -2,10 +2,7 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.gui.ChangeNotifications;
-import it.polimi.ingsw.view.gui.GUI_Scene;
-import it.polimi.ingsw.view.gui.GameInputHandler;
-import it.polimi.ingsw.view.gui.GameWindow;
+import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -25,6 +22,8 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
     private final PlayAreaPanel playAreaPanel;
     private final GameInputHandler inputHandler;
     private final PlayerHandPanel handPanel;
+    private final JLabel notificationLabel;
+    private Timer displayTimer;
 
     public LocalPlayerAreaScene(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
@@ -34,7 +33,9 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         JLayeredPane layersPane = new JLayeredPane();
         layersPane.setSize(WIDTH, HEIGHT);
         layersPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
+        notificationLabel = GUIFunc.createNotificationLabel();
+        notificationLabel.setBounds(WIDTH/2,0, 200, 50);
+        layersPane.add(notificationLabel, Integer.valueOf(10000));
         playAreaPanel = new PlayAreaPanel();
 
         JScrollPane scrollPane = setupAreaScrollPane();
@@ -52,7 +53,8 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
     }
 
     public JScrollPane setupAreaScrollPane(){
-        JScrollPane scrollPane = new JScrollPane(playAreaPanel);
+        JScrollPane scrollPane = new JScrollPane(playAreaPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         scrollPane.setSize(new Dimension(WIDTH, HEIGHT));
@@ -78,19 +80,19 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
     }
 
     @Override
-    public void display() {
+    public synchronized void display() {
         revalidate();
         repaint();
         setVisible(true);
     }
 
     @Override
-    public void displayError(String error) {
-
+    public synchronized void displayError(String error) {
+        displayError(error, 1.5f, false);
     }
 
     @Override
-    public void displayNotification(List<String> backlog) {
+    public synchronized void displayNotification(List<String> backlog) {
 
     }
 
@@ -110,7 +112,7 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
     }
 
     @Override
-    public void close() {
+    public synchronized void close() {
         setVisible(false);
     }
 
@@ -147,4 +149,34 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
                 break;
         }
     }
+
+//region ERROR LABEL METHODS
+    private void displayError(String errorMessage, float displayTimeSeconds, boolean close) {
+        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
+        //TODO [Gamba] Fix color
+        notificationLabel.setForeground(Color.red);
+        notificationLabel.setText(errorMessage);
+        // The error will become visible
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime, close);
+    }
+
+    private void startDisplayTimer(int displayTime, boolean isClosing) {
+        // After delay time the notification will
+        // disappear from the screen
+        displayTimer = new Timer(displayTime,
+                (event) -> {
+                    notificationLabel.setVisible(false);
+                    // java.awt timers don't stop after
+                    // the delay time has passed,
+                    // so they need to be actively stopped
+                    displayTimer.stop();
+                    displayTimer = null;
+                    if(isClosing){
+                        close();
+                    }
+                });
+        displayTimer.start();
+    }
+//endregion
 }

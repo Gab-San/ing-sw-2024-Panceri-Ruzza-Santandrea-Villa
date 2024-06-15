@@ -157,19 +157,19 @@ public class TUIParser {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
 
         String arg = cmdArgs.get(0).toUpperCase();
-        ViewPlayCard flippedCard = null;
+        ViewPlayCard flippedCard;
         if(arg.matches("\\d")) {
             try {
                 int index = Integer.parseInt(cmdArgs.get(0));
                 board.getPlayerHand().flipCard(index);
-                flippedCard = board.getPlayerHand().getCard(index);
+                flippedCard = board.getPlayerHand().getCard(index - 1);
             }catch (IndexOutOfBoundsException | NumberFormatException e){
                 throw new IllegalArgumentException("Invalid flip index provided.");
             }
         }
         else{
             board.getPlayerHand().flipCard(arg); //throws if card not in hand
-            board.getPlayerHand().getCardByID(arg);
+            flippedCard = board.getPlayerHand().getCardByID(arg);
         }
 
         view.update(SceneID.getMyAreaSceneID(),
