@@ -213,7 +213,7 @@ public class GameGUI implements View {
 
     @Override
     public synchronized void showError(String errorMsg) {
-
+        SceneManager.getInstance().getCurrentScene().displayError(errorMsg);
     }
 
     @Override

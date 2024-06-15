@@ -80,6 +80,8 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                 assert evt.getOldValue() instanceof ViewPlaceableCard;
                 ViewPlaceableCard removedCard = (ViewPlaceableCard) evt.getOldValue();
                 if(removedCard == null || !cardsInHand.contains(removedCard)) return;
+
+                if(selectedCard != null && selectedCard.equals(removedCard)) selectedCard = null; //deselect if removing selected card
                 SwingUtilities.invokeLater(
                         ()->{
                             playCardsPanel.remove(removedCard);
@@ -92,7 +94,9 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
             case CLEAR_PLAY_CARDS:
                 assert evt.getOldValue() instanceof List;
                 List<ViewPlayCard> removedCardsList = (List<ViewPlayCard>) evt.getOldValue();
+
                 for(ViewPlayCard removedPlayCard : removedCardsList){
+                    if(selectedCard != null && selectedCard.equals(removedPlayCard)) selectedCard = null; //deselect if removing selected card
                     SwingUtilities.invokeLater(
                             ()->{
                                 playCardsPanel.remove(removedPlayCard);
@@ -140,9 +144,13 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
         if(cardID == null) {
             try {
                 inputHandler.placeStartCard(selectedCard.isFaceUp());
+                selectedCard = null;
             } catch (RemoteException e) {
-                //TODO notify disconnection on screen
+                inputHandler.showError("CONNECTION LOST."); //TODO: review this notification
                 inputHandler.notifyDisconnection();
+            } catch (IllegalStateException e){
+                inputHandler.showError(e.getMessage());
+                throw e; //notifies the placeholder that placement failed
             }
             return;
         }
@@ -150,8 +158,13 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
         try {
             inputHandler.placeCard(selectedCard.getCardID(),position,
                     direction.toString(), selectedCard.isFaceUp());
+            selectedCard = null; //deselect after place attempt removing selected card
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            inputHandler.showError("CONNECTION LOST."); //TODO: review this notification
+            inputHandler.notifyDisconnection();
+        } catch (IllegalStateException e){
+            inputHandler.showError(e.getMessage());
+            //must not throw because ViewCorner doesn't take exception
         }
     }
 
@@ -186,7 +199,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
     public int getHeight() {
         return (int) getPreferredSize().getHeight();
     }
-
     @Override
     public int getWidth() {
         return (int) getPreferredSize().getWidth();

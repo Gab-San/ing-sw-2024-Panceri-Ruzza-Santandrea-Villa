@@ -53,10 +53,10 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
                 PlaceHolder p = (PlaceHolder) e.getSource();
                 try {
                     cornerListener.setClickedCard(null, new GamePoint(0,0), null);
-                    remove(p);
                 } catch (IllegalStateException exception){
-                    //TODO display error
+                    return; // if setClickedCard fails to place startCard
                 }
+                remove(p);
                 SwingUtilities.invokeLater(
                         () -> {
                             revalidate();
@@ -161,7 +161,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     }
 
     @Override
-    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction) {
+    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction) throws IllegalStateException{
         cornerListener.setClickedCard(cardID, position, direction);
     }
 }

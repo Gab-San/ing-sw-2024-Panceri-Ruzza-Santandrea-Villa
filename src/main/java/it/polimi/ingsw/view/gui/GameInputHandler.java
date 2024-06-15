@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
@@ -29,6 +30,10 @@ public class GameInputHandler{
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
 
+    public void showError(String errorMsg){
+        //threaded to prevent stalling while displaying
+        threadPool.submit(() -> gui.showError(errorMsg));
+    }
 
     public void sendMsg(String addressee, String message) throws RemoteException {
         serverProxy.sendMsg(addressee, message);
@@ -73,12 +78,14 @@ public class GameInputHandler{
     }
 
 
-    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException, IllegalStateException {
+        controller.validatePlaceCard(cardID, placePos, cornerDir);
         serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
     }
 
 
-    public void draw(char deck, int cardPosition) throws RemoteException {
+    public void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
+        controller.validateDraw(deck,cardPosition);
         serverProxy.draw(deck, cardPosition);
     }
 
