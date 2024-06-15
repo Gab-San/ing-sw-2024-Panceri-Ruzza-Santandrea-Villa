@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GUITest {
     public static void main(String[] args) {
-        View view = new GUI(new CommandPassthrough() {
+        View view = new GameGUI(new CommandPassthrough() {
             @Override
             public void sendMsg(String addressee, String message) throws RemoteException {
 

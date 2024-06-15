@@ -24,7 +24,7 @@ public class Client {
     public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
-    public static final int CONNECT_ATTEMPT_DELAY_MILLIS = 500;
+    public static final int CONNECT_ATTEMPT_DELAY_MILLIS = 1500;
     private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
 
@@ -264,6 +264,7 @@ public class Client {
                         setClientModelUpdater = rmiClient::setModelUpdater;
                         break;
                     } else {
+                        //Shouldn't happen, but this acts as a failsafe
                         System.err.println("Wrong connection technology passed as parameter. Must be TCP/RMI");
                         quitError();
                     }
@@ -271,6 +272,10 @@ public class Client {
                     if(i < MAX_CONNECTION_ATTEMPTS){
                         System.err.println("Couldn't locate server. Trying again... #"+i);
                     }
+                } catch (IllegalArgumentException e){
+                    //Shouldn't be thrown, but this acts as a failsafe
+                    System.err.println("Couldn't locate server. Port parameter is invalid.");
+                    quitError();
                 }
 
                 try{

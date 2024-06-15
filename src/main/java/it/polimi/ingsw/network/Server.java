@@ -1,9 +1,11 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.tcp.server.TCPServerSocket;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
@@ -17,7 +19,6 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
  */
 public class Server {
     private static final int MAX_PORT = 65535;
-
 
     /**
      * Main method of the Server. Reads args passed by command line and
@@ -44,6 +45,7 @@ public class Server {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+    //region READ ARGS
         if(args.length < 2){
             System.err.println("Must provide RMI and TCP ports, in that order.");
             System.exit(-1);
@@ -62,6 +64,7 @@ public class Server {
             System.err.println("Invalid ports provided. They must be numbers");
             System.exit(-1);
         }
+    //endregion
 
     //region SET PROPERTY java.rmi.server.hostname
         System.out.println("Reading Server IPs...");
@@ -94,10 +97,18 @@ public class Server {
 
         try{
             new RMIServer(rmiPort); //also creates CentralServer via singleton
+
+            //fix for when a TCP client connects first and then all
+            // subsequent RMI clients can't connect to RMIServer
+            try {
+                new RMIClient(serverIP, rmiPort);
+            }catch (NotBoundException e){
+                System.err.println("Debug RMIClient creation failed.");
+            }
         }catch (RemoteException e){
             System.err.println("Couldn't create RMI Server.");
         }catch (IllegalArgumentException e){
-            System.err.println("Invalid TCP port: " + e.getMessage());
+            System.err.println("Invalid RMI port: " + e.getMessage());
         }
 
         try{
@@ -106,9 +117,11 @@ public class Server {
             System.err.println("Couldn't create TCP Server.");
         }catch (IllegalArgumentException e){
             //thrown by ServerSocket constructor within TCPServerSocket
+            //should never be thrown due to port validation in READ-ARGS
             System.err.println("Invalid TCP port: " + e.getMessage());
         }
 
+    //region DEBUG commands
         String command="";
         while(!command.matches("[qQ]uit")){
             command = scanner.nextLine();
@@ -152,6 +165,8 @@ public class Server {
                 }
             }
         }
+    //endregion
+
         System.exit(0);
     }
 }
