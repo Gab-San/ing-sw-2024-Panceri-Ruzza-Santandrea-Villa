@@ -156,6 +156,12 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
 
     @Override
     public void setSelectedCard(ViewPlaceableCard card) {
+        //allow "deselection" of the selected card
+        if(selectedCard == card){
+            deselectCards();
+            selectedCard = null;
+            return;
+        }
         selectedCard = card;
         SwingUtilities.invokeLater(
                 () -> {

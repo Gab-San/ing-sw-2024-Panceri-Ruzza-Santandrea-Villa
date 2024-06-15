@@ -83,9 +83,14 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
             case ChangeNotifications.CURRENT_TURN_UPDATE:
                 assert evt.getNewValue() instanceof Integer;
                 adjournCurrentTurn((Integer) evt.getNewValue());
+                break;
             case ChangeNotifications.PLAYER_TURN_UPDATE:
                 assert evt.getNewValue() instanceof Integer;
                 setTurn((Integer) evt.getNewValue());
+                break;
+            case ChangeNotifications.PLAYER_DEADLOCK_UPDATE:
+                assert evt.getNewValue() instanceof Boolean;
+                setDeadLocked((Boolean) evt.getNewValue());
                 break;
         }
     }

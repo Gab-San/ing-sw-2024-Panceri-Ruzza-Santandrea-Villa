@@ -243,6 +243,7 @@ public abstract class ViewHand extends JComponent {
      * @param deadlocked new deadlock status
      */
     public void setDeadlocked(boolean deadlocked) {
+        firePropertyChange(ChangeNotifications.PLAYER_DEADLOCK_UPDATE, this.isDeadlocked, deadlocked);
         isDeadlocked = deadlocked;
     }
 
