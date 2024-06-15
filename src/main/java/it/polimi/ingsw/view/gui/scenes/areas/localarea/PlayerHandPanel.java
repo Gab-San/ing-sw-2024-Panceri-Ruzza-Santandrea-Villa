@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
+import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
 
-public class PlayerHandPanel extends JPanel implements PropertyChangeListener, CardListener{
+public class PlayerHandPanel extends JPanel implements PropertyChangeListener, CardListener, CornerListener {
     private static final int CARD_HEIGHT = ViewCard.getScaledHeight();
     private static final int CARD_WIDTH = ViewCard.getScaledWidth();
     private final List<ViewPlaceableCard> cardsInHand;

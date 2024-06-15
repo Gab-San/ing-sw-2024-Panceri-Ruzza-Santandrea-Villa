@@ -47,7 +47,7 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
                 handPanel.getWidth(), handPanel.getHeight());
         layersPane.add(handPanel,  Integer.valueOf(10));
 
-        playAreaPanel.setCardListener(handPanel);
+        playAreaPanel.setCornerListener(handPanel);
 
         add(layersPane,BorderLayout.CENTER);
     }
@@ -145,7 +145,7 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
                 ViewPlayArea playArea = (ViewPlayArea) evt.getNewValue();
                 if(!inputHandler.isLocalPlayer(playArea.getOwner())) return;
                 playArea.addPropertyChangeListener(ChangeNotifications.VIS_RES_CHANGE, playerInfoPanel);
-                playArea.addPropertyChangeListener(playAreaPanel);
+                playArea.addPropertyChangeListener(ChangeNotifications.PLACED_CARD, playAreaPanel);
                 break;
         }
     }

@@ -30,6 +30,7 @@ public class ViewCorner extends JComponent implements MouseListener {
      * True if this corner is not covered by another corner
      */
     private boolean isVisible;
+    private boolean isDisabled;
 
     /**
      * Constructs the corner, optionally already attaching it to a card
@@ -44,6 +45,7 @@ public class ViewCorner extends JComponent implements MouseListener {
         this.cardRef = cardRef;
         this.direction = direction;
         isVisible = true;
+        isDisabled = false;
     }
 
     /**
@@ -132,11 +134,10 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(!isVisible){
+        if(!isVisible || isDisabled){
             return;
         }
-        System.out.println("CARD POSITION: " + cardRef.getPosition() + "DIRECTION: " + direction);
-        cardRef.cardListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
+        cardRef.cornerListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
     }
 
     @Override
@@ -147,13 +148,23 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        if(!isVisible || isDisabled){
+            return;
+        }
         setEnabled(true);
         setFocusable(true);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        if(!isVisible || isDisabled){
+            return;
+        }
         setEnabled(false);
         setFocusable(false);
+    }
+
+    public void disableCorner() {
+        isDisabled = true;
     }
 }

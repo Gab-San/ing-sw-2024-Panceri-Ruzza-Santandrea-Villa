@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
+import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.gui.CardListener;
-import it.polimi.ingsw.view.gui.ChangeNotifications;
+import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
+public class PlayAreaPanel extends JPanel implements PropertyChangeListener, CornerListener {
     private static final int AREA_WIDTH = 16620;
     private static final int AREA_HEIGHT = 11120;
     private static final int CENTER_X = AREA_WIDTH/2;
@@ -24,7 +24,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
     private final SpringLayout layout;
     private final List<PlaceHolder> placeHolderList;
     private SpringLayout.Constraints startingCard;
-    private CardListener cardListener;
+    private CornerListener cornerListener;
     public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setBackground(new Color(0xc76f30));
@@ -52,7 +52,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
             public void mouseClicked(MouseEvent e) {
                 PlaceHolder p = (PlaceHolder) e.getSource();
                 try {
-                    cardListener.setClickedCard(null, new GamePoint(0,0), null);
+                    cornerListener.setClickedCard(null, new GamePoint(0,0), null);
                     remove(p);
                 } catch (IllegalStateException exception){
                     //TODO display error
@@ -90,39 +90,33 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
         return new Dimension(AREA_WIDTH, AREA_HEIGHT);
     }
 
-    public void setCardListener(CardListener cardListener) {
-        this.cardListener = cardListener;
+    public void setCornerListener(CornerListener cornerListener) {
+        this.cornerListener = cornerListener;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        switch (evt.getPropertyName()){
-            case ChangeNotifications.PLACED_CARD:
-                assert evt.getNewValue() instanceof ViewPlaceableCard;
-                ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
-                SpringLayout.Constraints constraints = setCardPosition(placedCard);
-                deletePlaceHolders();
+        assert evt.getNewValue() instanceof ViewPlaceableCard;
+        ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+        SpringLayout.Constraints constraints = setCardPosition(placedCard);
+        deletePlaceHolders();
+        placedCard.setCornerListener(this);
 
-                SwingUtilities.invokeLater(
-                        () -> {
-                            System.out.println("PLACING CARD: " + placedCard.getCardID());
-                            placedCard.setBorder(BorderFactory.createEmptyBorder());
-                            add(placedCard, constraints);
-                            revalidate();
-                            repaint();
-                        }
-                );
-        }
-
+        SwingUtilities.invokeLater(
+                () -> {
+                    placedCard.setBorder(BorderFactory.createEmptyBorder());
+                    add(placedCard, constraints);
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 
     private void deletePlaceHolders() {
        SwingUtilities.invokeLater(
-               () -> {
-                   placeHolderList.forEach(
-                           this::remove
-                           );
-               }
+               () -> placeHolderList.forEach(
+                       this::remove
+                       )
        );
     }
 
@@ -141,37 +135,10 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
         }
 
         GamePoint position = placedCard.getPosition();
-        System.out.println(position.row() + " " + position.col());
         int centerX = position.col() * (ViewCard.getScaledWidth() - ViewCorner.getFixedWidth());
         // y axis direction is towards the bottom of the screen
         int centerY = -1 * position.row() * (ViewCard.getScaledHeight() - ViewCorner.getFixedHeight());
-        System.out.println("CENTERX" + centerX);
-        System.out.println("CENTERY" +centerY);
 
-        System.out.println("X: " + startingCard.getX().getMinimumValue());
-        System.out.println("X: " +startingCard.getX().getPreferredValue());
-        System.out.println("X: " +startingCard.getX().getMaximumValue());
-        System.out.println("Y: " +startingCard.getY().getMinimumValue());
-        System.out.println("Y: " +startingCard.getY().getPreferredValue());
-        System.out.println("Y: " +startingCard.getY().getMaximumValue());
-        System.out.println("WDT: " +startingCard.getWidth().getMinimumValue());
-        System.out.println("WDT: " +startingCard.getWidth().getPreferredValue());
-        System.out.println("WDT: " +startingCard.getWidth().getMaximumValue());
-        System.out.println("HGT: " +startingCard.getHeight().getMinimumValue());
-        System.out.println("HGT: " +startingCard.getHeight().getPreferredValue());
-        System.out.println("HGT: " +startingCard.getHeight().getMaximumValue());
-//        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placedCard,
-//                centerX,
-//                SpringLayout.HORIZONTAL_CENTER, startingCard);
-//        layout.putConstraint(SpringLayout.VERTICAL_CENTER, placedCard,
-//                centerY,
-//                SpringLayout.VERTICAL_CENTER, startingCard);
-//        layout.putConstraint(SpringLayout.EAST, placedCard,
-//                centerX + ViewCard.getScaledWidth()/2,
-//                SpringLayout.VERTICAL_CENTER, startingCard);
-//        layout.putConstraint(SpringLayout.SOUTH, placedCard,
-//                centerY + ViewCard.getScaledHeight()/2,
-//                SpringLayout.HORIZONTAL_CENTER, startingCard);
 
         SpringLayout.Constraints cardConstraints = layout.getConstraints(placedCard);
         cardConstraints.setX(
@@ -189,18 +156,12 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener {
         cardConstraints.setHeight(
                 Spring.sum(cardConstraints.getY(), Spring.constant(ViewCard.getScaledHeight()))
         );
-        System.out.println("X: " + layout.getConstraints(placedCard).getX().getMinimumValue());
-        System.out.println("X: " +layout.getConstraints(placedCard).getX().getPreferredValue());
-        System.out.println("X: " +layout.getConstraints(placedCard).getX().getMaximumValue());
-        System.out.println("Y: " +layout.getConstraints(placedCard).getY().getMinimumValue());
-        System.out.println("Y: " +layout.getConstraints(placedCard).getY().getPreferredValue());
-        System.out.println("Y: " +layout.getConstraints(placedCard).getY().getMaximumValue());
-        System.out.println("WDT: " +layout.getConstraints(placedCard).getWidth().getMinimumValue());
-        System.out.println("WDT: " +layout.getConstraints(placedCard).getWidth().getPreferredValue());
-        System.out.println("WDT: " +layout.getConstraints(placedCard).getWidth().getMaximumValue());
-        System.out.println("HGT: " +layout.getConstraints(placedCard).getHeight().getMinimumValue());
-        System.out.println("HGT: " +layout.getConstraints(placedCard).getHeight().getPreferredValue());
-        System.out.println("HGT: " +layout.getConstraints(placedCard).getHeight().getMaximumValue());
+
         return cardConstraints;
+    }
+
+    @Override
+    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction) {
+        cornerListener.setClickedCard(cardID, position, direction);
     }
 }

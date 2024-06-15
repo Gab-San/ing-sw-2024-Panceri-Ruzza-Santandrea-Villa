@@ -543,7 +543,6 @@ public class ModelUpdater {
                 pos.isCornerVisible().keySet().stream()
                     .filter(dir -> !pos.isCornerVisible().get(dir))
                     .forEach(dir -> card.getCorner(dir).cover());
-                System.out.println("Card position: " + pos);
                 playArea.setCard(new GamePoint(pos.row(), pos.col()), card);
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
                         .filter(c -> c.cardCornerId().equals(card.getCardID()))
