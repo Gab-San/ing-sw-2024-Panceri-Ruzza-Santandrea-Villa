@@ -57,11 +57,12 @@ public class ViewPlayArea extends JComponent {
      */
     public void placeCard(GamePoint position, ViewPlaceableCard card){
         setCard(position, card);
+        List<ViewCorner> placementFreeCorners = new LinkedList<>();
         for(CornerDirection dir : CornerDirection.values()){
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
             if(dirCard != null){
                 dirCard.getCorner(dir.opposite()).cover();
-                freeCorners.remove(dirCard.getCorner(dir.opposite()));
+                placementFreeCorners.remove(dirCard.getCorner(dir.opposite()));
             }
             else{
                 if(card.getCornerResource(dir) != FILLED){
@@ -74,7 +75,7 @@ public class ViewPlayArea extends JComponent {
                             break;
                         }
                     }
-                    if(isCornerFree) freeCorners.add(card.getCorner(dir));
+                    if(isCornerFree) placementFreeCorners.add(card.getCorner(dir));
                 }
                 else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
                     GamePoint pointLocked = position.move(dir);
@@ -83,7 +84,7 @@ public class ViewPlayArea extends JComponent {
                         if(cardDir != null) {
                             ViewCorner possibleLockedCorner = cardDir.getCorner(dir2.opposite());
                             if (possibleLockedCorner.getResource() != FILLED)
-                                freeCorners.remove(possibleLockedCorner);
+                                placementFreeCorners.remove(possibleLockedCorner);
                         }
                     }
                 }
@@ -97,6 +98,7 @@ public class ViewPlayArea extends JComponent {
             board.notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlaceCard(owner, true, cardMatrix));
 
+        addFreeCorners(placementFreeCorners);
     }
     /**
      * Places a card at position bypassing all checks.

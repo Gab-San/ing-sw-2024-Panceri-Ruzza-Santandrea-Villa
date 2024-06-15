@@ -96,6 +96,15 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         this.getInputMap().remove(KeyStroke.getKeyStroke("F"));
     }
 
+    public void activateCorner(CornerDirection direction){
+        corners.get(direction).activateCorner();
+        SwingUtilities.invokeLater(
+                () -> {
+                    revalidate();
+                    repaint();
+                }
+        );
+    }
     public synchronized GamePoint getPosition(){
         return position;
     }
@@ -113,11 +122,11 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
             corner.setEnabled(false);
             corner.setFocusable(false);
         }
+        this.setFocusable(false);
+        this.addMouseListener(this);
         corners.keySet().stream()
                 .sorted(CornerDirection.getComparator())
                 .forEach((dir) -> add(corners.get(dir)));
-        this.setFocusable(false);
-        this.addMouseListener(this);
         // Enabling flipping input
         this.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("F"), "FLIP_CARD_ACTION");
         this.getActionMap().put("FLIP_CARD_ACTION", new FlipAction());
@@ -129,7 +138,8 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
             corner.setEnabled(false);
             corner.setVisible(false);
             corner.disableCorner();
-            corner.setBorder(BorderFactory.createEmptyBorder());
+            corner.resetCorner();
+            remove(corner);
         }
     }
 

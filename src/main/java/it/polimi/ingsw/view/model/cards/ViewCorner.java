@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.plaf.synth.SynthUI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Objects;
 
 /**
  * A card's corner. Should always be associated with a card,
@@ -86,6 +86,7 @@ public class ViewCorner extends JComponent implements MouseListener {
      */
     public synchronized void cover(){
         isVisible = false;
+        //TODO [Ale] use a resetCorner() here?
         SwingUtilities.invokeLater(
                 () -> {
                     setEnabled(false);
@@ -102,6 +103,20 @@ public class ViewCorner extends JComponent implements MouseListener {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj instanceof ViewCorner otherCorner){
+            return Objects.equals(this.cardRef, otherCorner.cardRef)
+                    && this.direction == otherCorner.direction;
+        }
+        return false;
+    }
+    @Override
+    public int hashCode(){
+        return Objects.hash(cardRef, direction);
+    }
+
+    @Override
     public Dimension getSize() {
         return new Dimension(50,60);
     }
@@ -110,6 +125,11 @@ public class ViewCorner extends JComponent implements MouseListener {
     @Override
     public Rectangle getBounds() {
         return new Rectangle(0,0, 50, 60);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(50, 60);
     }
 
     public static int getFixedWidth(){
@@ -122,14 +142,11 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     public void activateCorner() {
         addMouseListener(this);
-        SwingUtilities.invokeLater(
-                () -> {
-                    Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
-                    Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
-                    setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
-                    repaint();
-                }
-        );
+        setEnabled(true);
+        setVisible(true);
+        Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
+        Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
+        this.setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
     }
 
     @Override
@@ -137,6 +154,7 @@ public class ViewCorner extends JComponent implements MouseListener {
         if(!isVisible || isDisabled){
             return;
         }
+        System.out.println(e.getSource());
         cardRef.cornerListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
     }
 
@@ -148,15 +166,18 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        System.out.println("ENTERED CORNER");
         if(!isVisible || isDisabled){
             return;
         }
+
         setEnabled(true);
         setFocusable(true);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        System.out.println("ENTERED CORNER");
         if(!isVisible || isDisabled){
             return;
         }
@@ -166,5 +187,25 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     public void disableCorner() {
         isDisabled = true;
+    }
+
+    @Override
+    public String toString() {
+        return "{\n" + "DIRECTION " + direction + "\n" +
+                "REF " + cardRef.getCardID() + "\n" +
+                "IS VISIBLE " + isVisible + "\n}";
+    }
+
+    public void resetCorner() {
+        removeMouseListener(this);
+        setEnabled(false);
+        setVisible(false);
+        SwingUtilities.invokeLater(
+                () -> {
+                    setBorder(BorderFactory.createEmptyBorder());
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 }

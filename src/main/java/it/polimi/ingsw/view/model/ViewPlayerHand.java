@@ -5,10 +5,7 @@ import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.update.*;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
-import it.polimi.ingsw.view.model.cards.ViewCard;
-import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
-import it.polimi.ingsw.view.model.cards.ViewStartCard;
+import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.List;
 
@@ -133,21 +130,22 @@ public class ViewPlayerHand extends ViewHand {
     }
     /**
      * Flips the card in hand identified by cardID (also valid for flipping starting card)
-     * @param cardID ID of the card to flip (including starting card)
+     * @param cardID ID of the card to flip (including "starting" to flip the starting card)
      * @throws IllegalArgumentException there is no card in hand with given cardID
+     * @return the flipped card
      */
-    public void flipCard(String cardID) throws IllegalArgumentException{
+    public ViewPlaceableCard flipCard(String cardID) throws IllegalArgumentException{
         for(ViewPlayCard c : getCards()){
             if(c.getCardID().equals(cardID)) {
                 c.flip();
-                return;
+                return c;
             }
         }
         if(getStartCard() != null){
             boolean matchesStartingCard = getStartCard().getCardID().equals(cardID) || cardID.matches("[sS]tarting|STARTING");
             if(matchesStartingCard){
                 getStartCard().flip();
-                return;
+                return getStartCard();
             }
         }
 

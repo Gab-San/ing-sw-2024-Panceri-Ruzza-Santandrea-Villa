@@ -123,7 +123,7 @@ public class JsonImporter {
 
     /**
      * @param ID a card ID (can be null)
-     * @return the card with the given ID
+     * @return the card with the given ID (a copy if it's a resource or gold card)
      *        (or null if the ID is null or doesn't correspond to any card)
      */
     public ViewCard getCard(String ID){
@@ -138,7 +138,7 @@ public class JsonImporter {
     }
     /**
      * @param ID a card ID (can be null)
-     * @return the playCard with the given ID
+     * @return a copy of the playCard with the given ID
      *        (or null if the ID is null or doesn't correspond to a playCard)
      */
     public ViewPlayCard getPlayCard(String ID){
@@ -166,7 +166,7 @@ public class JsonImporter {
     }
     /**
      * @param IDList a list of playCard IDs
-     * @return the list of playCards with the given IDs, in the same order as the IDs
+     * @return the list of copies of the playCards with the given IDs, in the same order as the IDs
      *        (the list may contain null values for the IDs that don't correspond to a playCard)
      */
     public List<ViewPlayCard> getPlayCards(List<String> IDList){

@@ -531,6 +531,8 @@ public class ModelUpdater {
         for(CardPosition position: cardPositions){
             if(position.row() == 0 && position.col() == 0){
                 ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(position.cardId());
+                if(position.isFaceUp()) card.turnFaceUp();
+                else card.turnFaceDown();
                 playArea.setCard(new GamePoint(0, 0), card);
             }
         }
@@ -540,10 +542,12 @@ public class ModelUpdater {
                 if(pos.isFaceUp()) card.turnFaceUp();
                 else card.turnFaceDown();
 
+                playArea.setCard(new GamePoint(pos.row(), pos.col()), card);
+
                 pos.isCornerVisible().keySet().stream()
                     .filter(dir -> !pos.isCornerVisible().get(dir))
                     .forEach(dir -> card.getCorner(dir).cover());
-                playArea.setCard(new GamePoint(pos.row(), pos.col()), card);
+
                 List<ViewCorner> cardFreeCorners = freeSerializableCorners.stream()
                         .filter(c -> c.cardCornerId().equals(card.getCardID()))
                         .map(SerializableCorner::getCornerDirection)

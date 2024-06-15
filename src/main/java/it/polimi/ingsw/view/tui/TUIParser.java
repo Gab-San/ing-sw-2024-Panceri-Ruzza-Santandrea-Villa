@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.events.commands.DisplayFlippedCard;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
 import java.rmi.RemoteException;
@@ -157,7 +158,7 @@ public class TUIParser {
         if(cmdArgs.isEmpty()) throw new IllegalArgumentException("Must provide an index or cardID to flip!");
 
         String arg = cmdArgs.get(0).toUpperCase();
-        ViewPlayCard flippedCard;
+        ViewPlaceableCard flippedCard;
         if(arg.matches("\\d")) {
             try {
                 int index = Integer.parseInt(cmdArgs.get(0));
@@ -168,8 +169,7 @@ public class TUIParser {
             }
         }
         else{
-            board.getPlayerHand().flipCard(arg); //throws if card not in hand
-            flippedCard = board.getPlayerHand().getCardByID(arg);
+            flippedCard = board.getPlayerHand().flipCard(arg); //throws if card not in hand
         }
 
         view.update(SceneID.getMyAreaSceneID(),
