@@ -164,7 +164,7 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
             inputHandler.notifyDisconnection();
         } catch (IllegalStateException e){
             inputHandler.showError(e.getMessage());
-            //must not throw because ViewCorner doesn't take exception
+            throw e; //notifies the caller that placement failed
         }
     }
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
@@ -16,7 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PlayAreaPanel extends JPanel implements PropertyChangeListener, CornerListener {
+public class PlayAreaPanel extends JPanel implements PropertyChangeListener, CornerListener, CardListener {
     private static final int AREA_WIDTH = 16620;
     private static final int AREA_HEIGHT = 11120;
     private static final int CENTER_X = AREA_WIDTH/2;
@@ -101,6 +102,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
         SpringLayout.Constraints constraints = setCardPosition(placedCard);
         deletePlaceHolders();
         placedCard.setCornerListener(this);
+        placedCard.setCardListener(this);
 
         SwingUtilities.invokeLater(
                 () -> {
@@ -161,7 +163,16 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     }
 
     @Override
-    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction) throws IllegalStateException{
-        cornerListener.setClickedCard(cardID, position, direction);
+    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction){
+        try{
+            cornerListener.setClickedCard(cardID, position, direction);
+        }catch (IllegalStateException e){
+            return; //on placement failure
+        }
+    }
+
+    @Override
+    public void setSelectedCard(ViewPlaceableCard card) {
+        System.out.println("Clicked a placed card and triggered \"SetSelectedCard\"");
     }
 }
