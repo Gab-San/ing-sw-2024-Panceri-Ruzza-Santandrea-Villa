@@ -50,6 +50,16 @@ public class ViewPlayArea extends JComponent {
     }
 
     /**
+     * Removes the corner from the freeCorners list
+     * and handles GUI border/mouseListener removal
+     * @param corner the corner to remove from freeCorners
+     */
+    private void removeFreeCorner(ViewCorner corner){
+        corner.resetCorner();
+        freeCorners.remove(corner);
+    }
+
+    /**
      * Places a card at position, covering corners and handling freeCorners list <br>
      * This function trusts the server and does not check the validity of the placement
      * @param position point on which to place the card
@@ -62,7 +72,7 @@ public class ViewPlayArea extends JComponent {
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
             if(dirCard != null){
                 dirCard.getCorner(dir.opposite()).cover();
-                placementFreeCorners.remove(dirCard.getCorner(dir.opposite()));
+                removeFreeCorner(dirCard.getCorner(dir.opposite()));
             }
             else{
                 if(card.getCornerResource(dir) != FILLED){
@@ -84,7 +94,7 @@ public class ViewPlayArea extends JComponent {
                         if(cardDir != null) {
                             ViewCorner possibleLockedCorner = cardDir.getCorner(dir2.opposite());
                             if (possibleLockedCorner.getResource() != FILLED)
-                                placementFreeCorners.remove(possibleLockedCorner);
+                                removeFreeCorner(possibleLockedCorner);
                         }
                     }
                 }
@@ -230,6 +240,9 @@ public class ViewPlayArea extends JComponent {
      * Resets this playArea's free corners list.
      */
     public void clearFreeCorners(){
+        freeCorners.forEach(
+                ViewCorner::resetCorner
+        );
         freeCorners.clear();
     }
 
@@ -250,7 +263,7 @@ public class ViewPlayArea extends JComponent {
 
 //        firePropertyChange(ChangeNotifications.FREE_CORN_CHANGE, null, cardFreeCorners);
 
-        freeCorners.forEach(
+        cardFreeCorners.forEach(
                 ViewCorner::activateCorner
         );
     }

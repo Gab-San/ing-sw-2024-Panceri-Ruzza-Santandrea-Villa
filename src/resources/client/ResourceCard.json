@@ -250,7 +250,7 @@
       "cardId": "R19",
       "pointsOnPlace": 1,
       "corners": [
-        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "L", "backResource": "N"},
         {"direction": "BL", "frontResource": "N", "backResource": "N"},
         {"direction": "BR", "frontResource": "N", "backResource": "N"}

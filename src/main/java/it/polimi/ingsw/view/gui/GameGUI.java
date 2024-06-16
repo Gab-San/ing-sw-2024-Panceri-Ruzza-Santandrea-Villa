@@ -185,12 +185,17 @@ public class GameGUI implements View {
                     try {
                         inputHandler.draw('R', 0);
                         hasDrawn = true;
-                    } catch (IllegalStateException ignore){
+                    } catch (IllegalStateException | IllegalArgumentException e){
+                        System.out.println("DRAW FAIL:  " + e.getMessage());
+                        break;
+//                        if(e.getMessage().contains("your turn")) break;
                     }
                     catch (RemoteException e) {
+                        System.out.println("DRAW REMOTE EXCEPTION");
                         throw new RuntimeException(e);
                     }
                 }
+                break;
             case EVALOBJ, SHOWWIN:
 
         }

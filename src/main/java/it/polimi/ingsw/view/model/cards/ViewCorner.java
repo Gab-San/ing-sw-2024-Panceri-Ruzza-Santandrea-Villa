@@ -146,7 +146,13 @@ public class ViewCorner extends JComponent implements MouseListener {
         setVisible(true);
         Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
         Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
-        this.setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+        SwingUtilities.invokeLater(
+                () -> {
+                    setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 
     @Override
@@ -166,7 +172,7 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("ENTERED CORNER");
+//        System.out.println("ENTERED CORNER");
         if(!isVisible || isDisabled){
             return;
         }
@@ -177,7 +183,7 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        System.out.println("ENTERED CORNER");
+//        System.out.println("EXITED CORNER");
         if(!isVisible || isDisabled){
             return;
         }

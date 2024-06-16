@@ -204,13 +204,13 @@ public class ViewBoard extends JComponent {
      */
     public synchronized void setGamePhase(GamePhase gamePhase) {
         if(this.gamePhase != gamePhase) {
+            this.gamePhase = gamePhase;
             if (gamePhase != GamePhase.SHOWWIN)
                 notifyView(SceneID.getBoardSceneID(), new DisplayGamePhase(gamePhase));
             else
                 notifyView(SceneID.getBoardSceneID(), new GotoEndgameEvent(this));
             // must notify GotoEndgameEvent to an existing scene (the Board scene is fine)
         }
-        this.gamePhase = gamePhase;
     }
 
     /**

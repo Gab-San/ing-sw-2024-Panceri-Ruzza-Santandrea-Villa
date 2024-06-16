@@ -132,34 +132,50 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
                     CENTER_X + ViewCard.getScaledWidth() / 2, SpringLayout.WEST, this);
             layout.putConstraint(SpringLayout.SOUTH, placedCard,
                     CENTER_Y + ViewCard.getScaledHeight() / 2, SpringLayout.NORTH, this);
+
+            //FIXME [Ale] with the new method below startingCard is no longer used
             startingCard = layout.getConstraints(placedCard);
             return startingCard;
         }
 
         GamePoint position = placedCard.getPosition();
-        int centerX = position.col() * (ViewCard.getScaledWidth() - ViewCorner.getFixedWidth());
+        int xOffset = position.col() * (ViewCard.getScaledWidth() - ViewCorner.getFixedWidth());
         // y axis direction is towards the bottom of the screen
-        int centerY = -1 * position.row() * (ViewCard.getScaledHeight() - ViewCorner.getFixedHeight());
+        int yOffset = -1 * position.row() * (ViewCard.getScaledHeight() - ViewCorner.getFixedHeight());
 
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placedCard,
+                CENTER_X + xOffset,
+                SpringLayout.WEST, this);
+        layout.putConstraint(SpringLayout.VERTICAL_CENTER, placedCard,
+                CENTER_Y + yOffset,
+                SpringLayout.NORTH, this);
+        layout.putConstraint(SpringLayout.EAST, placedCard,
+                CENTER_X + ViewCard.getScaledWidth() / 2 + xOffset,
+                SpringLayout.WEST, this);
+        layout.putConstraint(SpringLayout.SOUTH, placedCard,
+                CENTER_Y + ViewCard.getScaledHeight() / 2 + yOffset,
+                SpringLayout.NORTH, this);
 
-        SpringLayout.Constraints cardConstraints = layout.getConstraints(placedCard);
-        cardConstraints.setX(
-                Spring.sum(startingCard.getX(), Spring.constant(centerX))
-        );
+        //TODO: Ga ti lascio i commenti così leggi, se va bene rimuovili poi
+        //   (vedi anche in ModelUpdater setPlayAreaState)
 
-        cardConstraints.setY(
-                Spring.sum(startingCard.getY(), Spring.constant(centerY))
-        );
+//        cardConstraints.setX(
+//                Spring.sum(startingCard.getX(), Spring.constant(xOffset))
+//        );
+//
+//        cardConstraints.setY(
+//                Spring.sum(startingCard.getY(), Spring.constant(yOffset))
+//        );
+//
+//        cardConstraints.setWidth(
+//                Spring.sum(cardConstraints.getX(), Spring.constant(ViewCard.getScaledWidth()))
+//        );
+//
+//        cardConstraints.setHeight(
+//                Spring.sum(cardConstraints.getY(), Spring.constant(ViewCard.getScaledHeight()))
+//        );
 
-        cardConstraints.setWidth(
-                Spring.sum(cardConstraints.getX(), Spring.constant(ViewCard.getScaledWidth()))
-        );
-
-        cardConstraints.setHeight(
-                Spring.sum(cardConstraints.getY(), Spring.constant(ViewCard.getScaledHeight()))
-        );
-
-        return cardConstraints;
+        return layout.getConstraints(placedCard);
     }
 
     @Override

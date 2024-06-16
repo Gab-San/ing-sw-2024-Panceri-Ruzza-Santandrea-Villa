@@ -528,14 +528,16 @@ public class ModelUpdater {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
         playArea.clearCardMatrix();
-        for(CardPosition position: cardPositions){
-            if(position.row() == 0 && position.col() == 0){
-                ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(position.cardId());
-                if(position.isFaceUp()) card.turnFaceUp();
-                else card.turnFaceDown();
-                playArea.setCard(new GamePoint(0, 0), card);
-            }
-        }
+
+        //FIXME [Ale] with the new method of PlayAreaPanel startingCard is no longer needed as the first placement
+        //reorder so that starting card is first
+//        cardPositions.sort((p1, p2) -> {
+//            if(p1.row() == 0 && p1.col() == 0) return -1; //(0,0) is first
+//            if(p2.row() == 0 && p2.col() == 0) return 1;  //(0,0) is first
+//            else return 0; //other cards can be placed in any order
+//        });
+
+        //then place all other cards
         for(CardPosition pos : cardPositions){
             ViewPlaceableCard card = (ViewPlaceableCard) jsonImporter.getCard(pos.cardId());
             if(card != null) {
