@@ -127,9 +127,8 @@
     },
     {
       "cardId": "G9",
-      "type": "GoldCard",
-      "pointsOnPlace": "5",
       "placementCost": "5-M",
+      "pointsOnPlace": "5",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -142,8 +141,8 @@
     },
     {
       "cardId": "G10",
-      "pointsOnPlace": "1-Q",
       "placementCost": "2-L, 1-B",
+      "pointsOnPlace": "1-Q",
       "corners": [
         {"direction": "TL", "frontResource": "Q", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -156,8 +155,8 @@
     },
     {
       "cardId": "G11",
-      "pointsOnPlace": "1-S",
       "placementCost": "2-L, 1-M",
+      "pointsOnPlace": "1-S",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "S", "backResource": "N"},
@@ -170,8 +169,8 @@
     },
     {
       "cardId": "G12",
-      "pointsOnPlace": "1-P",
       "placementCost": "2-L, 1-W",
+      "pointsOnPlace": "1-P",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -187,7 +186,7 @@
       "placementCost": "3-L, 1-B",
       "pointsOnPlace": "2-CC",
       "corners": [
-        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
         {"direction": "BL", "frontResource": "N", "backResource": "N"},
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
@@ -197,10 +196,9 @@
       "backImageFileName": "gold/img_G10_back.png"
     },
     {
-      "type": "GoldCard",
       "cardId": "G14",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-L, 1-W",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -213,8 +211,8 @@
     },
     {
       "cardId": "G15",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-L, 1-M",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -227,8 +225,8 @@
     },
     {
       "cardId": "G16",
-      "pointsOnPlace": "3",
       "placementCost": "3-L",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -241,8 +239,8 @@
     },
     {
       "cardId": "G17",
-      "pointsOnPlace": "3",
       "placementCost": "3-L",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "S", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -255,8 +253,8 @@
     },
     {
       "cardId": "G18",
+      "placementCost": "3-L",
       "pointsOnPlace": "3",
-      "placementCost": "2-L",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "P", "backResource": "N"},
@@ -269,8 +267,8 @@
     },
     {
       "cardId": "G19",
-      "pointsOnPlace": "5",
       "placementCost": "5-L",
+      "pointsOnPlace": "5",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -283,8 +281,8 @@
     },
     {
       "cardId": "G20",
-      "pointsOnPlace": "1-P",
       "placementCost": "2-W, 1-B",
+      "pointsOnPlace": "1-P",
       "corners": [
         {"direction": "TL", "frontResource": "P", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -297,8 +295,8 @@
     },
     {
       "cardId": "G21",
-      "pointsOnPlace": "1-S",
       "placementCost": "2-W, 1-L",
+      "pointsOnPlace": "1-S",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -311,8 +309,8 @@
     },
     {
       "cardId": "G22",
-      "pointsOnPlace": "1-Q",
       "placementCost": "2-W, 1-M",
+      "pointsOnPlace": "1-Q",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -325,8 +323,8 @@
     },
     {
       "cardId": "G23",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-W, 1-B",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -339,8 +337,8 @@
     },
     {
       "cardId": "G24",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-W, 1-M",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -353,8 +351,8 @@
     },
     {
       "cardId": "G25",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-W, 1-L",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -367,8 +365,8 @@
     },
     {
       "cardId": "G26",
-      "pointsOnPlace":  "3",
       "placementCost": "3-W",
+      "pointsOnPlace":  "3",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -381,8 +379,8 @@
     },
     {
       "cardId": "G27",
-      "pointsOnPlace": "3",
       "placementCost": "3-W",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "P", "backResource": "N"},
@@ -395,8 +393,8 @@
     },
     {
       "cardId": "G28",
-      "pointsOnPlace": "3",
       "placementCost": "3-W",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -409,8 +407,8 @@
     },
     {
       "cardId": "G29",
-      "pointsOnPlace": "5",
       "placementCost": "5-W",
+      "pointsOnPlace": "5",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -423,8 +421,8 @@
     },
     {
       "cardId": "G30",
-      "pointsOnPlace": "1-Q",
       "placementCost": "2-B, 1-L",
+      "pointsOnPlace": "1-Q",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "Q", "backResource": "N"},
@@ -437,8 +435,8 @@
     },
     {
       "cardId": "G31",
-      "pointsOnPlace": "1-S",
       "placementCost": "2-B, 1-W",
+      "pointsOnPlace": "1-S",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -451,8 +449,8 @@
     },
     {
       "cardId": "G32",
-      "pointsOnPlace": "1-P",
       "placementCost": "2-B, 1-M",
+      "pointsOnPlace": "1-P",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -465,8 +463,8 @@
     },
     {
       "cardId": "G33",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-B, 1-W",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -479,8 +477,8 @@
     },
     {
       "cardId": "G34",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-B, 1-L",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},
@@ -493,8 +491,8 @@
     },
     {
       "cardId": "G35",
-      "pointsOnPlace": "2-CC",
       "placementCost": "3-B, 1-M",
+      "pointsOnPlace": "2-CC",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -507,8 +505,8 @@
     },
     {
       "cardId": "G36",
-      "pointsOnPlace": "3",
       "placementCost": "3-B",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "P", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -521,8 +519,8 @@
     },
     {
       "cardId": "G37",
-      "pointsOnPlace": "3",
       "placementCost": "3-B",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "S", "backResource": "N"},
@@ -535,8 +533,8 @@
     },
     {
       "cardId": "G38",
-      "pointsOnPlace": "3",
       "placementCost": "3-B",
+      "pointsOnPlace": "3",
       "corners": [
         {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
@@ -549,8 +547,8 @@
     },
     {
       "cardId": "G39",
-      "pointsOnPlace": "5",
       "placementCost": "5-B",
+      "pointsOnPlace": "5",
       "corners": [
         {"direction": "TL", "frontResource": "N", "backResource": "N"},
         {"direction": "TR", "frontResource": "N", "backResource": "N"},

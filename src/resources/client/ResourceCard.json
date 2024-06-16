@@ -291,7 +291,7 @@
       "corners": [
         {"direction": "TL", "frontResource": "W", "backResource": "N"},
         {"direction": "TR", "frontResource": "F", "backResource": "N"},
-        {"direction": "BL", "frontResource": "F", "backResource": "N"},
+        {"direction": "BL", "frontResource": "W", "backResource": "N"},
         {"direction": "BR", "frontResource": "N", "backResource": "N"}
       ], 
       "backResource": "W",
@@ -315,7 +315,7 @@
       "cardId": "R24",
       "pointsOnPlace": 0,
       "corners": [
-        {"direction": "TL", "frontResource": "N", "backResource": "N"},
+        {"direction": "TL", "frontResource": "F", "backResource": "N"},
         {"direction": "TR", "frontResource": "B", "backResource": "N"},
         {"direction": "BL", "frontResource": "P", "backResource": "N"},
         {"direction": "BR", "frontResource": "W", "backResource": "N"}

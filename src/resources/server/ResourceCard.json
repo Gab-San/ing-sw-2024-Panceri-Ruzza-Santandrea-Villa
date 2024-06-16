@@ -247,7 +247,7 @@
       "corners": [
         {"direction": "TL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "FILLED", "backResource": "NULL"},
-        {"direction": "BL", "frontResource": "FILLED", "backResource": "NULL"},
+        {"direction": "BL", "frontResource": "WOLF", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
       ], 
       "backResource": "WOLF"
@@ -267,7 +267,7 @@
       "cardId": "R24",
       "pointsOnPlace": 0,
       "corners": [
-        {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
+        {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "BUTTERFLY", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "POTION", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "WOLF", "backResource": "NULL"}

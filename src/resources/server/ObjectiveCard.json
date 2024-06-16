@@ -51,7 +51,7 @@
     "cardId": "O8",
     "type" : "RESOURCETYPE",
     "points": 2,
-    "pattern": ["WOLF", "WOLF", "WOLF"]
+    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"]
   },
   {
     "cardId": "O9",
@@ -63,7 +63,7 @@
     "cardId": "O10",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["MUSHROOM", "MUSHROOM", "MUSHROOM"]
+    "pattern": ["WOLF", "WOLF", "WOLF"]
   },
   {
     "cardId": "O11",
@@ -74,25 +74,25 @@
   {
     "cardId": "O12",
     "type": "RESOURCETYPE",
-    "points": 2,
-    "pattern": ["QUILL", "QUILL"]
+    "points": 3,
+    "pattern": ["QUILL", "POTION", "SCROLL"]
   },
   {
     "cardId": "O13",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["POTION", "POTION"]
+    "pattern": ["SCROLL", "SCROLL"]
   },
   {
     "cardId": "O14",
     "type": "RESOURCETYPE",
     "points": 2,
-    "pattern": ["SCROLL", "SCROLL"]
+    "pattern": ["POTION", "POTION"]
   },
   {
     "cardId": "O15",
     "type": "RESOURCETYPE",
-    "points": 3,
-    "pattern": ["QUILL", "SCROLL", "POTION"]
+    "points": 2,
+    "pattern": ["QUILL", "QUILL"]
   }
 ]

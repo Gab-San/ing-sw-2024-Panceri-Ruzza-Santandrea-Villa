@@ -199,7 +199,7 @@
       ],
       "pointsOnPlace": {"type":"CORNERCOVER", "amount": 2},
       "corners": [
-        {"direction": "TL", "frontResource": "NULL", "backResource": "NULL"},
+        {"direction": "TL", "frontResource": "FILLED", "backResource": "NULL"},
         {"direction": "TR", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BL", "frontResource": "NULL", "backResource": "NULL"},
         {"direction": "BR", "frontResource": "NULL", "backResource": "NULL"}
