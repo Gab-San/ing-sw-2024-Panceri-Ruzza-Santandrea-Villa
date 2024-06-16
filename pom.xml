@@ -76,10 +76,6 @@
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
-                            <descriptors>
-                                <descriptor>src/main/assembly/client.xml</descriptor>
-                                <descriptor>src/main/assembly/server.xml</descriptor>
-                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>

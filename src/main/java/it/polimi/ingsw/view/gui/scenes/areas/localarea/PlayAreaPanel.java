@@ -123,21 +123,6 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     }
 
     private SpringLayout.Constraints setCardPosition(ViewPlaceableCard placedCard) {
-        if(placedCard.getPosition().equals(new GamePoint(0,0))) {
-            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, placedCard, CENTER_X,
-                    SpringLayout.WEST, this);
-            layout.putConstraint(SpringLayout.VERTICAL_CENTER, placedCard, CENTER_Y,
-                    SpringLayout.NORTH, this);
-            layout.putConstraint(SpringLayout.EAST, placedCard,
-                    CENTER_X + ViewCard.getScaledWidth() / 2, SpringLayout.WEST, this);
-            layout.putConstraint(SpringLayout.SOUTH, placedCard,
-                    CENTER_Y + ViewCard.getScaledHeight() / 2, SpringLayout.NORTH, this);
-
-            //FIXME [Ale] with the new method below startingCard is no longer used
-            startingCard = layout.getConstraints(placedCard);
-            return startingCard;
-        }
-
         GamePoint position = placedCard.getPosition();
         int xOffset = position.col() * (ViewCard.getScaledWidth() - ViewCorner.getFixedWidth());
         // y axis direction is towards the bottom of the screen
@@ -155,25 +140,6 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
         layout.putConstraint(SpringLayout.SOUTH, placedCard,
                 CENTER_Y + ViewCard.getScaledHeight() / 2 + yOffset,
                 SpringLayout.NORTH, this);
-
-        //TODO: Ga ti lascio i commenti così leggi, se va bene rimuovili poi
-        //   (vedi anche in ModelUpdater setPlayAreaState)
-
-//        cardConstraints.setX(
-//                Spring.sum(startingCard.getX(), Spring.constant(xOffset))
-//        );
-//
-//        cardConstraints.setY(
-//                Spring.sum(startingCard.getY(), Spring.constant(yOffset))
-//        );
-//
-//        cardConstraints.setWidth(
-//                Spring.sum(cardConstraints.getX(), Spring.constant(ViewCard.getScaledWidth()))
-//        );
-//
-//        cardConstraints.setHeight(
-//                Spring.sum(cardConstraints.getY(), Spring.constant(ViewCard.getScaledHeight()))
-//        );
 
         return layout.getConstraints(placedCard);
     }

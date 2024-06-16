@@ -34,7 +34,9 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         layersPane.setSize(WIDTH, HEIGHT);
         layersPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         notificationLabel = GUIFunc.createNotificationLabel();
-        notificationLabel.setBounds(WIDTH/2,0, 200, 50);
+        //TODO: [Ale] scale up font size, it's a bit small
+        notificationLabel.setBounds(WIDTH/4,0, WIDTH/2, 200);
+        notificationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         layersPane.add(notificationLabel, Integer.valueOf(10000));
         playAreaPanel = new PlayAreaPanel();
 

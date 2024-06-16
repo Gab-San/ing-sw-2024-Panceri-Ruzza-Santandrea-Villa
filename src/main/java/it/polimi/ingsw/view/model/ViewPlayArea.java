@@ -240,9 +240,12 @@ public class ViewPlayArea extends JComponent {
      * Resets this playArea's free corners list.
      */
     public void clearFreeCorners(){
-        freeCorners.forEach(
-                ViewCorner::resetCorner
-        );
+        //do not run resetCorner on each to prevent a bug that disables
+        // the starting card corners when transitioning
+        // from setup state to play state
+//        freeCorners.forEach(
+//                ViewCorner::resetCorner
+//        );
         freeCorners.clear();
     }
 
