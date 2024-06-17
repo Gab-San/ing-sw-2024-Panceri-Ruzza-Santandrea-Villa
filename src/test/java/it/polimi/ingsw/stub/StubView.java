@@ -112,6 +112,11 @@ public class StubView implements View {
     }
 
     @Override
+    public void showNotification(String notification) {
+
+    }
+
+    @Override
     public void notifyTimeout() {
 
     }

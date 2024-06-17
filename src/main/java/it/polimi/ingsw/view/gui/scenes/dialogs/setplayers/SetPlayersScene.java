@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.scenes.dialogs.setplayers;
 
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -81,8 +82,7 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
     private JLabel createErrorLabel(){
         JLabel errorLabel =  new JLabel("ERROR");
         errorLabel.setVisible(false);
-        //TODO choose better color
-        errorLabel.setForeground(Color.red);
+        errorLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
         return errorLabel;
     }
 

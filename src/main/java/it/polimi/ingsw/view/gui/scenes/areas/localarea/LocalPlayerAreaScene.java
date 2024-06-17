@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.ViewPlayerHand;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,9 +34,7 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         layersPane.setSize(WIDTH, HEIGHT);
         layersPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         notificationLabel = GUIFunc.createNotificationLabel();
-        //TODO: [Ale] scale up font size, it's a bit small
-        notificationLabel.setBounds(WIDTH/4,0, WIDTH/2, 200);
-        notificationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        modifyNotificationLabel();
         layersPane.add(notificationLabel, Integer.valueOf(10000));
         playAreaPanel = new PlayAreaPanel();
 
@@ -52,15 +52,16 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         add(layersPane,BorderLayout.CENTER);
     }
 
-    public JScrollPane setupAreaScrollPane(){
-        JScrollPane scrollPane = new JScrollPane(playAreaPanel,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    private void modifyNotificationLabel() {
+        notificationLabel.setBounds(WIDTH/4,0, WIDTH/2, 200);
+        notificationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        notificationLabel.setVerticalAlignment(SwingConstants.CENTER);
+        notificationLabel.setFont(new Font("Raleway", Font.PLAIN, 30));
+    }
 
-        scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        scrollPane.setSize(new Dimension(WIDTH, HEIGHT));
-        int currentWidth = GameWindow.getDisplayWindow().getWidth()  - PlayerListPanel.WIDTH;
-        int currentHeight = GameWindow.getDisplayWindow().getHeight() - PlayerInfoPanel.HEIGHT;
-        scrollPane.setBounds(0,0, currentWidth, currentHeight);
+    public JScrollPane setupAreaScrollPane(){
+        JScrollPane scrollPane = initializeScrollPane();
+        // Center scroll pane
         int horValue = playAreaPanel.getWidth()/2;
         int vertValue = playAreaPanel.getHeight()/2;
 
@@ -76,6 +77,29 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         horModel.setExtent(scrollPane.getWidth());
 
         horModel.setValue(horValue - horModel.getExtent()/2);
+        // Add WASD movement
+        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("D"), "MOVE_RIGHT");
+        scrollPane.getActionMap().put("MOVE_RIGHT", new MoveScreenAction(1,0));
+        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("A"), "MOVE_LEFT");
+        scrollPane.getActionMap().put("MOVE_LEFT", new MoveScreenAction(-1,0));
+        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("W"), "MOVE_UP");
+        scrollPane.getActionMap().put("MOVE_UP", new MoveScreenAction(0,-1));
+        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("S"), "MOVE_DOWN");
+        scrollPane.getActionMap().put("MOVE_DOWN", new MoveScreenAction(0,1));
+
+        return scrollPane;
+    }
+
+    @NotNull
+    private JScrollPane initializeScrollPane() {
+        JScrollPane scrollPane = new JScrollPane(playAreaPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        scrollPane.setSize(new Dimension(WIDTH, HEIGHT));
+        int currentWidth = GameWindow.getDisplayWindow().getWidth()  - PlayerListPanel.WIDTH;
+        int currentHeight = GameWindow.getDisplayWindow().getHeight() - PlayerInfoPanel.HEIGHT;
+        scrollPane.setBounds(0,0, currentWidth, currentHeight);
         return scrollPane;
     }
 
@@ -88,12 +112,12 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
 
     @Override
     public synchronized void displayError(String error) {
-        displayError(error, 1.5f, false);
+        displayError(error, 1.5f);
     }
 
     @Override
     public synchronized void displayNotification(List<String> backlog) {
-
+        displayNotification(backlog.get(0), 2f);
     }
 
     @Override
@@ -135,18 +159,17 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         }
     }
 
-//region ERROR LABEL METHODS
-    private void displayError(String errorMessage, float displayTimeSeconds, boolean close) {
+//region NOTIFICATION LABEL METHODS
+    private void displayError(String errorMessage, float displayTimeSeconds) {
         int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.red);
-        notificationLabel.setText(errorMessage);
+        notificationLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
+        notificationLabel.setText(GUIFunc.correctToLabelFormat(errorMessage));
         // The error will become visible
         notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime, close);
+        startDisplayTimer(displayTime);
     }
 
-    private void startDisplayTimer(int displayTime, boolean isClosing) {
+    private void startDisplayTimer(int displayTime) {
         // After delay time the notification will
         // disappear from the screen
         displayTimer = new Timer(displayTime,
@@ -157,11 +180,16 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
                     // so they need to be actively stopped
                     displayTimer.stop();
                     displayTimer = null;
-                    if(isClosing){
-                        close();
-                    }
                 });
         displayTimer.start();
+    }
+
+    private synchronized void displayNotification(String successMessage, float displayTimeSeconds){
+        int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
+        notificationLabel.setForeground(GameColor.NOTIFICATION_COLOUR.getColor());
+        notificationLabel.setText(GUIFunc.correctToLabelFormat(successMessage));
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
     }
 //endregion
 }

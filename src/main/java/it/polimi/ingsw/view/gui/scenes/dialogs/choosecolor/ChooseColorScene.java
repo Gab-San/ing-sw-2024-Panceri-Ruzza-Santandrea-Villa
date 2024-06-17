@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor;
 
 import it.polimi.ingsw.PlayerColor;
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -14,6 +15,9 @@ import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import static it.polimi.ingsw.view.GameColor.ERROR_COLOUR;
+import static it.polimi.ingsw.view.GameColor.NOTIFICATION_COLOUR;
+
 public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChangeListener {
     private final JButton redButton, yellowButton, greenButton, blueButton;
     private final JLabel notificationLabel;
@@ -25,10 +29,10 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         this.inputHandler = inputHandler;
         setLayout(new GridBagLayout());
         Action colorButtonAction = getButtonAction();
-        redButton = createColorButton( colorButtonAction, "Red", Color.red);
-        yellowButton = createColorButton(colorButtonAction,"Yellow", Color.yellow);
-        blueButton = createColorButton(colorButtonAction,"Blue", Color.BLUE);
-        greenButton = createColorButton(colorButtonAction,"Green", Color.GREEN);
+        redButton = createColorButton( colorButtonAction, "Red", GameColor.PLAYER_RED.getColor());
+        yellowButton = createColorButton(colorButtonAction,"Yellow", GameColor.PLAYER_YELLOW.getColor());
+        blueButton = createColorButton(colorButtonAction,"Blue", GameColor.PLAYER_BLUE.getColor());
+        greenButton = createColorButton(colorButtonAction,"Green", GameColor.PLAYER_GREEN.getColor());
 
         notificationLabel = GUIFunc.createNotificationLabel();
 
@@ -61,7 +65,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
                     if(evt.getPropertyName().equals(ChooseColorAction.CHOSEN_COLOR)){
                         try {
                             inputHandler.chooseColor((Character) evt.getNewValue());
-                            close();
                         } catch (RemoteException e) {
                             displayError("Connection Lost!");
                             inputHandler.notifyDisconnection();
@@ -75,8 +78,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     private JButton createColorButton(Action action, String colorName, Color buttonColor) {
         JButton colorButton = new JButton(action);
         colorButton.setText(colorName);
-        //FIXME adjust colors
-//        colorButton.setForeground(Color.white);
         colorButton.setBackground(buttonColor);
 
         colorButton.setPreferredSize(new Dimension(100, 40));
@@ -105,7 +106,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     @Override
     public synchronized void displayError(String error) {
         // Can be called only by timeout disconnection
-        //FIXME: Should be called also if an error occurs while choosing color
+        // Or if an error occurs while choosing color
         displayError(error, 1, false);
     }
 
@@ -168,8 +169,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
 
     private synchronized void displayError(String errorMessage, float displayTimeSeconds, boolean close){
         int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.red);
+        notificationLabel.setForeground(ERROR_COLOUR.getColor());
         notificationLabel.setText(errorMessage);
         // The error will become visible
         notificationLabel.setVisible(true);
@@ -178,8 +178,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
 
     private synchronized void displayNotification(String notificationMsg, float displayTimeSeconds){
         int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.green);
+        notificationLabel.setForeground(NOTIFICATION_COLOUR.getColor());
         notificationLabel.setText(notificationMsg);
         notificationLabel.setVisible(true);
         SwingUtilities.invokeLater(

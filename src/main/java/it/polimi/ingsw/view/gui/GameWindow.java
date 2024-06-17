@@ -15,6 +15,9 @@ import java.beans.PropertyChangeListener;
  * attached to it, and it will control the interactions between the panels.
  */
 public class GameWindow extends JFrame implements PropertyChangeListener {
+    /**
+     * Screen scaling factor
+     */
     public static final float SCALE_FACTOR = (float) GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds().width /GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
     /**
      * Window starting width.

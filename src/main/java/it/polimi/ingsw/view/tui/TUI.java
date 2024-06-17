@@ -206,6 +206,7 @@ public class TUI implements View{
      * (using the refresh timer)
      * @param notification the text notification to be displayed
      */
+    @Override
     public synchronized void showNotification(String notification) {
         if(notification == null || notification.isEmpty()) return;
         if(notificationBacklog.size() >= BACKLOG_SIZE){

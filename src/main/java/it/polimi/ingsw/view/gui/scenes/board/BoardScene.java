@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.board;
 
-import it.polimi.ingsw.view.gui.CardListener;
-import it.polimi.ingsw.view.gui.DeckListener;
-import it.polimi.ingsw.view.gui.GUI_Scene;
-import it.polimi.ingsw.view.gui.GameInputHandler;
+import it.polimi.ingsw.view.GameColor;
+import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewDeck;
 import it.polimi.ingsw.view.model.cards.ViewCard;
@@ -27,13 +25,13 @@ import java.util.List;
  * This class implements GUI scene interface. It displays the decks and the scoreboard.
  */
 public class BoardScene extends JPanel implements GUI_Scene, ActionListener, CardListener, DeckListener {
-    private final JPanel deckpanel;
-    private final JPanel scoreboard;
+    private final ScoreboardPanel scoreboard;
     private final List<ViewDeck<? extends ViewPlaceableCard>> selectableDecks;
-    private static final int SCOREBOARD_WIDTH = 300;
     private final GameInputHandler inputHandler;
     private char selectedDeck;
     private int selectedPosition;
+    private final JLabel errorLabel;
+    private Timer displayTimer;
 
     /**
      * Constructs the board scene with the deck and the scoreboard to be
@@ -48,22 +46,24 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         selectableDecks = new ArrayList<>(2);
 
         setLayout(new BorderLayout());
-        deckpanel = setupDeckPanel(board);
-        scoreboard = new JPanel();
-        scoreboard.setPreferredSize(new Dimension(SCOREBOARD_WIDTH, 10));
-        scoreboard.setBackground(new Color(0xc76f30));
-
+        JPanel deckpanel = setupDeckPanel(board);
+        scoreboard = new ScoreboardPanel();
+        errorLabel = GUIFunc.createNotificationLabel();
+        modifyErrorLabel();
         //Adding components
+        add(errorLabel,BorderLayout.NORTH);
         add(deckpanel, BorderLayout.CENTER);
         add(scoreboard, BorderLayout.EAST);
     }
+
+
 
     private JPanel setupDeckPanel(ViewBoard board) {
         JPanel panel = new JPanel(new GridBagLayout());
         // Height isn't needed as in border layout it is automatically stretched
         panel.setPreferredSize(new Dimension(ViewCard.getScaledWidth() * 3 + 4*10,
                 ViewCard.getScaledHeight() * 3 + 4 * 10 + 25));
-        panel.setBackground(new Color(0xc76f30));
+        panel.setBackground(GameColor.BOARD_COLOUR.getColor());
         addResourceDeck(panel, board);
         addGoldDeck(panel, board);
 
@@ -103,11 +103,42 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     @Override
     public void display() {
         setVisible(true);
+        selectedDeck = 'A';
+        selectedPosition = -1;
     }
 
     @Override
     public void displayError(String error) {
+        displayError(error, 1.5f);
+    }
 
+    private void displayError(String errorMsg, float displayTimeSec){
+        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSec, displayTimer);
+        errorLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
+        errorLabel.setText(errorMsg);
+        // The error will become visible
+        errorLabel.setVisible(true);
+        startDisplayTimer(displayTime);
+    }
+    private void startDisplayTimer(int displayTime) {
+        // After delay time the notification will
+        // disappear from the screen
+        displayTimer = new Timer(displayTime,
+                (event) -> {
+                    errorLabel.setVisible(false);
+                    // java.awt timers don't stop after
+                    // the delay time has passed,
+                    // so they need to be actively stopped
+                    displayTimer.stop();
+                    displayTimer = null;
+                });
+        displayTimer.start();
+    }
+
+    private void modifyErrorLabel() {
+        errorLabel.setFont(new Font("Raleway", Font.BOLD, 30));
+        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errorLabel.setVerticalAlignment(SwingConstants.CENTER);
     }
 
     @Override
@@ -144,7 +175,6 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     public void setSelectedPosition(char deckId, int cardPosition) {
         selectedDeck = deckId;
         selectedPosition = cardPosition;
-        System.out.println("SELECTED POSITION: " + deckId + selectedPosition);
     }
 
     @Override
@@ -157,10 +187,10 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         try{
             inputHandler.draw(selectedDeck, selectedPosition);
         } catch (IllegalArgumentException | IllegalStateException exc){
-          //TODO handle possible exception
-            System.err.println(exc.getMessage());
+            inputHandler.showError(exc.getMessage());
         } catch (RemoteException ex) {
-            throw new RuntimeException(ex);
+            inputHandler.showError("CONNECTION LOST!");
+            System.exit(-1);
         }
     }
 }

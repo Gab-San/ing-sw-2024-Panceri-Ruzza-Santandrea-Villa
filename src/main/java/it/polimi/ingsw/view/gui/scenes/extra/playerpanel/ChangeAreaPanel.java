@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
-import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,7 +25,6 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
         areaButton.setText(areaName);
 
         areaButton.setFocusable(false);
-        //TODO: add icon
         connectionLabel = setupConnectionLabel(areaName, isConnected);
 
         add(areaButton);

@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -149,7 +150,13 @@ public class GameGUI implements View {
                 );
                 break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD, DRAWCARD:
+                    CHOOSEFIRSTPLAYER, PLACESTARTING:
+                break;
+            case PLACECARD:
+                showNotification("GAME PHASE UPDATED TO PLACE CARD PHASE");
+                break;
+            case DRAWCARD:
+                showNotification("GAME PHASE UPDATED TO DRAW CARD PHASE");
                 break;
             case CHOOSECOLOR:
                 // Setting up and displaying the pop-up screen that handles user selection
@@ -211,7 +218,13 @@ public class GameGUI implements View {
             listener.displayMessage(messenger, msg);
         }
     }
-//region NETWORK NOTIFICATIONS
+
+    @Override
+    public synchronized void showNotification(String notification) {
+        SceneManager.getInstance().getCurrentScene().displayNotification(Collections.singletonList(notification));
+    }
+
+    //region NETWORK NOTIFICATIONS
     @Override
     public synchronized void notifyTimeout() {
         Scene currentScene = SceneManager.getInstance().getCurrentScene();

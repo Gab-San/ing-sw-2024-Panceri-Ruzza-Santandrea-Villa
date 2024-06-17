@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.model.cards.ViewCard;
@@ -27,7 +28,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     private CornerListener cornerListener;
     public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
-        setBackground(new Color(0xc76f30));
+        setBackground(GameColor.BOARD_COLOUR.getColor());
         placeHolderList = new LinkedList<>();
         //FIXME USE LAYERED PANE
         layout = new SpringLayout();

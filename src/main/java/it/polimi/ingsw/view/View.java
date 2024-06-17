@@ -31,6 +31,12 @@ public interface View {
     void showChatMessage(String messenger, String msg);
 
     /**
+     * Displays the last notification.
+     * @param notification notification message
+     */
+    void showNotification(String notification);
+
+    /**
      * Notifies the View of having been forcibly disconnected from
      * the server due to a timeout.
      */

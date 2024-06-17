@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.scenes.connection;
 
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
@@ -13,8 +14,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
-    // TODO: this is horrible
-
     // Frame settings
     private static final int LOGIN_FRAME_WIDTH = 500;
     private static final int LOGIN_FRAME_HEIGHT = 200;
@@ -114,8 +113,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
 
     private synchronized void displaySuccess(String successMessage, float displayTimeSeconds){
         int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.green);
+        notificationLabel.setForeground(GameColor.NOTIFICATION_COLOUR.getColor());
         notificationLabel.setText(successMessage);
         notificationLabel.setVisible(true);
         startDisplayTimer(displayTime, true);
@@ -123,8 +121,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
 
     private void displayError(String errorMessage, float displayTimeSeconds, boolean close) {
         int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        //TODO [Gamba] Fix color
-        notificationLabel.setForeground(Color.red);
+        notificationLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
         notificationLabel.setText(errorMessage);
         // The error will become visible
         notificationLabel.setVisible(true);

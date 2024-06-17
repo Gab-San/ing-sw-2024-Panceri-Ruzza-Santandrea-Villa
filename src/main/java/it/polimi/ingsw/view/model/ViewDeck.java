@@ -68,12 +68,10 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
         if(topCard != null) {
             topCard.setCardListener(this);
             topCard.disableComponent();
+            displayChange(topCard, 0);
         }
         // Checks are inside the event
         notifyView(SceneID.getBoardSceneID(), new DisplayDeckUpdate(deckId, topCard, 0));
-        // When a card is set than it always changes. No need to check if it's the same
-//        firePropertyChange(ChangeNotifications.ADD_CARD_DECK, null, new CardDeckInfo(deckId, card, 0));
-        displayChange(topCard, 0);
     }
 
     /**
@@ -151,16 +149,33 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
 
 //region GUI METHODS
     private void setupView() {
-        setLayout(new GridLayout(3,1, 0, 10));
+        setLayout(new GridBagLayout());
         setOpaque(false);
     }
 
     private void displayChange(ViewCard card, int cardPosition){
-        //FIXME use a gridbag layout
         SwingUtilities.invokeLater(
                 () ->{
                     if(card != null) {
-                        add(card, cardPosition);
+                        switch (cardPosition) {
+                            case 0:
+                                add(card, new GridBagConstraints(0, 0, 1, 1,
+                                        1.0, 1.0,
+                                    GridBagConstraints.NORTH, GridBagConstraints.NONE,
+                                    new Insets(0, 0, 0, 0), 0, 0));
+                                break;
+                            case 1:
+                                add(card, new GridBagConstraints(0, 1, 1, 1,
+                                        1.0, 1.0,
+                                        GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                                        new Insets(0, 0, 0, 0), 0, 0));
+                                break;
+                            case 2:
+                                add(card, new GridBagConstraints(0, 2, 1, 1,
+                                        1.0, 1.0,
+                                        GridBagConstraints.SOUTH, GridBagConstraints.NONE,
+                                new Insets(0, 0, 0, 0), 0, 0));
+                        }
                     }
                     revalidate();
                     repaint();
@@ -176,7 +191,13 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
     private void removeCard(ViewCard removedCard){
         if(removedCard != null){
             removedCard.setCardListener(null);
-            remove(removedCard);
+            SwingUtilities.invokeLater(
+                    () -> {
+                        remove(removedCard);
+                        revalidate();
+                        repaint();
+                    }
+            );
         }
     }
 
@@ -200,7 +221,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
         }
 
         if(cardPosition == -1){
-            throw new IllegalStateException("SELECTED CARD NOT IN DECK");
+            throw new IllegalStateException("SELECTED CARD NOT IN DECK: " + card.getCardID());
         }
 
         deckListener.setSelectedPosition(deckId, cardPosition);

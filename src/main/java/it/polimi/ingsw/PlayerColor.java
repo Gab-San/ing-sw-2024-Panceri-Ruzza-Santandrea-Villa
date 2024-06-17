@@ -1,4 +1,6 @@
 package it.polimi.ingsw;
+import it.polimi.ingsw.view.GameColor;
+
 import java.awt.*;
 
 
@@ -37,10 +39,10 @@ public enum PlayerColor {
             return Color.black;
         }
         return switch (colorName) {
-            case RED -> new Color(0xf23020);
-            case BLUE -> new Color(0x072bce);
-            case GREEN -> new Color(0x07c912);
-            case YELLOW -> new Color(0xf4fb14);
+            case RED -> GameColor.PLAYER_RED.getColor();
+            case BLUE -> GameColor.PLAYER_BLUE.getColor();
+            case GREEN -> GameColor.PLAYER_GREEN.getColor();
+            case YELLOW -> GameColor.PLAYER_YELLOW.getColor();
         };
     }
 
