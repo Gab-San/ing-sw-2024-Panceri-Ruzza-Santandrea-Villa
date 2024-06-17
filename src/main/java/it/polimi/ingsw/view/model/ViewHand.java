@@ -173,7 +173,7 @@ public abstract class ViewHand extends JComponent {
     protected synchronized void addSecretObjectiveCard(ViewObjectiveCard secretObjectiveCard){
         if(secretObjectiveCard == null) return;
         this.secretObjectiveCards.add(secretObjectiveCard);
-        firePropertyChange(ChangeNotifications.ADDED_SECRET_CARD, null, secretObjectiveCard);
+        firePropertyChange(ChangeNotifications.ADD_SECRET_CARD, null, secretObjectiveCard);
     }
 
     /**

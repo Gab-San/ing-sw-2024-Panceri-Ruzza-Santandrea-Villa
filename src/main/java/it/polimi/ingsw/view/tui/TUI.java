@@ -16,8 +16,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
-
 /**
  * Main class of the TUI
  */
@@ -153,7 +151,7 @@ public class TUI implements View{
      * @param directions list of direction to move towards
      */
     void moveView(List<CornerDirection> directions){
-        SceneManager.getInstance().getCurrentScene().moveView(directions);
+        ((TUI_Scene) SceneManager.getInstance().getCurrentScene()).moveView(directions);
     }
     /**
      * Calls setCenter on the SceneManager currentScene
@@ -161,7 +159,7 @@ public class TUI implements View{
      * @param row y coordinate of the new center
      */
     void setCenter(int col, int row) {
-        SceneManager.getInstance().getCurrentScene().setCenter(row,col);
+        ((TUI_Scene) SceneManager.getInstance().getCurrentScene()).setCenter(row,col);
     }
 
     @Override

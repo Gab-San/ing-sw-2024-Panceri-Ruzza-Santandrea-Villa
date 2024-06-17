@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.gui.scenes.areas.opponentarea;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 
 import javax.swing.*;
@@ -22,21 +20,6 @@ public class OpponentAreaScene extends JPanel implements GUI_Scene, PropertyChan
 
     @Override
     public void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
 
     }
 

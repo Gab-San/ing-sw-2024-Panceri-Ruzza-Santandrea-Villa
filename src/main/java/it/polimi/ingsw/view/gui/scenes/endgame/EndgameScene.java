@@ -24,21 +24,6 @@ public class EndgameScene implements GUI_Scene {
     }
 
     @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
-
-    }
-
-    @Override
     public void close() {
 
     }

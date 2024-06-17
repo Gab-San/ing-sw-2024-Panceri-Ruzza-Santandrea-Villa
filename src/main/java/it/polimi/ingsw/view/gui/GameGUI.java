@@ -74,7 +74,7 @@ public class GameGUI implements View {
         setClientModelUpd.accept(modelUpdater);
         inputHandler = new GameInputHandler(serverProxy, this, new ViewController(board));
         createGUI();
-        loadScenes();
+        loadScenes(board);
         importFonts();
         // Subscribing all the created listeners to board events
         subscribeListenersToComponent(board);
@@ -105,8 +105,9 @@ public class GameGUI implements View {
 
     /**
      * Loading scenes that will be displayed during the course of the game.
+     * @param board board model used in board scene.
      */
-    private void loadScenes() {
+    private void loadScenes(ViewBoard board) {
         // Loading connection scene
         sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
         // Loading local player scene
@@ -114,9 +115,9 @@ public class GameGUI implements View {
         sceneManager.loadScene(SceneID.getMyAreaSceneID(), localPlayerAreaScene);
         addToPropListeners(localPlayerAreaScene);
         // Loading board scene
-        BoardScene boardScene = new BoardScene();
+        BoardScene boardScene = new BoardScene(board, inputHandler);
         sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
-        addToPropListeners(boardScene);
+        addToObservableComponents(boardScene);
     }
 
     /**
@@ -148,7 +149,7 @@ public class GameGUI implements View {
                 );
                 break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD:
+                    CHOOSEFIRSTPLAYER, PLACESTARTING, PLACECARD, DRAWCARD:
                 break;
             case CHOOSECOLOR:
                 // Setting up and displaying the pop-up screen that handles user selection
@@ -178,23 +179,6 @@ public class GameGUI implements View {
                 SwingUtilities.invokeLater(
                         chooseObjectiveScene::display
                 );
-                break;
-            case DRAWCARD:
-                boolean hasDrawn = false;
-                while(!hasDrawn) {
-                    try {
-                        inputHandler.draw('R', 0);
-                        hasDrawn = true;
-                    } catch (IllegalStateException | IllegalArgumentException e){
-                        System.out.println("DRAW FAIL:  " + e.getMessage());
-                        break;
-//                        if(e.getMessage().contains("your turn")) break;
-                    }
-                    catch (RemoteException e) {
-                        System.out.println("DRAW REMOTE EXCEPTION");
-                        throw new RuntimeException(e);
-                    }
-                }
                 break;
             case EVALOBJ, SHOWWIN:
 

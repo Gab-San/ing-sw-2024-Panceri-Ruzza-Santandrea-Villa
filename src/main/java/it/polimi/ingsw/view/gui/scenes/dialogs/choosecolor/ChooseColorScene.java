@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
@@ -113,21 +111,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
 
     @Override
     public synchronized void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
 
     }
 

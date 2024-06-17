@@ -1,8 +1,5 @@
 package it.polimi.ingsw.view.gui.scenes.dialogs.chooseobjective;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
 import it.polimi.ingsw.view.gui.GameInputHandler;
@@ -143,21 +140,6 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
 
     @Override
     public synchronized void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public synchronized void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
 
     }
 

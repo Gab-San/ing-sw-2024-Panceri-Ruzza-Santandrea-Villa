@@ -161,7 +161,9 @@ public abstract class ViewCard extends JComponent {
     public void setCardListener(CardListener cardListener){
         this.cardListener = cardListener;
     }
-
+    public void disableComponent(){
+        this.setEnabled(false);
+    }
 
     @Override
     public Dimension getPreferredSize() {

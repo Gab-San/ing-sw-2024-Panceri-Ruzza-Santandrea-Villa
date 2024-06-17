@@ -149,15 +149,15 @@ public abstract class TUI_Scene implements Scene {
             display();
         }
     }
-    @Override
+
     public void moveView(List<CornerDirection> cornerDirections){
         display();
     }
-    @Override
+
     public void setCenter(int row, int col){
         display();
     }
-    @Override
+
     public void setCenter(GamePoint center){
         display();
     }

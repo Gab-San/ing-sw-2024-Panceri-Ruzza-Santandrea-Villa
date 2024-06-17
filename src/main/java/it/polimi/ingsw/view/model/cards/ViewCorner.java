@@ -177,7 +177,6 @@ public class ViewCorner extends JComponent implements MouseListener {
             return;
         }
 
-        setEnabled(true);
         setFocusable(true);
     }
 
@@ -187,7 +186,6 @@ public class ViewCorner extends JComponent implements MouseListener {
         if(!isVisible || isDisabled){
             return;
         }
-        setEnabled(false);
         setFocusable(false);
     }
 

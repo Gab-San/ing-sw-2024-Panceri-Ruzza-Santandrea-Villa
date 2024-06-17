@@ -107,7 +107,7 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                     cardsInHand.remove(removedPlayCard);
                 }
                 break;
-            case ADDED_SECRET_CARD:
+            case ADD_SECRET_CARD:
                 assert evt.getNewValue() instanceof ViewObjectiveCard;
                 ViewObjectiveCard objectiveCard = (ViewObjectiveCard) evt.getNewValue();
                 SwingUtilities.invokeLater(

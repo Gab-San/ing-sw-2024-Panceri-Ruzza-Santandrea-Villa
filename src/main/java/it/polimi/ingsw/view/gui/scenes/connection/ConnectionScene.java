@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.gui.scenes.connection;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GUI_Scene;
@@ -79,15 +77,6 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
 
     @Override
     public void displayNotification(List<String> backlog) {/*unused*/}
-
-    @Override
-    public  void moveView(List<CornerDirection> cornerDirections) {/*unused*/}
-
-    @Override
-    public void setCenter(int row, int col) {/*unused*/}
-
-    @Override
-    public void setCenter(GamePoint center) {/*unused*/}
 
     @Override
     public synchronized void close() {

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.Scene;
 
 import java.util.List;
@@ -22,21 +20,6 @@ public class NotificationScene implements Scene {
 
     @Override
     public void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
 
     }
 }

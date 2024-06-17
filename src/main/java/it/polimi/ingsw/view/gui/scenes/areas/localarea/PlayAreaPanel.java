@@ -24,7 +24,6 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     private static final int CENTER_Y = AREA_HEIGHT/2;
     private final SpringLayout layout;
     private final List<PlaceHolder> placeHolderList;
-    private SpringLayout.Constraints startingCard;
     private CornerListener cornerListener;
     public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));

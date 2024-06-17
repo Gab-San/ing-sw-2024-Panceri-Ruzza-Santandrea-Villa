@@ -37,10 +37,10 @@ public enum PlayerColor {
             return Color.black;
         }
         return switch (colorName) {
-            case RED -> Color.red;
-            case BLUE -> Color.blue;
-            case GREEN -> Color.green;
-            case YELLOW -> Color.yellow;
+            case RED -> new Color(0xf23020);
+            case BLUE -> new Color(0x072bce);
+            case GREEN -> new Color(0x07c912);
+            case YELLOW -> new Color(0xf4fb14);
         };
     }
 

@@ -132,8 +132,10 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         this.getActionMap().put("FLIP_CARD_ACTION", new FlipAction());
     }
 
-    public synchronized void disableComponent(){
-        this.setEnabled(false);
+
+    public synchronized void forceDisableComponent(){
+        super.disableComponent();
+        removeMouseListener(this);
         for(ViewCorner corner : corners.values()){
             corner.setEnabled(false);
             corner.setVisible(false);
@@ -161,7 +163,6 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         assert e.getSource() instanceof ViewPlaceableCard;
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
         card.setFocusable(true);
-        card.setEnabled(true);
         card.grabFocus();
     }
 
@@ -170,7 +171,6 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         assert e.getSource() instanceof ViewPlaceableCard;
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
         card.setFocusable(false);
-        card.setEnabled(false);
     }
 }
 
@@ -180,6 +180,9 @@ class FlipAction extends AbstractAction{
     public void actionPerformed(ActionEvent e) {
         assert e.getSource() instanceof ViewPlaceableCard;
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
+        if(!card.isEnabled()) {
+            return;
+        }
         card.flip();
     }
 }

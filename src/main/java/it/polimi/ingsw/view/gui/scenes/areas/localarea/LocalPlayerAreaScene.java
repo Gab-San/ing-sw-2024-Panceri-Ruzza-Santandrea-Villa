@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
-import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.*;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -95,21 +93,6 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
 
     @Override
     public synchronized void displayNotification(List<String> backlog) {
-
-    }
-
-    @Override
-    public void moveView(List<CornerDirection> cornerDirections) {
-
-    }
-
-    @Override
-    public void setCenter(int row, int col) {
-
-    }
-
-    @Override
-    public void setCenter(GamePoint center) {
 
     }
 
