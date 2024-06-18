@@ -191,7 +191,6 @@ public class PlayerHand implements GameSubject {
      */
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{
         if(secretObjective.isEmpty()){
-            //TODO check if add crash event
             notifyAllListeners(new IllegalStateError(playerRef.getNickname(),"Objective choices not initialized.".toUpperCase()));
             throw new PlayerHandException("Objective choices not initialized.", playerRef, ObjectiveCard.class);
         }

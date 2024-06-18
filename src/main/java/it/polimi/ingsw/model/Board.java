@@ -98,7 +98,7 @@ public class Board implements GameSubject{
      * Constructs the Board (as in initializing the game)
      * @throws DeckInstantiationException if the decks can't be initialized
      */
-    public Board() throws IllegalStateException{
+    public Board(){
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
         hasGoneToEndgame = false;
@@ -646,7 +646,7 @@ public class Board implements GameSubject{
      * @param nickname player's nickname
      * @throws IllegalArgumentException if there is no player in this game with the given nickname
      */
-    public void removePlayer(String nickname) throws IllegalStateException, IllegalArgumentException {
+    public void removePlayer(String nickname) throws IllegalArgumentException {
         Player player = getPlayerByNickname(nickname);
         // remove playArea and scoreboard
         playerAreas.remove(player);
@@ -668,7 +668,7 @@ public class Board implements GameSubject{
     /**
      * Disconnects player with given nickname without removing their information from the board
      * @param nickname player's nickname
-     * @throws IllegalStateException if there is no player with given nickname
+     * @throws IllegalArgumentException if there is no player with given nickname
      */
     public void disconnectPlayer(String nickname) throws IllegalArgumentException{
         getPlayerByNickname(nickname).setConnected(false);

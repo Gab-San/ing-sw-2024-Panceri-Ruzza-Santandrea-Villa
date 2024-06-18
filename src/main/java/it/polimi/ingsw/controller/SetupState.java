@@ -322,12 +322,10 @@ public class SetupState extends GameState{
 
     /**
      * Moves the controller to the next state:
-     *      set phase to CHOOSEFIRSTPLAYER and choose the first player randomly
+     *      sets phase to CHOOSE_FIRST_PLAYER and chooses the first player randomly
      *      then changes the game state to PlayState
-     *      never throws IllegalStateException
-     * @throws IllegalStateException never thrown, only if controls pre-nextState fail FIXME:[FLAVIO]
      */
-    private void nextState() throws IllegalStateException {
+    private void nextState() {
         board.setGamePhase(GamePhase.CHOOSEFIRSTPLAYER);
         List<Player> players = new LinkedList<>(board.getPlayerAreas().keySet());
         final int numOfPlayers = players.size();

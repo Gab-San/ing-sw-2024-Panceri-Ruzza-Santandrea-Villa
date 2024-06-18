@@ -53,7 +53,7 @@ public class PlayState extends GameState {
             startRejoinTimer();
         }
         else{
-            Player player = board.getCurrentPlayer();
+            Player player = board.getCurrentPlayer(); //never throws IllegalState
             timers.startTimer(player, TURN_TIME);
         }
     }

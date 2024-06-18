@@ -144,9 +144,11 @@ public class EndgameState extends GameState{
             board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO START A NEW GAME IN THIS PHASE"));
             throw new IllegalStateException("IMPOSSIBLE TO START A NEW GAME IN THIS PHASE");
         }
-        if(numOfPlayers > Board.MAX_PLAYERS)
-            throw new IllegalArgumentException("Can't restart the game with more than "+ Board.MAX_PLAYERS + " players!");
-
+        if(numOfPlayers > Board.MAX_PLAYERS) {
+            String errorMsg = "Can't restart the game with more than " + Board.MAX_PLAYERS + " players!";
+            board.notifyAllListeners(new IllegalParameterError(nickname,errorMsg.toUpperCase()));
+            throw new IllegalArgumentException(errorMsg);
+        }
         board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player isn't in game
 
         if(numOfPlayers < board.getPlayerAreas().size()){
@@ -190,9 +192,9 @@ public class EndgameState extends GameState{
             try {
                 secretObjective = player.getHand().getSecretObjective();
             } catch (PlayerHandException e){
-                //FIXME if at this point in the game the secret objective has to be set
-                // if this error occurs than the application should crash
-                throw new IllegalStateException(e);
+                System.err.println("ERROR. Secret Objectives not found on " + player.getNickname());
+                System.exit(-1);
+                throw new IllegalStateException(e); //to block code execution
             }
             secretObjective.turnFaceUp(); // reveal the secret objective
             PlayArea playArea = board.getPlayerAreas().get(player);
