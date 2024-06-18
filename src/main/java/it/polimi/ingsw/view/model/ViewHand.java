@@ -101,16 +101,12 @@ public abstract class ViewHand extends JComponent {
      * @param startCard the starting card, can be null to set a state of "not having a starting card in hand"
      */
     protected synchronized void setStartCard(ViewStartCard startCard){
-        firePropertyChange(ChangeNotifications.SET_STARTING_CARD, this.startCard, startCard);
-        this.startCard = startCard;
-    }
+        if(startCard == null)
+            firePropertyChange(ChangeNotifications.CLEAR_STARTING_CARD, startCard, null);
+        else
+            firePropertyChange(ChangeNotifications.SET_STARTING_CARD, this.startCard, startCard);
 
-    /**
-     * Sets a state of "not having a starting card in hand"
-     */
-    public synchronized void clearStartCard(){
-        firePropertyChange(ChangeNotifications.CLEAR_STARTING_CARD, startCard, null);
-        startCard = null;
+        this.startCard = startCard;
     }
 
     /**
@@ -159,8 +155,8 @@ public abstract class ViewHand extends JComponent {
      * @param objectiveCards list of objectiveCards to set as the hand content.
      */
     protected synchronized void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
-        this.secretObjectiveCards.clear();
         firePropertyChange(ChangeNotifications.CLEAR_OBJECTIVES, secretObjectiveCards, null);
+        this.secretObjectiveCards.clear();
         if(objectiveCards == null) return;
         for(ViewObjectiveCard objCard : objectiveCards){
             addSecretObjectiveCard(objCard);
@@ -187,6 +183,7 @@ public abstract class ViewHand extends JComponent {
                 choice = obj;
         }
         if(choice != null){
+            firePropertyChange(ChangeNotifications.CLEAR_OBJECTIVES, secretObjectiveCards,null);
             secretObjectiveCards.clear();
             addSecretObjectiveCard(choice);
         }

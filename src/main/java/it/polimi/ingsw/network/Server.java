@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -124,7 +125,11 @@ public class Server {
     //region DEBUG commands
         String command="";
         while(!command.matches("[qQ]uit")){
-            command = scanner.nextLine();
+            try {
+                command = scanner.nextLine();
+            }catch (NoSuchElementException crash){
+                System.exit(0);
+            }
             if(command.matches("[Dd]ebug(\\s+.*)*")){
                 String[] cmdArgs = command.split("\\s+");
                 if(cmdArgs.length > 1 && cmdArgs[1].equalsIgnoreCase("help")){

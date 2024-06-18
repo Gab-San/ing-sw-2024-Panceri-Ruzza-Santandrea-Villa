@@ -223,8 +223,10 @@ public class ViewBoard extends JComponent {
         playerAreas.put(nickname,playArea);
         opponentHands.put(nickname, opponentHand);
         scoreboard.put(nickname, 0);
+    }
+    public synchronized void notifyAddedOpponent(ViewHand opponentHand){
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, opponentHand);
-        firePropertyChange(ChangeNotifications.ADDED_AREA, null, playArea);
+        firePropertyChange(ChangeNotifications.ADDED_AREA, null, getPlayerArea(opponentHand.getNickname()));
     }
 
     /**
@@ -275,4 +277,5 @@ public class ViewBoard extends JComponent {
     public synchronized void notifyView(SceneID scene, DisplayEvent event){
         view.update(scene, event);
     }
+
 }

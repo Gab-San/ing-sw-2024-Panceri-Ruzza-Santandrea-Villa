@@ -80,6 +80,7 @@ public class ModelUpdater {
             hand.setConnected(isConnected);
             hand.setTurn(turn);
             hand.setColor(color);
+            System.out.println("RAN DisplayPlayerState EVENT on ModelUpdater");
             board.notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayPlayerState(nickname,
                     isConnected, turn, color));
         }
@@ -528,14 +529,6 @@ public class ModelUpdater {
         ViewPlayArea playArea = board.getPlayerArea(nickname);
         playArea.clearFreeCorners();
         playArea.clearCardMatrix();
-
-        //FIXME [Ale] with the new method of PlayAreaPanel startingCard is no longer needed as the first placement
-        //reorder so that starting card is first
-//        cardPositions.sort((p1, p2) -> {
-//            if(p1.row() == 0 && p1.col() == 0) return -1; //(0,0) is first
-//            if(p2.row() == 0 && p2.col() == 0) return 1;  //(0,0) is first
-//            else return 0; //other cards can be placed in any order
-//        });
 
         //then place all other cards
         for(CardPosition pos : cardPositions){

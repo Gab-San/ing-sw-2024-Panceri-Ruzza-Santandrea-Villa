@@ -11,6 +11,10 @@ public enum GameColor {
      */
     BOARD_COLOUR(new Color(0xA96F33)),
     /**
+     * Color used by the scoreboard background.
+     */
+    SCOREBOARD_COLOUR(new Color(0x94622F)),
+    /**
      * Color used by error notifications.
      */
     ERROR_COLOUR(new Color(0xCC0909)),

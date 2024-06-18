@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ScoreboardPanel extends JPanel {
-    public static final int SCOREBOARD_WIDTH = 300;
+    public static final int SCOREBOARD_WIDTH = 350;
     public static final int SCOREBOARD_HEIGHT = 900;
     private BufferedImage scoreboardImage;
     public ScoreboardPanel(){
         setPreferredSize(new Dimension(SCOREBOARD_WIDTH, SCOREBOARD_HEIGHT));
-        setBackground(GameColor.BOARD_COLOUR.getColor());
+        setBackground(GameColor.SCOREBOARD_COLOUR.getColor());
     }
 
 
@@ -32,7 +32,7 @@ public class ScoreboardPanel extends JPanel {
                 throw new RuntimeException(e);
             }
         }
-        int xOffset = (int) (SCOREBOARD_WIDTH / 10 * GameWindow.SCALE_FACTOR);
+        int xOffset = (int) (1.6f *SCOREBOARD_WIDTH / 10 * GameWindow.SCALE_FACTOR);
         int yOffset = (int) (SCOREBOARD_HEIGHT/6 * GameWindow.SCALE_FACTOR);
         graphics2D.drawImage(scoreboardImage, xOffset, yOffset,
                 scoreboardImage.getWidth()/2, scoreboardImage.getHeight()/2, null);

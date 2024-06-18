@@ -30,4 +30,8 @@ public class ChangeNotifications {
     public static final String CLEAR_OBJECTIVES = "CLEAR_OBJECTIVES";
     public static final String CLEAR_PLAY_CARDS = "CLEAR_PLAY_CARDS";
     public static final String REMOVE_CARD_HAND = "REMOVE_CARD_HAND";
+    /**
+     * Use with oldValue=null and newValue=ViewPlaceableCard
+     */
+    public static final String CARD_LAYER_CHANGE = "CARD_LAYER_CHANGE";
 }

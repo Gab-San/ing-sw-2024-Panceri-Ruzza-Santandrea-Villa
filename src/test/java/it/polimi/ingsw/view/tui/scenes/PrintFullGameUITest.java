@@ -125,7 +125,7 @@ public class PrintFullGameUITest {
                 switch (argument) {
                     case "hand": test.board.getPlayerHand().setCards(new LinkedList<>()); break;
                     case "objectives": test.board.getPlayerHand().setSecretObjectiveCards(new LinkedList<>()); break;
-                    case "starting": test.board.getPlayerHand().clearStartCard(); break;
+                    case "starting": test.board.getPlayerHand().setStartCard(null); break;
                     default: error = "Invalid flush argument"; break;
                 }
             }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scenes.areas.localarea;
+package it.polimi.ingsw.view.gui.scenes.areas;
 
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.gui.ChangeNotifications;

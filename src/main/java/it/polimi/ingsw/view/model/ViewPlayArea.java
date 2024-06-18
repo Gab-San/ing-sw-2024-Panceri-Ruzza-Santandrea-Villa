@@ -290,6 +290,7 @@ public class ViewPlayArea extends JComponent {
         for (GamePoint pos : cardMatrix.keySet()) {
             //TODO: fix this to scale on size of cardMatrix
             zLayerMatrix.put(pos, 3000);
+            cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
         }
 
         // I will use big gaps (~1000) to prevent a case like these coverages: 0 -> x -> 1
@@ -307,10 +308,9 @@ public class ViewPlayArea extends JComponent {
                 int z = zLayerMatrix.get(pos);
                 try{
                     int zChange = determineZChange(pos);
-                    if(zChange != 0) {
-                        zLayerMatrix.put(pos, z + zChange);
-                        cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
-                    }
+                    zLayerMatrix.put(pos, z + zChange);
+                    cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
+                    firePropertyChange(ChangeNotifications.CARD_LAYER_CHANGE, null, cardMatrix.get(pos));
                     finalizedPos.add(pos);
                 }catch (IllegalStateException ignored){} //due to being currently undecidable
             }

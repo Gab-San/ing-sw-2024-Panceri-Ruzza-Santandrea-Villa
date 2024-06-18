@@ -5,6 +5,7 @@ import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.GameInputHandler;
+import it.polimi.ingsw.view.gui.scenes.areas.HandPanel;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
@@ -20,54 +21,26 @@ import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
 
-public class PlayerHandPanel extends JPanel implements PropertyChangeListener, CardListener, CornerListener {
-    private static final int CARD_HEIGHT = ViewCard.getScaledHeight();
-    private static final int CARD_WIDTH = ViewCard.getScaledWidth();
-    private final List<ViewPlaceableCard> cardsInHand;
+public class PlayerHandPanel extends HandPanel implements CardListener, CornerListener {
     private final GameInputHandler inputHandler;
-    private final JPanel playCardsPanel;
-    private final JPanel objectiveCardsPanel;
     private ViewPlaceableCard selectedCard;
 
     public PlayerHandPanel(GameInputHandler inputHandler){
-        cardsInHand = new LinkedList<>();
+        super();
         this.inputHandler = inputHandler;
-
-        setLayout(new BorderLayout());
-        setOpaque(false);
-        playCardsPanel = setupPlayCardsPanel();
-        objectiveCardsPanel = setupObjectiveCardsPanel();
-        add(playCardsPanel, BorderLayout.CENTER);
-        add(objectiveCardsPanel, BorderLayout.EAST);
-    }
-
-    private JPanel setupObjectiveCardsPanel() {
-        JPanel panel = new JPanel();
-        int width = CARD_WIDTH * 2 + 10;
-        panel.setPreferredSize(new Dimension(width, CARD_HEIGHT));
-        panel.setLayout(new GridLayout(1,2, 10, 20));
-        panel.setOpaque(false);
-        return panel;
-    }
-
-    private JPanel setupPlayCardsPanel() {
-        JPanel panel = new JPanel();
-        int width = CARD_WIDTH * 3 + 10*2;
-        panel.setPreferredSize(new Dimension(width, CARD_HEIGHT));
-        panel.setLayout(new GridLayout(1,3, 10, 20));
-        panel.setOpaque(false);
-        return panel;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
         switch (evt.getPropertyName()){
             case SET_STARTING_CARD, ADD_CARD_HAND:
                 assert evt.getNewValue() instanceof ViewPlaceableCard;
                 ViewPlaceableCard addedCard = (ViewPlaceableCard) evt.getNewValue();
+                if(addedCard == null) return;
                 boolean alreadyContained = cardsInHand.stream()
                         .anyMatch(e -> e.getCardID().equals(addedCard.getCardID()));
-                if(addedCard == null || alreadyContained) return;
+                if(alreadyContained) return;
                 cardsInHand.add(addedCard);
                 addedCard.setCardListener(this);
                 SwingUtilities.invokeLater(
@@ -107,30 +80,6 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                             }
                     );
                     cardsInHand.remove(removedPlayCard);
-                }
-                break;
-            case ADD_SECRET_CARD:
-                assert evt.getNewValue() instanceof ViewObjectiveCard;
-                ViewObjectiveCard objectiveCard = (ViewObjectiveCard) evt.getNewValue();
-                SwingUtilities.invokeLater(
-                        () ->{
-                            objectiveCardsPanel.add(objectiveCard);
-                            revalidate();
-                            repaint();
-                        }
-                );
-                break;
-            case CLEAR_OBJECTIVES:
-                assert evt.getOldValue() instanceof List;
-                List<ViewObjectiveCard> objectiveCardList = (List<ViewObjectiveCard>) evt.getOldValue();
-                for(ViewObjectiveCard objCard : objectiveCardList){
-                    SwingUtilities.invokeLater(
-                            () ->{
-                                objectiveCardsPanel.remove(objCard);
-                                revalidate();
-                                repaint();
-                            }
-                    );
                 }
                 break;
         }
@@ -192,18 +141,4 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
                 c -> c.setBorder(BorderFactory.createEmptyBorder())
         );
     }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(CARD_WIDTH * 5 + 10 * 4, CARD_HEIGHT);
-    }
-    @Override
-    public int getHeight() {
-        return (int) getPreferredSize().getHeight();
-    }
-    @Override
-    public int getWidth() {
-        return (int) getPreferredSize().getWidth();
-    }
-
 }

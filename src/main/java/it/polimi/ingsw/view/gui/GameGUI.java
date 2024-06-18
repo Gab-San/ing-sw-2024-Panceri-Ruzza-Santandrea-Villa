@@ -46,6 +46,7 @@ import java.util.function.Consumer;
 public class GameGUI implements View {
     private final BlockingQueue<String> inputQueue;
     private final GameInputHandler inputHandler;
+    private final ViewBoard board;
     private GameWindow gameWindow;
     private final SceneManager sceneManager = SceneManager.getInstance();
 //region EVENTS ATTRIBUTES
@@ -68,7 +69,7 @@ public class GameGUI implements View {
         propertyChangeListenerList = new LinkedList<>();
         chatListenerList = new LinkedList<>();
 
-        ViewBoard board = new ViewBoard(this);
+        board = new ViewBoard(this);
         addToObservableComponents(board);
 
         ModelUpdater modelUpdater = new ModelUpdater(board);
@@ -370,8 +371,6 @@ public class GameGUI implements View {
         // Must connect updates to my scene area after
         // the player has connected
         if(isLocalPlayer){
-            SceneID localID = SceneID.getMyAreaSceneID();
-            LocalPlayerAreaScene localScene = (LocalPlayerAreaScene) SceneManager.getInstance().getScene(localID);
             JComponent localHand = inputHandler.getPlayerHand(nickname);
             // Adds local scene as listener to the local player's hand
             synchronized (observableComponents) {
@@ -379,25 +378,25 @@ public class GameGUI implements View {
                     return;
                 }
             }
-            localHand.addPropertyChangeListener(localScene);
             addToObservableComponents(localHand);
             return;
         }
 
-        // Creating opposing player's area
-        // the player has connected
-        OpponentAreaScene opponentScene = new OpponentAreaScene();
-        SceneManager.getInstance().loadScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
         // Adds opponent scene as listener for opponent's hand
-        JComponent opponentHand = inputHandler.getPlayerHand(nickname);
+        ViewHand opponentHand = inputHandler.getPlayerHand(nickname);
         synchronized (observableComponents) {
             if (observableComponents.contains(opponentHand)) {
                 return;
             }
         }
-        opponentHand.addPropertyChangeListener(opponentScene);
-//        inputHandler.getPlayArea(nickname).addPropertyChangeListener();
+        // Creating opposing player's area
+        // the player has connected
+        OpponentAreaScene opponentScene = new OpponentAreaScene(inputHandler, opponentHand.getNickname());
+        SceneManager.getInstance().loadScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
+        board.addPropertyChangeListener(opponentScene);
         addToObservableComponents(opponentHand);
+
+        board.notifyAddedOpponent(opponentHand);
     }
 
     /**
@@ -408,7 +407,7 @@ public class GameGUI implements View {
         SceneID sceneID = SceneID.getOpponentAreaSceneID(nickname);
         OpponentAreaScene opponentAreaScene = (OpponentAreaScene) SceneManager.getInstance().getScene(sceneID);
         if(opponentAreaScene == null){
-            System.out.println("THIS CALL SHOULD BE ERRANEOUS!");
+            System.out.println("THIS CALL SHOULD BE ERRONEOUS!");
             return;
         }
         GUI_Scene currentScene = (GUI_Scene) SceneManager.getInstance().getCurrentScene();

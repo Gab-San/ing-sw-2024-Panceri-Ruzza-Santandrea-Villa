@@ -135,7 +135,6 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         layer = 0;
     }
 
-
     public synchronized void forceDisableComponent(){
         super.disableComponent();
         removeMouseListener(this);
@@ -146,6 +145,13 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
             corner.resetCorner();
             remove(corner);
         }
+        SwingUtilities.invokeLater(
+                ()->{
+                    setVisible(true);
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 
     @Override
@@ -166,7 +172,8 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         assert e.getSource() instanceof ViewPlaceableCard;
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
         card.setFocusable(true);
-        card.grabFocus();
+
+        card.requestFocusInWindow();
     }
 
     @Override

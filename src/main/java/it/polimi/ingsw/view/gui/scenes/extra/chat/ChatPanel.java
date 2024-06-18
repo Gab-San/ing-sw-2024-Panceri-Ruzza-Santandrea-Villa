@@ -51,6 +51,9 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
         //Need a panel to layout properly the various components
         JPanel messagingPanel = createMessagingPanel(addresseeList, messageEditArea);
 
+        //set not focusable (with tab)
+        addresseeList.setFocusable(false);
+
         //Adding components
         add(messagingPanel, BorderLayout.SOUTH);
         add(chatVisualizer, BorderLayout.CENTER);
