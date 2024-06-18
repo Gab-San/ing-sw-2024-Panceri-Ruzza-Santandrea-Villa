@@ -24,18 +24,24 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     private static final int CENTER_X = AREA_WIDTH/2;
     private static final int CENTER_Y = AREA_HEIGHT/2;
     private final SpringLayout layout;
+    private final JLayeredPane layeredPane;
     private final List<PlaceHolder> placeHolderList;
     private CornerListener cornerListener;
     public PlayAreaPanel(){
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setBackground(GameColor.BOARD_COLOUR.getColor());
         placeHolderList = new LinkedList<>();
+        setLayout(new BorderLayout());
+
         //FIXME USE LAYERED PANE
         layout = new SpringLayout();
+        layeredPane = new JLayeredPane();
+        layeredPane.setLayout(layout);
         PlaceHolder placeHolder = setupPlaceHolder();
 
-        setLayout(layout);
-        add(placeHolder);
+
+        layeredPane.add(placeHolder, Integer.valueOf(0));
+        add(layeredPane, BorderLayout.CENTER);
     }
 
     private PlaceHolder setupPlaceHolder() {
@@ -57,9 +63,9 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
                 } catch (IllegalStateException exception){
                     return; // if setClickedCard fails to place startCard
                 }
-                remove(p);
                 SwingUtilities.invokeLater(
                         () -> {
+                            layeredPane.remove(p);
                             revalidate();
                             repaint();
                         }
@@ -99,15 +105,15 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     public void propertyChange(PropertyChangeEvent evt) {
         assert evt.getNewValue() instanceof ViewPlaceableCard;
         ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
-        SpringLayout.Constraints constraints = setCardPosition(placedCard);
+        setCardPosition(placedCard);
         deletePlaceHolders();
         placedCard.setCornerListener(this);
         placedCard.setCardListener(this);
-
+        int cardLayer = placedCard.getLayer();
         SwingUtilities.invokeLater(
                 () -> {
                     placedCard.setBorder(BorderFactory.createEmptyBorder());
-                    add(placedCard, constraints);
+                    layeredPane.add(placedCard, Integer.valueOf(cardLayer));
                     revalidate();
                     repaint();
                 }
@@ -117,7 +123,7 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     private void deletePlaceHolders() {
        SwingUtilities.invokeLater(
                () -> placeHolderList.forEach(
-                       this::remove
+                       layeredPane::remove
                        )
        );
     }

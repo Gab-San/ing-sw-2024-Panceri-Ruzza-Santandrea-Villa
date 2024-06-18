@@ -120,6 +120,7 @@ public class ViewPlayArea extends JComponent {
         cardMatrix.put(position, card);
         card.setPosition(position);
         zLayerMatrix.put(position, maxZ++);
+        card.setLayer(zLayerMatrix.get(position));
         firePropertyChange(ChangeNotifications.PLACED_CARD, null, card);
     }
 
@@ -306,8 +307,10 @@ public class ViewPlayArea extends JComponent {
                 int z = zLayerMatrix.get(pos);
                 try{
                     int zChange = determineZChange(pos);
-                    if(zChange != 0)
+                    if(zChange != 0) {
                         zLayerMatrix.put(pos, z + zChange);
+                        cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
+                    }
                     finalizedPos.add(pos);
                 }catch (IllegalStateException ignored){} //due to being currently undecidable
             }

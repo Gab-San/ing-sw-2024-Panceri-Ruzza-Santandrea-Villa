@@ -29,6 +29,7 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     private GamePoint position;
 
     protected CornerListener cornerListener;
+    private int layer;
 
     /**
      * Constructs the placeable card base.
@@ -130,6 +131,8 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         // Enabling flipping input
         this.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("F"), "FLIP_CARD_ACTION");
         this.getActionMap().put("FLIP_CARD_ACTION", new FlipAction());
+
+        layer = 0;
     }
 
 
@@ -171,6 +174,12 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         assert e.getSource() instanceof ViewPlaceableCard;
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
         card.setFocusable(false);
+    }
+    public void setLayer(int layer){
+        this.layer = layer;
+    }
+    public int getLayer() {
+        return layer;
     }
 }
 
