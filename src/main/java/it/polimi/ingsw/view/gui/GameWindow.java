@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.gui.scenes.extra.chat.ChatPanel;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
@@ -84,7 +85,6 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         // This needs to be called each time a scene change
         // is issued to be sure that all the items are validated for display
         setVisible(true);
-
     }
 
     @Override

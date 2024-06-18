@@ -103,6 +103,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     @Override
     public void display() {
         setVisible(true);
+        deselectCards();
         selectedDeck = 'A';
         selectedPosition = -1;
     }

@@ -13,7 +13,7 @@ public enum GameColor {
     /**
      * Color used by error notifications.
      */
-    ERROR_COLOUR(new Color(0xB91111)),
+    ERROR_COLOUR(new Color(0xCC0909)),
     /**
      * Color used by to display notifications.
      */
