@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -24,26 +26,29 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
     private final PlayerHandPanel handPanel;
     private final JLabel notificationLabel;
     private Timer displayTimer;
+    private final JScrollPane scrollPane;
+    private final JLayeredPane layersPane;
 
     public LocalPlayerAreaScene(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
 
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        JLayeredPane layersPane = new JLayeredPane();
-        layersPane.setSize(WIDTH, HEIGHT);
+        layersPane = new JLayeredPane();
+//        layersPane.setSize(WIDTH, HEIGHT);
         layersPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         notificationLabel = GUIFunc.createNotificationLabel();
         modifyNotificationLabel();
         layersPane.add(notificationLabel, Integer.valueOf(10000));
         playAreaPanel = new PlayAreaPanel();
 
-        JScrollPane scrollPane = setupAreaScrollPane();
+        scrollPane = setupAreaScrollPane();
         layersPane.add(scrollPane, Integer.valueOf(0));
 
         handPanel = new PlayerHandPanel(inputHandler);
-        handPanel.setBounds(WIDTH/2 - handPanel.getWidth()/2,
-                HEIGHT - handPanel.getHeight(),
+        int xHandPanel = WIDTH/2 - handPanel.getWidth()/2;
+        handPanel.setBounds(xHandPanel > 0 ? xHandPanel : 20,
+                HEIGHT - handPanel.getHeight() - 50,
                 handPanel.getWidth(), handPanel.getHeight());
         layersPane.add(handPanel,  Integer.valueOf(10));
 
@@ -77,17 +82,40 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         horModel.setExtent(scrollPane.getWidth());
 
         horModel.setValue(horValue - horModel.getExtent()/2);
-        // Add WASD movement
-        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("D"), "MOVE_RIGHT");
-        scrollPane.getActionMap().put("MOVE_RIGHT", new MoveScreenAction(1,0));
-        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("A"), "MOVE_LEFT");
-        scrollPane.getActionMap().put("MOVE_LEFT", new MoveScreenAction(-1,0));
-        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("W"), "MOVE_UP");
-        scrollPane.getActionMap().put("MOVE_UP", new MoveScreenAction(0,-1));
-        scrollPane.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("S"), "MOVE_DOWN");
-        scrollPane.getActionMap().put("MOVE_DOWN", new MoveScreenAction(0,1));
+        setScrollPaneMovement(scrollPane);
+
+        scrollPane.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        scrollPane.grabFocus();
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        scrollPane.setFocusable(true);
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        scrollPane.setFocusable(false);
+                    }
+                }
+        );
 
         return scrollPane;
+    }
+
+    private void setScrollPaneMovement(JScrollPane scrollPane) {
+        // Add WASD movement
+        scrollPane.getInputMap().put(KeyStroke.getKeyStroke("D"), "MOVE_RIGHT");
+        scrollPane.getActionMap().put("MOVE_RIGHT", new MoveScreenAction(1,0));
+        scrollPane.getInputMap().put(KeyStroke.getKeyStroke("A"), "MOVE_LEFT");
+        scrollPane.getActionMap().put("MOVE_LEFT", new MoveScreenAction(-1,0));
+        scrollPane.getInputMap().put(KeyStroke.getKeyStroke("W"), "MOVE_UP");
+        scrollPane.getActionMap().put("MOVE_UP", new MoveScreenAction(0,-1));
+        scrollPane.getInputMap().put(KeyStroke.getKeyStroke("S"), "MOVE_DOWN");
+        scrollPane.getActionMap().put("MOVE_DOWN", new MoveScreenAction(0,1));
     }
 
     @NotNull
@@ -95,8 +123,9 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
         JScrollPane scrollPane = new JScrollPane(playAreaPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        scrollPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        scrollPane.setSize(new Dimension(WIDTH, HEIGHT));
+        scrollPane.setPreferredSize(new Dimension(GameWindow.WIDTH, GameWindow.HEIGHT));
+        scrollPane.setSize(new Dimension(GameWindow.WIDTH, GameWindow.HEIGHT));
+
         int currentWidth = GameWindow.getDisplayWindow().getWidth()  - PlayerListPanel.WIDTH;
         int currentHeight = GameWindow.getDisplayWindow().getHeight() - PlayerInfoPanel.HEIGHT;
         scrollPane.setBounds(0,0, currentWidth, currentHeight);
@@ -186,10 +215,28 @@ public class LocalPlayerAreaScene extends JPanel implements GUI_Scene, PropertyC
 
     private synchronized void displayNotification(String successMessage, float displayTimeSeconds){
         int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        notificationLabel.setForeground(GameColor.NOTIFICATION_COLOUR.getColor());
+        notificationLabel.setForeground(Color.black);
         notificationLabel.setText(GUIFunc.correctToLabelFormat(successMessage));
         notificationLabel.setVisible(true);
         startDisplayTimer(displayTime);
     }
 //endregion
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        SwingUtilities.invokeLater(
+                () -> {
+                    int currentWidth = GameWindow.getDisplayWindow().getWidth() - PlayerListPanel.WIDTH;
+                    int currentHeight = GameWindow.getDisplayWindow().getHeight() - PlayerInfoPanel.HEIGHT;
+                    scrollPane.setBounds(0, 0, currentWidth, currentHeight);
+
+                    int xHandPanel = GameWindow.getDisplayWindow().getWidth()/2 - handPanel.getWidth()/2;
+                    int yHandPanel = GameWindow.getDisplayWindow().getHeight() - handPanel.getHeight() - 80;
+                    handPanel.setBounds(xHandPanel > 0 ? xHandPanel : 10,
+                            yHandPanel, handPanel.getWidth(), handPanel.getHeight());
+                }
+        );
+    }
 }

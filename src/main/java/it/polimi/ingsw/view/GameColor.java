@@ -9,15 +9,15 @@ public enum GameColor {
     /**
      * Color used by the board background.
      */
-    BOARD_COLOUR(new Color(0xCC9866)),
+    BOARD_COLOUR(new Color(0xA96F33)),
     /**
      * Color used by error notifications.
      */
-    ERROR_COLOUR(new Color(0x960B0B)),
+    ERROR_COLOUR(new Color(0xB91111)),
     /**
      * Color used by to display notifications.
      */
-    NOTIFICATION_COLOUR(new Color(0x0C8D27)),
+    NOTIFICATION_COLOUR(new Color(0x09B62F)),
     /**
      * Red color for player
      */

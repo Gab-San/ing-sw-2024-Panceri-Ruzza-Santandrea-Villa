@@ -160,7 +160,6 @@ public class ViewCorner extends JComponent implements MouseListener {
         if(!isVisible || isDisabled){
             return;
         }
-        System.out.println(e.getSource());
         cardRef.cornerListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
     }
 
@@ -172,7 +171,7 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-//        System.out.println("ENTERED CORNER");
+
         if(!isVisible || isDisabled){
             return;
         }
@@ -182,7 +181,7 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-//        System.out.println("EXITED CORNER");
+
         if(!isVisible || isDisabled){
             return;
         }

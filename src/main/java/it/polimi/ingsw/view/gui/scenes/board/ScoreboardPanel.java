@@ -34,8 +34,6 @@ public class ScoreboardPanel extends JPanel {
         }
         int xOffset = (int) (SCOREBOARD_WIDTH / 10 * GameWindow.SCALE_FACTOR);
         int yOffset = (int) (SCOREBOARD_HEIGHT/6 * GameWindow.SCALE_FACTOR);
-        System.out.println(xOffset + " " + yOffset + " " +
-                scoreboardImage.getWidth()/2 + " " + scoreboardImage.getHeight()/2 + " " + GameWindow.SCALE_FACTOR);
         graphics2D.drawImage(scoreboardImage, xOffset, yOffset,
                 scoreboardImage.getWidth()/2, scoreboardImage.getHeight()/2, null);
     }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.CardListener;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
@@ -15,8 +16,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class PlayAreaPanel extends JPanel implements PropertyChangeListener, CornerListener, CardListener {
     private static final int AREA_WIDTH = 16620;
@@ -27,7 +30,10 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
     private final JLayeredPane layeredPane;
     private final List<PlaceHolder> placeHolderList;
     private CornerListener cornerListener;
+    private final Set<String> placedCardsSet;
     public PlayAreaPanel(){
+        this.placedCardsSet = new HashSet<>();
+
         setSize(new Dimension(AREA_WIDTH, AREA_HEIGHT));
         setBackground(GameColor.BOARD_COLOUR.getColor());
         placeHolderList = new LinkedList<>();
@@ -103,21 +109,23 @@ public class PlayAreaPanel extends JPanel implements PropertyChangeListener, Cor
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        assert evt.getNewValue() instanceof ViewPlaceableCard;
-        ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
-        setCardPosition(placedCard);
-        deletePlaceHolders();
-        placedCard.setCornerListener(this);
-        placedCard.setCardListener(this);
-        int cardLayer = placedCard.getLayer();
-        SwingUtilities.invokeLater(
-                () -> {
-                    placedCard.setBorder(BorderFactory.createEmptyBorder());
-                    layeredPane.add(placedCard, Integer.valueOf(cardLayer));
-                    revalidate();
-                    repaint();
-                }
-        );
+            assert evt.getNewValue() instanceof ViewPlaceableCard;
+            ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+            if (placedCardsSet.contains(placedCard.getCardID())) return;
+            setCardPosition(placedCard);
+            placedCardsSet.add(placedCard.getCardID());
+            deletePlaceHolders();
+            placedCard.setCornerListener(this);
+            placedCard.setCardListener(this);
+            int cardLayer = placedCard.getLayer();
+            SwingUtilities.invokeLater(
+                    () -> {
+                        placedCard.setBorder(BorderFactory.createEmptyBorder());
+                        layeredPane.add(placedCard, Integer.valueOf(cardLayer));
+                        revalidate();
+                        repaint();
+                    }
+            );
     }
 
     private void deletePlaceHolders() {

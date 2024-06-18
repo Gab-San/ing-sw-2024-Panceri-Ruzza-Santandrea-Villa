@@ -65,7 +65,9 @@ public class PlayerHandPanel extends JPanel implements PropertyChangeListener, C
             case SET_STARTING_CARD, ADD_CARD_HAND:
                 assert evt.getNewValue() instanceof ViewPlaceableCard;
                 ViewPlaceableCard addedCard = (ViewPlaceableCard) evt.getNewValue();
-                if(addedCard == null) return;
+                boolean alreadyContained = cardsInHand.stream()
+                        .anyMatch(e -> e.getCardID().equals(addedCard.getCardID()));
+                if(addedCard == null || alreadyContained) return;
                 cardsInHand.add(addedCard);
                 addedCard.setCardListener(this);
                 SwingUtilities.invokeLater(
