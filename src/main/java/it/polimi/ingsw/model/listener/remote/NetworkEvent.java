@@ -14,5 +14,11 @@ import java.rmi.RemoteException;
  * </p>
  */
 public interface NetworkEvent extends GameEvent {
+
+    /**
+     * Handles event and notifies the client about it.
+     * @param virtualClient client instance to be notified
+     * @throws RemoteException if an error occurs during notification
+     */
     void executeEvent(VirtualClient virtualClient) throws RemoteException;
 }

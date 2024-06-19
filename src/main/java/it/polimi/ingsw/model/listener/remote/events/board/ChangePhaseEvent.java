@@ -6,9 +6,16 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
+/**
+ * This class represents an update event. It is triggered when the phase is changed.
+ */
 public class ChangePhaseEvent implements UpdateEvent {
     private final GamePhase gamePhase;
 
+    /**
+     * Constructs the game phase event.
+     * @param gamePhase updated gamephase
+     */
     public ChangePhaseEvent(GamePhase gamePhase) {
         this.gamePhase = gamePhase;
     }

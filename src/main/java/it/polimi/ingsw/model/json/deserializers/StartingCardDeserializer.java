@@ -12,7 +12,7 @@ import it.polimi.ingsw.GameResource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+//DOCS add docs
 public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
     public StartingCardDeserializer(){
         this(null);

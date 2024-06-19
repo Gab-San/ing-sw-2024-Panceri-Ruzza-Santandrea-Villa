@@ -4,7 +4,7 @@ import it.polimi.ingsw.GameResource;
 
 import java.util.List;
 import java.util.Map;
-
+//DOCS add docs
 public class GoldCardJSON {
     private String cardId;
     private Map<String, Integer> placementCost;

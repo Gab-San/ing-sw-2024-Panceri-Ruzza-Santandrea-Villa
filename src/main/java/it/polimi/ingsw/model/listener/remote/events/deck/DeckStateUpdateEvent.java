@@ -6,10 +6,21 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
+/**
+ * This class represents a deck event. Notifies about the state of the deck.
+ */
 public class DeckStateUpdateEvent extends DeckEvent{
     private final Card topCard;
     private final Card firstRevealedCard;
     private final Card secondRevealedCard;
+
+    /**
+     * Constructs a deck state update event.
+     * @param deck deck type id
+     * @param topCard current face-down pile top card
+     * @param firstRevealedCard current first revealed card
+     * @param secondRevealedCard current second revealed card
+     */
 
     public DeckStateUpdateEvent(char deck, Card topCard, Card firstRevealedCard, Card secondRevealedCard) {
         super(deck);
@@ -18,6 +29,18 @@ public class DeckStateUpdateEvent extends DeckEvent{
         this.secondRevealedCard = secondRevealedCard;
     }
 
+    /**
+     * Notifies about different states of the deck based upon the values of the three visible cards.
+     * <p>
+     *     If the three cards are not filled than the deck is completely empty. <br>
+     *     If at least one of the positions is filled than that the deck is still considered not
+     *     empty. <br>
+     *     The only configuration with two cards in the deck is if the two cards are both revealed. <br>
+     *     At last, if all three positions are occupied by a card the deck is considered full.
+     * </p>
+     * @param virtualClient client instance to be notified
+     * @throws RemoteException
+     */
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
         String topId = (topCard == null) ? null : topCard.getCardID();

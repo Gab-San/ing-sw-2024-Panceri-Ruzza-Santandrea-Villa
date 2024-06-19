@@ -75,7 +75,7 @@ public abstract class Card {
         return isFaceUp;
     }
 
-    public String getCardID() {return cardID != "" ? cardID : "";}
+    public String getCardID() {return !cardID.isEmpty() ? cardID : "";}
 
     // OBJECT METHODS
     /**

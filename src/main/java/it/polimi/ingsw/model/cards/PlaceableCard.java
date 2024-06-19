@@ -4,7 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import java.security.InvalidParameterException;
 import java.util.*;
-
+//DOCS complete
 /**
  * This class represents a placeable card.
  * <p>

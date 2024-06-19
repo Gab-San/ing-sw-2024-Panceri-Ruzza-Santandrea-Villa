@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
-import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
+import it.polimi.ingsw.model.listener.remote.events.deck.FaceDownReplaceEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class ObjectiveDeck implements GameSubject {
             topCard = cardDeck.remove(getRandomCard());
         }
 
-        notifyAllListeners(new DrawnCardEvent(Board.OBJECTIVE_DECK, topCard));
+        notifyAllListeners(new FaceDownReplaceEvent(Board.OBJECTIVE_DECK, topCard));
         return returnCard;
     }
 

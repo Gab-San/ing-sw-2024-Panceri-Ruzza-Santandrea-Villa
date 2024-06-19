@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import it.polimi.ingsw.GameResource;
 
 import java.io.IOException;
-
+//DOCS add docs
 public class ResourceCardDeserializer extends StdDeserializer<ResourceCardJSON> {
     public ResourceCardDeserializer(){
         this(null);

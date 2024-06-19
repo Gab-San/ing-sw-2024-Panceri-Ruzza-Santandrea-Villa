@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.json.deserializers;
 
-
+//DOCS add docs
 public class CornerJ {
     private String direction;
     private String frontResource;

@@ -1,5 +1,5 @@
 package it.polimi.ingsw.model.json.deserializers;
-
+//DOCS add docs
 public class PointOnPlace {
     private String type;
     private int amount;

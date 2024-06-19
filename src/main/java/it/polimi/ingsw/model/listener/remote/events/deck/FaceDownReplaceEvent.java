@@ -6,9 +6,18 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
-public class DrawnCardEvent extends DeckEvent{
+/**
+ * This class represents a deck event, triggered by a card being drawn and the top card being replaced.
+ */
+public class FaceDownReplaceEvent extends DeckEvent{
     private final Card topCard;
-    public DrawnCardEvent(char deck, Card topCard) {
+
+    /**
+     * Constructs a replace top card event.
+     * @param deck deck type id
+     * @param topCard updated face-down pile visible top card
+     */
+    public FaceDownReplaceEvent(char deck, Card topCard) {
         super(deck);
         this.topCard = topCard;
     }

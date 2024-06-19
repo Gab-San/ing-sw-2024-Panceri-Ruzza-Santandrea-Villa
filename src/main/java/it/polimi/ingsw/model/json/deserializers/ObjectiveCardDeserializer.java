@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
 
 import java.io.IOException;
-
+//DOCS add docs
 public class ObjectiveCardDeserializer extends StdDeserializer<ObjectiveCard> {
     public ObjectiveCardDeserializer(){
         this(null);

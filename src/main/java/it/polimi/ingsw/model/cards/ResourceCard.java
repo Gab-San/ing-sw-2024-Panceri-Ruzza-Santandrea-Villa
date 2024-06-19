@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
 import java.util.*;
-
+//DOCS complete
 /**
  * This class represents the resource card
  * <p>

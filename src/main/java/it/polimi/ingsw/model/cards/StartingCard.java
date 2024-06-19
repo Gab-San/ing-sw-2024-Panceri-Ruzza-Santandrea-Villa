@@ -5,6 +5,7 @@ import it.polimi.ingsw.GamePoint;
 import java.security.InvalidParameterException;
 import java.util.*;
 
+//DOCS complete
 /**
  * This represents the starting card: the first card placed in the setup phase.
  * <p>

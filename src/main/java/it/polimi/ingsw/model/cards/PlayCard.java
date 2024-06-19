@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.PlayArea;
 
 import java.security.InvalidParameterException;
 import java.util.*;
-
+//DOCS complete
 /**
  * This class represents a card that can be played.
  * <p>

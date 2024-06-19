@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.json.deserializers;
 import it.polimi.ingsw.GameResource;
 
 import java.util.List;
-
+//DOCS add docs
 public class ResourceCardJSON {
     private String cardId;
     private int pointsOnPlace;

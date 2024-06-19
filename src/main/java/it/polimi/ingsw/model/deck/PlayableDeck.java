@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.listener.GameEvent;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.model.listener.GameSubject;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
-import it.polimi.ingsw.model.listener.remote.events.deck.DrawnCardEvent;
+import it.polimi.ingsw.model.listener.remote.events.deck.FaceDownReplaceEvent;
 import it.polimi.ingsw.network.CentralServer;
 
 import java.util.ArrayDeque;
@@ -56,7 +56,7 @@ public class PlayableDeck implements GameSubject {
         } catch (DeckException ignored){
             // If the cardFactory is empty there's no mean to throw an error
         }
-        notifyAllListeners(new DrawnCardEvent(deckType, cardDeck.peek()));
+        notifyAllListeners(new FaceDownReplaceEvent(deckType, cardDeck.peek()));
         return returnCard;
     }
 
