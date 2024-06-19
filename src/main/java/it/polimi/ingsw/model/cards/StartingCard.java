@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.model.functions.UsefulFunc;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -77,7 +76,7 @@ public class StartingCard extends PlaceableCard {
             }
         }
 
-        return UsefulFunc.resourceArrayToMap(resourcesCount);
+        return super.resourceArrayToMap(resourcesCount);
     }
 
     /**

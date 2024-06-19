@@ -9,12 +9,25 @@ import java.awt.*;
  * at the start of the game.
  */
 public enum PlayerColor {
+    /**
+     * Blue pawn color.
+     */
     BLUE,
+    /**
+     * Red pawn color.
+     */
     RED,
+    /**
+     * Yellow pawn color.
+     */
     YELLOW,
+    /**
+     * Green pawn color.
+     */
     GREEN;
 
     /**
+     * Returns the color associated with the given initial.
      * @param colour the initial of the desired color (uppercase)
      * @return the color associated with the given initial, or null if none match.
      */

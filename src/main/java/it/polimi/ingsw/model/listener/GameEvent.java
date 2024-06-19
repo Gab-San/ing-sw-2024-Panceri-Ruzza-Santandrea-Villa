@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.listener;
 
-import java.rmi.RemoteException;
-
+/**
+ * This interface defines a game event.
+ */
 public interface GameEvent{
 }

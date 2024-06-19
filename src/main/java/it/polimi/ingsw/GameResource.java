@@ -4,15 +4,45 @@ package it.polimi.ingsw;
  * Enumeration of game's resources. Valid resources have an associated integer value for array indexing.
  */
 public enum GameResource {
-    MUSHROOM(1), BUTTERFLY(2), LEAF(3),
-    WOLF(4), SCROLL(5), POTION(6),
-    QUILL(7), FILLED(-1);
+    /**
+     * Mushroom resource.
+     */
+    MUSHROOM(1),
+    /**
+     * Butterfly resource.
+     */
+    BUTTERFLY(2),
+    /**
+     * Leaf resource.
+     */
+    LEAF(3),
+    /**
+     * Wolf resource.
+     */
+    WOLF(4),
+    /**
+     * Scroll resource.
+     */
+    SCROLL(5),
+    /**
+     * Potion resource.
+     */
+    POTION(6),
+    /**
+     * Quill resource.
+     */
+    QUILL(7),
+    /**
+     * Represents filled corner.
+     */
+    FILLED(-1);
     private final int resourceIndex;
     GameResource(int resourceIndex){
         this.resourceIndex = resourceIndex;
     }
 
     /**
+     * Returns the resource associated to the given name.
      * @param resName the desired resource's name
      * @return the resource associated to the given name (or null if no resources match)
      */
@@ -30,6 +60,7 @@ public enum GameResource {
         };
     }
     /**
+     * Returns the resource associated to the given initial.
      * @param resName the desired resource's name initial
      * @return the resource associated to the given initial (or null if no resources match)
      */
@@ -48,6 +79,7 @@ public enum GameResource {
     }
 
     /**
+     * Returns the resource associated with the given color.
      * @param colorName the color name
      * @return the resource associated with the given color
      */
@@ -80,6 +112,7 @@ public enum GameResource {
     }
 
     /**
+     * Returns the initial of the color associated to this resource
      * @return the initial of the color associated to this resource
      */
     public String asColor(){
@@ -93,9 +126,11 @@ public enum GameResource {
     }
 
     /**
-     * @return the resource index for array indexing (0-based) <br>
-     *      Please note that the FILLED resource has a negative index
-     *      to prevent its usage as a "valid" resource
+     * Returns the resource index for array indexing (0-based).
+     * <p>
+     *    Please note that the FILLED resource has a negative index to prevent its usage as a "valid" resource.
+     * </p>
+     * @return the resource index
      */
     public int getResourceIndex(){
         return resourceIndex - 1;

@@ -8,6 +8,14 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Future;
 
+/**
+ * This class implements an update task.
+ *
+ * <p>
+ *     An update task is responsible for updating the
+ *     clients about the events' history.
+ * </p>
+ */
 public class UpdateTask implements Runnable{
 
      private final VirtualClient client;
@@ -15,6 +23,11 @@ public class UpdateTask implements Runnable{
      private Future<?> taskFuture;
      private boolean hasToStop;
 
+    /**
+     * Constructs an update task for the specified client.
+     * @param client client to be updated
+     * @param eventRecord events' history record
+     */
     public UpdateTask(VirtualClient client, NetworkEventRecord eventRecord) {
         this.client = client;
         hasToStop = false;
@@ -60,15 +73,27 @@ public class UpdateTask implements Runnable{
         }
         eventRecord.removeTask(this);
     }
-    
+
+    /**
+     * Sets the future representing this task.
+     * @param taskFuture future representing this task.
+     */
     void setTaskFuture(Future<?> taskFuture){
         this.taskFuture = taskFuture;
     }
+
+    /**
+     * Forces task interruption.
+     */
     void killTask(){
         hasToStop = true;
         taskFuture.cancel(true);
     }
 
+    /**
+     * Returns the client handled by this task.
+     * @return handled client
+     */
     VirtualClient getTaskClient(){
         return client;
     }

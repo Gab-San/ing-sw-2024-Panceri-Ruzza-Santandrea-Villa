@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.model.PlayArea;
-import it.polimi.ingsw.model.functions.UsefulFunc;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -98,11 +97,11 @@ public abstract class PlayCard extends PlaceableCard{
             int[] resourcesCount = new int[7];
             if(backResource != null && backResource != GameResource.FILLED)
                 resourcesCount[backResource.getResourceIndex()]++;
-            return UsefulFunc.resourceArrayToMap(resourcesCount);
+            return super.resourceArrayToMap(resourcesCount);
         }
 
         int[] resourcesCount = super.getCornerResources();
-        return UsefulFunc.resourceArrayToMap(resourcesCount);
+        return super.resourceArrayToMap(resourcesCount);
     }
 
     /**

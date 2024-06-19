@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
+//DOCS complete docs
 public class PlayerHand implements GameSubject {
     static final int MAX_CARDS = 3;
     private final List<PlayCard> cards;

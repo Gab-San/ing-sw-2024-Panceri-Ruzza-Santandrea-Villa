@@ -8,6 +8,10 @@ import java.io.Serializable;
  * @param cornerDirection the direction of this corner, as its toString()
  */
 public record SerializableCorner(String cardCornerId, String cornerDirection) implements Serializable {
+    /**
+     * Unpacks the serialized information about the corner direction.
+     * @return corner direction
+     */
     public CornerDirection getCornerDirection(){
         return CornerDirection.getDirectionFromString(cornerDirection);
     }

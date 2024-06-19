@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Range;
 import java.util.LinkedList;
 import java.util.List;
 
+//DOCS complete docs
 public class Player implements GameSubject {
     private final String nickname;
     @Range(from=1,to=4)

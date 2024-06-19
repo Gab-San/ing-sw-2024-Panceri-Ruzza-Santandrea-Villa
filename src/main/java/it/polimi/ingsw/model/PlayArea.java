@@ -22,6 +22,7 @@ import it.polimi.ingsw.GameResource;
 
 import java.util.*;
 
+//DOCS Complete docs
 public class PlayArea implements GameSubject {
     private final String owner;
     private final Map<GamePoint, PlaceableCard> cardMatrix;

@@ -18,6 +18,7 @@ public record GamePoint(int row, int col) {
     }
 
     /**
+     * Returns a point that represents the movement in the desired direction by one step.
      * @param from Point from which to move from
      * @param direction direction to move towards
      * @return the point obtained by moving in the given direction one step
@@ -31,6 +32,7 @@ public record GamePoint(int row, int col) {
         };
     }
     /**
+     * Returns the point obtained by moving from this in the given direction one step.
      * @param direction direction to move towards
      * @return the point obtained by moving from this in the given direction one step
      */
@@ -39,6 +41,7 @@ public record GamePoint(int row, int col) {
     }
 
     /**
+     * Returns the point obtained by applying successive moves.
      * @param directions ordered sequence of moves to apply to this point
      * @return the destination point obtained by applying successive moves
      */
@@ -50,6 +53,7 @@ public record GamePoint(int row, int col) {
         return p;
     }
     /**
+     * Returns destination point obtained by applying successive moves.
      * @param directions ordered sequence of moves to apply to this point
      * @return the destination point obtained by applying successive moves
      */
@@ -72,6 +76,7 @@ public record GamePoint(int row, int col) {
     }
 
     /**
+     * Returns a point that is the sum of this' and p's rows and columns.
      * @param p other point to add to this
      * @return Point obtained from the sum of this' and p's rows and columns
      */

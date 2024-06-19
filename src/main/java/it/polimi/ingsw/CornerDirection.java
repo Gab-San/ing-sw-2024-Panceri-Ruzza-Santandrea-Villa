@@ -6,16 +6,36 @@ import java.util.Comparator;
  * Enumeration of possible direction where a corner can be (all diagonals from the center of the card)
  */
 public enum CornerDirection {
-    TL(0), TR(1),
-    BL(2), BR(3);
+    /**
+     * Top left corner
+     */
+    TL(0),
+    /**
+     * Top right corner
+     */
+    TR(1),
+    /**
+     * Bottom left corner
+     */
+    BL(2),
+    /**
+     * Bottom right corner
+     */
+    BR(3);
 
     private final int index;
     CornerDirection(int index){
         this.index = index;
     }
+
+    /**
+     * Returns the index associated to this corner.
+     * @return integer associated to this corner
+     */
     public int getIndex(){ return index; }
 
     /**
+     * Returns the direction opposite to the corner on whose this method is called.
      * @return the direction opposite to this <br> TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR
      */
     public CornerDirection opposite(){
@@ -43,6 +63,14 @@ public enum CornerDirection {
         };
     }
 
+    /**
+     * Returns the comparator for corners.
+     *
+     * <p>
+     *     The corner comparator uses indexes to order the corner.
+     * </p>
+     * @return corners direction comparator
+     */
     public static Comparator<CornerDirection> getComparator(){
         return Comparator.comparingInt(CornerDirection::getIndex);
     }

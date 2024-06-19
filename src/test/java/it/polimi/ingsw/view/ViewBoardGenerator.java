@@ -3,7 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.model.functions.UsefulFunc;
+import it.polimi.ingsw.model.cards.PlaceableCard;
 import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.*;
 
@@ -64,7 +64,7 @@ public class ViewBoardGenerator {
                 resAmount[res.getResourceIndex()]++;
             else i--;
         }
-        playArea.setVisibleResources(UsefulFunc.resourceArrayToMap(resAmount));
+        playArea.setVisibleResources(PlaceableCard.resourceArrayToMap(resAmount));
     }
     public static <C extends ViewCard> void fillDeckRandomly(ViewDeck<C> deck, Class<C> cardClass){
         Supplier<C> cardMaker;
