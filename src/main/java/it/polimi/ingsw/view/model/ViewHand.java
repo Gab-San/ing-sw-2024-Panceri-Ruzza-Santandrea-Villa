@@ -37,9 +37,6 @@ public abstract class ViewHand extends JComponent {
     private int turn;
     protected final View view;
 
-    //DOCS: Comment this?
-    public static final String COLOR_PROPERTY = "PROPERTY_COLOR";
-
     /**
      * Constructs the ViewHand
      * @param nickname the player nickname

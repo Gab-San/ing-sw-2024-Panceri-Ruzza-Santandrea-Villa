@@ -27,7 +27,6 @@ public class RemoteHandler implements GameListener{
 
     public synchronized void addClient(String nickname, VirtualClient client){
         if(playerClients.containsValue(client)){
-            //TODO decide if to return an exception
             System.err.println("Client already connected");
             return;
         }

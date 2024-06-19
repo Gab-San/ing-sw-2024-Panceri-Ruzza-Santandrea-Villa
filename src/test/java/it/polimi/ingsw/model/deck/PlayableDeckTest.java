@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ class PlayableDeckTest {
     static void setup() {
         try {
             playableDeck = new PlayableDeck(Board.RESOURCE_DECK, new ResourceCardFactory(),6);
-        } catch (DeckInstantiationException deckExc) {
+        } catch (IllegalStateException deckExc) {
             deckExc.printStackTrace(System.err);
         }
     }

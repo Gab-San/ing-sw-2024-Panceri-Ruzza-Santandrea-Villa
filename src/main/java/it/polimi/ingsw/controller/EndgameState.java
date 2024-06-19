@@ -57,11 +57,10 @@ public class EndgameState extends GameState{
 
     /**
      * Handles player disconnection.
-     * @throws IllegalStateException if disconnection cannot be handled at this stage.
      * @throws IllegalArgumentException if the nickname is invalid.
      */
     @Override
-    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
 
         board.disconnectPlayer(nickname);

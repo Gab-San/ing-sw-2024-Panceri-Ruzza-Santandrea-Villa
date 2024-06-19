@@ -19,8 +19,7 @@ import java.util.Map;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
 
-//FIXME Check that all ifs before board notification are correct and
-// comment them
+
 //DOCS: COMMENT ALL NEW EVENTS PLUS NEW SCENE
 public class ModelUpdater {
     private final ViewBoard board;

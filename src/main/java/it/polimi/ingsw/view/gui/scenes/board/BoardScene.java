@@ -19,8 +19,6 @@ import java.util.List;
 
 //DOCS [Gamba] add docs;
 
-//FIXME add error display
-
 /**
  * This class implements GUI scene interface. It displays the decks and the scoreboard.
  */
@@ -47,7 +45,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
 
         setLayout(new BorderLayout());
         JPanel deckpanel = setupDeckPanel(board);
-        scoreboard = new ScoreboardPanel();
+        scoreboard = new ScoreboardPanel(board);
         errorLabel = GUIFunc.createNotificationLabel();
         modifyErrorLabel();
         //Adding components

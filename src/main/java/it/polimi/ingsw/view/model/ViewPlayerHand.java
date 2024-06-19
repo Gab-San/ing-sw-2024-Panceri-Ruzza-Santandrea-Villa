@@ -55,7 +55,7 @@ public class ViewPlayerHand extends ViewHand {
         if(card != null)
             card.turnFaceUp();
         notifyView(SceneID.getMyAreaSceneID(),
-                 new DisplayAddedCard(nickname, true, cards));
+                 new DisplayAddedCard(nickname, true));
         super.addCard(card);
     }
     /**

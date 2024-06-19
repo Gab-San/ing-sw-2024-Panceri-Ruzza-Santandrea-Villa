@@ -8,6 +8,7 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
+import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.errors.IllegalActionError;
 import it.polimi.ingsw.network.VirtualClient;
 
@@ -42,7 +43,9 @@ public class SetupState extends GameState{
         try {
             giveStartingCard();
         } catch (IllegalStateException e){
-            //TODO add crash event
+            board.notifyAllListeners(new CrashStateError("all", "An error occured " +
+                    "while dealing starting cards"));
+            System.exit(-1);
             throw e;
         }
         board.setGamePhase(GamePhase.PLACESTARTING);
@@ -70,13 +73,11 @@ public class SetupState extends GameState{
      *      if the player is part of the game, he disconnects and his phase action is done randomly;
      *      if the player isn't part of the game throws IllegalArgumentException.
      * @param nickname the nickname of the disconnecting player
-     * @throws IllegalStateException if the action after the disconnection is not allowed at this stage
      * @throws IllegalArgumentException if the player is not part of the game
      */
 
     @Override
-    public void disconnect(String nickname)
-            throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws  IllegalArgumentException {
 
         disconnectingPlayers.remove(nickname);
 
@@ -219,7 +220,9 @@ public class SetupState extends GameState{
             try {
                 drawFirstHand();
             } catch ( DeckException e ) {
-                //TODO: add crash event
+                board.notifyAllListeners(new CrashStateError("all", "An error occured " +
+                        "while dealing cards at the start of the game"));
+                System.exit(-1);
                 throw new IllegalStateException(e);
             } catch (PlayerHandException | IllegalStateException exc){
                 throw new IllegalStateException(exc);
@@ -230,7 +233,9 @@ public class SetupState extends GameState{
             try {
                 giveSecretObjectives();
             } catch (IllegalStateException e){
-                //TODO add crash event
+                board.notifyAllListeners(new CrashStateError("all", "An error occured " +
+                        "while dealing objective cards"));
+                System.exit(-1);
                 throw e;
             }
 

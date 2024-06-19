@@ -55,11 +55,10 @@ public class JoinState extends GameState {
 
     /**
      * Handles a player disconnecting from the game.
-     * @throws IllegalStateException if the operation is not allowed in the current game state
      * @throws IllegalArgumentException if the specified player nickname is invalid
      */
     @Override
-    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
 
         board.unsubscribeClientFromUpdates(nickname);

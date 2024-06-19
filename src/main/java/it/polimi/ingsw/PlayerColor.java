@@ -34,7 +34,6 @@ public enum PlayerColor {
      * @return the LowerCamelCase string representation of the enum value, for cleaner printing.
      */
     public static Color getColor(PlayerColor colorName) {
-        //TODO fix colors
         if(colorName == null){
             return Color.black;
         }

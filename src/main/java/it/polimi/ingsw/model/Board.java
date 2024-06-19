@@ -12,7 +12,6 @@ import it.polimi.ingsw.model.deck.cardfactory.ResourceCardFactory;
 import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.ListenException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.GameEvent;
@@ -96,9 +95,9 @@ public class Board implements GameSubject{
 
     /**
      * Constructs the Board (as in initializing the game)
-     * @throws DeckInstantiationException if the decks can't be initialized
+     * * @throws IllegalStateException if an error occurs while initializing board
      */
-    public Board(){
+    public Board() throws IllegalStateException{
         observableObjects = new LinkedList<>();
         gameListeners = new LinkedList<>();
         hasGoneToEndgame = false;
@@ -161,10 +160,9 @@ public class Board implements GameSubject{
      * Constructs the board (as in initializing the game) and automatically makes the given players join
      * @param players list of 1-4 players that are joining this game
      * @throws InvalidParameterException if the list of players has an illegal player count (0 or >4)
-     * @throws IllegalStateException if players contains duplicates
-     * @throws DeckInstantiationException if the decks can't be initialized
+     * @throws IllegalStateException if players contains duplicates or an error occurs while initializing board
      */
-    public Board(Board oldBoard, List<Player> players) throws InvalidParameterException, IllegalStateException, DeckInstantiationException {
+    public Board(Board oldBoard, List<Player> players) throws InvalidParameterException, IllegalStateException{
         this();
         if(players.isEmpty() || players.size() > MAX_PLAYERS) throw new InvalidParameterException("Illegal number of players!");
         for(Player p: players){

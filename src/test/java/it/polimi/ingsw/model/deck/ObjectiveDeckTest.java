@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.cards.ObjectiveCard;
-import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +10,7 @@ class ObjectiveDeckTest {
     public static void instatiateDeck() {
         try {
             objDeck = new ObjectiveDeck();
-        } catch (DeckInstantiationException deckException){
+        } catch (IllegalStateException deckException){
             deckException.printStackTrace(System.err);
         }
     }

@@ -103,10 +103,10 @@ public class ViewPlayArea extends JComponent {
 
         if(board.getPlayerHand().getNickname().equals(owner))
             board.notifyView(SceneID.getMyAreaSceneID(),
-                    new DisplayPlaceCard(owner, true, cardMatrix));
+                    new DisplayPlaceCard(owner, true));
         else
             board.notifyView(SceneID.getMyAreaSceneID(),
-                    new DisplayPlaceCard(owner, true, cardMatrix));
+                    new DisplayPlaceCard(owner, true));
 
         addFreeCorners(placementFreeCorners);
     }

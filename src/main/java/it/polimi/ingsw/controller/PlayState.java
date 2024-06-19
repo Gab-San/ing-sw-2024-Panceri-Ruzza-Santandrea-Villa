@@ -76,11 +76,10 @@ public class PlayState extends GameState {
 
     /**
      * Handles the player disconnecting from the game during the play state.
-     * @throws IllegalStateException if the game phase does not allow disconnecting
      * @throws IllegalArgumentException if the player is not in the game
      */
     @Override
-    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
 
         board.getPlayerByNickname(nickname); // throws IllegalArgumentException if player not in game

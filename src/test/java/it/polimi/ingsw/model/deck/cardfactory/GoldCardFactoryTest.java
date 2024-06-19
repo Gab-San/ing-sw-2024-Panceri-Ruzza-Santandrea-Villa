@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.deck.cardfactory;
 
 import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

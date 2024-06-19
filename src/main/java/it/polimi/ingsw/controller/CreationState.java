@@ -49,10 +49,9 @@ public class CreationState extends GameState{
     /**
      * Handles player disconnection.
      * @throws IllegalStateException if disconnection cannot be handled at this stage.
-     * @throws IllegalArgumentException if the nickname is invalid.
      */
     @Override
-    public void disconnect(String nickname) throws IllegalStateException, IllegalArgumentException {
+    public void disconnect(String nickname) throws IllegalArgumentException {
         disconnectingPlayers.remove(nickname);
         board.unsubscribeClientFromUpdates(nickname);
         timers.stopTimer(board.getPlayerByNickname(nickname));
@@ -69,11 +68,6 @@ public class CreationState extends GameState{
     @Override
     public void setNumOfPlayers(String nickname, int num)
                 throws IllegalArgumentException, IllegalStateException{
-//        if(board.getGamePhase()!=GamePhase.SETNUMPLAYERS) {
-//            //FIXME: This notification is impossible to reach because if the player has connected then the phase is necessarily the SETNUMPLAYERS
-//            board.notifyAllListeners(new IllegalActionError(nickname, "IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE"));
-//            throw new IllegalStateException("IMPOSSIBLE TO SET THE NUMBER OF PLAYERS IN THIS PHASE");
-//        }
 
         Player player = board.getPlayerByNickname(nickname); // throws on player not in game
 

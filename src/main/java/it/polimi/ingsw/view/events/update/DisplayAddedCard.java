@@ -10,17 +10,15 @@ import java.util.List;
  * This class represents an event triggered by a card being added to the player's hand
  */
 public class DisplayAddedCard extends DisplayPlayerEvent {
-    //TODO: decide whether to pass all cards or only added
-    private final List<ViewPlayCard> playCardList;
+
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
      */
-    public DisplayAddedCard(String nickname, boolean isLocalPlayer, List<ViewPlayCard> playCardList) {
+    public DisplayAddedCard(String nickname, boolean isLocalPlayer) {
         super(nickname, isLocalPlayer);
-        this.playCardList = playCardList;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.deck;
 
 import it.polimi.ingsw.model.cards.StartingCard;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ class StartingCardFactoryTest {
     static void setup(){
         try {
             sFactory = new StartingCardDeck();
-        } catch (DeckInstantiationException deckExc){
+        } catch (IllegalStateException deckExc){
             deckExc.printStackTrace(System.err);
         }
     }

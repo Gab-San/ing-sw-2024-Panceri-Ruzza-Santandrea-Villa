@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.model.cards.PlayCard;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.json.deserializers.GoldCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
-import it.polimi.ingsw.network.Server;
 
 import java.io.File;
 import java.io.IOException;

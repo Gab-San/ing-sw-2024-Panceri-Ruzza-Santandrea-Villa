@@ -74,7 +74,7 @@ public class ViewOpponentHand extends ViewHand {
         if(card != null)
             card.turnFaceDown();
         notifyView(SceneID.getOpponentAreaSceneID(nickname),
-                new DisplayAddedCard(nickname, false, cards));
+                new DisplayAddedCard(nickname, false));
         super.addCard(card);
     }
 

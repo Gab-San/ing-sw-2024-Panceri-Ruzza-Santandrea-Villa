@@ -86,13 +86,7 @@ public class ViewCorner extends JComponent implements MouseListener {
      */
     public synchronized void cover(){
         isVisible = false;
-        //TODO [Ale] use a resetCorner() here?
-        SwingUtilities.invokeLater(
-                () -> {
-                    setEnabled(false);
-                    setBorder(BorderFactory.createEmptyBorder());
-                }
-        );
+        resetCorner();
     }
 
     public synchronized ViewPlaceableCard getCardRef() {

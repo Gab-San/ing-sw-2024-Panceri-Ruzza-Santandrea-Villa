@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.deck.cardfactory;
 
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,7 @@ class ResourceCardFactoryTest {
         ResourceCardFactory resourceCardFactory = null;
         try {
              resourceCardFactory = new ResourceCardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile");
-        } catch (DeckInstantiationException deckInstantiationException){
+        } catch (IllegalStateException deckInstantiationException){
             deckInstantiationException.printStackTrace(System.err);
         }
         
@@ -39,7 +38,7 @@ class ResourceCardFactoryTest {
         ResourceCardFactory resourceCardFactory = null;
         try {
             resourceCardFactory = new ResourceCardFactory();
-        } catch (DeckInstantiationException deckExc){
+        } catch (IllegalStateException deckExc){
             deckExc.printStackTrace(System.err);
         }
 

@@ -15,7 +15,6 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.model.exceptions.DeckException;
-import it.polimi.ingsw.model.exceptions.DeckInstantiationException;
 import it.polimi.ingsw.model.exceptions.PlayerHandException;
 import it.polimi.ingsw.model.listener.GameListener;
 import it.polimi.ingsw.stub.SimpleListener;
@@ -124,7 +123,7 @@ class EventTest {
 
     @Test
     @DisplayName("Deck State only first and second revealed")
-    void testDeckCreationEvents() throws InterruptedException, DeckInstantiationException {
+    void testDeckCreationEvents() throws InterruptedException {
         board.unsubscribeClientFromUpdates(nick);
         PlayableDeck deckWithTwo = new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile") {
             private int count = 0;

@@ -50,11 +50,9 @@ public abstract class GameState {
     /**
      * Handles a player disconnecting from the game.
      * @param nickname the nickname of the disconnecting player
-     * @throws IllegalStateException if the operation is not allowed in the current game state
      * @throws IllegalArgumentException if the provided nickname is invalid
      */
-    //FIXME: [FLAVIO] disconnect does not need IllegalStateException
-    abstract public void disconnect (String nickname) throws IllegalStateException, IllegalArgumentException;
+    abstract public void disconnect (String nickname) throws IllegalArgumentException;
     /**
      * Handles placing a starting card on the game board.
      * @param nickname the nickname of the player placing the card

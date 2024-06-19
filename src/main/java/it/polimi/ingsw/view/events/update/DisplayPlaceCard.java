@@ -12,18 +12,14 @@ import java.util.Map;
  * This class represents an event triggered when a card is placed on player's area.
  */
 public class DisplayPlaceCard extends DisplayPlayerEvent {
-    //TODO decide if to pass only card
-    private final Map<GamePoint, ViewPlaceableCard> cardMatrix;
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
      */
-    public DisplayPlaceCard(String nickname, boolean isLocalPlayer,
-                               Map<GamePoint, ViewPlaceableCard> cardMatrix) {
+    public DisplayPlaceCard(String nickname, boolean isLocalPlayer) {
         super(nickname, isLocalPlayer);
-        this.cardMatrix = cardMatrix;
     }
 
     @Override
