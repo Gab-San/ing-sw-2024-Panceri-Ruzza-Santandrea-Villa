@@ -6,11 +6,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PlayerPawn extends JComponent {
-    private Color pawnColor;
+    private final Color pawnColor;
     private final int width = 20;
     private final int height = 20;
     public PlayerPawn(Color pawnColor){
         this.pawnColor = pawnColor;
+    }
+
+    public Color getColor(){
+        return pawnColor;
     }
 
     @Override

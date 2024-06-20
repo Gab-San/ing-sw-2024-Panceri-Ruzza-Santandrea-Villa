@@ -17,6 +17,9 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Base class of the playAreaPanel, with shared behaviour of local and opponent playAreas
+ */
 public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyChangeListener {
     public static final int WIDTH = GameWindow.SCREEN_WIDTH - PlayerListPanel.WIDTH;
     public static final int HEIGHT = GameWindow.SCREEN_HEIGHT - PlayerInfoPanel.HEIGHT;
@@ -212,6 +215,8 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
                 );
                 hand.addPropertyChangeListener(playerInfoPanel);
                 hand.addPropertyChangeListener(handPanel);
+                hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, areaPanel);
+                hand.addPropertyChangeListener(ChangeNotifications.PLAYER_TURN_UPDATE, areaPanel);
                 ((ViewBoard) evt.getSource())
                         .addPropertyChangeListener(ChangeNotifications.CURRENT_TURN_UPDATE, playerInfoPanel);
                 break;
