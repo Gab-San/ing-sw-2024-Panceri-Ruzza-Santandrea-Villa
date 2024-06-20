@@ -8,15 +8,12 @@ import it.polimi.ingsw.view.model.ViewPlayArea;
 import java.beans.PropertyChangeEvent;
 
 public class LocalPlayerAreaScene extends AreaScene{
-    private final PlayAreaPanel playAreaPanel;
-    private final PlayerHandPanel handPanel;
 
     public LocalPlayerAreaScene(GameInputHandler inputHandler){
         super(inputHandler, new PlayAreaPanel(), new PlayerHandPanel(inputHandler));
-        playAreaPanel = (PlayAreaPanel) areaPanel;
-        handPanel = (PlayerHandPanel) super.handPanel;
 
-        playAreaPanel.setCornerListener(handPanel);
+        PlayAreaPanel playAreaPanel = (PlayAreaPanel) areaPanel;
+        playAreaPanel.setCornerListener((PlayerHandPanel) super.handPanel);
     }
 
     @Override

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.gui.scenes.areas;
 
-import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.model.cards.ViewCard;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +13,9 @@ import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
 
-
+/**
+ * Base class of the player Hand Panel, with the shared behaviour of local and opponent hands.
+ */
 public abstract class HandPanel extends JPanel implements PropertyChangeListener {
     private static final int CARD_HEIGHT = ViewCard.getScaledHeight();
     private static final int CARD_WIDTH = ViewCard.getScaledWidth();
