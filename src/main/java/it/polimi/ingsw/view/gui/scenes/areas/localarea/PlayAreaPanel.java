@@ -72,22 +72,22 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        super.propertyChange(evt);
-        ViewPlaceableCard placedCard;
+        System.out.println("LOCAL AREA TRIGGERED " + evt.getPropertyName());
+        if(!super.parentPropertyChange(evt)) return; //returns if parent detected invalid update
+        assert evt.getNewValue() instanceof ViewPlaceableCard;
+        ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+
         switch (evt.getPropertyName()){
             case ChangeNotifications.CARD_LAYER_CHANGE:
-                assert evt.getNewValue() instanceof ViewPlaceableCard;
-                placedCard = (ViewPlaceableCard) evt.getNewValue();
-                if(!placedCardsSet.contains(placedCard)) return;
-                System.out.println("Changed card " + placedCard.getCardID() + " layer to " + placedCard.getLayer());
+                System.out.println("LOCAL Changed card " + placedCard.getCardID() + " layer to " + placedCard.getLayer());
                 System.out.flush();
                 break;
             case ChangeNotifications.PLACED_CARD:
-                assert evt.getNewValue() instanceof ViewPlaceableCard;
-                placedCard = (ViewPlaceableCard) evt.getNewValue();
                 deletePlaceHolders();
                 placedCard.setCornerListener(this);
                 placedCard.setCardListener(this);
+                System.out.println("LOCAL Placed card " + placedCard.getCardID() + " having layer " + placedCard.getLayer());
+                System.out.flush();
                 break;
         }
     }

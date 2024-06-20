@@ -18,7 +18,6 @@ public class OpponentHandPanel extends HandPanel {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
-        System.out.println("OPPONENT HAND TRIGGERED " + evt.getPropertyName());
         switch (evt.getPropertyName()){
             case SET_STARTING_CARD, ADD_CARD_HAND:
                 assert evt.getNewValue() instanceof ViewPlaceableCard;

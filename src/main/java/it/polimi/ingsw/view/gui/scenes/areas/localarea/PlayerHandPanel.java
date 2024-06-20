@@ -96,9 +96,6 @@ public class PlayerHandPanel extends HandPanel implements CardListener, CornerLi
             try {
                 inputHandler.placeStartCard(selectedCard.isFaceUp());
                 selectedCard = null;
-            } catch (RemoteException e) {
-                inputHandler.showError("CONNECTION LOST."); //TODO: review this notification
-                inputHandler.notifyDisconnection();
             } catch (IllegalStateException e){
                 inputHandler.showError(e.getMessage());
                 throw e; //notifies the placeholder that placement failed
@@ -110,9 +107,6 @@ public class PlayerHandPanel extends HandPanel implements CardListener, CornerLi
             inputHandler.placeCard(selectedCard.getCardID(),position,
                     direction.toString(), selectedCard.isFaceUp());
             selectedCard = null; //deselect after place attempt removing selected card
-        } catch (RemoteException e) {
-            inputHandler.showError("CONNECTION LOST."); //TODO: review this notification
-            inputHandler.notifyDisconnection();
         } catch (IllegalStateException e){
             inputHandler.showError(e.getMessage());
             throw e; //notifies the caller that placement failed

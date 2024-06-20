@@ -81,15 +81,24 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public abstract void propertyChange(PropertyChangeEvent evt);
+
+    /**
+     * @param evt the propertyChange event triggered by some object this is listening to
+     * @return false if the update was invalid and ignored, <br>
+     *         true if the update was valid and successful
+     */
+    public boolean parentPropertyChange(PropertyChangeEvent evt) {
         assert evt.getNewValue() instanceof ViewPlaceableCard;
         ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
         if(evt.getPropertyName().equals(ChangeNotifications.CARD_LAYER_CHANGE)){
-            if (!placedCardsSet.contains(placedCard)) return;
+            if (!placedCardsSet.contains(placedCard)){
+                System.out.println("RETURNED due to CARD_LAYER_CHANGE on nonExisting card");
+                return false;
+            }
             ViewPlaceableCard oldCard = placedCardsSet.stream()
                     .filter(c -> c.equals(placedCard))
                     .findFirst().orElse(placedCard);
-
             SwingUtilities.invokeLater(
                     () -> {
                         layeredPane.remove(oldCard);
@@ -97,10 +106,15 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
 //                        repaint();  (maybe re add this)
                     }
             );
+            //remove from set in order to pass the following ".contains()" check
+            placedCardsSet.remove(oldCard);
         }
 
-        // In any case the card should be (re-)added
-        if (placedCardsSet.contains(placedCard)) return;
+        // In any case the card should be (re-)added to the panel
+        if (placedCardsSet.contains(placedCard)){
+            System.out.println("RETURNED due to placement of alreadyExisting card");
+            return false;
+        }
         setCardPosition(placedCard);
         placedCardsSet.add(placedCard);
         int cardLayer = placedCard.getLayer();
@@ -112,5 +126,7 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
                     repaint();
                 }
         );
+
+        return true;
     }
 }

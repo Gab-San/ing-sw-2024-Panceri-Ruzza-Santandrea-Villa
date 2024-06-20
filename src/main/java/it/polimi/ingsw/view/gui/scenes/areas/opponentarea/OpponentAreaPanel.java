@@ -15,25 +15,21 @@ public class OpponentAreaPanel extends AreaPanel {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        super.propertyChange(evt);
-//        System.out.println("OPPONENT AREA "+ this.hashCode() +" TRIGGERED " + evt.getPropertyName());
-        ViewPlaceableCard placedCard;
+        System.out.println("OPPONENT AREA TRIGGERED " + evt.getPropertyName());
+        if(!super.parentPropertyChange(evt)) return; //returns if parent detected invalid update
+        assert evt.getNewValue() instanceof ViewPlaceableCard;
+        ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+
+        placedCard.forceDisableComponent();
+
         switch (evt.getPropertyName()){
             case ChangeNotifications.CARD_LAYER_CHANGE:
-                assert evt.getNewValue() instanceof ViewPlaceableCard;
-                placedCard = (ViewPlaceableCard) evt.getNewValue();
-                if (!placedCardsSet.contains(placedCard)) return;
-
                 System.out.println("OPPONENT Changed card " + placedCard.getCardID() + " layer to " + placedCard.getLayer());
-                System.out.flush();
                 break;
             case ChangeNotifications.PLACED_CARD:
-                assert evt.getNewValue() instanceof ViewPlaceableCard;
-                placedCard = (ViewPlaceableCard) evt.getNewValue();
-                if (placedCardsSet.contains(placedCard)) return;
                 System.out.println("OPPONENT AREA PLACING " + placedCard.getCardID() + " z=" + placedCard.getLayer());
-                placedCard.forceDisableComponent();
                 break;
         }
+        System.out.flush();
     }
 }

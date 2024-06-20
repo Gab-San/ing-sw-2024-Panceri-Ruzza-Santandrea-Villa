@@ -324,7 +324,7 @@ public class ViewPlayArea extends JComponent {
             throw new IllegalArgumentException("MAX ITERATIONS REACHED");
 
         maxZ = zLayerMatrix.values().stream()
-                .mapToInt(v->v).max().orElse(0);
+                .reduce(0, Integer::max);
     }
     /**
      * Return the zChange that fixes a position pos
@@ -371,9 +371,11 @@ public class ViewPlayArea extends JComponent {
                         .filter(i -> isCoveringOthers ? i > 0 : i < 0)
                         .sorted(Integer::compare) //sort ascending
                         .toList();
-                if (diffs.isEmpty()) //unbounded increase/decrease
+                if (diffs.isEmpty()) { //unbounded increase/decrease
                     // use a big number for the same problem described above
-                    zChange = isCoveringOthers ? UNBOUND_BIG_CHANGE : -UNBOUND_BIG_CHANGE;
+                    int maxNegChange = Math.min(UNBOUND_BIG_CHANGE, zCard); //never decrease below 0
+                    zChange = isCoveringOthers ? UNBOUND_BIG_CHANGE : -maxNegChange;
+                }
                 else {
                     //diffs contains all relevant differences in zLayer
                     // (only >0 is this covers them) (only <0 if they cover this)

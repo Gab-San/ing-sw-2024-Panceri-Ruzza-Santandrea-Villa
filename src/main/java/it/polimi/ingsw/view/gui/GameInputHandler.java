@@ -58,9 +58,17 @@ public class GameInputHandler{
     }
 
 
-    public void placeStartCard(boolean placeOnFront) throws RemoteException, IllegalStateException {
+    public void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
-        serverProxy.placeStartCard(placeOnFront);
+        threadPool.submit(() -> {
+                    try {
+                        serverProxy.placeStartCard(placeOnFront);
+                    } catch (RemoteException e) {
+                        showError("CONNECTION LOST.");
+                        notifyDisconnection();
+                    }
+                }
+        );
     }
 
 
@@ -78,9 +86,18 @@ public class GameInputHandler{
     }
 
 
-    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws RemoteException, IllegalStateException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
-        serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
+        threadPool.submit(() -> {
+                    try {
+                        serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
+                    } catch (RemoteException e) {
+                        showError("CONNECTION LOST.");
+                        notifyDisconnection();
+                    }
+                }
+        );
+
     }
 
 
