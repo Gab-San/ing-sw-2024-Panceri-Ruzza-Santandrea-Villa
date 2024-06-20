@@ -9,11 +9,20 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FreeCornersUpdate extends PlayerEvent {
-    private final List<SerializableCorner> freeSerialableCorners;
+/**
+ * This class represents a player event. It is triggered by an update of the free corners.
+ */
+public class FreeCornersUpdate extends PlayerEvent  {
+    private final List<SerializableCorner> freeSerializableCorners;
+
+    /**
+     * Constructs the free corners' event.
+     * @param nickname play area owner's id
+     * @param freeCorners updated free corners list
+     */
     public FreeCornersUpdate(String nickname, List<Corner> freeCorners) {
         super(nickname);
-        freeSerialableCorners = new LinkedList<>(freeCorners.stream().map(
+        freeSerializableCorners = new LinkedList<>(freeCorners.stream().map(
                 corner -> new SerializableCorner(corner.getCardRef().getCardID(),
                         corner.getDirection().toString())
         ).toList());
@@ -21,6 +30,6 @@ public class FreeCornersUpdate extends PlayerEvent {
 
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {
-        virtualClient.freeCornersUpdate(nickname, freeSerialableCorners);
+        virtualClient.freeCornersUpdate(nickname, freeSerializableCorners);
     }
 }

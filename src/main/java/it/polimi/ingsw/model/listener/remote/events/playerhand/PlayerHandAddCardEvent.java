@@ -6,8 +6,17 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
+/**
+ * This class represents a player event. It is triggered when a card is added to the player hand.
+ */
 public class PlayerHandAddCardEvent extends PlayerEvent {
     private final String drawnCardId;
+
+    /**
+     * Constructs the added card event.
+     * @param nickname hand owner's id
+     * @param drawnCard added card
+     */
     public PlayerHandAddCardEvent(String nickname, PlayCard drawnCard) {
         super(nickname);
         this.drawnCardId = drawnCard.getCardID();

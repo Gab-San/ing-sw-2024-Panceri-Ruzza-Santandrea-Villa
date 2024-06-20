@@ -5,9 +5,20 @@ import it.polimi.ingsw.network.VirtualClient;
 
 import java.rmi.RemoteException;
 
+/**
+ * This class represents a player event.
+ * <p>
+ *     A player event is an event triggered when a modification involving
+ *     a player status and board occurs.
+ * </p>
+ */
 abstract public class PlayerEvent implements UpdateEvent {
     protected final String nickname;
 
+    /**
+     * Constructs a player event.
+     * @param nickname involved player's id
+     */
     protected PlayerEvent(String nickname) {
         this.nickname = nickname;
     }
