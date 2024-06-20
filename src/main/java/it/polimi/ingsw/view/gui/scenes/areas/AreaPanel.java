@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -99,13 +100,18 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
             ViewPlaceableCard oldCard = placedCardsSet.stream()
                     .filter(c -> c.equals(placedCard))
                     .findFirst().orElse(placedCard);
-            SwingUtilities.invokeLater(
-                    () -> {
-                        layeredPane.remove(oldCard);
-                        revalidate();
-//                        repaint();  (maybe re add this)
-                    }
-            );
+            try {
+                SwingUtilities.invokeAndWait(
+                        () -> {
+                            layeredPane.remove(oldCard);
+                            revalidate();
+                            repaint();  // (maybe re add this)
+                        }
+                );
+            } catch (InterruptedException | InvocationTargetException e) {
+                System.out.println("ERROR while removing oldCard " + e.getMessage());
+                return false;
+            }
             //remove from set in order to pass the following ".contains()" check
             placedCardsSet.remove(oldCard);
         }

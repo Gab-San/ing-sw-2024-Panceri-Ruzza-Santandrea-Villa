@@ -324,7 +324,7 @@ public class ViewPlayArea extends JComponent {
             throw new IllegalArgumentException("MAX ITERATIONS REACHED");
 
         maxZ = zLayerMatrix.values().stream()
-                .reduce(0, Integer::max);
+                .reduce(0, Integer::max) + 1; //must increase by 1 to be above the top card
     }
     /**
      * Return the zChange that fixes a position pos
@@ -435,20 +435,4 @@ public class ViewPlayArea extends JComponent {
         }
         return 100;
     }
-
-
-    /*
-    final int MAX_HALVING = zChange/25; //2^5 = 32
-        for (int i = 0; i < MAX_HALVING; i++) {
-            if(validateZ(pos,zChange))
-                return zChange;
-            else{
-                if(Math.abs(zChange) > 128)
-                    zChange = (int) (Math.signum(zChange) * (Math.abs(zChange) - 50));
-                else
-                    zChange = zChange / 2;
-            }
-            System.out.println("INVALID CHANGE AT " + pos + " #iter="+i);
-        }
-     */
 }
