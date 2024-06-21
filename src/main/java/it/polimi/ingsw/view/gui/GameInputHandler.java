@@ -59,15 +59,15 @@ public class GameInputHandler{
 
     public synchronized void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
-        threadPool.submit(() -> {
+//        threadPool.submit(() -> {
                     try {
                         serverProxy.placeStartCard(placeOnFront);
                     } catch (RemoteException e) {
                         showError("CONNECTION LOST.");
                         notifyDisconnection();
                     }
-                }
-        );
+//                }
+//        );
     }
 
 
@@ -87,15 +87,15 @@ public class GameInputHandler{
 
     public synchronized void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
-        threadPool.submit(() -> {
+//        threadPool.submit(() -> {
                     try {
                         serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
                     } catch (RemoteException e) {
                         showError("CONNECTION LOST.");
                         notifyDisconnection();
                     }
-                }
-        );
+//                }
+//        );
 
     }
 
@@ -106,20 +106,22 @@ public class GameInputHandler{
     }
 
 
-    public synchronized void restartGame(int numOfPlayers) {
-        if(numOfPlayers < 2 || numOfPlayers > 4){
-            showError("Number of Players must be (2-4)");
-            return;
+    public synchronized void restartGame(int numOfPlayers) throws IllegalArgumentException {
+        try{
+            controller.validateRestart(numOfPlayers);
+        }catch (IllegalArgumentException e){
+            showError(e.getMessage());
+            throw e;
         }
-        threadPool.submit(() -> {
+//        threadPool.submit(() -> {
                     try {
                         serverProxy.restartGame(numOfPlayers);
                     } catch (RemoteException e) {
                         showError("CONNECTION LOST.");
                         notifyDisconnection();
                     }
-                }
-        );
+//                }
+//        );
     }
 
     public synchronized void notifyDisconnection(){

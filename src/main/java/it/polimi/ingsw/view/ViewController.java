@@ -148,6 +148,24 @@ public class ViewController {
     }
 
     /**
+     * Validates whether the restart game command can be run. <br>
+     * Successfully returning from this method means passing the check.
+     * @param numOfPlayers number of players required to start the new game
+     * @throws IllegalStateException if the player can't currently restart the game.
+     *                              The exception message explains the reason in greater detail.
+     * @throws IllegalArgumentException if the numOfPlayers argument is invalid (<2 or >4).
+     *                              The exception message explains the reason in greater detail.
+     */
+    public void validateRestart(int numOfPlayers)throws IllegalStateException, IllegalArgumentException{
+        validatePhase(GamePhase.SHOWWIN);
+        int numActivePlayers = (int) board.getOpponents().stream()
+                .filter(ViewOpponentHand::isConnected).count() + 1 ; //add 1 for the local player
+        if(numOfPlayers < numActivePlayers || numOfPlayers > 4){
+            throw new IllegalArgumentException("Number of Players must be ("+numActivePlayers+"-4)");
+        }
+    }
+
+    /**
      * Validates whether a chat message can be sent to addressee
      * Successfully returning from this method means passing the check.
      * @param addressee the nickname of the addressee of the chat message,

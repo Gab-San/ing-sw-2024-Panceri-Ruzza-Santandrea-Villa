@@ -174,7 +174,7 @@ public class Parser {
      *                              The exception message specifies the proper formatting
      * @throws RemoteException if a connection error occurs while communicating with the server
      */
-    private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalStateException {
+    private void parseRestartCmd(List<String> cmdArgs) throws RemoteException, IllegalArgumentException {
         if(cmdArgs.isEmpty())
             throw new IllegalArgumentException("Restart must provide the number of players with which to restart the game (2-4)\n"+
                 "For example: Restart with 4 players");
@@ -184,7 +184,7 @@ public class Parser {
         } catch (IndexOutOfBoundsException outOfBoundsException){
             throw new IllegalArgumentException("Invalid number of players." + outOfBoundsException.getMessage() + "2 and 4");
         }
-        viewController.validatePhase(GamePhase.SHOWWIN);
+        viewController.validateRestart(numOfPlayers);
         virtualServer.restartGame(numOfPlayers);
     }
 
@@ -215,6 +215,7 @@ public class Parser {
             nickname.append(cmp).append(" ");
         }
 
+        //can throw IllegalStateException or RemoteException
         virtualServer.connect(nickname.toString().trim());
     }
 //endregion

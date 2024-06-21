@@ -265,8 +265,6 @@ public class ViewPlayArea extends JComponent {
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
                     new DisplayFreeCorners(owner, false, freeCorners));
 
-//        firePropertyChange(ChangeNotifications.FREE_CORN_CHANGE, null, cardFreeCorners);
-
         cardFreeCorners.forEach(
                 ViewCorner::activateCorner
         );
