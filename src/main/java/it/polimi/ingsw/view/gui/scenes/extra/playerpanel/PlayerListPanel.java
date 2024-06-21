@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GameInputHandler;
+import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 
@@ -23,6 +23,7 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
     private final ButtonGroup buttonPlayerGroup;
     private final ChangeAreaAction buttonAction;
     private final List<ChangeAreaPanel> areaList;
+
     public PlayerListPanel(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
         this.areaList = new LinkedList<>();
@@ -121,5 +122,24 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
                 }
                 break;
         }
+    }
+
+    public void addEndgameButton(String text) {
+        SceneID sceneID = SceneID.getEndgameSceneID();
+        boolean connectionStatus = true;
+
+        ChangeAreaPanel changeAreaPanel = new ChangeAreaPanel(text, buttonAction,
+                sceneID, connectionStatus);
+
+        buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
+        SwingUtilities.invokeLater(
+                () -> {
+                    add(changeAreaPanel);
+                    revalidate();
+                    repaint();
+                    setVisible(true);
+                }
+        );
+        areaList.add(changeAreaPanel);
     }
 }

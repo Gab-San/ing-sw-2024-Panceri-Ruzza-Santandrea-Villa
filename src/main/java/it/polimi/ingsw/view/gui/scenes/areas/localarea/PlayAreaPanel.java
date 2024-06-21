@@ -75,10 +75,7 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         if(!super.parentPropertyChange(evt))
             return; //returns if parent detected invalid update
 
-        if(!(evt.getNewValue() instanceof ViewPlaceableCard placedCard))
-            return;
-
-        if (evt.getPropertyName().equals(ChangeNotifications.PLACED_CARD)) {
+        if(evt.getNewValue() instanceof ViewPlaceableCard placedCard){
             deletePlaceHolders();
             placedCard.setCornerListener(this);
             placedCard.setCardListener(this);

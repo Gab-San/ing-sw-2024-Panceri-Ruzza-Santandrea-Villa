@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.events;
 
+import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
 import it.polimi.ingsw.view.gui.GameGUI;
@@ -21,7 +22,7 @@ public class GotoEndgameEvent implements TUIEvent, GUIEvent{
     }
     @Override
     public void displayEvent(GameGUI gui) {
-
+        gui.updatePhase(GamePhase.SHOWWIN);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.SceneManager;
+import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.gui.scenes.extra.chat.ChatPanel;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -96,5 +96,9 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
             hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, chatPanel);
             hand.addPropertyChangeListener(playerListPanel);
         }
+    }
+
+    public void addEndgameButtonToSidePanel(String text) {
+        playerListPanel.addEndgameButton(text);
     }
 }

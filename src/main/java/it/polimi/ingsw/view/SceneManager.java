@@ -38,17 +38,11 @@ public class SceneManager {
     }
 
     public void setScene(SceneID sceneID) throws IllegalArgumentException{
-        Scene newScene;
-        synchronized (loadedScenes) {
-            newScene = loadedScenes.get(sceneID);
-        }
+        Scene newScene = getScene(sceneID);
         if(newScene == null){
             throw new IllegalArgumentException("Scene " + sceneID + " does not exist.");
         }
-        synchronized (SCENE_LOCK) {
-            currentScene = newScene;
-            currentScene.display();
-        }
+        setScene(newScene);
     }
 
     public Scene getCurrentScene(){

@@ -107,8 +107,20 @@ public class GameInputHandler{
     }
 
 
-    public void restartGame(int numOfPlayers) throws RemoteException {
-
+    public void restartGame(int numOfPlayers) {
+        if(numOfPlayers < 2 || numOfPlayers > 4){
+            showError("Number of Players must be (2-4)");
+            return;
+        }
+        threadPool.submit(() -> {
+                    try {
+                        serverProxy.restartGame(numOfPlayers);
+                    } catch (RemoteException e) {
+                        showError("CONNECTION LOST.");
+                        notifyDisconnection();
+                    }
+                }
+        );
     }
 
     public void notifyDisconnection(){

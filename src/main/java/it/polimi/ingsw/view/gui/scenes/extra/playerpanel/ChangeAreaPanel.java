@@ -72,11 +72,13 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
 
         if(evt.getPropertyName().equals(ChangeNotifications.COLOR_CHANGE)){
             assert evt.getNewValue() instanceof PlayerColor;
-            Color playerColor = PlayerColor.getColor((PlayerColor) evt.getNewValue());
-            areaButton.setBackground(playerColor);
-            SwingUtilities.invokeLater(
-                this::repaint
-            );
+            if(evt.getNewValue() != null){
+                Color playerColor = PlayerColor.getColor((PlayerColor) evt.getNewValue());
+                areaButton.setBackground(playerColor);
+                SwingUtilities.invokeLater(
+                        this::repaint
+                );
+            }
         }
     }
 
