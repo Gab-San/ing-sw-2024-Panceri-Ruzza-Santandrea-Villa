@@ -227,6 +227,9 @@ public class ViewBoard extends JComponent {
     public synchronized void notifyAddedOpponent(ViewHand opponentHand){
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, opponentHand);
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, getPlayerArea(opponentHand.getNickname()));
+        //the following 2 firePropertyChange order is important.
+        opponentHand.firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, opponentHand.getColor());
+        opponentHand.firePropertyChange(ChangeNotifications.PLAYER_TURN_UPDATE, null, opponentHand.getTurn());
     }
 
     /**

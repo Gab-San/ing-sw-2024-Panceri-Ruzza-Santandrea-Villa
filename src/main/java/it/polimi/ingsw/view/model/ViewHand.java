@@ -220,7 +220,7 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized boolean setTurn(int turn) {
         boolean changed = this.turn != turn;
-        firePropertyChange(ChangeNotifications.PLAYER_TURN_UPDATE, this.turn, turn);
+        if(changed) firePropertyChange(ChangeNotifications.PLAYER_TURN_UPDATE, this.turn, turn);
         this.turn = turn;
         return changed;
     }
@@ -253,5 +253,12 @@ public abstract class ViewHand extends JComponent {
      */
     public synchronized void notifyView(SceneID scene, DisplayEvent event){
         view.update(scene, event);
+    }
+
+    /**
+     * Public override of this hand's firePropertyChange (would otherwise be protected)
+     */
+    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        super.firePropertyChange(propertyName, oldValue, newValue);
     }
 }

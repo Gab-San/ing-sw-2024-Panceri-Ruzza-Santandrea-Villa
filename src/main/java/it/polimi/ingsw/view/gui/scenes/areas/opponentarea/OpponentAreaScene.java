@@ -8,13 +8,9 @@ import java.beans.PropertyChangeEvent;
 
 public class OpponentAreaScene extends AreaScene {
     private final String nickname;
-    private final OpponentAreaPanel opponentAreaPanel;
-    private final OpponentHandPanel opponentHandPanel;
 
     public OpponentAreaScene(GameInputHandler inputHandler, String nickname) {
         super(inputHandler, new OpponentAreaPanel(), new OpponentHandPanel());
-        opponentHandPanel = (OpponentHandPanel) handPanel;
-        opponentAreaPanel = (OpponentAreaPanel) areaPanel;
         this.nickname = nickname;
     }
 
@@ -25,7 +21,7 @@ public class OpponentAreaScene extends AreaScene {
                 assert evt.getNewValue() instanceof ViewHand;
                 ViewHand hand = (ViewHand) evt.getNewValue();
                 if(!nickname.equals(hand.getNickname())){
-                    System.out.println("QUITTING OPPONENT HAND " + hand.getNickname());
+                    System.out.println("QUITTING ADDED_PLAYER " + hand.getNickname());
                     return;
                 }
                 break;

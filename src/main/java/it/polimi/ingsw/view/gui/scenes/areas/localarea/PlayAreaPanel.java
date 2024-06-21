@@ -72,32 +72,31 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("LOCAL AREA TRIGGERED " + evt.getPropertyName());
-        if(!super.parentPropertyChange(evt)) return; //returns if parent detected invalid update
-        assert evt.getNewValue() instanceof ViewPlaceableCard;
-        ViewPlaceableCard placedCard = (ViewPlaceableCard) evt.getNewValue();
+        if(!super.parentPropertyChange(evt))
+            return; //returns if parent detected invalid update
 
-        switch (evt.getPropertyName()){
-            case ChangeNotifications.CARD_LAYER_CHANGE:
-                System.out.println("LOCAL Changed card " + placedCard.getCardID() + " layer to " + placedCard.getLayer());
-                System.out.flush();
-                break;
-            case ChangeNotifications.PLACED_CARD:
-                deletePlaceHolders();
-                placedCard.setCornerListener(this);
-                placedCard.setCardListener(this);
-                System.out.println("LOCAL Placed card " + placedCard.getCardID() + " having layer " + placedCard.getLayer());
-                System.out.flush();
-                break;
+        if(!(evt.getNewValue() instanceof ViewPlaceableCard placedCard))
+            return;
+
+        if (evt.getPropertyName().equals(ChangeNotifications.PLACED_CARD)) {
+            deletePlaceHolders();
+            placedCard.setCornerListener(this);
+            placedCard.setCardListener(this);
         }
     }
 
     private void deletePlaceHolders() {
-       SwingUtilities.invokeLater(
-               () -> placeHolderList.forEach(
-                       layeredPane::remove
-                       )
-       );
+        if(!placeHolderList.isEmpty())
+           SwingUtilities.invokeLater(
+                   () -> {
+                       placeHolderList.forEach(
+                               layeredPane::remove
+                       );
+                       placeHolderList.clear();
+                       revalidate();
+                       repaint();
+                   }
+           );
     }
 
     @Override
@@ -111,6 +110,9 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
 
     @Override
     public void setSelectedCard(ViewPlaceableCard card) {
+        //A placed card should not be clickable, so this method should never be called.
+        //The placed card's CardListener is set to this just to avoid NullPointerExceptions
+        // or accidental side effects that would arise should this method be called on other CardListeners
         System.out.println("Clicked a placed card and triggered \"SetSelectedCard\"");
     }
 }
