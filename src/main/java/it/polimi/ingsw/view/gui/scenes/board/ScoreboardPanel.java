@@ -15,7 +15,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,23 +22,36 @@ import java.util.Map;
 import static it.polimi.ingsw.view.gui.ChangeNotifications.COLOR_CHANGE;
 import static it.polimi.ingsw.view.gui.ChangeNotifications.SCORE_CHANGE;
 
+/**
+ * This class represents the scoreboard panel. Displays score for each player.
+ */
 public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
+//region PANEL DIMENSIONS
     private static final float scaleFactor = GameWindow.SCALE_FACTOR;
     private final int PANEL_WIDTH = (int) (350 * scaleFactor);
     private final int PANEL_HEIGHT = (int) (1100 * scaleFactor);
     private final int SCOREBOARD_WIDTH = (int) (484/1.5f * scaleFactor);
     private final int SCOREBOARD_HEIGHT = (int) (948/1.5f * scaleFactor);
+//endregion
 
+//region COMPONENTS CONSTANTS AND DIMENSIONS
     private final int xOffset = (getWidth() - SCOREBOARD_WIDTH)/2;
     private final int yOffset = (getHeight() - SCOREBOARD_HEIGHT)/4;
     private final int gridGap = Math.round(6 * scaleFactor);
     private final int compSide = 46;
+//endregion
     private BufferedImage scoreboardImage;
     private final ViewBoard board;
     private final Map<Integer, JPanel> scorePosition;
     private final Map<String, Integer> oldScore;
     private final PlayerPawn redPlayer, yellowPlayer, greenPlayer, bluePlayer;
+
+    /**
+     * Constructs scoreboard panel.
+     * @param board playing board
+     */
     public ScoreboardPanel(ViewBoard board){
+        // Image import
         if(scoreboardImage == null){
             try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/plateau_score.jpg")){
                 assert is != null;
@@ -64,24 +76,26 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
         greenPlayer = new PlayerPawn(GameColor.PLAYER_GREEN.getColor());
     }
 
-
+    // Positioning absolute values panel in which
+    // tokens will be placed
     private Map<Integer, JPanel> initializeScorePosition() {
         Map<Integer, JPanel> mapScorePanel = new HashMap<>();
         int maxOffsetBottomFromLeftSide = 65;
         int offsetFromBottomSide = 26;
         int i = 0;
         int hgap = 27;
+        // 0 to 2 share same y;
+        int yFirstRow = (int) (yOffset + SCOREBOARD_HEIGHT - (offsetFromBottomSide + compSide) * scaleFactor);
         while(i < 3){
             int x = (int) (xOffset + (maxOffsetBottomFromLeftSide + (compSide + hgap) * i) * scaleFactor);
-            int y = (int) (yOffset + SCOREBOARD_HEIGHT - (offsetFromBottomSide + compSide) * scaleFactor);
-            JPanel panel = initializePanel(x, y);
+            JPanel panel = initializePanel(x, yFirstRow);
             mapScorePanel.put(i, panel);
             i++;
         }
-
+        // 3 to 19 are positioned in a grid, so the position
+        // can be algorithmically defined.
         // Starting from right to left
         int dirX = -1;
-        // Here i is equal to 3
         int minOffsetFromLeftSide = 29;
         int offsetFromRightSide = 28;
         int vgap = 21;
@@ -102,10 +116,10 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             i++;
         }
 
-        //Number 20 has a particular position
+        // 21 to 23 share same x
+        int x = (int) (xOffset + minOffsetFromLeftSide * scaleFactor);
         i = 21;
         while(i < 24){
-            int x = (int) (xOffset + minOffsetFromLeftSide * scaleFactor);
             int y = (int) (yOffset + SCOREBOARD_HEIGHT - (offsetFromBottomSide + compSide + vgap
                                 + compSide + (vgap + compSide) * (4 + i % 21))* scaleFactor);
             JPanel panel = initializePanel(x,y);
@@ -113,8 +127,8 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             i++;
         }
 
-        //After 23 there's it is simpler positioning by hand
-        int x;
+        // Numbers 20 to 29 have different position,
+        // so it is simpler to position them manually
         int y;
         JPanel panel;
 
@@ -128,8 +142,8 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
 
         // 20 and 29 have the same x
         i = 29;
-        int y23 = (offsetFromRightSide + compSide + vgap + compSide + (vgap + compSide) * 6);
-        y = yOffset + SCOREBOARD_HEIGHT -Math.round( (y23 - 14)* scaleFactor);
+        int y23 = (offsetFromBottomSide + compSide + vgap + compSide + (vgap + compSide) * 6);
+        y = yOffset + SCOREBOARD_HEIGHT - Math.round( (y23 - 14)* scaleFactor);
         panel = initializePanel(x,y);
         mapScorePanel.put(i, panel);
 
@@ -144,7 +158,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
         // 26 has same y of 24
         i = 26;
         // The offset of the top part from the left side is the same of the right side
-        x = xOffset + SCOREBOARD_WIDTH - Math.round(maxOffsetTopFromLeftSide * scaleFactor);
+        x = xOffset + SCOREBOARD_WIDTH - Math.round((maxOffsetTopFromLeftSide + compSide) * scaleFactor);
         panel = initializePanel(x,y);
         mapScorePanel.put(i,panel);
 
@@ -154,10 +168,8 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
         panel = initializePanel(x,y);
         mapScorePanel.put(i, panel);
 
-
-
         i = 27;
-        x = xOffset + SCOREBOARD_WIDTH - (offsetFromRightSide + compSide);
+        x = xOffset + SCOREBOARD_WIDTH - Math.round((offsetFromRightSide + compSide) * scaleFactor);
         y = (int) (yOffset + SCOREBOARD_HEIGHT - y23 * scaleFactor);
         panel = initializePanel(x,y);
         mapScorePanel.put(i, panel);
@@ -202,6 +214,11 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
                 SCOREBOARD_WIDTH, SCOREBOARD_HEIGHT, null);
     }
 
+    /**
+     * Adjourns player color token on scoreboard track.
+     * @param evt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
+     */
     @Override
     public synchronized void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
@@ -235,17 +252,16 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, this);
             return;
         }
+        // If another score is already present than the token shall
+        // not display on it.
         if (oldScore.containsKey(hand.getNickname())) {
             int prevScore = oldScore.get(hand.getNickname());
             JPanel panel = scorePosition.get(prevScore);
-            try {
-                SwingUtilities.invokeAndWait(
-                        () -> removeColor(panel, hand.getColor())
-                );
-            } catch (InterruptedException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
+            SwingUtilities.invokeLater(
+                    () -> removeColor(panel, hand.getColor())
+            );
         }
+
         int currentScore = board.getScore(hand.getNickname());
         oldScore.put(hand.getNickname(), currentScore);
         JPanel scorePanel = scorePosition.get(currentScore);
@@ -255,7 +271,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
     }
 
     private void addColor(JPanel scorePanel, PlayerColor color) {
-        PlayerPawn pawn =switch (color) {
+        PlayerPawn pawn = switch (color) {
             case RED -> redPlayer;
             case YELLOW -> yellowPlayer;
             case BLUE -> bluePlayer;

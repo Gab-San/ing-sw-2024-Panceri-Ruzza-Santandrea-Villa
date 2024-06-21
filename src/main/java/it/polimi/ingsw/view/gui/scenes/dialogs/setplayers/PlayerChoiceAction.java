@@ -3,11 +3,14 @@ package it.polimi.ingsw.view.gui.scenes.dialogs.setplayers;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * This class is an action that informs the input handler about the number of players selected by the user.
+ */
 public class PlayerChoiceAction extends AbstractAction {
+    /**
+     * Set player number action property name.
+     */
     public static final String PLAYERS_NUM_PROPERTY_NAME = "NUMBER_OF_PLAYERS";
-    public PlayerChoiceAction(){
-        super();
-    }
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setEnabled(false);

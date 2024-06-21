@@ -1,19 +1,30 @@
 package it.polimi.ingsw.view.gui.scenes.board;
 
 import it.polimi.ingsw.view.gui.GameWindow;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class represents a player token.
+ */
 public class PlayerPawn extends JComponent {
     private final Color pawnColor;
     private final int width = (int) (20 * GameWindow.SCALE_FACTOR);
     private final int height = (int) (20 * GameWindow.SCALE_FACTOR);
+
+    /**
+     * Constructs a player pawn of the given color.
+     * @param pawnColor color of the pawn
+     */
     public PlayerPawn(Color pawnColor){
         this.pawnColor = pawnColor;
     }
 
+    /**
+     * Returns the pawn color.
+     * @return pawn color.
+     */
     public Color getColor(){
         return pawnColor;
     }

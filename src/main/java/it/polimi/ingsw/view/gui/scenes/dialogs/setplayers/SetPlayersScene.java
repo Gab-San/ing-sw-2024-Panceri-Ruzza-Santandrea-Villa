@@ -11,6 +11,10 @@ import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.List;
 
+/**
+ * This class implements a dialog that lets the user choose
+ * the required number of players to play the game.
+ */
 public class SetPlayersScene extends JDialog implements GUI_Scene {
     private final JLabel setPlayerLabel;
     private final JButton twoPlayersButton;
@@ -18,6 +22,13 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
     private final JButton fourPlayersButton;
     private final JLabel errorLabel;
     private Timer errorTimer;
+
+    /**
+     * Constructs set number of player dialog.
+     * @param owner frame owner
+     * @param title dialog title
+     * @param inputHandler user input handler
+     */
     public SetPlayersScene(Frame owner, String title, GameInputHandler inputHandler){
         // A modal dialog blocks all inputs on other windows
         super(owner, title, true);
@@ -34,20 +45,20 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
         errorLabel = createErrorLabel();
 
         // Adding components
-        addGridComponent(setPlayerLabel, 0, 0, 1, 1, 1.0, 1.0 ,
-                GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(0,0,0,10),
-                0,0);
-        addGridComponent(twoPlayersButton, 1, 0, 1, 1, 1.0, 1.0 ,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0),
-                0,0);
-        addGridComponent(threePlayersButton, 2, 0, 1, 1, 1.0, 1.0 ,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0),
-                0,0);
-        addGridComponent(fourPlayersButton, 3,0, 1, 1, 1.0, 1.0 ,
-                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0),
-                0,0);
-        addGridComponent(errorLabel, 1,1,2,1,1.0,1.0,GridBagConstraints.WEST,
-                GridBagConstraints.VERTICAL, new Insets(0,0,0,0), 0,0);
+        addGridComponent(setPlayerLabel, 0, 0, 1,
+                GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(0,0,0,10)
+        );
+        addGridComponent(twoPlayersButton, 1, 0, 1,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0)
+        );
+        addGridComponent(threePlayersButton, 2, 0, 1,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0)
+        );
+        addGridComponent(fourPlayersButton, 3,0, 1,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0)
+        );
+        addGridComponent(errorLabel, 1,1,2, GridBagConstraints.WEST,
+                GridBagConstraints.VERTICAL, new Insets(0,0,0,0));
     }
 
     @NotNull
@@ -86,15 +97,14 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
         return errorLabel;
     }
 
-    private void addGridComponent(Component component, int x, int y, int width, int height, double weightx,
-                                  double weighty, int anchor, int fill, Insets insets,
-                                  int ipadx, int ipady){
-        add(component, new GridBagConstraints(x, y, width, height, weightx, weighty, anchor, fill,
-                insets, ipadx, ipady));
+    private void addGridComponent(Component component, int x, int y, int width,
+                                  int anchor, int fill, Insets insets){
+        add(component, new GridBagConstraints(x, y, width, 1, 1.0, 1.0, anchor, fill,
+                insets, 0, 0));
     }
 
     @Override
-    public void display() {
+    public synchronized void display() {
         final int WIDTH = 500;
         final int HEIGHT = 200;
         GUIFunc.setupDialog(this, WIDTH, HEIGHT);
@@ -111,7 +121,7 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
     }
 
     @Override
-    public void displayError(String error) {
+    public synchronized void displayError(String error) {
         if(errorTimer != null){
             errorTimer.stop();
         }
@@ -130,9 +140,7 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
     }
 
     @Override
-    public void displayNotification(List<String> backlog) {
-
-    }
+    public synchronized void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
     public void close() {

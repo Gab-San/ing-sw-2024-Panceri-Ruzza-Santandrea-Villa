@@ -18,12 +18,21 @@ import java.util.List;
 import static it.polimi.ingsw.view.GameColor.ERROR_COLOUR;
 import static it.polimi.ingsw.view.GameColor.NOTIFICATION_COLOUR;
 
+/**
+ * This class implements a dialog to choose the player color.
+ */
 public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChangeListener {
     private final JButton redButton, yellowButton, greenButton, blueButton;
     private final JLabel notificationLabel;
     private Timer displayTimer;
     private final GameInputHandler inputHandler;
 
+    /**
+     * Constructs choose color dialog.
+     * @param owner frame this dialog is displayed on
+     * @param title dialog title
+     * @param inputHandler user input handler
+     */
     public ChooseColorScene(Frame owner, String title, GameInputHandler inputHandler) {
         super(owner, title, true);
         this.inputHandler = inputHandler;
@@ -37,24 +46,23 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         notificationLabel = GUIFunc.createNotificationLabel();
 
         // Adding components
-        addGridComponent(redButton, 0,0,1,1,1.0,1.0,GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0);
-        addGridComponent(yellowButton, 1,0,1,1,1.0,1.0,GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0);
-        addGridComponent(blueButton, 2,0,1,1,1.0,1.0,GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0);
-        addGridComponent(greenButton, 3,0,1,1,1.0,1.0,GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0);
-        addGridComponent(notificationLabel,1,1,2,1,1.0,1.0,GridBagConstraints.CENTER,
-                GridBagConstraints.VERTICAL, new Insets(0,20,0,0), 0, 0);
+        addGridComponent(redButton, 0,0,1,
+                GridBagConstraints.NONE, new Insets(0,0,0,0));
+        addGridComponent(yellowButton, 1,0,1,
+                GridBagConstraints.NONE, new Insets(0,0,0,0));
+        addGridComponent(blueButton, 2,0,1,
+                GridBagConstraints.NONE, new Insets(0,0,0,0));
+        addGridComponent(greenButton, 3,0,1,
+                GridBagConstraints.NONE, new Insets(0,0,0,0));
+        addGridComponent(notificationLabel,1,1,2,
+                GridBagConstraints.VERTICAL, new Insets(0,20,0,0));
 
     }
 
-    private void addGridComponent(Component component, int x, int y, int width, int height, double weightx,
-                                  double weighty, int anchor, int fill, Insets insets,
-                                  int ipadx, int ipady){
-        add(component, new GridBagConstraints(x, y, width, height, weightx, weighty, anchor, fill,
-                insets, ipadx, ipady));
+    private void addGridComponent(Component component, int x, int y, int width,
+                                  int fill, Insets insets){
+        add(component, new GridBagConstraints(x, y, width, 1, 1.0, 1.0, GridBagConstraints.CENTER, fill,
+                insets, 0, 0));
     }
 
     @NotNull
@@ -104,16 +112,19 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     }
 
     @Override
-    public synchronized void displayError(String error) {
+    public synchronized void displayError(String errorMessage) {
         // Can be called only by timeout disconnection
         // Or if an error occurs while choosing color
-        displayError(error, 1, false);
+        int displayTime =  GUIFunc.setupDisplayTimer((float) 1, displayTimer);
+        notificationLabel.setForeground(ERROR_COLOUR.getColor());
+        notificationLabel.setText(errorMessage);
+        // The error will become visible
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
     }
 
     @Override
-    public synchronized void displayNotification(List<String> backlog) {
-
-    }
+    public synchronized void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
     public synchronized void close() {
@@ -121,7 +132,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public synchronized void propertyChange(PropertyChangeEvent evt) {
         assert evt.getSource() instanceof ViewHand;
         ViewHand playerHand = (ViewHand) evt.getSource();
 
@@ -133,8 +144,10 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         }
 
         SwingUtilities.invokeLater(
-                () -> displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue(), 1500)
+                () -> displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue())
         );
+
+        // Disables and hides buttons of colors already chosen.
         PlayerColor color = (PlayerColor) evt.getNewValue();
         SwingUtilities.invokeLater(
                 () -> {
@@ -167,28 +180,20 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     }
 
 
-    private synchronized void displayError(String errorMessage, float displayTimeSeconds, boolean close){
-        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        notificationLabel.setForeground(ERROR_COLOUR.getColor());
-        notificationLabel.setText(errorMessage);
-        // The error will become visible
-        notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime, close);
-    }
 
-    private synchronized void displayNotification(String notificationMsg, float displayTimeSeconds){
-        int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
+    private synchronized void displayNotification(String notificationMsg){
+        int displayTime = GUIFunc.setupDisplayTimer((float) 1500, displayTimer);
         notificationLabel.setForeground(NOTIFICATION_COLOUR.getColor());
         notificationLabel.setText(notificationMsg);
         notificationLabel.setVisible(true);
         SwingUtilities.invokeLater(
-                () -> startDisplayTimer(displayTime, true)
+                () -> startDisplayTimer(displayTime)
         );
         revalidate();
         repaint();
     }
 
-    private void startDisplayTimer(int displayTime, boolean isClosing) {
+    private void startDisplayTimer(int displayTime) {
         // After delay time the notification will
         // disappear from the screen
         displayTimer = new Timer(displayTime,
@@ -199,9 +204,6 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
                     // so they need to be actively stopped
                     displayTimer.stop();
                     displayTimer = null;
-                    if(isClosing){
-                        close();
-                    }
                 });
         displayTimer.start();
     }

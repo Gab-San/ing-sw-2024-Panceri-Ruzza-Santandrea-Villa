@@ -17,6 +17,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * This class implements a dialog to choose the secret objective card.
+ */
 public class ChooseObjectiveScene extends JDialog implements PropertyChangeListener, GUI_Scene, MouseListener, ActionListener {
     private final GameInputHandler inputHandler;
     private final List<ViewObjectiveCard> secretCards;

@@ -49,6 +49,11 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         add(leftSidePanel, BorderLayout.WEST);
     }
 
+    /**
+     * Returns the instance of the display window.
+     * @return game window instance.
+     * @throws IllegalStateException if the game window has not yet been created.
+     */
     public synchronized static GameWindow getDisplayWindow() throws IllegalStateException{
         if(displayWindow == null) throw new IllegalStateException("Trying to acquire non existent window");
         return displayWindow;
@@ -74,7 +79,11 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         return leftPanel;
     }
 
-    public void displayScene(GUI_Scene nextScene) {
+    /**
+     * Closes the currently shown scene and displays the selected one.
+     * @param nextScene scene to be displayed next
+     */
+    public synchronized void displayScene(GUI_Scene nextScene) {
         GUI_Scene currentScene = (GUI_Scene) SceneManager.getInstance().getCurrentScene();
         currentScene.close();
         add((JPanel) nextScene, BorderLayout.CENTER);
@@ -88,7 +97,7 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public synchronized void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ChangeNotifications.ADDED_PLAYER)){
             // When a player is added than it adds chat and
             // hand as listeners to their event.
@@ -98,7 +107,12 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         }
     }
 
-    public void addEndgameButtonToSidePanel(String text) {
+    /**
+     * Adds a button that lets the user change to the endgame scene
+     * if previously exited.
+     * @param text button text
+     */
+    public synchronized void addEndgameButtonToSidePanel(String text) {
         playerListPanel.addEndgameButton(text);
     }
 }

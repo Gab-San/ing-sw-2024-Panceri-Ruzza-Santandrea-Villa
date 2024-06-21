@@ -23,7 +23,6 @@ import java.util.List;
  * This class implements GUI scene interface. It displays the decks and the scoreboard.
  */
 public class BoardScene extends JPanel implements GUI_Scene, ActionListener, CardListener, DeckListener {
-    private final ScoreboardPanel scoreboard;
     private final List<ViewDeck<? extends ViewPlaceableCard>> selectableDecks;
     private final GameInputHandler inputHandler;
     private char selectedDeck;
@@ -45,7 +44,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
 
         setLayout(new BorderLayout());
         JPanel deckpanel = setupDeckPanel(board);
-        scoreboard = new ScoreboardPanel(board);
+        ScoreboardPanel scoreboard = new ScoreboardPanel(board);
         errorLabel = GUIFunc.createNotificationLabel();
         modifyErrorLabel();
         //Adding components
@@ -101,24 +100,20 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     @Override
     public synchronized void display() {
         setVisible(true);
-        deselectCards();
         selectedDeck = 'A';
         selectedPosition = -1;
     }
 
     @Override
-    public synchronized void displayError(String error) {
-        displayError(error, 1.5f);
-    }
-
-    private void displayError(String errorMsg, float displayTimeSec){
-        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSec, displayTimer);
+    public synchronized void displayError(String errorMsg) {
+        int displayTime =  GUIFunc.setupDisplayTimer(1.5f, displayTimer);
         errorLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
         errorLabel.setText(errorMsg);
         // The error will become visible
         errorLabel.setVisible(true);
         startDisplayTimer(displayTime);
     }
+
     private void startDisplayTimer(int displayTime) {
         // After delay time the notification will
         // disappear from the screen
@@ -141,12 +136,11 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     }
 
     @Override
-    public synchronized void displayNotification(List<String> backlog) {
-
-    }
+    public synchronized void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
     public synchronized void close() {
+        deselectCards();
         setVisible(false);
     }
 
@@ -176,6 +170,11 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         selectedPosition = cardPosition;
     }
 
+    /**
+     * Invoked when the draw button is pressed, it attempts to draw
+     * from the selected deck
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(selectedDeck == 'A' || selectedPosition == -1){

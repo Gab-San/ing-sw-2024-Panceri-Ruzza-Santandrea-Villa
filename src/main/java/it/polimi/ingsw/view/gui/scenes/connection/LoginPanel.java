@@ -6,9 +6,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * This class represents a login panel. It contains all the components to
+ * effectively display a panel that can take as input any string and
+ * tries to connect to the main lobby using the string as username.
+ */
 public class LoginPanel extends JPanel {
     private final JTextField loginTextField;
 
+    /**
+     * Default constructor.
+     */
     public LoginPanel() {
         //Flow layout is always displayed on top
         this.setLayout(new FlowLayout());
@@ -41,7 +49,7 @@ public class LoginPanel extends JPanel {
     }
 
     @Override
-    public synchronized void addKeyListener(KeyListener l) {
+    public void addKeyListener(KeyListener l) {
         loginTextField.addKeyListener(l);
     }
 
@@ -53,10 +61,16 @@ public class LoginPanel extends JPanel {
         return loginTextField.getText();
     }
 
+    /**
+     * Disables text input.
+     */
     public void disableInput() {
         loginTextField.setEnabled(false);
     }
 
+    /**
+     * Enables text inpu.
+     */
     public void enableInput() {
         loginTextField.setEnabled(true);
     }

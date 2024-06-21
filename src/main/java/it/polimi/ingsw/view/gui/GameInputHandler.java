@@ -12,11 +12,22 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * This class acts as the handler for all the user inputs that either modify
+ * the gui or are sent to the server.
+ */
 public class GameInputHandler{
     private final CommandPassthrough serverProxy;
     private final GameGUI gui;
     private final ViewController controller;
     private final ExecutorService threadPool;
+
+    /**
+     * Constructs the game input handler.
+     * @param serverProxy enter point of the network connection
+     * @param gui gui on which this input handler is attached to
+     * @param controller view model controller
+     */
     public GameInputHandler(CommandPassthrough serverProxy, GameGUI gui, ViewController controller){
         this.serverProxy = serverProxy;
         this.gui = gui;
@@ -29,15 +40,31 @@ public class GameInputHandler{
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
 
+    /**
+     * Requests an error to be shown on the gui.
+     * @param errorMsg error message text
+     */
     public synchronized void showError(String errorMsg){
         //threaded to prevent stalling while displaying
         threadPool.submit(() -> gui.showError(errorMsg));
     }
 
+    /**
+     * Sends a message to the selected addressee.
+     * @param addressee message receiver
+     * @param message message body
+     * @throws RemoteException if an error occurs during connection
+     */
     public synchronized void sendMsg(String addressee, String message) throws RemoteException {
         serverProxy.sendMsg(addressee, message);
     }
 
+    /**
+     * Attempts to connect the user to the server with the chosen nickname.
+     * @param nickname user identifier
+     * @throws RemoteException if an error occurs during connection
+     * @throws IllegalStateException if the nickname format isn't valid
+     */
     public synchronized void connect(String nickname) throws RemoteException, IllegalStateException {
         if (!validateNickname(nickname)) {
             throw new IllegalStateException(UIFunctions.evaluateErrorType(nickname));
@@ -47,16 +74,30 @@ public class GameInputHandler{
         serverProxy.connect(nickname);
     }
 
+    /**
+     * Attempts to set the number of players.
+     * @param numOfPlayers number of players to play the match.
+     * @throws RemoteException if a connection error occurs
+     */
     public synchronized void setNumOfPlayers(int numOfPlayers) throws RemoteException {
         serverProxy.setNumOfPlayers(numOfPlayers);
     }
 
-
+    /**
+     * Attempts to disconnect the player from the lobby.
+     * @throws IllegalStateException
+     * @throws IllegalArgumentException
+     * @throws RemoteException
+     */
     public synchronized void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
 
     }
 
-
+    /**
+     * Attempts to place the starting card.
+     * @param placeOnFront true if the starting card is facing up, false otherwise
+     * @throws IllegalStateException if the starting card cannot be placed at the time of the invocation
+     */
     public synchronized void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
 //        threadPool.submit(() -> {
@@ -70,12 +111,21 @@ public class GameInputHandler{
 //        );
     }
 
-
+    /**
+     * Attempts to choose color of the player.
+     * @param colour chosen color
+     * @throws RemoteException if a connection error occurs
+     */
     public synchronized void chooseColor(char colour) throws RemoteException {
         serverProxy.chooseColor(colour);
     }
 
-
+    /**
+     * Attempts to choose secret objective card.
+     * @param chosenCard chosen objective card
+     * @throws RemoteException if a connection error occurs
+     * @throws IllegalStateException if no card is selected
+     */
     public synchronized void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
         if(chosenCard == null){
             throw new IllegalStateException("Choose a card!");
@@ -84,7 +134,14 @@ public class GameInputHandler{
         serverProxy.chooseObjective(choice);
     }
 
-
+    /**
+     * Attempts to place a card.
+     * @param cardID placing card id
+     * @param placePos position on which the card has to be placed
+     * @param cornerDir corner direction
+     * @param placeOnFront true if the card is facing up, false otherwise
+     * @throws IllegalStateException if the card cannot be placed at the time of the invocation
+     */
     public synchronized void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
 //        threadPool.submit(() -> {

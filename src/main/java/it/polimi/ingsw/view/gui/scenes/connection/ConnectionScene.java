@@ -13,6 +13,10 @@ import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
+/**
+ * This class represents the connection frame. It displays a simple login panel in which
+ * the player can choose their nickname, and connect to the match.
+ */
 public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     // Frame settings
     private static final int LOGIN_FRAME_WIDTH = 500;
@@ -24,7 +28,10 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     private final JLabel notificationLabel;
     private Timer displayTimer;
 
-
+    /**
+     * Constructs connection scene.
+     * @param inputHandler user action handler
+     */
     public ConnectionScene(GameInputHandler inputHandler){
         setupFrame();
         //Setting layout
@@ -95,7 +102,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 // Attempt of connection
                 inputHandler.connect(nickname);
                 // Here connection is successful
-                displaySuccess("Login success!", 1.5f);
+                displaySuccess();
                 // Goes to the next scene
                 inputHandler.changeScene(SceneID.getMyAreaSceneID());
             } catch (IllegalStateException exc){
@@ -111,10 +118,10 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {/*unused*/}
 
-    private synchronized void displaySuccess(String successMessage, float displayTimeSeconds){
-        int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
+    private void displaySuccess(){
+        int displayTime = GUIFunc.setupDisplayTimer((float) 1.5, displayTimer);
         notificationLabel.setForeground(GameColor.NOTIFICATION_COLOUR.getColor());
-        notificationLabel.setText(successMessage);
+        notificationLabel.setText("Login success!");
         notificationLabel.setVisible(true);
         startDisplayTimer(displayTime, true);
     }
