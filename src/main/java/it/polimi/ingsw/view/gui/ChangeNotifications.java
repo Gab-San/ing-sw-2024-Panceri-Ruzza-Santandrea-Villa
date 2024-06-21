@@ -25,7 +25,6 @@ public class ChangeNotifications {
     public static final String CLEAR_STARTING_CARD = "CLEAR_STARTING_CARD";
     public static final String ADD_CARD_HAND = "ADD_CARD_HAND";
     public static final String ADD_SECRET_CARD = "ADD_SECRET_CARD";
-    public static final String ADD_CARD_DECK = "ADD_CARD_DECK";
     public static final String CHOSEN_OBJECTIVE_CARD = "CHOSEN_OBJECTIVE_CARD";
     public static final String CLEAR_OBJECTIVES = "CLEAR_OBJECTIVES";
     public static final String CLEAR_PLAY_CARDS = "CLEAR_PLAY_CARDS";
@@ -34,4 +33,5 @@ public class ChangeNotifications {
      * Use with oldValue=null and newValue=ViewPlaceableCard
      */
     public static final String CARD_LAYER_CHANGE = "CARD_LAYER_CHANGE";
+    public static final String SCORE_CHANGE = "SCORE_CHANGE";
 }

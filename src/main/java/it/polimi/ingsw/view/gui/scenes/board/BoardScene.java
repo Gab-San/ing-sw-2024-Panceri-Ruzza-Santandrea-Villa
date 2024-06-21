@@ -99,7 +99,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
 
 
     @Override
-    public void display() {
+    public synchronized void display() {
         setVisible(true);
         deselectCards();
         selectedDeck = 'A';
@@ -107,7 +107,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     }
 
     @Override
-    public void displayError(String error) {
+    public synchronized void displayError(String error) {
         displayError(error, 1.5f);
     }
 
@@ -141,12 +141,12 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     }
 
     @Override
-    public void displayNotification(List<String> backlog) {
+    public synchronized void displayNotification(List<String> backlog) {
 
     }
 
     @Override
-    public void close() {
+    public synchronized void close() {
         setVisible(false);
     }
 

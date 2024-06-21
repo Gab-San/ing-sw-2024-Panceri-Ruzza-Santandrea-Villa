@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
@@ -30,16 +29,16 @@ public class GameInputHandler{
                 && nickname.length() < Client.MAX_NICKNAME_LENGTH;
     }
 
-    public void showError(String errorMsg){
+    public synchronized void showError(String errorMsg){
         //threaded to prevent stalling while displaying
         threadPool.submit(() -> gui.showError(errorMsg));
     }
 
-    public void sendMsg(String addressee, String message) throws RemoteException {
+    public synchronized void sendMsg(String addressee, String message) throws RemoteException {
         serverProxy.sendMsg(addressee, message);
     }
 
-    public void connect(String nickname) throws RemoteException, IllegalStateException {
+    public synchronized void connect(String nickname) throws RemoteException, IllegalStateException {
         if (!validateNickname(nickname)) {
             throw new IllegalStateException(UIFunctions.evaluateErrorType(nickname));
         }
@@ -48,17 +47,17 @@ public class GameInputHandler{
         serverProxy.connect(nickname);
     }
 
-    public void setNumOfPlayers(int numOfPlayers) throws RemoteException {
+    public synchronized void setNumOfPlayers(int numOfPlayers) throws RemoteException {
         serverProxy.setNumOfPlayers(numOfPlayers);
     }
 
 
-    public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
+    public synchronized void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
 
     }
 
 
-    public void placeStartCard(boolean placeOnFront) throws IllegalStateException {
+    public synchronized void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
         threadPool.submit(() -> {
                     try {
@@ -72,12 +71,12 @@ public class GameInputHandler{
     }
 
 
-    public void chooseColor(char colour) throws RemoteException {
+    public synchronized void chooseColor(char colour) throws RemoteException {
         serverProxy.chooseColor(colour);
     }
 
 
-    public void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
+    public synchronized void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
         if(chosenCard == null){
             throw new IllegalStateException("Choose a card!");
         }
@@ -86,7 +85,7 @@ public class GameInputHandler{
     }
 
 
-    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public synchronized void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
         threadPool.submit(() -> {
                     try {
@@ -101,13 +100,13 @@ public class GameInputHandler{
     }
 
 
-    public void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
+    public synchronized void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
         controller.validateDraw(deck,cardPosition);
         serverProxy.draw(deck, cardPosition);
     }
 
 
-    public void restartGame(int numOfPlayers) {
+    public synchronized void restartGame(int numOfPlayers) {
         if(numOfPlayers < 2 || numOfPlayers > 4){
             showError("Number of Players must be (2-4)");
             return;
@@ -123,7 +122,7 @@ public class GameInputHandler{
         );
     }
 
-    public void notifyDisconnection(){
+    public synchronized void notifyDisconnection(){
         // Calls to actions block the UI thread, so all the actions
         // should be called on threads unless a synchronous response is wanted.
         // In this case, this action would block the thread as it waits for the
@@ -131,17 +130,17 @@ public class GameInputHandler{
         threadPool.execute( gui::notifyServerFailure );
     }
 
-    public ViewHand getPlayerHand(String nickname) {
+    public synchronized ViewHand getPlayerHand(String nickname) {
         return controller.getPlayer(nickname);
     }
 
-    public ViewPlayArea getPlayArea(String nickname) { return controller.getPlayArea(nickname);}
+    public synchronized ViewPlayArea getPlayArea(String nickname) { return controller.getPlayArea(nickname);}
 
-    public void addChatListener(ChatListener chatListener) {
+    public synchronized void addChatListener(ChatListener chatListener) {
         gui.addChatListener(chatListener);
     }
 
-    public void addPropertyListener(PropertyChangeListener pcl) {
+    public synchronized void addPropertyListener(PropertyChangeListener pcl) {
         gui.addToPropListeners(pcl);
     }
 
@@ -149,16 +148,19 @@ public class GameInputHandler{
      * Invokes the scene identified by the unique sceneId to be displayed next.
      * @param nextSceneID next scene identifier
      */
-    public void changeScene(SceneID nextSceneID) {
+    public synchronized void changeScene(SceneID nextSceneID) {
         GUI_Scene nextScene = (GUI_Scene) SceneManager.getInstance().getScene(nextSceneID);
+        if(nextScene == null){
+            throw new IllegalArgumentException("Scene wasn't loaded");
+        }
         gui.changeScene(nextScene);
     }
 
-    public boolean isLocalPlayer(String nickname) {
+    public synchronized boolean isLocalPlayer(String nickname) {
         return controller.isLocalPlayer(nickname);
     }
 
-    public ViewHand getLocalPlayer() {
+    public synchronized ViewHand getLocalPlayer() {
         return controller.getLocalPlayer();
     }
 }

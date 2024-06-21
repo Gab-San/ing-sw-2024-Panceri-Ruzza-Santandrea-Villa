@@ -65,7 +65,7 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
         this.setVisible(true);
         // This method should make the window
         // appear in front of everything
-        this.requestFocus();
+        this.requestFocusInWindow();
     }
 
     @Override

@@ -155,6 +155,14 @@ public class ViewBoard extends JComponent {
      */
     public synchronized void setScore(String nickname, int score){
         scoreboard.put(nickname, score);
+        ViewHand hand;
+        if(getPlayerHand().getNickname().equals(nickname)){
+            hand = getPlayerHand();
+        } else {
+            hand = getOpponentHand(nickname);
+        }
+        // Notify that the player score has changed
+        firePropertyChange(ChangeNotifications.SCORE_CHANGE, null, hand);
         notifyView(SceneID.getBoardSceneID(), new DisplayScore(nickname, score));
     }
 

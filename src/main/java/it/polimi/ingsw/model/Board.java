@@ -95,7 +95,7 @@ public class Board implements GameSubject{
 
     /**
      * Constructs the Board (as in initializing the game)
-     * * @throws IllegalStateException if an error occurs while initializing board
+     * @throws IllegalStateException if an error occurs while initializing board
      */
     public Board() throws IllegalStateException{
         observableObjects = new LinkedList<>();
