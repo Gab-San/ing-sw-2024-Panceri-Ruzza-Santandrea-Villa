@@ -101,7 +101,7 @@
     "points": 3,
     "pattern": "QPS",
     "frontImageFileName": "objectives/img_B12_front.png",
-    "backImageFileName": "objectives/img_B0_back.png"
+    "backImageFileName": "objectives/img_B12_back.png"
   },
   {
     "cardId": "O13",
@@ -109,7 +109,7 @@
     "points": 2,
     "pattern": "SS",
     "frontImageFileName": "objectives/img_B13_front.png",
-    "backImageFileName": "objectives/img_B0_back.png"
+    "backImageFileName": "objectives/img_B12_back.png"
   },
   {
     "cardId": "O14",
@@ -117,7 +117,7 @@
     "points": 2,
     "pattern": "PP",
     "frontImageFileName": "objectives/img_B14_front.png",
-    "backImageFileName": "objectives/img_B0_back.png"
+    "backImageFileName": "objectives/img_B12_back.png"
   },
   {
     "cardId": "O15",
@@ -125,6 +125,6 @@
     "points": 2,
     "pattern": "QQ",
     "frontImageFileName": "objectives/img_B15_front.png",
-    "backImageFileName": "objectives/img_B0_back.png"
+    "backImageFileName": "objectives/img_B12_back.png"
   }
 ]

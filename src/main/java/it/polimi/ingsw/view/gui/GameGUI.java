@@ -14,6 +14,7 @@ import it.polimi.ingsw.view.gui.scenes.dialogs.chooseobjective.ChooseObjectiveSc
 import it.polimi.ingsw.view.gui.scenes.areas.localarea.LocalPlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.areas.opponentarea.OpponentAreaScene;
 import it.polimi.ingsw.view.gui.scenes.dialogs.setplayers.SetPlayersScene;
+import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 
@@ -188,8 +189,13 @@ public class GameGUI implements View {
                         chooseObjectiveScene::display
                 );
                 break;
-            case EVALOBJ, SHOWWIN:
-
+            case EVALOBJ: break;
+            case SHOWWIN:
+                EndgameScene endgameScene = new EndgameScene(board, inputHandler);
+                SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameScene);
+                gameWindow.addEndgameButtonToSidePanel("Display Winner");
+                changeScene(endgameScene);
+                break;
         }
     }
 

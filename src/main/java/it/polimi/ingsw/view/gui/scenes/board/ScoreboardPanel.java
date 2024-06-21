@@ -2,34 +2,43 @@ package it.polimi.ingsw.view.gui.scenes.board;
 
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.GameColor;
+import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GameWindow;
 import it.polimi.ingsw.view.model.ViewBoard;
+import it.polimi.ingsw.view.model.ViewHand;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.polimi.ingsw.view.GameColor.PLAYER_RED;
+import static it.polimi.ingsw.view.gui.ChangeNotifications.COLOR_CHANGE;
+import static it.polimi.ingsw.view.gui.ChangeNotifications.SCORE_CHANGE;
 
-public class ScoreboardPanel extends JPanel {
-    private final int PANEL_WIDTH = (int) (350 * GameWindow.SCALE_FACTOR);
-    private final int PANEL_HEIGHT = (int) (1100 * GameWindow.SCALE_FACTOR);
-    public static final int SCOREBOARD_WIDTH = (int) (484/1.5f * GameWindow.SCALE_FACTOR);
-    public static final int SCOREBOARD_HEIGHT = (int) (948/1.5f * GameWindow.SCALE_FACTOR);
-    int xOffset = (getWidth() - SCOREBOARD_WIDTH)/2;
-    int yOffset = (getHeight() - SCOREBOARD_HEIGHT)/4;
-    private final int componentWidth = 60;
-    private final int componentHeight = 58;
-    private final int hgap = 15;
-    private final int vgap = 10;
+public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
+    private static final float scaleFactor = GameWindow.SCALE_FACTOR;
+    private final int PANEL_WIDTH = (int) (350 * scaleFactor);
+    private final int PANEL_HEIGHT = (int) (1100 * scaleFactor);
+    private final int SCOREBOARD_WIDTH = (int) (484/1.5f * scaleFactor);
+    private final int SCOREBOARD_HEIGHT = (int) (948/1.5f * scaleFactor);
+
+    private final int xOffset = (getWidth() - SCOREBOARD_WIDTH)/2;
+    private final int yOffset = (getHeight() - SCOREBOARD_HEIGHT)/4;
+    private final int gridGap = Math.round(6 * scaleFactor);
+    private final int compSide = 46;
     private BufferedImage scoreboardImage;
     private final ViewBoard board;
     private final Map<Integer, JPanel> scorePosition;
+    private final Map<String, Integer> oldScore;
+    private final PlayerPawn redPlayer, yellowPlayer, greenPlayer, bluePlayer;
     public ScoreboardPanel(ViewBoard board){
         if(scoreboardImage == null){
             try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/plateau_score.jpg")){
@@ -41,55 +50,31 @@ public class ScoreboardPanel extends JPanel {
         }
 
         this.board = board;
+        board.addPropertyChangeListener(SCORE_CHANGE,this);
         this.scorePosition = initializeScorePosition();
-        initializePanels();
+        this.oldScore = new HashMap<>();
+
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(GameColor.SCOREBOARD_COLOUR.getColor());
         setLayout(null);
 
-        JPanel panel = scorePosition.get(10);
-        System.out.println(panel);
-        panel.add(new PlayerPawn(PLAYER_RED.getColor()));
-        panel.revalidate();
-
-        panel = scorePosition.get(3);
-        System.out.println(panel);
-        panel.add(new PlayerPawn(PLAYER_RED.getColor()));
-        panel.revalidate();
-
-        panel = scorePosition.get(11);
-        System.out.println(panel);
-        panel.add(new PlayerPawn(PLAYER_RED.getColor()));
-        panel.revalidate();
-
-        panel = scorePosition.get(18);
-        System.out.println(panel);
-        panel.add(new PlayerPawn(PLAYER_RED.getColor()));
-        panel.revalidate();
-
+        redPlayer = new PlayerPawn(GameColor.PLAYER_RED.getColor());
+        bluePlayer = new PlayerPawn(GameColor.PLAYER_BLUE.getColor());
+        yellowPlayer = new PlayerPawn(GameColor.PLAYER_YELLOW.getColor());
+        greenPlayer = new PlayerPawn(GameColor.PLAYER_GREEN.getColor());
     }
 
-    private void initializePanels() {
-        for(JPanel panel : scorePosition.values()){
-            panel.setSize(60,60);
-            panel.setPreferredSize(new Dimension(60,60));
-            panel.setMaximumSize(new Dimension(60,60));
-            panel.setLayout(new GridLayout(2,2,20,24));
-            panel.setOpaque(false);
-            add(panel);
-        }
-    }
 
     private Map<Integer, JPanel> initializeScorePosition() {
         Map<Integer, JPanel> mapScorePanel = new HashMap<>();
+        int maxOffsetBottomFromLeftSide = 65;
+        int offsetFromBottomSide = 26;
         int i = 0;
+        int hgap = 27;
         while(i < 3){
-            // 58 is the offset from the side of the scoreboard
-            int x = xOffset + 58 + (componentWidth+hgap) * i;
-            // 20 is the offset from the south border of the scoreboard
-            int y = yOffset + SCOREBOARD_HEIGHT - (20 + componentHeight);
-            JPanel panel = new JPanel();
-            panel.setBounds(x,y,componentWidth, componentHeight);
+            int x = (int) (xOffset + (maxOffsetBottomFromLeftSide + (compSide + hgap) * i) * scaleFactor);
+            int y = (int) (yOffset + SCOREBOARD_HEIGHT - (offsetFromBottomSide + compSide) * scaleFactor);
+            JPanel panel = initializePanel(x, y);
             mapScorePanel.put(i, panel);
             i++;
         }
@@ -97,22 +82,22 @@ public class ScoreboardPanel extends JPanel {
         // Starting from right to left
         int dirX = -1;
         // Here i is equal to 3
+        int minOffsetFromLeftSide = 29;
+        int offsetFromRightSide = 28;
+        int vgap = 21;
         while (i < 20){
             if((i-3)%4 == 0 && i != 3){
                 dirX *= -1;
-                System.out.println("Changing dir: " + i);
             }
-            int x = xOffset + (dirX == -1 ? SCOREBOARD_WIDTH : 0)
-                    + dirX * (23 + (dirX == -1 ? componentWidth : 0) + (hgap + componentWidth) * ((i - 3) % 4));
+            // When going from right to left must start from the right side of the scoreboard
+            int x = (int) (xOffset + (dirX == -1 ? SCOREBOARD_WIDTH : 0)
+                                + (dirX * ((dirX == -1 ? offsetFromRightSide : minOffsetFromLeftSide)
+                                + (dirX == -1 ? compSide : 0) + (hgap + compSide) * ((i - 3) % 4))) * scaleFactor);
 
-            int y = yOffset + SCOREBOARD_HEIGHT - (20 + componentHeight + 8
-                    + componentHeight + (vgap + componentHeight) * ((int) (i-3)/4));
-            if(i == 10){
-                System.out.println(xOffset + " " + dirX + " " + (i - 3) %4);
-            }
-            System.out.println("SCORE POINT: " + i + " " + "X: " + x + " Y: " + y);
-            JPanel panel = new JPanel();
-            panel.setBounds(x,y,componentWidth, componentHeight);
+            int y = (int) (yOffset + SCOREBOARD_HEIGHT - ((offsetFromBottomSide + compSide + vgap
+                                + compSide + (vgap + compSide) * ((i-3)/4))) * scaleFactor);
+
+            JPanel panel = initializePanel(x,y);
             mapScorePanel.put(i, panel);
             i++;
         }
@@ -120,11 +105,10 @@ public class ScoreboardPanel extends JPanel {
         //Number 20 has a particular position
         i = 21;
         while(i < 24){
-            int x = xOffset + 23;
-            int y = yOffset + SCOREBOARD_HEIGHT - (20 + componentHeight + 8
-                    + componentHeight + (vgap + componentHeight) * (4 + i%21));
-            JPanel panel = new JPanel();
-            panel.setBounds(x,y,componentWidth, componentHeight);
+            int x = (int) (xOffset + minOffsetFromLeftSide * scaleFactor);
+            int y = (int) (yOffset + SCOREBOARD_HEIGHT - (offsetFromBottomSide + compSide + vgap
+                                + compSide + (vgap + compSide) * (4 + i % 21))* scaleFactor);
+            JPanel panel = initializePanel(x,y);
             mapScorePanel.put(i, panel);
             i++;
         }
@@ -135,29 +119,67 @@ public class ScoreboardPanel extends JPanel {
         JPanel panel;
 
         i = 20;
+        x = xOffset + Math.round((minOffsetFromLeftSide + compSide + 63) * scaleFactor);
+        // y position of the number 22
+        int y22 = offsetFromBottomSide + compSide + vgap + compSide + (vgap + compSide) * 5;
+        y = (int) (yOffset + SCOREBOARD_HEIGHT - (y22 - 34)* scaleFactor);
+        panel = initializePanel(x,y);
+        mapScorePanel.put(i, panel);
 
+        // 20 and 29 have the same x
+        i = 29;
+        int y23 = (offsetFromRightSide + compSide + vgap + compSide + (vgap + compSide) * 6);
+        y = yOffset + SCOREBOARD_HEIGHT -Math.round( (y23 - 14)* scaleFactor);
+        panel = initializePanel(x,y);
+        mapScorePanel.put(i, panel);
+
+        int minOffsetFromTop = 27;
+        int maxOffsetFromTop = 38;
+        int maxOffsetTopFromLeftSide = 71;
         i = 24;
+        x = xOffset + Math.round(maxOffsetTopFromLeftSide * scaleFactor);
+        y = yOffset + Math.round(maxOffsetFromTop * scaleFactor);
+        panel= initializePanel(x,y);
+        mapScorePanel.put(i, panel);
+        // 26 has same y of 24
+        i = 26;
+        // The offset of the top part from the left side is the same of the right side
+        x = xOffset + SCOREBOARD_WIDTH - Math.round(maxOffsetTopFromLeftSide * scaleFactor);
+        panel = initializePanel(x,y);
+        mapScorePanel.put(i,panel);
 
         i = 25;
+        x = xOffset + Math.round((maxOffsetTopFromLeftSide + compSide + 21) * scaleFactor );
+        y = yOffset + Math.round(minOffsetFromTop * scaleFactor);
+        panel = initializePanel(x,y);
+        mapScorePanel.put(i, panel);
 
-        i = 26;
+
 
         i = 27;
-        x = xOffset + SCOREBOARD_WIDTH - (23 + componentWidth);
-        y = yOffset + SCOREBOARD_HEIGHT - (20 + componentHeight + 8 + componentHeight + (vgap + componentHeight) * 6);
-        panel = new JPanel();
-        panel.setBounds(x,y, componentWidth, componentHeight);
+        x = xOffset + SCOREBOARD_WIDTH - (offsetFromRightSide + compSide);
+        y = (int) (yOffset + SCOREBOARD_HEIGHT - y23 * scaleFactor);
+        panel = initializePanel(x,y);
         mapScorePanel.put(i, panel);
 
         i = 28;
-        y = yOffset + SCOREBOARD_HEIGHT - (20 + componentHeight + 8 + componentHeight + (vgap + componentHeight) * 5);
-        panel = new JPanel();
-        panel.setBounds(x,y, componentWidth, componentHeight);
+        y = (int) (yOffset + SCOREBOARD_HEIGHT - y22 * scaleFactor);
+        panel = initializePanel(x,y);
         mapScorePanel.put(i, panel);
 
-        i = 29;
-
         return mapScorePanel;
+    }
+
+    private JPanel initializePanel(int x, int y) {
+        JPanel panel = new JPanel(new GridLayout(2,2,gridGap,gridGap));
+        int actualCompSide = Math.round(compSide * scaleFactor);
+        panel.setBounds(x,y,actualCompSide, actualCompSide);
+        panel.setSize(actualCompSide,actualCompSide);
+        panel.setPreferredSize(new Dimension(actualCompSide,actualCompSide));
+        panel.setMaximumSize(new Dimension(actualCompSide,actualCompSide));
+        panel.setOpaque(false);
+        this.add(panel);
+        return panel;
     }
 
     @Override
@@ -178,5 +200,84 @@ public class ScoreboardPanel extends JPanel {
 
         graphics2D.drawImage(scoreboardImage, xOffset, yOffset,
                 SCOREBOARD_WIDTH, SCOREBOARD_HEIGHT, null);
+    }
+
+    @Override
+    public synchronized void propertyChange(PropertyChangeEvent evt) {
+        switch (evt.getPropertyName()) {
+            case SCORE_CHANGE:
+                handleScoreChange(evt);
+                break;
+            case COLOR_CHANGE:
+                assert evt.getSource() instanceof ViewHand;
+                ViewHand hand = (ViewHand) evt.getSource();
+                String playerNick = hand.getNickname();
+                assert evt.getNewValue() instanceof PlayerColor;
+                PlayerColor color = (PlayerColor) evt.getNewValue();
+                // When color is chosen the player are still in setup phase
+                oldScore.put(playerNick, 0);
+                JPanel panel = scorePosition.get(oldScore.get(playerNick));
+                if(color == null){
+                    return;
+                }
+                SwingUtilities.invokeLater(
+                        () -> addColor(panel, color)
+                );
+                break;
+        }
+    }
+
+    private void handleScoreChange(PropertyChangeEvent evt) {
+        assert evt.getNewValue() instanceof ViewHand;
+        ViewHand hand = (ViewHand) evt.getNewValue();
+        if (hand.getColor() == null) {
+            if(Arrays.asList(hand.getPropertyChangeListeners()).contains(this)) return;
+            hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, this);
+            return;
+        }
+        if (oldScore.containsKey(hand.getNickname())) {
+            int prevScore = oldScore.get(hand.getNickname());
+            JPanel panel = scorePosition.get(prevScore);
+            try {
+                SwingUtilities.invokeAndWait(
+                        () -> removeColor(panel, hand.getColor())
+                );
+            } catch (InterruptedException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        int currentScore = board.getScore(hand.getNickname());
+        oldScore.put(hand.getNickname(), currentScore);
+        JPanel scorePanel = scorePosition.get(currentScore);
+        SwingUtilities.invokeLater(
+                () -> addColor(scorePanel, hand.getColor())
+        );
+    }
+
+    private void addColor(JPanel scorePanel, PlayerColor color) {
+        PlayerPawn pawn =switch (color) {
+            case RED -> redPlayer;
+            case YELLOW -> yellowPlayer;
+            case BLUE -> bluePlayer;
+            case GREEN -> greenPlayer;
+        };
+        scorePanel.add(pawn);
+    }
+
+    private void removeColor(JPanel panel,PlayerColor c) {
+        switch (c){
+            case RED:
+                panel.remove(redPlayer);
+                break;
+            case BLUE:
+                panel.remove(bluePlayer);
+                break;
+            case GREEN:
+                panel.remove(greenPlayer);
+                break;
+            case YELLOW:
+                panel.remove(yellowPlayer);
+                break;
+        }
     }
 }

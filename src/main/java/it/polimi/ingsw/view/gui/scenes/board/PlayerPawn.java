@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.scenes.board;
 
+import it.polimi.ingsw.view.gui.GameWindow;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -7,8 +8,8 @@ import java.awt.*;
 
 public class PlayerPawn extends JComponent {
     private final Color pawnColor;
-    private final int width = 20;
-    private final int height = 20;
+    private final int width = (int) (20 * GameWindow.SCALE_FACTOR);
+    private final int height = (int) (20 * GameWindow.SCALE_FACTOR);
     public PlayerPawn(Color pawnColor){
         this.pawnColor = pawnColor;
     }
