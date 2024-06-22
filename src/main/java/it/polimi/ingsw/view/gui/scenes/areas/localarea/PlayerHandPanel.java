@@ -87,7 +87,7 @@ public class PlayerHandPanel extends HandPanel implements CardListener, CornerLi
 
 
     @Override
-    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction)
+    public void placeOnCorner(String cardID, GamePoint position, CornerDirection direction)
             throws IllegalStateException {
         if(selectedCard == null){
             throw new IllegalStateException("NO CARD SELECTED.");

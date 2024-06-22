@@ -152,7 +152,7 @@ public class GameGUI implements View {
                 );
                 break;
             case JOIN, SETUP, DEALCARDS,
-                    CHOOSEFIRSTPLAYER, PLACESTARTING:
+                    CHOOSEFIRSTPLAYER, PLACESTARTING, EVALOBJ:
                 break;
             case PLACECARD:
                 showNotification("GAME PHASE UPDATED TO PLACE CARD PHASE");
@@ -189,7 +189,6 @@ public class GameGUI implements View {
                         chooseObjectiveScene::display
                 );
                 break;
-            case EVALOBJ: break;
             case SHOWWIN:
                 EndgameScene endgameScene = new EndgameScene(board, inputHandler);
                 SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameScene);

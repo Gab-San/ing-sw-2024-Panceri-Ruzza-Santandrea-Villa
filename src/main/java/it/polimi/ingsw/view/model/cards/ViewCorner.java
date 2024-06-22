@@ -154,7 +154,7 @@ public class ViewCorner extends JComponent implements MouseListener {
         if(!isVisible || isDisabled){
             return;
         }
-        cardRef.cornerListener.setClickedCard(cardRef.getCardID(), cardRef.getPosition(), direction);
+        cardRef.cornerListener.placeOnCorner(cardRef.getCardID(), cardRef.getPosition(), direction);
     }
 
     @Override

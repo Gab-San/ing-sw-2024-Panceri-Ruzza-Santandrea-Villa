@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.gui.CardListener;
-import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.scenes.areas.AreaPanel;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
@@ -49,7 +48,7 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
             public void mouseClicked(MouseEvent e) {
                 PlaceHolder p = (PlaceHolder) e.getSource();
                 try {
-                    cornerListener.setClickedCard(null, new GamePoint(0,0), null);
+                    cornerListener.placeOnCorner(null, new GamePoint(0,0), null);
                 } catch (IllegalStateException exception){
                     return; // if setClickedCard fails to place startCard
                 }
@@ -97,9 +96,9 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
     }
 
     @Override
-    public void setClickedCard(String cardID, GamePoint position, CornerDirection direction){
+    public void placeOnCorner(String cardID, GamePoint position, CornerDirection direction){
         try{
-            cornerListener.setClickedCard(cardID, position, direction);
+            cornerListener.placeOnCorner(cardID, position, direction);
         }catch (IllegalStateException e){
             return; //on placement failure
         }

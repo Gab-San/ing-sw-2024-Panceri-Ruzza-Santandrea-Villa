@@ -4,7 +4,6 @@ import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewHand;
-import it.polimi.ingsw.view.model.ViewPlayArea;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 
 import java.beans.PropertyChangeListener;
@@ -85,12 +84,17 @@ public class GameInputHandler{
 
     /**
      * Attempts to disconnect the player from the lobby.
-     * @throws IllegalStateException
-     * @throws IllegalArgumentException
-     * @throws RemoteException
+     * @throws IllegalStateException may be thrown for different reasons: <br>
+     * - nickname doesn't match any of the connected players' nicknames <br>
+     * - a client instance not connected is trying to disconnect <br>
+     * - game reaches an illegal state of execution.
+     * @throws IllegalArgumentException may be thrown for different reasons: <br>
+     * - nickname doesn't match any of the connected players' nicknames <br>
+     * - an inner state exception
+     * @throws RemoteException if a connection error occurs
      */
     public synchronized void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
-
+        serverProxy.disconnect();
     }
 
     /**
@@ -135,7 +139,7 @@ public class GameInputHandler{
     }
 
     /**
-     * Attempts to place a card.
+     * Attempts to place the selected card.
      * @param cardID placing card id
      * @param placePos position on which the card has to be placed
      * @param cornerDir corner direction
@@ -156,19 +160,27 @@ public class GameInputHandler{
 
     }
 
-
+    /**
+     * Attempts to draw the card in the selected deck position.
+     * @param deck deck identifier
+     * @param cardPosition card position in the deck
+     * @throws RemoteException if a connection error occurs
+     * @throws IllegalStateException if the selected position is invalid
+     */
     public synchronized void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
         controller.validateDraw(deck,cardPosition);
         serverProxy.draw(deck, cardPosition);
     }
 
 
-    public synchronized void restartGame(int numOfPlayers) throws IllegalArgumentException {
-        try{
-            controller.validateRestart(numOfPlayers);
-        }catch (IllegalArgumentException e){
-            showError(e.getMessage());
-            throw e;
+    /**
+     * Attempts to restart the game with the specified number of players.
+     * @param numOfPlayers number of players of the next game
+     */
+    public synchronized void restartGame(int numOfPlayers) {
+        if(numOfPlayers < 2 || numOfPlayers > 4){
+            showError("Number of Players must be (2-4)");
+            return;
         }
 //        threadPool.submit(() -> {
                     try {
@@ -181,6 +193,10 @@ public class GameInputHandler{
 //        );
     }
 
+    /**
+     * Notifies the gui of the local player disconnection. This may be due to a connection error
+     * or the turn timer ending.
+     */
     public synchronized void notifyDisconnection(){
         // Calls to actions block the UI thread, so all the actions
         // should be called on threads unless a synchronous response is wanted.
@@ -189,16 +205,27 @@ public class GameInputHandler{
         threadPool.execute( gui::notifyServerFailure );
     }
 
+    /**
+     * Returns the player hand associated with the given nickname.
+     * @param nickname player's unique identifier
+     * @return player's hand
+     */
     public synchronized ViewHand getPlayerHand(String nickname) {
         return controller.getPlayer(nickname);
     }
 
-    public synchronized ViewPlayArea getPlayArea(String nickname) { return controller.getPlayArea(nickname);}
-
+    /**
+     * Adds the specified chat listener to the gui events.
+     * @param chatListener component that acts as chat listener
+     */
     public synchronized void addChatListener(ChatListener chatListener) {
         gui.addChatListener(chatListener);
     }
 
+    /**
+     * Adds the specified component as a property change listener.
+     * @param pcl component that acts as property change listener
+     */
     public synchronized void addPropertyListener(PropertyChangeListener pcl) {
         gui.addToPropListeners(pcl);
     }
@@ -215,10 +242,19 @@ public class GameInputHandler{
         gui.changeScene(nextScene);
     }
 
+    /**
+     * Returns true if the given nickname is associated with the local player, false otherwise.
+     * @param nickname player's id to confront
+     * @return true if the given nickname matches the local player's nickname, false otherwise
+     */
     public synchronized boolean isLocalPlayer(String nickname) {
         return controller.isLocalPlayer(nickname);
     }
 
+    /**
+     * Returns the local player's hand.
+     * @return local player's hand
+     */
     public synchronized ViewHand getLocalPlayer() {
         return controller.getLocalPlayer();
     }

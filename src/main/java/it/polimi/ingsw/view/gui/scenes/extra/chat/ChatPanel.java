@@ -24,11 +24,15 @@ import java.rmi.RemoteException;
  * </p>
  */
 public class ChatPanel extends JPanel implements PropertyChangeListener, ChatListener {
-    private final JTextField messageEditArea;
     private final JScrollPane chatVisualizer;
     private final JComboBox<String> addresseeList;
     private final GameInputHandler inputHandler;
     private final ChatDocument chatDocument;
+
+    /**
+     * Constructs the chat panel.
+     * @param inputHandler game input handler
+     */
     public ChatPanel(GameInputHandler inputHandler){
         setPreferredSize(new Dimension(300, 250));
         setLayout(new BorderLayout());
@@ -47,7 +51,7 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
         MutableComboBoxModel<String> addresseeOptions = new DefaultComboBoxModel<>();
         addresseeOptions.addElement("ALL");
         addresseeList = setupStringComboBox(addresseeOptions);
-        messageEditArea = setupEditArea(15);
+        JTextField messageEditArea = setupEditArea(15);
         //Need a panel to layout properly the various components
         JPanel messagingPanel = createMessagingPanel(addresseeList, messageEditArea);
 
@@ -174,6 +178,7 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
 
         return min >= (max - 2*vertScrollBar.getBlockIncrement());
     }
+
     private void scrollToBottom(){
         SwingUtilities.invokeLater(
                 () -> chatVisualizer.getVerticalScrollBar()

@@ -12,12 +12,23 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This class implements a panel that lets the user know whether a player is connected or not
+ * and navigate between the player areas.
+ */
 public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     private final ChangeAreaButton areaButton;
     private final JLabel connectionLabel;
     private ImageIcon connectedIcon;
     private ImageIcon disconnectedIcon;
 
+    /**
+     * Constructs a player area panel.
+     * @param areaName player nickname
+     * @param action button action to navigate player areas
+     * @param sceneID scene identifier of the player's play area
+     * @param isConnected true if the player is connected, false otherwise
+     */
     public ChangeAreaPanel(String areaName, Action action,
                            SceneID sceneID, boolean isConnected){
         this.areaButton = new ChangeAreaButton(action, sceneID);
@@ -100,10 +111,18 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Returns the visible area button.
+     * @return button associated with the displayed player's play area
+     */
     public ChangeAreaButton getAreaButton(){
         return areaButton;
     }
 
+    /**
+     * Returns the name of the play area.
+     * @return name of the play area
+     */
     public String getAreaName(){
         return areaButton.getSceneName();
     }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.gui.GameInputHandler;
-import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewOpponentHand;
 
@@ -16,13 +15,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * This class implements a player panel on which the player in lobby are displayed.
+ * It also allows for the user to swap between player areas.
+ */
 public class PlayerListPanel extends JPanel implements PropertyChangeListener{
+    /**
+     * Panel preferred width.
+     */
     public static int WIDTH = 300;
+    /**
+     * Panel preferred height.
+     */
     public static int HEIGHT = 200;
     private final GameInputHandler inputHandler;
     private final ButtonGroup buttonPlayerGroup;
     private final ChangeAreaAction buttonAction;
     private final List<ChangeAreaPanel> areaList;
+
+    /**
+     * Constructs the players panel.
+     * @param inputHandler game interaction handler
+     */
 
     public PlayerListPanel(GameInputHandler inputHandler){
         this.inputHandler = inputHandler;
@@ -64,44 +78,14 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        String playerNick;
-        SceneID sceneID;
-        boolean connectionStatus;
-        ViewHand hand;
         switch (evt.getPropertyName()){
             case ChangeNotifications.ADDED_PLAYER:
-                assert evt.getSource() instanceof ViewHand;
-                hand = (ViewHand) evt.getNewValue();
-                playerNick = hand.getNickname();
-                sceneID = inputHandler.isLocalPlayer(playerNick) ?
-                        SceneID.getMyAreaSceneID() : SceneID.getOpponentAreaSceneID(playerNick);
-                connectionStatus = inputHandler.isLocalPlayer(playerNick) ||
-                        ((ViewOpponentHand) hand).isConnected();
-                ChangeAreaPanel changeAreaPanel = new ChangeAreaPanel(playerNick, buttonAction,
-                        sceneID, connectionStatus);
-                buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
-                if (inputHandler.isLocalPlayer(playerNick)) {
-                    buttonPlayerGroup.setSelected(
-                            changeAreaPanel.getAreaButton().getModel(),
-                            true
-                    );
-                    buttonAction.setOldButton(changeAreaPanel.getAreaButton());
-                }
-                SwingUtilities.invokeLater(
-                        () -> {
-                            add(changeAreaPanel);
-                            revalidate();
-                            repaint();
-                            setVisible(true);
-                        }
-                );
-                areaList.add(changeAreaPanel);
-                hand.addPropertyChangeListener(changeAreaPanel);
+                addPlayer(evt);
                 break;
             case ChangeNotifications.REMOVE_PLAYER:
                 assert evt.getSource() instanceof ViewHand;
-                hand = (ViewHand) evt.getOldValue();
-                playerNick = hand.getNickname();
+                ViewHand hand = (ViewHand) evt.getOldValue();
+                String playerNick = hand.getNickname();
                 ListIterator<ChangeAreaPanel> iterator = areaList.listIterator();
                 while (iterator.hasNext()){
                     ChangeAreaPanel area = iterator.next();
@@ -124,6 +108,45 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
         }
     }
 
+    private void addPlayer(PropertyChangeEvent evt) {
+        assert evt.getSource() instanceof ViewHand;
+        ViewHand hand = (ViewHand) evt.getNewValue();
+        String playerNick = hand.getNickname();
+        SceneID sceneID = inputHandler.isLocalPlayer(playerNick) ?
+                SceneID.getMyAreaSceneID() : SceneID.getOpponentAreaSceneID(playerNick);
+        // Local player is always considered connected.
+        boolean connectionStatus = inputHandler.isLocalPlayer(playerNick) ||
+                ((ViewOpponentHand) hand).isConnected();
+
+        ChangeAreaPanel changeAreaPanel = new ChangeAreaPanel(playerNick, buttonAction,
+                sceneID, connectionStatus);
+
+        buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
+        // Automatically selects the local player
+        if (inputHandler.isLocalPlayer(playerNick)) {
+            buttonPlayerGroup.setSelected(
+                    changeAreaPanel.getAreaButton().getModel(),
+                    true
+            );
+            buttonAction.setOldButton(changeAreaPanel.getAreaButton());
+        }
+        SwingUtilities.invokeLater(
+                () -> {
+                    add(changeAreaPanel);
+                    revalidate();
+                    repaint();
+                    setVisible(true);
+                }
+        );
+        areaList.add(changeAreaPanel);
+        hand.addPropertyChangeListener(changeAreaPanel);
+    }
+
+    /**
+     * Adds a button that displays the endgame scene in order for the players to be able
+     * to return to the endgame scene.
+     * @param text button label
+     */
     public void addEndgameButton(String text) {
         SceneID sceneID = SceneID.getEndgameSceneID();
         boolean connectionStatus = true;
