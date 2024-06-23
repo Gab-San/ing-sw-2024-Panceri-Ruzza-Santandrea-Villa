@@ -56,6 +56,7 @@ public class ViewPlayArea extends JComponent {
      */
     private void removeFreeCorner(ViewCorner corner){
         corner.resetCorner();
+        System.err.println("CORNER RESET!");
         freeCorners.remove(corner);
     }
 
@@ -74,6 +75,7 @@ public class ViewPlayArea extends JComponent {
             if(dirCard != null){
                 System.err.println("DIRECTION NOT NULL");
                 dirCard.getCorner(dir.opposite()).cover();
+                System.err.println("COVERED CORNER!");
                 removeFreeCorner(dirCard.getCorner(dir.opposite()));
                 System.err.println("DIRECTION NOT NULL EXECUTED");
             }
