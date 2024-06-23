@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
+import it.polimi.ingsw.view.gui.scenes.board.ScoreboardPanel;
 import it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor.ChooseColorScene;
 import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
 import it.polimi.ingsw.view.gui.scenes.board.BoardScene;
@@ -192,7 +193,8 @@ public class GameGUI implements View {
                 );
                 break;
             case SHOWWIN:
-                EndgameScene endgameScene = new EndgameScene(board, inputHandler);
+                ScoreboardPanel scoreboard = ((BoardScene) SceneManager.getInstance().getScene(SceneID.getBoardSceneID())).getScoreboard();
+                EndgameScene endgameScene = new EndgameScene(board, inputHandler, scoreboard);
                 SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameScene);
                 gameWindow.addEndgameButtonToSidePanel("Display Winner");
                 changeScene(endgameScene);

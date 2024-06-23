@@ -20,13 +20,12 @@ import java.util.List;
 public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
     private final GameInputHandler inputHandler;
     private final ViewBoard board;
-    private final ScoreboardPanel scoreboard;
     private final boolean atLeast2Players;
     protected Timer displayTimer;
     private final JLabel notificationLabel;
     private static final int STANDARD_WINNER_TEXT_FONT = 50;
 
-    public EndgameScene(ViewBoard board, GameInputHandler inputHandler){
+    public EndgameScene(ViewBoard board, GameInputHandler inputHandler, ScoreboardPanel scoreboard){
         this.inputHandler = inputHandler;
         this.board = board;
         setLayout(new BorderLayout());
@@ -66,9 +65,6 @@ public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
         winnerPanel.add(winnerNickLabel,
                 new GridBagConstraints(2,0,1 ,1 ,0.5 ,0.5,
                         GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(10,10,10,10), 0,0));
-
-        scoreboard = new ScoreboardPanel(board);
-        //TODO: init scoreboard
 
         notificationLabel = GUIFunc.createNotificationLabel();
         modifyNotificationLabel();

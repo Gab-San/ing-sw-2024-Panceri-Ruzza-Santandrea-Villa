@@ -29,6 +29,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     private int selectedPosition;
     private final JLabel errorLabel;
     private Timer displayTimer;
+    private final ScoreboardPanel scoreboard;
 
     /**
      * Constructs the board scene with the deck and the scoreboard to be
@@ -44,7 +45,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
 
         setLayout(new BorderLayout());
         JPanel deckpanel = setupDeckPanel(board);
-        ScoreboardPanel scoreboard = new ScoreboardPanel(board);
+        scoreboard = new ScoreboardPanel(board);
         errorLabel = GUIFunc.createNotificationLabel();
         modifyErrorLabel();
         //Adding components
@@ -52,8 +53,9 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         add(deckpanel, BorderLayout.CENTER);
         add(scoreboard, BorderLayout.EAST);
     }
-
-
+    public ScoreboardPanel getScoreboard(){
+        return scoreboard;
+    }
 
     private JPanel setupDeckPanel(ViewBoard board) {
         JPanel panel = new JPanel(new GridBagLayout());

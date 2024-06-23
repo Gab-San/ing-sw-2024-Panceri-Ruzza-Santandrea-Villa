@@ -588,12 +588,6 @@ public class ModelUpdater {
 
             playArea.placeCard(new GamePoint(row, col), card);
         }
-
-        try{
-            throw new RuntimeException();
-        } catch (RuntimeException e){
-            e.printStackTrace(System.err);
-        }
     }
     /**
      * Updates the visible resources map.
