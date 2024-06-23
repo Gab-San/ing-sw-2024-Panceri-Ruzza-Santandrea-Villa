@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.areas;
 
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
         turnLabel = new JLabel("Player Turn: " + turn);
         turnLabel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
         currentTurnLabel = new JLabel("Current Turn: " + 0);
-        currentTurnLabel.setForeground(Color.ORANGE);
+        currentTurnLabel.setForeground(GameColor.CURRENT_TURN_COLOR.getColor());
         currentTurnLabel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
         add(visibleResourcesPanel);
         add(deadLockLabel);

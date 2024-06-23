@@ -34,8 +34,14 @@ public enum GameColor {
      * Green color for player
      */
     PLAYER_GREEN(new Color(0x07c912)),
-    PLAYER_YELLOW(new Color(0xf4fb14));
-
+    /**
+     * Yellow color for player
+     */
+    PLAYER_YELLOW(new Color(0xf4fb14)),
+    /**
+     * Current turn display color
+     */
+    CURRENT_TURN_COLOR(new Color(0xB95E00));
     private final Color color;
 
     GameColor(Color color){

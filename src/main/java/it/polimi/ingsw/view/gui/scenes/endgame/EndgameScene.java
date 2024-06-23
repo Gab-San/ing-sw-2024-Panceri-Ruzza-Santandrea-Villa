@@ -16,7 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
+//DOCS add docs
 public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
     private final GameInputHandler inputHandler;
     private final ViewBoard board;
@@ -195,8 +195,8 @@ public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         int restartNum = Integer.parseInt(button.getText().split(" ")[1]);
-//        if(restartNum >= 2 && restartNum <= 4)
-//            inputHandler.restartGame(restartNum);
+        if(restartNum >= 2 && restartNum <= 4)
+            inputHandler.restartGame(restartNum);
 
         //TODO: restart GUI and send restartGame command
     }

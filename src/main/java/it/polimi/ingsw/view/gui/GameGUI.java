@@ -51,12 +51,12 @@ public class GameGUI implements View {
     private final ViewBoard board;
     private GameWindow gameWindow;
     private final SceneManager sceneManager = SceneManager.getInstance();
+
 //region EVENTS ATTRIBUTES
     private final List<JComponent> observableComponents;
     private final List<PropertyChangeListener> propertyChangeListenerList;
     private final List<ChatListener> chatListenerList;
 //endregion
-
 
     /**
      * Constructs GUI.

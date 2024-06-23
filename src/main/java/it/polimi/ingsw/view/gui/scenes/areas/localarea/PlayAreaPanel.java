@@ -25,12 +25,6 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         PlaceHolder placeHolder = setupPlaceHolder();
 
         layeredPane.add(placeHolder, Integer.valueOf(0));
-        SwingUtilities.invokeLater(
-                ()->{
-                    revalidate();
-                    repaint();
-                }
-        );
     }
 
     private PlaceHolder setupPlaceHolder() {

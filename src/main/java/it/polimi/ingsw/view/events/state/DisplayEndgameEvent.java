@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.events.state;
 
-import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
 import it.polimi.ingsw.view.gui.GameGUI;
@@ -23,20 +22,16 @@ public class DisplayEndgameEvent implements TUIEvent, GUIEvent {
     }
     @Override
     public void displayEvent(TUI tui) {
-        displayNotification(tui);
+        if(nickname == null) {
+            tui.showNotification("Endgame has been reached!");
+            return;
+        }
+        tui.showNotification("Endgame has been reached because "
+                + nickname + " has reached " + score + " (>20) points!");
     }
 
     @Override
     public void displayEvent(GameGUI gui) {
-        displayNotification(gui);
-    }
-
-    private void displayNotification(View view){
-        if(nickname == null) {
-            view.showNotification("Endgame has been reached!");
-            return;
-        }
-        view.showNotification("Endgame has been reached because "
-                + nickname + " has reached " + score + " (>20) points!");
+        //TODO display endgame in chat
     }
 }

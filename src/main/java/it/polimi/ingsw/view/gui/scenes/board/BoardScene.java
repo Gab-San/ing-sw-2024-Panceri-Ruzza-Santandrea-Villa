@@ -110,7 +110,6 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     public synchronized void displayError(String errorMsg) {
         int displayTime =  GUIFunc.setupDisplayTimer(1.5f, displayTimer);
         errorLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
-        errorLabel.setBackground(GameColor.BOARD_COLOUR.getColor());
         errorLabel.setText(errorMsg);
         // The error will become visible
         errorLabel.setVisible(true);
@@ -137,6 +136,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setVerticalAlignment(SwingConstants.CENTER);
     }
+
    // TODO implement display notification
     @Override
     public synchronized void displayNotification(List<String> backlog) {/*unused*/}
