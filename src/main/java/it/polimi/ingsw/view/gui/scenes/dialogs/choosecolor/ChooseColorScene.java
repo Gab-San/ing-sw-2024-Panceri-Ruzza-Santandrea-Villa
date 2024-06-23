@@ -181,7 +181,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
 
 
 
-    private synchronized void displayNotification(String notificationMsg){
+    private void displayNotification(String notificationMsg){
         int displayTime = GUIFunc.setupDisplayTimer((float) 1500, displayTimer);
         notificationLabel.setForeground(NOTIFICATION_COLOUR.getColor());
         notificationLabel.setText(notificationMsg);

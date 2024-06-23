@@ -68,6 +68,11 @@ public class ModelUpdater {
     public synchronized void setPlayerState(String nickname, boolean isConnected, int turn, PlayerColor color) {
         // Setting current player check
         if (board.getPlayerHand().getNickname().equals(nickname)) {
+            try {
+                throw new RuntimeException();
+            } catch (RuntimeException e){
+                e.printStackTrace(System.err);
+            }
             board.getPlayerHand().setTurn(turn);
             board.getPlayerHand().setColor(color);
             board.notifyView(SceneID.getMyAreaSceneID(), new DisplayPlayerState(nickname,

@@ -5,6 +5,9 @@ package it.polimi.ingsw.view.exceptions;
  * of being forcefully disconnected due to a timeout
  */
 public class TimeoutException extends Exception{
+    /**
+     * Constructs a TimeoutException with no detail message.
+     */
     public TimeoutException() {
         super("TIMEOUT");
     }

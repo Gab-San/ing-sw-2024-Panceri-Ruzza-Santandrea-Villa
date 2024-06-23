@@ -71,6 +71,11 @@ public class GameInputHandler{
         controller.addLocalPlayer(nickname);
         controller.setSelfPlayerArea();
         serverProxy.connect(nickname);
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e){
+            e.printStackTrace(System.err);
+        }
     }
 
     /**
@@ -234,7 +239,7 @@ public class GameInputHandler{
      * Invokes the scene identified by the unique sceneId to be displayed next.
      * @param nextSceneID next scene identifier
      */
-    public synchronized void changeScene(SceneID nextSceneID) {
+    public void changeScene(SceneID nextSceneID) {
         GUI_Scene nextScene = (GUI_Scene) SceneManager.getInstance().getScene(nextSceneID);
         if(nextScene == null){
             throw new IllegalArgumentException("Scene wasn't loaded");

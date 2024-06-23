@@ -18,7 +18,6 @@ public class ChooseColorAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.setEnabled(false);
         JButton selectedButton = (JButton) e.getSource();
         String buttonColor = selectedButton.getText();
         char colorChar = buttonColor.charAt(0);

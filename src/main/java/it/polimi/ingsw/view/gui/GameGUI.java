@@ -164,10 +164,12 @@ public class GameGUI implements View {
                 // Setting up and displaying the pop-up screen that handles user selection
                 ChooseColorScene chooseColorScene = new ChooseColorScene(gameWindow, "Choose your color!", inputHandler);
                 // Listening only to player color events
-                for (JComponent component : observableComponents) {
-                    if (component instanceof ViewHand) {
-                        component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
-                                chooseColorScene);
+                synchronized (observableComponents) {
+                    for (JComponent component : observableComponents) {
+                        if (component instanceof ViewHand) {
+                            component.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE,
+                                    chooseColorScene);
+                        }
                     }
                 }
                 SwingUtilities.invokeLater(

@@ -249,6 +249,11 @@ public class ViewBoard extends JComponent {
         // different nicknames, board will be clean if previous
         // connection attempts failed
         ViewPlayArea playArea;
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e){
+            e.printStackTrace(System.err);
+        }
         if(playerHand != null){
             firePropertyChange(ChangeNotifications.REMOVE_PLAYER, playerHand, null);
             playArea = getPlayerArea(playerHand.getNickname());
