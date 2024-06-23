@@ -238,6 +238,7 @@ public class ViewBoard extends JComponent {
         //the following 2 firePropertyChange order is important.
         opponentHand.firePropertyChange(ChangeNotifications.COLOR_CHANGE, null, opponentHand.getColor());
         opponentHand.firePropertyChange(ChangeNotifications.PLAYER_TURN_UPDATE, null, opponentHand.getTurn());
+        firePropertyChange(ChangeNotifications.CURRENT_TURN_UPDATE, null, currentTurn);
     }
 
     /**

@@ -7,6 +7,9 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.network.VirtualClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The BoardController class manages the game board and player interactions.
@@ -19,9 +22,10 @@ public class BoardController {
     /**
      * Default BoardController constructor.
      */
-    public BoardController () throws IllegalStateException {
+    public BoardController () {
         try {
-            this.gameState = new CreationState(new Board(), this, new ArrayList<>());
+            List<String> disconnectingPlayers = Collections.synchronizedList(new LinkedList<>());
+            this.gameState = new CreationState(new Board(), this, disconnectingPlayers);
         } catch (IllegalStateException ignore) {
             /*If an error occurs during first creation than the server will crash*/
         }
@@ -59,9 +63,7 @@ public class BoardController {
      */
     public void disconnect(String nickname)
             throws IllegalStateException, IllegalArgumentException{
-        synchronized(gameState.disconnectingPlayers){
-            gameState.disconnectingPlayers.add(nickname);
-        }
+        gameState.disconnectingPlayers.add(nickname);
         synchronized(this){
             gameState.disconnect(nickname);
         }
