@@ -55,6 +55,7 @@ public class RemoteErrorHandler implements GameListener {
         if(!(event instanceof RemoteErrorEvent error)){
             return;
         }
+
         String addressee = error.getUser();
         if(addressee.equalsIgnoreCase("all")){
             broadcastError(error);

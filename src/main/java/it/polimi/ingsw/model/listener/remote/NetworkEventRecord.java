@@ -38,8 +38,8 @@ public class NetworkEventRecord {
      * @param updateEvent last occurred event
      */
     public synchronized void addEvent(UpdateEvent updateEvent){
-            eventsHistory.add(updateEvent);
-            this.notifyAll();
+        eventsHistory.add(updateEvent);
+        this.notifyAll();
     }
 
     /**

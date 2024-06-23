@@ -2,12 +2,10 @@ package it.polimi.ingsw.view.gui.scenes.areas;
 
 import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.*;
-import it.polimi.ingsw.view.gui.scenes.areas.localarea.PlayerHandPanel;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
-import it.polimi.ingsw.view.model.ViewPlayerHand;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

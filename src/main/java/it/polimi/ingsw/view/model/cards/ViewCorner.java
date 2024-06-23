@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class ViewCorner extends JComponent implements MouseListener {
     private final GameResource frontResource;
     private final GameResource backResource;
+    boolean addedMouse;
     /**
      * The card this corner belongs to
      */
@@ -46,6 +48,7 @@ public class ViewCorner extends JComponent implements MouseListener {
         this.direction = direction;
         isVisible = true;
         isDisabled = false;
+        addedMouse = false;
     }
 
     /**
@@ -86,6 +89,7 @@ public class ViewCorner extends JComponent implements MouseListener {
      */
     public synchronized void cover(){
         isVisible = false;
+        System.err.println("COVERING...");
         resetCorner();
     }
 
@@ -136,6 +140,7 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     public void activateCorner() {
         addMouseListener(this);
+        addedMouse = true;
         setEnabled(true);
         setVisible(true);
         Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);
@@ -194,15 +199,16 @@ public class ViewCorner extends JComponent implements MouseListener {
     }
 
     public void resetCorner() {
-        removeMouseListener(this);
-        setEnabled(false);
-        setVisible(false);
-        setBorder(BorderFactory.createEmptyBorder());
-//        SwingUtilities.invokeLater(
-//                () -> {
-//                    revalidate();
-//                    repaint();
-//                }
-//        );
+        if(Arrays.stream(getMouseListeners()).toList().contains(this)) removeMouseListener(this);
+        
+        SwingUtilities.invokeLater(
+                () -> {
+                    setEnabled(false);
+                    setVisible(false);
+                    setBorder(BorderFactory.createEmptyBorder());
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 }
