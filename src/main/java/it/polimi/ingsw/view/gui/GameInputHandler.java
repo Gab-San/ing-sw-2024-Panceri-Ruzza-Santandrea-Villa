@@ -43,7 +43,7 @@ public class GameInputHandler{
      * Requests an error to be shown on the gui.
      * @param errorMsg error message text
      */
-    public synchronized void showError(String errorMsg){
+    public void showError(String errorMsg){
         //threaded to prevent stalling while displaying
         threadPool.submit(() -> gui.showError(errorMsg));
     }
@@ -54,7 +54,7 @@ public class GameInputHandler{
      * @param message message body
      * @throws RemoteException if an error occurs during connection
      */
-    public synchronized void sendMsg(String addressee, String message) throws RemoteException {
+    public void sendMsg(String addressee, String message) throws RemoteException {
         serverProxy.sendMsg(addressee, message);
     }
 
@@ -64,12 +64,15 @@ public class GameInputHandler{
      * @throws RemoteException if an error occurs during connection
      * @throws IllegalStateException if the nickname format isn't valid
      */
-    public synchronized void connect(String nickname) throws RemoteException, IllegalStateException {
+    public void connect(String nickname) throws RemoteException, IllegalStateException {
         if (!validateNickname(nickname)) {
             throw new IllegalStateException(UIFunctions.evaluateErrorType(nickname));
         }
+        System.err.println("BEFORE ADD LOCAL PLAYER!");
         controller.addLocalPlayer(nickname);
+        System.err.println("AFTER ADDING LOCAL PLAYER & BEFORE SETTING SELF PLAYER AREA!");
         controller.setSelfPlayerArea();
+        System.err.println("AFTER ADDING LOCAL PLAYER & BEFORE CONNECT!");
         serverProxy.connect(nickname);
         try {
             throw new RuntimeException();
@@ -83,7 +86,7 @@ public class GameInputHandler{
      * @param numOfPlayers number of players to play the match.
      * @throws RemoteException if a connection error occurs
      */
-    public synchronized void setNumOfPlayers(int numOfPlayers) throws RemoteException {
+    public void setNumOfPlayers(int numOfPlayers) throws RemoteException {
         serverProxy.setNumOfPlayers(numOfPlayers);
     }
 
@@ -98,7 +101,7 @@ public class GameInputHandler{
      * - an inner state exception
      * @throws RemoteException if a connection error occurs
      */
-    public synchronized void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
+    public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
         serverProxy.disconnect();
     }
 
@@ -107,7 +110,7 @@ public class GameInputHandler{
      * @param placeOnFront true if the starting card is facing up, false otherwise
      * @throws IllegalStateException if the starting card cannot be placed at the time of the invocation
      */
-    public synchronized void placeStartCard(boolean placeOnFront) throws IllegalStateException {
+    public void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
 //        threadPool.submit(() -> {
                     try {
@@ -125,7 +128,7 @@ public class GameInputHandler{
      * @param colour chosen color
      * @throws RemoteException if a connection error occurs
      */
-    public synchronized void chooseColor(char colour) throws RemoteException {
+    public void chooseColor(char colour) throws RemoteException {
         serverProxy.chooseColor(colour);
     }
 
@@ -135,7 +138,7 @@ public class GameInputHandler{
      * @throws RemoteException if a connection error occurs
      * @throws IllegalStateException if no card is selected
      */
-    public synchronized void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
+    public void chooseObjective(ViewObjectiveCard chosenCard) throws RemoteException, IllegalStateException {
         if(chosenCard == null){
             throw new IllegalStateException("Choose a card!");
         }
@@ -151,7 +154,7 @@ public class GameInputHandler{
      * @param placeOnFront true if the card is facing up, false otherwise
      * @throws IllegalStateException if the card cannot be placed at the time of the invocation
      */
-    public synchronized void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
+    public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
 //        threadPool.submit(() -> {
                     try {
@@ -172,7 +175,7 @@ public class GameInputHandler{
      * @throws RemoteException if a connection error occurs
      * @throws IllegalStateException if the selected position is invalid
      */
-    public synchronized void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
+    public void draw(char deck, int cardPosition) throws RemoteException, IllegalStateException {
         controller.validateDraw(deck,cardPosition);
         serverProxy.draw(deck, cardPosition);
     }
@@ -182,7 +185,7 @@ public class GameInputHandler{
      * Attempts to restart the game with the specified number of players.
      * @param numOfPlayers number of players of the next game
      */
-    public synchronized void restartGame(int numOfPlayers) {
+    public void restartGame(int numOfPlayers) {
         if(numOfPlayers < 2 || numOfPlayers > 4){
             showError("Number of Players must be (2-4)");
             return;
@@ -202,7 +205,7 @@ public class GameInputHandler{
      * Notifies the gui of the local player disconnection. This may be due to a connection error
      * or the turn timer ending.
      */
-    public synchronized void notifyDisconnection(){
+    public void notifyDisconnection(){
         // Calls to actions block the UI thread, so all the actions
         // should be called on threads unless a synchronous response is wanted.
         // In this case, this action would block the thread as it waits for the

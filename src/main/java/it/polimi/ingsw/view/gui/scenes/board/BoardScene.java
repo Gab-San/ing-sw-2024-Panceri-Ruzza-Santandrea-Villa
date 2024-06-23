@@ -134,7 +134,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setVerticalAlignment(SwingConstants.CENTER);
     }
-
+   // TODO implement display notification
     @Override
     public synchronized void displayNotification(List<String> backlog) {/*unused*/}
 

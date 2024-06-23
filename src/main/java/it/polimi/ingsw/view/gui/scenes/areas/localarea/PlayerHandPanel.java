@@ -126,6 +126,7 @@ public class PlayerHandPanel extends HandPanel implements CardListener, CornerLi
                 () -> {
                     deselectCards();
                     selectedCard.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+                    repaint();
                 }
         );
     }

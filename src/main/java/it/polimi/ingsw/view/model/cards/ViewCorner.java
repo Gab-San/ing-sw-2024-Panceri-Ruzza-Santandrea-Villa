@@ -197,12 +197,12 @@ public class ViewCorner extends JComponent implements MouseListener {
         removeMouseListener(this);
         setEnabled(false);
         setVisible(false);
-        SwingUtilities.invokeLater(
-                () -> {
-                    setBorder(BorderFactory.createEmptyBorder());
-                    revalidate();
-                    repaint();
-                }
-        );
+        setBorder(BorderFactory.createEmptyBorder());
+//        SwingUtilities.invokeLater(
+//                () -> {
+//                    revalidate();
+//                    repaint();
+//                }
+//        );
     }
 }

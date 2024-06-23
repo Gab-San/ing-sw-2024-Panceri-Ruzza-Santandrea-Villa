@@ -187,10 +187,12 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
         notificationLabel.setText(notificationMsg);
         notificationLabel.setVisible(true);
         SwingUtilities.invokeLater(
-                () -> startDisplayTimer(displayTime)
+                () -> {
+                    startDisplayTimer(displayTime);
+                    revalidate();
+                    repaint();
+                }
         );
-        revalidate();
-        repaint();
     }
 
     private void startDisplayTimer(int displayTime) {
