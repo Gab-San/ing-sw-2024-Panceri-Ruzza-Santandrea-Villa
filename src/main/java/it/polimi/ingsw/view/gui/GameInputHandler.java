@@ -74,11 +74,6 @@ public class GameInputHandler{
         controller.setSelfPlayerArea();
         System.err.println("AFTER ADDING LOCAL PLAYER & BEFORE CONNECT!");
         serverProxy.connect(nickname);
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e){
-            e.printStackTrace(System.err);
-        }
     }
 
     /**
@@ -99,10 +94,14 @@ public class GameInputHandler{
      * @throws IllegalArgumentException may be thrown for different reasons: <br>
      * - nickname doesn't match any of the connected players' nicknames <br>
      * - an inner state exception
-     * @throws RemoteException if a connection error occurs
      */
-    public void disconnect() throws IllegalStateException, IllegalArgumentException, RemoteException {
-        serverProxy.disconnect();
+    public void disconnect() throws IllegalStateException, IllegalArgumentException {
+        try {
+            serverProxy.disconnect();
+        } catch (RemoteException e) {
+            showError("CONNECTION LOST.");
+            notifyDisconnection();
+        }
     }
 
     /**
@@ -112,15 +111,12 @@ public class GameInputHandler{
      */
     public void placeStartCard(boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceStartCard();
-//        threadPool.submit(() -> {
-                    try {
-                        serverProxy.placeStartCard(placeOnFront);
-                    } catch (RemoteException e) {
-                        showError("CONNECTION LOST.");
-                        notifyDisconnection();
-                    }
-//                }
-//        );
+        try {
+            serverProxy.placeStartCard(placeOnFront);
+        } catch (RemoteException e) {
+            showError("CONNECTION LOST.");
+            notifyDisconnection();
+        }
     }
 
     /**
@@ -156,16 +152,12 @@ public class GameInputHandler{
      */
     public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException {
         controller.validatePlaceCard(cardID, placePos, cornerDir);
-//        threadPool.submit(() -> {
-                    try {
-                        serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
-                    } catch (RemoteException e) {
-                        showError("CONNECTION LOST.");
-                        notifyDisconnection();
-                    }
-//                }
-//        );
-
+        try {
+            serverProxy.placeCard(cardID, placePos, cornerDir, placeOnFront);
+        } catch (RemoteException e) {
+            showError("CONNECTION LOST.");
+            notifyDisconnection();
+        }
     }
 
     /**
@@ -190,15 +182,12 @@ public class GameInputHandler{
             showError("Number of Players must be (2-4)");
             return;
         }
-//        threadPool.submit(() -> {
-                    try {
-                        serverProxy.restartGame(numOfPlayers);
-                    } catch (RemoteException e) {
-                        showError("CONNECTION LOST.");
-                        notifyDisconnection();
-                    }
-//                }
-//        );
+        try {
+            serverProxy.restartGame(numOfPlayers);
+        } catch (RemoteException e) {
+            showError("CONNECTION LOST.");
+            notifyDisconnection();
+        }
     }
 
     /**
