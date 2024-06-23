@@ -135,6 +135,7 @@ public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
         return setupLabel(text, color, STANDARD_WINNER_TEXT_FONT);
     }
     private JLabel setupLabel(String text, PlayerColor color, int size){
+        text = GUIFunc.correctToLabelFormat(text);
         JLabel label = new JLabel(text);
         label.setFont(new Font("Raleway", Font.PLAIN, size));
         label.setForeground(PlayerColor.getColor(color));

@@ -210,7 +210,7 @@ public class GameInputHandler{
      * @param nickname player's unique identifier
      * @return player's hand
      */
-    public synchronized ViewHand getPlayerHand(String nickname) {
+    public ViewHand getPlayerHand(String nickname) {
         return controller.getPlayer(nickname);
     }
 
@@ -218,7 +218,7 @@ public class GameInputHandler{
      * Adds the specified chat listener to the gui events.
      * @param chatListener component that acts as chat listener
      */
-    public synchronized void addChatListener(ChatListener chatListener) {
+    public void addChatListener(ChatListener chatListener) {
         gui.addChatListener(chatListener);
     }
 
@@ -226,7 +226,7 @@ public class GameInputHandler{
      * Adds the specified component as a property change listener.
      * @param pcl component that acts as property change listener
      */
-    public synchronized void addPropertyListener(PropertyChangeListener pcl) {
+    public void addPropertyListener(PropertyChangeListener pcl) {
         gui.addToPropListeners(pcl);
     }
 
@@ -247,7 +247,7 @@ public class GameInputHandler{
      * @param nickname player's id to confront
      * @return true if the given nickname matches the local player's nickname, false otherwise
      */
-    public synchronized boolean isLocalPlayer(String nickname) {
+    public boolean isLocalPlayer(String nickname) {
         return controller.isLocalPlayer(nickname);
     }
 
@@ -255,7 +255,7 @@ public class GameInputHandler{
      * Returns the local player's hand.
      * @return local player's hand
      */
-    public synchronized ViewHand getLocalPlayer() {
+    public ViewHand getLocalPlayer() {
         return controller.getLocalPlayer();
     }
 }

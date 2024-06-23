@@ -132,7 +132,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     }
 
     @Override
-    public synchronized void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent evt) {
         assert evt.getSource() instanceof ViewHand;
         ViewHand playerHand = (ViewHand) evt.getSource();
 
