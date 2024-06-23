@@ -1,28 +1,60 @@
 package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class PlaceHolder extends JComponent {
+
+    private BufferedImage image;
+
+    public PlaceHolder(){
+        super();
+        importIMG();
+    }
+
+    private void importIMG() {
+        ClassLoader cl = this.getClass().getClassLoader();
+        InputStream url = null;
+        try {
+            url = cl.getResourceAsStream("icons/TransparentStarting.png");
+        } catch(NullPointerException e){
+            e.printStackTrace(System.err);
+        }
+
+        BufferedImage img = null;
+        try{
+            assert url != null;
+            img = ImageIO.read(url);
+        } catch(IOException e){
+            e.printStackTrace(System.err);
+        }
+        this.image = img;
+    }
+
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
-        g2D.fillOval(0,0,100,100);
+        // width = 831 height  = 556
+        g2D.drawImage(image,0,0, image.getWidth()/4, image.getHeight()/4, null);
     }
 
     @Override
     public Dimension getSize(Dimension rv) {
-        return new Dimension(100,100);
+        return new Dimension(getWidth(),getHeight());
     }
 
     @Override
     public int getWidth() {
-        return 100;
+        return image.getWidth()/4;
     }
 
     @Override
     public int getHeight() {
-        return 100;
+        return image.getHeight()/4;
     }
 }
