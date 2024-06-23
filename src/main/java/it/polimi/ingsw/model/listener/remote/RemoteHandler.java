@@ -34,7 +34,7 @@ public class RemoteHandler implements GameListener{
      * @param nickname client's user id
      * @param client subscribing client
      */
-    public synchronized void addClient(String nickname, VirtualClient client){
+    public void addClient(String nickname, VirtualClient client){
         if(playerClients.containsValue(client)){
             System.err.println("Client already connected");
             return;
@@ -52,7 +52,7 @@ public class RemoteHandler implements GameListener{
      * Removes client associated with user id.
      * @param nickname user identifier
      */
-    public synchronized void removeClient(String nickname){
+    public void removeClient(String nickname){
         if(!playerClients.containsKey(nickname))
             return;
         VirtualClient virtualClient = playerClients.get(nickname);

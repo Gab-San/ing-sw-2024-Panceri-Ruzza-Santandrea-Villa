@@ -29,12 +29,10 @@ public class CentralServer {
 
     /**
      * Default CentralServer constructor
-     * @throws IllegalStateException
      */
-    private CentralServer() throws IllegalStateException{
+    private CentralServer(){
         playerClients = new Hashtable<>();
         commandQueue = new LinkedBlockingDeque<>();
-        //FIXME: If board controller launches an exception should the application just close?
         gameRef = new BoardController();
         chat = new ChatHandler(this);
         startCommandExecutor();

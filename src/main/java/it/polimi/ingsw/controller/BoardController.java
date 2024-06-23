@@ -18,10 +18,13 @@ public class BoardController {
     private GameState gameState;
     /**
      * Default BoardController constructor.
-     * @throws IllegalStateException if the initial game state cannot be created.
      */
-    public BoardController () throws IllegalStateException{
-        this.gameState = new CreationState(new Board(), this, new ArrayList<>());
+    public BoardController () throws IllegalStateException {
+        try {
+            this.gameState = new CreationState(new Board(), this, new ArrayList<>());
+        } catch (IllegalStateException ignore) {
+            /*If an error occurs during first creation than the server will crash*/
+        }
     }
 
     /**

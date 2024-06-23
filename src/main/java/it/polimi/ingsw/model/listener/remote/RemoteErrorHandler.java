@@ -33,7 +33,7 @@ public class RemoteErrorHandler implements GameListener {
      * @param nickname client's user's identifier
      * @param client notified client instance
      */
-    public synchronized void addClient(String nickname, VirtualClient client){
+    public void addClient(String nickname, VirtualClient client){
         playerClients.put(nickname, client);
     }
 
@@ -41,7 +41,7 @@ public class RemoteErrorHandler implements GameListener {
      * Removes a client from the set of notified clients.
      * @param nickname client's user's identifier
      */
-    public synchronized void removeClient(String nickname){
+    public void removeClient(String nickname){
         playerClients.remove(nickname);
     }
 
