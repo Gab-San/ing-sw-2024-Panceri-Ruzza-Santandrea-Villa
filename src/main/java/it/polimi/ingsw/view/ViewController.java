@@ -158,8 +158,7 @@ public class ViewController {
      */
     public void validateRestart(int numOfPlayers)throws IllegalStateException, IllegalArgumentException{
         validatePhase(GamePhase.SHOWWIN);
-        int numActivePlayers = (int) board.getOpponents().stream()
-                .filter(ViewOpponentHand::isConnected).count() + 1 ; //add 1 for the local player
+        int numActivePlayers = board.getOpponents().size() + 1 ; //add 1 for the local player
         if(numOfPlayers < numActivePlayers || numOfPlayers > 4){
             throw new IllegalArgumentException("Number of Players must be ("+numActivePlayers+"-4)");
         }

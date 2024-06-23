@@ -56,7 +56,6 @@ public class ViewPlayArea extends JComponent {
      */
     private void removeFreeCorner(ViewCorner corner){
         corner.resetCorner();
-        System.err.println("CORNER RESET!");
         freeCorners.remove(corner);
     }
 
@@ -69,19 +68,14 @@ public class ViewPlayArea extends JComponent {
     public void placeCard(GamePoint position, ViewPlaceableCard card){
         setCard(position, card);
         List<ViewCorner> placementFreeCorners = new LinkedList<>();
-        System.err.println("ENTERING PLACE CARD");
         for(CornerDirection dir : CornerDirection.values()){
             ViewPlaceableCard dirCard = cardMatrix.get(position.move(dir));
             if(dirCard != null){
-                System.err.println("DIRECTION NOT NULL");
                 dirCard.getCorner(dir.opposite()).cover();
-                System.err.println("COVERED CORNER!");
                 removeFreeCorner(dirCard.getCorner(dir.opposite()));
-                System.err.println("DIRECTION NOT NULL EXECUTED");
             }
             else{
                 if(card.getCornerResource(dir) != FILLED){
-                    System.err.println("CORNER NOT FILLED");
                     boolean isCornerFree = true;
                     GamePoint pointToCheck = position.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()) {
@@ -92,10 +86,8 @@ public class ViewPlayArea extends JComponent {
                         }
                     }
                     if(isCornerFree) placementFreeCorners.add(card.getCorner(dir));
-                    System.err.println("CORNER NOT FILLED EXECUTED");
                 }
                 else{    // if that corner is FILLED, then check if it's blocking placement on another freeCorner
-                    System.err.println("CORNER FILLED");
                     GamePoint pointLocked = position.move(dir);
                     for(CornerDirection dir2 : CornerDirection.values()){
                         ViewPlaceableCard cardDir = cardMatrix.get(pointLocked.move(dir2));
@@ -105,11 +97,9 @@ public class ViewPlayArea extends JComponent {
                                 removeFreeCorner(possibleLockedCorner);
                         }
                     }
-                    System.err.println("CORNER FILLED EXECUTED");
                 }
             }
         }
-        System.err.println("BEFORE SENDING NOTIFICATION");
         if(board.getPlayerHand().getNickname().equals(owner))
             board.notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlaceCard(owner, true));
@@ -117,9 +107,7 @@ public class ViewPlayArea extends JComponent {
             board.notifyView(SceneID.getMyAreaSceneID(),
                     new DisplayPlaceCard(owner, true));
 
-        System.err.println("AFTER SENDING NOTIFICATION AND BEFORE ADDING FREE CORNERS.");
         addFreeCorners(placementFreeCorners);
-        System.err.println("AFTER ADDING FREE CORNERS.");
     }
     /**
      * Places a card at position bypassing all checks.

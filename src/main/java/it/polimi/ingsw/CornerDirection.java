@@ -39,7 +39,6 @@ public enum CornerDirection {
      * @return the direction opposite to this <br> TR -> BL ; BL -> TR ;<br> BR -> TL ; TL -> BR
      */
     public CornerDirection opposite(){
-        System.err.println("CALCULATING OPPOSITE");
         return switch (this) {
             case TL -> BR;
             case TR -> BL;
