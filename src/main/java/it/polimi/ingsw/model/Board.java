@@ -98,7 +98,7 @@ public class Board implements GameSubject{
      * @throws IllegalStateException if an error occurs while initializing board
      */
     public Board() throws IllegalStateException{
-        observableObjects = new LinkedList<>();
+        observableObjects = Collections.synchronizedList(new LinkedList<>());
         gameListeners = new LinkedList<>();
         hasGoneToEndgame = false;
         // Controlled in Board

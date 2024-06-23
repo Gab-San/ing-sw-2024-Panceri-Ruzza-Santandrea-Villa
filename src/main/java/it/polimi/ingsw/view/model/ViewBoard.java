@@ -272,6 +272,7 @@ public class ViewBoard extends JComponent {
      */
     public synchronized void removeOpponent(String nickname){
         ViewOpponentHand opponentHand = opponentHands.get(nickname);
+        if(opponentHand == null) return; //needed to not throw NullPointer on repeated connect/disconnect
         ViewPlayArea playArea = playerAreas.get(nickname);
         playerAreas.remove(nickname);
         opponentHands.remove(nickname);

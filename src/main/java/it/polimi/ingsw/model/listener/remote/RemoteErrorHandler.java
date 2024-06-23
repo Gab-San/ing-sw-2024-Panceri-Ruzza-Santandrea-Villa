@@ -51,7 +51,7 @@ public class RemoteErrorHandler implements GameListener {
      * @throws ListenException if a client cannot be reached
      */
     @Override
-    public synchronized void listen(GameEvent event) throws ListenException {
+    public void listen(GameEvent event) throws ListenException {
         if(!(event instanceof RemoteErrorEvent error)){
             return;
         }
@@ -60,20 +60,28 @@ public class RemoteErrorHandler implements GameListener {
             broadcastError(error);
             return;
         }
-
-        VirtualClient client =  playerClients.get(addressee);
-        if(client == null) return;
+        VirtualClient client;
+        synchronized (this){
+            client = playerClients.get(addressee);
+        }
+        if(client == null) {
+            return;
+        }
         try {
             error.executeEvent(client);
         } catch (RemoteException e) {
-            try {
-                CentralServer.getSingleton().disconnect(addressee, client);
-            } catch (IllegalArgumentException | IllegalStateException ignore){}
+            errorThreadPool.submit(
+                    ()->{
+                        try {
+                            CentralServer.getSingleton().disconnect(addressee, client);
+                        } catch (IllegalArgumentException | IllegalStateException ignore){}
+                    }
+            );
             throw new ListenException();
         }
     }
 
-    private void broadcastError(RemoteErrorEvent errorEvent) throws ListenException {
+    private synchronized void broadcastError(RemoteErrorEvent errorEvent) throws ListenException {
         for(String username : playerClients.keySet()){
             VirtualClient client = playerClients.get(username);
             errorThreadPool.execute(() ->{
