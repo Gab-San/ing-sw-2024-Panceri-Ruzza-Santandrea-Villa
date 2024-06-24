@@ -5,20 +5,19 @@ import it.polimi.ingsw.model.exceptions.DeckException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public abstract class CardFactory{
     protected final List<String> remainingCards;
 
     protected CardFactory(String idFile){
-        Charset chrset = Charset.forName(System.getProperty("file.encoding"));
-        remainingCards = loadCardsIDs(Path.of(idFile), chrset);
+        Charset charset = Charset.forName(System.getProperty("file.encoding"));
+        remainingCards = loadCardsIDs(getFromResources(idFile), charset);
     }
 
     /**
@@ -32,14 +31,25 @@ public abstract class CardFactory{
         return new Random().nextInt(remainingCards.size());
     }
 
-    private List<String> loadCardsIDs(Path filePath, Charset charset){
+    private List<String> loadCardsIDs(InputStream idStream, Charset charset){
         List<String> idList = new ArrayList<>();
-        try(BufferedReader reader = Files.newBufferedReader(filePath, charset)){
+        InputStreamReader idStreamReader = new InputStreamReader(idStream, charset);
+        try(BufferedReader reader = new BufferedReader(idStreamReader)){
             reader.lines().flatMap(e -> Arrays.stream(e.trim().split("\\s+"))).forEach(idList::add);
         } catch(IOException ioException){
             System.exit(-1);
         }
         return idList;
+    }
+
+    protected InputStream getFromResources(String fileName){
+        ClassLoader cl = this.getClass().getClassLoader();
+        try {
+            return cl.getResourceAsStream("server/" + fileName);
+        } catch(NullPointerException e){
+            System.exit(-1); //crash app if a json can't be read
+            throw new RuntimeException("File could not be read");
+        }
     }
 
     public synchronized boolean isEmpty(){

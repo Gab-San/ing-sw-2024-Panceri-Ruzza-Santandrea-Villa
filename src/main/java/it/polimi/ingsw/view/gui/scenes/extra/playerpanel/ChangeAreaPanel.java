@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scenes.extra.playerpanel;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
+import it.polimi.ingsw.view.gui.GUIFunc;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,6 +22,9 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     private final JLabel connectionLabel;
     private ImageIcon connectedIcon;
     private ImageIcon disconnectedIcon;
+    private static final String ICON_ROOT = GUIFunc.getGraphicsResourcesRootPath() + "icons/";
+    private static final String ONLINE_ICON_PATH = ICON_ROOT + "Online_Icon_x16.png";
+    private static final String OFFLINE_ICON_PATH = ICON_ROOT + "Offline_Icon_x16.png";
 
     /**
      * Constructs a player area panel.
@@ -43,14 +47,14 @@ public class ChangeAreaPanel extends JPanel implements PropertyChangeListener {
     }
 
     private void importIcons() {
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/Online_Icon_x16.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(ONLINE_ICON_PATH)){
             assert is != null;
             connectedIcon = new ImageIcon(ImageIO.read(is));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/Offline_Icon_x16.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(OFFLINE_ICON_PATH)){
             assert is != null;
             disconnectedIcon = new ImageIcon(ImageIO.read(is));
         } catch (IOException e) {

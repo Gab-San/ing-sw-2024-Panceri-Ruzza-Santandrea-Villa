@@ -10,6 +10,8 @@ import it.polimi.ingsw.view.model.json.deserializers.StartingCardDeserializerVie
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +26,16 @@ public class JsonImporter {
     private final Map<String, ViewObjectiveCard> objectiveCards;
     private final Map<String, ViewStartCard> startCards;
 
+    private InputStream getJsonAsResource(String jsonFileName) throws IOException {
+        ClassLoader cl = this.getClass().getClassLoader();
+        try {
+            return cl.getResourceAsStream("client/" + jsonFileName);
+        } catch(NullPointerException e){
+            e.printStackTrace(System.err);
+            throw new IOException("Json could not be read");
+        }
+    }
+
     /**
      * Creates the Importer and imports all ViewCards from JSON
      * @throws IOException if an error occurs while loading cards
@@ -34,7 +46,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewGoldCard.class, new GoldCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        File json = new File("src/resources/client/GoldCard.json"); // Path file JSON
+        InputStream json = getJsonAsResource("GoldCard.json"); // Path file JSON
         goldCards = new Hashtable<>();
         List<ViewGoldCard> goldCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewGoldCard.class));
@@ -48,7 +60,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewResourceCard.class, new ResourceCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File("src/resources/client/ResourceCard.json"); // Path file JSON
+        json = getJsonAsResource("ResourceCard.json"); // Path file JSON
         resourceCards = new Hashtable<>();
         List<ViewResourceCard> resourceCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewResourceCard.class));
@@ -61,7 +73,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewObjectiveCard.class, new ObjectiveCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File("src/resources/client/ObjectiveCard.json"); // Path file JSON
+        json = getJsonAsResource("ObjectiveCard.json"); // Path file JSON
         objectiveCards = new Hashtable<>();
         List<ViewObjectiveCard> objectiveCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewObjectiveCard.class));
@@ -74,7 +86,7 @@ public class JsonImporter {
         simpleModule.addDeserializer(ViewStartCard.class, new StartingCardDeserializerView());
         objectMapper.registerModule(simpleModule);
 
-        json = new File("src/resources/client/StartingCard.json"); // Path file JSON
+        json = getJsonAsResource("StartingCard.json"); // Path file JSON
         startCards = new Hashtable<>();
         List<ViewStartCard> startCardImport = objectMapper.readValue(json, objectMapper.getTypeFactory()
                 .constructCollectionType(List.class, ViewStartCard.class));

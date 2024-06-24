@@ -1,11 +1,9 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.UIFunctions;
-import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 import static java.awt.Component.CENTER_ALIGNMENT;
 
@@ -14,6 +12,14 @@ import static java.awt.Component.CENTER_ALIGNMENT;
  * for most setups across UI elements.
  */
 public final class GUIFunc extends UIFunctions {
+
+    /**
+     * @return the path to the root of all graphic resources (icons, images, fonts)
+     */
+    public static String getGraphicsResourcesRootPath(){
+        return "graphics/";
+    }
+
     /**
      * Creates a simple notification label.
      * @return notification label

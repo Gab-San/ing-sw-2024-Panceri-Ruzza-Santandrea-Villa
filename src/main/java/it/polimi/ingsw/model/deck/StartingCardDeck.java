@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.json.deserializers.StartingCardDeserializer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,16 @@ public class StartingCardDeck{
         return cardDeck.remove(cardIdx);
     }
 
+    private InputStream getJsonFromResources(){
+        ClassLoader cl = this.getClass().getClassLoader();
+        try {
+            return cl.getResourceAsStream("server/StartingCard.json");
+        } catch(NullPointerException e){
+            System.exit(-1); //crash app if a json can't be read
+            throw new RuntimeException("File could not be read");
+        }
+    }
+
     private List<StartingCard> importFromJson() throws IllegalStateException{
         List<StartingCard> startingCardsList;
 
@@ -33,7 +44,7 @@ public class StartingCardDeck{
             simpleModule.addDeserializer(StartingCard.class, new StartingCardDeserializer());
             objectMapper.registerModule(simpleModule);
 
-            File json = new File("src/resources/server/StartingCard.json");
+            InputStream json = getJsonFromResources();
             startingCardsList = objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, StartingCard.class));
         } catch (IOException e) {
             throw new IllegalStateException("SYSTEM SHUT DOWN: An error occured while initializing the starting deck");

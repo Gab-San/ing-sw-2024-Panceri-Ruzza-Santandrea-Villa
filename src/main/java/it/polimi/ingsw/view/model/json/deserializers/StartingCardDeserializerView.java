@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
@@ -28,8 +29,8 @@ public class StartingCardDeserializerView extends StdDeserializer<ViewStartCard>
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         String id = node.get("cardId").asText();
-        String imgFront = node.get("frontImageFileName").asText();
-        String imgBack = node.get("backImageFileName").asText();
+        String imgFront = GUIFunc.getGraphicsResourcesRootPath() + node.get("frontImageFileName").asText();
+        String imgBack = GUIFunc.getGraphicsResourcesRootPath() + node.get("backImageFileName").asText();
 
         // Getting Central Front Resources
         List<GameResource> centralFrontResources = new ArrayList<>();

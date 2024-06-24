@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 
@@ -36,8 +37,8 @@ public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
 
         String cardId = node.get("cardId").asText();
         GameResource backResource = GameResource.getResourceFromNameInitial(node.get("backResource").asText());
-        String imageFront = node.get("frontImageFileName").asText();
-        String imageBack = node.get("backImageFileName").asText();
+        String imageFront = GUIFunc.getGraphicsResourcesRootPath() + node.get("frontImageFileName").asText();
+        String imageBack = GUIFunc.getGraphicsResourcesRootPath() + node.get("backImageFileName").asText();
         List<ViewCorner> corners = JsonFunctionsView.parseCorners(node);
 
         String[] placementCosts = node.get("placementCost").asText().split(", ");

@@ -86,9 +86,10 @@ public class GameGUI implements View {
 
 
     private void importFonts() {
+        final String FONT_PATH = GUIFunc.getGraphicsResourcesRootPath() + "fonts/";
         // Importing inter
         try(InputStream fontIS = this.getClass().getClassLoader()
-                .getResourceAsStream("fonts/inter/Inter-VariableFont_slnt,wght.ttf") ){
+                .getResourceAsStream(FONT_PATH + "inter/Inter-VariableFont_slnt,wght.ttf") ){
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             assert fontIS != null;
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));
@@ -98,7 +99,7 @@ public class GameGUI implements View {
 
         // Importing raleway
         try( InputStream fontIS = this.getClass().getClassLoader()
-                .getResourceAsStream("fonts/raleway/Raleway-VariableFont_wght.ttf") ){
+                .getResourceAsStream(FONT_PATH + "raleway/Raleway-VariableFont_wght.ttf") ){
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             assert fontIS != null;
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fontIS));

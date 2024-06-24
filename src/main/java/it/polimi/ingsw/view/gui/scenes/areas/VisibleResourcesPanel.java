@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.areas;
 
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.gui.GUIFunc;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VisibleResourcesPanel extends JPanel {
+    private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/";
     private final Map<GameResource, GameResourceLabel> resourceLabelMap;
     public VisibleResourcesPanel(){
         setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -18,7 +20,7 @@ public class VisibleResourcesPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         this.resourceLabelMap = new HashMap<>();
         //LEAF
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/LEAF_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "LEAF_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -28,7 +30,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //MUSHROOM
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/MUSH_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "MUSH_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -38,7 +40,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //BUTTERFLY
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/BUTTERFLY_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "BUTTERFLY_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -48,7 +50,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //WOLF
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/WOLF_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "WOLF_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -58,7 +60,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //POTION
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/POTION_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "POTION_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -68,7 +70,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //SCROLL
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/SCROLL_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "SCROLL_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);
@@ -78,7 +80,7 @@ public class VisibleResourcesPanel extends JPanel {
             throw new RuntimeException(e);
         }
         //QUILL
-        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/QUILL_TEST.png")){
+        try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "QUILL_TEST.png")){
             assert is != null;
             ImageIcon icon = new ImageIcon(ImageIO.read(is));
             GameResourceLabel resLabel = new GameResourceLabel(icon, 0);

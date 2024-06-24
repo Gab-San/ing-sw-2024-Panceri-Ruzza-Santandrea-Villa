@@ -13,8 +13,8 @@ import it.polimi.ingsw.model.listener.remote.errors.CrashStateError;
 import it.polimi.ingsw.model.listener.remote.events.deck.DeckRevealEvent;
 import it.polimi.ingsw.model.listener.remote.events.deck.FaceDownReplaceEvent;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +97,15 @@ public class ObjectiveDeck implements GameSubject {
         return secondRevealed;
     }
 
-
+    private InputStream getJsonFromResources(){
+        ClassLoader cl = this.getClass().getClassLoader();
+        try {
+            return cl.getResourceAsStream("server/ObjectiveCard.json");
+        } catch(NullPointerException e){
+            System.exit(-1); //crash app if a json can't be read
+            throw new RuntimeException("File could not be read");
+        }
+    }
 
     private List<ObjectiveCard> importFromJson() throws IllegalStateException{
         List<ObjectiveCard> objectiveCardList;
@@ -108,7 +116,7 @@ public class ObjectiveDeck implements GameSubject {
             module.addDeserializer(ObjectiveCard.class, new ObjectiveCardDeserializer());
             mapper.registerModule(module);
 
-            File json = new File("src/resources/server/ObjectiveCard.json");
+            InputStream json = getJsonFromResources();
             objectiveCardList = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(ArrayList.class, ObjectiveCard.class));
         } catch (IOException exc){
             notifyAllListeners(new CrashStateError("all", "An error occured while initializing the objective deck".toUpperCase()));

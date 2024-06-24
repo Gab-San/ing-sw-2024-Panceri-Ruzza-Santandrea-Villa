@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.cards.ObjectiveCard;
 import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 
 import java.io.IOException;
@@ -31,8 +32,8 @@ public class ObjectiveCardDeserializerView extends StdDeserializer<ViewObjective
         String id = node.get("cardId").asText();
         String patternType = node.get("type").asText();
         String patternValue = node.get("pattern").asText();
-        String imgFront = node.get("frontImageFileName").asText();
-        String imgBack = node.get("backImageFileName").asText();
+        String imgFront = GUIFunc.getGraphicsResourcesRootPath() + node.get("frontImageFileName").asText();
+        String imgBack = GUIFunc.getGraphicsResourcesRootPath() + node.get("backImageFileName").asText();
 
         int pointsPerSolve = node.get("points").asInt();
 

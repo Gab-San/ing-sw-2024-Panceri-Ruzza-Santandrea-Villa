@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scenes.board;
 import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.GameColor;
 import it.polimi.ingsw.view.gui.ChangeNotifications;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import it.polimi.ingsw.view.gui.GameWindow;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -40,6 +41,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
     private final int gridGap = Math.round(6 * scaleFactor);
     private final int compSide = 46;
 //endregion
+    private static final String SCOREBOARD_PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/plateau_score.jpg";
     private BufferedImage scoreboardImage;
     private final ViewBoard board;
     private final Map<Integer, JPanel> scorePosition;
@@ -53,7 +55,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
     public ScoreboardPanel(ViewBoard board){
         // Image import
         if(scoreboardImage == null){
-            try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("icons/plateau_score.jpg")){
+            try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(SCOREBOARD_PATH)){
                 assert is != null;
                 scoreboardImage = ImageIO.read(is);
             } catch (IOException e) {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
+import it.polimi.ingsw.view.gui.GUIFunc;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +11,7 @@ import java.io.InputStream;
 
 public class PlaceHolder extends JComponent {
 
+    private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/TransparentStarting.png";
     private BufferedImage image;
 
     public PlaceHolder(){
@@ -20,7 +23,7 @@ public class PlaceHolder extends JComponent {
         ClassLoader cl = this.getClass().getClassLoader();
         InputStream url = null;
         try {
-            url = cl.getResourceAsStream("icons/TransparentStarting.png");
+            url = cl.getResourceAsStream(PATH);
         } catch(NullPointerException e){
             e.printStackTrace(System.err);
         }
