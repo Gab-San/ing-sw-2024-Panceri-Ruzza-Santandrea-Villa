@@ -5,14 +5,14 @@ Complete rules + TUI + GUI + RMI + Socket + 2FA  (30)
 Chat and Disconnection resilience
 
 # How to launch the Server
-1. Navigate to the folder containing the Server.jar and the "src" folder
+1. Navigate to the folder containing the Server.jar
 2. Run the command `java -jar Server.jar <RMI port> <TCP port> [Server IP]`  (the **order** of the arguments is **important**)
       - The IP can be omitted: the app will automatically use the local machine's IP (excluding localhost)
       - If the local machine has multiple IPs, then it will prompt the user to select one of them (other than localhost)
 3. If using the FatJar instead run: <br> `java -cp Server.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`
 
 # How to launch the Client
-1. Navigate to the folder containing the Server.jar and the "src" folder
+1. Navigate to the folder containing the Client.jar
 2. Run the command `java -jar Client.jar <Server port> <RMI | TCP> [Server IP] [myIP=<Client IP>]` (arguments can be in any order) 
       - The IPs are optional: if omitted, localhost will be used. 
       - The `myIP=<IP>` argument is also optional, as it is only used by RMI. It must be an IP reachable by the server.
