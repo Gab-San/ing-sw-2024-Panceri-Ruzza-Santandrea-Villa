@@ -1,22 +1,36 @@
-Questo README contiene il workflow che vorrei ognuno di voi utilizzasse.
+# Implemented features
+Complete rules + TUI + GUI + RMI + Socket + 2FA (30)
 
-Nella sezione di GitHub _Projects_ è presente un elemento, "Ingegneria del Software". 
-Se non avete iniziato a lavorare su nulla, guardate nella sezione task di tale elemento e controllate tutte le task che non sono ancora state assegnate. 
-Potete liberamente scegliere di inventarvene una nuova (se non è presente) oppure sceglierne una tra quelle già definite.
-Una volta scelta una task, **datevi una deadline**: nella sezione _Project Roadmap_ è possibile selezionare una data di inizio e una data di fine. Almeno indicativamente **cerchiamo di darci una tempistica**,
-di modo che possiamo tutti lavorare in maniera più coordinata.
+### Advanced functionalities
+Chat and Disconnection resilience
 
-Un volta scelta una task, si utilizzi il workflow dei _feature branch_:
-1. Creazione del branch: il nome da dare al branch è nella colonna _branch id_ delle tasks
-2. Sviluppo del branch: potete liberamente lavorare su tale branch, magari condividendolo con qualcun altro nel corso dello sviluppo; di base sarà **personale**.
-3. Push del branch: **NON** fate mai una merge senza aver consultato il team. Pushate il branch su cui state lavorando, anche in mezzo allo sviluppo e utilizzate il pull&merge request su GitHub per far notare agli altri
-      su cosa state lavorando. Possiamo organizzarci per lavorare a coppie: una persona che sviluppa una cosa e un'altro che fa la review.
-4. Step Finali: una volta che avete testato e sviluppato il vostro branch e il team ha dato il permesso di mergare allora si arriva agli step finali;
-   1. Rebase: se il vostro branch non è nasce dall'ultimo commit del main, si utilizza il comando `git rebase` per poter spostare il vostro branch sull'ultimo commit del main e gestire tutti 
-        i conflitti all'interno del vostro branch.  
-   2. Squash: utilizzate il comando di `git rebase --interactive` per poter fare lo squashing e riscrivere la history in modo tale da renderla più corta e leggibile;
-   3. Merge&Push: alla fine potete mergare e pushare sulla remote repo.
+# How to install the jars
+1. Download the jar and the associated "src" folder
+2. Place them in the same directory (the "src" folder contains the JSON files with the card information)
 
-Segnate sul _Project_ "Ingegneria del Software" che avete finito di sviluppare tale feature (spostare in done). 
+The JSON files can be modified by the user, but the changes made in the Server JSON files should be reflected in the Client JSON files for a correct display of the cards.
+Please note, however, that the game should function even if the JSON files differ slightly between server and client.
 
-Qualora sorgano dubbi o problemi, o qualsiasi, utilizzate la task nel project per creare una issue e descrivete il vostro problema: basta aprire la vostra task e premere in basso a destra _Convert to issue_.
+# How to launch the Server
+1. Navigate to the folder containing the Server.jar and the "src" folder
+2. Run the command "`java -jar Server.jar <RMI port> <TCP port> [Server IP]`"  (the **order** of the arguments is **important**)
+      - The IP can be omitted: the app will automatically use the local machine's IP (excluding localhost)
+      - If the local machine has multiple IPs, then it will prompt the user to select one of them (other than localhost)
+3. If using the FatJar.jar instead run "`java -cp Server.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`"
+
+
+# How to launch the Client
+1. Navigate to the folder containing the Server.jar and the "src" folder
+2. Run the command "`java -jar Client.jar <Server port> <RMI | TCP> [Server IP] [myIP=<Client IP>]`" (arguments can be in any order) 
+      - The IPs are optional: if omitted, localhost will be used. 
+      - The "`myIP=<IP>`" argument is also optional, as it is only used by RMI. It must be an IP reachable by the server.
+3. If using the FatJar.jar you only need to replace "Client.jar" with "FatJar.jar" in the command above.
+
+# Notes (on both Client and Server)
+The IP arguments can be hostnames instead of IP addresses (a.b.c.d)
+All arguments other than IPs/Hostnames are validated and the app will quit if an argument is invalid.
+If the IP/Hostname argument is invalid, the app will instead list all available IPs on the local machine and prompt the user to input a valid IP address.
+If a machine only has one IP (other than localhost) then that IP will be used automatically.
+
+# TUI notes
+You can list all available commands with their syntax explanation by typing the "help" command.
