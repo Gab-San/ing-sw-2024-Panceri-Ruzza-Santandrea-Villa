@@ -6,7 +6,10 @@ import it.polimi.ingsw.view.exceptions.TimeoutException;
 
 import java.rmi.RemoteException;
 
-
+/**
+ * This class implements the skeleton of a view: it displays
+ * the model and notifications.
+ */
 public interface View {
     /**
      * Notifies the scene of an event. Creates the OpponentScene if it didn't exist. <br>

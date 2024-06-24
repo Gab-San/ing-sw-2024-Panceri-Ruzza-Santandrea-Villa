@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
- * Main class of the TUI
+ * Main class of the TUI.
  */
 public class TUI implements View{
     private static final int BACKLOG_SIZE = 10;
@@ -68,7 +68,7 @@ public class TUI implements View{
      * @throws RemoteException if a connection error occurs while attempting to join game
      */
     private void runNicknameSelectScene() throws RemoteException{
-        SceneManager.getInstance().setScene(SceneID.getNicknameSelectSceneID());
+        SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID());
         String nickname;
         do {
             try {
@@ -96,24 +96,24 @@ public class TUI implements View{
         TUI_Scene myAreaUI = new PrintPlayerUI(board.getPlayerHand(),
                 board.getPlayerArea(board.getPlayerHand().getNickname()));
         setBacklogs(myAreaUI);
-        SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID(), myAreaUI);
-        SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
+        SceneManager.getInstance().saveScene(SceneID.getMyAreaSceneID(), myAreaUI);
+        SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID());
     }
 
     /**
      * Creates and loads the main TUI scenes in the SceneManager
      */
     private void loadScenes(){
-        SceneManager.getInstance().loadScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
-        SceneManager.getInstance().loadScene(SceneID.getNotificationSceneID(), new NotificationScene());
+        SceneManager.getInstance().saveScene(SceneID.getNicknameSelectSceneID(), new PrintNicknameSelectUI());
+        SceneManager.getInstance().saveScene(SceneID.getNotificationSceneID(), new NotificationScene());
 
         TUI_Scene boardUI = new PrintBoardUI(board);
         setBacklogs(boardUI);
-        SceneManager.getInstance().loadScene(SceneID.getBoardSceneID(), boardUI);
+        SceneManager.getInstance().saveScene(SceneID.getBoardSceneID(), boardUI);
 
         TUI_Scene helperUI = new PrintHelperUI();
         setBacklogs(helperUI);
-        SceneManager.getInstance().loadScene(SceneID.getHelperSceneID(), helperUI);
+        SceneManager.getInstance().saveScene(SceneID.getHelperSceneID(), helperUI);
     }
 
     /**
@@ -172,10 +172,10 @@ public class TUI implements View{
             tuiEvent.displayEvent(this);
         }
         else if(sceneID.isOpponentAreaScene()){
-            String nick = sceneID.getNickname();
+            String nick = sceneID.getOpponentNickname();
             TUI_Scene opponentUI = new PrintOpponentUI(board.getOpponentHand(nick), board.getPlayerArea(nick));
             setBacklogs(opponentUI);
-            SceneManager.getInstance().loadScene(sceneID, opponentUI);
+            SceneManager.getInstance().saveScene(sceneID, opponentUI);
             update(sceneID, event); // won't loop indefinitely as next iteration will have scene != null
         }
     }

@@ -9,7 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-
+//DOCS add docs
 public class OpponentHandPanel extends HandPanel {
     public OpponentHandPanel(){
         super();

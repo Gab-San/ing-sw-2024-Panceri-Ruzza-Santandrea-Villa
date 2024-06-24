@@ -27,7 +27,9 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
      * This card's position after being placed on a playArea
      */
     private GamePoint position;
-
+    /**
+     * Listener for card corners.
+     */
     protected CornerListener cornerListener;
     private int layer;
 
@@ -89,6 +91,10 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         return corners.get(dir);
     }
 
+    /**
+     * Sets card position and activates card for positioning.
+     * @param position position in which to place the card
+     */
     public synchronized void setPosition(GamePoint position) {
         this.position = position;
         this.removeMouseListener(this);
@@ -97,15 +103,10 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         this.getInputMap().remove(KeyStroke.getKeyStroke("F"));
     }
 
-    public void activateCorner(CornerDirection direction){
-        corners.get(direction).activateCorner();
-        SwingUtilities.invokeLater(
-                () -> {
-                    revalidate();
-                    repaint();
-                }
-        );
-    }
+    /**
+     * Returns card position (might be null if the card was not positioned yet).
+     * @return card position
+     */
     public synchronized GamePoint getPosition(){
         return position;
     }
@@ -135,6 +136,9 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         layer = 0;
     }
 
+    /**
+     * Disables component.
+     */
     public synchronized void forceDisableComponent(){
         super.disableComponent();
         removeMouseListener(this);
@@ -190,6 +194,9 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     }
 }
 
+/**
+ * This class implements the action that flips cards.
+ */
 class FlipAction extends AbstractAction{
 
     @Override

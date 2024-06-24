@@ -69,22 +69,22 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
         messagingPanel.setLayout(new GridBagLayout());
         messageEditArea.setBorder(BorderFactory.createEtchedBorder());
 
-        addGridComponentToPanel(messagingPanel, messageEditArea, 1, 0, 3, 1, 1.0 ,1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0,0,0,0),
-                0, 0);
+        addGridComponentToPanel(messagingPanel, messageEditArea, 1, 3, 1.0 ,1.0,
+                GridBagConstraints.CENTER, new Insets(0,0,0,0)
+        );
 
         comboBox.setBorder(BorderFactory.createEmptyBorder(5,5,5,10));
-        addGridComponentToPanel(messagingPanel, comboBox, 0,0,1,1,0.01,0.01,
-                GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0,0,0,0)
-                ,0,0);
+        addGridComponentToPanel(messagingPanel, comboBox, 0, 1, 0.01,0.01,
+                GridBagConstraints.EAST, new Insets(0,0,0,0)
+        );
         return messagingPanel;
     }
 
-    private void addGridComponentToPanel(JPanel container, Component component, int x, int y, int width, int height,
-                                         double weightx, double weighty, int anchor, int fill,
-                                         Insets insets, int ipadx, int ipady){
-        container.add(component, new GridBagConstraints(x, y, width, height, weightx, weighty, anchor, fill,
-                insets, ipadx, ipady));
+    private void addGridComponentToPanel(JPanel container, Component component, int x, int width,
+                                         double weightx, double weighty, int anchor,
+                                         Insets insets){
+        container.add(component, new GridBagConstraints(x, 0, width, 1, weightx, weighty, anchor, GridBagConstraints.HORIZONTAL,
+                insets, 0, 0));
     }
 
     private JTextField setupEditArea(int column) {
@@ -169,12 +169,6 @@ public class ChatPanel extends JPanel implements PropertyChangeListener, ChatLis
         JScrollBar vertScrollBar = chatVisualizer.getVerticalScrollBar();
         int min = vertScrollBar.getValue() + vertScrollBar.getVisibleAmount();
         int max = vertScrollBar.getMaximum();
-//        System.out.println("{\n" + "VALUE: " + vertScrollBar.getValue() + "\n" +
-//                "VISIBLE AMOUNT: " + vertScrollBar.getVisibleAmount() + "\n" +
-//                "MIN: " + min + "\n" +
-//                "MAX: " + vertScrollBar.getMaximum() + "\n" +
-//                + vertScrollBar.getBlockIncrement() + "\n" +
-//                "}");
 
         return min >= (max - 2*vertScrollBar.getBlockIncrement());
     }

@@ -16,6 +16,7 @@ import it.polimi.ingsw.view.tui.scenes.PrintEndgameUI;
 public class GotoEndgameEvent implements TUIEvent, GUIEvent{
     private final ViewBoard board;
     boolean atLeast2Players;
+    //DOCS add docs
     public GotoEndgameEvent(ViewBoard board){
         this.board = board;
         atLeast2Players = board.getOpponents().stream().anyMatch(ViewOpponentHand::isConnected);
@@ -29,7 +30,7 @@ public class GotoEndgameEvent implements TUIEvent, GUIEvent{
     public void displayEvent(TUI tui) {
         TUI_Scene endgameUI = new PrintEndgameUI(board, atLeast2Players);
         tui.setBacklogs(endgameUI);
-        SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameUI);
-        SceneManager.getInstance().setScene(SceneID.getEndgameSceneID());
+        SceneManager.getInstance().saveScene(SceneID.getEndgameSceneID(), endgameUI);
+        SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID());
     }
 }

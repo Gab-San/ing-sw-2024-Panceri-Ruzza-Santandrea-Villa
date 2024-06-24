@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.tui.TUI;
 public class DisplayMessageEvent implements TUIEvent, GUIEvent{
     private final String message;
     private final String messenger;
+    //DOCS add docs
     public DisplayMessageEvent(String messenger, String message) {
         this.message = message;
         this.messenger = messenger;

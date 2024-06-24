@@ -6,18 +6,16 @@ import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.gui.scenes.areas.HandPanel;
-import it.polimi.ingsw.view.model.cards.*;
+import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
+import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.rmi.RemoteException;
-import java.util.LinkedList;
 import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-
+//DOCS add docs
 public class PlayerHandPanel extends HandPanel implements CardListener, CornerListener {
     private final GameInputHandler inputHandler;
     private ViewPlaceableCard selectedCard;

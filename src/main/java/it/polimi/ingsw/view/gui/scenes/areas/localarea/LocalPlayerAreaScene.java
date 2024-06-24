@@ -6,7 +6,7 @@ import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 
 import java.beans.PropertyChangeEvent;
-
+//DOCS add docs
 public class LocalPlayerAreaScene extends AreaScene{
 
     public LocalPlayerAreaScene(GameInputHandler inputHandler){

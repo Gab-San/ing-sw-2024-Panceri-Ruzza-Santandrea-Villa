@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-
+//DOCS add docs
 public abstract class AreaPanel extends JPanel implements PropertyChangeListener{
     protected static final int AREA_WIDTH = 16620;
     protected static final int AREA_HEIGHT = 11120;

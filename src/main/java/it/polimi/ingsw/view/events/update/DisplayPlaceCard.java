@@ -1,12 +1,7 @@
 package it.polimi.ingsw.view.events.update;
 
-import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GameGUI;
-import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 import it.polimi.ingsw.view.tui.TUI;
-
-import java.util.Map;
 
 /**
  * This class represents an event triggered when a card is placed on player's area.

@@ -11,16 +11,15 @@ import java.util.List;
  * to the player's hand.
  */
 public class DisplayAddedObjective extends DisplayPlayerEvent {
-    private final List<ViewObjectiveCard> objectiveCards;
+
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
      */
-    public DisplayAddedObjective(String nickname, boolean isLocalPlayer, List<ViewObjectiveCard> objectiveCards) {
+    public DisplayAddedObjective(String nickname, boolean isLocalPlayer) {
         super(nickname, isLocalPlayer);
-        this.objectiveCards = objectiveCards;
     }
 
 

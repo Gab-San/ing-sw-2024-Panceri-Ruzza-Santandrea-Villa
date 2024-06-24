@@ -7,15 +7,13 @@ import it.polimi.ingsw.view.model.*;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.model.cards.ViewStartCard;
-import it.polimi.ingsw.view.tui.ConsoleTextColors;
 
 import java.util.List;
 import java.util.ListIterator;
 
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
-
 /**
- * DOCS: add general description of ViewController
+ * This class acts as the controller communicating with the board
+ * to perform checks and modify it.
  */
 public class ViewController {
     private final ViewBoard board;
@@ -231,20 +229,6 @@ public class ViewController {
             return board.getPlayerHand();
         } else {
             return board.getOpponentHand(nickname);
-        }
-    }
-
-    /**
-     * @param nickname any player nickname
-     * @return the ViewPlayArea of the player with given nickname. <br>
-     *          Due to ViewBoard implementation, it also runs addOpponent()
-     *          if the given nickname doesn't correspond to the local player or to any opponent in game.
-     */
-    public ViewPlayArea getPlayArea(String nickname) {
-        if(board.getPlayerHand().getNickname().equals(nickname)){
-            return selfPlayArea;
-        } else {
-            return board.getPlayerArea(nickname);
         }
     }
 

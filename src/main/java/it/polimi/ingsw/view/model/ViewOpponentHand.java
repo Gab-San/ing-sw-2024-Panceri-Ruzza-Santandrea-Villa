@@ -31,6 +31,7 @@ public class ViewOpponentHand extends ViewHand {
     }
 
     /**
+     * Returns true if opponent is connected, false otherwise.
      * @return true if this opponent is connected
      */
     public synchronized boolean isConnected() {
@@ -86,12 +87,12 @@ public class ViewOpponentHand extends ViewHand {
     public synchronized void removeCard(ViewPlayCard card) {
         super.removeCard(card);
         notifyView(SceneID.getOpponentAreaSceneID(nickname),
-                new DisplayRemoveCards(nickname, false, cards));
+                new DisplayRemoveCards(nickname, false));
     }
 
     /**
-     * @param objectiveCards list of objectiveCards to set as the hand content. <br>
-     *                      Turns all objective cards face-down before setting them to the hand.
+     * Sets secret objective cards. Turns all objective cards face-down before setting them to the hand.
+     * @param objectiveCards list of objectiveCards to set as the hand content.
      */
     @Override
     public void setSecretObjectiveCards(List<ViewObjectiveCard> objectiveCards){
@@ -99,6 +100,7 @@ public class ViewOpponentHand extends ViewHand {
             objectiveCards.forEach(ViewCard::turnFaceDown);
         super.setSecretObjectiveCards(objectiveCards);
     }
+
     /**
      * Adds a objectiveCard to the hand. <br>
      * Turns the objectiveCard face-down before adding it to hand. <br>
@@ -109,8 +111,8 @@ public class ViewOpponentHand extends ViewHand {
     public void addSecretObjectiveCard(ViewObjectiveCard objectiveCard){
         if(objectiveCard != null)
             objectiveCard.turnFaceDown();
-        notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayAddedObjective(nickname, false,
-                secretObjectiveCards));
+        notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayAddedObjective(nickname, false
+        ));
         super.addSecretObjectiveCard(objectiveCard);
     }
 
@@ -122,7 +124,7 @@ public class ViewOpponentHand extends ViewHand {
     public synchronized void chooseObjective(String choiceID) {
         super.chooseObjective(choiceID);
         notifyView(SceneID.getOpponentAreaSceneID(nickname),
-                new DisplayChosenObjective(nickname, false, choiceID));
+                new DisplayChosenObjective(nickname, false));
     }
     /**
      * Sets the start card in this hand. <br>

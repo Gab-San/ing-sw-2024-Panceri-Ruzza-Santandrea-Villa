@@ -19,10 +19,22 @@ import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
 public abstract class HandPanel extends JPanel implements PropertyChangeListener {
     private static final int CARD_HEIGHT = ViewCard.getScaledHeight();
     private static final int CARD_WIDTH = ViewCard.getScaledWidth();
+    /**
+     * Player's hand cards.
+     */
     protected final List<ViewPlaceableCard> cardsInHand;
+    /**
+     * Play cards panel.
+     */
     protected final JPanel playCardsPanel;
+    /**
+     * Objective cards panel.
+     */
     protected final JPanel objectiveCardsPanel;
 
+    /**
+     * Default hand panel constructor.
+     */
     public HandPanel(){
         cardsInHand = new LinkedList<>();
 

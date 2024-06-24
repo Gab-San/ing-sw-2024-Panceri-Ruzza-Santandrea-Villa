@@ -4,7 +4,6 @@ import it.polimi.ingsw.PlayerColor;
 import it.polimi.ingsw.view.SceneID;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.update.*;
-import it.polimi.ingsw.view.gui.ChangeNotifications;
 import it.polimi.ingsw.view.model.cards.*;
 
 import java.util.List;
@@ -66,7 +65,7 @@ public class ViewPlayerHand extends ViewHand {
     public synchronized void removeCard(ViewPlayCard card) {
         super.removeCard(card);
         notifyView(SceneID.getMyAreaSceneID(),
-                new DisplayRemoveCards(nickname, true, cards));
+                new DisplayRemoveCards(nickname, true));
     }
     /**
      * @param objectiveCards list of objectiveCards to set as the hand content. <br>
@@ -89,7 +88,7 @@ public class ViewPlayerHand extends ViewHand {
         if(objectiveCard != null)
             objectiveCard.turnFaceUp();
         notifyView(SceneID.getMyAreaSceneID(),
-                new DisplayAddedObjective(nickname, true, secretObjectiveCards));
+                new DisplayAddedObjective(nickname, true));
         super.addSecretObjectiveCard(objectiveCard);
     }
 
@@ -101,7 +100,7 @@ public class ViewPlayerHand extends ViewHand {
     public synchronized void chooseObjective(String choiceID) {
         super.chooseObjective(choiceID);
         notifyView(SceneID.getMyAreaSceneID(),
-                new DisplayChosenObjective(nickname, true, choiceID));
+                new DisplayChosenObjective(nickname, true));
     }
     /**
      * Sets the start card in this hand. <br>

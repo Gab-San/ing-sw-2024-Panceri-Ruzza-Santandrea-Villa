@@ -27,7 +27,7 @@ public class DisplayPlayerRemove extends DisplayPlayerEvent implements GUIEvent 
         Scene currentScene = SceneManager.getInstance().getCurrentScene();
         Scene opponentScene = SceneManager.getInstance().getScene(SceneID.getOpponentAreaSceneID(nickname));
         if(currentScene.equals(opponentScene)){
-            SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
+            SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID());
         }
         tui.showNotification(nickname + " has been removed.");
         SceneManager.getInstance().remove(SceneID.getOpponentAreaSceneID(nickname));

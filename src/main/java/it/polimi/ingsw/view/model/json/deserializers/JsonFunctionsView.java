@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a helper for json functions.
+ */
 public interface JsonFunctionsView {
 
     /**

@@ -9,7 +9,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
-
+//DOCS add docs
 public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
     public static int HEIGHT = 40;
     private final VisibleResourcesPanel visibleResourcesPanel;

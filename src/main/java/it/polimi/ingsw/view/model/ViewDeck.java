@@ -42,6 +42,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
 
 
     /**
+     * Returns true if the top card of this deck is empty.
      * @return true if the top card of this deck is empty
      */
     public synchronized boolean isEmpty() {
@@ -49,6 +50,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
     }
 
     /**
+     * Returns the top card of this deck.
      * @return the top card of this deck
      */
     public synchronized C getTopCard() {
@@ -75,6 +77,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
     }
 
     /**
+     * Returns the first revealed card of this deck.
      * @return the first revealed card of this deck
      */
     public synchronized C getFirstRevealed() {
@@ -101,6 +104,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
         displayChange(firstRevealed, 1);
     }
     /**
+     * Returns the second revealed card of this deck.
      * @return the second revealed card of this deck
      */
     public synchronized C getSecondRevealed() {
@@ -126,6 +130,7 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
     }
 
     /**
+     * Returns deck name based on specified on deck identifier.
      * @param deck the deck initial
      * @return the full name associated with the given initial (or an empty string if none match)
      */

@@ -1,26 +1,21 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.view.events.DisplayPlayerEvent;
-import it.polimi.ingsw.view.gui.GameGUI;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 import it.polimi.ingsw.view.tui.TUI;
-
-import java.util.List;
 
 /**
  * This class represents an event triggered when a card is removed from a player's hand.
  */
 public class DisplayRemoveCards extends DisplayPlayerEvent {
-    private final List<ViewPlayCard> playCards;
+
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
      */
-    public DisplayRemoveCards(String nickname, boolean isLocalPlayer, List<ViewPlayCard> playCards) {
+    public DisplayRemoveCards(String nickname, boolean isLocalPlayer) {
         super(nickname, isLocalPlayer);
-        this.playCards = playCards;
     }
 
 

@@ -14,7 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
-
+//DOCS add docs
 public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, CornerListener, CardListener {
     private final List<PlaceHolder> placeHolderList;
     private CornerListener cornerListener;
@@ -93,9 +93,7 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
     public void placeOnCorner(String cardID, GamePoint position, CornerDirection direction){
         try{
             cornerListener.placeOnCorner(cardID, position, direction);
-        }catch (IllegalStateException e){
-            return; //on placement failure
-        }
+        }catch (IllegalStateException ignore){/*on placement failure*/}
     }
 
     @Override

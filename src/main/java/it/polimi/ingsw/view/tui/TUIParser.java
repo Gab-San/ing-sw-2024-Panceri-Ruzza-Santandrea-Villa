@@ -10,7 +10,6 @@ import it.polimi.ingsw.view.events.commands.DisplayFlippedCard;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.model.ViewBoard;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -79,7 +78,7 @@ public class TUIParser {
             throw new DisconnectException();
         }
         if(keyCommand.toLowerCase().matches("restart") && board.getGamePhase() == GamePhase.SHOWWIN){
-            SceneManager.getInstance().setScene(SceneID.getMyAreaSceneID());
+            SceneManager.getInstance().loadScene(SceneID.getMyAreaSceneID());
             //go back to myAreaScene on game restart
         }
     }
@@ -88,7 +87,7 @@ public class TUIParser {
      * Changes scene to the Helper scene.
      */
     private void viewHelperScene() {
-        SceneManager.getInstance().setScene(SceneID.getHelperSceneID());
+        SceneManager.getInstance().loadScene(SceneID.getHelperSceneID());
     }
 
     /**
@@ -145,7 +144,7 @@ public class TUIParser {
                 default -> SceneID.getOpponentAreaSceneID(cmdArgs.get(0));
             };
         
-        SceneManager.getInstance().setScene(selectedScene);
+        SceneManager.getInstance().loadScene(selectedScene);
     }
 
     /**

@@ -8,6 +8,9 @@ import java.util.List;
  * The base class of PlayCards in the ViewModel
  */
 public abstract class ViewPlayCard extends ViewPlaceableCard{
+    /**
+     * Points score when placing the card.
+     */
     protected final int pointsOnPlace;
     private final GameResource backResource;
 

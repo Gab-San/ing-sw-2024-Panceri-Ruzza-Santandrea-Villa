@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * View gold card deserializer class.
+ */
 public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
 
     /**
@@ -24,11 +27,13 @@ public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
         this(null);
     }
 
+    /**
+     * Constructs view gold card deserializer.
+     */
     public GoldCardDeserializerView(Class<?> vc){
         super(vc);
     }
 
-    //DOCS: add docs for deserialize (??)
     @Override
     public ViewGoldCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {

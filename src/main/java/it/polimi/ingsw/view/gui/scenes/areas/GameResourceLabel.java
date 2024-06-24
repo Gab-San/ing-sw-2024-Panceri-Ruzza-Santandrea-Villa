@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.gui.scenes.areas;
 
-import it.polimi.ingsw.GameResource;
-
 import javax.swing.*;
-
+//DOCS add docs
 public class GameResourceLabel extends JLabel {
     public GameResourceLabel(ImageIcon resourceIcon, int initialQuantity){
         super(resourceIcon);

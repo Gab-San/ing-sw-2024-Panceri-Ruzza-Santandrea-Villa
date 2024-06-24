@@ -19,7 +19,7 @@ import java.util.Objects;
 public class ViewCorner extends JComponent implements MouseListener {
     private final GameResource frontResource;
     private final GameResource backResource;
-    boolean addedMouse;
+
     /**
      * The card this corner belongs to
      */
@@ -48,7 +48,6 @@ public class ViewCorner extends JComponent implements MouseListener {
         this.direction = direction;
         isVisible = true;
         isDisabled = false;
-        addedMouse = false;
     }
 
     /**
@@ -139,7 +138,6 @@ public class ViewCorner extends JComponent implements MouseListener {
 
     public void activateCorner() {
         addMouseListener(this);
-        addedMouse = true;
         setEnabled(true);
         setVisible(true);
         Border innerBorder = BorderFactory.createLineBorder(Color.yellow, 2);

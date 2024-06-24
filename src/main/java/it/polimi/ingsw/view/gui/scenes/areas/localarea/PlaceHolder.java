@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
+//DOCS add docs
 public class PlaceHolder extends JComponent {
 
     private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/TransparentStarting.png";

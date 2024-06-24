@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.events.update;
 
 import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.view.events.GUIEvent;
 import it.polimi.ingsw.view.events.TUIEvent;
 import it.polimi.ingsw.view.gui.GameGUI;

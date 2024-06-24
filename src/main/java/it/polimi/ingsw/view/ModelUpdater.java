@@ -19,8 +19,10 @@ import java.util.Map;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
 
-
-//DOCS: COMMENT ALL NEW EVENTS PLUS NEW SCENE
+/**
+ * This class acts as the view model updater:
+ * updates the lightweight representation of the server board.
+ */
 public class ModelUpdater {
     private final ViewBoard board;
     private final JsonImporter jsonImporter;
@@ -212,8 +214,8 @@ public class ModelUpdater {
             }
             if(topCard != null)
                 board.notifyView(SceneID.getBoardSceneID(),
-                        new DisplayDeckState(deck, topCard,
-                                firstRevealed, secondRevealed));
+                        new DisplayDeckState(deck
+                        ));
         }catch (ClassCastException e){
             deckCardTypeMismatch();
         }
@@ -378,6 +380,8 @@ public class ModelUpdater {
         }
         board.setGamePhase(gamePhase);
         board.setCurrentTurn(currentTurn);
+        board.notifyView(SceneID.getBoardSceneID(), new DisplayBoardState(currentTurn, scoreboard,
+                gamePhase, playerDeadLock));
     }
     /**
      * Notifies about game phase change in match.
@@ -420,16 +424,16 @@ public class ModelUpdater {
             hand.setCards(cardsInHand);
             hand.setSecretObjectiveCards(objectives);
             hand.setStartCard(startCard);
-            board.notifyView(SceneID.getMyAreaSceneID(), new DisplayHandState(nickname, true,
-                    cardsInHand, objectives, startCard));
+            board.notifyView(SceneID.getMyAreaSceneID(), new DisplayHandState(nickname, true
+            ));
         }
         else{
             ViewOpponentHand hand = board.getOpponentHand(nickname);
             hand.setCards(cardsInHand);
             hand.setSecretObjectiveCards(objectives);
             hand.setStartCard(startCard);
-            board.notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayHandState(nickname, false,
-                    cardsInHand, objectives, startCard));
+            board.notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayHandState(nickname, false
+            ));
         }
     }
     /**
@@ -556,12 +560,10 @@ public class ModelUpdater {
         playArea.setVisibleResources(visibleResources);
         if(board.getPlayerHand().getNickname().equals(nickname))
             board.notifyView(SceneID.getMyAreaSceneID(),
-                    new DisplayAreaState(nickname, true,
-                            playArea.getCardMatrix(), playArea.getVisibleResources(), playArea.getFreeCorners()));
+                    new DisplayAreaState(nickname, true));
         else
             board.notifyView(SceneID.getOpponentAreaSceneID(nickname),
-                    new DisplayAreaState(nickname, false,
-                            playArea.getCardMatrix(), playArea.getVisibleResources(), playArea.getFreeCorners()));
+                    new DisplayAreaState(nickname, false));
     }
     /**
      * Notifies about card's placement.

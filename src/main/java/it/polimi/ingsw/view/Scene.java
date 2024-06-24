@@ -2,6 +2,9 @@ package it.polimi.ingsw.view;
 
 import java.util.List;
 
+/**
+ * This interface defines the skeleton of a displayable scene.
+ */
 public interface Scene {
     /**
      * Displays the scene on-screen.

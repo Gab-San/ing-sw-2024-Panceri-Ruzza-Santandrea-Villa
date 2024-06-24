@@ -32,6 +32,7 @@ public class DisplayBoardState implements TUIEvent {
 
     @Override
     public void displayEvent(TUI tui) {
-        tui.showNotification("Board initialised.");
+        tui.showNotification("Board initialised at " + currentTurn + "\nwith: " + scoreboard +
+                "\nGAME PHASE: " + gamePhase + "\nPLAYER DEAD LOCK: " + playersDeadLock);
     }
 }

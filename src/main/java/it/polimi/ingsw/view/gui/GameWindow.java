@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.SceneManager;
-import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.gui.scenes.extra.chat.ChatPanel;
 import it.polimi.ingsw.view.gui.scenes.extra.playerpanel.PlayerListPanel;
 import it.polimi.ingsw.view.model.ViewHand;
@@ -28,6 +27,9 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
      * Window starting height
      */
     public static final int SCREEN_HEIGHT = (int) (900 * SCALE_FACTOR);
+    /**
+     * Game window instance.
+     */
     public static GameWindow displayWindow;
     private final GameInputHandler inputHandler;
     private ChatPanel chatPanel;
@@ -88,7 +90,7 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         currentScene.close();
         add((JPanel) nextScene, BorderLayout.CENTER);
         // Sets and executes the scene
-        SceneManager.getInstance().setScene(nextScene);
+        SceneManager.getInstance().loadScene(nextScene);
         revalidate();
         repaint();
         // This needs to be called each time a scene change

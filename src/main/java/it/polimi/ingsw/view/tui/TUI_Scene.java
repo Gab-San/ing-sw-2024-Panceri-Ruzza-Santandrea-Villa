@@ -19,8 +19,17 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
  */
 public abstract class TUI_Scene implements Scene {
     private static final int NOTIF_CHAT_SPACING = 10;
+    /**
+     * Output printer.
+     */
     protected final PrintWriter out;
+    /**
+     * Backlog of notifications.
+     */
     protected List<String> notificationBacklog;
+    /**
+     * Chat backlog.
+     */
     protected List<String> chatBacklog;
 
     /**
@@ -143,7 +152,10 @@ public abstract class TUI_Scene implements Scene {
         }
     }
 
-
+    /**
+     * Displays the backlogs notifications on the current scene.
+     * @param backlog the notification backlog
+     */
     public final void displayNotification(List<String> backlog){
         synchronized (System.out) {
             this.notificationBacklog = backlog;
@@ -151,14 +163,28 @@ public abstract class TUI_Scene implements Scene {
         }
     }
 
+    /**
+     * Moves the scene center to the selected direction.
+     * @param cornerDirections direction in which to move
+     */
     public void moveView(List<CornerDirection> cornerDirections){
         display();
     }
 
+    /**
+     * Sets the center of the view to the selected
+     * point defined by row and col.
+     * @param row row to which to move
+     * @param col col to which to move
+     */
     public void setCenter(int row, int col){
         display();
     }
 
+    /**
+     * Sets the center of the view to the selected point.
+     * @param center selected center
+     */
     public void setCenter(GamePoint center){
         display();
     }

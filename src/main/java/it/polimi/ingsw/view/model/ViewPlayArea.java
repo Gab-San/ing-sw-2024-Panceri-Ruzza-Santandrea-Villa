@@ -209,10 +209,10 @@ public class ViewPlayArea extends JComponent {
         this.visibleResources.putAll(visibleResources);
         if(board.getPlayerHand().getNickname().equals(owner))
             board.notifyView(SceneID.getMyAreaSceneID(),
-                    new DisplayVisibleResources(owner, true, visibleResources));
+                    new DisplayVisibleResources(owner, true));
         else
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
-                    new DisplayVisibleResources(owner, false, visibleResources));
+                    new DisplayVisibleResources(owner, false));
 
         firePropertyChange(ChangeNotifications.VIS_RES_CHANGE, null, visibleResources);
     }
@@ -259,10 +259,10 @@ public class ViewPlayArea extends JComponent {
 
         if(board.getPlayerHand().getNickname().equals(owner))
             board.notifyView(SceneID.getMyAreaSceneID(),
-                    new DisplayFreeCorners(owner, true, freeCorners));
+                    new DisplayFreeCorners(owner, true));
         else
             board.notifyView(SceneID.getOpponentAreaSceneID(owner),
-                    new DisplayFreeCorners(owner, false, freeCorners));
+                    new DisplayFreeCorners(owner, false));
 
         cardFreeCorners.forEach(
                 ViewCorner::activateCorner

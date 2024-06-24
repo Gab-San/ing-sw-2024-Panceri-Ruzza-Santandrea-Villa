@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//DOCS add docs
 public class VisibleResourcesPanel extends JPanel {
     private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/";
     private final Map<GameResource, GameResourceLabel> resourceLabelMap;

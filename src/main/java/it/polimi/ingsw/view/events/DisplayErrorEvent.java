@@ -9,7 +9,7 @@ import it.polimi.ingsw.view.tui.TUI;
  */
 public class DisplayErrorEvent implements TUIEvent, GUIEvent {
     private final String errorMessage;
-
+//DOCS add docs
     public DisplayErrorEvent(String errorMessage) {
         this.errorMessage = errorMessage;
     }

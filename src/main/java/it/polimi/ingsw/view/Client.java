@@ -20,6 +20,7 @@ import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.getListOfVa
 import static it.polimi.ingsw.network.rmi.RMI_AddressHelperFunctions.isLoopbackAddress;
 import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
 
+//DOCS add class docs
 public class Client {
     public static final int MAX_NICKNAME_LENGTH = 80;
     public static View view = null;

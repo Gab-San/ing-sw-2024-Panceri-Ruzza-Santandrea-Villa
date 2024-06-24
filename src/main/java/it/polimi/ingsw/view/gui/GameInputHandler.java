@@ -6,7 +6,6 @@ import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;

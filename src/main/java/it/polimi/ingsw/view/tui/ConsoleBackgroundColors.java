@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.PlayerColor;
 
+//DOCS should add attribute docs
 /**
  * Collection of ANSI background colors
  */

@@ -53,6 +53,11 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         add(deckpanel, BorderLayout.CENTER);
         add(scoreboard, BorderLayout.EAST);
     }
+
+    /**
+     * Returns scoreboard panel.
+     * @return scoreboard panel
+     */
     public ScoreboardPanel getScoreboard(){
         return scoreboard;
     }

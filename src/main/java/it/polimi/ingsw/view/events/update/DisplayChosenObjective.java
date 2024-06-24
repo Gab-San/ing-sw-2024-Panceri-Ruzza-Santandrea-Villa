@@ -7,16 +7,15 @@ import it.polimi.ingsw.view.tui.TUI;
  * This class represents an event triggered by a user when choosing the objective card.
  */
 public class DisplayChosenObjective extends DisplayPlayerEvent {
-    private final String choiceID;
+
     /**
      * Constructs player event.
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
      */
-    public DisplayChosenObjective(String nickname, boolean isLocalPlayer, String choiceID) {
+    public DisplayChosenObjective(String nickname, boolean isLocalPlayer) {
         super(nickname, isLocalPlayer);
-        this.choiceID = choiceID;
     }
 
 

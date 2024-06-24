@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+//DOCS add docs
+
 /**
  * Base class of the playAreaPanel, with shared behaviour of local and opponent playAreas
  */

@@ -5,7 +5,7 @@ import it.polimi.ingsw.view.gui.scenes.areas.AreaScene;
 import it.polimi.ingsw.view.model.*;
 
 import java.beans.PropertyChangeEvent;
-
+//DOCS add docs
 public class OpponentAreaScene extends AreaScene {
     private final String nickname;
 

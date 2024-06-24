@@ -21,7 +21,7 @@ public class PrintEndgameUI extends TUI_Scene {
      * Spacing of the leaderboard, to not print it too close to console border
      */
     private static final int LEFT_SPACING = 16;
-    boolean atLeast2Players;
+    private final boolean atLeast2Players;
 
     /**
      * Constructs the Endgame UI (leaderboard) scene

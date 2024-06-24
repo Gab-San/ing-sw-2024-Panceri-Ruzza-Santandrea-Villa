@@ -24,13 +24,18 @@ public class ViewStartCard extends ViewPlaceableCard {
         super(cardID, imageFrontName, imageBackName, corners);
         this.centralFrontResources = centralFrontResources;
     }
-
+    /**
+     * Construct the starting card as a copy of another starting card.
+     * @param other the other starting card to copy.
+     */
     public ViewStartCard(ViewStartCard other){
         super(other);
         this.centralFrontResources = new LinkedList<>(other.centralFrontResources);
     }
+
     /**
-     * @return null as the starting cards do not have a color.
+     * Returns null as the starting cards do not have a color
+     * @return null (starting cards do not have a color).
      */
     @Override
     public GameResource getCardColour() {

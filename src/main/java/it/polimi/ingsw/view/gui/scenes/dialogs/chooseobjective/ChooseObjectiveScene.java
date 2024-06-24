@@ -28,6 +28,12 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
     private final JButton selectButton;
     private ViewObjectiveCard selectedCard;
 
+    /**
+     * Constructs choose objective dialog.
+     * @param owner dialog frame owner
+     * @param title dialog title
+     * @param inputHandler interaction game handler
+     */
     public ChooseObjectiveScene(JFrame owner, String title, GameInputHandler inputHandler){
         super(owner, title, true);
         this.inputHandler = inputHandler;
@@ -142,9 +148,7 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
 
 
     @Override
-    public synchronized void displayNotification(List<String> backlog) {
-
-    }
+    public synchronized void displayNotification(List<String> backlog) {/*unused*/}
 
     @Override
     public synchronized void close() {
@@ -160,14 +164,10 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {/*unused*/}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {/*unused*/}
 
     @Override
     public void mouseEntered(MouseEvent e) {

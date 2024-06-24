@@ -232,6 +232,11 @@ public class ViewBoard extends JComponent {
         opponentHands.put(nickname, opponentHand);
         scoreboard.put(nickname, 0);
     }
+
+    /**
+     * Notifies about an opponent being added.
+     * @param opponentHand added opponent hand
+     */
     public synchronized void notifyAddedOpponent(ViewHand opponentHand){
         firePropertyChange(ChangeNotifications.ADDED_PLAYER, null, opponentHand);
         firePropertyChange(ChangeNotifications.ADDED_AREA, null, getPlayerArea(opponentHand.getNickname()));

@@ -32,9 +32,21 @@ public abstract class ViewHand extends JComponent {
      * Contains 2 cards during objective selection and 1 card after that.
      */
     protected final List<ViewObjectiveCard> secretObjectiveCards;
+    /**
+     * Player's color.
+     */
     protected PlayerColor color;
+    /**
+     * Player's deadlocked condition.
+     */
     protected boolean isDeadlocked;
+    /**
+     * Player's turn.
+     */
     private int turn;
+    /**
+     * Selected displaying view.
+     */
     protected final View view;
 
     /**
@@ -188,6 +200,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Returns player color.
      * @return this player's color
      */
     public synchronized PlayerColor getColor() {
@@ -195,7 +208,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
-     * Sets this player's color
+     * Sets this player's color.
      * @param color the new player color (can be null to remove the color)
      * @return true if the color changed with this assignment
      */
@@ -207,6 +220,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Returns player's turn.
      * @return this player's turn
      */
     public synchronized int getTurn() {
@@ -214,7 +228,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
-     * Sets this player's turn
+     * Sets this player's turn.
      * @param turn the new player turn
      * @return true if the player's turn changed with this assignment
      */
@@ -226,6 +240,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Returns true if player is deadlocked, false otherwise.
      * @return true if this player is deadlocked
      */
     public boolean isDeadlocked() {
@@ -233,7 +248,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
-     * Sets the deadlock status for this player
+     * Sets the deadlock status for this player.
      * @param deadlocked new deadlock status
      */
     public void setDeadlocked(boolean deadlocked) {
@@ -247,7 +262,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
-     * Notifies the View of an event
+     * Notifies the View of an event.
      * @param scene scene ID concerned by the event
      * @param event the event to be notified to the scene
      */
@@ -256,7 +271,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
-     * Public override of this hand's firePropertyChange (would otherwise be protected)
+     * Public override of this hand's firePropertyChange (would otherwise be protected).
      */
     public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         super.firePropertyChange(propertyName, oldValue, newValue);

@@ -13,15 +13,24 @@ import it.polimi.ingsw.view.model.cards.ViewResourceCard;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * View resource card deserializer class.
+ */
 public class ResourceCardDeserializerView extends StdDeserializer<ViewResourceCard> {
+    /**
+     * Default constructor.
+     */
     public ResourceCardDeserializerView(){
         this(null);
     }
+
+    /**
+     * Constructs view resource card deserializer.
+     */
     public ResourceCardDeserializerView(Class<?> vc){
         super(vc);
     }
 
-    //DOCS: add docs for deserialize (??)
     @Override
     public ViewResourceCard deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JacksonException {

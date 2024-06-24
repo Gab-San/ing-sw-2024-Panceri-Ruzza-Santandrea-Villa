@@ -21,9 +21,21 @@ public abstract class ViewCard extends JComponent {
     private BufferedImage imageFront;
     private BufferedImage imageBack;
     private boolean importedImg;
+    /**
+     * Pixel image width.
+     */
     public static final int IMAGE_WIDTH = 831;
+    /**
+     * Pixel image height.
+     */
     public static final int IMAGE_HEIGHT = 556;
+    /**
+     * Scaling image factor.
+     */
     public static final int SCALE_FACTOR = 4;
+    /**
+     * Card listener to this card.
+     */
     protected CardListener cardListener;
 //endregion
     /**

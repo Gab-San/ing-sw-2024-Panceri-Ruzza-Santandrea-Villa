@@ -116,14 +116,14 @@ public class GameGUI implements View {
      */
     private void loadScenes(ViewBoard board) {
         // Loading connection scene
-        sceneManager.loadScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
+        sceneManager.saveScene(SceneID.getNicknameSelectSceneID(), new ConnectionScene(inputHandler));
         // Loading local player scene
         LocalPlayerAreaScene localPlayerAreaScene = new LocalPlayerAreaScene(inputHandler);
-        sceneManager.loadScene(SceneID.getMyAreaSceneID(), localPlayerAreaScene);
+        sceneManager.saveScene(SceneID.getMyAreaSceneID(), localPlayerAreaScene);
         addToPropListeners(localPlayerAreaScene);
         // Loading board scene
         BoardScene boardScene = new BoardScene(board, inputHandler);
-        sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
+        sceneManager.saveScene(SceneID.getBoardSceneID(), boardScene);
     }
 
     /**
@@ -205,7 +205,7 @@ public class GameGUI implements View {
             case SHOWWIN:
                 ScoreboardPanel scoreboard = ((BoardScene) SceneManager.getInstance().getScene(SceneID.getBoardSceneID())).getScoreboard();
                 EndgameScene endgameScene = new EndgameScene(board, inputHandler, scoreboard);
-                SceneManager.getInstance().loadScene(SceneID.getEndgameSceneID(), endgameScene);
+                SceneManager.getInstance().saveScene(SceneID.getEndgameSceneID(), endgameScene);
                 gameWindow.addEndgameButtonToSidePanel("Display Winner");
                 changeScene(endgameScene);
                 break;
@@ -219,7 +219,7 @@ public class GameGUI implements View {
         removeFromObservableComponents(boardScene);
         // Loading board scene
         boardScene = new BoardScene(board, inputHandler);
-        sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
+        sceneManager.saveScene(SceneID.getBoardSceneID(), boardScene);
         addToObservableComponents(boardScene);
         changeScene((GUI_Scene) SceneManager.getInstance().getScene(SceneID.getMyAreaSceneID()));
         for(AreaScene areaScene: SceneManager.getInstance().getAreaScenes()){
@@ -279,7 +279,7 @@ public class GameGUI implements View {
 //endregion
 
     private void RunNicknameScene(){
-        sceneManager.setScene(SceneID.getNicknameSelectSceneID());
+        sceneManager.loadScene(SceneID.getNicknameSelectSceneID());
     }
 
     @Override
@@ -427,7 +427,7 @@ public class GameGUI implements View {
         // Creating opposing player's area
         // the player has connected
         OpponentAreaScene opponentScene = new OpponentAreaScene(inputHandler, opponentHand.getNickname());
-        SceneManager.getInstance().loadScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
+        SceneManager.getInstance().saveScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
         board.addPropertyChangeListener(opponentScene);
         addToObservableComponents(opponentHand);
 
