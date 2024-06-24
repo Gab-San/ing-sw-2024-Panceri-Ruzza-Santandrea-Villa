@@ -4,13 +4,6 @@ Complete rules + TUI + GUI + RMI + Socket + 2FA (30)
 ### Advanced functionalities
 Chat and Disconnection resilience
 
-# How to install the jars
-1. Download the jar and the associated "src" folder
-2. Place them in the same directory (the "src" folder contains the JSON files with the card information)
-
-The JSON files can be modified by the user, but the changes made in the Server JSON files should be reflected in the Client JSON files for a correct display of the cards.
-Please note, however, that the game should function even if the JSON files differ slightly between server and client.
-
 # How to launch the Server
 1. Navigate to the folder containing the Server.jar and the "src" folder
 2. Run the command "`java -jar Server.jar <RMI port> <TCP port> [Server IP]`"  (the **order** of the arguments is **important**)
