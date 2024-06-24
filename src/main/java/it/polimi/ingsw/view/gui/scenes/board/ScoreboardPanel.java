@@ -254,6 +254,10 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             hand.addPropertyChangeListener(ChangeNotifications.COLOR_CHANGE, this);
             return;
         }
+
+        int currentScore = board.getScore(hand.getNickname());
+        if(currentScore > 29) return;
+
         // If another score is already present than the token shall
         // not display on it.
         if (oldScore.containsKey(hand.getNickname())) {
@@ -264,8 +268,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             );
         }
 
-        int currentScore = board.getScore(hand.getNickname());
-        if(currentScore > 29) return;
+
         oldScore.put(hand.getNickname(), currentScore);
         JPanel scorePanel = scorePosition.get(currentScore);
         SwingUtilities.invokeLater(
