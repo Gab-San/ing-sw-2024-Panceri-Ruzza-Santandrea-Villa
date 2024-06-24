@@ -86,7 +86,6 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
      * @return this card's corner in the given direction
      */
     public ViewCorner getCorner(CornerDirection dir) {
-        System.err.println("GETTING CORNER");
         return corners.get(dir);
     }
 

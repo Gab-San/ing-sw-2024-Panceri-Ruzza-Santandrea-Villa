@@ -89,7 +89,6 @@ public class ViewCorner extends JComponent implements MouseListener {
      */
     public synchronized void cover(){
         isVisible = false;
-        System.err.println("COVERING...");
         resetCorner();
     }
 

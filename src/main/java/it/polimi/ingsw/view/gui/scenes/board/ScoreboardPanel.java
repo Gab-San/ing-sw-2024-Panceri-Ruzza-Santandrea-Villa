@@ -265,6 +265,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
         }
 
         int currentScore = board.getScore(hand.getNickname());
+        if(currentScore > 29) return;
         oldScore.put(hand.getNickname(), currentScore);
         JPanel scorePanel = scorePosition.get(currentScore);
         SwingUtilities.invokeLater(

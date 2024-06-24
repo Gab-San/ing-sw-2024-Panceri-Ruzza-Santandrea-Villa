@@ -97,4 +97,12 @@ public class VisibleResourcesPanel extends JPanel {
             label.setQuantity(value);
         }
     }
+
+    public void clear() {
+        synchronized (resourceLabelMap){
+            for(GameResourceLabel label: resourceLabelMap.values()){
+                label.setQuantity(0);
+            }
+        }
+    }
 }

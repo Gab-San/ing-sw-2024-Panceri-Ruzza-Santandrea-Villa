@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.GameResource;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,6 +25,10 @@ public class ViewStartCard extends ViewPlaceableCard {
         this.centralFrontResources = centralFrontResources;
     }
 
+    public ViewStartCard(ViewStartCard other){
+        super(other);
+        this.centralFrontResources = new LinkedList<>(other.centralFrontResources);
+    }
     /**
      * @return null as the starting cards do not have a color.
      */

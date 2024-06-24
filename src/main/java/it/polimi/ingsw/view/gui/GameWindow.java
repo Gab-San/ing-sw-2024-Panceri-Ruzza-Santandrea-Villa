@@ -115,4 +115,11 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
     public synchronized void addEndgameButtonToSidePanel(String text) {
         playerListPanel.addEndgameButton(text);
     }
+
+    /**
+     * Removes the endgame scene button.
+     */
+    public void removeEndgameButtonFromSidePanel() {
+        playerListPanel.removeEndgameButton();
+    }
 }

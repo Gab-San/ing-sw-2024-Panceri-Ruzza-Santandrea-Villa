@@ -130,7 +130,7 @@ public class JsonImporter {
      */
     public ViewStartCard getStartCard(String ID){
         if(ID == null) return null;
-        return startCards.get(ID);
+        return new ViewStartCard(startCards.get(ID));
     }
 
     /**

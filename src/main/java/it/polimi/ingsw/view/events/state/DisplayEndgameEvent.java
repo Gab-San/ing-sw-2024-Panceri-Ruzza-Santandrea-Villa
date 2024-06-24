@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.tui.TUI;
 public class DisplayEndgameEvent implements TUIEvent, GUIEvent {
     private final String nickname;
     private final int score;
+    public static boolean notified;
     public DisplayEndgameEvent(){
         nickname = null;
         score = 0;
@@ -32,6 +33,9 @@ public class DisplayEndgameEvent implements TUIEvent, GUIEvent {
 
     @Override
     public void displayEvent(GameGUI gui) {
-        //TODO display endgame in chat
+        if(!notified) {
+            gui.showChatMessage("SERVER", "Endgame has started! An additional " +
+                    "turn shall be played by each of you before the game ends.");
+        }
     }
 }

@@ -69,13 +69,10 @@ public class GameInputHandler{
         if (!validateNickname(nickname)) {
             throw new IllegalStateException(UIFunctions.evaluateErrorType(nickname));
         }
-        System.err.println("BEFORE ADD LOCAL PLAYER!");
+
         controller.addLocalPlayer(nickname);
-        System.err.println("AFTER ADDING LOCAL PLAYER & BEFORE SETTING SELF PLAYER AREA!");
         controller.setSelfPlayerArea();
-        System.err.println("AFTER ADDING LOCAL PLAYER & BEFORE CONNECT!");
         serverProxy.connect(nickname);
-        System.err.println("EXITED CONNECT!");
     }
 
     /**

@@ -95,6 +95,7 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
 
         return scrollPane;
     }
+
     @NotNull
     private JScrollPane initializeScrollPane() {
         JScrollPane scrollPane = new JScrollPane(areaPanel,
@@ -226,5 +227,12 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
                 playArea.addPropertyChangeListener(ChangeNotifications.CARD_LAYER_CHANGE, areaPanel);
                 break;
         }
+    }
+
+    /**
+     * Clears the player panel to restore start version.
+     */
+    public void clear() {
+        areaPanel.clear();
     }
 }

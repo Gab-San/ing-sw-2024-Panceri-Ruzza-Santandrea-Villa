@@ -99,7 +99,7 @@ public abstract class ViewHand extends JComponent {
      */
     protected synchronized void setStartCard(ViewStartCard startCard){
         if(startCard == null)
-            firePropertyChange(ChangeNotifications.CLEAR_STARTING_CARD, startCard, null);
+            firePropertyChange(ChangeNotifications.CLEAR_STARTING_CARD, this.startCard, null);
         else
             firePropertyChange(ChangeNotifications.SET_STARTING_CARD, this.startCard, startCard);
 

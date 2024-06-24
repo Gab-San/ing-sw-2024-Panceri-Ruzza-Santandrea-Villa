@@ -726,6 +726,9 @@ public class Board implements GameSubject{
         errorHandler.removeClient(nickname);
     }
 
+    /**
+     * Squashes history and replaces with current state.
+     */
     public void squashHistory(){
         List<UpdateEvent> stateSave = new ArrayList<>(16);
 

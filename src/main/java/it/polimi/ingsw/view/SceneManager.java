@@ -1,8 +1,12 @@
 package it.polimi.ingsw.view;
 
-import java.util.HashMap;
-import java.util.Map;
+import it.polimi.ingsw.view.gui.scenes.areas.AreaScene;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+//DOCS add docs
 public class SceneManager {
     private Scene currentScene;
     private final Object SCENE_LOCK = new Object();
@@ -79,4 +83,18 @@ public class SceneManager {
         }
     }
 
+    public List<AreaScene> getAreaScenes() {
+        List<AreaScene> scenes = new LinkedList<>();
+        synchronized (loadedScenes){
+            for(SceneID id : loadedScenes.keySet()){
+                if(id.isOpponentAreaScene()){
+                    scenes.add((AreaScene) loadedScenes.get(id));
+                }
+                if(id.equals(SceneID.getMyAreaSceneID())){
+                    scenes.add((AreaScene) loadedScenes.get(id));
+                }
+            }
+        }
+        return scenes;
+    }
 }

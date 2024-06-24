@@ -28,6 +28,7 @@ public class Player implements GameSubject {
         this.nickname = nickname;
         isConnected = true;
         turn = 0;
+        color = null;
         hand = new PlayerHand(this);
     }
 

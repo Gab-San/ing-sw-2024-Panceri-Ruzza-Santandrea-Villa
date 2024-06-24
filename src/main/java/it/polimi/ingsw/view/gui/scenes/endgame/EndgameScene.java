@@ -195,9 +195,8 @@ public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         int restartNum = Integer.parseInt(button.getText().split(" ")[1]);
-        if(restartNum >= 2 && restartNum <= 4)
+        if(restartNum >= 2 && restartNum <= 4) {
             inputHandler.restartGame(restartNum);
-
-        //TODO: restart GUI and send restartGame command
+        }
     }
 }

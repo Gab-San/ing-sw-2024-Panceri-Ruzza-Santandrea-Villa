@@ -5,15 +5,17 @@ import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.events.DisplayEvent;
 import it.polimi.ingsw.view.events.GUIEvent;
+import it.polimi.ingsw.view.events.state.DisplayEndgameEvent;
 import it.polimi.ingsw.view.exceptions.DisconnectException;
 import it.polimi.ingsw.view.exceptions.TimeoutException;
-import it.polimi.ingsw.view.gui.scenes.board.ScoreboardPanel;
-import it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor.ChooseColorScene;
-import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
-import it.polimi.ingsw.view.gui.scenes.board.BoardScene;
-import it.polimi.ingsw.view.gui.scenes.dialogs.chooseobjective.ChooseObjectiveScene;
+import it.polimi.ingsw.view.gui.scenes.areas.AreaScene;
 import it.polimi.ingsw.view.gui.scenes.areas.localarea.LocalPlayerAreaScene;
 import it.polimi.ingsw.view.gui.scenes.areas.opponentarea.OpponentAreaScene;
+import it.polimi.ingsw.view.gui.scenes.board.BoardScene;
+import it.polimi.ingsw.view.gui.scenes.board.ScoreboardPanel;
+import it.polimi.ingsw.view.gui.scenes.connection.ConnectionScene;
+import it.polimi.ingsw.view.gui.scenes.dialogs.choosecolor.ChooseColorScene;
+import it.polimi.ingsw.view.gui.scenes.dialogs.chooseobjective.ChooseObjectiveScene;
 import it.polimi.ingsw.view.gui.scenes.dialogs.setplayers.SetPlayersScene;
 import it.polimi.ingsw.view.gui.scenes.endgame.EndgameScene;
 import it.polimi.ingsw.view.model.ViewBoard;
@@ -122,7 +124,6 @@ public class GameGUI implements View {
         // Loading board scene
         BoardScene boardScene = new BoardScene(board, inputHandler);
         sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
-        addToObservableComponents(boardScene);
     }
 
     /**
@@ -145,6 +146,12 @@ public class GameGUI implements View {
      */
     public synchronized void updatePhase(GamePhase gamePhase){
         switch (gamePhase){
+            case JOIN, SETUP:
+                GUI_Scene scene = (GUI_Scene) SceneManager.getInstance().getScene(SceneID.getEndgameSceneID());
+                if(scene != null) {
+                    restartGUI((EndgameScene) scene);
+                }
+                break;
             case SETNUMPLAYERS:
                 // Setting up and running the pop-up screen that handles user selection
                 GUI_Scene setNumberOfPlayers = new SetPlayersScene(gameWindow, "Choose number of players",
@@ -153,9 +160,11 @@ public class GameGUI implements View {
                         setNumberOfPlayers::display
                 );
                 break;
-            case JOIN, SETUP, DEALCARDS,
+            case CREATE, DEALCARDS,
                     CHOOSEFIRSTPLAYER, PLACESTARTING, EVALOBJ:
                 break;
+            case WAITING_FOR_REJOIN:
+                showNotification("WAITING FOR A PLAYER TO RECONNECT");
             case PLACECARD:
                 showNotification("GAME PHASE UPDATED TO PLACE CARD PHASE");
                 break;
@@ -201,6 +210,22 @@ public class GameGUI implements View {
                 changeScene(endgameScene);
                 break;
         }
+    }
+
+    private void restartGUI(EndgameScene scene) {
+        scene.close();
+        gameWindow.removeEndgameButtonFromSidePanel();
+        BoardScene boardScene = (BoardScene) SceneManager.getInstance().getScene(SceneID.getBoardSceneID());
+        removeFromObservableComponents(boardScene);
+        // Loading board scene
+        boardScene = new BoardScene(board, inputHandler);
+        sceneManager.loadScene(SceneID.getBoardSceneID(), boardScene);
+        addToObservableComponents(boardScene);
+        changeScene((GUI_Scene) SceneManager.getInstance().getScene(SceneID.getMyAreaSceneID()));
+        for(AreaScene areaScene: SceneManager.getInstance().getAreaScenes()){
+            areaScene.clear();
+        }
+        DisplayEndgameEvent.notified = false;
     }
 
     /**

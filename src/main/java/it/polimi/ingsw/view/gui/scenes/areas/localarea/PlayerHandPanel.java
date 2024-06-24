@@ -6,10 +6,7 @@ import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.GameInputHandler;
 import it.polimi.ingsw.view.gui.scenes.areas.HandPanel;
-import it.polimi.ingsw.view.model.cards.ViewCard;
-import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
-import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
+import it.polimi.ingsw.view.model.cards.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,17 +51,21 @@ public class PlayerHandPanel extends HandPanel implements CardListener, CornerLi
             case CLEAR_STARTING_CARD, REMOVE_CARD_HAND:
                 assert evt.getOldValue() instanceof ViewPlaceableCard;
                 ViewPlaceableCard removedCard = (ViewPlaceableCard) evt.getOldValue();
-                if(removedCard == null || !cardsInHand.contains(removedCard)) return;
 
+                if(removedCard == null || !cardsInHand.contains(removedCard)) return;
                 if(selectedCard != null && selectedCard.equals(removedCard)) selectedCard = null; //deselect if removing selected card
+
+                ViewPlaceableCard actualRemovedCard = cardsInHand.stream().
+                        filter( c -> c.equals(removedCard)).findFirst().orElse(removedCard);
+
                 SwingUtilities.invokeLater(
                         ()->{
-                            playCardsPanel.remove(removedCard);
+                            playCardsPanel.remove(actualRemovedCard);
                             revalidate();
                             repaint();
                         }
                 );
-                cardsInHand.remove(removedCard);
+                cardsInHand.remove(actualRemovedCard);
                 break;
             case CLEAR_PLAY_CARDS:
                 assert evt.getOldValue() instanceof List;

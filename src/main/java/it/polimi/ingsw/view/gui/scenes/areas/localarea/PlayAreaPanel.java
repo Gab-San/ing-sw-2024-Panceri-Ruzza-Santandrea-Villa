@@ -105,4 +105,21 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         // or accidental side effects that would arise should this method be called on other CardListeners
         System.out.println("Clicked a placed card and triggered \"SetSelectedCard\"");
     }
+
+    /**
+     * Removes all components from the panel and
+     * adds a new placeholder.
+     */
+    @Override
+    public void clear() {
+        super.clear();
+        PlaceHolder placeHolder = setupPlaceHolder();
+        layeredPane.add(placeHolder, Integer.valueOf(0));
+        SwingUtilities.invokeLater(
+                ()->{
+                    revalidate();
+                    repaint();
+                }
+        );
+    }
 }

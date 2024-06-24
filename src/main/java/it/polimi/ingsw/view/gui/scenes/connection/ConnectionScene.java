@@ -101,7 +101,6 @@ public class ConnectionScene extends JFrame implements GUI_Scene, KeyListener {
                 loginPanel.disableInput();
                 // Attempt of connection
                 inputHandler.connect(nickname);
-                System.err.println("SUCCESS!");
                 // Here connection is successful
                 displaySuccess();
                 // Goes to the next scene

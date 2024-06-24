@@ -32,7 +32,7 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
     private final ButtonGroup buttonPlayerGroup;
     private final ChangeAreaAction buttonAction;
     private final List<ChangeAreaPanel> areaList;
-
+    private ChangeAreaPanel endgameAreaPanel;
     /**
      * Constructs the players panel.
      * @param inputHandler game interaction handler
@@ -151,18 +151,35 @@ public class PlayerListPanel extends JPanel implements PropertyChangeListener{
         SceneID sceneID = SceneID.getEndgameSceneID();
         boolean connectionStatus = true;
 
-        ChangeAreaPanel changeAreaPanel = new ChangeAreaPanel(text, buttonAction,
+        endgameAreaPanel = new ChangeAreaPanel(text, buttonAction,
                 sceneID, connectionStatus);
 
-        buttonPlayerGroup.add(changeAreaPanel.getAreaButton());
+        buttonPlayerGroup.add(endgameAreaPanel.getAreaButton());
+        buttonPlayerGroup.setSelected(endgameAreaPanel.getAreaButton().getModel(), true);
         SwingUtilities.invokeLater(
                 () -> {
-                    add(changeAreaPanel);
+                    add(endgameAreaPanel);
                     revalidate();
                     repaint();
                     setVisible(true);
                 }
         );
-        areaList.add(changeAreaPanel);
+        areaList.add(endgameAreaPanel);
+    }
+
+    /**
+     * Removes the endgame scene button.
+     */
+    public void removeEndgameButton() {
+        SwingUtilities.invokeLater(
+                () ->{
+                    if(endgameAreaPanel != null){
+                        remove(endgameAreaPanel);
+                        endgameAreaPanel = null;
+                    }
+                    revalidate();
+                    repaint();
+                }
+        );
     }
 }

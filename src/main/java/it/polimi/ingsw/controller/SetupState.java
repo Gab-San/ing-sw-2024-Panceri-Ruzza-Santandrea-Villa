@@ -38,8 +38,8 @@ public class SetupState extends GameState{
         board.setGamePhase(GamePhase.SETUP);
         board.squashHistory();
         playersWhoPlacedStartingCard = new HashSet<>();
-        playersWhoChoseColor=new HashSet<>();
-        playersWhoChoseSecretObjective=new HashSet<>();
+        playersWhoChoseColor = new HashSet<>();
+        playersWhoChoseSecretObjective = new HashSet<>();
         try {
             giveStartingCard();
         } catch (IllegalStateException e){

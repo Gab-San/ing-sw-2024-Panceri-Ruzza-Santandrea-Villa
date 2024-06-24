@@ -71,6 +71,8 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
                 assert evt.getNewValue() instanceof Map;
 
                 Map<GameResource, Integer> resourceIntegerMap = (Map<GameResource, Integer>) evt.getNewValue();
+                if(resourceIntegerMap.isEmpty()) visibleResourcesPanel.clear();
+                //If empty this foreach loop will be jumped
                 for(GameResource res : resourceIntegerMap.keySet()){
                     visibleResourcesPanel.adjournResourceCount(res, resourceIntegerMap.get(res));
                 }

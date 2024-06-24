@@ -193,4 +193,17 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
                 }
         );
     }
+
+    /**
+     * Clears the panel (removes all the components on the panel).
+     */
+    public void clear(){
+        layeredPane.removeAll();
+        SwingUtilities.invokeLater(
+                ()->{
+                    revalidate();
+                    repaint();
+                }
+        );
+    }
 }

@@ -147,8 +147,11 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
                 () -> displayNotification(playerHand.getNickname() + " chose color " + evt.getNewValue())
         );
 
+        playerHand.removePropertyChangeListener(this);
+
         // Disables and hides buttons of colors already chosen.
         PlayerColor color = (PlayerColor) evt.getNewValue();
+        if(color == null) return;
         SwingUtilities.invokeLater(
                 () -> {
                     switch (color) {
