@@ -83,7 +83,6 @@ public class TUI implements View{
                     parser.setSelfPlayerArea();
                     parser.parseCommand("connect " + nickname);
                 }catch (IllegalStateException | DisconnectException e){
-                    //FIXME Post event handle [Ale] ???
                     SceneManager.getInstance().getCurrentScene().displayError("Join failed. Server can't accommodate you now.\n" + e.getMessage());
                     nickname = "";
                 }

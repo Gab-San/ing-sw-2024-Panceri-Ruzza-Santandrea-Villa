@@ -16,15 +16,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
-import static it.polimi.ingsw.view.tui.ConsoleTextColors.YELLOW_TEXT;
-
 /**
  * This class acts as the view model updater:
  * updates the lightweight representation of the server board.
  */
 public class ModelUpdater {
+    /**
+     * The board of the ViewModel to receive the updates
+     */
     private final ViewBoard board;
+    /**
+     * Reference to the JsonImporter (to get new cards)
+     */
     private final JsonImporter jsonImporter;
 
     /**
@@ -161,18 +164,6 @@ public class ModelUpdater {
         board.notifyView(SceneID.getNotificationSceneID(), new DisplayEndgameEvent(nickname, score));
     }
 
-    //TODO: [Ale] remove these debug prints (and maybe remove exception too)
-    private void deckCardTypeMismatch(){
-        System.out.println(YELLOW_TEXT + "CLEARLY AN ERROR." + RESET);
-        System.out.println("|".repeat(500));
-        throw new IllegalArgumentException("Deck type and Card type mismatch");
-    }
-    private void illegalArgument(){
-        System.out.println(YELLOW_TEXT + "CLEARLY AN ARGUMENT ERROR." + RESET);
-        System.out.println("|".repeat(500));
-        throw new IllegalArgumentException("Illegal argument passed.");
-    }
-
     /**
      * Notifies about the current state of the deck.
      *<p>
@@ -217,7 +208,7 @@ public class ModelUpdater {
                         new DisplayDeckState(deck
                         ));
         }catch (ClassCastException e){
-            deckCardTypeMismatch();
+            return; //ignore a wrongly formatted update
         }
     }
     /**
@@ -235,8 +226,8 @@ public class ModelUpdater {
      * @param cardPosition the card which was changed (top = 0, first = 1, second = 2)
      */
     public synchronized void deckUpdate(char deck, String revealedId, int cardPosition) {
-        //FIXME: handle argument error, maybe just return (ignore wrong update?)
-        if(!Character.toString(deck).toUpperCase().matches("[RGO]")) illegalArgument();
+        if(!Character.toString(deck).toUpperCase().matches("[RGO]"))
+            return; //ignore a wrongly formatted update
 
         ViewCard card = jsonImporter.getCard(revealedId);
         try {
@@ -282,7 +273,7 @@ public class ModelUpdater {
                     break;
             }
         }catch (ClassCastException e){
-            deckCardTypeMismatch();
+            return; //ignore a wrongly formatted update
         }
     }
     /**
@@ -338,7 +329,9 @@ public class ModelUpdater {
      * @param position the empty revealed card's position (1 or 2)
      */
     public synchronized void emptyReveal(char deck, int position){
-        if(position > 2 || position < 1) illegalArgument();
+        if(position > 2 || position < 1)
+            return; //ignore a wrongly formatted update
+
         boolean first = position == 1;
         switch (deck) {
             case ViewBoard.RESOURCE_DECK:
@@ -410,7 +403,7 @@ public class ModelUpdater {
      * @param nickname the unique player's identifier
      * @param playCardIDs the list of IDs of playable cards in the player's hand (can be empty)
      * @param objectiveCardIDs the list of IDs of objective cards in the player's hand (can be empty)
-     * @param startingCardID the ID of the starting card in the player's hand (may be null)
+     * @param startingCardID the ID of the starting card in the player's hand (can be null)
      */
     public synchronized void setPlayerHandState(String nickname, List<String> playCardIDs,
                                                 List<String> objectiveCardIDs, String startingCardID) {

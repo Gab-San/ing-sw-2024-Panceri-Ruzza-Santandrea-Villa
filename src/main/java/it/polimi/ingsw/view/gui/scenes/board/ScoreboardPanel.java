@@ -255,8 +255,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        int currentScore = board.getScore(hand.getNickname());
-        if(currentScore > 29) return;
+        int currentScore = Math.min(29, board.getScore(hand.getNickname()));
 
         // If another score is already present than the token shall
         // not display on it.
@@ -284,6 +283,8 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
             case GREEN -> greenPlayer;
         };
         scorePanel.add(pawn);
+        revalidate();
+        repaint();
     }
 
     private void removeColor(JPanel panel,PlayerColor c) {
@@ -301,5 +302,7 @@ public class ScoreboardPanel extends JPanel implements PropertyChangeListener {
                 panel.remove(yellowPlayer);
                 break;
         }
+        revalidate();
+        repaint();
     }
 }

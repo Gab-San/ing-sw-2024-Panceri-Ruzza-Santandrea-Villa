@@ -36,6 +36,7 @@ public class DisplayEndgameEvent implements TUIEvent, GUIEvent {
         if(!notified) {
             gui.showChatMessage("SERVER", "Endgame has started! An additional " +
                     "turn shall be played by each of you before the game ends.");
+            notified = true;
         }
     }
 }

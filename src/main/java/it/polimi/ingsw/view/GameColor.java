@@ -29,7 +29,7 @@ public enum GameColor {
     /**
      * Blue color for player
      */
-    PLAYER_BLUE(new Color(0x072bce)),
+    PLAYER_BLUE(new Color(0x2145E1)),
     /**
      * Green color for player
      */

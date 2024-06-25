@@ -226,6 +226,7 @@ public class GameGUI implements View {
             areaScene.clear();
         }
         DisplayEndgameEvent.notified = false;
+        showChatMessage("SERVER", "The game has restarted!");
     }
 
     /**

@@ -121,7 +121,7 @@ topLeftCard      topCard       topRightCard
           BLCard         BRCard
 botLeftCard      botCard      botRightCard
      */
-    //FIXME: [Ale] this doc could be horrible
+    //DOCS: [Ale] this doc could be horrible
     /**
      * Prints according to following schema: <br><br>
      * topLeftCard______topCard________topRightCard <br>

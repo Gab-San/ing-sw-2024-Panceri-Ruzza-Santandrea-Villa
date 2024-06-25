@@ -31,6 +31,7 @@ public class ViewPlayArea extends JComponent {
     private final List<ViewCorner> freeCorners;
     private final ViewBoard board;
     //zLayer information is needed for GUI image layering
+    private final Set<CornerDirection> dirs = Arrays.stream(CornerDirection.values()).collect(Collectors.toSet());
     private final Map<GamePoint, Integer> zLayerMatrix;
     private int maxZ;
 
@@ -274,9 +275,6 @@ public class ViewPlayArea extends JComponent {
     }
 
 
-    //TODO: move this up
-    private final Set<CornerDirection> dirs = Arrays.stream(CornerDirection.values()).collect(Collectors.toSet());
-
     /**
      * Updates the zLayerMatrix with valid values for each card. <br>
      * All adjacent z values will be different. z1 > z2 means that card1 covers card2.
@@ -399,7 +397,6 @@ public class ViewPlayArea extends JComponent {
             }
         }
         throw new IllegalArgumentException("INVALID CHANGE AT " + pos + " #iter=OVER-MAX" + " zChange="+zChange);
-        //TODO: fix invalid zChange?? [Ale] more testing to validate this method
     }
 
     /**
