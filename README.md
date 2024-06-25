@@ -7,8 +7,7 @@ Chat and Disconnection resilience
 # How to launch the Server
 1. Navigate to the folder containing the Server.jar
 2. Run the command `java -jar Server.jar <RMI port> <TCP port> [Server IP]`  (the **order** of the arguments is **important**)
-      - The IP can be omitted: the app will automatically use the local machine's IP (excluding localhost)
-      - If the local machine has multiple IPs, then it will prompt the user to select one of them (other than localhost)
+      - The IP can be omitted: the app will list the local machine IPs and prompt the user to select one of them (other than `localhost`)
 3. If using the FatJar instead run: <br> `java -cp Server.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`
 
 # How to launch the Client
