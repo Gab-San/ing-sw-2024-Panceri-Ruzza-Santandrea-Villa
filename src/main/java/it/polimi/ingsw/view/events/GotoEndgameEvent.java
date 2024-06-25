@@ -16,7 +16,11 @@ import it.polimi.ingsw.view.tui.scenes.PrintEndgameUI;
 public class GotoEndgameEvent implements TUIEvent, GUIEvent{
     private final ViewBoard board;
     boolean atLeast2Players;
-    //DOCS add docs
+
+    /**
+     * Constructs go to endgame event.
+     * @param board board model of view
+     */
     public GotoEndgameEvent(ViewBoard board){
         this.board = board;
         atLeast2Players = board.getOpponents().stream().anyMatch(ViewOpponentHand::isConnected);

@@ -9,7 +9,12 @@ import it.polimi.ingsw.view.tui.TUI;
 public class DisplayMessageEvent implements TUIEvent, GUIEvent{
     private final String message;
     private final String messenger;
-    //DOCS add docs
+
+    /**
+     * Constructs display chat message event.
+     * @param messenger message sender's identifier
+     * @param message message body
+     */
     public DisplayMessageEvent(String messenger, String message) {
         this.message = message;
         this.messenger = messenger;

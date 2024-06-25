@@ -19,9 +19,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-//DOCS complete docs
+/**
+ * This class represents the player hand, holding play cards and visible cards.
+ */
 public class PlayerHand implements GameSubject {
-    static final int MAX_CARDS = 3;
+    private static final int MAX_CARDS = 3;
     private final List<PlayCard> cards;
     private final List<ObjectiveCard> secretObjective;
     private StartingCard startingCard;
@@ -74,6 +76,10 @@ public class PlayerHand implements GameSubject {
         else return cards.get(pos);
     }
 
+    /**
+     * Returns the list of card in player's hand.
+     * @return cards in player's hand
+     */
     public List<PlayCard> peekCards() {
         return cards;
     }
@@ -119,6 +125,12 @@ public class PlayerHand implements GameSubject {
         notifyAllListeners(new PlayerHandAddCardEvent(playerRef.getNickname(), drawnCard));
         cards.add(drawnCard);
     }
+
+    /**
+     * Returns true if the number of play cards in the player's hand is equal or higher than the maximum number
+     * of cards a player can hold (3 by the rules), false otherwise.
+     * @return true if a card cannot be added to the player's hand, false otherwise
+     */
     public boolean isHandFull() {
         return cards.size() >= MAX_CARDS;
     }
@@ -179,8 +191,11 @@ public class PlayerHand implements GameSubject {
         this.secretObjective.add(objectiveCard);
         notifyAllListeners(new PlayerHandAddObjectiveCardEvent(playerRef.getNickname(), objectiveCard));
     }
-    
-    
+
+    /**
+     * Returns the secret cards currently held by the player.
+     * @return player's secret cards
+     */
     public List<ObjectiveCard> getObjectiveChoices() {
         return secretObjective;
     }
@@ -219,6 +234,11 @@ public class PlayerHand implements GameSubject {
             throw new PlayerHandException("Starting card was not dealt before trying to access it.", playerRef, StartingCard.class);
         return startingCard;
     }
+
+    /**
+     * Returns the current starting card (may be null).
+     * @return current starting card (if owned)
+     */
     public StartingCard peekStartingCard(){
         return startingCard;
     }
@@ -248,7 +268,10 @@ public class PlayerHand implements GameSubject {
         notifyAllListeners(new PlayerHandSetStartingCardEvent(playerRef.getNickname(), startingCard));
     }
 
-
+    /**
+     * Returns the associated player instance.
+     * @return associated player
+     */
     public Player getPlayerRef(){
         return playerRef;
     }

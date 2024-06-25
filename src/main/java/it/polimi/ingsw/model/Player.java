@@ -13,7 +13,14 @@ import org.jetbrains.annotations.Range;
 import java.util.LinkedList;
 import java.util.List;
 
-//DOCS complete docs
+/**
+ * This class represents a player. A player is an entity that sits to play the game
+ * and is characterized by the following attributes: <br>
+ * - is active; <br>
+ * - has a turn assigned in which to play; <br>
+ * - can choose a color; <br>
+ * - is identifier by a unique string named nickname.
+ */
 public class Player implements GameSubject {
     private final String nickname;
     @Range(from=1,to=4)
@@ -23,6 +30,10 @@ public class Player implements GameSubject {
     private PlayerColor color;
     private final List<GameListener> gameListenerList;
 
+    /**
+     * Initializes a player with the specified nickname.
+     * @param nickname unique identifier of the player
+     */
     public Player(String nickname){
         gameListenerList = new LinkedList<>();
         this.nickname = nickname;
@@ -45,29 +56,68 @@ public class Player implements GameSubject {
         return nickname.hashCode();
     }
 
+    /**
+     * Returns player's nickname. It is their unique identifier.
+     * @return player's nickname
+     */
     public String getNickname(){
         return nickname;
     }
+
+    /**
+     * Returns the play turn assigned to the player.
+     * @return player turn
+     */
     public int getTurn(){
         return turn;
     }
+
+    /**
+     * Sets the player's turn.
+     * @param turn turn in which the selected player is to play
+     */
     public void setTurn(int turn) {
         this.turn = turn;
         notifyAllListeners(new SetTurnEvent(nickname, turn));
     }
+
+    /**
+     * Returns true if the player is connected, false otherwise.
+     * @return true if the player is connected, false otherwise
+     */
     public boolean isConnected() {
         return isConnected;
     }
+
+    /**
+     * Sets player connection status. This represents the active status of a player.
+     * @param connected true if the player is connected, false otherwise
+     */
     public void setConnected(boolean connected) {
         isConnected = connected;
         notifyAllListeners(new SetConnectEvent(nickname, connected));
     }
+
+    /**
+     * Returns player's hand.
+     * @return player's hand
+     */
     public PlayerHand getHand() {
         return hand;
     }
+
+    /**
+     * Returns player's chosen color.
+     * @return player's color
+     */
     public PlayerColor getColor() {
         return color;
     }
+
+    /**
+     * Sets the player's color as chosen during choose color phase.
+     * @param newColor chosen color
+     */
     public void setColor(PlayerColor newColor){
         this.color=newColor;
         notifyAllListeners(new SetColorEvent(nickname, newColor));
