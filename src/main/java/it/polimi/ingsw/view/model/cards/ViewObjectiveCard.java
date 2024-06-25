@@ -11,8 +11,13 @@ import java.awt.*;
  * the objective solves.
  */
 public class ViewObjectiveCard extends ViewCard {
-    //DOCS add attribute javadoc
+    /**
+     * The string identifying a "pattern strategy" type of objective card
+     */
     public static final String PATTERN_TYPE = "PATTERNTYPE";
+    /**
+     * The string identifying a "resource strategy" type of objective card
+     */
     public static final String RESOURCE_TYPE = "RESOURCETYPE";
     /**
      * Either "PATTERNTYPE" or "RESOURCETYPE"

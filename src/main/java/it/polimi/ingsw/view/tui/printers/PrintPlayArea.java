@@ -121,15 +121,9 @@ topLeftCard      topCard       topRightCard
           BLCard         BRCard
 botLeftCard      botCard      botRightCard
      */
-    //DOCS: [Ale] this doc could be horrible
     /**
-     * Prints according to following schema: <br><br>
-     * topLeftCard______topCard________topRightCard <br>
-     * ___________TLCard________TRCard <br>
-     * __leftCard_______midCard________rightCard    <br>
-     * __________BLCard_________BRCard              <br>
-     * botLeftCard______botCard_______botRightCard  <br>
-     * <br>
+     * Prints a 5-cards-wide square view of this printer's playArea centered on the given point. <br><br>
+     *
      * The outside corners of cards on the edges of the view that are
      * covered by another card (not in view) are not shown to indicate
      * the presence of another card in that outside position.
@@ -139,6 +133,8 @@ botLeftCard      botCard      botRightCard
     public void printPlayArea(GamePoint center){
         final Set<CornerDirection> fillCorners = new HashSet<>();
 
+    //region Import cards
+        //import the necessary cards, reading from playArea
         ViewPlaceableCard topCard = playArea.getCardAt(center.move(TL, TR));
         ViewPlaceableCard topLeftCard = playArea.getCardAt(center.move(TL, TL));
         ViewPlaceableCard topRightCard = playArea.getCardAt(center.move(TR, TR));
@@ -159,7 +155,11 @@ botLeftCard      botCard      botRightCard
 
         String TLSpaces = printCard.getSpaces(PrintCard.cornerStringAsSpacesLength + PrintCard.cornerRowSpaceCount);
         String inBetweenSpaces = printCard.getSpaces(PrintCard.cornerRowSpaceCount);
+    //endregion
 
+    //region Transform Card -> String[5]
+        //transform all cards in their String[5] representation, filling corners as needed.
+        //each positions has different corner filling requirements
         fillCorners.clear();
         fillCorners.add(TL);
         fillCorners.add(TR);
@@ -252,8 +252,9 @@ botLeftCard      botCard      botRightCard
         fillCorners.add(BR);
         fillCorners.add(TR);
         String[] botRightCardRows = getCardAsStringRows(botRightCard, fillCorners);
+    //endregion
 
-
+    //region PlayArea print
         print(topLeftCardRows[0]);  print(inBetweenSpaces); print(topCardRows[0]);  print(inBetweenSpaces); print(topRightCardRows[0]); endl();
         print(topLeftCardRows[1]);  print(inBetweenSpaces); print(topCardRows[1]);  print(inBetweenSpaces); print(topRightCardRows[1]); endl();
         print(topLeftCardRows[2]);  print(inBetweenSpaces); print(topCardRows[2]);  print(inBetweenSpaces); print(topRightCardRows[2]); endl();
@@ -279,8 +280,9 @@ botLeftCard      botCard      botRightCard
         print(botLeftCardRows[2]);  print(inBetweenSpaces); print(botCardRows[2]);  print(inBetweenSpaces); print(botRightCardRows[2]); endl();
         print(botLeftCardRows[3]);  print(inBetweenSpaces); print(botCardRows[3]);  print(inBetweenSpaces); print(botRightCardRows[3]); endl();
         print(botLeftCardRows[4]);  print(inBetweenSpaces); print(botCardRows[4]);  print(inBetweenSpaces); print(botRightCardRows[4]); endl();
+    //endregion
 
-        //visible Resources print:
+    //region Visible Resources print
         print("\nVisible Resources: ");
         boolean onePrinted = false;
         for(GameResource res : GameResource.values()){
@@ -291,5 +293,7 @@ botLeftCard      botCard      botRightCard
                 onePrinted = true;
             }
         } endl();
+    //endregion
+
     }
 }
