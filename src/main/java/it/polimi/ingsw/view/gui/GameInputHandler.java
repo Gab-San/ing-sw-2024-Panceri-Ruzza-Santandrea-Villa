@@ -6,8 +6,13 @@ import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.cards.ViewObjectiveCard;
 
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +20,7 @@ import java.util.concurrent.Executors;
  * This class acts as the handler for all the user inputs that either modify
  * the gui or are sent to the server.
  */
-public class GameInputHandler{
+public class GameInputHandler extends WindowAdapter {
     private final CommandPassthrough serverProxy;
     private final GameGUI gui;
     private final ViewController controller;
@@ -83,24 +88,6 @@ public class GameInputHandler{
         serverProxy.setNumOfPlayers(numOfPlayers);
     }
 
-    /**
-     * Attempts to disconnect the player from the lobby.
-     * @throws IllegalStateException may be thrown for different reasons: <br>
-     * - nickname doesn't match any of the connected players' nicknames <br>
-     * - a client instance not connected is trying to disconnect <br>
-     * - game reaches an illegal state of execution.
-     * @throws IllegalArgumentException may be thrown for different reasons: <br>
-     * - nickname doesn't match any of the connected players' nicknames <br>
-     * - an inner state exception
-     */
-    public void disconnect() throws IllegalStateException, IllegalArgumentException {
-        try {
-            serverProxy.disconnect();
-        } catch (RemoteException e) {
-            showError("CONNECTION LOST.");
-            notifyDisconnection();
-        }
-    }
 
     /**
      * Attempts to place the starting card.
@@ -252,5 +239,34 @@ public class GameInputHandler{
      */
     public ViewHand getLocalPlayer() {
         return controller.getLocalPlayer();
+    }
+
+    /**
+     * Attempts to disconnect the player from the lobby and exits the application.
+     * @throws IllegalStateException may be thrown for different reasons: <br>
+     * - nickname doesn't match any of the connected players' nicknames <br>
+     * - a client instance not connected is trying to disconnect <br>
+     * - game reaches an illegal state of execution.
+     * @throws IllegalArgumentException may be thrown for different reasons: <br>
+     * - nickname doesn't match any of the connected players' nicknames <br>
+     * - an inner state exception
+     */
+    @Override
+    public void windowClosing(WindowEvent e) {
+        try {
+            serverProxy.disconnect();
+        } catch (RemoteException ignore) {/*if an error occurs during disconnection
+        it means that it's only up to the server to detect disconnection*/}
+        Window[] windows = GameWindow.getWindows();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (Window window : windows) {
+                    window.dispose();
+                }
+                System.exit(0);
+            }
+        }, 1500);
     }
 }

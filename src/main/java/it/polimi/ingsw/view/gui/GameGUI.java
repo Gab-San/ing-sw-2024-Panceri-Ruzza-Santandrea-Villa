@@ -164,7 +164,8 @@ public class GameGUI implements View {
                     CHOOSEFIRSTPLAYER, PLACESTARTING, EVALOBJ:
                 break;
             case WAITING_FOR_REJOIN:
-                showNotification("WAITING FOR A PLAYER TO RECONNECT");
+                showChatMessage("SERVER", "WAITING FOR A PLAYER TO RECONNECT");
+                break;
             case PLACECARD:
                 showNotification("GAME PHASE UPDATED TO PLACE CARD PHASE");
                 break;

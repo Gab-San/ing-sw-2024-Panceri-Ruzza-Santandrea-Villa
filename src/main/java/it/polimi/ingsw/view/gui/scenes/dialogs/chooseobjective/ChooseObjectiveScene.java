@@ -114,7 +114,7 @@ public class ChooseObjectiveScene extends JDialog implements PropertyChangeListe
 
     @Override
     public synchronized void display() {
-        GUIFunc.setupDialog(this, 1200, 400);
+        GUIFunc.setupDialog(this, 1200, 400, inputHandler);
         setVisible(true);
     }
 

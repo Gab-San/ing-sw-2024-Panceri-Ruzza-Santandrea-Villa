@@ -4,6 +4,7 @@ import it.polimi.ingsw.view.UIFunctions;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
 
 import static java.awt.Component.CENTER_ALIGNMENT;
 
@@ -90,14 +91,14 @@ public final class GUIFunc extends UIFunctions {
      * @param width width of the frame
      * @param height height of the frame
      */
-    public static void setupFrame(JFrame frame, String title, int width, int height){
+    public static void setupFrame(JFrame frame, String title, int width, int height, WindowAdapter windowAdapter){
         // Sets title frame
         frame.setTitle(title);
         frame.setSize(width, height);
         // Centers screen
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         center.translate(-width/2, -height/2);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(windowAdapter);
         frame.setLocation(center);
     }
 
@@ -107,14 +108,12 @@ public final class GUIFunc extends UIFunctions {
      * @param width width of the dialog
      * @param height height of the dialog
      */
-    public static void setupDialog(JDialog dialog, int width, int height){
+    public static void setupDialog(JDialog dialog, int width, int height, WindowAdapter windowAdapter){
         dialog.setSize(width, height);
         dialog.setPreferredSize(new Dimension(width, height));
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         center.translate(-width/2, -height/2);
         dialog.setLocation(center);
-        //FIXME: for now it can exit since join should ping the client
-        // but it should first send a notification to the server
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.addWindowListener(windowAdapter);
     }
 }

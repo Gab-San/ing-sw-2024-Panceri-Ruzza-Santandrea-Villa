@@ -34,6 +34,9 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
         super(owner, title, true);
 
         setLayout(new GridBagLayout());
+        final int WIDTH = 500;
+        final int HEIGHT = 200;
+        GUIFunc.setupDialog(this, WIDTH, HEIGHT, inputHandler);
 
         setPlayerLabel = new JLabel("Set number of players:");
 
@@ -105,9 +108,6 @@ public class SetPlayersScene extends JDialog implements GUI_Scene {
 
     @Override
     public synchronized void display() {
-        final int WIDTH = 500;
-        final int HEIGHT = 200;
-        GUIFunc.setupDialog(this, WIDTH, HEIGHT);
         setAllComponentsVisible();
         setVisible(true);
         requestFocus();

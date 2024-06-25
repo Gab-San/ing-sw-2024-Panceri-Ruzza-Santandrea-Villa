@@ -43,7 +43,7 @@ public class GameWindow extends JFrame implements PropertyChangeListener {
         displayWindow = this;
         // Standard JFrame stuff defining window size, position and layout
         GUIFunc.setupFrame(this, "Codex Naturalis",
-                SCREEN_WIDTH, SCREEN_HEIGHT);
+                SCREEN_WIDTH, SCREEN_HEIGHT, inputHandler);
         this.inputHandler = inputHandler;
         setLayout(new BorderLayout());
         // Sets up the panel containing chat and players list

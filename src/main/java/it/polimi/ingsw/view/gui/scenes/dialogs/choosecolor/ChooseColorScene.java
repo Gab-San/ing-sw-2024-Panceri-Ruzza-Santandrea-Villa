@@ -99,7 +99,7 @@ public class ChooseColorScene extends JDialog implements GUI_Scene, PropertyChan
     public synchronized void display() {
         final int WIDTH = 700;
         final int HEIGHT = 300;
-        GUIFunc.setupDialog(this, WIDTH, HEIGHT);
+        GUIFunc.setupDialog(this, WIDTH, HEIGHT, inputHandler);
         setAllComponentsVisible();
         setVisible(true);
     }
