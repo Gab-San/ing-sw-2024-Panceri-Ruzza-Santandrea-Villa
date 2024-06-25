@@ -61,7 +61,7 @@ public class ViewBoardGenerator {
             GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
-        int numOfVisibleResources = random.nextInt(cardNum*4);
+        int numOfVisibleResources = random.nextInt(1 + cardNum*4);
         int[] resAmount = new int[7];
         for (int i = 0; i < numOfVisibleResources; i++) {
             GameResource res = getRandomResource();

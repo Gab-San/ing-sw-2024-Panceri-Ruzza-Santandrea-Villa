@@ -284,7 +284,7 @@ public class ViewPlayArea extends JComponent {
         zLayerMatrix.clear();
         for (GamePoint pos : cardMatrix.keySet()) {
             //TODO: fix this to scale on size of cardMatrix
-            zLayerMatrix.put(pos, 3000);
+            zLayerMatrix.put(pos, 3000 + cardMatrix.size()*50);
             cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
         }
 
@@ -332,7 +332,7 @@ public class ViewPlayArea extends JComponent {
         int zCard = zLayerMatrix.get(pos);
         int zChange;
         //TODO: fix this to scale on size of cardMatrix
-        final int UNBOUND_BIG_CHANGE = 5000;
+        final int UNBOUND_BIG_CHANGE = 5000 + cardMatrix.size()*50;
 
         List<Boolean> covers = dirs.stream()
                 .filter(d -> zLayerMatrix.get(pos.move(d)) != null)
@@ -347,7 +347,7 @@ public class ViewPlayArea extends JComponent {
             if(covers.isEmpty()){
                 zChange = 0; //no issues if all zLayers are different and valid for coverage
                 if(!validateZ(pos, zChange)){
-                    zChange = 1000*discernInvalidation(pos, zChange);
+                    zChange = UNBOUND_BIG_CHANGE*discernInvalidation(pos, zChange);
                 }
             }
             else {
@@ -385,18 +385,15 @@ public class ViewPlayArea extends JComponent {
             }
         }
 
-        final int MAX_HALVING = 20;
-        for (int i = 0; i < MAX_HALVING; i++) {
+        int i = 0;
+        do{
             if(validateZ(pos,zChange))
                 return zChange;
             else
                 zChange /= 2;
-            if(zChange == 0){
-                System.out.println("zChange=0 at #iter="+i);
-                break;
-            }
-        }
-        throw new IllegalArgumentException("INVALID CHANGE AT " + pos + " #iter=OVER-MAX" + " zChange="+zChange);
+            i++;
+        }while(zChange != 0);
+        throw new IllegalArgumentException("INVALID CHANGE AT " + pos + " #iter=" + i + " zChange="+zChange);
     }
 
     /**
