@@ -125,7 +125,7 @@ class EventTest {
     @DisplayName("Deck State only first and second revealed")
     void testDeckCreationEvents() throws InterruptedException {
         board.unsubscribeClientFromUpdates(nick);
-        PlayableDeck deckWithTwo = new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile") {
+        PlayableDeck deckWithTwo = new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("TestFile") {
             private int count = 0;
             @Override
             public PlayCard addCardToDeck() throws DeckException {
@@ -157,7 +157,7 @@ class EventTest {
     }
 
     private PlayableDeck createDeckWithThreeCards(){
-        return new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile") {
+        return new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("TestFile") {
             private int count = 0;
             @Override
             public PlayCard addCardToDeck() throws DeckException {
@@ -227,7 +227,7 @@ class EventTest {
     @DisplayName("Empty Deck")
     void testDeckCreationEmpty() throws InterruptedException {
         board.unsubscribeClientFromUpdates(nick);
-        PlayableDeck emptyDeck = new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile") {
+        PlayableDeck emptyDeck = new PlayableDeck(Board.RESOURCE_DECK, new CardFactory("TestFile") {
             @Override
             public PlayCard addCardToDeck() throws DeckException {
                 throw new DeckException();

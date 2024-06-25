@@ -26,6 +26,36 @@ public class PuppetModelUpdater extends ModelUpdater {
     }
 
     @Override
+    public synchronized void displayMessage(String messenger, String msg) {
+        
+    }
+
+    @Override
+    public synchronized void notifyIndirectDisconnect() {
+        
+    }
+
+    @Override
+    public synchronized void removePlayer(String nickname) {
+        
+    }
+
+    @Override
+    public synchronized void notifyEndgame() {
+        
+    }
+
+    @Override
+    public synchronized void notifyEndgame(String nickname, int score) {
+        
+    }
+
+    @Override
+    public synchronized void setBoardState(int currentTurn, Map<String, Integer> scoreboard, GamePhase gamePhase, Map<String, Boolean> playerDeadLock) {
+        
+    }
+
+    @Override
     public void updatePlayer(String nickname, boolean isConnected){
 
     }

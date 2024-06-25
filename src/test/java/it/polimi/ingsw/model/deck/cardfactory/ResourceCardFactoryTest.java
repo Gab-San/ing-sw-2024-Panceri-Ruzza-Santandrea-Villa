@@ -13,7 +13,7 @@ class ResourceCardFactoryTest {
     void deckExceptionWrongCard(){
         ResourceCardFactory resourceCardFactory = null;
         try {
-             resourceCardFactory = new ResourceCardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile");
+             resourceCardFactory = new ResourceCardFactory("TestFile");
         } catch (IllegalStateException deckInstantiationException){
             deckInstantiationException.printStackTrace(System.err);
         }

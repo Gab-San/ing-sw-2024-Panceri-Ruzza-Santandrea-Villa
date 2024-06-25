@@ -47,7 +47,7 @@ class GoldCardFactoryTest {
 
     @Test
     void tryToImportFromWrongFile(){
-        GoldCardFactory goldCardFactory = new GoldCardFactory("src/test/java/it/polimi/ingsw/model/deck/TestFile");
+        GoldCardFactory goldCardFactory = new GoldCardFactory("TestFile");
 
         assertThrows(
             DeckException.class,

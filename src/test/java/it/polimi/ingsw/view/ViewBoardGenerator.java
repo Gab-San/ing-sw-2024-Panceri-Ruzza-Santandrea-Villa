@@ -47,16 +47,21 @@ public class ViewBoardGenerator {
         hand.setConnected(random.nextBoolean());
         hand.setColor(getRandomPlayerColor());
     }
-    public static void fillPlayAreaRandomly(ViewPlayArea playArea){
+    public static void fillPlayAreaRandomly(ViewPlayArea playArea) {
+        //default area size to 30 cards
+        fillPlayAreaRandomly(playArea, 30);
+    }
+    public static void fillPlayAreaRandomly(ViewPlayArea playArea, int cardNum){
         playArea.placeCard(new GamePoint(0,0), getRandomStartingCard());
-        List<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(30, false));
+        List<ViewPlaceableCard> cards = new LinkedList<>(getRandomCards(cardNum, false));
         for(ViewPlaceableCard card : cards){
+            if(playArea.getFreeCorners().isEmpty()) break;
             int randomCornerIdx = random.nextInt(playArea.getFreeCorners().size());
             ViewCorner corner = playArea.getFreeCorners().get(randomCornerIdx);
             GamePoint position = corner.getCardRef().getPosition().move(corner.getDirection());
             playArea.placeCard(position, card);
         }
-        int numOfVisibleResources = random.nextInt(30*4);
+        int numOfVisibleResources = random.nextInt(cardNum*4);
         int[] resAmount = new int[7];
         for (int i = 0; i < numOfVisibleResources; i++) {
             GameResource res = getRandomResource();
