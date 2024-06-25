@@ -3,7 +3,8 @@ package it.polimi.ingsw.view;
 import java.util.List;
 
 /**
- * This interface defines the skeleton of a displayable scene.
+ * This interface defines the skeleton of a displayable scene (abstracting from TUI/GUI). <br>
+ * Provides generic methods to display the scene or to show notifications and errors on the scene
  */
 public interface Scene {
     /**

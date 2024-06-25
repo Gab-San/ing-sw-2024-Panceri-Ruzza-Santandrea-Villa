@@ -17,6 +17,9 @@ import java.util.ListIterator;
  */
 public class ViewController {
     private final ViewBoard board;
+    /**
+     * The local player's ViewPlayArea
+     */
     private ViewPlayArea selfPlayArea;
 
     /**
@@ -240,11 +243,19 @@ public class ViewController {
         return board.getPlayerHand().getNickname().equals(nickname);
     }
 
+    /**
+     * @return the local player's hand.
+     */
     public ViewPlayerHand getLocalPlayer() {
         return board.getPlayerHand();
     }
 
-    public int getObjectiveCardIndex(ViewObjectiveCard comparedCard) {
+    /**
+     * @param comparedCard the objective card to find
+     * @return the index of the given objective card in hand.
+     * @throws IllegalStateException if the objective card is not in hand.
+     */
+    public int getObjectiveCardIndex(ViewObjectiveCard comparedCard) throws IllegalStateException {
         List<ViewObjectiveCard> secretCards = board.getPlayerHand().getSecretObjectives();
         ListIterator<ViewObjectiveCard> iterator = secretCards.listIterator();
         while(iterator.hasNext()){

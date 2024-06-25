@@ -180,7 +180,6 @@ public class EndgameState extends GameState{
     }
 
 //region AUXILIARY FUNCTIONS
-    //DOCS: [Ale] correct docs if we have the server crash on PlayerHandException
     /**
      * Evaluates the objectives of all players (secret and shared) and updates their scores.
      * @throws IllegalStateException if a player does not have a secret objective.

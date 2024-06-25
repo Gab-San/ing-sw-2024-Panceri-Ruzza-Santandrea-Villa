@@ -10,22 +10,39 @@ import java.util.Map;
 
 /**
  * This class implements a scene manager. A scene manager has full control
- * on game scenes, and it is the only way to access them. It is implemented
- * as a singleton.
+ * on game scenes, and it is the only way to access them.
+ * It is implemented as a singleton. <br>
+ * A scene should first be saved, then set to be displayed. <br>
  */
 public class SceneManager {
+    /**
+     * The scene that is currently displayed
+     */
     private Scene currentScene;
+    /**
+     * Lock to synchronize access to the loaded scenes
+     */
     private final Object SCENE_LOCK = new Object();
+
+    /**
+     * Map associating an ID with its corresponding (loaded) scene.
+     */
     private final Map<SceneID, Scene> savedScenes;
+    /**
+     * Singleton instance of the SceneManager
+     */
     private static SceneManager instance;
+
+    /**
+     * Creates a SceneManager with no loaded scenes
+     */
     private SceneManager(){
         currentScene = null;
         savedScenes = new HashMap<>();
     }
 
     /**
-     * Returns scene manager singleton instance.
-     * @return singleton instance
+     * @return the SceneManager singleton instance
      */
     public synchronized static SceneManager getInstance(){
         if(instance == null) instance = new SceneManager();
@@ -46,7 +63,7 @@ public class SceneManager {
     /**
      * Returns the scene associated to the scene identifier.
      * @param sceneID scene identifier
-     * @return scene associated to scene id
+     * @return scene associated to scene id (can be null)
      */
     public Scene getScene(SceneID sceneID){
         synchronized (savedScenes) {
@@ -79,8 +96,7 @@ public class SceneManager {
     }
 
     /**
-     * Returns the current displaying scene.
-     * @return current displaying scene
+     * @return currently displayed scene
      */
     public Scene getCurrentScene(){
         synchronized (SCENE_LOCK) {
@@ -89,10 +105,10 @@ public class SceneManager {
     }
 
     /**
-     * Returns the current scene identifier.
-     * @return current scene identifier
+     * @return the current scene identifier
+     * @throws IllegalStateException if the current scene was not loaded
      */
-    public SceneID getCurrentSceneID(){
+    public SceneID getCurrentSceneID() throws IllegalStateException{
         synchronized (SCENE_LOCK){
             synchronized (savedScenes){
                 for(SceneID id : savedScenes.keySet()){
@@ -106,7 +122,7 @@ public class SceneManager {
     }
 
     /**
-     * Removes the scene associated to the scene identifier.
+     * Removes the scene associated to the scene identifier from the saved scenes.
      * @param sceneID scene identifier
      */
     public void remove(SceneID sceneID){
@@ -116,7 +132,7 @@ public class SceneManager {
     }
 
     /**
-     * Removes the selected scene.
+     * Removes the selected scene from the saved scenes.
      * @param scene scene to remove
      */
     public void remove(Scene scene){
@@ -130,17 +146,15 @@ public class SceneManager {
     }
 
     /**
-     * Returns the saved play area scenes.
-     * @return saved play area scenes
+     * @return a list of all the {@link AreaScene} that were saved before the call to this method. <br>
+     *      The returned list is not a view of the loaded scenes and any changes to the
+     *      returned list will not be reflected in the SceneManager.
      */
     public List<AreaScene> getAreaScenes() {
         List<AreaScene> scenes = new LinkedList<>();
         synchronized (savedScenes){
             for(SceneID id : savedScenes.keySet()){
-                if(id.isOpponentAreaScene()){
-                    scenes.add((AreaScene) savedScenes.get(id));
-                }
-                if(id.equals(SceneID.getMyAreaSceneID())){
+                if(id.isOpponentAreaScene() || id.equals(SceneID.getMyAreaSceneID())){
                     scenes.add((AreaScene) savedScenes.get(id));
                 }
             }

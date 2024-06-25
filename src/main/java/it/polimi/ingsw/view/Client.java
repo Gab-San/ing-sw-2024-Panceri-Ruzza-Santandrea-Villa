@@ -30,39 +30,21 @@ public class Client {
     private static JsonImporter cardJSONImporter;
 
 //region FUNCTIONS
-
-    /**
-     * @return true if the program is being run in the IntelliJ IDE
-     */
-    // TODO: delete this
-    public static boolean isRunningInIDE(){
-        try {
-            return Client.class.getClassLoader().loadClass("com.intellij.rt.execution.application.AppMainV2") != null;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
-
     /**
      * Clears the screen. <br>
      * On Windows: same as running "cls", prevents scrolling up <br>
-     * On Linux/WSL: same as running "clear", does not prevent scrolling up
+     * On Linux/WSL/Others: same as running "clear", does not prevent scrolling up
      */
     public static void cls(){
+        //The print "\033[H\033[2J" is and ANSI code to perform a "clear" linux-like
+        // It is possible to scroll up after that ANSI code "clears the screen"
         synchronized (System.out) {
-            //TODO: delete \n screen before release (needed for IDE console cls)
-            if (isRunningInIDE()) System.out.print("\n".repeat(50));
-            else {
-                System.out.print("\033[H\033[2J");
-                //FIXME: [Ale] choose which cls to use
-                //source: https://stackoverflow.com/questions/2979383/how-to-clear-the-console-using-java
-                try {
-                    if (System.getProperty("os.name").contains("Windows"))
-                        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                    else Runtime.getRuntime().exec("clear");
-                } catch (Exception ignored) {
-                }
-            }
+            System.out.print("\033[H\033[2J");
+            try {
+                if (System.getProperty("os.name").contains("Windows"))
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                else Runtime.getRuntime().exec("clear");
+            } catch (Exception ignored) {}
             System.out.flush();
         }
     }
