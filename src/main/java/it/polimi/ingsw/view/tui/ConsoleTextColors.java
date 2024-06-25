@@ -4,10 +4,16 @@ package it.polimi.ingsw.view.tui;
  * Collection of ANSI text (foreground) colors
  */
 public class ConsoleTextColors {
+    /**
+     * The ANSI prefix, common to all codes
+     */
     public static final String PREFIX = "\u001B[";
+    /**
+     * The ANSI postfix, common to all codes
+     */
     public static final String POSTFIX = "m";
     // Reset
-    public static final String RESET = PREFIX + "00" + POSTFIX;  // Text Reset
+    public static final String RESET = PREFIX + "00" + POSTFIX;
 
     // Regular Colors
     public static final String BLACK_TEXT = PREFIX + "0;30" + POSTFIX;  

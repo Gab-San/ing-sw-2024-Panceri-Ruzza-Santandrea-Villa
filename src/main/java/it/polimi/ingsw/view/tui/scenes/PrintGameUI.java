@@ -16,10 +16,21 @@ import java.util.List;
  * such as moveView and setCenter.
  */
 public abstract class PrintGameUI extends TUI_Scene {
-    //DOCS add attribute doc
+    /**
+     * Printer of this scene's playArea
+     */
     protected final PrintPlayArea printPlayArea;
+    /**
+     * The point on which the playArea print is centered
+     */
     protected GamePoint printCenter;
+    /**
+     * Printer of this scene's player hand
+     */
     protected final PrintHand printHand;
+    /**
+     * The name of the player associated with this scene's hand and playArea
+     */
     protected final String nickname;
 
     /**

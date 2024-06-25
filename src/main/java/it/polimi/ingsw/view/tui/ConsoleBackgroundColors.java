@@ -8,13 +8,20 @@ import it.polimi.ingsw.PlayerColor;
  * Collection of ANSI background colors
  */
 public class ConsoleBackgroundColors {
+    /**
+     * The ANSI prefix, common to all codes
+     */
     public static final String PREFIX = "\u001B[";
+    /**
+     * The ANSI postfix, common to all codes
+     */
     public static final String POSTFIX = "m";
-    
-    public static final String RESET = PREFIX + "00" + POSTFIX;  //Resetta il colore
+
+    //Reset
+    public static final String RESET = PREFIX + "00" + POSTFIX;
 
     // Normal intensity backgrounds
-    public static final String WHITE = PREFIX + "47" + POSTFIX; //Colore bianco per i bordi
+    public static final String WHITE = PREFIX + "47" + POSTFIX;
     public static final String RED = PREFIX + "41" + POSTFIX;
     public static final String PURPLE = PREFIX + "45" + POSTFIX;
     public static final String GREEN = PREFIX + "42" + POSTFIX;
