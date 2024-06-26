@@ -29,6 +29,7 @@ public class PlacePlayCmd extends GameCommand{
      * Constructs the command and sets the command parameters.
      * @param gameController controller of the game for which game commands are issued
      * @param nickname unique identifier of the user issuing the command
+     * @param cardID    placed card unique identifier
      * @param placePos the position of the placed card on which the card will be placed.
      * @param cornerDir the direction of the corner of the placed card on which the card will be placed.
      * @param placeOnFront true if the card will be placed front-side up

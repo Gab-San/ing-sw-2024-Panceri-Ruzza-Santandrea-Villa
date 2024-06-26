@@ -56,6 +56,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Returns true if the card is in hand (comparing with ==), false otherwise.
      * @param card the card to look for in hand
      * @return true if the card is in hand (comparing with ==), false otherwise
      */
@@ -67,6 +68,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Returns the playable card at the specified index.
      * @param pos index (0-2)
      * @return card at index pos in this hand, without removing it from the hand
      * @throws IndexOutOfBoundsException if pos < 0 or pos >= hand size
@@ -85,6 +87,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Returns the playable card associated wit the specified id.
      * @param cardID ID of the requested card
      * @return card with given cardID in this hand, without removing it from the hand
      * @throws IllegalArgumentException if there is no card with given cardID in this hand
@@ -98,6 +101,7 @@ public class PlayerHand implements GameSubject {
                 });
     }
     /**
+     * Returns the card at the specified position, removing it from the player's hand.
      * @param pos index (0-2)
      * @return card at index pos in this hand, removing it from the hand
      * @throws IndexOutOfBoundsException if pos < 0 or pos >= hand size
@@ -152,6 +156,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Returns the player's hand secret objective.
      * @return the selected secret objective of this hand
      * @throws PlayerHandException if the secret objective wasn't chosen yet
      */
@@ -201,6 +206,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Removes the secret objective not chosen from the player's hand.
      * @param choice index of the chosen secret objective (1 or 2)
      * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
      * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
@@ -226,6 +232,7 @@ public class PlayerHand implements GameSubject {
     }
 
     /**
+     * Returns the starting card.
      * @return this hand's starting card
      * @throws PlayerHandException if starting card was not dealt
      */

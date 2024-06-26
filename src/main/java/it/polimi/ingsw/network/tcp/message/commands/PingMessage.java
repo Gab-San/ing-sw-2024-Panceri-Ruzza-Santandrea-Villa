@@ -18,6 +18,10 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class PingMessage implements TCPClientMessage, TCPServerMessage {
     @Serial
     private static final long serialVersionUID = 0000L;
+    /**
+     * Default constructor.
+     */
+    public PingMessage(){}
 
      @Override
     public void execute(VirtualServer virtualServer, VirtualClient virtualClient) throws RemoteException {

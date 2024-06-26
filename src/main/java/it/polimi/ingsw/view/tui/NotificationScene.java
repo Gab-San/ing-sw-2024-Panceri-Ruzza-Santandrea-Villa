@@ -8,6 +8,10 @@ import java.util.List;
  * Default empty scene to always be able to receive notifications
  */
 public class NotificationScene implements Scene {
+    /**
+     * Default constructor.
+     */
+    public NotificationScene(){}
     @Override
     public void display() {
 

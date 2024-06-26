@@ -13,8 +13,9 @@ import java.util.List;
  */
 public interface RMI_AddressHelperFunctions {
     /**
-     * @return list of distinct IPs and hostnames on the local machine. <br>
-     *      Reads the IPs using java.net.NetworkInterface
+     * Returns list of distinct IPs and hostnames on the local machine. <br>
+     * Reads the IPs using java.net.NetworkInterface
+     * @return list of distinct IPs and hostnames on the local machine.
      */
     static List<String> getListOfValidLocalIPs(){
         List<String> localIPs = new LinkedList<>();
@@ -38,6 +39,7 @@ public interface RMI_AddressHelperFunctions {
     }
 
     /**
+     * Returns true if address matches the loopback address (127.0.0.1) or "localhost".
      * @param address and IP address or a hostname
      * @return true if address matches the loopback address (127.0.0.1) or "localhost"
      */

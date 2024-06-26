@@ -11,6 +11,11 @@ public class PlayerChoiceAction extends AbstractAction {
      * Set player number action property name.
      */
     public static final String PLAYERS_NUM_PROPERTY_NAME = "NUMBER_OF_PLAYERS";
+
+    /**
+     * Default constructor.
+     */
+    public PlayerChoiceAction(){}
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setEnabled(false);

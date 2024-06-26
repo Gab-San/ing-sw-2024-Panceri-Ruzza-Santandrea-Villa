@@ -16,8 +16,8 @@ public class OnlyRevealedSetDeckStateUpdate extends DeckTypeUpdate {
      * Constructs the update.
      * @param modelUpdater instance of the model updater referenced to execute updates
      * @param deck identifier of the deck
-     * @param revealedId
-     * @param cardPosition
+     * @param revealedId revealed card identifier
+     * @param cardPosition card position into the deck
      */
     public OnlyRevealedSetDeckStateUpdate(ModelUpdater modelUpdater, char deck, String revealedId, int cardPosition) {
         super(modelUpdater, deck);

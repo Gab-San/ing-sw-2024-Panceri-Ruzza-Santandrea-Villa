@@ -60,6 +60,7 @@ public abstract class PlayCard extends PlaceableCard{
 
     /**
      * This constructor creates a card with placement points.
+     * @param cardID card identifier
      * @param backResource the resource displayed on the back of the card
      * @param pointsOnPlace the points multiplier on card placing
      * @param corners the corners associated with the card

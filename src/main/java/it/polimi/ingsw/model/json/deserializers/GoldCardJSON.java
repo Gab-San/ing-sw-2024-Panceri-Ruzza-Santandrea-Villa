@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.json.deserializers;
 
 import it.polimi.ingsw.GameResource;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,16 @@ public class GoldCardJSON {
     private PointOnPlace pointsOnPlace;
     private List<CornerJ> cornersJS;
     private GameResource backResource;
+    /**
+     * Default constructor.
+     */
+    public GoldCardJSON(){
+        cardId = null;
+        placementCost = new HashMap<>();
+        pointsOnPlace = new PointOnPlace();
+        cornersJS = new LinkedList<>();
+        backResource = null;
+    }
 
     /**
      * Returns the card identifier.

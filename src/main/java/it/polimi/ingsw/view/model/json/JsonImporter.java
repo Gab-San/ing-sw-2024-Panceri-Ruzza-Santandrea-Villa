@@ -8,10 +8,8 @@ import it.polimi.ingsw.view.model.json.deserializers.ObjectiveCardDeserializerVi
 import it.polimi.ingsw.view.model.json.deserializers.ResourceCardDeserializerView;
 import it.polimi.ingsw.view.model.json.deserializers.StartingCardDeserializerView;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,6 +94,8 @@ public class JsonImporter {
     }
 
     /**
+     * Returns the resource card associated with the given id or a resource card such that
+     * ViewCard.equals(o, e) returns true.
      * @param ID a card ID (can be null)
      * @return returns a copy of the resource card with given ID
      *        (or null if the ID is null or doesn't correspond to a resource card)
@@ -106,6 +106,8 @@ public class JsonImporter {
     }
 
     /**
+     * Returns the gold card associated with the given id or a gold card such that
+     * ViewCard.equals(o, e) returns true.
      * @param ID a card ID (can be null)
      * @return returns a copy of the gold card with given ID
      *        (or null if the ID is null or doesn't correspond to a gold card)
@@ -114,7 +116,9 @@ public class JsonImporter {
         if(ID == null) return null;
         return new ViewGoldCard(goldCards.get(ID));
     }
+
     /**
+     * Returns an objective card associated with the given id.
      * @param ID a card ID (can be null)
      * @return returns the objective card with given ID
      *        (or null if the ID is null or doesn't correspond to an objective card)
@@ -124,6 +128,8 @@ public class JsonImporter {
         return objectiveCards.get(ID);
     }
     /**
+     * Returns the starting card associated with the given id or a starting card such that
+     * ViewCard.equals(o, e) returns true.
      * @param ID a card ID (can be null)
      * @return returns a starting card with given ID
      *        (or null if the ID is null or doesn't correspond to a starting card)
@@ -134,6 +140,8 @@ public class JsonImporter {
     }
 
     /**
+     * Returns the view card associated with the given id or a view card such that
+     * ViewCard.equals(o, e) returns true.
      * @param ID a card ID (can be null)
      * @return the card with the given ID (a copy if it's a resource or gold card)
      *        (or null if the ID is null or doesn't correspond to any card)
@@ -149,6 +157,8 @@ public class JsonImporter {
         };
     }
     /**
+     * Returns the play card associated with the given id or a play card such that
+     * ViewCard.equals(o, e) returns true.
      * @param ID a card ID (can be null)
      * @return a copy of the playCard with the given ID
      *        (or null if the ID is null or doesn't correspond to a playCard)
@@ -162,6 +172,7 @@ public class JsonImporter {
         };
     }
     /**
+     * Returns a list of view cards from the list of ids given.
      * @param IDList a list of card IDs
      * @return the list of cards with the given IDs, in the same order as the IDs
      *        (the list may contain null values for the IDs that don't correspond to a card)
@@ -177,6 +188,7 @@ public class JsonImporter {
         return cardList;
     }
     /**
+     * Returns a list of play cards associated with the specified list of ids.
      * @param IDList a list of playCard IDs
      * @return the list of copies of the playCards with the given IDs, in the same order as the IDs
      *        (the list may contain null values for the IDs that don't correspond to a playCard)
@@ -192,6 +204,7 @@ public class JsonImporter {
         return cardList;
     }
     /**
+     * Returns a list of view objective cards associated with the specified list of ids.
      * @param IDList a list of objectiveCard IDs
      * @return the list of objectiveCards with the given IDs, in the same order as the IDs
      *        (the list may contain null values for the IDs that don't correspond to an objectiveCard)

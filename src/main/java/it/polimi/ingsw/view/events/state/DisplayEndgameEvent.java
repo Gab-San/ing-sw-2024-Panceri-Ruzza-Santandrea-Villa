@@ -11,12 +11,25 @@ import it.polimi.ingsw.view.tui.TUI;
 public class DisplayEndgameEvent implements TUIEvent, GUIEvent {
     private final String nickname;
     private final int score;
+    /**
+     * Endgame notification status. True if notified at least once.
+     */
     public static boolean notified;
+
+    /**
+     * Constructs display endgame event. Notifies of endgame when decks are empty.
+     */
     public DisplayEndgameEvent(){
         nickname = null;
         score = 0;
     }
 
+    /**
+     * Constructs display endgame event. Notifies of endgame when a player has
+     * reached score threshold.
+     * @param nickname player's identifier who has reached threshold
+     * @param score score with which the player has reached threshold
+     */
     public DisplayEndgameEvent(String nickname, int score){
         this.nickname = nickname;
         this.score = score;

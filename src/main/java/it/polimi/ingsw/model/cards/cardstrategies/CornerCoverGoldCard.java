@@ -6,7 +6,15 @@ import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 
+/**
+ * This class represents the gold card strategy that gives point based on
+ * how many corners the card covers.
+ */
 public class CornerCoverGoldCard implements GoldCardStrategy{
+    /**
+     * Default constructor.
+     */
+    public CornerCoverGoldCard(){}
     /**
      * This method calculates how many corners the placed card covers.
      * <p>

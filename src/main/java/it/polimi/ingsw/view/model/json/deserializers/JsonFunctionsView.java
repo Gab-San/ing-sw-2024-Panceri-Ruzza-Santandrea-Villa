@@ -2,13 +2,12 @@ package it.polimi.ingsw.view.model.json.deserializers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.GameResource;
+import it.polimi.ingsw.view.model.cards.ViewCorner;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is a helper for json functions.
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 public interface JsonFunctionsView {
 
     /**
+     * Parses view corners from the given json node.
      * @param node the node of the card that is being imported
      * @return a list of that card's ViewCorners
      */

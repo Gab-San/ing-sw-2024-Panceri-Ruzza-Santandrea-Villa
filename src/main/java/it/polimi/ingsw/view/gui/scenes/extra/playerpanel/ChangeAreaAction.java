@@ -11,6 +11,12 @@ import java.awt.event.ActionEvent;
  * This action lets the user change the scene to the selected player's area.
  */
 public class ChangeAreaAction extends AbstractAction {
+    /**
+     * Default constructor.
+     */
+    public ChangeAreaAction(){
+        super();
+    }
     private ChangeAreaButton oldButton;
     /**
      * Area scene change property name.

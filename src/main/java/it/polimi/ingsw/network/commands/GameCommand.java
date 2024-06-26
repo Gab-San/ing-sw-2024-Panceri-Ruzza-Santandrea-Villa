@@ -13,7 +13,13 @@ import it.polimi.ingsw.model.exceptions.DeckException;
  * </p>
  */
 abstract public class GameCommand{
+    /**
+     * Board controller instance on which to apply command.
+     */
     public final BoardController gameController;
+    /**
+     * Player who issued command unique identifier.
+     */
     protected final String nickname;
 
     /**

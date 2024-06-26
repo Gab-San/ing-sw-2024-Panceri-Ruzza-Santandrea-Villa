@@ -42,6 +42,7 @@ public class SceneManager {
     }
 
     /**
+     * Returns scene manager singleton instance.
      * @return the SceneManager singleton instance
      */
     public synchronized static SceneManager getInstance(){
@@ -96,6 +97,7 @@ public class SceneManager {
     }
 
     /**
+     * Returns the currently displayed scene.
      * @return currently displayed scene
      */
     public Scene getCurrentScene(){
@@ -105,6 +107,7 @@ public class SceneManager {
     }
 
     /**
+     * Returns current scene id.
      * @return the current scene identifier
      * @throws IllegalStateException if the current scene was not loaded
      */
@@ -146,9 +149,10 @@ public class SceneManager {
     }
 
     /**
-     * @return a list of all the {@link AreaScene} that were saved before the call to this method. <br>
-     *      The returned list is not a view of the loaded scenes and any changes to the
-     *      returned list will not be reflected in the SceneManager.
+     * Returns a list of all the {@link AreaScene} that were saved before the call to this method. <br>
+     * The returned list is not a view of the loaded scenes and any changes to the
+     * returned list will not be reflected in the SceneManager.
+     * @return a list of all the {@link AreaScene} that were saved.
      */
     public List<AreaScene> getAreaScenes() {
         List<AreaScene> scenes = new LinkedList<>();

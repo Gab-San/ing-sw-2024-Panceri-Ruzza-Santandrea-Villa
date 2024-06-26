@@ -7,7 +7,10 @@ import it.polimi.ingsw.view.tui.TUI;
  * This class handles indirect disconnection by timeout event.
  */
 public class NotifyTimeoutEvent implements TUIEvent, GUIEvent{
-
+    /**
+     * Default constructor.
+     */
+    public NotifyTimeoutEvent(){}
     @Override
     public void displayEvent(TUI tui) {
         tui.notifyTimeout();

@@ -13,9 +13,21 @@ import java.util.List;
  * Represents the abstract state of the game.
  */
 public abstract class GameState {
+    /**
+     * Controlled board ref.
+     */
     protected final Board board;
+    /**
+     * Controller ref.
+     */
     protected final BoardController controller;
+    /**
+     * List of disconnecting player.
+     */
     protected final List<String> disconnectingPlayers;
+    /**
+     * Turn timers controller ref.
+     */
     protected final TurnTimerController timers;
 
     /**

@@ -5,9 +5,12 @@ package it.polimi.ingsw.view.events;
  */
 abstract public class DisplayPlayerEvent implements TUIEvent{
     /**
-     * Player's nickname (unique identifier)
+     * Player's nickname (unique identifier).
      */
     protected final String nickname;
+    /**
+     * True if the specified player is the local user, false otherwise.
+     */
     protected final boolean isLocalPlayer;
 
     /**

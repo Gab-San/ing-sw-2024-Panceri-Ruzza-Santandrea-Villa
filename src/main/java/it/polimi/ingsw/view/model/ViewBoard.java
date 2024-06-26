@@ -70,19 +70,22 @@ public class ViewBoard extends JComponent {
     }
 
     /**
-     * @return a reference to the resource deck.
+     * Returns a reference to the resource deck.
+     * @return a reference to the resource deck
      */
     public ViewDeck<ViewResourceCard> getResourceCardDeck() {
         return resourceCardDeck;
     }
     /**
-     * @return a reference to the gold deck.
+     * Returns a ref to the gold deck.
+     * @return a reference to the gold deck
      */
     public ViewDeck<ViewGoldCard> getGoldCardDeck() {
         return goldCardDeck;
     }
     /**
-     * @return a reference to the objective deck.
+     * Returns a ref to the objective deck.
+     * @return a reference to the objective deck
      */
     public ViewDeck<ViewObjectiveCard> getObjectiveCardDeck() {
         return objectiveCardViewDeck;
@@ -101,7 +104,8 @@ public class ViewBoard extends JComponent {
     }
 
     /**
-     * @return the local player's hand.
+     * Returns the local player's hand.
+     * @return the local player's hand
      */
     public synchronized ViewPlayerHand getPlayerHand() {
         return playerHand;
@@ -121,6 +125,7 @@ public class ViewBoard extends JComponent {
     }
 
     /**
+     * Returns a list of all opponent hands ordere by turn (ascending).
      * @return list of all opponent hands ordered by turn (ascending)
      */
     public synchronized List<ViewOpponentHand> getOpponents(){
@@ -129,6 +134,8 @@ public class ViewBoard extends JComponent {
         return list;
     }
     /**
+     * Returns list of all player hands with local player at index 0
+     * and opponents at subsequent indexes ordered by turn (ascending)
      * @return list of all player hands with local player at index 0
      * and opponents at subsequent indexes ordered by turn (ascending)
      */
@@ -140,6 +147,7 @@ public class ViewBoard extends JComponent {
     }
 
     /**
+     * Returns specified player's score.
      * @param nickname the player's nickname
      * @return the score of the player with given nickname
      */
@@ -167,8 +175,9 @@ public class ViewBoard extends JComponent {
     }
 
     /**
-     * @return true if any player is above ENDGAME_SCORE,
-     *        or if both deck's top cards are empty.
+     * Returns true if any player true if any player is above ENDGAME_SCORE,
+     * or if both deck's top cards are empty.
+     * @return true if endgame conditions have been met, false otherwise
      */
     public synchronized boolean isEndgame(){
         int maxScore = scoreboard.values().stream().max(Integer::compare).orElse(0);

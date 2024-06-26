@@ -9,6 +9,12 @@ import java.beans.PropertyChangeEvent;
  * This class represents an opponent play area view (view-only).
  */
 public class OpponentAreaPanel extends AreaPanel {
+    /**
+     * Default constructor.
+     */
+    public OpponentAreaPanel(){
+        super();
+    }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(!super.parentPropertyChange(evt))

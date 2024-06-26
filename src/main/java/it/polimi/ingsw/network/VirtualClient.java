@@ -328,6 +328,7 @@ public interface VirtualClient extends Remote, Serializable {
 
     /**
      * Reports an indirect disconnection notification.
+     * @throws RemoteException if an error during connection is detected
      */
     void notifyIndirectDisconnect() throws RemoteException;
 }

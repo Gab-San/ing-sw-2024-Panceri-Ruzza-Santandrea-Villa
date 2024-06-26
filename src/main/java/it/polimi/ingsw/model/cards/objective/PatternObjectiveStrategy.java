@@ -13,6 +13,10 @@ import java.util.*;
 public class PatternObjectiveStrategy implements ObjectiveStrategy{
     private final PatternObjective pattern;
 
+    /**
+     * Constructs pattern strategy of given pattern.
+     * @param pattern pattern objective to be calculated
+     */
     public PatternObjectiveStrategy(PatternObjective pattern){
         this.pattern = pattern;
     }

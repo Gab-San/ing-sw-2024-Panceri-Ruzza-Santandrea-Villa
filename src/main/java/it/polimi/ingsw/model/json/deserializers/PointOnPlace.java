@@ -12,6 +12,14 @@ public class PointOnPlace {
     private int amount;
 
     /**
+     * Default constructor.
+     */
+    public PointOnPlace(){
+        type = null;
+        amount = 0;
+    }
+
+    /**
      * Returns the card's scoring method.
      * @return card's scoring method
      */

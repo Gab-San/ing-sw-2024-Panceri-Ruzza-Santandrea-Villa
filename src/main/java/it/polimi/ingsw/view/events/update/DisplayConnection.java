@@ -14,7 +14,9 @@ public class DisplayConnection extends DisplayPlayerEvent {
     /**
      * Constructs player event.
      *
-     * @param nickname      player's nickname who caused event to be triggered
+     * @param nickname player's nickname who caused event to be triggered
+     * @param isConnected true if player is active in game, false otherwise
+     * @param changed true if player connection status has changed, false otherwise
      */
     public DisplayConnection(String nickname, boolean isConnected, boolean changed) {
         super(nickname, false);

@@ -43,8 +43,9 @@ public enum PlayerColor {
 
 
     /**
-     * Override of the standard toString method of enums
-     * @return the LowerCamelCase string representation of the enum value, for cleaner printing.
+     * Returns the color associated with the player color. Default value is black.
+     * @param colorName player color
+     * @return the color associated with the given player color.
      */
     public static Color getColor(PlayerColor colorName) {
         if(colorName == null){
@@ -58,6 +59,10 @@ public enum PlayerColor {
         };
     }
 
+    /**
+     * Override of the standard toString method of enums
+     * @return the LowerCamelCase string representation of the enum value, for cleaner printing.
+     */
     @Override
     public String toString() {
         String normalRep = super.toString();

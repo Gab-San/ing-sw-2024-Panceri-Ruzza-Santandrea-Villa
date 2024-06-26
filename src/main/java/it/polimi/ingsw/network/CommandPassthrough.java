@@ -32,7 +32,7 @@ public interface CommandPassthrough extends Remote{
      *     is subject to an abnormal disconnection he must reconnect with the same nickname in
      *     order to reconnect.
      * </p>
-     *
+     * @param nickname user selected identifier
      * @throws IllegalStateException may be thrown for different reasons: <br>
      * - the client is already connected; <br>
      * - the nickname passed is already in use; <br>

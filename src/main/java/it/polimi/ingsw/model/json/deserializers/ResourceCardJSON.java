@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.json.deserializers;
 
 import it.polimi.ingsw.GameResource;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -13,6 +14,16 @@ public class ResourceCardJSON {
     private int pointsOnPlace;
     private List<CornerJ> cornerJS;
     private GameResource backResource;
+
+    /**
+     * Default constructor.
+     */
+    public ResourceCardJSON(){
+        cardId = null;
+        pointsOnPlace = 0;
+        cornerJS = new LinkedList<>();
+        backResource = null;
+    }
 
     /**
      * Returns the card identifier.

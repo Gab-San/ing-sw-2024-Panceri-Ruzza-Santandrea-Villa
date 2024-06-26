@@ -120,7 +120,13 @@ public class RMIServer implements VirtualServer {
         return;
     }
 
-
+    /**
+     * Unbinds the server if possible.
+     * @throws RemoteException f remote communication with the registry failed; if exception is a
+     * ServerException containing an AccessException, then the registry denies the caller access
+     * to perform this operation (if originating from a non-local host, for example)
+     * @throws NotBoundException if name is not currently bound
+     */
     public void closeServer() throws RemoteException, NotBoundException {
         registry.unbind(CANONICAL_NAME);
         UnicastRemoteObject.unexportObject(registry, true);

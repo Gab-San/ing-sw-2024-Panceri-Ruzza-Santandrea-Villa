@@ -9,19 +9,30 @@ import it.polimi.ingsw.model.json.deserializers.GoldCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.GoldCardJSON;
 import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * This class represents a card factory for gold cards.
+ */
 public class GoldCardFactory extends CardFactory {
-    List<GoldCardJSON> jsonCards;
+    private final List<GoldCardJSON> jsonCards;
 
+    /**
+     * Default constructor.
+     * @throws IllegalStateException if an error occurs while reading the json
+     */
     public GoldCardFactory() throws IllegalStateException{
         this("GoldCard_Id");
     }
 
+    /**
+     * Constructs a gold card factory using deck cards at specified path.
+     * @param idFile path to the deck file
+     * @throws IllegalStateException if an error occurs while reading the json
+     */
     public GoldCardFactory(String idFile) throws IllegalStateException {
         super(idFile);
         try {

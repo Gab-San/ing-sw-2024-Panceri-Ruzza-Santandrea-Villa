@@ -10,6 +10,15 @@ public class CornerJ {
     private String backResource;
 
     /**
+     * Default constructor.
+     */
+    public CornerJ(){
+        direction = null;
+        frontResource = null;
+        backResource = null;
+    }
+
+    /**
      * Returns the relative direction to the center of the card in which the corner is placed.
      * @return direction of the corner
      */

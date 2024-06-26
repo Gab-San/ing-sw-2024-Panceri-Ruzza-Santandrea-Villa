@@ -10,6 +10,9 @@ import java.io.Serializable;
  * </p>
  */
 public interface TCPMessage extends Serializable {
+    /**
+     * Serial version identifier
+     */
     long serialVersionUID = 2031613L;
 
     /**

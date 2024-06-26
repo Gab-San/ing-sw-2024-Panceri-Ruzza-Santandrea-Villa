@@ -40,6 +40,7 @@ public abstract class PlaceableCard extends Card{
      * <p>
      *     The card position is set to null.
      * </p>
+     * @param cardID card unique identifier
      * @param corners a list of the corners that the card contains
      * @throws InvalidParameterException when a duplicate corner is found
      */

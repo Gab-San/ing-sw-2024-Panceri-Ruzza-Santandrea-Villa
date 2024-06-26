@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+//DOCS add docs
 public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;

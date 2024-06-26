@@ -3,8 +3,17 @@ import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.GoldCard;
 import it.polimi.ingsw.GameResource;
 
+/**
+ * This class implements the gold card strategy that gives points for each
+ * visible resource of the specified type on the player's play area.
+ */
 public class ItemCountGoldCard implements GoldCardStrategy{
     private final GameResource item;
+
+    /**
+     * Constructs an item count gold strategy for the specified item.
+     * @param item item to count
+     */
     public ItemCountGoldCard(GameResource item){
         this.item = item;
     }

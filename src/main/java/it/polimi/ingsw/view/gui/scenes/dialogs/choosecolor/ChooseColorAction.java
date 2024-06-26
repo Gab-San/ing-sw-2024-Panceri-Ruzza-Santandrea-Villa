@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
  */
 public class ChooseColorAction extends AbstractAction {
     /**
+     * Default constructor.
+     */
+    public ChooseColorAction(){}
+    /**
      * Choose color action property name.
      */
     public static String CHOSEN_COLOR = "CHOSEN_COLOR";

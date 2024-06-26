@@ -62,7 +62,8 @@ public class PatternObjective {
     }
 
     /**
-     * @return pattern as a Map similar to PlayArea.cardMatrix (points are centered in (0,0))
+     * Returns objective pattern as a map.
+     * @return pattern as a map similar to PlayArea.cardMatrix (points are centered in (0,0))
      */
     public Map<GamePoint, GameResource> getPattern(){
         return pattern;

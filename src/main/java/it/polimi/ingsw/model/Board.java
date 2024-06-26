@@ -73,9 +73,21 @@ public class Board implements GameSubject{
     private final PlayableDeck resourceDeck, goldDeck;
     private final ObjectiveDeck objectiveDeck;
     private final StartingCardDeck startingDeck;
+    /**
+     * Starting deck identifier.
+     */
     public static final char STARTING_DECK = 'S';
+    /**
+     * Objective deck identifier.
+     */
     public static final char OBJECTIVE_DECK = 'O';
+    /**
+     * Resource deck identifier.
+     */
     public static final char RESOURCE_DECK = 'R';
+    /**
+     * Gold deck identifier.
+     */
     public static final char GOLD_DECK = 'G';
 
     /**
@@ -158,6 +170,7 @@ public class Board implements GameSubject{
 
     /**
      * Constructs the board (as in initializing the game) and automatically makes the given players join
+     * @param oldBoard board used in the previous match
      * @param players list of 1-4 players that are joining this game
      * @throws InvalidParameterException if the list of players has an illegal player count (0 or >4)
      * @throws IllegalStateException if players contains duplicates or an error occurs while initializing board
@@ -175,9 +188,19 @@ public class Board implements GameSubject{
     }
 
 //region TURN METHODS
+
+    /**
+     * Returns the current turn. Current turn represents the turn that still has to be played.
+     * @return current turn.
+     */
     public int getCurrentTurn() {
         return currentTurn;
     }
+
+    /**
+     * Sets the current turn.
+     * @param currentTurn turn that has to be played
+     */
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
         notifyAllListeners(new ChangeTurnEvent(currentTurn));
@@ -217,26 +240,55 @@ public class Board implements GameSubject{
 //endregion
 
 //region GAME STATUS METHODS
+
+    /**
+     * Returns the current game phase.
+     * @return current game phase
+     */
     public GamePhase getGamePhase() {
         return gamePhase;
+    }
+
+    /**
+     * Sets the current game phase.
+     * @param gamePhase current game phase
+     */
+    public void setGamePhase(GamePhase gamePhase) {
+        this.gamePhase = gamePhase;
+        notifyAllListeners(new ChangePhaseEvent(gamePhase));
     }
 
 //endregion
 
 //region GETTERS
+
+    /**
+     * Returns the map of player areas.
+     * @return map of player areas
+     */
     public Map<Player, PlayArea> getPlayerAreas(){
         return playerAreas;
     }
+
+    /**
+     * Returns the map of the players' deadlock status.
+     * @return player's deadlock status map
+     */
     public Map<Player, Boolean> getPlayerDeadlocks(){
         return isPlayerDeadlocked;
     }
 
+    /**
+     * Returns the scoreboard map, associating players with their scores.
+     * @return scoreboard
+     */
     public Map<Player, Integer> getScoreboard(){
         return scoreboard;
     }
 
     /**
-     * @return Set of all colors that have not yet been chosen by a player
+     * Returns a set of all colors that have not yet been chosen.
+     * @return set of all colors that have not yet been chosen by a player
      */
     public Set<PlayerColor> getAvailableColors(){
         Set<PlayerColor> colors = Arrays.stream(PlayerColor.values()).collect(Collectors.toSet());
@@ -248,7 +300,8 @@ public class Board implements GameSubject{
     }
 
     /**
-     * @return a random color among colors that have not yet been chosen by a player
+     * Returns a random color among colors that have not yet been chosen by a player.
+     * @return a random available color
      */
     public PlayerColor getRandomAvailableColor() throws IllegalStateException{
         Set<PlayerColor> colors = getAvailableColors();
@@ -274,6 +327,12 @@ public class Board implements GameSubject{
         int newScore = scoreboard.get(player) + amount * (CentralServer.isPointsDebugMode() ? DEBUG_MODE_SCORE_MULT : 1);
         setScore(player, newScore);
     }
+
+    /**
+     * Sets specified player's score.
+     * @param player player whose score has changed
+     * @param score player's updated score
+     */
     protected void setScore(Player player, int score){
         if(gamePhase != GamePhase.EVALOBJ && score > MAX_PLAY_SCORE){
             score = MAX_PLAY_SCORE;
@@ -281,15 +340,11 @@ public class Board implements GameSubject{
         scoreboard.put(player, score);
         notifyAllListeners(new ChangeScoreEvent(player.getNickname(), score));
     }
-
-    public void setGamePhase(GamePhase gamePhase) {
-        this.gamePhase = gamePhase;
-        notifyAllListeners(new ChangePhaseEvent(gamePhase));
-    }
 //endregion
 
     /**
-     * @return true if any player has a score >= ENDGAME_SCORE or if both decks are empty <br>
+     * Returns true if any player has a score >= ENDGAME_SCORE or if both decks are empty, false otherwise.
+     * @return true if one of the two endgame conditions is checked
      */
     public boolean checkEndgame(){
         if(scoreboard.values().stream().anyMatch(score -> score >= ENDGAME_SCORE)){
@@ -313,6 +368,11 @@ public class Board implements GameSubject{
         return false;
     }
 
+    /**
+     * Sets player deadlock status.
+     * @param player specified player
+     * @param isDeadLocked true if player cannot place any more cards, false otherwise
+     */
     public void setPlayerDeadLock(Player player, boolean isDeadLocked){
         isPlayerDeadlocked.put(player, isDeadLocked);
         notifyAllListeners(new PlayerDeadLockedEvent(player.getNickname(), isDeadLocked));
@@ -320,6 +380,7 @@ public class Board implements GameSubject{
 
 //region DECKS METHODS
     /**
+     * Returns true if there is at least one card to draw on the board (among revealed cards or top deck).
      * @return true if there is at least one card to draw on the board (among revealed cards or top deck)
      */
     public boolean canDraw(){
@@ -425,7 +486,8 @@ public class Board implements GameSubject{
     }
 
     /**
-     * @return A list of the 2 revealed objectives on the Board
+     * Returns a list of the two revealed shared objectives card on the board.
+     * @return list of revealed objectives on the board
      */
     public List<ObjectiveCard> getRevealedObjectives(){
         List<ObjectiveCard> revealedObj = new ArrayList<>();
@@ -532,6 +594,10 @@ public class Board implements GameSubject{
                 throw new IllegalStateException("Choosing a non-drawable deck");
         }
     }
+
+    /**
+     * Reveals shared objectives.
+     */
     public void revealObjectives(){
         objectiveDeck.reveal();
     }
@@ -541,6 +607,7 @@ public class Board implements GameSubject{
 //region PLAYER METHODS
     //region GETTERS
     /**
+     * Returns the list of players ordered by their turn.
      * @return list of players ordered by their turn
      */
     public List<Player> getPlayersByTurn(){
@@ -549,6 +616,7 @@ public class Board implements GameSubject{
                 .toList();
     }
     /**
+     * Returns the list of players ordered by their score.
      * @return list of players ordered by their score
      */
     public List<Player> getPlayersByScore(){
@@ -558,7 +626,8 @@ public class Board implements GameSubject{
     }
 
     /**
-     * @return player whose turn corresponds to the currentTurn
+     * Returns the player whose turn corresponds to the current turn.
+     * @return player whose turn corresponds to the current turn
      * @throws IllegalStateException if turns have not been assigned turns yet (no player has turned = currentTurn >= 1)
      */
     public Player getCurrentPlayer() throws IllegalStateException{
@@ -571,8 +640,9 @@ public class Board implements GameSubject{
     }
 
     /**
+     * Returns player instance associated with the specified identifier
      * @param nickname player's nickname
-     * @return the Player instance of the player with given nickname
+     * @return the player instance of the player with given nickname
      * @throws IllegalArgumentException if there is no player in this game with the given nickname
      */
     public Player getPlayerByNickname(String nickname) throws IllegalArgumentException{
@@ -585,6 +655,7 @@ public class Board implements GameSubject{
     }
 
     /**
+     * Returns true if only one player is connected, false otherwise
      * @return true if only one player is connected, false otherwise
      */
     public boolean isOnePlayerRemaining(){
@@ -592,7 +663,8 @@ public class Board implements GameSubject{
     }
 
     /**
-     * @return (0-4) number of connected players in this game
+     * Returns the number of connected players in this game (0-4).
+     * @return number of connected players in this game
      */
     public int getNumOfConnectedPlayers(){
         return (int) playerAreas.keySet().stream().filter(Player::isConnected).count();
@@ -687,6 +759,11 @@ public class Board implements GameSubject{
 //endregion
 
 //region LISTENER METHODS
+
+    /**
+     * Subscribes the specified listener to all registered observable objects.
+     * @param listener listener to subscribe
+     */
     void subscribeListenerToAll(GameListener listener){
         for(GameSubject subject: observableObjects){
             subject.addListener(listener);
@@ -716,11 +793,20 @@ public class Board implements GameSubject{
         }
     }
 
+    /**
+     * Subscribes the specified user to receive history updates.
+     * @param nickname user identifier
+     * @param client virtual client instance associated with user nickname
+     */
     public void subscribeClientToUpdates(String nickname, VirtualClient client){
         remoteHandler.addClient(nickname,client);
         errorHandler.addClient(nickname, client);
     }
 
+    /**
+     * Unsubscribes user from receiving history updates.
+     * @param nickname user identifier
+     */
     public void unsubscribeClientFromUpdates(String nickname){
         remoteHandler.removeClient(nickname);
         errorHandler.removeClient(nickname);

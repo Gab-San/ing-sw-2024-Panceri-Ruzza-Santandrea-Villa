@@ -45,6 +45,17 @@ public class GoldCard extends PlayCard{
         this(null, backResource, pointsOnPlace, plCost, goldStrat, corners);
     }
 
+    /**
+     * Constructs a gold card with the given identifier and specified back resource, placement points, placement cost,
+     * gold strategy and corners.
+     * @param cardID unique identifier
+     * @param backResource resource displayed on the back
+     * @param pointsOnPlace placement points
+     * @param plCost placement cost
+     * @param goldStrat gold strategy
+     * @param corners card's corners
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public GoldCard(String cardID, GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, Corner... corners) throws InvalidParameterException {
         super(cardID, backResource, pointsOnPlace, corners);
@@ -55,7 +66,17 @@ public class GoldCard extends PlayCard{
             this.placementCost.put(res, plCost.get(res));
         }
     }
-
+    /**
+     * Constructs a gold card with the given identifier and specified back resource, placement points, placement cost,
+     * gold strategy and list of corners.
+     * @param cardID unique identifier
+     * @param backResource resource displayed on the back
+     * @param pointsOnPlace placement points
+     * @param plCost placement cost
+     * @param goldStrat gold strategy
+     * @param corners list of card's corners
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public GoldCard(String cardID, GameResource backResource, int pointsOnPlace, Map<GameResource, Integer> plCost,
                     GoldCardStrategy goldStrat, List<Corner> corners) throws InvalidParameterException {
         super(cardID, backResource, pointsOnPlace, corners);

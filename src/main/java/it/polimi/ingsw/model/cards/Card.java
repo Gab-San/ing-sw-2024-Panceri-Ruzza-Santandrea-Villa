@@ -75,6 +75,10 @@ public abstract class Card {
         return isFaceUp;
     }
 
+    /**
+     * Returns card unique string identifier.
+     * @return card identifier
+     */
     public String getCardID() {return cardID != null ? cardID : "";}
 
     // OBJECT METHODS

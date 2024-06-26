@@ -4,6 +4,10 @@ package it.polimi.ingsw.view.gui;
  * This class acts as a database for all the events notified to the gui.
  */
 public class ChangeNotifications {
+    /**
+     * Default constructor.
+     */
+    public ChangeNotifications(){}
     //Players updates
     /**
      * When a player is added to the lobby.

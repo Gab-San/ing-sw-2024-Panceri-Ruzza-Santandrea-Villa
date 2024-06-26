@@ -33,7 +33,9 @@ public abstract class TUI_Scene implements Scene {
     protected List<String> chatBacklog;
 
     /**
-     * Builds the scene and sets the backlog lists
+     * Builds the scene and sets the backlog lists.
+     * @param chatBacklog chat backlog of the scene
+     * @param notificationBacklog notification backlog to use in this scene
      */
     protected TUI_Scene(List<String> notificationBacklog, List<String> chatBacklog) {
         this.out = new PrintWriter(System.out, true);

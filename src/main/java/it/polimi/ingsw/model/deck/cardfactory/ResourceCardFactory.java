@@ -9,18 +9,31 @@ import it.polimi.ingsw.model.json.deserializers.JsonFunctions;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardDeserializer;
 import it.polimi.ingsw.model.json.deserializers.ResourceCardJSON;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * This class represents a card factory for resource cards.
+ */
 public class ResourceCardFactory extends CardFactory {
     private final List<ResourceCardJSON> jsonCards;
+
+    /**
+     * Default constructor.
+     * @throws IllegalStateException if an error occurs while parsing json file
+     */
     public ResourceCardFactory() throws IllegalStateException{
         this("ResourceCard_Id");
     }
 
+
+    /**
+     * Constructs resource card factory with deck coded at specified path.
+     * @param idFile path to the deck file.
+     * @throws IllegalStateException if an error occurs while parsing json file
+     */
     public ResourceCardFactory(String idFile) throws IllegalStateException{
         super(idFile);
         try{

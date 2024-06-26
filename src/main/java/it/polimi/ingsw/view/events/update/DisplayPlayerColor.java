@@ -17,6 +17,7 @@ public class DisplayPlayerColor extends DisplayPlayerEvent {
      *
      * @param nickname      player's nickname who caused event to be triggered
      * @param isLocalPlayer true if the event was triggered due to local player action, false otherwise.
+     * @param color         player's chosen color
      */
     public DisplayPlayerColor(String nickname, boolean isLocalPlayer, PlayerColor color) {
         super(nickname, isLocalPlayer);

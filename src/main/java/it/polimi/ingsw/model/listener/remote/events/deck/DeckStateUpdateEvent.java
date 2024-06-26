@@ -39,7 +39,7 @@ public class DeckStateUpdateEvent extends DeckEvent{
      *     At last, if all three positions are occupied by a card the deck is considered full.
      * </p>
      * @param virtualClient client instance to be notified
-     * @throws RemoteException
+     * @throws RemoteException if a connection error is detected
      */
     @Override
     public void executeEvent(VirtualClient virtualClient) throws RemoteException {

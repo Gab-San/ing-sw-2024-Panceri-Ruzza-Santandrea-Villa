@@ -38,6 +38,7 @@ public class ConsoleBackgroundColors {
     public static final String WHITE_BRIGHT = PREFIX + "0;107" + POSTFIX;
 
     /**
+     * Returns the PlayerColor's ANSI background color equivalent string.
      * @param color the PlayerColor to transform into its ANSI equivalent
      * @return PlayerColor's ANSI background color equivalent string
      */
@@ -51,6 +52,7 @@ public class ConsoleBackgroundColors {
         };
     }
     /**
+     * Returns GameResource's ANSI background color equivalent string.
      * @param resource the GameResource to transform into its ANSI equivalent
      * @return GameResource's ANSI background color equivalent string
      */

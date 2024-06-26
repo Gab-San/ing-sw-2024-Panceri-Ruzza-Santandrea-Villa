@@ -27,12 +27,15 @@ import java.util.Random;
  * - 1 card is drawn from the deck by each player. <br>
  */
 public class ObjectiveDeck implements GameSubject {
-    public final List<ObjectiveCard> cardDeck;
+
+    private final List<ObjectiveCard> cardDeck;
     private ObjectiveCard firstRevealed;
     private ObjectiveCard secondRevealed;
     private ObjectiveCard topCard;
     private final List<GameListener> gameListenerList;
-
+    /**
+     * Default constructor. Creates the objective deck and sets the top card.
+     */
     public ObjectiveDeck() throws IllegalStateException {
         gameListenerList = new LinkedList<>();
         // Populating the array
@@ -60,6 +63,10 @@ public class ObjectiveDeck implements GameSubject {
         return returnCard;
     }
 
+    /**
+     * Returns the top card of the face-down pile of the deck.
+     * @return face-down pile top card
+     */
     public ObjectiveCard peekTop(){
         return topCard;
     }
@@ -127,6 +134,10 @@ public class ObjectiveDeck implements GameSubject {
         return objectiveCardList;
     }
 
+    /**
+     * Returns true if the deck is empty, false otherwise.
+     * @return ture if the deck is empty, false otherwise
+     */
     public boolean isEmpty(){
         return cardDeck.isEmpty();
     }

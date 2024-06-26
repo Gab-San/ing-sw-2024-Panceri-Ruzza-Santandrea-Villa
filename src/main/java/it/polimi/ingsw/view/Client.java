@@ -24,9 +24,21 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.*;
  * This class is the client starter.
  */
 public class Client {
+    /**
+     * Maximum nickname length.
+     */
     public static final int MAX_NICKNAME_LENGTH = 80;
+    /**
+     * User selected view.
+     */
     public static View view = null;
+    /**
+     * Number of attempts to reach the server before shutting down.
+     */
     public static final int MAX_CONNECTION_ATTEMPTS = 5;
+    /**
+     * Milliseconds delay between connection attempts.
+     */
     public static final int CONNECT_ATTEMPT_DELAY_MILLIS = 1500;
     private static final Scanner scanner = new Scanner(System.in);
     private static JsonImporter cardJSONImporter;
@@ -52,6 +64,7 @@ public class Client {
     }
 
     /**
+     * Returns the instance of the json importer.
      * @return the static JSONImporter reference
      */
     public static JsonImporter getCardJSONImporter(){

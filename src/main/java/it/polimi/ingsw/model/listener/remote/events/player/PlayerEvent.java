@@ -13,6 +13,9 @@ import java.rmi.RemoteException;
  * </p>
  */
 abstract public class PlayerEvent implements UpdateEvent {
+    /**
+     * Player identifier.
+     */
     protected final String nickname;
 
     /**

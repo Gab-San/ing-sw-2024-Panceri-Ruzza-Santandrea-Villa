@@ -85,6 +85,7 @@ public class Corner {
      * Placing a card will result in making a copy of the original into the matrix so a change
      * in the reference is needed in order to correctly access information from the corners
      * @param card the new card to which the corner must be associated with
+     * @return corner instance
      */
     Corner setCardRef(PlaceableCard card){
         cardRef = card;
@@ -102,6 +103,7 @@ public class Corner {
     /**
      * This functions sets the occupation of the corner as true.
      * After its invocation the function isOccupied will return true.
+     * @return corner instance
      */
     public Corner occupy(){
         occupied = true;
@@ -120,6 +122,7 @@ public class Corner {
     /**
      * This method sets the visibility of the corner.
      * After its invocation the method isVisible will return FALSE.
+     * @return corner instance
      */
     public Corner cover(){
         visible = false;

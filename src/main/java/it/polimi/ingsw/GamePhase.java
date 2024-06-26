@@ -71,10 +71,4 @@ public enum GamePhase {
     public String toString() {
         return gamePhaseExtended;
     }
-    public boolean equals(String phase){
-        return (this.gamePhaseExtended.equals(phase));
-    }
-    public boolean equals(GamePhase phase){
-        return this == phase;
-    }
 }

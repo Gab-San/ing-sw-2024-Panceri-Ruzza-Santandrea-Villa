@@ -15,12 +15,26 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.BLACK_TEXT;
  * It also contains some methods to manipulate or print String[5] representations as needed. <br>
  */
 public class PrintCard {
-    static final int cornerRowSpaceCount = 16;  // Exact spacing between Corners
-    static final int middleRowSideSpaceCount = 10;  // Spacing of the middle row sides (excluding the resource character in the center)
+    /**
+     * Exact spacing between corners.
+     */
+    static final int cornerRowSpaceCount = 16;
+    /**
+     * Spacing of the middle row sides (excluding the resource character in the center).
+     */
+    static final int middleRowSideSpaceCount = 10;
+    /**
+     * Color with which the corners are displayed.
+     */
     static final String cornerColor = ConsoleColorsCombiner.combine(BLACK_TEXT, WHITE);
+    /**
+     * Length of the corner's formatted string.
+     */
     static final int cornerStringLength = (cornerColor + " M " + RESET).length();
+    /**
+     * Length of the corner's string representation.
+     */
     static final int cornerStringAsSpacesLength = (" M ").length();
-    private final int cardIDSpacing = 2;
     private String colorCode;
 
     /**
@@ -40,13 +54,15 @@ public class PrintCard {
      * @return modified row with added ID
      */
     private String insertID(String cardRow, String cardID){
+        int cardIDSpacing = 2;
         return cardRow.replace(
-                colorCode + getSpaces(cardID.length()+cardIDSpacing),
+                colorCode + getSpaces(cardID.length()+ cardIDSpacing),
                 colorCode + getSpaces(cardIDSpacing) + cardID
         );
     }
 
     /**
+     * Returns a string composed of 'length' spaces, empty if length is less than zero.
      * @param length number of spaces to return
      * @return a string composed of 'length' spaces, empty if length <= 0
      */
@@ -260,6 +276,8 @@ public class PrintCard {
     }
 
     /**
+     * Returns the unchanged cardAsStringRows if it wasn't a null card's String[5] representation. <br>
+     * Otherwise, returns a String[5] of just spaces with no coloring.
      * @param cardAsStringRows any ViewCard's String[5] representation, even a null card's
      * @return the unchanged cardAsStringRows if it wasn't a null card's String[5] representation. <br>
      * Otherwise, returns a String[5] of just spaces with no coloring.

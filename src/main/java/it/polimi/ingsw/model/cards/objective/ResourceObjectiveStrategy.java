@@ -12,12 +12,12 @@ import java.util.Map;
  */
 public class ResourceObjectiveStrategy implements ObjectiveStrategy{
     private final Map<GameResource, Integer> resourceForCompletion;
-
+    //DOCS add docs
     public ResourceObjectiveStrategy(Map<GameResource, Integer> resourceForCompletion) {
         this.resourceForCompletion = new Hashtable<>();
         this.resourceForCompletion.putAll(resourceForCompletion);
     }
-
+    //DOCS add docs
     public int calculateSolves(@NotNull PlayArea p){
         return divideMap(p.getVisibleResources(), resourceForCompletion);
     }

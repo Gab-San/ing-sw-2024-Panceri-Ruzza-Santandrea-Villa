@@ -112,6 +112,7 @@ public class PlayArea implements GameSubject {
      * @param playCard ResourceCard or GoldCard to be placed
      * @param corner which corner (in FreeCorner) to place it on
      * @throws IllegalStateException if the placement is invalid
+     * @return placed card
      */
     public PlayCard placeCard(@NotNull PlayCard playCard, @NotNull Corner corner) throws IllegalStateException{
         // checks valid cost before placing

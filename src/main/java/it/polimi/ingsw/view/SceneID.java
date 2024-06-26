@@ -29,7 +29,8 @@ public class SceneID {
     }
 
     /**
-     * @return
+     * Returns the opponent nickname associated to the scene.
+     * @return opponent nickname
      * <ul>
      *     <li>
      *          null if this ID is not an OpponentAreaScene ID. <br>
@@ -62,18 +63,21 @@ public class SceneID {
 
 //region COMMON SCENE IDs
     /**
+     * Returns local player area scene identifier.
      * @return local player area scene identifier
      */
     public static SceneID getMyAreaSceneID(){
         return new SceneID("Me");
     }
     /**
+     * Returns nickname selection scene's identifier.
      * @return nickname selection scene's identifier
      */
     public static SceneID getNicknameSelectSceneID(){
         return new SceneID("NICKNAME_SELECT");
     }
     /**
+     * Returns board scene identifier.
      * @return board scene identifier
      */
     public static SceneID getBoardSceneID(){
@@ -88,6 +92,7 @@ public class SceneID {
         return new SceneID(OPPONENT_SCENE_PREFIX + nickname);
     }
     /**
+     * Returns endgame scene's identifier.
      * @return endgame scene's identifier
      */
     public static SceneID getEndgameSceneID() {
@@ -98,14 +103,16 @@ public class SceneID {
 //region TUI-ONLY SCENE IDs
 
     /**
-     * @return the ID of the generic empty "notification scene", used on TUI
-     *         to display all notifications independently of the current scene
+     * Returns the ID of the generic empty "notification scene", used on TUI
+     * to display all notifications independently of the current scene.
+     * @return notification scene id
      */
     public static SceneID getNotificationSceneID(){
         return new SceneID("DEFAULT");
     }
 
     /**
+     * Returns the TUI helper scene identifier.
      * @return the TUI helper scene identifier
      */
     public static SceneID getHelperSceneID() {

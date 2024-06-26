@@ -13,6 +13,10 @@ import java.rmi.RemoteException;
 public class DisconnectErrorMessage implements TCPServerMessage {
     @Serial
     private static final long serialVersionUID = 513138463514L;
+    /**
+     * Default constructor.
+     */
+    public DisconnectErrorMessage(){}
     @Override
     public boolean isCheck() {
         return false;

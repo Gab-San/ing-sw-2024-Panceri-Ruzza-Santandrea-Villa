@@ -32,7 +32,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     /**
      * Constructs the board scene with the deck and the scoreboard to be
      * populated as the updates arrive.
-     *
+     * @param board board view model
      * @param inputHandler game interaction controller
      */
     public BoardScene(ViewBoard board, GameInputHandler inputHandler){

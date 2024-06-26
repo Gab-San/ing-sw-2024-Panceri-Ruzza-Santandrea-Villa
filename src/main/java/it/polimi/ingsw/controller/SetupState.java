@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  *      where the board and the players' hands are initialized
  */
 public class SetupState extends GameState{
-    public Set<String> playersWhoPlacedStartingCard;
-    public Set<String> playersWhoChoseColor;
-    public Set<String> playersWhoChoseSecretObjective;
+    private final Set<String> playersWhoPlacedStartingCard;
+    private final Set<String> playersWhoChoseColor;
+    private final Set<String> playersWhoChoseSecretObjective;
     private static final int TURN_TIME = 122;
 
     /**

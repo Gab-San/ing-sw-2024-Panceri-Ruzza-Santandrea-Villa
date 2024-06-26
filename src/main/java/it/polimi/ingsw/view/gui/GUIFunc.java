@@ -19,6 +19,7 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 public final class GUIFunc extends UIFunctions {
 
     /**
+     * Returns the path to the root of all graphic resources (icons, images, fonts).
      * @return the path to the root of all graphic resources (icons, images, fonts)
      */
     public static String getGraphicsResourcesRootPath(){
@@ -117,6 +118,7 @@ public final class GUIFunc extends UIFunctions {
      * @param title title of the frame
      * @param width width of the frame
      * @param height height of the frame
+     * @param windowAdapter window listener
      */
     public static void setupFrame(JFrame frame, String title, int width, int height, WindowAdapter windowAdapter){
         // Sets title frame
@@ -134,6 +136,7 @@ public final class GUIFunc extends UIFunctions {
      * @param dialog dialog frame instance
      * @param width width of the dialog
      * @param height height of the dialog
+     * @param windowAdapter window listener
      */
     public static void setupDialog(JDialog dialog, int width, int height, WindowAdapter windowAdapter){
         dialog.setSize(width, height);
