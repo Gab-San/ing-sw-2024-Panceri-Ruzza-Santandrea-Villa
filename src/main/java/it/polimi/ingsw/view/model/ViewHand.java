@@ -21,11 +21,18 @@ import java.util.List;
  * nickname, color, turn and deadlock status.
  */
 public abstract class ViewHand extends JComponent {
+    /**
+     * The nickname of this player.
+     */
     protected final String nickname;
     /**
      * List of cards in player's hand
      */
     protected final List<ViewPlayCard> cards;
+    /**
+     * The start card in this hand. <br>
+     * Can be null if there is no start card.
+     */
     protected ViewStartCard startCard;
     /**
      * List of secret objectives of this player.
@@ -66,6 +73,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Getter for this player's nickname
      * @return this player's nickname
      */
     public String getNickname(){
@@ -73,6 +81,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Getter for the list of PlayCards in this hand.
      * @return list of PlayCards in this hand as an unmodifiable list.
      */
     public List<ViewPlayCard> getCards(){
@@ -80,6 +89,7 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Loops through the cards in this hand and returns the card in this hand with given ID.
      * @param cardID the desired card's ID
      * @return the card in this hand with given ID
      * @throws IllegalArgumentException if there is no card with given ID in this hand
@@ -91,6 +101,7 @@ public abstract class ViewHand extends JComponent {
         }
     }
     /**
+     * Getter for the list of ObjectiveCards in this hand.
      * @return list of ObjectiveCards in this hand as an unmodifiable list.
      */
     public List<ViewObjectiveCard> getSecretObjectives(){
@@ -98,8 +109,9 @@ public abstract class ViewHand extends JComponent {
     }
 
     /**
+     * Getter for the starting card in this hand. <br>
+     * Could be null if the player has no start card in hand.
      * @return the starting card in this hand.
-     *        Could be null if the player has no start card in hand.
      */
     public synchronized ViewStartCard getStartCard(){
         return startCard;

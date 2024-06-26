@@ -17,7 +17,13 @@ import java.util.Objects;
  * except during card construction.
  */
 public class ViewCorner extends JComponent implements MouseListener {
+    /**
+     * The resource on the front face of this corner
+     */
     private final GameResource frontResource;
+    /**
+     * The resource on the back face of this corner
+     */
     private final GameResource backResource;
 
     /**
@@ -76,10 +82,20 @@ public class ViewCorner extends JComponent implements MouseListener {
     public GameResource getResource() throws NullPointerException {
         return cardRef.isFaceUp() ? frontResource : backResource;
     }
+
+    /**
+     * Getter for this corner's direction. <br>
+     * Direction indicates which corner of cardRef this corner represents.
+     * @return this corner's direction.
+     */
     public CornerDirection getDirection() {
         return direction;
     }
 
+    /**
+     * Getter for this corner's visibility status.
+     * @return true if this corner is visible
+     */
     public synchronized boolean isVisible(){
         return isVisible;
     }
@@ -92,9 +108,19 @@ public class ViewCorner extends JComponent implements MouseListener {
         resetCorner();
     }
 
+    /**
+     * Returns the card this corner belongs to
+     * (according to the value stored in the cardRef attribute)
+     * @return the card this corner belongs to.
+     */
     public synchronized ViewPlaceableCard getCardRef() {
         return cardRef;
     }
+
+    /**
+     * Sets the card this corner belongs to
+     * @param card the card this corner belongs to
+     */
     public synchronized void setCardRef(ViewPlaceableCard card) {
         cardRef = card;
     }

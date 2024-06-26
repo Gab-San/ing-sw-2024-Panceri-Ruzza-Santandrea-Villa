@@ -219,6 +219,7 @@ public class ViewController {
     }
     /**
      * Creates the local player in the ViewBoard
+     * @param nickname the local player's nickname
      */
     public void addLocalPlayer(String nickname) {
         board.addLocalPlayer(nickname);

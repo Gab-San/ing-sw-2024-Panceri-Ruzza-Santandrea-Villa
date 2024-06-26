@@ -33,10 +33,12 @@ public class ViewObjectiveCard extends ViewCard {
     private final int pointsPerSolve;
 
     /**
+     * Constructs the view objective card.
      * @param cardID card's ID
      * @param imageFrontName front image filename
      * @param imageBackName back image filename
      * @param objectiveStrategyType must be "PATTERNTYPE" or "RESOURCETYPE"
+     * @param pointsPerSolve amount of points gained per solve of this objective
      * @param objectiveStrategyAsString the pattern (if PATTERNTYPE) or the resources as string of initials e.g. "MLW" (if RESOURCETYPE)
      */
     public ViewObjectiveCard(String cardID, String imageFrontName, String imageBackName, String objectiveStrategyType, int pointsPerSolve, String objectiveStrategyAsString) {
@@ -47,22 +49,33 @@ public class ViewObjectiveCard extends ViewCard {
     }
 
     /**
-     * @return null as the objective cards do not have a color.
+     * The objective card has no color, so null is returned.
+     * @return null
      */
     public GameResource getCardColour(){
         return null;
     }
 
+    /**
+     * Getter for the string representation of this objective's strategy.
+     * @return the string representation of this objective's strategy.
+     */
     public String getObjectiveStrategyAsString() {
         return objectiveStrategyAsString;
     }
 
     /**
-     * @return true if the strategyType is "PATTERNTYPE"
+     * Compares the objective strategy type with "PATTERNTYPE".
+     * @return true if the strategyType equals "PATTERNTYPE", false otherwise
      */
     public boolean isPatternType(){
         return objectiveStrategyType.equals(PATTERN_TYPE);
     }
+
+    /**
+     * Getter for the points gained per solve of this objective
+     * @return the points gained per solve of this objective
+     */
     public int getPointsPerSolve() {
         return pointsPerSolve;
     }

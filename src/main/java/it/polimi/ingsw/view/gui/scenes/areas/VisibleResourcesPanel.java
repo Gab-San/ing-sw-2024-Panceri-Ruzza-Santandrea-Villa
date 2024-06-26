@@ -109,6 +109,11 @@ public class VisibleResourcesPanel extends JPanel {
         }
     }
 
+    /**
+     * Updates the resource count on the label displayed.
+     * @param res the resource concerned by the change
+     * @param value the new resource count
+     */
     public void adjournResourceCount(GameResource res, Integer value){
         synchronized (resourceLabelMap){
             GameResourceLabel label = resourceLabelMap.get(res);
@@ -116,6 +121,9 @@ public class VisibleResourcesPanel extends JPanel {
         }
     }
 
+    /**
+     * Resets all resource count labels to 0
+     */
     public void clear() {
         synchronized (resourceLabelMap){
             for(GameResourceLabel label: resourceLabelMap.values()){

@@ -16,6 +16,9 @@ import java.util.Map;
  * This interface represents the skeletal structure of a client
  */
 public interface VirtualClient extends Remote, Serializable {
+    /**
+     * The UID required for serialization.
+     */
     long serialVersionUID =-124819284198L;
 
     /**

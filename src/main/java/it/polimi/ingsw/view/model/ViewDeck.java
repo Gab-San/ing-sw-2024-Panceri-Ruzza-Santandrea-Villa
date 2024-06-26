@@ -45,8 +45,6 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
         setupView();
     }
 
-
-
     /**
      * Returns true if the top card of this deck is empty.
      * @return true if the top card of this deck is empty
@@ -211,10 +209,17 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
             );
         }
     }
-
+    /**
+     * Setter for the listener for input on this deck's cards
+     * @param cardListener the listener for input on this deck's cards
+     */
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
     }
+    /**
+     * Setter for the listener for input on this deck
+     * @param deckListener the listener for input on this deck
+     */
     public void setDeckListener(DeckListener deckListener){
         this.deckListener = deckListener;
     }

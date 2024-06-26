@@ -159,6 +159,8 @@ public class ViewPlayArea extends JComponent {
     }
 
     /**
+     * Loops through all positions of the card matrix until a card with
+     * matching ID is found, or all positions were visited once.
      * @param cardID the ID of the card to find in this playArea
      * @return the position of the requested card.
      * @throws IllegalArgumentException if there is no card with given ID in this playArea
@@ -174,6 +176,7 @@ public class ViewPlayArea extends JComponent {
     }
 
     /**
+     * Returns the card at the given coordinates given as a {@link GamePoint}.
      * @param position position to read
      * @return the card that was placed at given position (or null if there is no card there)
      */
@@ -181,6 +184,7 @@ public class ViewPlayArea extends JComponent {
         return cardMatrix.get(position);
     }
     /**
+     * Returns the card at the given coordinates.
      * @param row y coordinate of the position
      * @param col x coordinate of the position
      * @return the card that was placed at given position (or null if there is no card there)
@@ -190,6 +194,7 @@ public class ViewPlayArea extends JComponent {
     }
 
     /**
+     * Getter of the card matrix.
      * @return an unmodifiable, synchronized view of this playArea's card matrix.
      */
     public Map<GamePoint, ViewPlaceableCard> getCardMatrix(){ return Collections.unmodifiableMap(cardMatrix);}
@@ -213,12 +218,14 @@ public class ViewPlayArea extends JComponent {
         firePropertyChange(ChangeNotifications.VIS_RES_CHANGE, null, visibleResources);
     }
     /**
+     * Getter of the visible resources map.
      * @return an unmodifiable, synchronized view of this playArea's visible resources map.
      */
     public Map<GameResource, Integer> getVisibleResources(){
         return Collections.unmodifiableMap(visibleResources);
     }
     /**
+     * Getter of the free corners list
      * @return an unmodifiable, synchronized view of this playArea's free corners list.
      */
     public List<ViewCorner> getFreeCorners(){
@@ -259,6 +266,10 @@ public class ViewPlayArea extends JComponent {
         );
     }
 
+    /**
+     * Getter of this playArea owner's nickname.
+     * @return the nickname of the owner of this playArea.
+     */
     public String getOwner(){
         return owner;
     }

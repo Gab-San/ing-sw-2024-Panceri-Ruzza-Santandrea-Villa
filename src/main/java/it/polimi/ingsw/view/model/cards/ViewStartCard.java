@@ -43,9 +43,11 @@ public class ViewStartCard extends ViewPlaceableCard {
     }
 
     /**
-     * @return the centralFrontResources list as a GameResource[3] in no particular order.
-     *          Some cells of the array may be null if the start card has less than
-     *          3 central front resources
+     * Returns an array containing the central resources on the front of this card. <br>
+     * Some cells on the end of the array may be null if the start card
+     * has less than 3 central front resources.
+     * @return the centralFrontResources list as a {@code GameResource[3]} in no particular order.
+     *
      */
     public GameResource[] getCentralFrontResourcesAsArray() {
         GameResource[] resourceArray = new GameResource[3];

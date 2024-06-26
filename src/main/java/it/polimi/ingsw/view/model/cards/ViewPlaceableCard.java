@@ -188,9 +188,19 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
         ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
         card.setFocusable(false);
     }
+    /**
+     * Setter for this card's z layer. <br>
+     * The layer is used to display overlapping cards in GUI.
+     * @param layer this card's z layer.
+     */
     public void setLayer(int layer){
         this.layer = layer;
     }
+    /**
+     * Getter for this card's z layer. <br>
+     * The layer is used to display overlapping cards in GUI.
+     * @return this card's z layer.
+     */
     public int getLayer() {
         return layer;
     }
