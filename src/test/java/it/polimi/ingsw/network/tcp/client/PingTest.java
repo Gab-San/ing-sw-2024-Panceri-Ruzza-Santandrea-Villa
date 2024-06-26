@@ -31,6 +31,8 @@ public class PingTest {
         server.closeServer();
     }
 
+    // This test would fail if ping message could not be processed from the
+    // client handler
     @Test
     void pingTest() throws RemoteException, InterruptedException {
         TCPClientSocket client;

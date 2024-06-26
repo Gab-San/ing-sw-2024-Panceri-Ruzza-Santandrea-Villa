@@ -18,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BoardInteractionTest {
-
+    // These tests evaluate whether the calls from the client correctly arrive to the server and
+    // are parsed accordingly. There can't always be ways to assert the correct behaviour, so the
+    // test result is based solely on the fact that no errors are triggered (Dijkstra theorem).
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private CentralServer centralServer;
     private TCPServerSocket tcpServer;
@@ -64,6 +66,7 @@ public class BoardInteractionTest {
         client = new TCPClientSocket("localhost", 8888);
 
         client.getProxy().connect("Gamba");
+        // Cannot check whether the client receives an error
         client.getProxy().setNumOfPlayers(5);
         client.getProxy().setNumOfPlayers(1);
         client.getProxy().setNumOfPlayers(4);

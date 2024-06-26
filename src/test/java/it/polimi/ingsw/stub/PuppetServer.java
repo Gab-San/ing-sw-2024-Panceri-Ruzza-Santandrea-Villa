@@ -6,6 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * This class acts as a simpler server. Used to test out basic
+ * client server interactions.
+ */
 public class PuppetServer {
     private final ServerSocket serverSocket;
     private ConnectionHandler handler;
@@ -45,6 +49,10 @@ public class PuppetServer {
 
 }
 
+/**
+ * This class acts as a simpler client handler that only prints out
+ * read objects.
+ */
 class ConnectionHandler {
     Socket clientSocket;
     ConnectionHandler(Socket clientSocket){

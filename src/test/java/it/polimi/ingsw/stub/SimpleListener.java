@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.listener.remote.NetworkEvent;
 
 import java.rmi.RemoteException;
 
+/**
+ * This game listener acts as a simple listener executing notification calls instantly.
+ */
 public class SimpleListener implements GameListener {
     private final StubClient client;
     public SimpleListener(StubClient client){

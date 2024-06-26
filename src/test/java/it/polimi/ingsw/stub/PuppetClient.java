@@ -1,12 +1,6 @@
 package it.polimi.ingsw.stub;
 
-import com.diogonunes.jcolor.Attribute;
-import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.GamePhase;
-import it.polimi.ingsw.GameResource;
-import it.polimi.ingsw.PlayerColor;
-import it.polimi.ingsw.CardPosition;
-import it.polimi.ingsw.SerializableCorner;
+import it.polimi.ingsw.*;
 import it.polimi.ingsw.network.CommandPassthrough;
 import it.polimi.ingsw.network.VirtualClient;
 
@@ -14,84 +8,86 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
+/**
+ * This class represents a client that acts also as a server proxy
+ * to test whether calls correctly arrive to the client. Most of the methods
+ * only print out the method call.
+ */
 public class PuppetClient implements CommandPassthrough, VirtualClient {
 
-    private final Attribute textColorFormat = Attribute.BRIGHT_CYAN_TEXT();
     private final String nickname;
-    private final PuppetController2 controller;
+    private final PuppetController controller;
     public boolean disconnected;
     public PuppetClient(){
         nickname = null;
         controller = null;
     }
 
-    public PuppetClient(String nickname, PuppetController2 controller) {
+    public PuppetClient(String nickname, PuppetController controller) {
         this.nickname = nickname;
         this.controller = controller;
     }
 
     @Override
     public void sendMsg(String addressee, String message) {
-        System.out.println(colorize(message.toUpperCase() + " SENT TO " + addressee.toUpperCase(), textColorFormat));
+        System.out.println(message.toUpperCase() + " SENT TO " + addressee.toUpperCase());
     }
 
     @Override
     public void connect(String nickname) throws IllegalStateException {
-        System.out.println(colorize("CONNECT COMMAND CALLED WITH ARGS:\n"
-                + nickname, textColorFormat));
+        System.out.println("CONNECT COMMAND CALLED WITH ARGS:\n"
+                + nickname);
     }
 
     @Override
     public void setNumOfPlayers(int num) throws IllegalStateException {
-        System.out.println(colorize("SET NUM OF PLAYERS COMMAND CALLED WITH ARGS:\n"
-                + num , textColorFormat));
+        System.out.println("SET NUM OF PLAYERS COMMAND CALLED WITH ARGS:\n"
+                + num);
     }
 
     @Override
     public void disconnect() throws IllegalStateException {
-        System.out.println(colorize("DISCONNECT COMMAND CALLED", textColorFormat));
+        System.out.println("DISCONNECT COMMAND CALLED");
     }
 
     @Override
     public void placeStartCard(boolean placeOnFront) throws IllegalStateException {
-        System.out.println(colorize("PLACE STARTING CARD COMMAND CALLED WITH ARGS:\n"
-                + placeOnFront, textColorFormat));
+        System.out.println("PLACE STARTING CARD COMMAND CALLED WITH ARGS:\n"
+                + placeOnFront);
     }
 
     @Override
     public void chooseColor(char colour) throws IllegalStateException {
-        System.out.println(colorize("CHOOSE COLOR COMMAND CALLED WITH ARGS:\n"
-                + colour, textColorFormat));
+        System.out.println("CHOOSE COLOR COMMAND CALLED WITH ARGS:\n"
+                + colour);
     }
 
     @Override
     public void chooseObjective(int choice) throws IllegalStateException {
-        System.out.println(colorize("CHOOSE OBJECTIVE COMMAND CALLED WITH ARGS:\n"
-                + choice, textColorFormat));
+        System.out.println("CHOOSE OBJECTIVE COMMAND CALLED WITH ARGS:\n"
+                + choice);
     }
 
     @Override
     public void placeCard(String cardID, GamePoint placePos, String cornerDir, boolean placeOnFront) throws IllegalStateException, RemoteException {
-        System.out.println(colorize("PLACE CARD COMMAND CALLED WITH ARGS:\n"
+        System.out.println("PLACE CARD COMMAND CALLED WITH ARGS:\n"
                 + cardID + "\n" +
                 placePos + "\n" +
                 cornerDir + "\n" +
-                placeOnFront, textColorFormat));
+                placeOnFront);
     }
 
     @Override
     public void draw(char deck, int cardPosition) throws IllegalStateException {
-        System.out.println(colorize("DRAW COMMAND CALLED WITH ARGS:\n"
+        System.out.println("DRAW COMMAND CALLED WITH ARGS:\n"
                 + deck + "\n"
-                + cardPosition, textColorFormat));
+                + cardPosition);
     }
 
     @Override
     public void restartGame(int numOfPlayers) throws IllegalStateException {
-        System.out.println(colorize("START GAME COMMAND CALLED WITH ARGS:\n"
-                + numOfPlayers, textColorFormat));
+        System.out.println("START GAME COMMAND CALLED WITH ARGS:\n"
+                + numOfPlayers);
     }
 
     @Override
@@ -260,6 +256,7 @@ public class PuppetClient implements CommandPassthrough, VirtualClient {
     public void notifyIndirectDisconnect() {
         assert controller != null;
         controller.interruptTimer(nickname);
+        controller.disconnect(nickname);
         disconnected = true;
     }
 

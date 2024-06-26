@@ -1,9 +1,8 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.CornerDirection;
-import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.network.rmi.RMIServer;
+import it.polimi.ingsw.GameResource;
 import it.polimi.ingsw.stub.PuppetClient;
 import it.polimi.ingsw.stub.StubView;
 import it.polimi.ingsw.stub.StubViewController;
@@ -18,12 +17,13 @@ import org.junit.jupiter.api.Test;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * This class tests that the parser correctly parses commands.
+ */
 class ParserTest {
     private Parser parser;
     private ViewBoard board;
@@ -35,59 +35,6 @@ class ParserTest {
         viewController.setSelfPlayerArea();
         parser = new Parser(new PuppetClient(), viewController);
     }
-
-
-    @Test
-    void patternTest(){
-        assertAll(
-                () -> assertTrue(Pattern.matches("[2-4]", "2")),
-                () -> assertFalse(Pattern.matches("[2-4]", "0")),
-                () -> assertFalse(Pattern.matches("2-4", "2")),
-                () -> assertTrue(Pattern.matches("[RGrg][0-2]", "R2")),
-                () -> assertTrue(Pattern.matches("[RGrg][0-2]", "G2")),
-                () -> assertTrue(Pattern.matches("[RGrg][0-2]", "R0")),
-                () -> assertTrue(Pattern.matches("[RGrg][0-2]", "r1")),
-                () -> assertTrue(Pattern.matches("[RGrg][0-2]", "g0")),
-                () -> assertFalse(Pattern.matches("[RGrg][0-2]", "0")),
-                () -> assertFalse(Pattern.matches("[RGrg][0-2]", "G")),
-                () -> assertFalse(Pattern.matches("[RGrg][0-2]", "2g")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R31")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r29")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R15")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R5")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r1")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "g0")),
-                () -> assertTrue(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "G9")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R41")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "r40")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "G49")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "g")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R100")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R528")),
-                () -> assertFalse(Pattern.matches("\\b[RGrg][1-3]?[0-9]\\b", "R369")),
-                () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","Blue")),
-                () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","Green")),
-                () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","yellow")),
-                () -> assertTrue(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","red")),
-                () -> assertFalse(Pattern.matches("[Bb]lue|[Rr]ed|[Yy]ellow|[Gg]reen","R"))
-        );
-    }
-
-    @Test
-    void patternGroupTest(){
-        Matcher matcher = Pattern.compile("[RGrg][0-2]").matcher("place g0 on g1 TL");
-
-        MatchResult result = matcher.toMatchResult();
-        System.out.println("Current matcher: " + result);
-
-        if(matcher.find()) {
-            System.out.println("Match Found!!");
-        }
-        assertEquals("g0",
-                matcher.group()
-        );
-    }
-
 
     @Test
     void parseTestCmd() throws RemoteException {
@@ -118,6 +65,10 @@ class ParserTest {
     @Test
     void parseSendCmd() throws RemoteException {
         parser.parseCommand("send \"all\" CIAO CIAO MAMMINA");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parser.parseCommand("send CIAO")
+        );
     }
 
     @Test

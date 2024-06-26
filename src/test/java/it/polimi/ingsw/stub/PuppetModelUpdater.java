@@ -10,6 +10,10 @@ import it.polimi.ingsw.view.ModelUpdater;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class does nothing, and it is used to fill the model updater refs needed in
+ * objects instantiations.
+ */
 public class PuppetModelUpdater extends ModelUpdater {
     public PuppetModelUpdater() {
         super(null);

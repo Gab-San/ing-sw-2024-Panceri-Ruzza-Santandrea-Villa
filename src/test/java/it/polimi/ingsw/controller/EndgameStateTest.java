@@ -156,13 +156,17 @@ class EndgameStateTest {
         assertEquals(EndgameState.class, controller.getGameState().getClass());
     }
 
+
+    // Tested exceptions can be thrown whether the player nickname isn't recognised
+    // (due to the player not joining the game beforehand) or if the command
+    // cannot be processed in the current state.
+
     @Test
     void join() {
         assertThrows(
                 IllegalStateException.class,
                 () -> controller.join("Cugola", new PuppetClient())
         );
-
     }
 
     @Test

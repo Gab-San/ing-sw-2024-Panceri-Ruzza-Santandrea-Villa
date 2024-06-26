@@ -17,6 +17,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class implements a stub view. Most methods do nothing. Used to test certain
+ * view behaviours.
+ */
 public class StubView implements View {
     private final List<Player> playerList;
     private GamePhase gamePhase;

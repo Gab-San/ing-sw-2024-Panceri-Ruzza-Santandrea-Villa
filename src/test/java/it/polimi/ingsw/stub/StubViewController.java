@@ -4,11 +4,10 @@ import it.polimi.ingsw.GamePhase;
 import it.polimi.ingsw.GamePoint;
 import it.polimi.ingsw.view.ViewController;
 import it.polimi.ingsw.view.model.ViewBoard;
-import it.polimi.ingsw.view.model.ViewHand;
-import it.polimi.ingsw.view.model.ViewPlayArea;
-import it.polimi.ingsw.view.model.cards.ViewPlayCard;
-import it.polimi.ingsw.view.model.cards.ViewStartCard;
 
+/**
+ * This class is an empty view controller. It is used to fill instantiation spots.
+ */
 public class StubViewController extends ViewController {
     public StubViewController(ViewBoard board) {
         super(board);

@@ -20,6 +20,10 @@ import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * This class tests listeners notification error notifications thrown by the controller.
+ * The assertions are made comparing the string notifications.
+ */
 public class EventControllerIntegrationTest {
 
     StubView view = new StubView();

@@ -25,17 +25,20 @@ public class CreationStateTest {
     @BeforeEach
     public void setUpController(){
         controller = new BoardController();
+        // State after creation state
         nextStateClass = JoinState.class;
         board = controller.getGameState().board;
-        assertEquals(controller.getGameState().board,board , "The board changed");
+        assertEquals(controller.getGameState().board, board, "The board changed");
         controller.join(playerNickname, new PuppetClient());
     }
 
     @Test
     public void joinAndDisconnectTest() {
+        // Check that at least a player is connected
         Player connPlayer = board.getPlayerAreas().keySet().stream().findAny().orElse(null);
         if(connPlayer==null)
             fail("Nobody is connected");
+        // When a player connects the phase updates
         assertEquals(GamePhase.SETNUMPLAYERS, board.getGamePhase(), "Wrong phase: \""+ board.getGamePhase() + "\" instead of \""+ GamePhase.SETNUMPLAYERS +"\".");
         assertEquals(CreationState.class, controller.getGameState().getClass(), "Wrong state: "+ controller.getGameState().getClass() + "instead of "+ CreationStateTest.class +".");
 
@@ -55,13 +58,15 @@ public class CreationStateTest {
 
         controller.setNumOfPlayers(name, new Random().nextInt(3)+2);
         assertEquals(GamePhase.JOIN, board.getGamePhase(), "How is this wrong?");
-
     }
 
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4,5,6})
     public void setNumOfPlayersTest(int i) {
+        // Tests number of players command
+
         assertEquals(GamePhase.SETNUMPLAYERS, board.getGamePhase());
+        // Nickname of player that hasn't joined
         assertThrows(IllegalArgumentException.class, () -> controller.setNumOfPlayers("definitelyNotRight", i),"Does not throw IllegalArgumentException with nickname not inside the game");
         if (i < 2|| i > 4) {
             assertThrows(IllegalArgumentException.class, () -> controller.setNumOfPlayers(playerNickname, i), "Does not throw IllegalArgumentException when i=" + i);
@@ -78,6 +83,9 @@ public class CreationStateTest {
         }
     }
 
+    // Tested exceptions can be thrown whether the player nickname isn't recognised
+    // (due to the player not joining the game beforehand) or if the command
+    // cannot be processed in the current state.
     @Test
     public void placeStartingCardTest() {
         assertThrows(IllegalStateException.class, () -> controller.placeStartingCard("definitelyNotRight", true), "PlaceStartingCard doesn't throw IllegalStateException with wrong nickname");

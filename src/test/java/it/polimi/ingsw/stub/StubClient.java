@@ -16,6 +16,10 @@ import java.util.Map;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
+/**
+ * This class acts as a simpler virtual client in which methods
+ * print out debug information.
+ */
 public class StubClient implements VirtualClient {
     private final StubView view;
     private final String nickname;

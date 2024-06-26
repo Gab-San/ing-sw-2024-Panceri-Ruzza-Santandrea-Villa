@@ -10,6 +10,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents a client that counts the number of received updates.
+ */
 public class CountUpdateClient extends StubClient {
     int counter;
 
