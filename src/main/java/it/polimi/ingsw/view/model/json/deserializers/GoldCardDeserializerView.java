@@ -11,7 +11,6 @@ import it.polimi.ingsw.view.model.cards.ViewCorner;
 import it.polimi.ingsw.view.model.cards.ViewGoldCard;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +28,9 @@ public class GoldCardDeserializerView extends StdDeserializer<ViewGoldCard> {
 
     /**
      * Constructs view gold card deserializer.
+     * @param vc Type of values this deserializer handles:
+     *           sometimes exact types, other time most specific supertype of types
+     *           deserializer handles (which may be as generic as Object in some case)
      */
     public GoldCardDeserializerView(Class<?> vc){
         super(vc);

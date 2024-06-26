@@ -18,8 +18,16 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-//DOCS add docs
+
+/**
+ * This is a helper class containing json deserializing methods.
+ */
 public interface JsonFunctions {
+    /**
+     * Parses json j-corners from a json node.
+     * @param node analyzed json node
+     * @return list of parsed j-corners
+     */
     static List<CornerJ> parseJsonCorners(@NotNull JsonNode node){
         List<CornerJ> cornerJS = new ArrayList<>();
         node.get("corners").forEach((e)->{
@@ -32,6 +40,11 @@ public interface JsonFunctions {
         return cornerJS;
     }
 
+    /**
+     * Parses corners from a json node.
+     * @param node analyzed json node
+     * @return list of corners
+     */
     static List<Corner> parseCorners(@NotNull JsonNode node){
         List<Corner> corners = new ArrayList<>();
         node.get("corners").forEach(
@@ -48,6 +61,11 @@ public interface JsonFunctions {
         return corners;
     }
 
+    /**
+     * Parses corners from a list of j-corners.
+     * @param jCorners list of j-corners
+     * @return list of corners
+     */
     static List<Corner> parseCorners(@NotNull List<CornerJ> jCorners){
         return jCorners.stream().map(e -> new Corner(
                 GameResource.getResourceFromName(e.getFrontResource()),
@@ -56,6 +74,11 @@ public interface JsonFunctions {
         )).collect(Collectors.toList());
     }
 
+    /**
+     * Parses the json node for pattern strategy.
+     * @param node analyzed json parser
+     * @return pattern strategy
+     */
     static PatternObjectiveStrategy parsePatternObjectiveStrategy(@NotNull JsonNode node){
         List<String> patternList = new ArrayList<>();
         node.get("pattern").forEach(
@@ -69,6 +92,11 @@ public interface JsonFunctions {
         return new PatternObjectiveStrategy(pattern);
     }
 
+    /**
+     * Parses json node for resource strategy.
+     * @param node analyzed json parser
+     * @return resource strategy
+     */
     static ResourceObjectiveStrategy parseResourcesObjective(@NotNull JsonNode node){
         List<GameResource> resourceList = new ArrayList<>();
         node.get("pattern").forEach(
@@ -87,6 +115,11 @@ public interface JsonFunctions {
         return new ResourceObjectiveStrategy(resourceMap);
     }
 
+    /**
+     * Parses json node to find placement cost.
+     * @param node analyzed json node
+     * @return placement cost map
+     */
     static Map<String, Integer> parsePlacementCost(@NotNull JsonNode node){
         Map<String, Integer> plCost = new Hashtable<>();
 
@@ -99,6 +132,11 @@ public interface JsonFunctions {
         return plCost;
     }
 
+    /**
+     * Parses placement cost from a lightweight placement cost map.
+     * @param plCost lightweight placement cost map
+     * @return placement cost map
+     */
     static Map<GameResource, Integer> parsePlacementCost(@NotNull Map<String, Integer> plCost){
         Map<GameResource, Integer> placementCost = new Hashtable<>();
         for(String gameRes: plCost.keySet()){
@@ -111,6 +149,11 @@ public interface JsonFunctions {
         return placementCost;
     }
 
+    /**
+     * Parses gold card strategy from points on place.
+     * @param pp card's points on place
+     * @return gold card strategy
+     */
     static GoldCardStrategy parseGoldCardStrategy(@NotNull PointOnPlace pp){
         String cardStrat = pp.getType();
         switch (cardStrat){

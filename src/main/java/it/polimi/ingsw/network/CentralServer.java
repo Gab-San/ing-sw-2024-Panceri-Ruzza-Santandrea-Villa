@@ -88,8 +88,8 @@ public class CentralServer {
                                     try {
                                         commandQueue.wait();
                                     } catch (InterruptedException e) {
-                                        //TODO Application quit?
-                                        // or restart with executors
+                                        System.err.println("Error while waiting for new actions: interrupted executor!");
+                                        System.exit(-1);
                                     }
                                 }
                                 command = commandQueue.remove();

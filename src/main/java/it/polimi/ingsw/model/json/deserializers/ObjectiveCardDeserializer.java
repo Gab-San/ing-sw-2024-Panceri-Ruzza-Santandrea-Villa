@@ -10,11 +10,23 @@ import it.polimi.ingsw.model.cards.objective.PatternObjectiveStrategy;
 import it.polimi.ingsw.model.cards.objective.ResourceObjectiveStrategy;
 
 import java.io.IOException;
-//DOCS add docs
+/**
+ * This class implements the deserializer for objective cards.
+ */
 public class ObjectiveCardDeserializer extends StdDeserializer<ObjectiveCard> {
+    /**
+     * Default constructor.
+     */
     public ObjectiveCardDeserializer(){
         this(null);
     }
+
+    /**
+     * Constructs objective card deserializer with specified class.
+     * @param vc Type of values this deserializer handles:
+     *           sometimes exact types, other time most specific supertype of types
+     *           deserializer handles (which may be as generic as Object in some case)
+     */
     public ObjectiveCardDeserializer(Class<?> vc){
         super(vc);
     }

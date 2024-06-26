@@ -4,7 +4,7 @@ import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GameResource;
 import java.security.InvalidParameterException;
 import java.util.*;
-//DOCS complete
+
 /**
  * This class represents a placeable card.
  * <p>
@@ -63,10 +63,21 @@ public abstract class PlaceableCard extends Card{
         }
     }
 
+    /**
+     * Constructs an anonymous card given its corners.
+     * @param corners corners that the card contains
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     protected PlaceableCard(Corner... corners) throws InvalidParameterException{
         this(null, corners);
     }
 
+    /**
+     * Constructs a card of the given id with the specified list corners.
+     * @param cardID card unique identifier
+     * @param corners list of corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     protected PlaceableCard(String cardID, List<Corner> corners) throws InvalidParameterException{
         super(cardID);
         this.position = null;
@@ -87,6 +98,11 @@ public abstract class PlaceableCard extends Card{
         }
     }
 
+    /**
+     * Constructs an anonymous card containing the specified corners.
+     * @param corners list of corners contained
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     protected PlaceableCard(List<Corner> corners) throws InvalidParameterException {
         this(null,corners);
     }
@@ -219,6 +235,11 @@ public abstract class PlaceableCard extends Card{
         // corners.equals delegates comparison to Corner.equals for each corner
     }
 
+    /**
+     * Compares two cards without considering corners.
+     * @param other the card with which to compare
+     * @return true if the card is the same as the argument, false otherwise
+     */
     protected boolean compareCard(PlaceableCard other){
         return super.compareCard(other) &&
                 (position == null || other.position == null || position.equals(other.position));

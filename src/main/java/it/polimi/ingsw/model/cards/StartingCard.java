@@ -5,7 +5,6 @@ import it.polimi.ingsw.GamePoint;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-//DOCS complete
 /**
  * This represents the starting card: the first card placed in the setup phase.
  * <p>
@@ -28,7 +27,7 @@ public class StartingCard extends PlaceableCard {
     }
 
     /**
-     * Constructs a starting card filled with the required information.
+     * Constructs an anonymous starting card filled with the required information.
      * @param centralRes The resources shown in the center of the card
      * @param corners The corners of the card
      */
@@ -36,16 +35,37 @@ public class StartingCard extends PlaceableCard {
         this(null, centralRes, corners);
     }
 
+    /**
+     * Constructs a starting card with the given identifier, specified central resources and corners.
+     * @param cardID card identifier
+     * @param centralRes resources displayed in the center of the card
+     * @param corners corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public StartingCard(String cardID, GameResource[] centralRes, Corner... corners) throws InvalidParameterException {
         super(cardID, corners);
         this.centralFrontResources = new ArrayList<>();
         centralFrontResources.addAll(Arrays.asList(centralRes));
     }
 
+    /**
+     * Constructs an anonymous starting card with the specified list of central resources and
+     * corners.
+     * @param centralRes list of resources displayed in the center of the card
+     * @param corners list of corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public StartingCard(List<GameResource> centralRes, List<Corner> corners) throws InvalidParameterException{
         this(null,centralRes,corners);
     }
 
+    /**
+     * Constructs a starting card with the given identifier and specified list of central resources and corners.
+     * @param cardID card identifier
+     * @param centralRes list of central resources
+     * @param corners list of corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public StartingCard(String cardID, List<GameResource> centralRes, List<Corner> corners) throws InvalidParameterException{
         super(cardID, corners);
 
@@ -77,7 +97,7 @@ public class StartingCard extends PlaceableCard {
             }
         }
 
-        return super.resourceArrayToMap(resourcesCount);
+        return resourceArrayToMap(resourcesCount);
     }
 
     /**

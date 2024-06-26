@@ -12,11 +12,23 @@ import it.polimi.ingsw.GameResource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-//DOCS add docs
+/**
+ * This class implements the deserializer for starting cards.
+ */
 public class StartingCardDeserializer extends StdDeserializer<StartingCard> {
+    /**
+     * Default constructor.
+     */
     public StartingCardDeserializer(){
         this(null);
     }
+
+    /**
+     * Constructs starting card deserializer handling specified class.
+     * @param vc Type of values this deserializer handles:
+     *           sometimes exact types, other time most specific supertype of types
+     *           deserializer handles (which may be as generic as Object in some case)
+     */
     public StartingCardDeserializer(Class<?> vc){
         super(vc);
     }

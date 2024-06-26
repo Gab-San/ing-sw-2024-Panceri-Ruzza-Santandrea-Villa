@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.PlayArea;
 
 import java.security.InvalidParameterException;
 import java.util.*;
-//DOCS complete
+
 /**
  * This class represents a card that can be played.
  * <p>
@@ -35,7 +35,14 @@ public abstract class PlayCard extends PlaceableCard{
         pointsOnPlace = 0;
     }
 
-
+    /**
+     * Constructs a card with the given identifier, specified resource on the back and
+     * given corners.
+     * @param cardID card identifier
+     * @param backResource resource displayed on the back
+     * @param corners corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     protected PlayCard(String cardID, GameResource backResource, Corner... corners) throws InvalidParameterException{
         super(cardID, corners);
         this.backResource = backResource;
@@ -64,6 +71,15 @@ public abstract class PlayCard extends PlaceableCard{
         this.pointsOnPlace = pointsOnPlace;
     }
 
+    /**
+     * Constructs a playable card with the given identifier, specified resource on the back, value of
+     * placement and list of corners.
+     * @param cardID card identifier
+     * @param backResource resource displayed on the back
+     * @param pointsOnPlace score obtained at placement
+     * @param corners list of corners contained in the card
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     protected PlayCard(String cardID, GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
         super(cardID, corners);
         this.backResource = backResource;

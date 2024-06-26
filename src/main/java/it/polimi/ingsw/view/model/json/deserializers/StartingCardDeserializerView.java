@@ -27,6 +27,9 @@ public class StartingCardDeserializerView extends StdDeserializer<ViewStartCard>
 
     /**
      * Constructs view resource card deserializer.
+     * @param vc Type of values this deserializer handles:
+     *           sometimes exact types, other time most specific supertype of types
+     *           deserializer handles (which may be as generic as Object in some case)
      */
     public StartingCardDeserializerView(Class<?> vc){
         super(vc);

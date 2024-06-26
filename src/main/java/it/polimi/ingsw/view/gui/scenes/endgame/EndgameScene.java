@@ -16,22 +16,31 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-//DOCS add docs
+
+/**
+ * This class represents the endgame scene. Displays the players list ordered by score and
+ * highlights the winner.
+ */
 public class EndgameScene extends JPanel implements GUI_Scene, ActionListener {
     private final GameInputHandler inputHandler;
     private final ViewBoard board;
-    private final boolean atLeast2Players;
-    protected Timer displayTimer;
+    private Timer displayTimer;
     private final JLabel notificationLabel;
     private static final int STANDARD_WINNER_TEXT_FONT = 50;
 
+    /**
+     * Constructs the endgame scene panel.
+     * @param board view model
+     * @param inputHandler game input handler
+     * @param scoreboard scoreboard view
+     */
     public EndgameScene(ViewBoard board, GameInputHandler inputHandler, ScoreboardPanel scoreboard){
         this.inputHandler = inputHandler;
         this.board = board;
         setLayout(new BorderLayout());
 
         JPanel winnerPanel = setupWinnerPanel();
-        atLeast2Players = board.getOpponents().stream()
+        boolean atLeast2Players = board.getOpponents().stream()
                 .anyMatch(ViewOpponentHand::isConnected);
 
         String winnerNick = board.getAllPlayerHands().stream()

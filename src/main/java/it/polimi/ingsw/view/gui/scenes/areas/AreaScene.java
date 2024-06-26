@@ -126,7 +126,7 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        scrollPane.requestFocusInWindow(); //FIXME: if this is problematic change to grabFocus()
+                        scrollPane.requestFocusInWindow();
                     }
                 }
         );

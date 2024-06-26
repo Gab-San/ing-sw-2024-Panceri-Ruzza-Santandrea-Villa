@@ -26,6 +26,9 @@ public class ObjectiveCardDeserializerView extends StdDeserializer<ViewObjective
 
     /**
      * Constructs view gold card deserializer.
+     * @param vc Type of values this deserializer handles:
+     *           sometimes exact types, other time most specific supertype of types
+     *           deserializer handles (which may be as generic as Object in some case)
      */
     public ObjectiveCardDeserializerView(Class<?> vc){
         super(vc);

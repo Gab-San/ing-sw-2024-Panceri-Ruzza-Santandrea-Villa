@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayArea;
 import it.polimi.ingsw.model.cards.objective.ObjectiveStrategy;
-//DOCS complete
 /**
  * This represents a generic card.
  * <p>

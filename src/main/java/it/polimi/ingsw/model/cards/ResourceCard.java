@@ -6,7 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
 import java.util.*;
-//DOCS complete
+
+
 /**
  * This class represents the resource card
  * <p>
@@ -37,12 +38,20 @@ public class ResourceCard extends PlayCard{
         this(null, backResource, corners);
     }
 
+    /**
+     * Constructs resource card with given identifier, specified resource
+     * on the back and corners. Default value of placement points is zero.
+     * @param cardID card unique identifier
+     * @param backResource resource displayed on the back
+     * @param corners contained corners
+     * @throws InvalidParameterException when a duplicate corner is found
+     */
     public ResourceCard(String cardID, GameResource backResource, Corner... corners) throws InvalidParameterException {
         super(cardID, backResource, corners);
     }
 
     /**
-     * Constructor for resource card with placement points.
+     * Constructor for anonymous resource card with placement points.
      * @param backResource the resource displayed on the back of the card
      * @param pointsOnPlace the placement points
      * @param corners the corners associated with the card
@@ -52,14 +61,39 @@ public class ResourceCard extends PlayCard{
         this( null, backResource, pointsOnPlace, corners);
     }
 
+    /**
+     * Constructs a resource card with the given card identifier, specified back resource,
+     * placement points and corners
+     * @param cardID card unique identifier
+     * @param backResource the resource displayed on the back of the card
+     * @param pointsOnPlace the placement points
+     * @param corners the corners associated with the card
+     * @throws InvalidParameterException when duplicate of corner found
+     */
     public ResourceCard(String cardID, GameResource backResource, int pointsOnPlace, Corner... corners) throws InvalidParameterException {
         super(cardID, backResource, pointsOnPlace, corners);
     }
 
+    /**
+     * Constructs an anonymous resource card with specified back resource, placement points and list of corners.
+     * @param backResource the resource displayed on the back of the card
+     * @param pointsOnPlace the placement points
+     * @param corners list of corners contained in the card
+     * @throws InvalidParameterException when duplicate of corner found
+     */
     public ResourceCard(GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
         this(null, backResource, pointsOnPlace, corners);
     }
 
+    /**
+     * Constructs a resource card with the given card identifier, specified back resource,
+     * placement points and list of contained corners
+     * @param cardID card unique identifier
+     * @param backResource the resource displayed on the back of the card
+     * @param pointsOnPlace the placement points
+     * @param corners list of corners associated with the card
+     * @throws InvalidParameterException when duplicate of corner found
+     */
     public ResourceCard(String cardID, GameResource backResource, int pointsOnPlace, List<Corner> corners) throws InvalidParameterException {
         super(cardID,backResource, pointsOnPlace, corners);
     }

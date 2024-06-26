@@ -22,7 +22,11 @@ import it.polimi.ingsw.GameResource;
 
 import java.util.*;
 
-//DOCS Complete docs
+/**
+ * This class represents the play-area of a player: the space within which the cards are placed.
+ * In this representation it is comprehensive of the visible resources and a list containing, all
+ * the free corners on which placement is possible.
+ */
 public class PlayArea implements GameSubject {
     private final String owner;
     private final Map<GamePoint, PlaceableCard> cardMatrix;
@@ -30,12 +34,16 @@ public class PlayArea implements GameSubject {
     private final List<Corner> freeCorners;
     private final List<GameListener> gameListeners;
     /**
-     * Constructs PlayArea with empty cardMatrix, no visible resources and no freeCorners
+     * Default constructor.
      */
     public PlayArea(){
         this(null);
     }
 
+    /**
+     * Constructs a play area associated with the specified player.
+     * @param owner player associated with the play area
+     */
     public PlayArea(String owner){
         this.owner = owner;
         gameListeners = new LinkedList<>();
@@ -44,18 +52,24 @@ public class PlayArea implements GameSubject {
         freeCorners = new LinkedList<>();
     }
 
+    /**
+     * Returns the map representation of the grid formed by the placed cards.
+     * @return map representation of the grid formed by the placed cards
+     */
     public Map<GamePoint, PlaceableCard> getCardMatrix(){
         return Collections.unmodifiableMap(cardMatrix);
     }
 
     /**
-     * @return map containing information of the amount of resources that are visible
+     * Returns map containing information of the amount of resources that are visible.
+     * @return visible resources map
      */
     public Map<GameResource, Integer> getVisibleResources() {
         return Collections.unmodifiableMap(visibleResources);
     }
 
     /**
+     * Returns a list of corners where a card can be placed.
      * @return list of corners where a card can be placed
      */
     public List<Corner> getFreeCorners() {
