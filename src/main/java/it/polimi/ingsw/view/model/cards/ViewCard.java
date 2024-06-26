@@ -1,14 +1,12 @@
 package it.polimi.ingsw.view.model.cards;
 
 import it.polimi.ingsw.view.gui.CardListener;
+import it.polimi.ingsw.view.gui.GUIFunc;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Base class of a generic card in the ViewModel
@@ -131,38 +129,8 @@ public abstract class ViewCard extends JComponent {
 
     private void importIMG() {
         ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = null;
-        try {
-            url = cl.getResourceAsStream(imageFrontName);
-        } catch(NullPointerException e){
-            e.printStackTrace(System.err);
-        }
-
-        BufferedImage img = null;
-        try{
-            assert url != null;
-            img = ImageIO.read(url);
-        } catch(IOException e){
-            e.printStackTrace(System.err);
-        }
-        this.imageFront = img;
-
-
-        try {
-            url =  cl.getResourceAsStream(imageBackName);
-        } catch(NullPointerException e){
-            e.printStackTrace(System.err);
-        }
-
-        img = null;
-        try{
-            assert url != null;
-            img = ImageIO.read(url);
-        } catch(IOException e){
-            e.printStackTrace(System.err);
-        }
-        this.imageBack = img;
-
+        this.imageFront = GUIFunc.importIMG(cl, imageFrontName);
+        this.imageBack = GUIFunc.importIMG(cl, imageBackName);
         importedImg = true;
     }
 
@@ -173,6 +141,10 @@ public abstract class ViewCard extends JComponent {
     public void setCardListener(CardListener cardListener){
         this.cardListener = cardListener;
     }
+
+    /**
+     * Disables the component.
+     */
     public void disableComponent(){
         this.setEnabled(false);
     }

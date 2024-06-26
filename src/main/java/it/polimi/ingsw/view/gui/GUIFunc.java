@@ -2,9 +2,13 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.UIFunctions;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static java.awt.Component.CENTER_ALIGNMENT;
 
@@ -84,6 +88,29 @@ public final class GUIFunc extends UIFunctions {
         return "<html>" + message.replaceAll("\n", "<br>") + "</html>";
     }
 
+    /**
+     * Imports the desired image found at the specified path relative to resource folder.
+     * @param cl class loader
+     * @param imagePath relative path to the desired image
+     * @return desired buffered image
+     */
+    public static BufferedImage importIMG(ClassLoader cl, String imagePath){
+        InputStream url = null;
+        try {
+            url = cl.getResourceAsStream(imagePath);
+        } catch(NullPointerException e){
+            e.printStackTrace(System.err);
+        }
+
+        BufferedImage img = null;
+        try{
+            assert url != null;
+            img = ImageIO.read(url);
+        } catch(IOException e){
+            e.printStackTrace(System.err);
+        }
+        return img;
+    }
     /**
      * Sets up a frame with given sizes.
      * @param frame frame instance to set up

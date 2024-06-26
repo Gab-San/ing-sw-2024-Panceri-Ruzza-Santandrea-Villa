@@ -2,40 +2,29 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.view.gui.GUIFunc;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-//DOCS add docs
+
+/**
+ * This class acts as a placeholder for a placeable card.
+ * <p>
+ *     Since the the first cards to be placed on a play area need
+ *     a clickable space to be defined.
+ *     The place holder offers a clickable space on which to place
+ *     the first card.
+ * </p>
+ */
 public class PlaceHolder extends JComponent {
-
     private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/TransparentStarting.png";
-    private BufferedImage image;
+    private final BufferedImage image;
 
+    /**
+     * Default constructor.
+     */
     public PlaceHolder(){
         super();
-        importIMG();
-    }
-
-    private void importIMG() {
-        ClassLoader cl = this.getClass().getClassLoader();
-        InputStream url = null;
-        try {
-            url = cl.getResourceAsStream(PATH);
-        } catch(NullPointerException e){
-            e.printStackTrace(System.err);
-        }
-
-        BufferedImage img = null;
-        try{
-            assert url != null;
-            img = ImageIO.read(url);
-        } catch(IOException e){
-            e.printStackTrace(System.err);
-        }
-        this.image = img;
+        this.image = GUIFunc.importIMG(this.getClass().getClassLoader(), PATH);
     }
 
     @Override

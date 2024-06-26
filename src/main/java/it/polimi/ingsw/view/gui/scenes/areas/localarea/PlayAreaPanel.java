@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.scenes.areas.localarea;
 
 import it.polimi.ingsw.CornerDirection;
 import it.polimi.ingsw.GamePoint;
-import it.polimi.ingsw.view.gui.CardListener;
 import it.polimi.ingsw.view.gui.CornerListener;
 import it.polimi.ingsw.view.gui.scenes.areas.AreaPanel;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
@@ -14,11 +13,19 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
-//DOCS add docs
-public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, CornerListener, CardListener {
+
+/**
+ * This class extends area panel and represents the player play area view:
+ * displays placed cards and highlights free corners in order to let the user
+ * interact and place cards on them.
+ */
+public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, CornerListener {
     private final List<PlaceHolder> placeHolderList;
     private CornerListener cornerListener;
 
+    /**
+     * Default constructor.
+     */
     public PlayAreaPanel(){
         placeHolderList = new LinkedList<>();
 
@@ -59,6 +66,10 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         return placeHolder;
     }
 
+    /**
+     * Sets the corner listener of user clicked corners.
+     * @param cornerListener listener of cards corners.
+     */
     public void setCornerListener(CornerListener cornerListener) {
         this.cornerListener = cornerListener;
     }
@@ -71,7 +82,6 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         if(evt.getNewValue() instanceof ViewPlaceableCard placedCard){
             deletePlaceHolders();
             placedCard.setCornerListener(this);
-            placedCard.setCardListener(this);
         }
     }
 
@@ -94,14 +104,6 @@ public class PlayAreaPanel extends AreaPanel implements PropertyChangeListener, 
         try{
             cornerListener.placeOnCorner(cardID, position, direction);
         }catch (IllegalStateException ignore){/*on placement failure*/}
-    }
-
-    @Override
-    public void setSelectedCard(ViewPlaceableCard card) {
-        //A placed card should not be clickable, so this method should never be called.
-        //The placed card's CardListener is set to this just to avoid NullPointerExceptions
-        // or accidental side effects that would arise should this method be called on other CardListeners
-        System.out.println("Clicked a placed card and triggered \"SetSelectedCard\"");
     }
 
     /**

@@ -5,12 +5,19 @@ import it.polimi.ingsw.view.gui.scenes.areas.AreaScene;
 import it.polimi.ingsw.view.model.*;
 
 import java.beans.PropertyChangeEvent;
-//DOCS add docs
+
+/**
+ * This class extends area scene and implements an opponent board view.
+ */
 public class OpponentAreaScene extends AreaScene {
     private final String nickname;
 
-    public OpponentAreaScene(GameInputHandler inputHandler, String nickname) {
-        super(inputHandler, new OpponentAreaPanel(), new OpponentHandPanel());
+    /**
+     * Constructs an opponent scene.
+     * @param nickname opponent's nickname
+     */
+    public OpponentAreaScene(String nickname) {
+        super(new OpponentAreaPanel(), new OpponentHandPanel());
         this.nickname = nickname;
     }
 

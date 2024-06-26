@@ -84,7 +84,6 @@ public class ModelUpdater {
             hand.setConnected(isConnected);
             hand.setTurn(turn);
             hand.setColor(color);
-            System.out.println("RAN DisplayPlayerState EVENT on ModelUpdater");
             board.notifyView(SceneID.getOpponentAreaSceneID(nickname), new DisplayPlayerState(nickname,
                     isConnected, turn, color));
         }

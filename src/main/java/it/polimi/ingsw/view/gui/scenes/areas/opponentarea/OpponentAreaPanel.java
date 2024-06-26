@@ -4,7 +4,10 @@ import it.polimi.ingsw.view.gui.scenes.areas.AreaPanel;
 import it.polimi.ingsw.view.model.cards.ViewPlaceableCard;
 
 import java.beans.PropertyChangeEvent;
-//DOCS add docs
+
+/**
+ * This class represents an opponent play area view (view-only).
+ */
 public class OpponentAreaPanel extends AreaPanel {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

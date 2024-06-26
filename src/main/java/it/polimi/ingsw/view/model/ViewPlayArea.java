@@ -195,11 +195,6 @@ public class ViewPlayArea extends JComponent {
     public Map<GamePoint, ViewPlaceableCard> getCardMatrix(){ return Collections.unmodifiableMap(cardMatrix);}
 
     /**
-     * @return an unmodifiable, synchronized view of this playArea's zLayer matrix (for the GUI).
-     */
-    public Map<GamePoint, Integer> getZLayerMatrix(){ return Collections.unmodifiableMap(zLayerMatrix);}
-
-    /**
      * Sets the visible resources of this playArea (overriding the old values). <br>
      * Note that the map is copied by value, not by reference. <br>
      * Also notifies the owner's scene of the visibleResources update event.
@@ -241,12 +236,6 @@ public class ViewPlayArea extends JComponent {
      * Resets this playArea's free corners list.
      */
     public void clearFreeCorners(){
-        //do not run resetCorner on each to prevent a bug that disables
-        // the starting card corners when transitioning
-        // from setup state to play state
-//        freeCorners.forEach(
-//                ViewCorner::resetCorner
-//        );
         freeCorners.clear();
     }
 
@@ -283,7 +272,6 @@ public class ViewPlayArea extends JComponent {
     public void calculateZLayers() throws IllegalArgumentException{
         zLayerMatrix.clear();
         for (GamePoint pos : cardMatrix.keySet()) {
-            //TODO: fix this to scale on size of cardMatrix
             zLayerMatrix.put(pos, 3000 + cardMatrix.size()*50);
             cardMatrix.get(pos).setLayer(zLayerMatrix.get(pos));
         }
@@ -331,7 +319,6 @@ public class ViewPlayArea extends JComponent {
         ViewPlaceableCard card = cardMatrix.get(pos);
         int zCard = zLayerMatrix.get(pos);
         int zChange;
-        //TODO: fix this to scale on size of cardMatrix
         final int UNBOUND_BIG_CHANGE = 5000 + cardMatrix.size()*50;
 
         List<Boolean> covers = dirs.stream()

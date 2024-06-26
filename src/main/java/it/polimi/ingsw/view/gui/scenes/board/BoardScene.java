@@ -17,8 +17,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-//DOCS [Gamba] add docs;
-
 /**
  * This class implements GUI scene interface. It displays the decks and the scoreboard.
  */
@@ -27,7 +25,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     private final GameInputHandler inputHandler;
     private char selectedDeck;
     private int selectedPosition;
-    private final JLabel errorLabel;
+    private final JLabel notificationLabel;
     private Timer displayTimer;
     private final ScoreboardPanel scoreboard;
 
@@ -46,10 +44,10 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         setLayout(new BorderLayout());
         JPanel deckpanel = setupDeckPanel(board);
         scoreboard = new ScoreboardPanel(board);
-        errorLabel = GUIFunc.createNotificationLabel();
-        modifyErrorLabel();
+        notificationLabel = GUIFunc.createNotificationLabel();
+        modifyLabel();
         //Adding components
-        add(errorLabel,BorderLayout.NORTH);
+        add(notificationLabel,BorderLayout.NORTH);
         add(deckpanel, BorderLayout.CENTER);
         add(scoreboard, BorderLayout.EAST);
     }
@@ -114,10 +112,10 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
     @Override
     public synchronized void displayError(String errorMsg) {
         int displayTime =  GUIFunc.setupDisplayTimer(1.5f, displayTimer);
-        errorLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
-        errorLabel.setText(errorMsg);
+        notificationLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
+        notificationLabel.setText(errorMsg);
         // The error will become visible
-        errorLabel.setVisible(true);
+        notificationLabel.setVisible(true);
         startDisplayTimer(displayTime);
     }
 
@@ -126,7 +124,7 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         // disappear from the screen
         displayTimer = new Timer(displayTime,
                 (event) -> {
-                    errorLabel.setVisible(false);
+                    notificationLabel.setVisible(false);
                     // java.awt timers don't stop after
                     // the delay time has passed,
                     // so they need to be actively stopped
@@ -136,15 +134,21 @@ public class BoardScene extends JPanel implements GUI_Scene, ActionListener, Car
         displayTimer.start();
     }
 
-    private void modifyErrorLabel() {
-        errorLabel.setFont(new Font("Raleway", Font.BOLD, 30));
-        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        errorLabel.setVerticalAlignment(SwingConstants.CENTER);
+    private void modifyLabel() {
+        notificationLabel.setFont(new Font("Raleway", Font.BOLD, 30));
+        notificationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        notificationLabel.setVerticalAlignment(SwingConstants.CENTER);
     }
 
-   // TODO implement display notification
     @Override
-    public synchronized void displayNotification(List<String> backlog) {/*unused*/}
+    public synchronized void displayNotification(List<String> backlog) {
+        int displayTime =  GUIFunc.setupDisplayTimer(1.5f, displayTimer);
+        notificationLabel.setForeground(GameColor.NOTIFICATION_COLOUR.getColor());
+        notificationLabel.setText(backlog.get(0));
+        // The error will become visible
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
+    }
 
     @Override
     public synchronized void close() {

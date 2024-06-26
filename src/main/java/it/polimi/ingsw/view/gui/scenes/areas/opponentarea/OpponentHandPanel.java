@@ -9,8 +9,15 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-//DOCS add docs
+
+/**
+ * This class extends hand panel and represents an opponent hand view.
+ * It is view-only and displays the cards currently held by the opponent.
+ */
 public class OpponentHandPanel extends HandPanel {
+    /**
+     * Default opponent hand panel constructor.
+     */
     public OpponentHandPanel(){
         super();
     }

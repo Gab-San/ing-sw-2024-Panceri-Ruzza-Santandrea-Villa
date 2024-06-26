@@ -15,25 +15,60 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-//DOCS add docs
 
 /**
- * Base class of the playAreaPanel, with shared behaviour of local and opponent playAreas
+ * Base class of the player board, with shared behaviour of local and opponent playAreas.
+ * <p>
+ *     The player board is comprehensive of: <br>
+ *     - player's area: area in which the cards are placed <br>
+ *     - player's hand: the set of cards held by the player <br>
+ *     - player's info: player's status labels.
+ * </p>
  */
 public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyChangeListener {
+    /**
+     * Area scene desired width.
+     */
     public static final int WIDTH = GameWindow.SCREEN_WIDTH - PlayerListPanel.WIDTH;
+    /**
+     * Area scene desired height.
+     */
     public static final int HEIGHT = GameWindow.SCREEN_HEIGHT - PlayerInfoPanel.HEIGHT;
+    /**
+     * Player info panel.
+     */
     protected PlayerInfoPanel playerInfoPanel;
-    protected final GameInputHandler inputHandler;
+    /**
+     * Notification displaying label.
+     */
     protected final JLabel notificationLabel;
+    /**
+     * Timer that handles displaying label.
+     */
     protected Timer displayTimer;
+    /**
+     * Scrollable panel that contains the play area.
+     */
     protected final JScrollPane scrollPane;
+    /**
+     * Layered panel in which the player area is displayed.
+     */
     protected final JLayeredPane layersPane;
+    /**
+     * Placed cards display panel.
+     */
     protected final AreaPanel areaPanel;
+    /**
+     * Player's hand display panel.
+     */
     protected final HandPanel handPanel;
 
-    protected AreaScene(GameInputHandler inputHandler, AreaPanel areaPanel, HandPanel handPanel){
-        this.inputHandler = inputHandler;
+    /**
+     * Constructs the player's board panel.
+     * @param areaPanel player's play area display panel
+     * @param handPanel player's hand display panel
+     */
+    protected AreaScene(AreaPanel areaPanel, HandPanel handPanel){
         this.areaPanel = areaPanel;
         this.handPanel = handPanel;
 
@@ -66,7 +101,8 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
         notificationLabel.setFont(new Font("Raleway", Font.PLAIN, 30));
     }
 
-    public JScrollPane setupAreaScrollPane(){
+
+    private JScrollPane setupAreaScrollPane(){
         JScrollPane scrollPane = initializeScrollPane();
         // Center scroll pane
         int horValue = areaPanel.getWidth()/2;
@@ -112,7 +148,7 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
         return scrollPane;
     }
 
-    protected void setScrollPaneMovement(JScrollPane scrollPane) {
+    private void setScrollPaneMovement(JScrollPane scrollPane) {
         // Add WASD movement
         scrollPane.getInputMap().put(KeyStroke.getKeyStroke("D"), "MOVE_RIGHT");
         scrollPane.getActionMap().put("MOVE_RIGHT", new MoveScreenAction(1,0));
@@ -134,12 +170,21 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
 
     @Override
     public synchronized void displayError(String error) {
-        displayError(error, 1.5f);
+        int displayTime =  GUIFunc.setupDisplayTimer((float) 1.5, displayTimer);
+        notificationLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
+        notificationLabel.setText(GUIFunc.correctToLabelFormat(error));
+        // The error will become visible
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
     }
 
     @Override
     public synchronized void displayNotification(java.util.List<String> backlog) {
-        displayNotification(backlog.get(0), 2f);
+        int displayTime = GUIFunc.setupDisplayTimer(2.0f, displayTimer);
+        notificationLabel.setForeground(Color.black);
+        notificationLabel.setText(GUIFunc.correctToLabelFormat(backlog.get(0)));
+        notificationLabel.setVisible(true);
+        startDisplayTimer(displayTime);
     }
 
     @Override
@@ -166,15 +211,6 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
         );
     }
 
-    //region NOTIFICATION LABEL METHODS
-    private void displayError(String errorMessage, float displayTimeSeconds) {
-        int displayTime =  GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        notificationLabel.setForeground(GameColor.ERROR_COLOUR.getColor());
-        notificationLabel.setText(GUIFunc.correctToLabelFormat(errorMessage));
-        // The error will become visible
-        notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime);
-    }
 
     private void startDisplayTimer(int displayTime) {
         // After delay time the notification will
@@ -191,14 +227,6 @@ public abstract class AreaScene extends JPanel implements GUI_Scene, PropertyCha
         displayTimer.start();
     }
 
-    private synchronized void displayNotification(String successMessage, float displayTimeSeconds){
-        int displayTime = GUIFunc.setupDisplayTimer(displayTimeSeconds, displayTimer);
-        notificationLabel.setForeground(Color.black);
-        notificationLabel.setText(GUIFunc.correctToLabelFormat(successMessage));
-        notificationLabel.setVisible(true);
-        startDisplayTimer(displayTime);
-    }
-//endregion
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

@@ -6,12 +6,22 @@ import it.polimi.ingsw.view.model.ViewHand;
 import it.polimi.ingsw.view.model.ViewPlayArea;
 
 import java.beans.PropertyChangeEvent;
-//DOCS add docs
+
+/**
+ * This class represents the board view of the local user. It offers interactive
+ * views of the play-area and player's hand.
+ */
 public class LocalPlayerAreaScene extends AreaScene{
+    private final GameInputHandler inputHandler;
 
+    /**
+     * Constructs board view for the local user handled by the given
+     * input handler.
+     * @param inputHandler game input handler
+     */
     public LocalPlayerAreaScene(GameInputHandler inputHandler){
-        super(inputHandler, new PlayAreaPanel(), new PlayerHandPanel(inputHandler));
-
+        super(new PlayAreaPanel(), new PlayerHandPanel(inputHandler));
+        this.inputHandler = inputHandler;
         PlayAreaPanel playAreaPanel = (PlayAreaPanel) areaPanel;
         playAreaPanel.setCornerListener((PlayerHandPanel) super.handPanel);
     }

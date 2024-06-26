@@ -15,11 +15,22 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-//DOCS add docs
+
+/**
+ * This class extends hand panel and represents the local player hand.
+ * <p>
+ *     Local player must be able to interact with all of the owned play cards in order
+ *     to place them onto their play area.
+ * </p>
+ */
 public class PlayerHandPanel extends HandPanel implements CardListener, CornerListener {
     private final GameInputHandler inputHandler;
     private ViewPlaceableCard selectedCard;
 
+    /**
+     * Constructs player hand panel.
+     * @param inputHandler game interaction handler
+     */
     public PlayerHandPanel(GameInputHandler inputHandler){
         super();
         this.inputHandler = inputHandler;

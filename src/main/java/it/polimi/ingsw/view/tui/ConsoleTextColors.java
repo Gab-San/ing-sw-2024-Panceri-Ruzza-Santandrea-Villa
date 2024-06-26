@@ -1,5 +1,5 @@
 package it.polimi.ingsw.view.tui;
-//DOCS should add attributes docs
+
 /**
  * Collection of ANSI text (foreground) colors
  */

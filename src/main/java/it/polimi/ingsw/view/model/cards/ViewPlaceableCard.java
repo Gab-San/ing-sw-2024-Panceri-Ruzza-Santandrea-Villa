@@ -7,13 +7,10 @@ import it.polimi.ingsw.view.gui.CornerListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collections;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The base class of PlaceableCards in the ViewModel
@@ -97,7 +94,9 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
      */
     public synchronized void setPosition(GamePoint position) {
         this.position = position;
-        this.removeMouseListener(this);
+        super.disableComponent();
+        if(Arrays.stream(this.getMouseListeners()).anyMatch(e -> e == this))
+            this.removeMouseListener(this);
         this.setFocusable(false);
         // Disabling input on this component
         this.getInputMap().remove(KeyStroke.getKeyStroke("F"));
@@ -140,8 +139,7 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
      * Disables component.
      */
     public synchronized void forceDisableComponent(){
-        super.disableComponent();
-        removeMouseListener(this);
+        disableComponent();
         for(ViewCorner corner : corners.values()){
             corner.setEnabled(false);
             corner.setVisible(false);
@@ -191,21 +189,5 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     }
     public int getLayer() {
         return layer;
-    }
-}
-
-/**
- * This class implements the action that flips cards.
- */
-class FlipAction extends AbstractAction{
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        assert e.getSource() instanceof ViewPlaceableCard;
-        ViewPlaceableCard card = (ViewPlaceableCard) e.getSource();
-        if(!card.isEnabled()) {
-            return;
-        }
-        card.flip();
     }
 }

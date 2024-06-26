@@ -34,7 +34,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-//DOCS add docs for all gui and comment code
 /**
  * This class acts as the GUI main controller class.
  * <p>
@@ -262,7 +261,7 @@ public class GameGUI implements View {
         SceneManager.getInstance().getCurrentScene().displayNotification(Collections.singletonList(notification));
     }
 
-    //region NETWORK NOTIFICATIONS
+//region NETWORK NOTIFICATIONS
     @Override
     public synchronized void notifyTimeout() {
         Scene currentScene = SceneManager.getInstance().getCurrentScene();
@@ -315,19 +314,6 @@ public class GameGUI implements View {
         addToPropListeners(gameWindow);
     }
 //region LISTENERS' METHODS
-
-    /**
-     * Subscribe the specified property change listener to
-     * all the registered components.
-     * @param pcl property change listener to subscribe to events
-     */
-    public void subscribeToComponents(PropertyChangeListener pcl) {
-        synchronized (observableComponents){
-            for(JComponent component : observableComponents){
-                component.addPropertyChangeListener(pcl);
-            }
-        }
-    }
 
     /**
      * Subscribes all the property listeners to the specified component events.
@@ -428,7 +414,7 @@ public class GameGUI implements View {
         }
         // Creating opposing player's area
         // the player has connected
-        OpponentAreaScene opponentScene = new OpponentAreaScene(inputHandler, opponentHand.getNickname());
+        OpponentAreaScene opponentScene = new OpponentAreaScene(opponentHand.getNickname());
         SceneManager.getInstance().saveScene(SceneID.getOpponentAreaSceneID(nickname), opponentScene);
         board.addPropertyChangeListener(opponentScene);
         addToObservableComponents(opponentHand);

@@ -17,14 +17,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static it.polimi.ingsw.view.gui.ChangeNotifications.*;
-//DOCS add docs
+
+/**
+ * This class represents an abstraction of the player's play area panel.
+ * The play area represents the space in which cards are placed.
+ */
 public abstract class AreaPanel extends JPanel implements PropertyChangeListener{
+    /**
+     * Area panel size width.
+     */
     protected static final int AREA_WIDTH = 16620;
+    /**
+     * Area panel size height.
+     */
     protected static final int AREA_HEIGHT = 11120;
+    /**
+     * x axis center.
+     */
     protected static final int CENTER_X = AREA_WIDTH/2;
+    /**
+     * y axis center.
+     */
     protected static final int CENTER_Y = AREA_HEIGHT/2;
+    /**
+     * Panel layout.
+     */
     protected final SpringLayout layout;
+    /**
+     * Layered pane on which the cards are disposed.
+     */
     protected final JLayeredPane layeredPane;
+    /**
+     * The set of already placed cards.
+     */
     protected final Set<ViewPlaceableCard> placedCardsSet;
     private static final int PAWN_xOFFSET = (int) (ViewCard.getScaledWidth()/5.4f);
     private static final int PAWN_yOFFSET = -ViewCard.getScaledHeight()/3;
@@ -89,12 +114,7 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
         layout.putConstraint(SpringLayout.SOUTH, placedCard,
                 CENTER_Y + ViewCard.getScaledHeight() / 2 + yOffset,
                 SpringLayout.NORTH, this);
-
-        layout.getConstraints(placedCard);
     }
-
-    @Override
-    public abstract void propertyChange(PropertyChangeEvent evt);
 
     /**
      * A propertyChange method modified to return a boolean. <br>
@@ -140,6 +160,7 @@ public abstract class AreaPanel extends JPanel implements PropertyChangeListener
                     return false;
                 }
                 setCardPosition(placedCard);
+                // Placed card are disabled when placing them.
                 placedCardsSet.add(placedCard);
                 int cardLayer = placedCard.getLayer();
                 SwingUtilities.invokeLater(

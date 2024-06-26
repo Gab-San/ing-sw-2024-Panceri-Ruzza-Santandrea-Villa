@@ -9,13 +9,33 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
-//DOCS add docs
+
+/**
+ * This class represents the panel that displays all the information about player status.
+ * <p>
+ *     It is comprehensive of: <br>
+ *     - visible resources; <br>
+ *     - deadlock; <br>
+ *     - player's turn; <br>
+ *     - current turn.
+ * </p>
+ */
 public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
+    /**
+     * Preferred height of the panel.
+     */
     public static int HEIGHT = 40;
     private final VisibleResourcesPanel visibleResourcesPanel;
     private final JLabel deadLockLabel;
     private final JLabel turnLabel;
     private final JLabel currentTurnLabel;
+
+    /**
+     * Constructs the player info panel with the specified deadlock status and assigned turn.
+     * The latter might be 0 as it is the standard value for initialized and unassigned turn.
+     * @param isDeadLocked true if the player cannot play any more cards, false otherwise
+     * @param turn player assigned turn
+     */
     public PlayerInfoPanel(boolean isDeadLocked, int turn){
         setLayout(new FlowLayout(FlowLayout.CENTER));
         // x dimension doesn't count since it's a component into the BorderLayout set to the north
@@ -34,6 +54,10 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
         add(currentTurnLabel);
     }
 
+    /**
+     * Displays player's deadlock status.
+     * @param deadLocked true if the player cannot play any more cards, false otherwise
+     */
     public void setDeadLocked(boolean deadLocked) {
         deadLockLabel.setText("Deadlock: " + deadLocked);
         SwingUtilities.invokeLater(
@@ -44,6 +68,10 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
         );
     }
 
+    /**
+     * Displays player's playing turn.
+     * @param turn assigned turn
+     */
     public void setTurn(int turn){
         turnLabel.setText("Player Turn: " + turn);
         SwingUtilities.invokeLater(
@@ -54,6 +82,10 @@ public class PlayerInfoPanel extends JPanel implements PropertyChangeListener {
         );
     }
 
+    /**
+     * Adjourns the label to display current turn.
+     * @param currentTurn general playing turn
+     */
     public void adjournCurrentTurn(int currentTurn){
         currentTurnLabel.setText("Current Turn: " + currentTurn);
         SwingUtilities.invokeLater(

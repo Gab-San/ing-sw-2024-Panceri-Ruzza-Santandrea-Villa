@@ -12,15 +12,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-//DOCS add docs
+/**
+ * This class implements the panel that displays the visible resources in a player's area.
+ */
 public class VisibleResourcesPanel extends JPanel {
     private static final String PATH = GUIFunc.getGraphicsResourcesRootPath() + "icons/";
     private final Map<GameResource, GameResourceLabel> resourceLabelMap;
+
+    /**
+     * Default constructor.
+     */
     public VisibleResourcesPanel(){
         setLayout(new FlowLayout(FlowLayout.LEFT));
         setPreferredSize(new Dimension(400, PlayerInfoPanel.HEIGHT));
         setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         this.resourceLabelMap = new HashMap<>();
+        importResources();
+    }
+
+    private void importResources() {
         //LEAF
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "LEAF_TEST.png")){
             assert is != null;
@@ -31,6 +41,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //MUSHROOM
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "MUSH_TEST.png")){
             assert is != null;
@@ -41,6 +52,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //BUTTERFLY
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "BUTTERFLY_TEST.png")){
             assert is != null;
@@ -51,6 +63,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //WOLF
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "WOLF_TEST.png")){
             assert is != null;
@@ -61,6 +74,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //POTION
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "POTION_TEST.png")){
             assert is != null;
@@ -71,6 +85,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //SCROLL
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "SCROLL_TEST.png")){
             assert is != null;
@@ -81,6 +96,7 @@ public class VisibleResourcesPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         //QUILL
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream(PATH + "QUILL_TEST.png")){
             assert is != null;
