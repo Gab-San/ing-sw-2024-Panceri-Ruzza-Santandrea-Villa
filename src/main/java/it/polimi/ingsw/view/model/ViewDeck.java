@@ -22,7 +22,13 @@ public class ViewDeck<C extends ViewCard> extends JComponent implements CardList
     private C firstRevealed;
     private C secondRevealed;
     private final View view;
+    /**
+     * The listener for input on this deck's cards
+     */
     private CardListener cardListener;
+    /**
+     * The listener for input on this deck
+     */
     private DeckListener deckListener;
 
     /**

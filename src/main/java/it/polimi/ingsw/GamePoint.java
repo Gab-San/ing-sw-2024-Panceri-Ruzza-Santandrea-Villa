@@ -87,7 +87,7 @@ public record GamePoint(int row, int col) {
     /**
      * Compares two points in increasing order of row then column
      * @param other point to compare this to
-     * @return 1 if this > other <br> 0 if this == other <br> -1 if this < other
+     * @return 1 if this &gt; other <br> 0 if this == other <br> -1 if this &lt; other
      */
     public int compare(GamePoint other) {
         if(row > other.row) return 1;

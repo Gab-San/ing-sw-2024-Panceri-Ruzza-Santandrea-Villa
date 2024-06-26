@@ -9,6 +9,12 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.RESET;
  * The Nickname selection UI scene printer for the TUI
  */
 public class PrintNicknameSelectUI extends TUI_Scene {
+
+    /**
+     * Default constructor.
+     */
+    public PrintNicknameSelectUI(){}
+
     @Override
     public void display(){
         synchronized (System.out) {

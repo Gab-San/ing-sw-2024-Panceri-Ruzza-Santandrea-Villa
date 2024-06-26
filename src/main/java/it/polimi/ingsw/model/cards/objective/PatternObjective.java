@@ -25,7 +25,9 @@ import java.util.*;
  *     <li>
  *          the positions between corners are the top, bottom, left, right cards
  *     </li>
+ *     <li>
  *          e.g. to get the top card it's Point(0,0).move(TL, TR)
+ *     </li>
  *     <li>
  *          e.g. to get the left card it's Point(0,0).move(TL, BL)
  *     </li>

@@ -69,6 +69,7 @@ public class ViewCorner extends JComponent implements MouseListener {
     }
 
     /**
+     * Returns the resource on the face corresponding to the attached card's status
      * @return The resource on the face corresponding to the attached card's status
      * @throws NullPointerException if the corner is not attached to any card (cardRef==null)
      */
@@ -128,14 +129,25 @@ public class ViewCorner extends JComponent implements MouseListener {
         return new Dimension(50, 60);
     }
 
+    /**
+     * Returns this corner's fixed width for the GUI
+     * @return 50
+     */
     public static int getFixedWidth(){
         return 50;
     }
-
+    /**
+     * Returns this corner's fixed height for the GUI
+     * @return 60
+     */
     public static int getFixedHeight(){
         return 60;
     }
 
+    /**
+     * Activates this corner's mouse listener and set the yellow border,
+     * enabling the user to click on this corner to place a card.
+     */
     public void activateCorner() {
         addMouseListener(this);
         setEnabled(true);
@@ -184,6 +196,9 @@ public class ViewCorner extends JComponent implements MouseListener {
         setFocusable(false);
     }
 
+    /**
+     * Permanently disables this corner so that it won't accept user input (on GUI).
+     */
     public void disableCorner() {
         isDisabled = true;
     }
@@ -195,6 +210,11 @@ public class ViewCorner extends JComponent implements MouseListener {
                 "IS VISIBLE " + isVisible + "\n}";
     }
 
+    /**
+     * Removes the mouse listener and removes the yellow border from this corner,
+     * disabling it until {@code activateCorner()} is called again. <br>
+     * Has no effect if this corner was not active.
+     */
     public void resetCorner() {
         if(Arrays.stream(getMouseListeners()).toList().contains(this)) removeMouseListener(this);
         

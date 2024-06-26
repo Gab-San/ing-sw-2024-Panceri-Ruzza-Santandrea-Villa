@@ -119,7 +119,7 @@ public class ViewPlayerHand extends ViewHand {
     /**
      * Flips the card in hand at position index (not valid for flipping starting card)
      * @param index position of the card to flip (1-3)
-     * @throws IndexOutOfBoundsException if <br>- index < 1 <br>- index > number of cards in hand
+     * @throws IndexOutOfBoundsException if <br>- index &lt; 1 <br>- index &gt; number of cards in hand
      */
     public void flipCard(int index) throws IndexOutOfBoundsException{
         getCards().get(index-1).flip();

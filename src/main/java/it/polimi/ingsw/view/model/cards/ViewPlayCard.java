@@ -48,6 +48,7 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
     }
 
     /**
+     * Returns a string representation of the points gained on placing this card.
      * @return An empty string if the card is face-down, or
      *        the pointsOnPlace as a string if the card is face-up.
      */
@@ -57,6 +58,7 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
     }
 
     /**
+     * Returns a string representation of the resources required to place this card.
      * @return An empty string if the card is face-down, or
      *        the placement cost as a string of resource initials
      *        if the card is face-up.
@@ -64,6 +66,7 @@ public abstract class ViewPlayCard extends ViewPlaceableCard{
     abstract public String getPlacementCostAsString();
 
     /**
+     * Returns a list of resources that are required to place this card.
      * @return a list of resources that are required to place this card
      */
     abstract public List<GameResource> getPlacementCost();

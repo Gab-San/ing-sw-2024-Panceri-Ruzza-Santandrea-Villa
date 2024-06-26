@@ -11,15 +11,30 @@ import java.util.Map;
  * Objective strategy for objectives that require a specific amount of resources
  */
 public class ResourceObjectiveStrategy implements ObjectiveStrategy{
+    /**
+     * A map of each resource-quantity pair
+     * required to solve this objective.
+     */
     private final Map<GameResource, Integer> resourceForCompletion;
-    //DOCS add docs
+
+    /**
+     * Construct this strategy, copying the argument map by value.
+     * @param resourceForCompletion a map of each resource-quantity pair
+     *                             required to solve this objective.
+     *
+     */
     public ResourceObjectiveStrategy(Map<GameResource, Integer> resourceForCompletion) {
         this.resourceForCompletion = new Hashtable<>();
         this.resourceForCompletion.putAll(resourceForCompletion);
     }
-    //DOCS add docs
-    public int calculateSolves(@NotNull PlayArea p){
-        return divideMap(p.getVisibleResources(), resourceForCompletion);
+
+    /**
+     * Calculates how many times this objective has been solved on the given playArea.
+     * @param playArea the playArea on which to calculate #solves of this objective
+     * @return the number of times this objective was solved on the playArea.
+     */
+    public int calculateSolves(@NotNull PlayArea playArea){
+        return divideMap(playArea.getVisibleResources(), resourceForCompletion);
     }
 
     /**

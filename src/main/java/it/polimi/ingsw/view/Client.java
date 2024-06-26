@@ -45,6 +45,11 @@ public class Client {
 
 //region FUNCTIONS
     /**
+     * Private constructor, as this class is not meant to be instantiated.
+     */
+    private Client(){}
+
+    /**
      * Clears the screen. <br>
      * On Windows: same as running "cls", prevents scrolling up <br>
      * On Linux/WSL/Others: same as running "clear", does not prevent scrolling up

@@ -65,8 +65,9 @@ public abstract class ViewCard extends JComponent {
     }
 
     /**
+     * Implementation of the equals method.
      * @param other the card to compare this with.
-     * @return if the other object is a ViewCard and
+     * @return true if the other object is a ViewCard and
      *        the card IDs match.
      */
     @Override
@@ -76,18 +77,28 @@ public abstract class ViewCard extends JComponent {
             return this.cardID.equals(otherCard.cardID);
         }else return false;
     }
+
+    /**
+     * Implementation of the hashcode method.
+     * @return the hashcode of this card's ID.
+     */
     @Override
     public int hashCode(){
         return cardID.hashCode();
     }
 
     /**
+     * Getter of the card ID
      * @return this card's ID
      */
     public String getCardID(){
         return cardID;
     }
 
+    /**
+     * Getter of this card's isFaceUp parameter.
+     * @return true if this card is front-face up.
+     */
     public synchronized boolean isFaceUp(){
         return isFaceUp;
     }
@@ -168,9 +179,17 @@ public abstract class ViewCard extends JComponent {
         return new Dimension(getScaledWidth(), getScaledHeight());
     }
 
+    /**
+     * Returns the width of the card image scaled by the scale factor.
+     * @return the width of the card image scaled by the scale factor.
+     */
     public static int getScaledWidth(){
         return IMAGE_WIDTH/SCALE_FACTOR;
     }
+    /**
+     * Returns the height of the card image scaled by the scale factor.
+     * @return the height of the card image scaled by the scale factor.
+     */
     public static int getScaledHeight(){
         return IMAGE_HEIGHT/SCALE_FACTOR;
     }

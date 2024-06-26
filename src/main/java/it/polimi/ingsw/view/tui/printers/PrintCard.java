@@ -38,6 +38,11 @@ public class PrintCard {
     private String colorCode;
 
     /**
+     * Default constructor.
+     */
+    public PrintCard(){}
+
+    /**
      * Sets the background color internally for the card to be constructed next. <br>
      * Accessible by other printers to allow for finer manipulation of this class' methods.
      * @param color the background color of the card as a GameResource
@@ -64,7 +69,7 @@ public class PrintCard {
     /**
      * Returns a string composed of 'length' spaces, empty if length is less than zero.
      * @param length number of spaces to return
-     * @return a string composed of 'length' spaces, empty if length <= 0
+     * @return a string composed of 'length' spaces, empty if length &lt;= 0
      */
     public String getSpaces(int length){
         return " ".repeat(Math.max(0, length));

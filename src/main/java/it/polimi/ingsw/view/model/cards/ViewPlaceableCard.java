@@ -68,19 +68,23 @@ public abstract class ViewPlaceableCard extends ViewCard implements MouseListene
     }
 
     /**
-     * @return this card's colour as a resource. (e.g. purple <-> Butterfly resource)
+     * Returns this card's colour as a resource. <br>
+     * (e.g. purple {@code <->} Butterfly resource)
+     * @return this card's colour as a resource.
      */
     abstract public GameResource getCardColour();
 
     /**
+     * Returns the resource on the visible side of the corner in the given direction.
      * @param dir the corner's direction on this card
-     * @return the resource on that corner on the current visible side of this card
+     * @return the resource on the visible side of the corner in the given direction.
      */
     public GameResource getCornerResource(CornerDirection dir){
         return corners.get(dir).getResource();
     }
 
     /**
+     * Returns the corner in the given direction
      * @param dir the corner's direction on this card
      * @return this card's corner in the given direction
      */

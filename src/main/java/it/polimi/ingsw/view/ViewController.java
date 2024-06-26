@@ -154,7 +154,7 @@ public class ViewController {
      * @param numOfPlayers number of players required to start the new game
      * @throws IllegalStateException if the player can't currently restart the game.
      *                              The exception message explains the reason in greater detail.
-     * @throws IllegalArgumentException if the numOfPlayers argument is invalid (<2 or >4).
+     * @throws IllegalArgumentException if the numOfPlayers argument is invalid {@code (<2 or >4)}.
      *                              The exception message explains the reason in greater detail.
      */
     public void validateRestart(int numOfPlayers)throws IllegalStateException, IllegalArgumentException{
@@ -189,12 +189,14 @@ public class ViewController {
     }
 
     /**
+     * Returns the local player's ViewPlayArea
      * @return local player's ViewPlayArea
      */
     public ViewPlayArea getSelfPlayArea(){
         return selfPlayArea;
     }
     /**
+     * Returns the local player's card in hand with given ID
      * @param id card ID to return
      * @return local player's card in hand with given ID
      */
@@ -202,6 +204,7 @@ public class ViewController {
         return board.getPlayerHand().getCardByID(id);
     }
     /**
+     * Returns the local player's starting card (could be null)
      * @return local player's starting card (could be null)
      */
     public ViewStartCard getSelfStartingCard(){
@@ -222,10 +225,12 @@ public class ViewController {
     }
 
     /**
+     * Returns the hand of the player with given nickname. <br>
+     * Due to ViewBoard implementation, it also runs addOpponent() if the given nickname
+     * doesn't correspond to the local player or to any opponent in game.
      * @param nickname a player nickname
-     * @return the ViewHand of the player with given nickname. <br>
-     *          Due to ViewBoard implementation, it also runs addOpponent()
-     *          if the given nickname doesn't correspond to the local player or to any opponent in game.
+     * @return the ViewHand of the player with given nickname.
+     *
      */
     public ViewHand getPlayer(String nickname) {
         if(board.getPlayerHand().getNickname().equals(nickname)){
@@ -236,6 +241,7 @@ public class ViewController {
     }
 
     /**
+     * Returns a boolean indicating if the nickname corresponds to the local player's nickname.
      * @param nickname a player nickname
      * @return true if the nickname corresponds to the local player's nickname.
      */
@@ -244,6 +250,7 @@ public class ViewController {
     }
 
     /**
+     * Returns the local player's hand.
      * @return the local player's hand.
      */
     public ViewPlayerHand getLocalPlayer() {
@@ -251,6 +258,8 @@ public class ViewController {
     }
 
     /**
+     * Loops through the objectives in hand and returns the index of the first
+     * objective card matching the argument.
      * @param comparedCard the objective card to find
      * @return the index of the given objective card in hand.
      * @throws IllegalStateException if the objective card is not in hand.

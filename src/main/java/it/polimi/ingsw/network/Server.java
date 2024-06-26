@@ -22,6 +22,11 @@ public class Server {
     private static final int MAX_PORT = 65535;
 
     /**
+     * Private constructor, as this class is not meant to be instantiated.
+     */
+    private Server(){}
+
+    /**
      * Main method of the Server. Reads args passed by command line and
      * creates both the RMI and TCP servers in that order, according to the port args. <br>
      * The central server is also created when the RMI server calls CentralServer.getInstance()

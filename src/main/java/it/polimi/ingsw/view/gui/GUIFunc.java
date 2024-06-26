@@ -19,6 +19,11 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 public final class GUIFunc extends UIFunctions {
 
     /**
+     * Private constructor, as this class is not meant to be instantiated.
+     */
+    private GUIFunc(){super();}
+
+    /**
      * Returns the path to the root of all graphic resources (icons, images, fonts).
      * @return the path to the root of all graphic resources (icons, images, fonts)
      */

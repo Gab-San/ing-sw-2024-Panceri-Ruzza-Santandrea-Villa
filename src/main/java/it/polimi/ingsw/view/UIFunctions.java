@@ -5,6 +5,11 @@ package it.polimi.ingsw.view;
  */
 public class UIFunctions {
     /**
+     * Non-public constructor, as this class is not meant to be instantiated.
+     */
+    protected UIFunctions(){}
+
+    /**
      * Evaluates which is the cause of the error while registering nickname on server.
      * @param nickname user chosen identifier
      * @return a string indicating error cause

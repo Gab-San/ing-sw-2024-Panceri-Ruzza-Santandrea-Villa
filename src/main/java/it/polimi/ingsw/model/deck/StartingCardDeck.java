@@ -12,20 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//DOCS add docs
+/**
+ * This class represents the deck of starting cards.
+ */
 public class StartingCardDeck{
 
     private final List<StartingCard> cardDeck;
 
+    /**
+     * Default constructor. Creates the starting deck and imports all starting cards.
+     */
     public StartingCardDeck() throws IllegalStateException{
         cardDeck = importFromJson();
     }
 
+    /**
+     * Returns a random starting card from the remaining cards of the deck.
+     * @return a random starting card from the remaining cards of the deck.
+     */
     public StartingCard getCard(){
         int cardIdx = getRandomCard();
         return cardDeck.remove(cardIdx);
     }
 
+    /**
+     * Creates an {@link InputStream} that reads from the starting card Json.
+     * @return an {@link InputStream} that reads from the starting card Json.
+     */
     private InputStream getJsonFromResources(){
         ClassLoader cl = this.getClass().getClassLoader();
         try {
@@ -36,6 +49,11 @@ public class StartingCardDeck{
         }
     }
 
+    /**
+     * Imports and instantiates all starting cards described in the startingCard json.
+     * @return a list of all imported starting cards.
+     * @throws IllegalStateException if an I/O error occurs.
+     */
     private List<StartingCard> importFromJson() throws IllegalStateException{
         List<StartingCard> startingCardsList;
 
@@ -54,9 +72,11 @@ public class StartingCardDeck{
         return startingCardsList;
     }
 
+    /**
+     * Returns a random index pointing to a card in this deck.
+     * @return a random index pointing to a card in this deck.
+     */
     protected int getRandomCard() {
         return new Random().nextInt(cardDeck.size());
     }
-
-
 }

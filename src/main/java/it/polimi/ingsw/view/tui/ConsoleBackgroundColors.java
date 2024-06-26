@@ -16,26 +16,76 @@ public class ConsoleBackgroundColors {
      */
     public static final String POSTFIX = "m";
 
-    //Reset
+    /**
+     * ANSI code to reset foreground and background to normal <br>
+     * (white text on black background)
+     */
     public static final String RESET = PREFIX + "00" + POSTFIX;
 
-    // Normal intensity backgrounds
+    //region Normal intensity backgrounds
+    /**
+     * ANSI code coloring the background
+     */
     public static final String WHITE = PREFIX + "47" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String RED = PREFIX + "41" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String PURPLE = PREFIX + "45" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String GREEN = PREFIX + "42" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String BLUE = PREFIX + "44" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String YELLOW = PREFIX + "43" + POSTFIX;
-
-    // High Intensity backgrounds
+    //endregion
+    //region High Intensity backgrounds
+    /**
+     * ANSI code coloring the background
+     */
     public static final String BLACK_BRIGHT = PREFIX + "0;100" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String RED_BRIGHT = PREFIX + "0;101" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String GREEN_BRIGHT = PREFIX + "0;102" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String YELLOW_BRIGHT = PREFIX + "0;103" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String BLUE_BRIGHT = PREFIX + "0;104" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String PURPLE_BRIGHT = PREFIX + "0;105" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String CYAN_BRIGHT = PREFIX + "0;106" + POSTFIX;
+    /**
+     * ANSI code coloring the background
+     */
     public static final String WHITE_BRIGHT = PREFIX + "0;107" + POSTFIX;
+    //endregion
+    /**
+     * Private constructor, as this class should not be instantiated
+     */
+    private ConsoleBackgroundColors(){}
 
     /**
      * Returns the PlayerColor's ANSI background color equivalent string.

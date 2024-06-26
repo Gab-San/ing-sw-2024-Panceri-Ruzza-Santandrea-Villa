@@ -6,6 +6,12 @@ import it.polimi.ingsw.view.tui.TUI_Scene;
  * The command helper (legend) UI scene printer for the TUI
  */
 public class PrintHelperUI extends TUI_Scene {
+
+    /**
+     * Default constructor.
+     */
+    public PrintHelperUI(){}
+
     @Override
     protected void print() {
         System.out.println("""

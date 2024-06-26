@@ -71,7 +71,7 @@ public class PlayerHand implements GameSubject {
      * Returns the playable card at the specified index.
      * @param pos index (0-2)
      * @return card at index pos in this hand, without removing it from the hand
-     * @throws IndexOutOfBoundsException if pos < 0 or pos >= hand size
+     * @throws IndexOutOfBoundsException if pos &lt; 0 or pos &gt;= hand size
      */
     public PlayCard getCard(int pos) throws IndexOutOfBoundsException{
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
@@ -104,7 +104,7 @@ public class PlayerHand implements GameSubject {
      * Returns the card at the specified position, removing it from the player's hand.
      * @param pos index (0-2)
      * @return card at index pos in this hand, removing it from the hand
-     * @throws IndexOutOfBoundsException if pos < 0 or pos >= hand size
+     * @throws IndexOutOfBoundsException if pos &lt; 0 or pos &gt;= hand size
      */
     public PlayCard popCard(int pos) throws IndexOutOfBoundsException{
         if (pos < 0 || pos >= cards.size()) throw new IndexOutOfBoundsException("Accessing illegal card index!");
@@ -208,7 +208,7 @@ public class PlayerHand implements GameSubject {
     /**
      * Removes the secret objective not chosen from the player's hand.
      * @param choice index of the chosen secret objective (1 or 2)
-     * @throws IndexOutOfBoundsException if choice <= 0 or choice > 2
+     * @throws IndexOutOfBoundsException if choice &lt;= 0 or choice &gt; 2
      * @throws PlayerHandException if secret objective was already chosen or if choices were never dealt
      */
     public void chooseObjective(int choice) throws IndexOutOfBoundsException, PlayerHandException{

@@ -16,7 +16,18 @@ import static it.polimi.ingsw.view.tui.ConsoleTextColors.PURPLE_TEXT;
  * Helper class with methods to manipulate ANSI color codes.
  */
 public class ConsoleColorsCombiner {
+    /**
+     * A regex that matches any ANSI background color code associated with a PlayerColor or GameResource. <br>
+     * Also matches RESET, WHITE, BLACK_TEXT, PURPLE_TEXT codes. <br>
+     * This attribute saves the regex, so it only needs to be computed once on its first use.
+     */
     private static String regexAnyColor = null;
+
+    /**
+     * Private constructor, as this class should not be instantiated
+     */
+    private ConsoleColorsCombiner(){}
+
     /**
      * Combines a TextColor and a Background color
      * to apply both effects simultaneously

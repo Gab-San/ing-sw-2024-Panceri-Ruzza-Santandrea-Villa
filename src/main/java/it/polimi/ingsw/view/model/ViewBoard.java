@@ -186,6 +186,7 @@ public class ViewBoard extends JComponent {
     }
 
     /**
+     * Getter of the current turn.
      * @return this game's current turn.
      */
     public synchronized int getCurrentTurn() {
@@ -205,6 +206,7 @@ public class ViewBoard extends JComponent {
     }
 
     /**
+     * Getter of the current game phase.
      * @return the current gamePhase.
      */
     public synchronized GamePhase getGamePhase() {
