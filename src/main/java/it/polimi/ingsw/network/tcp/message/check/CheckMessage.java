@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.message.check;
 
-import it.polimi.ingsw.network.tcp.client.ServerProxy;
+import it.polimi.ingsw.network.tcp.client.TCPServerProxy;
 import it.polimi.ingsw.network.tcp.message.TCPServerCheckMessage;
 
 import java.io.Serial;
@@ -48,7 +48,7 @@ public class CheckMessage implements TCPServerCheckMessage {
     }
 
     @Override
-    public void handle(ServerProxy client) throws IllegalStateException, IllegalArgumentException{
+    public void handle(TCPServerProxy client) throws IllegalStateException, IllegalArgumentException{
         if(stateException != null){
             throw stateException;
         }

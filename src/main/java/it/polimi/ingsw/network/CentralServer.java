@@ -205,10 +205,12 @@ public class CentralServer {
      */
     public synchronized void sendMessage(String messenger, String addressee, String message) throws IllegalArgumentException {
         if(!playerClients.containsKey(messenger)){
+            //Exception not caught
             throw new IllegalArgumentException("Client not connected to chat!");
         }
         if(!playerClients.containsKey(addressee) && !addressee.equalsIgnoreCase("all")){
-            throw new IllegalArgumentException("Addressee not connected!");
+            chat.addMessage("SERVER", messenger, "ERROR: Addressee not connected or not found!");
+            return;
         }
         chat.addMessage(messenger, addressee, message);
     }

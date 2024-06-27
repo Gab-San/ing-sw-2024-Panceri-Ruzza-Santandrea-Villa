@@ -30,7 +30,7 @@ public class TCPClientSocket implements VirtualClient{
     private final Socket clientSocket;
     private final ObjectInputStream inputStream;
     private final Queue<TCPServerMessage> updateQueue;
-    private final ServerProxy proxy;
+    private final TCPServerProxy proxy;
     private ModelUpdater modelUpdater;
     private boolean quitUpdateThread;
 
@@ -51,7 +51,7 @@ public class TCPClientSocket implements VirtualClient{
      */
     public TCPClientSocket(String hostAddr, int connectionPort) throws IOException{
         this.clientSocket = new Socket(hostAddr, connectionPort);
-        this.proxy = new ServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
+        this.proxy = new TCPServerProxy(new ObjectOutputStream(clientSocket.getOutputStream()), this);
         inputStream = new ObjectInputStream(clientSocket.getInputStream());
         updateQueue = new LinkedBlockingQueue<>();
         quitUpdateThread = false;
@@ -123,7 +123,6 @@ public class TCPClientSocket implements VirtualClient{
 
 //endregion
 
-
 //region SOCKET FUNCTIONS
 
     /**
@@ -145,7 +144,7 @@ public class TCPClientSocket implements VirtualClient{
      * Returns the client-side proxy bound to this client.
      * @return proxy bound to this client
      */
-    public ServerProxy getProxy(){
+    public TCPServerProxy getProxy(){
         return proxy;
     }
 

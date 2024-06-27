@@ -21,7 +21,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  *     to add logic on the client-side.
  * </p>
  */
-public class ServerProxy implements CommandPassthrough {
+public class TCPServerProxy implements CommandPassthrough {
     private final ObjectOutputStream outputStream;
     private String nickname;
     private final TCPClientSocket clientSocket;
@@ -32,7 +32,7 @@ public class ServerProxy implements CommandPassthrough {
      * @param outputStream wrapped socket output stream
      * @param clientSocket client socket this proxy is bound to
      */
-    public ServerProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
+    public TCPServerProxy(ObjectOutputStream outputStream, TCPClientSocket clientSocket){
         this.outputStream = outputStream;
         this.clientSocket = clientSocket;
         checkQueue = new ArrayBlockingQueue<>(2);

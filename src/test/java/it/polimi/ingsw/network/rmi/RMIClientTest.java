@@ -28,7 +28,7 @@ class RMIClientTest {
 
     @AfterEach
     void close() throws RemoteException, NotBoundException {
-        server.closeServer();
+        server.unbindServer();
     }
 
     @Test

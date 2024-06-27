@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.tcp.message;
 
-import it.polimi.ingsw.network.tcp.client.ServerProxy;
+import it.polimi.ingsw.network.tcp.client.TCPServerProxy;
 
 /**
  * This interface portrays the checks sent from the server to the client.
@@ -12,5 +12,5 @@ public interface TCPServerCheckMessage extends TCPMessage {
      * @throws IllegalStateException if carried by the check message
      * @throws IllegalArgumentException if carried by the check message
      */
-    void handle(ServerProxy client) throws IllegalStateException, IllegalArgumentException;
+    void handle(TCPServerProxy client) throws IllegalStateException, IllegalArgumentException;
 }

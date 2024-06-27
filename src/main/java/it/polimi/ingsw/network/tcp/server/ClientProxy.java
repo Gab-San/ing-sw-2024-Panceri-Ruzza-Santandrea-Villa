@@ -245,7 +245,7 @@ public class ClientProxy implements VirtualClient {
      * @param message check message to notify the client of
      *                the correct or incorrect result of computation
      */
-    public synchronized void sendCheck(TCPServerCheckMessage message){
+    synchronized void sendCheck(TCPServerCheckMessage message){
         try{
             ping();
             outputStream.writeObject(message);
