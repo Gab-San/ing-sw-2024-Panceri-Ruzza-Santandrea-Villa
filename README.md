@@ -46,4 +46,5 @@ Please note that compiling the project using Maven creates a FatJar.
 - If the IP/Hostname argument is invalid, the app will instead list all available IPs on the local machine and prompt the user to input a valid IP address.
 - If a machine only has one IP (other than localhost) then that IP will be used automatically.
 
-
+-----
+NOTE: Codex Naturalis is a board game developed and published by Cranio Creations Srl. The graphic content of this project related to the board game is used with the prior approval of Cranio Creations Srl solely for educational purposes. Distribution, copying, or reproduction of the content and images in any form outside the project is prohibited, as is the redistribution and publication of the content and images for purposes other than those mentioned above. The commercial use of the aforementioned content is also prohibited.
