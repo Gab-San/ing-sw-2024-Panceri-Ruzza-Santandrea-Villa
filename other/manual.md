@@ -1,11 +1,11 @@
 <h1 align="center">User Manual</h1>
 
-# Table of Contents
+## Table of Contents
 
 - [Commands](#commands)
 - [Cards](#cards)
 
-# Commands
+## Commands
 
 The command syntax for the TUI is the following:
 
@@ -34,7 +34,7 @@ Full list of commands:
 | [choose](#choose) | **only during choosing states** choose between options |
 | [restart](#restart) | **only after endgame** restart lobby|
 
-## Help
+### Help
 
 Print the list of available commands.
 
@@ -43,7 +43,7 @@ Print the list of available commands.
 
 > **ALIAS**: `legend`
 
-## View
+### View
 
 Change the visualized portion of the table.
 
@@ -53,7 +53,7 @@ Command Syntax: `view me|board|<player_identifier>`
 
 > EXAMPLE: `view me` changes the screen to the user play area; `view gabriele` shows the play area related to gabriele (a connected user).
 
-The **board** is comprehensive of the decks and the scoreboard; in addition some information about the players are shown.
+The **board** is comprehensive of the decks and the scoreboard; also shows additional information about the players.
 
 Before the view command the visualized area is the user play area:
 
@@ -71,7 +71,7 @@ Press one of the player names in the sidebar to view their play area.
 
 ![gui_view_example](./images/manual/gui_view_example.png)
 
-## Draw
+### Draw
 
 Draw a card from the selected deck.
 
@@ -93,7 +93,7 @@ Command Syntax: `draw <r|g><0|1|2>` without spaces between the two characters.
 
 **GUI**
 
-## Place
+### Place
 
 Place a card from your hand onto your play area.
 
@@ -120,7 +120,7 @@ Command Syntax:
 1. Select a card in your hand;
 2. Select one of the highlighted corners on the play area.
 
-## Flip
+### Flip
 
 Flip the selected card in your hand.
 
@@ -140,7 +140,7 @@ Command Syntax: `flip <card_index>|<card_id>`
 1. Hover with the mouse cursor over the card you want to flip;
 2. Press **F**.
 
-## Move
+### Move
 
 Move inside a play area.
 
@@ -161,7 +161,7 @@ Command Syntax: `move <direction>|<cardinal_direction>|center`
 1. Press on the area background;
 2. Move around using W A S D to move up/left/down/right.
 
-## Send
+### Send
 
 Send a message to a player, to self or to everybody
 
@@ -186,7 +186,7 @@ Command Syntax: `send all|<player_id>`
 
 ![gui_chat_example](./images/manual/gui_chat_example.png)
 
-## Disconnect
+### Disconnect
 
 Disconnect from the game.
 
@@ -200,7 +200,7 @@ Command Syntax: `disconnect`
 
 Close the application.
 
-## Set
+### Set
 
 **Only when the first one to join the lobby**, set the lobby's number of players
 
@@ -216,7 +216,7 @@ Select one of the options given.
 
 ![gui_set_players](./images/manual/gui_set_players.png)
 
-## Choose
+### Choose
 
 **Only when prompted to choose**, choose the objective card or pick your colour.
 
@@ -235,7 +235,7 @@ Select one of the options given.
 
 ![gui_choose_colours](./images/manual/gui_choose_colours.png)
 
-## Restart
+### Restart
 
 **Only after endgame**, try to start a new lobby with the specified number of players. If the number of players selected is lower then the currently connected players, the server will create a new lobby with the current connected players.
 
@@ -249,5 +249,4 @@ Command Syntax: `restart <2-4>`
 
 Onto the endgame screen, select one of the given options.
 
-# Cards
-
+## Cards
