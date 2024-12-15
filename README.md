@@ -18,7 +18,7 @@
 
 This project consists in the digitalization of a board game using the java language, previously introduced in the course of _Ingegneria del Software_ (Software Engineering).
 
-# Table of Contents
+## Table of Contents
 
 - [Download](#download)
 - [Usage](#usage)
@@ -28,19 +28,19 @@ This project consists in the digitalization of a board game using the java langu
 - [Game Rules](#rules)
 - [License](#license)
 
-# Download
+## Download
 
 Check out the [latest release](https://github.com/Gab-San/ing-sw-2024-Panceri-Ruzza-Santandrea-Villa/releases/latest) and download the files (preferably all in the same folder).
 
-# Usage
+## Usage
 
 **Navigate** to the folder where you downloaded your **files** and follow the instructions:
 
 > Warning: the `Server.jar` and `FatJar.jar` have to be run with different commands! For correct compatibility, stick with either `Server.jar <-> Client.jar` configuration or `FatJar.jar` configuration
 
-## How to launch the Server
+### How to launch the Server
 
-### `Server.jar <-> Client.jar` configuration
+#### `Server.jar <-> Client.jar` configuration
 
 Run the command: 
 
@@ -50,15 +50,15 @@ Run the command:
 
 > The IP can be omitted: the app will list the local machine IPs and prompt the user to select one of them (other than `localhost`)
 
-### `FarJar.jar` configuration
+#### `FarJar.jar` configuration
 
 Run:
 
 `java -cp Server.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`
 
-## How to launch the Client
+### How to launch the Client
 
-### `Server.jar <-> Client.jar` configuration
+#### `Server.jar <-> Client.jar` configuration
 
 Run the command:
 
@@ -69,13 +69,13 @@ Run the command:
 - The IPs are optional: if omitted, localhost will be used;
 - The `myIP=<IP>` argument is also optional, as it is only used by RMI. It must be an IP reachable by the server.
 
-### `FatJar.jar` configuration
+#### `FatJar.jar` configuration
 
 Replace `Client.jar` with `FatJar.jar` in the command right above👆:
 
 `java -jar FatJar.jar <Server port> <RMI | TCP> [Server IP] [myIP=<Client IP>]`
 
-## Notes (on both Client and Server)
+### Notes (on both Client and Server)
 
 Please note that compiling the project using Maven creates a FatJar.
 
@@ -84,7 +84,7 @@ Please note that compiling the project using Maven creates a FatJar.
 - If the IP/Hostname argument is invalid, the app will instead list all available IPs on the local machine and prompt the user to input a valid IP address.
 - If a machine only has one IP (other than localhost) then that IP will be used automatically.
 
-## Navigate the application
+### Navigate the application
 
 The first thing that should appear when looking should be a message that asks which kind of UI to use.
 
@@ -95,7 +95,7 @@ The options are:
 - [TUI](#tui)
 - [GUI](#gui)
 
-### TUI
+#### TUI
 
 The TUI (Text User Interface) is an interactive terminal that lets the user control the program through a set of commands.
 
@@ -112,21 +112,17 @@ A list of TUI commands:
 
 | Command | Description |
 | ---------- | ------------ |
-| [help](#help) | list all available commands |
-| [view](./other/manual.md#view) | change screen to view other play areas or the main board |
-| [place](./other/manual.md#place) | play one of the cards into your hand |
-| [draw](./other/manual.md#draw) | draw a card from the specified deck |
-| [flip](./other/manual.md#flip) | filp one of your cards upside down |
-| [move](./other/manual.md#move) | **on play area view** move your view in the specified direction |
-| [send](./other/manual.md#send) | send a message to another player |
+| help | list all available commands |
+| view | change screen to view other play areas or the main board |
+| place | play one of the cards into your hand |
+| draw | draw a card from the specified deck |
+| flip | filp one of your cards upside down |
+| move | **on play area view** move your view in the specified direction |
+| send | send a message to another player |
 
 More information about TUI commands in the [MANUAL](./other/manual.md).
 
-#### Help
-
-You can list all available commands with their syntax explanation by typing the "help" command and pressing enter.
-
-### TUI notes
+##### TUI notes
 
 The TUI uses ANSI color codes. They should show correctly on Mac/Linux consoles, but they are disabled on Windows CMD by default.
 
@@ -139,7 +135,7 @@ You can enable them by following the instruction below:
     - **If _not_ present** then right-click on the `Console` directory and press `New -> DWORD` to add it with value `1`
     - Otherwise change its value to `1`
 
-### GUI
+#### GUI
 
 The GUI (Graphical User Interface) is what you'll be more accustomed since most of modern applications usually have one.
 
@@ -151,13 +147,13 @@ After this screen if you are the first player to connect you will be prompted to
 
 ![gui_set_players](./other/images/manual/gui_set_players.png)
 
-Check out the [MANUAL](./other/manual.md)
+If ever in doubt check the [MANUAL](./other/manual.md)
 
-# Project Requirements
+## Project Requirements
 
 The integral version of project requirements can be found [here](./other/requirements.pdf).
 
-## Features
+### Features
 
 | Requirements | Max Reachable Grade | Implemented |
 | :------------- | :-------: | :-------------: |
@@ -178,11 +174,11 @@ The integral version of project requirements can be found [here](./other/require
 | Disconnection resilience | Reconnect disconnected or crashed users | ✅ |  
 | Chat | Let players send messages via chat | ✅ |
 
-# Rules
+## Rules
 
 For a thorough description of the rules check the [RULE-BOOK](./other/rule-book.md)
 
-# License
+## License
 
 _Codex Naturalis is a board game developed and published by Cranio Creations SRL_.
 

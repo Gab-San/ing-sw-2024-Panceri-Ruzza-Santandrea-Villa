@@ -4,19 +4,17 @@
 Codex Naturalis Rules
 </h1>
 
-# Languages
-
 - [Italiano](#italiano)
 - [English](#english)
 
-# Italiano
+## Italiano
 
 - [Obiettivo del gioco](#obiettivo-del-gioco)
 - [Preparazione](#preparazione)
 - [Turno del giocatore](#turno-del-giocatore)
 - [Fine della partita](#fine-della-partita)
 
-## Obiettivo del gioco
+### Obiettivo del gioco
 
 L'obiettivo di questo gioco è quello di collocare le carte sulla propria plancia di gioco, tentando di sfruttare al meglio le risorse al fine di:
 
@@ -27,7 +25,7 @@ Il primo giocatore a totalizzare 20 punti innesca la [fine della partita](#fine-
 
 State attenti perchè non è detto che arrivare per primi al traguardo vi garantisca la vittoria!
 
-## Preparazione
+### Preparazione
 
 1. I mazzi delle **carte Risorsa** e **Oro** sono mescolati e sono rivelate 2 carte per mazzo;
 2. Ogni giocatore riceve una **carta Iniziale** casuale e la colloca di fronte a sé dal lato preferito;
@@ -37,14 +35,14 @@ State attenti perchè non è detto che arrivare per primi al traguardo vi garant
 6. Ogni giocatore riceve **2 carte Obiettivo**, le guarda e ne sceglie una e scarta l'altra. La carta scelta diventa il suo **obiettivo segreto**;
 7. Viene determinato casualmente il primo giocatore, quindi viene collocato il **segnalino primo giocatore** (di colore nero) sulla sua **carta Iniziale**.
 
-## Turno del giocatore
+### Turno del giocatore
 
 Il turno di un giocatore si divide in due fasi:
 
 1. Giocare una carta
 2. Pescare una carta
 
-### Giocare una carta
+#### Giocare una carta
 
 Il giocatore di turno sceglie una delle 3 carte dalla mano e la colloca nella propria area di gioco.
 
@@ -62,13 +60,13 @@ Il piazzamento deve rispettare due regole:
 
 > Ricevere i punti: se la carta piazzata fa guadagnare punti al giocatore, questi devono esser immediatamente segnati sul tracciato Segnapunti!
 
-### Pescare una carta
+#### Pescare una carta
 
 Dopo aver piazzato una carta nella propria area di gioco, il giocatore sceglie una nuova carta fra le **quattro carte rivelate** al centro del tavolo (rimpiazzandola con una carta dello stesso mazzo) oppure **prende la carta in cima** ad uno dei due mazzi. 
 
 > È possibile pescare solamente dai mazzi Risorsa e Oro
 
-## Fine della partita
+### Fine della partita
 
 La fine della partita è innescata non appena un giocatore **raggiunge (o supera) i 20 punti** oppure quando **tutti e due i mazzi si esauriscono**.
 I giocatori terminano il round corrente. Una volta che l'ultimo giocatore del round corrente ha finito il turno, si procede a giocare un turno addizionale.
@@ -82,14 +80,14 @@ In caso di disconnesione degli altri giocatori, l'ultimo giocatore rimanente (al
 ---
 **DISCLAIMER:** Questo documento ha il solo scopo di facilitare l'esperienza di gioco della **nostra versione digitalizzata** del gioco e non è in alcun modo un sostituto delle regole ufficiali.
 
-# English
+## English
 
 - [Game's objective](#games-objective)
 - [Setup](#setup)
 - [Playing a turn](#playing-a-turn)
 - [Ending the game](#ending-the-game)
 
-## Game's objective
+### Game's objective
 
 The objective of this game is to score the most points at the end of the game through strategically placing cards on each own play area, managing and exploiting resources in order to:
 
@@ -98,7 +96,7 @@ The objective of this game is to score the most points at the end of the game th
 
 The [endgame](#ending-the-game) starts after one player reaches 20 points.
 
-## Setup
+### Setup
 
 1. **Resource** and **Gold decks** are shuffled and 2 cards from each deck are revealed;
 2. Each player is given a random **Starting card**. They then proceed to choose a side and place it in front of themselves;
@@ -108,14 +106,14 @@ The [endgame](#ending-the-game) starts after one player reaches 20 points.
 6. Each player is given **2 Objective cards**, then chooses one and the other is discarded. The chosen card is the **secret objective**;
 7. The first player is randomly chosen; the **first player token** (black) is placed on the first player **Starting card**.
 
-## Playing a turn
+### Playing a turn
 
 Each turn is composed of two phases:
 
 1. Playing a card
 2. Draw a card
 
-### Playing a card
+#### Playing a card
 
 The player chooses 1 card in their hand and places it in their own play area.
 
@@ -133,13 +131,13 @@ The placement must follow two rules:
 
 > Score points: if the placed card gives points, they must be scored immediately and tracked on the Scoreboard!
 
-### Draw a card
+#### Draw a card
 
 After placement, the player draws either a card from the **four revealed cards** in the center of the table (replacing it with one from the same deck) or **the top card** of one of the two decks. 
 
 > It's possible to draw only from Resource and Gold deck
 
-## Ending the game
+### Ending the game
 
 The endgame starts as soon as a player **hits (or more) 20 points** or if **both decks are empty**.
 Remaining players play their turn, after which a bonus round is played.
