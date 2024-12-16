@@ -88,8 +88,6 @@ Please note that compiling the project using Maven creates a FatJar.
 
 The first thing that should appear when looking should be a message that asks which kind of UI to use.
 
-![first_screen](./other/images/manual/first_screen.png)
-
 The options are:
 
 - [TUI](#tui)
@@ -98,6 +96,8 @@ The options are:
 #### TUI
 
 The TUI (Text User Interface) is an interactive terminal that lets the user control the program through a set of commands.
+
+![choose_nickname](./other/images/manual/tui_choose_nickname.gif)
 
 The command syntax is the following:
 
@@ -141,11 +141,11 @@ The GUI (Graphical User Interface) is what you'll be more accustomed since most 
 
 When prompted as the first screen, insert a nickname and press enter to attempt connecting to the server.
 
-![gui_choose_nickname](./other/images/manual/gui_choose_nickname.png)
+![gui_choose_nickname](./other/images/manual/gui_choose_nickname.gif)
 
 After this screen if you are the first player to connect you will be prompted to select the number of players in the lobby:
 
-![gui_set_players](./other/images/manual/gui_set_players.png)
+![gui_set_players](./other/images/manual/gui_set_players.gif)
 
 If ever in doubt check the [MANUAL](./other/manual.md)
 
