@@ -38,8 +38,7 @@ Full list of commands:
 
 Print the list of available commands.
 
-![help_screen_1](./images/manual/help_screen.png)
-![help_screen_2](./images/manual/help_screen_2.png)
+![help_screen](./images/manual/tui_help.gif)
 
 > **ALIAS**: `legend`
 
@@ -55,13 +54,7 @@ Command Syntax: `view me|board|<player_identifier>`
 
 The **board** is comprehensive of the decks and the scoreboard; also shows additional information about the players.
 
-Before the view command the visualized area is the user play area:
-
-![tui_view_example_before](./images/manual/tui_view_example_before.png)
-
-After the view command with "board" as argument the visualized area is the main board:
-
-![tui_view_example_after](./images/manual/tui_view_example_after.png)
+![tui_view_example](./images/manual/tui_view.gif)
 
 ---
 
@@ -69,7 +62,7 @@ After the view command with "board" as argument the visualized area is the main 
 
 Press one of the player names in the sidebar to view their play area.
 
-![gui_view_example](./images/manual/gui_view_example.png)
+![gui_view_example](./images/manual/gui_view.gif)
 
 ### Draw
 
@@ -87,11 +80,16 @@ Command Syntax: `draw <r|g><0|1|2>` without spaces between the two characters.
 
 > EXAMPLE: `draw r0` draws the top card of the resource deck; `draw g2` draws the second revealed card of the gold deck.
 
-![tui_board](./images/manual/tui_view_example_after.png)
+![tui_draw](./images/manual/tui_draw.gif)
 
 ---
 
 **GUI**
+
+1. Change view to the board
+2. Select a card (decks are selectable)
+
+![gui_draw](./images/manual/gui_draw.gif)
 
 ### Place
 
@@ -111,6 +109,8 @@ Command Syntax:
 
 > **ALIAS**: `play`
 
+![tui_place](./images/manual/tui_place.gif)
+
 > EXAMPLE: `place r20 r12 TL` place r20 on the top-left corner of r12 (already placed); `play g12 r20 BR` place g12 on the bottom-right corner of r20
 
 ---
@@ -120,6 +120,8 @@ Command Syntax:
 1. Select a card in your hand;
 2. Select one of the highlighted corners on the play area.
 
+![gui_place](./images/manual/gui_place.gif)
+
 ### Flip
 
 Flip the selected card in your hand.
@@ -128,8 +130,9 @@ Flip the selected card in your hand.
 
 Command Syntax: `flip <card_index>|<card_id>`
 
-
 > **ALIAS**: `turn`, `turnover`
+
+![tui_flip](./images/manual/tui_flip.gif)
 
 > EXAMPLE: `flip r20` flips card with id r20 (in your hand); `turn 2` flips the second card in your hand
 
@@ -139,6 +142,8 @@ Command Syntax: `flip <card_index>|<card_id>`
 
 1. Hover with the mouse cursor over the card you want to flip;
 2. Press **F**.
+
+![gui_flip](./images/manual/gui_flip.gif)
 
 ### Move
 
@@ -154,12 +159,16 @@ Command Syntax: `move <direction>|<cardinal_direction>|center`
 
 > EXAMPLE: `move up` moves the view up by one card; `move southeast` moves the view down by one card and then right by one card
 
+![tui_move](./images/manual/tui_move.gif)
+
 ---
 
 **GUI**
 
 1. Press on the area background;
 2. Move around using W A S D to move up/left/down/right.
+
+![gui_move](./images/manual/gui_move.gif)
 
 ### Send
 
@@ -171,20 +180,17 @@ Command Syntax: `send all|<player_id>`
 
 > `player_id` can be sender's nickname
 
-![tui_chat_example](./images/manual/tui_chat_example.png)
+![tui_chat_example](./images/manual/tui_chat.gif)
 
 > EXAMPLE: `send all hello everybody!` sends "hello everybody" to everyone; `send gabriele hello gab!` sends "hello gab!" only to gabriele (a connected player)
 
 **GUI**
 
 1. Use the dropdown menu in the chat to select the player to receive the message;
-
-![gui_chat_choose](./images/manual/gui_chat_choose.png)
-
 2. Write the message to the player;
 3. Press enter to send.
 
-![gui_chat_example](./images/manual/gui_chat_example.png)
+![gui_chat_example](./images/manual/gui_chat.gif)
 
 ### Disconnect
 
@@ -208,13 +214,15 @@ Close the application.
 
 Command Syntax: `set <2-4>`
 
+![tui_set_players](./images/manual/tui_set_players.gif)
+
 ---
 
 **GUI**
 
 Select one of the options given.
 
-![gui_set_players](./images/manual/gui_set_players.png)
+![gui_set_players](./images/manual/gui_set_players.gif)
 
 ### Choose
 
@@ -226,6 +234,8 @@ Command Syntax:
 
 - `choose objective <card_index>` to choose the objective card
 - `choose color Red|Blue|Yellow|Green` to pick the color
+
+![tui_choose_objective](./images/manual/gui_choose_obj.gif)
 
 ---
 
@@ -242,6 +252,8 @@ Select one of the options given.
 **TUI**
 
 Command Syntax: `restart <2-4>`
+
+![tui_restart](./images/manual/tui_restart.gif)
 
 ---
 
