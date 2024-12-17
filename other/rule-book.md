@@ -58,7 +58,11 @@ Il piazzamento deve rispettare due regole:
 
 - **Regola delle carte Oro**: per piazzare una carta Oro, il giocatore deve avere visibili nell'area di gioco le risorse indicate sulla parte inferiore della carta. Le risorse devono essere visibili **prima** del piazzamento, ma possono essere coperte dal piazzamento.
 
-> Ricevere i punti: se la carta piazzata fa guadagnare punti al giocatore, questi devono esser immediatamente segnati sul tracciato Segnapunti!
+##### Ricevere i punti
+
+Se la carta piazzata fa guadagnare punti al giocatore, questi devono esser immediatamente segnati sul tracciato Segnapunti!
+
+Per vedere come sono calcolati i punti consultare il [manuale](./manual.md).
 
 #### Pescare una carta
 
@@ -129,7 +133,11 @@ The placement must follow two rules:
 
 - **Gold cards rule**: to place a Gold card, the resources shown on the bottom of the card must be visible on the player's play area. Resources must be visible only previous to the placement, but they can be covered by it.
 
-> Score points: if the placed card gives points, they must be scored immediately and tracked on the Scoreboard!
+##### Score points
+
+If the placed card gives points, they must be scored immediately and tracked on the Scoreboard!
+
+To check how the points are scored read the [manual](./manual.md)
 
 #### Draw a card
 

@@ -214,7 +214,7 @@ Close the application.
 
 Command Syntax: `set <2-4>`
 
-![tui_set_players](./images/manual/tui_set_players.gif)
+![tui_set_players](./images/manual/tui_set_players.png)
 
 ---
 
@@ -235,7 +235,7 @@ Command Syntax:
 - `choose objective <card_index>` to choose the objective card
 - `choose color Red|Blue|Yellow|Green` to pick the color
 
-![tui_choose_objective](./images/manual/gui_choose_obj.gif)
+![tui_choose_objective](./images/manual/tui_choose_obj.gif)
 
 ---
 
@@ -262,3 +262,73 @@ Command Syntax: `restart <2-4>`
 Onto the endgame screen, select one of the given options.
 
 ## Cards
+
+### Resource cards
+
+A resource card is composed of:
+
+<img src="./images/manual/rc_front.png" alt="Resource Card Front" width="207,75px" height="139px" align="right"/>
+
+- up to 3 visible corners;
+- up to 1 resource per corner;
+- (**optionally**) points on placement.
+
+### Gold cards
+
+A gold card is composed of:
+
+<img src="./images/manual/gc_front.png" alt="Gold Card Front" width="207,75px" height="139px" align="right"/>
+
+- up to 3 visible corners;
+- up to 1 resource per corner;
+- points on placement;
+- placement requirements.
+
+#### Special points per placement
+
+There are two special ways to score points on placement:
+
+- score _n_ points for each visible corner covered when placing the card  <img src="./images/manual/sp_covered_corners.png" alt="covered corners" width="70px" height="30px"/>
+- score _n_ point for each visible item of the specified kind (e.g. in this image case it's the quills) <img src="./images/manual/sp_item_count.png" alt="item count" width="70px" height="30px"/>
+
+### Objective cards
+
+In a similar fashion, objective cards can show two different kinds of goals that define how to count the points scored:
+
+<img src="./images/manual/obj_pattern.png" alt="obj pattern" width="70px" height="108px" align="right">
+<img src="./images/manual/obj_item_count.png" alt="obj item count" width="70px" height="108px" align="right">
+
+- score _n_ points for each _x_ visible items on the play area;
+- score _n_ points for each time the pattern is uniquely applicable to the play area.
+
+When counting items/patterns, **already counted** items/cards can be considered only once and the highest possible score will be considered!
+
+### Notes about TUI
+
+In the current TUI representation the cards items are represented as follows:
+
+- Wolfs -> W;
+- Mushrooms -> M;
+- Butterflies -> B;
+- Leafs -> L;
+- Quills -> Q;
+- Scrolls -> S;
+- Potions -> P.
+
+For the cards the representation follows the background colour:
+
+- Purple -> P;
+- Red -> R;
+- Blue -> B;
+- Green -> G;
+
+Patterns are usually represented as a matrix on top of the objective card. For example:
+
+<img src="./images/manual/obj_pattern.png" alt="obj pattern" width="70px" height="108px" align="right">
+
+```java
+ 2
+**B
+*B*
+B**
+```
