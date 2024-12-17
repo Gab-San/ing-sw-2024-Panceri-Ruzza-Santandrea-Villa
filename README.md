@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://www.craniocreations.it/prodotto/codex-naturalis" target="_blank">
-        <img src="./other/images/Familienspiel-CODEX-von-huch-4260071882424-A-Logo_2500x2500px.png" alt="INSERT IMAGE" style="width:250px;height:250px;">
+        <img src="./other/images/Familienspiel-CODEX-von-huch-4260071882424-A-Logo_2500x2500px.png" alt="INSERT IMAGE" width="250p" height="250px"/>
     </a>
 </h1>
 
