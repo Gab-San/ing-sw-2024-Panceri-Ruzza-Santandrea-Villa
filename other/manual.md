@@ -9,7 +9,7 @@
 
 The command syntax for the TUI is the following:
 
-`command me|board|<player_id>`
+`command value value|<player_id>`
 
 - **command** is the command keyword (it is always the first word). Commands are listed below👇;
 - `<description>` indicates a command argument: it must be replaced with an argument that fits the description;
