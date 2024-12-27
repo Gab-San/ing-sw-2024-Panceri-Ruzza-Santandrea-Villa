@@ -54,7 +54,7 @@ Run the command:
 
 Run:
 
-`java -cp Server.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`
+`java -cp FatJar.jar it.polimi.ingsw.network.Server <RMI port> <TCP port> [Server IP]`
 
 ### How to launch the Client
 
