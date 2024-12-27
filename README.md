@@ -124,6 +124,8 @@ More information about TUI commands in the [MANUAL](./other/manual.md).
 
 ##### TUI notes
 
+It is advisable to run the TUI in fullscreen (press `Ctrl+Enter` in the terminal) or in a large enough window to allow the proper visualization of all scenes. If any scene does not display properly, enlarge the window and press `Enter` to refresh.
+
 The TUI uses ANSI color codes. They should show correctly on Mac/Linux consoles, but they are disabled on Windows CMD by default.
 
 You can enable them by following the instruction below:
