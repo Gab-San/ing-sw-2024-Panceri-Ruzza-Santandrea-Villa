@@ -24,7 +24,7 @@ This project consists in the digitalization of a board game using the java langu
 - [Usage](#usage)
   - [Navigate the application](#navigate-the-application)
   - [TUI Notes](#tui-notes)
-- [Project Requirements](project-requirements)
+- [Project Requirements](#project-requirements)
 - [Game Rules](#rules)
 - [License](#license)
 
