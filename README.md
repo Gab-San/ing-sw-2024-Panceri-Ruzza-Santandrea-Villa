@@ -24,6 +24,7 @@ This project consists in the digitalization of a board game using the java langu
 - [Usage](#usage)
   - [Navigate the application](#navigate-the-application)
   - [TUI Notes](#tui-notes)
+- [Documentation](#documentation)
 - [Project Requirements](#project-requirements)
 - [Game Rules](#rules)
 - [License](#license)
@@ -150,6 +151,16 @@ After this screen if you are the first player to connect you will be prompted to
 ![gui_set_players](./other/images/manual/gui_set_players.gif)
 
 If ever in doubt check the [MANUAL](./other/manual.md)
+
+## Documentation
+
+To generate the API documentation locally, run:
+
+`mvn javadoc:javadoc`
+
+Use JDK 21 when running the command above.
+
+The generated files will be available at `target/reports/apidocs/index.html`.
 
 ## Project Requirements
 
