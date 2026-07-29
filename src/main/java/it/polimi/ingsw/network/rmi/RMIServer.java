@@ -127,7 +127,7 @@ public class RMIServer implements VirtualServer {
      * to perform this operation (if originating from a non-local host, for example)
      * @throws NotBoundException if name is not currently bound
      */
-    public void closeServer() throws RemoteException, NotBoundException {
+    public void unbindServer() throws RemoteException, NotBoundException {
         registry.unbind(CANONICAL_NAME);
         UnicastRemoteObject.unexportObject(registry, true);
     }

@@ -38,7 +38,7 @@ public class BoardInteractionTest {
     @AfterEach
     void close() throws RemoteException, NotBoundException {
         tcpServer.closeServer();
-        rmiServer.closeServer();
+        rmiServer.unbindServer();
     }
     
 

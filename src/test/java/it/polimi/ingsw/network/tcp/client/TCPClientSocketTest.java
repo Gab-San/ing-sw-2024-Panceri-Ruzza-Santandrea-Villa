@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TCPClientSocketTest {
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private TCPServerSocket server;
-    private ServerProxy client;
+    private TCPServerProxy client;
 
     @BeforeEach
     void resetMySingleton() throws NoSuchFieldException, IllegalAccessException, IOException {
